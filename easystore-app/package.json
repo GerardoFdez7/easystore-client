@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint",  
     "setup-hooks": "git config core.hooksPath .githooks && git update-index --chmod=+x .githooks/pre-push && git config --global core.autocrlf input",
     "docker:dev": "docker-compose -f docker-compose.dev.yml up",
     "docker:dev:build": "docker-compose -f docker-compose.dev.yml up --build",

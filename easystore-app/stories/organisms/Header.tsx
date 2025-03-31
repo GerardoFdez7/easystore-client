@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '../../ui/Landing/Button';
+import { Button } from '../atoms/Button';
 import './header.css';
 
 type User = {

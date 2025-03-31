@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header } from '../../layout/Landing/Header';
+import { Header } from '../organisms/Header';
 import './page.css';
 
 type User = {

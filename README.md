@@ -30,7 +30,7 @@ Follow these instructions to set up and run the EasyStore frontend application:
 2. Install dependencies:
 
    ```bash
-   npm run install
+   npm install
    ```
 
 3. Set up Git hooks:
@@ -44,7 +44,9 @@ Follow these instructions to set up and run the EasyStore frontend application:
    ```bash
    npm run dev
    ```
-
+ > [!IMPORTANT]
+ > The Prettier extension is mandatory for this project. Please ensure you have it installed in your code editor to maintain consistent code formatting.
+ 
  > [!TIP]
  > Alternatively, you can use Docker for development:
 
