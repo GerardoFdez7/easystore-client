@@ -49,8 +49,5 @@ docker-compose.override.yml
 # Storybook
 *storybook.log
 
-# githooks
-!.githooks/
-
 # Preserve empty directories
 !.gitkeep
