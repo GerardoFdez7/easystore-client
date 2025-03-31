@@ -1,0 +1,61 @@
+{
+  "name": "easystore-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "setup-hooks": "git config core.hooksPath .githooks && git update-index --chmod=+x .githooks/pre-push",
+    "docker:dev": "docker-compose -f docker-compose.dev.yml up",
+    "docker:dev:build": "docker-compose -f docker-compose.dev.yml up --build",
+    "docker:dev:down": "docker-compose -f docker-compose.dev.yml down",
+    "docker:prod": "docker-compose up",
+    "docker:prod:build": "docker-compose up --build",
+    "docker:prod:down": "docker-compose down",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "babel-plugin-react-compiler": "^19.0.0-beta-aeaed83-20250323",
+    "next": "15.2.4",
+    "next-intl": "^4.0.2",
+    "next-themes": "^0.4.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^3.2.6",
+    "@eslint/eslintrc": "^3",
+    "@next/eslint-plugin-next": "^15.2.4",
+    "@storybook/addon-essentials": "^8.6.11",
+    "@storybook/addon-interactions": "^8.6.11",
+    "@storybook/addon-onboarding": "^8.6.11",
+    "@storybook/blocks": "^8.6.11",
+    "@storybook/nextjs": "^8.6.11",
+    "@storybook/react": "^8.6.11",
+    "@storybook/test": "^8.6.11",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@typescript-eslint/parser": "^8.28.0",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.4",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.5",
+    "eslint-plugin-storybook": "^0.12.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.5.3",
+    "storybook": "^8.6.11",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:storybook/recommended"
+    ]
+  }
+}
