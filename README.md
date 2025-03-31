@@ -33,19 +33,11 @@ Follow these instructions to set up and run the EasyStore frontend application:
    npm install
    ```
 
-3. Set up Git hooks:
-
-   ```bash
-   npm run setup-hooks
-   ```
-
-4. Start the development server:
+3. Start the development server:
 
    ```bash
    npm run dev
    ```
- > [!IMPORTANT]
- > The Prettier extension is mandatory for this project. Please ensure you have it installed in your code editor to maintain consistent code formatting.
  
  > [!TIP]
  > Alternatively, you can use Docker for development:
@@ -112,6 +104,9 @@ Our codebase follows strict linting rules to ensure code quality and consistency
 > [!IMPORTANT]
 > All code must pass ESLint checks before being committed.
 
+ > [!CAUTION]
+ > The Prettier extension is mandatory for this project. Please ensure you have it installed in your code editor.
+
 ### Commit Rules
 
 We follow the Conventional Commits specification for commit messages:
@@ -119,6 +114,8 @@ We follow the Conventional Commits specification for commit messages:
 ```plaintext
 <type>: <description>
 ```
+> [!TIP]
+> For this purpose we recommend using the conventional commits extension or commitizen tool. 
 
 Supported types :
 
