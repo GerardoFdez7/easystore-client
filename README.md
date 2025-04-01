@@ -8,6 +8,10 @@ Welcome to the frontend repository of EasyStore, the web application that empowe
   - [Component Documentation](#component-documentation)
 - [Repository Rules](#repository-rules)
   - [ESLint Rules](#eslint-rules)
+  - [Gitflow](#gitflow)
+    - [Main Branches](#main-branches)
+    - [Workflow](#workflow)
+    - [Hotfixes](#hotfixes)
   - [Commit Rules](#commit-rules)
   - [Branch Rules](#branch-rules)
 - [Architecture](#architecture)
@@ -43,7 +47,7 @@ Follow these instructions to set up and run the EasyStore frontend application:
  > Alternatively, you can use Docker for development:
 
    ```bash
-   docker-compose -f docker-compose.dev.yml up
+   npm run docker:dev
    ```
 
 ### Production Environment
@@ -59,7 +63,7 @@ npm run start
 > Alternatively, you can use Docker for production:
 
 ```bash
-docker-compose up
+npm run docker
 ```
 
 ### Component Documentation
@@ -106,6 +110,28 @@ Our codebase follows strict linting rules to ensure code quality and consistency
 
  > [!CAUTION]
  > The Prettier extension is mandatory for this project. Please ensure you have it installed in your code editor.
+
+### Gitflow
+
+We follow a Simplified Gitflow workflow:
+
+#### Main Branches
+- **Main**: Production-ready code
+- **Development**: Integration branch for features
+
+#### Workflow
+1. Each team member creates a feature branch from Development
+2. Work is completed on the feature branch following our branch naming convention
+3. When finished, the feature branch is merged into Development
+4. At the end of each sprint, Development undergoes final review
+5. After approval, Development is merged into Main for production deployment
+
+#### Hotfixes
+- If a bug occurs in production, a hotfix branch is created from Main
+- After the fix is implemented, it's merged into both Main and Development to keep branches synchronized
+
+> [!NOTE]
+> This workflow ensures stable production code while allowing continuous development.
 
 ### Commit Rules
 
