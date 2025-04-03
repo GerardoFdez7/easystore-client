@@ -16,6 +16,7 @@ Welcome to the frontend repository of EasyStore, the web application that empowe
   - [Branch Rules](#branch-rules)
 - [Architecture](#architecture)
 - [Features](#features)
+  - [GraphQL API](#graphql-api)
   - [Theming](#theming)
   - [Internationalization](#internationalization)
 
@@ -37,7 +38,20 @@ Follow these instructions to set up and run the EasyStore frontend application:
    npm install
    ```
 
-3. Start the development server:
+3. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   ```
+
+4. Generate typescript types from GraphQL schema and operations:
+   ```bash
+   npm run gql
+   ```
+> [!IMPORTANT]
+> Run this command after adding new queries or when the backend schema changes.
+> 
+
+5. Start the development server:
 
    ```bash
    npm run dev
@@ -201,6 +215,15 @@ EasyStore frontend is built using the following architecture and technologies:
 The Atomic Design pattern organizes components into atoms, molecules, organisms, templates, and pages, creating a scalable and maintainable component hierarchy.
 
 ## Features
+### GraphQL API
+EasyStore uses Apollo Client for GraphQL integration:
+
+- Type-safe API requests with generated TypeScript types
+- Automatic caching and state management
+- Optimistic UI updates
+- Error handling and retry mechanisms
+> [!TIP]
+> Use the custom useGraphQL hook for simplified query execution with proper typing.
 
 ### Theming
 
