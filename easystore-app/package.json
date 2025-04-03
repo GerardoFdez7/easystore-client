@@ -11,10 +11,13 @@
     "docker:dev": "docker-compose -f docker-compose.dev.yml up",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "gql": "npx graphql-codegen && npx graphql-codegen --check",
     "prepare": "cd .. && husky install easystore-app/.husky"
   },
   "dependencies": {
+    "@apollo/client": "^3.13.5",
     "babel-plugin-react-compiler": "^19.0.0-beta-aeaed83-20250323",
+    "graphql": "^16.10.0",
     "next": "15.2.4",
     "next-intl": "^4.0.2",
     "next-themes": "^0.4.6",
@@ -24,6 +27,10 @@
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.6",
     "@eslint/eslintrc": "^3",
+    "@graphql-codegen/cli": "^5.0.5",
+    "@graphql-codegen/typescript": "^4.1.6",
+    "@graphql-codegen/typescript-operations": "^4.6.0",
+    "@graphql-codegen/typescript-react-apollo": "^4.3.2",
     "@next/eslint-plugin-next": "^15.2.4",
     "@storybook/addon-essentials": "^8.6.11",
     "@storybook/addon-interactions": "^8.6.11",
@@ -37,6 +44,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@typescript-eslint/parser": "^8.28.0",
+    "dotenv": "^16.4.7",
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
     "eslint-config-prettier": "^10.1.1",

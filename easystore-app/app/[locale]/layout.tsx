@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { ThemeProvider } from '@/components/atoms/ThemeProvider';
+import { ApolloWrapper } from '@/lib/apollo/apollo-provider';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
@@ -39,9 +40,11 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <NextIntlClientProvider>{children}</NextIntlClientProvider>
-        </ThemeProvider>
+        <ApolloWrapper>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <NextIntlClientProvider>{children}</NextIntlClientProvider>
+          </ThemeProvider>
+        </ApolloWrapper>
       </body>
     </html>
   );
