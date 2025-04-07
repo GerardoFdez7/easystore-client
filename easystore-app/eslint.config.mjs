@@ -27,7 +27,6 @@ const eslintConfig = [
     },
     rules: {
       // Base rules
-      'no-console': 'error',
       curly: 'error',
       eqeqeq: ['error', 'always'],
 
@@ -96,7 +95,7 @@ const eslintConfig = [
     },
   },
   ...compat.config({
-    extends: ['plugin:prettier/recommended', 'next'],
+    extends: ['plugin:prettier/recommended'],
   }),
 ];
 

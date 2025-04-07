@@ -22,10 +22,8 @@ export const useGraphQL = <
   const { data, error, ...rest } = useQuery<TResult, TVariables>(query, {
     variables,
     errorPolicy: 'all',
-    onError: (_error) => {
-      /* Replace this with a logger  
-      console.error('GraphQL Error:', _error);
-      */
+    onError: (error) => {
+      console.error('GraphQL Error:', error);
     },
   });
 
