@@ -49,8 +49,15 @@ docker-compose.override.yml
 # Storybook
 *storybook.log
 
-# Preserve empty directories
-!.gitkeep
-
 # generated types from api
 app/[locale]/lib/graphql/generated.ts
+
+.husky/*
+!.husky/_/*
+!.husky/_/husky.sh
+!.husky/.commit-msg
+!.husky/pre-commit
+!.husky/commit-msg
+lint-staged.config.js
+eslint.config.mjs
+.prettierrc
