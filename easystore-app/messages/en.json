@@ -1,5 +1,11 @@
 {
   "Home": {
     "title": "Welcome to EasyStore!"
+  },
+
+  "Landing": {
+    "buttonStartFree": "Start Free",
+    "login": "Log in",
+    "pricing": "Pricing"
   }
 }
