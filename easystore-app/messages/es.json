@@ -1,5 +1,10 @@
 {
   "Home": {
     "title": "Bienvenido a EasyStore!"
+  },
+  "Landing": {
+    "buttonStartFree": "Comienza gratis",
+    "login": "Iniciar sesión",
+    "pricing": "Precios"
   }
 }
