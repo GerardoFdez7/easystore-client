@@ -7,7 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
-import { LanguageButton } from '@components/atoms/LanguageButton';
+import { LanguageButton } from '@components/atoms/languageButton';
 import LinkLog from './LinkLogIn';
 import LinkPricing from './LinkPricing';
 
