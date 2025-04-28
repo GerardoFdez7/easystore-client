@@ -1,5 +1,15 @@
 {
   "Home": {
     "title": "Bem-vindo à EasyStore!"
+  },
+  "Landing": {
+    "buttonStartFree": "Comece grátis",
+    "login": "Entrar",
+    "pricing": "Preços",
+    "Spanish": "Espanhol",
+    "English": "Inglês",
+    "French": "Francês",
+    "Italian": "Italiano",
+    "Portuguese": "Português"
   }
 }

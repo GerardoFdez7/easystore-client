@@ -1,6 +1,6 @@
 import { Logo } from '../atoms/Logo';
 import { Button } from '../atoms/Button';
-import { MenuIcon } from '../atoms/MenuIcon';
+import MenuIcon from '../atoms/MenuIcon';
 import NavLinks from '../molecules/navLinks';
 
 import { useTranslations } from 'next-intl';

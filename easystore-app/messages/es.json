@@ -3,8 +3,13 @@
     "title": "Bienvenido a EasyStore!"
   },
   "Landing": {
-    "buttonStartFree": "Comienza gratis",
+    "buttonStartFree": "Comenzar gratis",
     "login": "Iniciar sesión",
-    "pricing": "Precios"
+    "pricing": "Precios",
+    "Spanish": "Español",
+    "English": "Inglés",
+    "French": "Francés",
+    "Italian": "Italiano",
+    "Portuguese": "Portugués"
   }
 }

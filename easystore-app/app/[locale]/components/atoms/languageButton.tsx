@@ -1,12 +1,20 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 export const LanguageButton = () => {
+  const t = useTranslations('Landing');
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
-  const [selectedLanguage, setSelectedLanguage] = useState('en'); // Inicializar en inglés por defecto
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
+
+  useEffect(() => {
+    const lang = pathname?.substring(1, 3) || 'en';
+    setSelectedLanguage(lang);
+  }, [pathname]);
 
   const handleLanguageChange = (lang: string) => {
     setSelectedLanguage(lang);
@@ -15,17 +23,28 @@ export const LanguageButton = () => {
     router.push(newPath);
   };
 
+  const languageAbbreviations: Record<string, string> = {
+    en: 'En',
+    es: 'Es',
+    fr: 'Fr',
+    it: 'It',
+    pt: 'Pt',
+  };
+
   return (
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="text-gray-700 hover:text-gray-900"
+        className="flex items-center text-gray-700 hover:text-gray-900"
       >
-        {selectedLanguage === 'en'
-          ? 'Languages'
-          : selectedLanguage === 'es'
-            ? 'Idiomas'
-            : 'Langues'}
+        <Image
+          src="/images/planet.png"
+          alt="Cart Icon"
+          width={20}
+          height={20}
+          className="mr-1 h-4 w-4"
+        />
+        {languageAbbreviations[selectedLanguage]}
       </button>
 
       {isOpen && (
@@ -35,19 +54,31 @@ export const LanguageButton = () => {
               className="cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100"
               onClick={() => handleLanguageChange('en')}
             >
-              English
+              {t('English')}
             </li>
             <li
               className="cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100"
               onClick={() => handleLanguageChange('es')}
             >
-              Spanish
+              {t('Spanish')}
             </li>
             <li
               className="cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100"
               onClick={() => handleLanguageChange('fr')}
             >
-              French
+              {t('French')}
+            </li>
+            <li
+              className="cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100"
+              onClick={() => handleLanguageChange('it')}
+            >
+              {t('Italian')}
+            </li>
+            <li
+              className="cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100"
+              onClick={() => handleLanguageChange('pt')}
+            >
+              {t('Portuguese')}
             </li>
           </ul>
         </div>
