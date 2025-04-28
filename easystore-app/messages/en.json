@@ -6,6 +6,11 @@
   "Landing": {
     "buttonStartFree": "Start Free",
     "login": "Log in",
-    "pricing": "Pricing"
+    "pricing": "Pricing",
+    "Spanish": "Spanish",
+    "English": "English",
+    "French": "French",
+    "Italian": "Italian",
+    "Portuguese": "Portuguese"
   }
 }
