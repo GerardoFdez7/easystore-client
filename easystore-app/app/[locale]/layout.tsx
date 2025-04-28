@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@lib/utils/ThemeProvider';
 import { ApolloWrapper } from '@lib/apollo/apollo-provider';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
@@ -7,14 +7,11 @@ import { notFound } from 'next/navigation';
 import { routing } from '@i18n/routing';
 import './globals.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+// Load Inter font with all weights
+const inter = Inter({
+  variable: '--font-inter',
   subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
 });
 
 export const metadata: Metadata = {
@@ -37,9 +34,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${inter.variable} antialiased`}>
         <ApolloWrapper>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <NextIntlClientProvider>{children}</NextIntlClientProvider>
