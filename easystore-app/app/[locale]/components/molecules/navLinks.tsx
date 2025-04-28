@@ -1,4 +1,4 @@
-import { LanguageButton } from '@components/atoms/languageButton';
+import { LanguageButton } from '@components/atoms/LanguageButton';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
