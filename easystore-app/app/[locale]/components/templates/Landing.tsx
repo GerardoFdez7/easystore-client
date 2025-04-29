@@ -1,4 +1,4 @@
-import Header from '@components/organisms/Header';
+import Header from '@components/organisms/Header1';
 
 export default function LandingPage() {
   return (
