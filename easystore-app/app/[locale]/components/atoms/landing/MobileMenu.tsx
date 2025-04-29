@@ -2,12 +2,13 @@
 
 import * as React from 'react';
 import Image from 'next/image';
+import menuIcon from '@assets/menu.png';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from '@components/ui/dropdown-menu';
-import { LanguageButton } from '@components/atoms/LanguageButton';
+} from '@components/molecules/landing/DropdownMenuCn';
+import { LanguageButton } from '@components/atoms/landing/ButtonLanguage';
 import LinkLog from './LinkLogIn';
 import LinkPricing from './LinkPricing';
 
@@ -17,7 +18,7 @@ export default function MobileMenu() {
       <DropdownMenuTrigger asChild>
         <button className="relative h-8 w-8">
           <Image
-            src="/images/menu.png"
+            src={menuIcon}
             alt="Menu Icon"
             fill
             className="object-contain"

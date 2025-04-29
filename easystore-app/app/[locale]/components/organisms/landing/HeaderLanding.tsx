@@ -1,24 +1,24 @@
-import { Logo } from '../atoms/Logo';
-import { Button } from '../atoms/Button';
-import MenuIcon from '../atoms/MenuIcon1';
-import NavLinks from '../molecules/NavLinks1';
+import { LogoCart } from '@components/atoms/landing/LogoCart';
+import { ButtonBase } from '@components/atoms/landing/ButtonBase';
+import MobileMenu from '@components/atoms/landing/MobileMenu';
+import NaviLinks from '@components/molecules/landing/NaviLinks';
 
 import { useTranslations } from 'next-intl';
 
-export default function Header() {
+export default function HeaderLanding() {
   const t = useTranslations('Landing');
   return (
     <header className="flex items-center justify-between bg-gray-50 p-4">
       <div className="flex items-center gap-2">
-        <Logo />
+        <LogoCart />
         <span className="text-xl font-bold text-gray-900">EasyStore</span>
       </div>
       <div className="mr-4 flex items-center gap-4">
-        <NavLinks />
+        <NaviLinks />
       </div>
       <div className="block flex items-center gap-5 md:hidden">
-        <Button label={t('buttonStartFree')} />
-        <MenuIcon />
+        <ButtonBase label={t('buttonStartFree')} />
+        <MobileMenu />
       </div>
     </header>
   );

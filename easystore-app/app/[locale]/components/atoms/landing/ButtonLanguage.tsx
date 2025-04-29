@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import plantetIcon from '@assets/planet.png';
 
 export const LanguageButton = () => {
   const t = useTranslations('Landing');
@@ -38,7 +39,7 @@ export const LanguageButton = () => {
         className="flex items-center text-gray-700 hover:text-gray-900"
       >
         <Image
-          src="/images/planet.png"
+          src={plantetIcon}
           alt="Cart Icon"
           width={20}
           height={20}
