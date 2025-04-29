@@ -1,4 +1,4 @@
-import { LanguageButton } from '@components/atoms/languageButton';
+import { LanguageButton } from '@components/atoms/LanguageButton';
 import LinkLog from '@components/atoms/LinkLogIn';
 import LinkPricing from '@components/atoms/LinkPricing';
 
