@@ -1,9 +1,10 @@
 import Image from 'next/image';
+import cartIcon from '@assets/cart.png';
 
-export const Logo = () => (
+export const LogoCart = () => (
   <div className="flex items-center gap-3">
     <Image
-      src="/images/cart.png"
+      src={cartIcon}
       alt="Cart Icon"
       width={40}
       height={40}
