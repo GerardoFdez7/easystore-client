@@ -5,7 +5,7 @@ type ButtonProps = {
 };
 
 export const ButtonBase = ({ label }: ButtonProps) => (
-  <Button className="rounded-full bg-purple-500 font-semibold text-white hover:bg-purple-600">
+  <Button className="bg-primary rounded-lg p-2 text-sm font-bold text-white">
     {label}
   </Button>
 );
