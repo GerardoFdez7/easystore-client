@@ -49,7 +49,7 @@ export const LanguageButton = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg">
+        <div className="bg-background absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 shadow-lg">
           <ul>
             <li
               className="cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100"

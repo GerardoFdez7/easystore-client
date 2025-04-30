@@ -50,7 +50,7 @@ export function PageThemeProvider({ children }: { children: React.ReactNode }) {
       '/pt/contact',
       '/pt/terms',
       '/pt/privacy',
-      'it',
+      '/it',
       '/it/login',
       '/it/register',
       '/it/confirm-registration',

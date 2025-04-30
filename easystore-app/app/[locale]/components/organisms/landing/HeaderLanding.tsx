@@ -8,10 +8,10 @@ import { useTranslations } from 'next-intl';
 export default function HeaderLanding() {
   const t = useTranslations('Landing');
   return (
-    <header className="flex items-center justify-between bg-gray-50 p-4">
+    <header className="flex items-center justify-between p-4">
       <div className="flex items-center gap-2">
         <LogoCart />
-        <span className="text-xl font-bold text-gray-900">EasyStore</span>
+        <span className="text-title text-2xl font-extrabold">EasyStore</span>
       </div>
       <div className="mr-4 flex items-center gap-4">
         <NaviLinks />

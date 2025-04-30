@@ -7,7 +7,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from '@components/molecules/landing/DropdownMenuCn';
+} from '@components/molecules/DropdownMenuCn';
 import { LanguageButton } from '@components/atoms/landing/ButtonLanguage';
 import LinkLog from './LinkLogIn';
 import LinkPricing from './LinkPricing';
@@ -25,8 +25,8 @@ export default function MobileMenu() {
           />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="flex h-screen w-56 flex-col bg-white shadow-lg">
-        <div className="flex flex-col space-y-3 p-4">
+      <DropdownMenuContent className="bg-background flex h-screen w-56 flex-col shadow-lg">
+        <div className="bg-background flex flex-col space-y-3 p-4">
           <LinkLog />
           <LinkPricing />
           <LanguageButton />
