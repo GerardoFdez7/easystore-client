@@ -1,15 +1,15 @@
 {
-  "Home": {
-    "title": "Bienvenue dans EasyStore!"
+  "Languages": {
+    "Spanish": "Español",
+    "English": "English",
+    "French": "Français",
+    "Italian": "Italiano",
+    "Portuguese": "Português"
   },
   "Landing": {
     "buttonStartFree": "Commencer",
     "login": "Se connecter",
     "pricing": "Tarification",
-    "Spanish": "Espagnol",
-    "English": "Anglais",
-    "French": "Français",
-    "Italian": "Italien",
-    "Portuguese": "Portugais"
+    "Spanish": "Espagnol"
   }
 }
