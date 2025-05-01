@@ -1,11 +1,12 @@
+import { useTranslations } from 'next-intl';
 import { Button } from '@components/atoms/shared/ButtonCn';
 
-type ButtonProps = {
-  label: string;
-};
+export default function ButtonBase() {
+  const t = useTranslations('Landing');
 
-export const ButtonBase = ({ label }: ButtonProps) => (
-  <Button className="bg-primary flex h-[70px] w-[180px] items-center justify-center rounded-full text-2xl font-extrabold text-white max-[580px]:h-[12vw] max-[580px]:w-[33vw] max-[580px]:text-[4vw]">
-    {label}
-  </Button>
-);
+  return (
+    <Button className="bg-primary : flex h-[70px] items-center justify-center rounded-full text-2xl font-extrabold text-white max-[580px]:h-[12vw] max-[580px]:w-[35vw] max-[580px]:min-w-[33vw] max-[580px]:text-[4vw]">
+      {t('buttonStartFree')}
+    </Button>
+  );
+}

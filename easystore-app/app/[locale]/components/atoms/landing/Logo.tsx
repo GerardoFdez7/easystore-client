@@ -1,9 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import logo from '@assets/logo.webp';
 
-export const Logo = () => {
+const Logo = () => {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -19,8 +18,10 @@ export const Logo = () => {
       aria-label="Scroll to top"
     >
       <Image
-        src={logo}
+        src={'/logo.webp'}
         alt="Cart Icon"
+        width={60}
+        height={64}
         className="max-[580px]:h-[10vw] max-[580px]:w-[10vw]"
       />
       <span className="text-title text-[40px] font-extrabold max-[580px]:text-[6vw]">
@@ -29,3 +30,5 @@ export const Logo = () => {
     </div>
   );
 };
+
+export default Logo;

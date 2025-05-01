@@ -12,17 +12,12 @@ import LinkLog from '@components/atoms/landing/LinkLogIn';
 import LinkPricing from '@components/atoms/landing/LinkPricing';
 import { Menu } from 'lucide-react';
 
-interface MobileMenuProps {
-  className?: string;
-  // Add any additional props you need here
-}
-
-export default function MobileMenu({ className = '' }: MobileMenuProps) {
+export default function MobileMenu() {
   return (
     <Drawer direction="right">
       <DrawerTrigger asChild>
         <button
-          className={`relative h-8 w-8 ${className}`}
+          className="flex items-center lg:hidden"
           aria-label="Open navigation menu"
           aria-haspopup="true"
           aria-expanded="false"
@@ -30,8 +25,15 @@ export default function MobileMenu({ className = '' }: MobileMenuProps) {
           <Menu size={32} />
         </button>
       </DrawerTrigger>
-      <DrawerContent className="bg-background flex h-screen w-56 flex-col shadow-lg">
+      <DrawerContent
+        className="bg-background flex h-screen w-56 flex-col shadow-lg"
+        aria-describedby="drawer-description"
+      >
         <DrawerTitle className="sr-only">Navigation Menu</DrawerTitle>
+        <div id="drawer-description" className="sr-only">
+          This is the navigation menu. Use the links to navigate through the
+          site.
+        </div>
         <div className="bg-background flex flex-col items-center space-y-4 p-4">
           <LanguageButton />
           <LinkPricing />
