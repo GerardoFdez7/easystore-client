@@ -8,7 +8,10 @@
   },
   "Landing": {
     "buttonStartFree": "Commencer",
+    "buttonViewPlans": "Voir les plans",
     "login": "Se connecter",
-    "pricing": "Tarification"
+    "pricing": "Tarification",
+    "title": "Développez votre marque sans effort avec EasyStore",
+    "slogan": "Créez une boutique en ligne puissante qui s’adapte à toute entreprise – sans codage ni développeur requis !"
   }
 }

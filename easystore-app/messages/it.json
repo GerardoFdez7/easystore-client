@@ -8,7 +8,10 @@
   },
   "Landing": {
     "buttonStartFree": "Inizia gratis",
+    "buttonViewPlans": "Visualizza i piani",
     "login": "Accedi",
-    "pricing": "Prezzi"
+    "pricing": "Prezzi",
+    "title": "Fai crescere il tuo brand senza sforzo con EasyStore",
+    "slogan": "Crea un potente negozio online che si adatta a qualsiasi attività – senza bisogno di codice o sviluppatori!"
   }
 }
