@@ -1,10 +1,13 @@
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 export default function Start() {
+  const t = useTranslations('Landing');
+
   return (
     <section className="mx-auto px-4 py-12 sm:px-6 sm:py-16 md:px-10 md:py-16 lg:px-14">
       <h2 className="text-title mb-12 text-center text-5xl font-extrabold xl:text-left">
-        Starting to sell is very easy
+        {t('starting')}
       </h2>
 
       <div className="flex flex-col items-center gap-8 px-10 xl:flex-row xl:items-start xl:justify-between">
@@ -15,7 +18,7 @@ export default function Start() {
             <div className="mb-4 flex items-center gap-3">
               <span className="text-secondary text-xl font-bold">1.</span>
               <h3 className="text-text font-regular text-2xl sm:text-3xl">
-                Add your products
+                {t('addYourProducts')}
               </h3>
             </div>
             <div className="border-t border-gray-200 pt-4"></div>
@@ -26,7 +29,7 @@ export default function Start() {
             <div className="mb-4 flex items-center gap-3">
               <span className="text-secondary text-xl font-bold">2.</span>
               <h3 className="text-text font-regular text-2xl sm:text-3xl">
-                Customize your store
+                {t('customizeYourStore')}
               </h3>
             </div>
             <div className="border-t border-gray-200 pt-4"></div>
@@ -37,7 +40,7 @@ export default function Start() {
             <div className="mb-4 flex items-center gap-3">
               <span className="text-secondary text-xl font-bold">3.</span>
               <h3 className="text-text font-regular text-2xl sm:text-3xl">
-                Set up payments
+                {t('setUpdPayments')}
               </h3>
             </div>
             <div className="border-t border-gray-200 pt-4"></div>
