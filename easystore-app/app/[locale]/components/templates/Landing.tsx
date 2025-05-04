@@ -1,15 +1,11 @@
 import HeaderLanding from '@components/organisms/landing/HeaderLanding';
-import Portrait from '@components/organisms/landing/Portrait';
-import Start from '@components/organisms/landing/Start';
-import Footer from '@components/organisms/shared/Footer';
+import MainLanding from '@components/organisms/landing/MainLanding';
 
 export default function LandingPage() {
   return (
     <div className="bg-background min-h-screen">
       <HeaderLanding />
-      <Portrait />
-      <Start />
-      <Footer />
+      <MainLanding />
     </div>
   );
 }

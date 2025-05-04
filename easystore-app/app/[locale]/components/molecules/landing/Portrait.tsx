@@ -8,7 +8,7 @@ export default function Portrait() {
   const t = useTranslations('Landing');
   return (
     <section
-      className="mx-0 my-3 mt-21 min-h-[770px] rounded-xl bg-cover bg-center text-white sm:mx-7 sm:mt-26 sm:min-h-[700px]"
+      className="mx-0 my-3 min-h-[770px] rounded-xl bg-cover bg-center text-white sm:min-h-[770px]"
       style={{
         backgroundImage: `url('/portrait_image.webp')`,
       }}
