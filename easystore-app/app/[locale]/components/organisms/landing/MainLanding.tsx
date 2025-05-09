@@ -1,13 +1,19 @@
-import Portrait from '@components/molecules/landing/Portrait';
-import Start from '@components/molecules/landing/Start';
-import Footer from '@components/molecules/shared/Footer';
+import AboutUs from '@components/molecules/landing/AboutUs';
+import FAQs from '@components/molecules/landing/FAQs';
+import Everywhere from '@molecules/landing/Everywhere';
+import Features from '@molecules/landing/Features';
+import Portrait from '@molecules/landing/Portrait';
+import Start from '@molecules/landing/Start';
 
 export default function MainLanding() {
   return (
-    <div className="mx-0 mt-21 sm:mt-26 md:mx-20 xl:mx-35">
+    <main className="mt-21 sm:mt-26 md:mx-20 xl:mx-35">
       <Portrait />
       <Start />
-      <Footer />
-    </div>
+      <Features />
+      <Everywhere />
+      <FAQs />
+      <AboutUs />
+    </main>
   );
 }
