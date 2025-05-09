@@ -12,11 +12,11 @@ const config: Config = {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
-        primary: '#BC5BF5',
-        secondary: '#10B981',
-        background_light: '#F3F4F6',
-        title: '#000000',
-        text: '#423F3D',
+        primary: 'var(--primary)',
+        secondary: 'var(--secondary)',
+        background_light: 'var(--background)',
+        title: 'var(--title-color)',
+        text: 'var(--foreground)',
       },
       fontFamily: {
         sans: ['var(--font-inter)'],

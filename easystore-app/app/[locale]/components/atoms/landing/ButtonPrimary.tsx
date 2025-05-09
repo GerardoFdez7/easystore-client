@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl';
-import { Button } from '@components/atoms/shared/ButtonCn';
+import { Button } from '@atoms/shared/ButtonCn';
 
-export default function ButtonBase() {
+export default function ButtonPrimary() {
   const t = useTranslations('Landing');
 
   return (
