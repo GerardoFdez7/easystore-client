@@ -7,8 +7,11 @@ interface SimpleLinkProps {
 
 export default function LinkFooter({ href, text }: SimpleLinkProps) {
   return (
-    <Link href={href} className="font-medium hover:text-gray-900">
-      <span style={{ opacity: 0.5 }} className="text-foreground">
+    <Link href={href} className="text-16 sm:text-20 font-medium">
+      <span
+        style={{ opacity: 0.7 }}
+        className="text-foreground hover:underline"
+      >
         {text}
       </span>
     </Link>

@@ -1,7 +1,7 @@
-import Logo from '@components/atoms/landing/Logo';
-import ButtonBase from '@components/atoms/landing/ButtonBase';
-import MobileMenu from '@components/molecules/landing/MobileMenu';
-import NaviLinks from '@components/molecules/landing/NaviLinks';
+import Logo from '@atoms/landing/Logo';
+import ButtonPrimary from '@components/atoms/landing/ButtonPrimary';
+import MobileMenu from '@molecules/landing/MobileMenu';
+import NaviLinks from '@molecules/landing/NaviLinks';
 
 export default function HeaderLanding() {
   return (
@@ -9,7 +9,7 @@ export default function HeaderLanding() {
       <Logo />
       <div className="flex items-center gap-2">
         <NaviLinks />
-        <ButtonBase />
+        <ButtonPrimary />
         <MobileMenu />
       </div>
     </header>

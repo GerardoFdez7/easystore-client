@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import ButtonBase from '@components/atoms/landing/ButtonBase';
+import ButtonPrimary from '@components/atoms/landing/ButtonPrimary';
 
 const meta = {
-  title: 'Atoms/Landing/ButtonBase',
-  component: ButtonBase,
+  title: 'Atoms/ButtonPrimary',
+  component: ButtonPrimary,
   parameters: {
     layout: 'centered',
   },
@@ -14,7 +14,7 @@ const meta = {
       description: 'description',
     },
   },
-} satisfies Meta<typeof ButtonBase>;
+} satisfies Meta<typeof ButtonPrimary>;
 
 export default meta;
 
