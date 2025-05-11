@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 export default function HeaderForm() {
   const t = useTranslations('Login');
   return (
-    <section className="bg-background flex items-center justify-between px-4 py-6">
+    <section className="bg-background flex items-center justify-between px-4">
       <div className="flex-shrink-0">
         <LogoLogin />
       </div>

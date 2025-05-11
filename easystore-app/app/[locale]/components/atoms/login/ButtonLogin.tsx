@@ -5,7 +5,7 @@ export default function ButtonLogin() {
   const t = useTranslations('Login');
 
   return (
-    <Button className="bg-primary flex h-[70px] items-center justify-center rounded-full text-2xl font-extrabold text-white max-[580px]:h-[12vw] max-[580px]:w-[35vw] max-[580px]:min-w-[33vw] max-[580px]:text-[4vw]">
+    <Button className="bg-primary text-text flex h-[50px] w-full items-center justify-center rounded-full font-bold text-white max-[580px]:h-[12vw] max-[580px]:w-[35vw] max-[580px]:min-w-[33vw] max-[580px]:text-[4vw]">
       {t('buttonLogin')}
     </Button>
   );
