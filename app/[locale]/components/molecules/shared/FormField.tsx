@@ -23,7 +23,7 @@ export const FormField: React.FC<FormFieldProps> = ({
   <Form.Field className="flex flex-col" name={name}>
     <div className="mb-1 flex items-baseline justify-between">
       <Form.Label asChild>
-        <label htmlFor={name} className="text-sm font-medium text-gray-700">
+        <label htmlFor={name} className="text-text font-medium text-gray-700">
           {label}
         </label>
       </Form.Label>
