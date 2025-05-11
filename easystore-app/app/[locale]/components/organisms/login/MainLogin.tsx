@@ -1,6 +1,7 @@
 'use client';
 
 import { LoginForm } from '@components/molecules/login/LoginForm';
+import HeaderForm from '@components/molecules/login/HeaderForm';
 
 export default function MainLogin() {
   const handleLogin = (data: { email: string; password: string }) => {
@@ -8,7 +9,8 @@ export default function MainLogin() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-4">
+    <main className="flex min-h-screen flex-col items-center justify-center px-4">
+      <HeaderForm />
       <LoginForm onSubmit={handleLogin} />
     </main>
   );
