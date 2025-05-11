@@ -6,6 +6,8 @@ import ButtonLogin from '@components/atoms/login/ButtonLogin';
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import LinkText from '@components/atoms/shared/LinkText';
+import SocialButton from '@components/atoms/shared/SocialButton';
+import { FaGoogle, FaFacebookF } from 'react-icons/fa';
 
 export interface LoginFormProps {
   onSubmit: (data: { email: string; password: string }) => void;
@@ -20,6 +22,15 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
       email: formData.get('email') as string,
       password: formData.get('password') as string,
     });
+  };
+
+  const handleGoogleLogin = () => {
+    // TO DO: implement Google login
+    console.log('Login with Google');
+  };
+  const handleFacebookLogin = () => {
+    // TO DO: implement Facebook login
+    console.log('Login with Facebook');
   };
 
   return (
@@ -52,9 +63,24 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
       </Form.Submit>
 
       <div className="flex flex-col items-center">
-        <LinkText href="/register" className="">
+        <LinkText href="" className="">
           {t('ChangePassword')}
         </LinkText>
+      </div>
+
+      <div className="flex items-center justify-center space-x-4">
+        <SocialButton
+          icon={<FaGoogle />}
+          text={t('loginWithGoogle')}
+          onClick={handleGoogleLogin}
+          className="bg-[#EBDBF5] text-black"
+        />
+        <SocialButton
+          icon={<FaFacebookF />}
+          text={t('loginWithFacebook')}
+          onClick={handleFacebookLogin}
+          className="bg-[#EBDBF5] text-black"
+        />
       </div>
     </Form.Root>
   );
