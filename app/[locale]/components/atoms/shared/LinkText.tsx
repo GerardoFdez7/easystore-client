@@ -8,10 +8,8 @@ interface LinkTextProps {
 }
 
 const LinkText: React.FC<LinkTextProps> = ({ href, children, className }) => (
-  <Link href={href}>
-    <a className={`text-primary text-sm hover:underline ${className || ''}`}>
-      {children}
-    </a>
+  <Link href={href} className={`underline ${className}`}>
+    {children}
   </Link>
 );
 
