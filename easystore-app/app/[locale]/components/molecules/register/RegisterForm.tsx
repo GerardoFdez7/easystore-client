@@ -80,6 +80,10 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
         placeholder="••••••••"
       />
 
+      <Form.Submit asChild>
+        <ButtonRegister />
+      </Form.Submit>
+
       <div className="flex flex-col items-center">
         <p className="text-sm text-gray-600">
           {t('alreadyHaveAccount')}{' '}
@@ -88,10 +92,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
           </LinkText>
         </p>
       </div>
-
-      <Form.Submit asChild>
-        <ButtonRegister />
-      </Form.Submit>
 
       <div className="flex items-center justify-center space-x-4">
         <SocialButton
