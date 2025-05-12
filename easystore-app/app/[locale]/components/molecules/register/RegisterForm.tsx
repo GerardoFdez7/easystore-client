@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl';
 import LinkText from '@components/atoms/shared/LinkText';
 import SocialButton from '@components/atoms/shared/SocialButton';
 import { FaGoogle, FaFacebookF } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
 
 export interface RegisterFormProps {
   onSubmit: (data: {
@@ -21,6 +22,7 @@ export interface RegisterFormProps {
 
 export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
   const t = useTranslations('Register');
+  const router = useRouter();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -32,6 +34,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
       password: formData.get('password') as string,
       confirmPassword: formData.get('confirmPassword') as string,
     });
+    router.push('/register/confirm');
   };
 
   const handleGoogleLogin = () => {
