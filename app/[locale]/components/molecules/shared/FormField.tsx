@@ -8,6 +8,8 @@ import Input from '@components/atoms/shared/Input';
 export interface FormFieldProps {
   label: string;
   name: string;
+  value?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   type?: React.HTMLInputTypeAttribute;
   placeholder?: string;
   requiredMessage?: string;
@@ -19,6 +21,8 @@ export const FormField: React.FC<FormFieldProps> = ({
   type = 'text',
   placeholder,
   requiredMessage,
+  value,
+  onChange,
 }) => (
   <Form.Field className="flex flex-col" name={name}>
     <div className="mb-1 flex items-baseline justify-between">
@@ -39,6 +43,8 @@ export const FormField: React.FC<FormFieldProps> = ({
         name={name}
         type={type}
         placeholder={placeholder}
+        value={value}
+        onChange={onChange}
         required
         className={cn('mb-2')}
       />
