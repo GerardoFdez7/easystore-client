@@ -1,4 +1,4 @@
-import CarouselFeature from '@components/molecules/landing/CarouselFeature';
+import CarouselFeature from '@molecules/landing/CarouselFeature';
 import { useTranslations } from 'next-intl';
 
 export default function Features() {
@@ -13,7 +13,7 @@ export default function Features() {
 
         <p className="text-text text-xl sm:text-3xl">{t('featureText')}</p>
       </div>
-      <div>
+      <div className="relative z-10 md:-mx-15 xl:-mx-25">
         <CarouselFeature />
       </div>
     </section>

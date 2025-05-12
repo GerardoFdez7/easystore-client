@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import HeaderLanding from '@components/organisms/landing/HeaderLanding';
+import HeaderLanding from '@organisms/landing/HeaderLanding';
 
 const meta: Meta<typeof HeaderLanding> = {
   title: 'Organisms/Landing/HeaderLanding',

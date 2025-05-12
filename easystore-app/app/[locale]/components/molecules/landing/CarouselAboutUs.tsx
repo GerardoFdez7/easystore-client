@@ -1,5 +1,5 @@
 import { Carousel, CarouselContent } from '@atoms/shared/Carousel';
-import ItemFeature from '@components/atoms/landing/ItemFeature';
+import ItemFeature from '@atoms/landing/ItemFeature';
 import { useTranslations } from 'next-intl';
 import { Building2, Users, Earth, Focus, Flag } from 'lucide-react';
 
@@ -31,7 +31,7 @@ export default function CarouselAboutUs() {
       </Carousel>
 
       {/*Row 2*/}
-      <Carousel className="mb-10">
+      <Carousel startAtEnd className="mb-10">
         <CarouselContent>
           <ItemFeature
             icon={<Focus className={iconClass} />}

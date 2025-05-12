@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from '@components/molecules/shared/DropdownMenuCn';
+} from '@molecules/shared/DropdownMenuCn';
 
 export const LanguageButton = () => {
   const t = useTranslations('Languages');
@@ -39,7 +39,7 @@ export const LanguageButton = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="text-text hover:text-gray-90 flex cursor-pointer items-center text-2xl font-medium">
+        <button className="text-title flex cursor-pointer items-center text-2xl font-medium">
           <Globe size={24} className="mx-1" />
           {languageAbbreviations[selectedLanguage]}
         </button>

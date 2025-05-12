@@ -1,6 +1,6 @@
 'use client';
-import ButtonPrimary from '@components/atoms/landing/ButtonPrimary';
-import ButtonViewPlans from '@components/atoms/landing/ButtonViewPlans';
+import ButtonPrimary from '@atoms/landing/ButtonPrimary';
+import ButtonViewPlans from '@atoms/landing/ButtonViewPlans';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 

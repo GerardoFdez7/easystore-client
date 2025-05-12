@@ -1,6 +1,6 @@
-import { LanguageButton } from '@components/atoms/shared/ButtonLanguage';
-import LinkLog from '@components/atoms/landing/LinkLogIn';
-import LinkPricing from '@components/atoms/landing/LinkPricing';
+import { LanguageButton } from '@atoms/shared/ButtonLanguage';
+import LinkLog from '@atoms/landing/LinkLogIn';
+import LinkPricing from '@atoms/landing/LinkPricing';
 
 export default function NaviLinks() {
   return (

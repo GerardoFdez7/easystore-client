@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
-import ImageStart from '@components/atoms/landing/ImageStart';
-import StepText from '@components/atoms/landing/StepText';
+import ImageStart from '@atoms/landing/ImageStart';
+import StepText from '@atoms/landing/StepText';
 
 export default function Start() {
   const t = useTranslations('Landing');
