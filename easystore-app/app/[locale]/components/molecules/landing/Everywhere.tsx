@@ -1,4 +1,4 @@
-import ImageEveryWhere from '@components/atoms/landing/ImageEveryWhere';
+import ImageEveryWhere from '@atoms/landing/ImageEveryWhere';
 import { useTranslations } from 'next-intl';
 
 export default function Everywhere() {

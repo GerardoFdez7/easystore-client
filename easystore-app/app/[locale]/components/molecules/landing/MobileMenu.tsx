@@ -6,10 +6,10 @@ import {
   DrawerContent,
   DrawerTrigger,
   DrawerTitle,
-} from '@components/molecules/shared/Drawer';
-import { LanguageButton } from '@components/atoms/shared/ButtonLanguage';
-import LinkLog from '@components/atoms/landing/LinkLogIn';
-import LinkPricing from '@components/atoms/landing/LinkPricing';
+} from '@molecules/shared/Drawer';
+import { LanguageButton } from '@atoms/shared/ButtonLanguage';
+import LinkLog from '@atoms/landing/LinkLogIn';
+import LinkPricing from '@atoms/landing/LinkPricing';
 import { Menu } from 'lucide-react';
 
 export default function MobileMenu() {

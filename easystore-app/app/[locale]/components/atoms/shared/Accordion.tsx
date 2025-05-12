@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { ChevronDownIcon } from 'lucide-react';
-import { cn } from 'app/[locale]/lib/utils/cn';
+import { cn } from 'utils';
 
 const AccordionHoverContext = React.createContext<{
   setValue?: (val: string) => void;

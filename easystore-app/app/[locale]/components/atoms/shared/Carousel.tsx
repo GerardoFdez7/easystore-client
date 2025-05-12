@@ -6,8 +6,8 @@ import useEmblaCarousel, {
 } from 'embla-carousel-react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
-import { cn } from 'app/[locale]/lib/utils/cn';
-import { Button } from '@components/atoms/shared/ButtonCn';
+import { cn } from 'utils';
+import { Button } from '@atoms/shared/ButtonCn';
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -19,6 +19,7 @@ type CarouselProps = {
   plugins?: CarouselPlugin;
   orientation?: 'horizontal' | 'vertical';
   setApi?: (api: CarouselApi) => void;
+  startAtEnd?: boolean;
 };
 
 type CarouselContextProps = {
@@ -47,6 +48,7 @@ function Carousel({
   opts,
   setApi,
   plugins,
+  startAtEnd,
   className,
   children,
   ...props
@@ -99,6 +101,17 @@ function Carousel({
 
   React.useEffect(() => {
     if (!api) return;
+
+    if (startAtEnd && window.innerWidth <= 1024) {
+      const lastIndex = api.scrollSnapList().length - 1;
+      api.scrollTo(lastIndex);
+    }
+
+    if (setApi) setApi(api);
+  }, [api, startAtEnd, setApi]);
+
+  React.useEffect(() => {
+    if (!api) return;
     onSelect(api);
     api.on('reInit', onSelect);
     api.on('select', onSelect);
@@ -127,7 +140,7 @@ function Carousel({
   React.useEffect(() => {
     if (!api) return;
 
-    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 1024;
     if (!isMobile) return;
 
     const interval = setInterval(() => {
@@ -148,7 +161,7 @@ function Carousel({
           api.scrollNext();
         }
       }
-    }, 4000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [api, isUserInteracting, scrollDirection]);
@@ -194,7 +207,7 @@ function CarouselContent({ className, ...props }: React.ComponentProps<'div'>) {
         className={cn(
           'flex',
           orientation === 'horizontal'
-            ? 'flex justify-start gap-4 xl:justify-center'
+            ? 'flex justify-center-safe gap-4 xl:justify-center'
             : '-mt-4 flex-col',
           className,
         )}

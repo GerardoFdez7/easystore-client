@@ -1,5 +1,5 @@
 import Logo from '@atoms/landing/Logo';
-import ButtonPrimary from '@components/atoms/landing/ButtonPrimary';
+import ButtonPrimary from '@atoms/landing/ButtonPrimary';
 import MobileMenu from '@molecules/landing/MobileMenu';
 import NaviLinks from '@molecules/landing/NaviLinks';
 

@@ -22,7 +22,6 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@components/*": ["app/[locale]/components/*"],
       "utils": ["app/[locale]/lib/utils/cn"],
       "@atoms/*": ["./app/[locale]/components/atoms/*"],
       "@molecules/*": ["./app/[locale]/components/molecules/*"],
@@ -36,12 +35,6 @@
       "@i18n/*": ["./i18n/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "app/[locale]/components/molecules/landing/CarouselAboutUstsx"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules", "**/*.jsx"]
 }

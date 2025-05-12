@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import LinkPricing from '@components/atoms/landing/LinkPricing';
+import LinkPricing from '@atoms/landing/LinkPricing';
 
 const meta: Meta<typeof LinkPricing> = {
   title: 'Atoms/Landing/LinkPricing',

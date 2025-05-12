@@ -1,4 +1,4 @@
-import CarouselAboutUs from '@components/molecules/landing/CarouselAboutUs';
+import CarouselAboutUs from '@molecules/landing/CarouselAboutUs';
 import { useTranslations } from 'next-intl';
 
 export default function AboutUs() {
@@ -15,7 +15,7 @@ export default function AboutUs() {
         <p className="text-text mb-8 text-xl sm:text-3xl">{t('aboutText2')}</p>
         <p className="text-text mb-8 text-xl sm:text-3xl">{t('aboutText3')}</p>
       </div>
-      <div>
+      <div className="relative z-10 md:-mx-15 xl:-mx-25">
         <CarouselAboutUs />
       </div>
     </section>

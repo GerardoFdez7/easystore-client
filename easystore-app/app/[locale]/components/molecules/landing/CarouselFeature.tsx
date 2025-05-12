@@ -1,6 +1,7 @@
 import { Carousel, CarouselContent } from '@atoms/shared/Carousel';
-import ItemFeature from '@components/atoms/landing/ItemFeature';
+import ItemFeature from '@atoms/landing/ItemFeature';
 import { useTranslations } from 'next-intl';
+import { MdCodeOff } from 'react-icons/md';
 import {
   Tag,
   Infinity,
@@ -8,7 +9,6 @@ import {
   ChartColumnBig,
   Ban,
   ChartNoAxesGantt,
-  Code,
   Globe,
   Search,
   RefreshCcw,
@@ -42,7 +42,7 @@ export default function CarouselFeature() {
       </Carousel>
 
       {/*Row 2*/}
-      <Carousel className="mb-10">
+      <Carousel startAtEnd className="mb-10">
         <CarouselContent>
           <ItemFeature
             icon={<ChartColumnBig className={iconClass} />}
@@ -60,7 +60,7 @@ export default function CarouselFeature() {
             text={t('manageEase')}
           />
           <ItemFeature
-            icon={<Code className={iconClass} />}
+            icon={<MdCodeOff className={iconClass} />}
             title={t('noCodeT')}
             text={t('noCode')}
           />
@@ -76,7 +76,7 @@ export default function CarouselFeature() {
             text={t('sellEverywhere')}
           />
           <ItemFeature
-            icon={<Search className={iconClass} />}
+            icon={<Search className="text-secondary h-[46px] w-[46px]" />}
             title={t('searchEngineT')}
             text={t('searchEngine')}
           />
