@@ -5,7 +5,7 @@ export default function LinkLog() {
   const t = useTranslations('Landing');
   return (
     <Link
-      href="#"
+      href="/login/"
       className="text-text text-2xl font-medium hover:text-gray-900"
     >
       {t('login')}
