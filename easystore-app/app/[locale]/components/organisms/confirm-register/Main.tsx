@@ -25,11 +25,8 @@ export default function Main() {
           />
         </div>
       </div>
-      <h2 className="text-title px-5 text-2xl font-bold 2xl:text-3xl">
-        Choose a Plan
-      </h2>
       <Pricing />
-      <div className="mb-12 flex justify-center">
+      <div className="my-12 flex justify-center">
         <button className="bg-primary w-xs rounded-full py-3 font-medium text-white sm:w-xl">
           Confirm & Register
         </button>

@@ -1,5 +1,5 @@
 import ConfirmRegisterPage from '@templates/ConfirmRegister';
 
-export default function Home() {
+export default function ConfirmRegister() {
   return <ConfirmRegisterPage />;
 }
