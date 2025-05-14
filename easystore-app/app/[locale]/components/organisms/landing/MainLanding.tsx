@@ -7,7 +7,7 @@ import Start from '@molecules/landing/Start';
 
 export default function MainLanding() {
   return (
-    <main className="relative z-0 mt-21 sm:mt-26 md:mx-20 xl:mx-35">
+    <main className="mt-21 sm:mt-26 md:mx-20 xl:mx-35">
       <Portrait />
       <Start />
       <Features />

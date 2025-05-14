@@ -12,7 +12,6 @@ export default function Everywhere() {
       <p className="text-text mb-5 text-xl sm:text-3xl">
         {t('everyWhereText')}
       </p>
-
       <div className="grid gap-8 md:grid-cols-2">
         <ImageEveryWhere src="/laptop.webp" />
         <ImageEveryWhere src="/phone.webp" />

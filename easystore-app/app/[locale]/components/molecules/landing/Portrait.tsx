@@ -1,4 +1,5 @@
 'use client';
+
 import ButtonPrimary from '@atoms/landing/ButtonPrimary';
 import ButtonViewPlans from '@atoms/landing/ButtonViewPlans';
 import Link from 'next/link';
