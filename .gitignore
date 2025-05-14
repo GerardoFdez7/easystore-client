@@ -53,6 +53,7 @@ docker-compose.override.yml
 # generated types from api
 app/[locale]/lib/graphql/generated.ts
 
+.vscode/
 .github/*
 .husky/*
 !.husky/_/*
