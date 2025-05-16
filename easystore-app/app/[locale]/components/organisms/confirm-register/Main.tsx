@@ -1,14 +1,17 @@
 import Pricing from '@molecules/shared/Pricing';
+import { useTranslations } from 'next-intl';
 
 export default function Main() {
+  const t = useTranslations('ConfirmRegister');
+
   return (
     <main className="mt-10 md:mx-20 xl:mx-35">
       <div className="px-5">
         <h1 className="text-title mb-2 text-[32px] font-extrabold sm:text-4xl 2xl:text-5xl">
-          Your Business Details
+          {t('title')}
         </h1>
         <p className="text-primary tex-[16px] mb-8 2xl:text-xl">
-          Tell us about your business and choose a plan
+          {t('description')}
         </p>
 
         <div className="mb-15">
@@ -16,19 +19,22 @@ export default function Main() {
             htmlFor="businessName"
             className="tex-[16px] text-foreground mb-2 block font-medium 2xl:text-xl"
           >
-            Business Name
+            {t('businessName')}
           </label>
           <input
             type="text"
             id="businessName"
-            className="tex-[16px] text-foreground border-primary focus:ring-primary h-[56px] w-full rounded-md border-1 bg-transparent p-3 focus:ring-2 focus:outline-none md:w-[593px] 2xl:text-xl"
+            className="tex-[16px] text-foreground border-primary focus:ring-primary h-[56px] w-full rounded-xl border-1 bg-transparent p-3 focus:ring-2 focus:outline-none md:w-[593px] 2xl:text-xl"
           />
         </div>
       </div>
+      <h2 className="text-title px-5 pb-5 text-2xl font-bold 2xl:text-3xl">
+        {t('choosePlan')}
+      </h2>
       <Pricing />
       <div className="my-12 flex justify-center">
         <button className="bg-primary w-xs rounded-full py-3 font-medium text-white sm:w-xl">
-          Confirm & Register
+          {t('confirmButton')}
         </button>
       </div>
     </main>

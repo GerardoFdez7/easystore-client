@@ -1,20 +1,27 @@
 import CardPlan from '@atoms/confirm-register/CardPlan';
 import { Button } from '@atoms/shared/ButtonCn';
+import { useTranslations } from 'next-intl';
 
-export default function PlanBasic() {
+type PlanBasicProps = {
+  price: string;
+};
+
+export default function PlanBasic({ price }: PlanBasicProps) {
+  const t = useTranslations('ConfirmRegister');
+
   return (
     <CardPlan
-      title="Basic"
-      price="$0"
+      title={t('basic')}
+      price={price}
       features={[
-        '50 products limit',
-        'Priority support',
-        'Access to beta features',
-        'Access to beta features',
+        t('1featureBasic'),
+        t('2featureBasic'),
+        t('3featureBasic'),
+        t('4featureBasic'),
       ]}
     >
       <Button className="py-6" variant={'plans'}>
-        try for free
+        {t('buttonBasic')}
       </Button>
     </CardPlan>
   );
