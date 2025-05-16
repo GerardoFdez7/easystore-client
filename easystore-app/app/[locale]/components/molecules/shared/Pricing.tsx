@@ -5,8 +5,11 @@ import PlanPremium from '@molecules/confirm-register/PlanPremium';
 import PlanEnterPrise from '@molecules/confirm-register/PlanEnterPrise';
 import { Tabs, TabsList, TabsTrigger } from '@atoms/shared/Tabs';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 export default function Pricing() {
+  const t = useTranslations('ConfirmRegister');
+
   type BillingType = 'monthly' | 'yearly';
   type PlanType = 'basic' | 'advanced' | 'premium' | 'enterprise';
   const [billing, setBilling] = useState<BillingType>('monthly');
@@ -17,18 +20,18 @@ export default function Pricing() {
   const prices: Record<BillingType, Record<PlanType, string>> = {
     monthly: {
       basic: '$0',
-      advanced: '$15',
-      premium: '$30',
+      premium: '$15',
+      advanced: '$30',
       enterprise: '$100',
     },
-    yearly: { basic: '$0', advanced: '$11', premium: '$22', enterprise: '$75' },
+    yearly: { basic: '$0', premium: '$11', advanced: '$22', enterprise: '$75' },
   };
 
   const renderPlan = () => {
     const price = prices[billing][selectedPlan];
     switch (selectedPlan) {
       case 'basic':
-        return <PlanBasic />;
+        return <PlanBasic price={price} />;
       case 'advanced':
         return <PlanAdvanced price={price} />;
       case 'premium':
@@ -40,23 +43,20 @@ export default function Pricing() {
 
   return (
     <section>
-      <h2 className="text-title px-5 pb-5 text-2xl font-bold 2xl:text-3xl">
-        Choose a Plan
-      </h2>
       {/* Tabs of Billing */}
       <Tabs
         defaultValue={billing}
         onValueChange={(val) => setBilling(val as BillingType)}
       >
         <TabsList className="mx-auto grid w-[263px] grid-cols-2 gap-2">
-          <TabsTrigger value="monthly">Monthly</TabsTrigger>
-          <TabsTrigger value="yearly">Yearly</TabsTrigger>
+          <TabsTrigger value="monthly"> {t('monthly')}</TabsTrigger>
+          <TabsTrigger value="yearly"> {t('yearly')}</TabsTrigger>
         </TabsList>
       </Tabs>
 
       <div className="hidden min-[904px]:block">
         <div className="flex flex-wrap justify-center gap-6">
-          <PlanBasic />
+          <PlanBasic price={prices[billing].basic} />
           <PlanAdvanced price={prices[billing].advanced} />
           <PlanPremium price={prices[billing].premium} />
           <PlanEnterPrise price={prices[billing].enterprise} />
@@ -69,18 +69,18 @@ export default function Pricing() {
           defaultValue={selectedPlan}
           onValueChange={(val) => setSelectedPlan(val as PlanType)}
         >
-          <TabsList className="mx-auto grid h-[50px] max-w-[360px] min-w-[330px] grid-cols-4 rounded-xl">
+          <TabsList className="mx-auto grid h-[50px] w-[360px] grid-cols-4 rounded-xl">
             <TabsTrigger className={styleTriggersPlans} value="basic">
-              Basic
-            </TabsTrigger>
-            <TabsTrigger className={styleTriggersPlans} value="advanced">
-              Advanced
+              {t('basic')}
             </TabsTrigger>
             <TabsTrigger className={styleTriggersPlans} value="premium">
-              Premium
+              {t('premium')}
+            </TabsTrigger>
+            <TabsTrigger className={styleTriggersPlans} value="advanced">
+              {t('advanced')}
             </TabsTrigger>
             <TabsTrigger className={styleTriggersPlans} value="enterprise">
-              Enterprise
+              {t('enterprise')}
             </TabsTrigger>
           </TabsList>
         </Tabs>
