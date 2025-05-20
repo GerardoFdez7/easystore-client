@@ -9,7 +9,7 @@ export default function MainLogin() {
   };
 
   return (
-    <main className="mb-10 flex flex-col items-center justify-center px-4">
+    <main className="mb-10 flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 lg:px-32">
       <HeaderForm />
       <LoginForm onSubmit={handleLogin} />
     </main>
