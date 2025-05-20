@@ -34,7 +34,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
   };
 
   return (
-    <Form.Root onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
+    <Form.Root
+      onSubmit={handleSubmit}
+      className="w-full max-w-xs space-y-4 sm:max-w-sm md:max-w-md lg:max-w-lg"
+    >
       <FormField
         name="email"
         label={t('email')}
@@ -49,7 +52,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
         placeholder="••••••••"
       />
 
-      <div className="flex flex-col items-center">
+      <div className="text-center">
         <p className="text-sm text-gray-600">
           {t('MessageAccount')}{' '}
           <LinkText href="/register" className="text-secondary">
@@ -62,24 +65,24 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
         <ButtonLogin />
       </Form.Submit>
 
-      <div className="flex flex-col items-center">
+      <div className="text-center">
         <LinkText href="" className="">
           {t('ChangePassword')}
         </LinkText>
       </div>
 
-      <div className="flex items-center justify-center space-x-4">
+      <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
         <SocialButton
           icon={<FaGoogle />}
           text={t('loginWithGoogle')}
           onClick={handleGoogleLogin}
-          className="bg-[#EBDBF5] text-black"
+          className="w-full bg-[#EBDBF5] text-black sm:w-auto"
         />
         <SocialButton
           icon={<FaFacebookF />}
           text={t('loginWithFacebook')}
           onClick={handleFacebookLogin}
-          className="bg-[#EBDBF5] text-black"
+          className="w-full bg-[#EBDBF5] text-black sm:w-auto"
         />
       </div>
     </Form.Root>
