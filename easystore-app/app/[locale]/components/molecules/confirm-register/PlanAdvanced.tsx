@@ -1,12 +1,18 @@
+import ButtonPlan from '@atoms/confirm-register/ButtonPlan';
 import CardPlan from '@atoms/confirm-register/CardPlan';
-import { Button } from '@atoms/shared/ButtonCn';
 import { useTranslations } from 'next-intl';
 
 type PlanAdvancedProps = {
   price: string;
+  selected: boolean;
+  onSelect: () => void;
 };
 
-export default function PlanAdvanced({ price }: PlanAdvancedProps) {
+export default function PlanAdvanced({
+  price,
+  selected,
+  onSelect,
+}: PlanAdvancedProps) {
   const t = useTranslations('ConfirmRegister');
   return (
     <CardPlan
@@ -25,9 +31,11 @@ export default function PlanAdvanced({ price }: PlanAdvancedProps) {
         t('10featureAdvanced'),
       ]}
     >
-      <Button className="py-6" variant={'plans'}>
-        {t('buttonAdvanced')}
-      </Button>
+      <ButtonPlan
+        text={t('buttonAdvanced')}
+        selected={selected}
+        onSelect={onSelect}
+      />
     </CardPlan>
   );
 }

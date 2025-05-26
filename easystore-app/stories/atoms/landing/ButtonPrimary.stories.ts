@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import ButtonPrimary from '@atoms/landing/ButtonPrimary';
 
 const meta = {
-  title: 'Atoms/ButtonPrimary',
+  title: 'Atoms/Landing/ButtonPrimary',
   component: ButtonPrimary,
   parameters: {
     layout: 'centered',
