@@ -1,12 +1,18 @@
+import ButtonPlan from '@atoms/confirm-register/ButtonPlan';
 import CardPlan from '@atoms/confirm-register/CardPlan';
-import { Button } from '@atoms/shared/ButtonCn';
 import { useTranslations } from 'next-intl';
 
 type PlanPremiumProps = {
   price: string;
+  selected: boolean;
+  onSelect: () => void;
 };
 
-export default function PlanPremium({ price }: PlanPremiumProps) {
+export default function PlanPremium({
+  price,
+  selected,
+  onSelect,
+}: PlanPremiumProps) {
   const t = useTranslations('ConfirmRegister');
 
   return (
@@ -25,9 +31,11 @@ export default function PlanPremium({ price }: PlanPremiumProps) {
         t('9featurePremium'),
       ]}
     >
-      <Button className="py-6" variant={'plans'}>
-        {t('buttonPremium')}
-      </Button>
+      <ButtonPlan
+        text={t('buttonPremium')}
+        selected={selected}
+        onSelect={onSelect}
+      />
     </CardPlan>
   );
 }

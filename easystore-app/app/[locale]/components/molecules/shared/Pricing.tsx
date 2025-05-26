@@ -7,13 +7,21 @@ import { Tabs, TabsList, TabsTrigger } from '@atoms/shared/Tabs';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 
-export default function Pricing() {
+type PricingProps = {
+  selectedPlan: PlanType;
+  setSelectedPlan: (plan: PlanType) => void;
+};
+
+type PlanType = 'basic' | 'advanced' | 'premium' | 'enterprise';
+type BillingType = 'monthly' | 'yearly';
+
+export default function Pricing({
+  selectedPlan,
+  setSelectedPlan,
+}: PricingProps) {
   const t = useTranslations('ConfirmRegister');
 
-  type BillingType = 'monthly' | 'yearly';
-  type PlanType = 'basic' | 'advanced' | 'premium' | 'enterprise';
   const [billing, setBilling] = useState<BillingType>('monthly');
-  const [selectedPlan, setSelectedPlan] = useState<PlanType>('basic');
   const styleTriggersPlans =
     'data-[state=active]:bg-foreground text-[12px] rounded-xl';
 
@@ -31,11 +39,29 @@ export default function Pricing() {
     const price = prices[billing][selectedPlan];
     switch (selectedPlan) {
       case 'basic':
-        return <PlanBasic price={price} />;
+        return (
+          <PlanBasic
+            price={price}
+            selected={selectedPlan === 'basic'}
+            onSelect={() => setSelectedPlan('basic')}
+          />
+        );
       case 'advanced':
-        return <PlanAdvanced price={price} />;
+        return (
+          <PlanAdvanced
+            price={price}
+            selected={selectedPlan === 'advanced'}
+            onSelect={() => setSelectedPlan('advanced')}
+          />
+        );
       case 'premium':
-        return <PlanPremium price={price} />;
+        return (
+          <PlanPremium
+            price={price}
+            selected={selectedPlan === 'premium'}
+            onSelect={() => setSelectedPlan('premium')}
+          />
+        );
       case 'enterprise':
         return <PlanEnterPrise price={price} />;
     }
@@ -56,9 +82,21 @@ export default function Pricing() {
 
       <div className="hidden min-[904px]:block">
         <div className="flex flex-wrap justify-center gap-6">
-          <PlanBasic price={prices[billing].basic} />
-          <PlanAdvanced price={prices[billing].advanced} />
-          <PlanPremium price={prices[billing].premium} />
+          <PlanBasic
+            price={prices[billing].basic}
+            selected={selectedPlan === 'basic'}
+            onSelect={() => setSelectedPlan('basic')}
+          />
+          <PlanAdvanced
+            price={prices[billing].advanced}
+            selected={selectedPlan === 'advanced'}
+            onSelect={() => setSelectedPlan('advanced')}
+          />
+          <PlanPremium
+            price={prices[billing].premium}
+            selected={selectedPlan === 'premium'}
+            onSelect={() => setSelectedPlan('premium')}
+          />
           <PlanEnterPrise price={prices[billing].enterprise} />
         </div>
       </div>

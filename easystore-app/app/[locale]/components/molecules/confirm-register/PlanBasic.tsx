@@ -1,12 +1,18 @@
+import ButtonPlan from '@atoms/confirm-register/ButtonPlan';
 import CardPlan from '@atoms/confirm-register/CardPlan';
-import { Button } from '@atoms/shared/ButtonCn';
 import { useTranslations } from 'next-intl';
 
 type PlanBasicProps = {
   price: string;
+  selected: boolean;
+  onSelect: () => void;
 };
 
-export default function PlanBasic({ price }: PlanBasicProps) {
+export default function PlanBasic({
+  price,
+  selected,
+  onSelect,
+}: PlanBasicProps) {
   const t = useTranslations('ConfirmRegister');
 
   return (
@@ -20,9 +26,11 @@ export default function PlanBasic({ price }: PlanBasicProps) {
         t('4featureBasic'),
       ]}
     >
-      <Button className="py-6" variant={'plans'}>
-        {t('buttonBasic')}
-      </Button>
+      <ButtonPlan
+        text={t('buttonBasic')}
+        selected={selected}
+        onSelect={onSelect}
+      />
     </CardPlan>
   );
 }
