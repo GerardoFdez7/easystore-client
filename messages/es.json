@@ -139,12 +139,16 @@
     "FAQsTitle": "Preguntas frecuentes"
   },
   "Login": {
-    "title": "Iniciar sesión en EasyStore",
+    "welcomeBack": "¡Bienvenido de nuevo!",
+    "loginMessage": "Inicia sesión para acceder a tu cuenta de EasyStore.",
     "email": "Correo electrónico",
     "password": "Contraseña",
-    "forgotPassword": "¿Olvidaste tu contraseña?",
-    "loginButton": "Iniciar sesión",
-    "noAccount": "¿No tienes una cuenta?",
-    "signUp": "Regístrate gratis"
+    "changePassword": "¿Olvidaste tu contraseña?",
+    "buttonLogin": "Iniciar sesión",
+    "messageAccount": "¿No tienes una cuenta?",
+    "loginWithGoogle": "Usar Google",
+    "loginWithFacebook": "Usar Facebook",
+    "register": "Regístrate",
+    "placeholderEmail": "Ingresa tu correo electrónico"
   }
 }
