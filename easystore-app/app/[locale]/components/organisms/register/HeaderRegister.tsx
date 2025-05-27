@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { LanguageButton } from '@components/atoms/shared/ButtonLanguage';
+import { LanguageButton } from '@atoms/shared/ButtonLanguage';
 
 export default function HeaderRegister() {
   const t = useTranslations('Register');

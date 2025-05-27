@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import LogoImage from '@components/atoms/shared/LogoImage';
-import { LanguageButton } from '@components/atoms/shared/ButtonLanguage';
+import LogoImage from '@atoms/shared/LogoImage';
+import { LanguageButton } from '@atoms/shared/ButtonLanguage';
 import { useTranslations } from 'next-intl';
 
 export default function Header() {

@@ -1,6 +1,6 @@
 import Footer from '@organisms/shared/Footer';
-import HeaderLogin from '@components/organisms/login/HeaderLogin';
-import MainLogin from '@components/organisms/login/MainLogin';
+import HeaderLogin from '@organisms/login/HeaderLogin';
+import MainLogin from '@organisms/login/MainLogin';
 
 export default function LoginPage() {
   return (

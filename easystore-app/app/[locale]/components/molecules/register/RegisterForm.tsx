@@ -1,11 +1,11 @@
 'use client';
 
-import { FormField } from '@components/molecules/shared/FormField';
+import { FormField } from '@molecules/shared/FormField';
 import { Root, Submit } from '@radix-ui/react-form';
-import { Button } from '@components/atoms/shared/ButtonCn';
+import { Button } from '@atoms/shared/ButtonCn';
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import LinkText from '@components/atoms/shared/LinkText';
+import LinkText from '@atoms/shared/LinkText';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
