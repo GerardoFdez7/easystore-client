@@ -41,7 +41,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
         name="email"
         label={t('email')}
         type="email"
-        placeholder="tucorreo@ejemplo.com"
+        placeholder={t('placeholderEmail')}
       />
 
       <FormField
@@ -53,9 +53,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
 
       <div className="text-center">
         <p className="text-sm text-gray-600">
-          {t('MessageAccount')}{' '}
+          {t('messageAccount')}{' '}
           <LinkText href="/register" className="text-secondary">
-            {t('Register')}
+            {t('register')}
           </LinkText>
         </p>
       </div>
@@ -67,7 +67,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
 
       <div className="text-center">
         <LinkText href="" className="">
-          {t('ChangePassword')}
+          {t('changePassword')}
         </LinkText>
       </div>
 

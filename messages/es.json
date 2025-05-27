@@ -135,6 +135,16 @@
     "7featureEnterprise": "Dominio personalizado incluido",
     "8featureEnterprise": "Sincronización de inventario",
     "9featureEnterprise": "IA para contenido de productos",
-    "buttonEnterprise": "Contáctanos"
+    "buttonEnterprise": "Contáctanos",
+    "FAQsTitle": "Preguntas frecuentes"
+  },
+  "Login": {
+    "title": "Iniciar sesión en EasyStore",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "loginButton": "Iniciar sesión",
+    "noAccount": "¿No tienes una cuenta?",
+    "signUp": "Regístrate gratis"
   }
 }
