@@ -1,8 +1,8 @@
 'use client';
 
 import { FormField } from '@components/molecules/shared/FormField';
-import { Form } from '@components/atoms/shared/Form';
 import ButtonRegister from '@components/atoms/register/ButtonRegister';
+import { Root, Submit } from '@radix-ui/react-form';
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import LinkText from '@components/atoms/shared/LinkText';
@@ -46,7 +46,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
   };
 
   return (
-    <Form.Root
+    <Root
       onSubmit={handleSubmit}
       className="w-full max-w-xs space-y-4 sm:max-w-sm md:max-w-md lg:max-w-lg"
     >
@@ -86,9 +86,9 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
       />
 
       <div className="flex justify-center">
-        <Form.Submit asChild>
+        <Submit asChild>
           <ButtonRegister />
-        </Form.Submit>
+        </Submit>
       </div>
 
       <div className="flex flex-col items-center">
@@ -114,6 +114,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
           onClick={handleFacebookLogin}
         />
       </div>
-    </Form.Root>
+    </Root>
   );
 };

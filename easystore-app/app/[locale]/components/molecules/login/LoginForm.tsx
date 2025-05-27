@@ -1,7 +1,7 @@
 'use client';
 
 import { FormField } from '../shared/FormField';
-import { Form } from '@components/atoms/shared/Form';
+import { Root, Submit } from '@radix-ui/react-form';
 import ButtonLogin from '@components/atoms/login/ButtonLogin';
 import React from 'react';
 import { useTranslations } from 'next-intl';
@@ -33,7 +33,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
   };
 
   return (
-    <Form.Root
+    <Root
       onSubmit={handleSubmit}
       className="w-full max-w-xs space-y-4 sm:max-w-sm md:max-w-md lg:max-w-lg"
     >
@@ -60,9 +60,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
         </p>
       </div>
       <div className="flex justify-center">
-        <Form.Submit asChild>
+        <Submit asChild>
           <ButtonLogin />
-        </Form.Submit>
+        </Submit>
       </div>
 
       <div className="text-center">
@@ -86,6 +86,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
           text={t('loginWithFacebook')}
         />
       </div>
-    </Form.Root>
+    </Root>
   );
 };
