@@ -6,9 +6,8 @@ import ButtonRegister from '@components/atoms/register/ButtonRegister';
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import LinkText from '@components/atoms/shared/LinkText';
-import { Button } from '@components/atoms/shared/ButtonCn';
+import { SocialButton } from '@atoms/shared/SocialButton';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 
 export interface RegisterFormProps {
   onSubmit: (data: {
@@ -47,7 +46,10 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
   };
 
   return (
-    <Form.Root onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
+    <Form.Root
+      onSubmit={handleSubmit}
+      className="w-full max-w-xs space-y-4 sm:max-w-sm md:max-w-md lg:max-w-lg"
+    >
       <FormField
         name="fullName"
         label={t('fullName')}
@@ -83,9 +85,11 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
         placeholder="••••••••"
       />
 
-      <Form.Submit asChild>
-        <ButtonRegister />
-      </Form.Submit>
+      <div className="flex justify-center">
+        <Form.Submit asChild>
+          <ButtonRegister />
+        </Form.Submit>
+      </div>
 
       <div className="flex flex-col items-center">
         <p className="text-sm text-gray-600">
@@ -96,31 +100,19 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
         </p>
       </div>
 
-      <div className="flex items-center justify-center space-x-4">
-        <Button
+      <div className="flex flex-col justify-center space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
+        <SocialButton
+          imageSrc="/icon_google.webp"
+          imageAlt="Google icon"
+          text={t('loginWithGoogle')}
           onClick={handleGoogleLogin}
-          className="w-full bg-[#EBDBF5] text-black sm:w-auto"
-        >
-          <Image
-            src="/icon_google.webp"
-            alt="Google icon"
-            width={20}
-            height={20}
-          />
-          {t('loginWithGoogle')}
-        </Button>
-        <Button
+        />
+        <SocialButton
+          imageSrc="/icon_facebook.webp"
+          imageAlt="Facebook icon"
+          text={t('loginWithFacebook')}
           onClick={handleFacebookLogin}
-          className="w-full bg-[#EBDBF5] text-black sm:w-auto"
-        >
-          <Image
-            src="/icon_facebook.webp"
-            alt="Facebook icon"
-            width={20}
-            height={20}
-          />
-          {t('loginWithFacebook')}
-        </Button>
+        />
       </div>
     </Form.Root>
   );
