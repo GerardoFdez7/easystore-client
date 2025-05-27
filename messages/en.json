@@ -150,5 +150,22 @@
     "loginWithFacebook": "Use Facebook",
     "register": "Register",
     "placeholderEmail": "Enter your email"
+  },
+  "Register": {
+    "registerTitle": "Welcome to EasyStore!",
+    "registerMessage": "Create your account to start building your online store.",
+    "fullName": "Full Name",
+    "phoneNumber": "Phone Number",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "buttonRegister": "Register",
+    "messageAccount": "Already have an account?",
+    "registerWithGoogle": "Use Google",
+    "registerWithFacebook": "Use Facebook",
+    "login": "Log in",
+    "placeholderEmail": "Enter your email",
+    "placeholderFullName": "Enter your full name",
+    "placeholderPhoneNumber": "Enter your phone number"
   }
 }
