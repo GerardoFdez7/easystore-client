@@ -82,5 +82,14 @@
     "onlineStoreTitle": "¿Mi tienda en línea se integra con mi tienda física?",
     "onlineStore": "Sí, tu tienda en línea se sincroniza automáticamente con tu tienda física, y puedes gestionar todo tu negocio desde un solo panel. Las actualizaciones de inventario, productos y pagos que realices en tu panel de administración de EasyStore se reflejarán de inmediato.",
     "FAQsTitle": "Preguntas frecuentes"
+  },
+  "Login": {
+    "title": "Iniciar sesión en EasyStore",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "loginButton": "Iniciar sesión",
+    "noAccount": "¿No tienes una cuenta?",
+    "signUp": "Regístrate gratis"
   }
 }

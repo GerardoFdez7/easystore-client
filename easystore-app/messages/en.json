@@ -82,5 +82,18 @@
     "onlineStoreTitle": "Does my online store integrate with my in person store?",
     "onlineStore": "Yes, your online store automatically synchronizes with your in person store, and you manage your entire business from one dashboard. Inventory, product, and payment updates that you make in your EasyStore admin will instantly take effect.",
     "FAQsTitle": "Frequently asked questions"
+  },
+  "Login": {
+    "welcomeBack": "Welcome Back!",
+    "loginMessage": "Log in to access your EasyStore account.",
+    "email": "Email",
+    "password": "Password",
+    "changePassword": "Forgot password?",
+    "buttonLogin": "Log in",
+    "messageAccount": "Don't have an account?",
+    "loginWithGoogle": "Use Google",
+    "loginWithFacebook": "Use Facebook",
+    "register": "Register",
+    "placeholderEmail": "Enter your email"
   }
 }
