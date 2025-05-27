@@ -1,7 +1,6 @@
 'use client';
 
 import { RegisterForm } from '@components/molecules/register/RegisterForm';
-import HeaderForm from '@components/molecules/register/HeaderForm';
 
 export default function MainRegister() {
   const handleRegister = (data: {
@@ -16,7 +15,6 @@ export default function MainRegister() {
 
   return (
     <main className="mb-10 flex flex-col items-center justify-center px-4">
-      <HeaderForm />
       <RegisterForm onSubmit={handleRegister} />
     </main>
   );
