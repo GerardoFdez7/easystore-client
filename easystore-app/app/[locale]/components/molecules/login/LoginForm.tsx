@@ -59,10 +59,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
           </LinkText>
         </p>
       </div>
-
-      <Form.Submit asChild>
-        <ButtonLogin />
-      </Form.Submit>
+      <div className="flex justify-center">
+        <Form.Submit asChild>
+          <ButtonLogin />
+        </Form.Submit>
+      </div>
 
       <div className="text-center">
         <LinkText href="" className="">
