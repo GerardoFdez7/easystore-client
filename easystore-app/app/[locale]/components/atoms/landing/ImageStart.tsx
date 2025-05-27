@@ -9,7 +9,6 @@ export default function ImageStart({ src }: ImageStartProps) {
     <Image
       src={src}
       alt="Image"
-      layout="responsive"
       width={241}
       height={275}
       className="rounded-lg"

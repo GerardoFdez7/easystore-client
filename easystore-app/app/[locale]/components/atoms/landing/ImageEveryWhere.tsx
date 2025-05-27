@@ -10,7 +10,6 @@ export default function ImageEveryWhere({ src }: ImageStartProps) {
       <Image
         src={src}
         alt="Image"
-        layout="responsive"
         width={688}
         height={516}
         className="rounded-lg"

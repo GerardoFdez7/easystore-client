@@ -17,12 +17,7 @@ function Accordion({
 }: React.ComponentProps<typeof AccordionPrimitive.Root> & {
   type?: 'single';
 }) {
-  const [internalValue, setInternalValue] = React.useState<string | undefined>(
-    typeof value === 'string' ? value : undefined,
-  );
-
   const handleChange = (val: string) => {
-    setInternalValue(val);
     onValueChange?.(val);
   };
 
@@ -31,7 +26,7 @@ function Accordion({
       <AccordionPrimitive.Root
         data-slot="accordion"
         collapsible
-        value={internalValue}
+        value={value}
         onValueChange={handleChange}
         {...props}
       >
