@@ -21,6 +21,8 @@ const buttonVariants = cva(
         ghost:
           'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
         link: 'text-primary underline-offset-4 hover:underline',
+        social: 'w-full gap-2 bg-[#EBDBF5] text-black sm:w-auto',
+        auth: 'bg-primary text-text flex h-[50px] w-full items-center justify-center rounded-full font-bold text-white max-[580px]:h-[10vw] max-[580px]:w-[full] max-[580px]:min-w-[33vw] max-[580px]:text-[4vw]',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',
