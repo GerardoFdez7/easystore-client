@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import LogoLogin from '@components/atoms/login/LogoLogin';
+import LogoImage from '@components/atoms/shared/LogoImage';
 import { LanguageButton } from '@components/atoms/shared/ButtonLanguage';
 import { useTranslations } from 'next-intl';
 
@@ -15,7 +15,11 @@ export default function Header() {
       </div>
 
       <div className="flex flex-col items-center justify-center space-y-0 text-center sm:flex-row sm:space-y-0 sm:space-x-4 sm:text-left">
-        <LogoLogin />
+        <LogoImage
+          width={120}
+          height={120}
+          className="mb-4 h-16 w-16 sm:mb-0 sm:h-20 sm:w-20 md:h-22 md:w-22"
+        />
         <div>
           <h1 className="text-title text-2xl font-extrabold sm:text-3xl md:text-4xl">
             {t('welcomeBack')}
