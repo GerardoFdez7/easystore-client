@@ -54,21 +54,21 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
         name="fullName"
         label={t('fullName')}
         type="text"
-        placeholder="John Doe"
+        placeholder={t('placeholderFullName')}
       />
 
       <FormField
         name="phoneNumber"
         label={t('phoneNumber')}
         type="tel"
-        placeholder="+1 234 567 890"
+        placeholder={t('placeholderPhoneNumber')}
       />
 
       <FormField
         name="email"
         label={t('email')}
         type="email"
-        placeholder="yourname@example.com"
+        placeholder={t('placeholderEmail')}
       />
 
       <FormField
@@ -93,7 +93,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
 
       <div className="flex flex-col items-center">
         <p className="text-sm text-gray-600">
-          {t('alreadyHaveAccount')}{' '}
+          {t('messageAccount')}{' '}
           <LinkText href="/login" className="text-secondary">
             {t('login')}
           </LinkText>
