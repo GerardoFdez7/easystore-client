@@ -1,13 +1,13 @@
 'use client';
 
 import { FormField } from '@components/molecules/shared/FormField';
-import ButtonRegister from '@components/atoms/register/ButtonRegister';
 import { Root, Submit } from '@radix-ui/react-form';
+import { Button } from '@components/atoms/shared/ButtonCn';
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import LinkText from '@components/atoms/shared/LinkText';
-import { SocialButton } from '@atoms/shared/SocialButton';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export interface RegisterFormProps {
   onSubmit: (data: {
@@ -36,13 +36,13 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
     router.push('/register/confirm');
   };
 
-  const handleGoogleLogin = () => {
+  const handleGoogleRegister = () => {
     // TO DO: implement Google login
-    console.log('Login with Google');
+    console.log('Register with Google');
   };
-  const handleFacebookLogin = () => {
+  const handleFacebookRegister = () => {
     // TO DO: implement Facebook login
-    console.log('Login with Facebook');
+    console.log('Register with Facebook');
   };
 
   return (
@@ -87,7 +87,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
 
       <div className="flex justify-center">
         <Submit asChild>
-          <ButtonRegister />
+          <Button variant="auth">{t('buttonRegister')}</Button>
         </Submit>
       </div>
 
@@ -101,18 +101,26 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
       </div>
 
       <div className="flex flex-col justify-center space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-        <SocialButton
-          imageSrc="/icon_google.webp"
-          imageAlt="Google icon"
-          text={t('loginWithGoogle')}
-          onClick={handleGoogleLogin}
-        />
-        <SocialButton
-          imageSrc="/icon_facebook.webp"
-          imageAlt="Facebook icon"
-          text={t('loginWithFacebook')}
-          onClick={handleFacebookLogin}
-        />
+        <Button variant={'social'} onClick={handleGoogleRegister}>
+          <Image
+            src="/icon_google.webp"
+            alt="Email icon"
+            width={24}
+            height={24}
+            className="mr-2 inline-block"
+          />
+          {t('registerWithGoogle')}
+        </Button>
+        <Button variant={'social'} onClick={handleFacebookRegister}>
+          <Image
+            src="/icon_facebook.webp"
+            alt="Email icon"
+            width={24}
+            height={24}
+            className="mr-2 inline-block"
+          />
+          {t('registerWithFacebook')}
+        </Button>
       </div>
     </Root>
   );

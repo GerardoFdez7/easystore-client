@@ -2,11 +2,11 @@
 
 import { FormField } from '../shared/FormField';
 import { Root, Submit } from '@radix-ui/react-form';
-import ButtonLogin from '@components/atoms/login/ButtonLogin';
 import React from 'react';
 import { useTranslations } from 'next-intl';
+import { Button } from '@components/atoms/shared/ButtonCn';
 import LinkText from '@components/atoms/shared/LinkText';
-import { SocialButton } from '@components/atoms/shared/SocialButton';
+import Image from 'next/image';
 
 export interface LoginFormProps {
   onSubmit: (data: { email: string; password: string }) => void;
@@ -61,7 +61,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
       </div>
       <div className="flex justify-center">
         <Submit asChild>
-          <ButtonLogin />
+          <Button variant="auth">{t('buttonLogin')}</Button>
         </Submit>
       </div>
 
@@ -72,19 +72,27 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
       </div>
 
       <div className="flex flex-col justify-center space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-        <SocialButton
-          imageSrc="/icon_google.webp"
-          imageAlt="Google"
-          onClick={handleGoogleLogin}
-          text={t('loginWithGoogle')}
-        />
+        <Button variant="social" onClick={handleGoogleLogin}>
+          <Image
+            src="/icon_google.webp"
+            alt="Google"
+            width={24}
+            height={24}
+            className="mr-2 inline-block"
+          />
+          {t('loginWithGoogle')}
+        </Button>
 
-        <SocialButton
-          imageSrc="/icon_facebook.webp"
-          imageAlt="Facebook"
-          onClick={handleFacebookLogin}
-          text={t('loginWithFacebook')}
-        />
+        <Button variant="social" onClick={handleFacebookLogin}>
+          <Image
+            src="/icon_facebook.webp"
+            alt="Facebook"
+            width={24}
+            height={24}
+            className="mr-2 inline-block"
+          />
+          {t('loginWithFacebook')}
+        </Button>
       </div>
     </Root>
   );
