@@ -1,6 +1,6 @@
 import Footer from '@organisms/shared/Footer';
-import HeaderRegister from '@components/organisms/register/HeaderRegister';
-import MainRegister from '@components/organisms/register/MainRegister';
+import HeaderRegister from '@organisms/register/HeaderRegister';
+import MainRegister from '@organisms/register/MainRegister';
 
 export default function RegisterPage() {
   return (

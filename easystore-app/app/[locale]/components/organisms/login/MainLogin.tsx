@@ -1,6 +1,6 @@
 'use client';
 
-import { LoginForm } from '@components/molecules/login/LoginForm';
+import { LoginForm } from '@molecules/login/LoginForm';
 
 export default function MainLogin() {
   const handleLogin = (data: { email: string; password: string }) => {
