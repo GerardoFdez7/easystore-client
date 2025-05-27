@@ -6,8 +6,8 @@ import ButtonLogin from '@components/atoms/login/ButtonLogin';
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import LinkText from '@components/atoms/shared/LinkText';
-import SocialButton from '@components/atoms/shared/SocialButton';
-import { FaGoogle, FaFacebookF } from 'react-icons/fa';
+import { Button } from '@components/atoms/shared/ButtonCn';
+import Image from 'next/image';
 
 export interface LoginFormProps {
   onSubmit: (data: { email: string; password: string }) => void;
@@ -72,18 +72,30 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
       </div>
 
       <div className="flex flex-col justify-center space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-        <SocialButton
-          icon={<FaGoogle />}
-          text={t('loginWithGoogle')}
+        <Button
           onClick={handleGoogleLogin}
           className="w-full bg-[#EBDBF5] text-black sm:w-auto"
-        />
-        <SocialButton
-          icon={<FaFacebookF />}
-          text={t('loginWithFacebook')}
+        >
+          <Image
+            src="/icon_google.webp"
+            alt="Google icon"
+            width={20}
+            height={20}
+          />
+          {t('loginWithGoogle')}
+        </Button>
+        <Button
           onClick={handleFacebookLogin}
           className="w-full bg-[#EBDBF5] text-black sm:w-auto"
-        />
+        >
+          <Image
+            src="/icon_facebook.webp"
+            alt="Facebook icon"
+            width={20}
+            height={20}
+          />
+          {t('loginWithFacebook')}
+        </Button>
       </div>
     </Form.Root>
   );
