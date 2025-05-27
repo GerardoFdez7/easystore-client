@@ -82,5 +82,18 @@
     "onlineStoreTitle": "Il mio negozio online si integra con il mio negozio fisico?",
     "onlineStore": "Sì, il tuo negozio online si sincronizza automaticamente con il tuo negozio fisico e puoi gestire tutta la tua attività da un unico pannello. Gli aggiornamenti su inventario, prodotti e pagamenti che effettui nel pannello di amministrazione di EasyStore si rifletteranno immediatamente.",
     "FAQsTitle": "Domande frequenti"
+  },
+  "Login": {
+    "welcomeBack": "Bentornato!",
+    "loginMessage": "Accedi per entrare nel tuo account EasyStore.",
+    "email": "Email",
+    "password": "Password",
+    "changePassword": "Hai dimenticato la password?",
+    "buttonLogin": "Accedi",
+    "messageAccount": "Non hai un account?",
+    "loginWithGoogle": "Usa Google",
+    "loginWithFacebook": "Usa Facebook",
+    "register": "Registrati",
+    "placeholderEmail": "Inserisci la tua email"
   }
 }
