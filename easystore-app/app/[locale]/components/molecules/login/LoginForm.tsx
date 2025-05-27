@@ -1,11 +1,11 @@
 'use client';
 
-import { FormField } from '../shared/FormField';
+import { FormField } from '@molecules/shared/FormField';
 import { Root, Submit } from '@radix-ui/react-form';
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { Button } from '@components/atoms/shared/ButtonCn';
-import LinkText from '@components/atoms/shared/LinkText';
+import { Button } from '@atoms/shared/ButtonCn';
+import LinkText from '@atoms/shared/LinkText';
 import Image from 'next/image';
 
 export interface LoginFormProps {

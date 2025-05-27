@@ -1,6 +1,6 @@
 'use client';
 
-import { RegisterForm } from '@components/molecules/register/RegisterForm';
+import { RegisterForm } from '@molecules/register/RegisterForm';
 
 export default function MainRegister() {
   const handleRegister = (data: {
