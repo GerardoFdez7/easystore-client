@@ -10,9 +10,9 @@ export default function LogoLogin() {
         src="/logo.webp"
         alt="EasyStore Logo"
         label=""
-        width={85}
-        height={85}
-        className="mb-8 h-16 w-full object-contain sm:h-20 sm:w-20"
+        width={120}
+        height={120}
+        className="mb-4 h-10 w-full object-contain sm:h-20 sm:w-20"
         labelClassName="text-2xl font-bold text-gray-900"
       />
     </div>
