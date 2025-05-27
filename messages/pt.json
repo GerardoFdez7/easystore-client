@@ -135,6 +135,20 @@
     "7featureEnterprise": "Domínio personalizado incluído",
     "8featureEnterprise": "Sincronização de estoque",
     "9featureEnterprise": "IA para conteúdo de produtos",
-    "buttonEnterprise": "Fale conosco"
+    "buttonEnterprise": "Fale conosco",
+    "FAQsTitle": "Perguntas frequentes"
+  },
+  "Login": {
+    "welcomeBack": "Bem-vindo de volta!",
+    "loginMessage": "Faça login para acessar sua conta EasyStore.",
+    "email": "E-mail",
+    "password": "Senha",
+    "changePassword": "Esqueceu a senha?",
+    "buttonLogin": "Entrar",
+    "messageAccount": "Não tem uma conta?",
+    "loginWithGoogle": "Usar Google",
+    "loginWithFacebook": "Usar Facebook",
+    "register": "Cadastrar-se",
+    "placeholderEmail": "Digite seu e-mail"
   }
 }
