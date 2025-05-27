@@ -135,6 +135,20 @@
     "7featureEnterprise": "Custom domain included",
     "8featureEnterprise": "Inventory synchronization",
     "9featureEnterprise": "AI for product content",
-    "buttonEnterprise": "Get in touch"
+    "buttonEnterprise": "Get in touch",
+    "FAQsTitle": "Frequently asked questions"
+  },
+  "Login": {
+    "welcomeBack": "Welcome Back!",
+    "loginMessage": "Log in to access your EasyStore account.",
+    "email": "Email",
+    "password": "Password",
+    "changePassword": "Forgot password?",
+    "buttonLogin": "Log in",
+    "messageAccount": "Don't have an account?",
+    "loginWithGoogle": "Use Google",
+    "loginWithFacebook": "Use Facebook",
+    "register": "Register",
+    "placeholderEmail": "Enter your email"
   }
 }
