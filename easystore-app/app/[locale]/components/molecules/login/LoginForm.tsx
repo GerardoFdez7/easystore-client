@@ -71,7 +71,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
         </LinkText>
       </div>
 
-      <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
+      <div className="flex flex-col justify-center space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
         <SocialButton
           icon={<FaGoogle />}
           text={t('loginWithGoogle')}
