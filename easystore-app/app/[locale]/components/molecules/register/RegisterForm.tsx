@@ -6,9 +6,9 @@ import ButtonRegister from '@components/atoms/register/ButtonRegister';
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import LinkText from '@components/atoms/shared/LinkText';
-import SocialButton from '@components/atoms/shared/SocialButton';
-import { FaGoogle, FaFacebookF } from 'react-icons/fa';
+import { Button } from '@components/atoms/shared/ButtonCn';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export interface RegisterFormProps {
   onSubmit: (data: {
@@ -97,18 +97,30 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
       </div>
 
       <div className="flex items-center justify-center space-x-4">
-        <SocialButton
-          icon={<FaGoogle />}
-          text={t('registerWithGoogle')}
+        <Button
           onClick={handleGoogleLogin}
-          className="bg-[#EBDBF5] text-black"
-        />
-        <SocialButton
-          icon={<FaFacebookF />}
-          text={t('registerWithFacebook')}
+          className="w-full bg-[#EBDBF5] text-black sm:w-auto"
+        >
+          <Image
+            src="/icon_google.webp"
+            alt="Google icon"
+            width={20}
+            height={20}
+          />
+          {t('loginWithGoogle')}
+        </Button>
+        <Button
           onClick={handleFacebookLogin}
-          className="bg-[#EBDBF5] text-black"
-        />
+          className="w-full bg-[#EBDBF5] text-black sm:w-auto"
+        >
+          <Image
+            src="/icon_facebook.webp"
+            alt="Facebook icon"
+            width={20}
+            height={20}
+          />
+          {t('loginWithFacebook')}
+        </Button>
       </div>
     </Form.Root>
   );
