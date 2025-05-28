@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Pricing from '@molecules/shared/Pricing';
+import Pricing from '@organisms/shared/Pricing';
 import { useState } from 'react';
 
 type PlanType = 'basic' | 'premium' | 'advanced' | 'enterprise';
 
 const meta: Meta<typeof Pricing> = {
-  title: 'Molecules/Shared/Pricing',
+  title: 'Organisms/Shared/Pricing',
   component: Pricing,
   parameters: {
     layout: 'centered',

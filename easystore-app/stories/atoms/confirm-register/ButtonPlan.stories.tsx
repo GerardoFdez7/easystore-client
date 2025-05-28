@@ -22,6 +22,13 @@ const meta: Meta<typeof ButtonPlan> = {
       description: 'Callback function triggered on click',
     },
   },
+  decorators: [
+    (Story) => (
+      <div className="w-[300px]">
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export default meta;

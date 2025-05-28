@@ -2,7 +2,7 @@
 import PlanBasic from '@molecules/confirm-register/PlanBasic';
 import PlanAdvanced from '@molecules/confirm-register/PlanAdvanced';
 import PlanPremium from '@molecules/confirm-register/PlanPremium';
-import PlanEnterPrise from '@molecules/confirm-register/PlanEnterPrise';
+import PlanEnterprise from '@molecules/confirm-register/PlanEnterprises';
 import { Tabs, TabsList, TabsTrigger } from '@atoms/shared/Tabs';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
@@ -46,14 +46,6 @@ export default function Pricing({
             onSelect={() => setSelectedPlan('basic')}
           />
         );
-      case 'advanced':
-        return (
-          <PlanAdvanced
-            price={price}
-            selected={selectedPlan === 'advanced'}
-            onSelect={() => setSelectedPlan('advanced')}
-          />
-        );
       case 'premium':
         return (
           <PlanPremium
@@ -62,8 +54,16 @@ export default function Pricing({
             onSelect={() => setSelectedPlan('premium')}
           />
         );
+      case 'advanced':
+        return (
+          <PlanAdvanced
+            price={price}
+            selected={selectedPlan === 'advanced'}
+            onSelect={() => setSelectedPlan('advanced')}
+          />
+        );
       case 'enterprise':
-        return <PlanEnterPrise price={price} />;
+        return <PlanEnterprise price={price} />;
     }
   };
 
@@ -87,17 +87,17 @@ export default function Pricing({
             selected={selectedPlan === 'basic'}
             onSelect={() => setSelectedPlan('basic')}
           />
-          <PlanAdvanced
-            price={prices[billing].advanced}
-            selected={selectedPlan === 'advanced'}
-            onSelect={() => setSelectedPlan('advanced')}
-          />
           <PlanPremium
             price={prices[billing].premium}
             selected={selectedPlan === 'premium'}
             onSelect={() => setSelectedPlan('premium')}
           />
-          <PlanEnterPrise price={prices[billing].enterprise} />
+          <PlanAdvanced
+            price={prices[billing].advanced}
+            selected={selectedPlan === 'advanced'}
+            onSelect={() => setSelectedPlan('advanced')}
+          />
+          <PlanEnterprise price={prices[billing].enterprise} />
         </div>
       </div>
 

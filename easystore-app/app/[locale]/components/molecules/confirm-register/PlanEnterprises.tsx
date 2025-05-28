@@ -1,11 +1,11 @@
 import CardPlan from '@atoms/confirm-register/CardPlan';
 import { useTranslations } from 'next-intl';
 
-type PlanEnterPriseProps = {
+type PlanEnterpriseProps = {
   price: string;
 };
 
-export default function PlanEnterPrise({ price }: PlanEnterPriseProps) {
+export default function PlanEnterprise({ price }: PlanEnterpriseProps) {
   const t = useTranslations('ConfirmRegister');
 
   return (
