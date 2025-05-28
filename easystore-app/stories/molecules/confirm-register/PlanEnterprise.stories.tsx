@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import PlanEnterprise from '@molecules/confirm-register/PlanEnterprises';
+import PlanEnterprise from '@molecules/confirm-register/PlanEnterprise';
 
 const meta: Meta<typeof PlanEnterprise> = {
   title: 'Molecules/ConfirmRegister/PlanEnterprise',

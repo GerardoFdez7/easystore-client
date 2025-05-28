@@ -2,7 +2,7 @@
 import PlanBasic from '@molecules/confirm-register/PlanBasic';
 import PlanAdvanced from '@molecules/confirm-register/PlanAdvanced';
 import PlanPremium from '@molecules/confirm-register/PlanPremium';
-import PlanEnterprise from '@molecules/confirm-register/PlanEnterprises';
+import PlanEnterprise from '@molecules/confirm-register/PlanEnterprise';
 import { Tabs, TabsList, TabsTrigger } from '@atoms/shared/Tabs';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
