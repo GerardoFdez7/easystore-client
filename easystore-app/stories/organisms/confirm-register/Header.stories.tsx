@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Header from '@organisms/confirm-register/Header';
+import Header from '@organisms/confirm-register/HeaderConfirmRegister';
 
 const meta: Meta<typeof Header> = {
   title: 'Organisms/ConfirmRegister/Header',

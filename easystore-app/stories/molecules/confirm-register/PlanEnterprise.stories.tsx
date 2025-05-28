@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import PlanEnterPrise from '@molecules/confirm-register/PlanEnterPrise';
+import PlanEnterprise from '@molecules/confirm-register/PlanEnterprises';
 
-const meta: Meta<typeof PlanEnterPrise> = {
-  title: 'Molecules/ConfirmRegister/PlanEnterPrise',
-  component: PlanEnterPrise,
+const meta: Meta<typeof PlanEnterprise> = {
+  title: 'Molecules/ConfirmRegister/PlanEnterprise',
+  component: PlanEnterprise,
   parameters: {
     layout: 'centered',
   },
@@ -18,7 +18,7 @@ const meta: Meta<typeof PlanEnterPrise> = {
 
 export default meta;
 
-type Story = StoryObj<typeof PlanEnterPrise>;
+type Story = StoryObj<typeof PlanEnterprise>;
 
 export const Default: Story = {
   args: {
