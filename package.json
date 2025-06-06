@@ -1,5 +1,5 @@
 {
-  "name": "easystore-app",
+  "name": "easystore-web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,7 +12,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "gql": "npx graphql-codegen && npx graphql-codegen --check",
-    "prepare": "cd .. && husky install easystore-app/.husky"
+    "prepare": "husky install"
   },
   "dependencies": {
     "@apollo/client": "^3.13.5",
