@@ -81,7 +81,10 @@
     "focusT": "Objectif",
     "focus": "Mise en place rapide, design soigné et simplicité sans code",
     "missionT": "Mission",
-    "mission": "Aider les entreprises à vendre en ligne sans limites"
+    "mission": "Aider les entreprises à vendre en ligne sans limites",
+    "pricing&Plans": "Forfaits et Tarifs",
+    "pricingTitle": "Choisissez le Forfait Idéal pour Votre Entreprise",
+    "pricingDescription": "Découvrez des forfaits abordables remplis de fonctionnalités haut de gamme conçues pour captiver votre audience, fidéliser vos clients et augmenter vos ventes."
   },
   "ConfirmRegister": {
     "title": "Détails de votre entreprise",
