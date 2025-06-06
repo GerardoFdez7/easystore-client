@@ -81,7 +81,10 @@
     "focusT": "Enfoque",
     "focus": "Configuración rápida, diseño atractivo y simplicidad sin código",
     "missionT": "Misión",
-    "mission": "Ayudar a las empresas a vender en línea sin límites"
+    "mission": "Ayudar a las empresas a vender en línea sin límites",
+    "pricing&Plans": "Planes y Precios",
+    "pricingTitle": "Selecciona el Plan Ideal para Tu Negocio",
+    "pricingDescription": "Descubre planes rentables repletos de funciones de primer nivel diseñadas para cautivar a tu audiencia, fomentar la fidelidad del cliente y aumentar tus ventas."
   },
   "ConfirmRegister": {
     "title": "Detalles de tu negocio",
