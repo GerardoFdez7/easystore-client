@@ -1,9 +1,11 @@
+'use client';
 import AboutUs from '@molecules/landing/AboutUs';
 import FAQs from '@molecules/landing/FAQs';
 import Everywhere from '@molecules/landing/Everywhere';
 import Features from '@molecules/landing/Features';
 import Portrait from '@molecules/landing/Portrait';
 import Start from '@molecules/landing/Start';
+import PricingLading from '@molecules/landing/PricingLanding';
 
 export default function MainLanding() {
   return (
@@ -12,6 +14,7 @@ export default function MainLanding() {
       <Start />
       <Features />
       <Everywhere />
+      <PricingLading />
       <FAQs />
       <AboutUs />
     </main>

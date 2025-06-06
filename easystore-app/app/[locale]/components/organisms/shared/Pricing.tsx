@@ -4,8 +4,9 @@ import PlanAdvanced from '@molecules/confirm-register/PlanAdvanced';
 import PlanPremium from '@molecules/confirm-register/PlanPremium';
 import PlanEnterprise from '@molecules/confirm-register/PlanEnterprise';
 import { Tabs, TabsList, TabsTrigger } from '@atoms/shared/Tabs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
+import clsx from 'clsx';
 
 type PricingProps = {
   selectedPlan: PlanType;
@@ -21,6 +22,7 @@ export default function Pricing({
 }: PricingProps) {
   const t = useTranslations('ConfirmRegister');
 
+  const [width, setWidth] = useState<number | null>(null);
   const [billing, setBilling] = useState<BillingType>('monthly');
   const styleTriggersPlans =
     'data-[state=active]:bg-foreground text-[12px] rounded-xl';
@@ -67,6 +69,16 @@ export default function Pricing({
     }
   };
 
+  //Update width of Tabs of Plans
+  useEffect(() => {
+    const updateWidth = () => setWidth(window.innerWidth);
+
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
+
   return (
     <section>
       {/* Tabs of Billing */}
@@ -107,7 +119,14 @@ export default function Pricing({
           defaultValue={selectedPlan}
           onValueChange={(val) => setSelectedPlan(val as PlanType)}
         >
-          <TabsList className="mx-auto grid h-[50px] w-[360px] grid-cols-4 rounded-xl">
+          <TabsList
+            className={clsx(
+              'mx-auto grid rounded-xl',
+              width !== null && width <= 360
+                ? 'h-auto w-[263px] grid-cols-2'
+                : 'h-[50px] w-[360px] grid-cols-4',
+            )}
+          >
             <TabsTrigger className={styleTriggersPlans} value="basic">
               {t('basic')}
             </TabsTrigger>

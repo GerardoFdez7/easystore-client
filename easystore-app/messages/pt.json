@@ -81,7 +81,10 @@
     "focusT": "Foco",
     "focus": "Configuração rápida, design bonito e simplicidade sem código",
     "missionT": "Missão",
-    "mission": "Ajudar empresas a vender online sem limites"
+    "mission": "Ajudar empresas a vender online sem limites",
+    "pricing&Plans": "Planos e Preços",
+    "pricingTitle": "Escolha o Plano Ideal para o Seu Negócio",
+    "pricingDescription": "Descubra planos acessíveis repletos de recursos avançados projetados para cativar seu público, fidelizar clientes e aumentar suas vendas."
   },
   "ConfirmRegister": {
     "title": "Detalhes do seu negócio",
