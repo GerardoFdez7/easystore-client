@@ -84,8 +84,8 @@ Supported types :
 - build : Changes affecting build system
 - ci : Changes to CI configuration
 - wip : Work in progress
-  > [!WARNING]
-  > Commit descriptions must be in lowercase. For example, use "feat: add login feature" instead of "feat: Add Login Feature".
+> [!WARNING]
+> Commit descriptions must be in lowercase. For example, use "feat: add login feature" instead of "feat: Add Login Feature".
 
 ### Branch Rules
 
