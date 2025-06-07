@@ -23,10 +23,8 @@ export default function Portrait() {
             {t('slogan')}
           </p>
           <div className="flex gap-4">
-            <Link href="/signup">
-              <ButtonPrimary />
-            </Link>
-            <Link href="/plans">
+            <ButtonPrimary />
+            <Link href="#plans">
               <ButtonViewPlans />
             </Link>
           </div>

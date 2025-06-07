@@ -10,7 +10,7 @@ export default function PricingLading() {
   const [selectedPlan, setSelectedPlan] = useState<PlanType>('basic');
 
   return (
-    <section className="mx-auto">
+    <section id="plans" className="mx-auto">
       <div className="mb-5 p-5 text-center">
         <h1 className="text-primary my-5 text-2xl font-medium sm:text-3xl">
           {t('pricing&Plans')}
