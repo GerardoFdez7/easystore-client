@@ -6,12 +6,14 @@ type PlanPremiumProps = {
   price: string;
   selected: boolean;
   onSelect: () => void;
+  mode?: 'confirm' | 'landing';
 };
 
 export default function PlanPremium({
   price,
   selected,
   onSelect,
+  mode,
 }: PlanPremiumProps) {
   const t = useTranslations('ConfirmRegister');
 
@@ -35,6 +37,7 @@ export default function PlanPremium({
         text={t('buttonPremium')}
         selected={selected}
         onSelect={onSelect}
+        mode={mode}
       />
     </CardPlan>
   );

@@ -22,7 +22,11 @@ export default function PricingLading() {
           {t('pricingDescription')}
         </p>
       </div>
-      <Pricing selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} />
+      <Pricing
+        mode="landing"
+        selectedPlan={selectedPlan}
+        setSelectedPlan={setSelectedPlan}
+      />
     </section>
   );
 }
