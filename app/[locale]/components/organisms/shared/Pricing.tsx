@@ -11,6 +11,7 @@ import clsx from 'clsx';
 type PricingProps = {
   selectedPlan: PlanType;
   setSelectedPlan: (plan: PlanType) => void;
+  mode?: 'confirm' | 'landing';
 };
 
 type PlanType = 'basic' | 'advanced' | 'premium' | 'enterprise';
@@ -19,6 +20,7 @@ type BillingType = 'monthly' | 'yearly';
 export default function Pricing({
   selectedPlan,
   setSelectedPlan,
+  mode,
 }: PricingProps) {
   const t = useTranslations('ConfirmRegister');
 
@@ -46,6 +48,7 @@ export default function Pricing({
             price={price}
             selected={selectedPlan === 'basic'}
             onSelect={() => setSelectedPlan('basic')}
+            mode={mode}
           />
         );
       case 'premium':
@@ -54,6 +57,7 @@ export default function Pricing({
             price={price}
             selected={selectedPlan === 'premium'}
             onSelect={() => setSelectedPlan('premium')}
+            mode={mode}
           />
         );
       case 'advanced':
@@ -62,6 +66,7 @@ export default function Pricing({
             price={price}
             selected={selectedPlan === 'advanced'}
             onSelect={() => setSelectedPlan('advanced')}
+            mode={mode}
           />
         );
       case 'enterprise':
@@ -98,16 +103,19 @@ export default function Pricing({
             price={prices[billing].basic}
             selected={selectedPlan === 'basic'}
             onSelect={() => setSelectedPlan('basic')}
+            mode={mode}
           />
           <PlanPremium
             price={prices[billing].premium}
             selected={selectedPlan === 'premium'}
             onSelect={() => setSelectedPlan('premium')}
+            mode={mode}
           />
           <PlanAdvanced
             price={prices[billing].advanced}
             selected={selectedPlan === 'advanced'}
             onSelect={() => setSelectedPlan('advanced')}
+            mode={mode}
           />
           <PlanEnterprise price={prices[billing].enterprise} />
         </div>

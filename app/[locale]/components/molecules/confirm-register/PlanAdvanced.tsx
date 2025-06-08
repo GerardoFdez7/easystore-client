@@ -6,12 +6,14 @@ type PlanAdvancedProps = {
   price: string;
   selected: boolean;
   onSelect: () => void;
+  mode?: 'confirm' | 'landing';
 };
 
 export default function PlanAdvanced({
   price,
   selected,
   onSelect,
+  mode,
 }: PlanAdvancedProps) {
   const t = useTranslations('ConfirmRegister');
   return (
@@ -35,6 +37,7 @@ export default function PlanAdvanced({
         text={t('buttonAdvanced')}
         selected={selected}
         onSelect={onSelect}
+        mode={mode}
       />
     </CardPlan>
   );

@@ -14,7 +14,11 @@ export default function MainConfirmRegister() {
       <h2 className="text-title px-5 pb-5 text-2xl font-bold 2xl:text-3xl">
         {t('choosePlan')}
       </h2>
-      <Pricing selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} />
+      <Pricing
+        mode="confirm"
+        selectedPlan={selectedPlan}
+        setSelectedPlan={setSelectedPlan}
+      />
       <div className="my-12 flex justify-center">
         <button className="bg-primary w-xs rounded-full py-3 font-medium text-white sm:w-xl">
           {t('confirmButton')}
