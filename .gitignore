@@ -54,12 +54,6 @@ docker-compose.override.yml
 app/[locale]/lib/graphql/generated.ts
 
 .github/*
-.husky/*
-!.husky/_/*
-!.husky/_/husky.sh
-!.husky/.commit-msg
-!.husky/pre-commit
-!.husky/commit-msg
 lint-staged.config.js
 eslint.config.mjs
 .prettierrc
