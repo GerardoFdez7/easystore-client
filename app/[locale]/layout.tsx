@@ -33,7 +33,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={locale} suppressHydrationWarning className="scroll-smooth">
+    <html lang={locale} suppressHydrationWarning>
       <body className={`${inter.variable} antialiased`}>
         <ApolloWrapper>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
