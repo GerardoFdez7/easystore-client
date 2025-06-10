@@ -2,7 +2,7 @@
 
 import Image, { StaticImageData } from 'next/image';
 import React from 'react';
-import { cn } from 'app/[locale]/lib/utils/cn';
+import { cn } from '@lib/utils/cn';
 
 export interface LogoProps {
   src: string | StaticImageData;

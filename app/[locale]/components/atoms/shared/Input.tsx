@@ -2,13 +2,11 @@
 'use client';
 
 import React from 'react';
-import { cn } from 'app/[locale]/lib/utils/cn';
+import { cn } from '@lib/utils/cn';
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
-  /** Texto de la etiqueta opcional */
   label?: string;
-  /** Mensaje de error opcional */
   error?: string;
 }
 
@@ -29,8 +27,8 @@ const Input: React.FC<InputProps> = ({
       <input
         id={id}
         className={cn(
-          'w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-base placeholder-gray-400',
-          'focus:border-primary focus:ring-primary focus:ring-1 focus:outline-none',
+          'tex-[16px] text-foreground focus:ring-primary border-primary h-[56px] w-full rounded-lg border-1 bg-transparent p-3 px-4 py-2 text-base placeholder-gray-400 2xl:text-xl',
+          'focus:border-primary focus:ring-2 focus:outline-none',
           'disabled:cursor-not-allowed disabled:opacity-50',
           error ? 'border-destructive focus:ring-destructive' : '',
         )}

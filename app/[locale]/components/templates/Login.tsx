@@ -2,9 +2,9 @@ import Footer from '@organisms/shared/Footer';
 import HeaderLogin from '@organisms/login/HeaderLogin';
 import MainLogin from '@organisms/login/MainLogin';
 
-export default function LoginPage() {
+export default function LoginTemplate() {
   return (
-    <div className="bg-background min-h-screen">
+    <div className="bg-background flex min-h-screen flex-col">
       <HeaderLogin />
       <MainLogin />
       <Footer />

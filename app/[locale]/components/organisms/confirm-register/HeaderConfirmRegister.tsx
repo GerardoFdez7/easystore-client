@@ -1,5 +1,7 @@
-import { LanguageButton } from '@atoms/shared/ButtonLanguage';
 import { useTranslations } from 'next-intl';
+import Input from '@atoms/shared/Input';
+import { Label } from '@atoms/shared/Label';
+import { LanguageButton } from '@atoms/shared/ButtonLanguage';
 
 export default function HeaderConfirmRegister() {
   const t = useTranslations('ConfirmRegister');
@@ -18,16 +20,17 @@ export default function HeaderConfirmRegister() {
         </p>
 
         <div className="mb-15">
-          <label
+          <Label
             htmlFor="businessName"
             className="tex-[16px] text-foreground mb-2 block font-medium 2xl:text-xl"
           >
             {t('businessName')}
-          </label>
-          <input
+          </Label>
+          <Input
+            required
             type="text"
             id="businessName"
-            className="tex-[16px] text-foreground border-primary focus:ring-primary h-[56px] w-full rounded-xl border-1 bg-transparent p-3 focus:ring-2 focus:outline-none md:w-[593px] 2xl:text-xl"
+            className="md:w-[593px]"
           />
         </div>
       </div>
