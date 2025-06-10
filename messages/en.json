@@ -148,14 +148,11 @@
     "messageAccount": "Don't have an account?",
     "loginWithGoogle": "Use Google",
     "loginWithFacebook": "Use Facebook",
-    "register": "Register",
-    "placeholderEmail": "Enter your email"
+    "register": "Register"
   },
   "Register": {
-    "registerTitle": "Welcome to EasyStore!",
+    "registerTitle": "Register",
     "registerMessage": "Create your account to start building your online store.",
-    "fullName": "Full Name",
-    "phoneNumber": "Phone Number",
     "email": "Email",
     "password": "Password",
     "confirmPassword": "Confirm Password",
@@ -163,9 +160,6 @@
     "messageAccount": "Already have an account?",
     "registerWithGoogle": "Use Google",
     "registerWithFacebook": "Use Facebook",
-    "login": "Log in",
-    "placeholderEmail": "Enter your email",
-    "placeholderFullName": "Enter your full name",
-    "placeholderPhoneNumber": "Enter your phone number"
+    "login": "Log in"
   }
 }

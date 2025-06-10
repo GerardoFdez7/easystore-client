@@ -1,7 +1,9 @@
 'use client';
-import Pricing from '@organisms/shared/Pricing';
-import { useTranslations } from 'next-intl';
+
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
+import Pricing from '@organisms/shared/Pricing';
+import { Button } from '@atoms/shared/Button';
 
 type PlanType = 'basic' | 'advanced' | 'premium' | 'enterprise';
 
@@ -19,11 +21,13 @@ export default function MainConfirmRegister() {
         selectedPlan={selectedPlan}
         setSelectedPlan={setSelectedPlan}
       />
-      <div className="my-12 flex justify-center">
-        <button className="bg-primary w-xs rounded-full py-3 font-medium text-white sm:w-xl">
-          {t('confirmButton')}
-        </button>
-      </div>
+      <Button
+        variant={'auth'}
+        size={'xl'}
+        className="mx-auto my-12 flex w-xs sm:w-xl"
+      >
+        {t('confirmButton')}
+      </Button>
     </main>
   );
 }

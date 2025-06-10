@@ -1,4 +1,4 @@
-import { Button } from '@atoms/shared/ButtonCn';
+import { Button } from '@atoms/shared/Button';
 import { Check } from 'lucide-react';
 import Link from 'next/link';
 
@@ -16,7 +16,7 @@ export default function ButtonPlan({
   mode = 'confirm',
 }: ButtonPlanProps) {
   const content = (
-    <div className="flex items-center justify-between gap-x-4">
+    <div className="flex items-center justify-between gap-x-4 text-lg">
       <span>{text}</span>
       {mode === 'confirm' && selected && (
         <Check className="text-secondary h-6 w-6" />

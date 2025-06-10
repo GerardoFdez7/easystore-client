@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl';
-import { Button } from '@atoms/shared/ButtonCn';
+import { Button } from '@atoms/shared/Button';
 import Link from 'next/link';
 
 export default function ButtonPrimary() {
