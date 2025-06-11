@@ -7,7 +7,7 @@ import useEmblaCarousel, {
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 import { cn } from 'utils';
-import { Button } from '@atoms/shared/Button';
+import { Button } from '@shadcn/ui/button';
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -226,7 +226,7 @@ function CarouselItem({ className, ...props }: React.ComponentProps<'div'>) {
       aria-roledescription="slide"
       data-slot="carousel-item"
       className={cn(
-        'min-w-0 shrink-0 grow-0 basis-full',
+        'min-w-0 shrink-0 grow-0 basis-full select-none hover:cursor-pointer',
         orientation === 'horizontal' ? 'pl-1' : 'pt-4',
         className,
       )}

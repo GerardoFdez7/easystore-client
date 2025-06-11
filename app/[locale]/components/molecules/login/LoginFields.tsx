@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from '@shadcn/ui/form';
 import { Eye, EyeClosed } from 'lucide-react';
-import Input from '@atoms/shared/Input';
+import Input from '@atoms/shared/OutsideInput';
 
 export const LoginFields: React.FC = () => {
   const t = useTranslations('Login');

@@ -3,7 +3,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@atoms/shared/Accordion';
+} from '@shadcn/ui/accordion';
 import { useTranslations } from 'next-intl';
 
 export default function FAQs() {

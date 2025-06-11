@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
-import { Label } from '@atoms/shared/Label';
+import { Label } from '@shadcn/ui/label';
 import {
   Controller,
   FormProvider,

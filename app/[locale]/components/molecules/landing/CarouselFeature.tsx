@@ -1,4 +1,4 @@
-import { Carousel, CarouselContent } from '@atoms/shared/Carousel';
+import { Carousel, CarouselContent } from '@shadcn/ui/carousel';
 import ItemFeature from '@atoms/landing/ItemFeature';
 import { useTranslations } from 'next-intl';
 import { MdCodeOff } from 'react-icons/md';

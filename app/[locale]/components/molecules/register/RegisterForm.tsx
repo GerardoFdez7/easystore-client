@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { Root, Submit } from '@radix-ui/react-form';
 import RegisterFields from '@molecules/register/RegisterFields';
-import { Button } from '@atoms/shared/Button';
+import { Button } from '@shadcn/ui/button';
 
 export interface RegisterFormProps {
   onSubmit: (data: {

@@ -3,7 +3,7 @@
 import React from 'react';
 import { cn } from '@lib/utils/cn';
 import { Field, Label, Control } from '@radix-ui/react-form';
-import Input from '@atoms/shared/Input';
+import Input from '@atoms/shared/OutsideInput';
 
 export interface FormFieldProps {
   label: string;

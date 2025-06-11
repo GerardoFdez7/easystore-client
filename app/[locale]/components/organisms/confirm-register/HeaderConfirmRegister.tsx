@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
-import Input from '@atoms/shared/Input';
-import { Label } from '@atoms/shared/Label';
+import Input from '@atoms/shared/OutsideInput';
+import { Label } from '@shadcn/ui/label';
 import { LanguageButton } from '@atoms/shared/ButtonLanguage';
 
 export default function HeaderConfirmRegister() {

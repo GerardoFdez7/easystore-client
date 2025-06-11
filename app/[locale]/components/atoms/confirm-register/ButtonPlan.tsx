@@ -1,4 +1,4 @@
-import { Button } from '@atoms/shared/Button';
+import { Button } from '@shadcn/ui/button';
 import { Check } from 'lucide-react';
 import Link from 'next/link';
 
@@ -27,7 +27,7 @@ export default function ButtonPlan({
   if (mode === 'landing') {
     return (
       <Link href="/register">
-        <Button className="py-6" variant={'plans'}>
+        <Button className="py-6 hover:cursor-pointer" variant={'plans'}>
           {content}
         </Button>
       </Link>

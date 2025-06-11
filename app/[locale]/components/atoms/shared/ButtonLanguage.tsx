@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from '@molecules/shared/DropdownMenu';
+} from '@shadcn/ui/dropdown-menu';
 
 export const LanguageButton = () => {
   const t = useTranslations('Languages');

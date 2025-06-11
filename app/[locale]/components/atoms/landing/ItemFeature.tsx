@@ -1,4 +1,4 @@
-import { CarouselItem } from '@atoms/shared/Carousel';
+import { CarouselItem } from '@shadcn/ui/carousel';
 import { ReactNode } from 'react';
 
 interface ItemFeatureProps {

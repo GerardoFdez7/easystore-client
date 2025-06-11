@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { Button } from '@atoms/shared/Button';
+import { Button } from '@shadcn/ui/button';
 
 export const SocialAuthButtons: React.FC = () => {
   const t = useTranslations('Register');
