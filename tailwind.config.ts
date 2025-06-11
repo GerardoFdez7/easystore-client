@@ -14,6 +14,8 @@ const config: Config = {
         foreground: 'var(--foreground)',
         primary: 'var(--primary)',
         secondary: 'var(--secondary)',
+        warning: 'var(--warning)',
+        error: 'var(--error)',
         background_light: 'var(--background)',
         title: 'var(--title-color)',
         text: 'var(--foreground)',

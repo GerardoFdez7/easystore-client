@@ -2,7 +2,7 @@
 
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import type { ThemeProviderProps } from 'next-themes';
-import { PageThemeProvider, usePageTheme } from './PageThemeProvider';
+import { PageThemeProvider, usePageTheme } from './page-theme';
 
 function CustomThemeProvider({ children, ...props }: ThemeProviderProps) {
   const { isDarkModeEnabled } = usePageTheme();
