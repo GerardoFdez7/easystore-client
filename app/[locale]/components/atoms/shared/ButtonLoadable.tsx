@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button } from '@atoms/shared/Button';
+import { Button } from '@shadcn/ui/button';
 import CartLoader from '@atoms/shared/CartLoader';
 import { type VariantProps } from 'class-variance-authority';
-import { buttonVariants } from '@atoms/shared/Button';
+import { buttonVariants } from '@shadcn/ui/button';
 
 interface ButtonLoadableProps
   extends React.ComponentProps<'button'>,

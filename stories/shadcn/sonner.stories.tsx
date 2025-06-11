@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Toaster } from '@shadcn/ui/sonner';
+import { Button } from '@shadcn/ui/button';
 import { toast } from 'sonner';
-import { Button } from '@atoms/shared/Button';
 
 const meta = {
   title: 'Shadcn/Toaster',

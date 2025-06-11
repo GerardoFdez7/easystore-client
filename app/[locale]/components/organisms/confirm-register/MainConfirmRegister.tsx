@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import Pricing from '@organisms/shared/Pricing';
-import { Button } from '@atoms/shared/Button';
+import { Button } from '@shadcn/ui/button';
 
 type PlanType = 'basic' | 'advanced' | 'premium' | 'enterprise';
 

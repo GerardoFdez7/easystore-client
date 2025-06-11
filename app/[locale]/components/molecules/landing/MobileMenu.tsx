@@ -6,7 +6,7 @@ import {
   DrawerContent,
   DrawerTrigger,
   DrawerTitle,
-} from '@molecules/shared/Drawer';
+} from '@shadcn/ui/drawer';
 import { LanguageButton } from '@atoms/shared/ButtonLanguage';
 import LinkLog from '@atoms/landing/LinkLogIn';
 import LinkPricing from '@atoms/landing/LinkPricing';
