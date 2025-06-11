@@ -27,6 +27,8 @@
       "@molecules/*": ["./app/[locale]/components/molecules/*"],
       "@organisms/*": ["./app/[locale]/components/organisms/*"],
       "@templates/*": ["./app/[locale]/components/templates/*"],
+      "@shadcn/*": ["./app/[locale]/components/shadcn/*"],
+      "@schemas/*": ["./app/[locale]/schemas/*"],
       "@hooks/*": ["app/[locale]/hooks/*"],
       "@types/*": ["app/[locale]/types/*"],
       "@assets/*": ["app/[locale]/assets/*"],

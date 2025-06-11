@@ -148,7 +148,10 @@
     "messageAccount": "Não tem uma conta?",
     "loginWithGoogle": "Usar Google",
     "loginWithFacebook": "Usar Facebook",
-    "register": "Cadastrar-se"
+    "register": "Cadastrar-se",
+    "invalidEmailFormat": "Formato de e-mail inválido",
+    "passwordTooShort": "A senha deve ter pelo menos 8 caracteres",
+    "passwordTooLong": "A senha deve ter no máximo 255 caracteres"
   },
   "Register": {
     "registerTitle": "Cadastre-se",

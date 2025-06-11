@@ -148,7 +148,10 @@
     "messageAccount": "Don't have an account?",
     "loginWithGoogle": "Use Google",
     "loginWithFacebook": "Use Facebook",
-    "register": "Register"
+    "register": "Register",
+    "invalidEmailFormat": "Invalid email format",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "passwordTooLong": "Password must be at most 255 characters"
   },
   "Register": {
     "registerTitle": "Register",

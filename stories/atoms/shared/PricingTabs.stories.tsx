@@ -1,9 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@atoms/shared/Tabs';
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from '@atoms/shared/PricingTabs';
 import { useState } from 'react';
 
 const meta: Meta = {
-  title: 'Atoms/Shared/Tabs',
+  title: 'Atoms/Shared/PricingTabs',
   parameters: {
     layout: 'centered',
   },
