@@ -14,14 +14,14 @@ export default function Header() {
         <LanguageButton />
       </div>
 
-      <div className="mt-24 flex flex-col items-center justify-center text-center sm:flex-row sm:space-x-4 sm:text-left">
+      <div className="mt-8 flex flex-col items-center justify-center text-center sm:mt-22 sm:flex-row sm:space-x-4 sm:text-left">
         <LogoImage
           width={140}
           height={140}
           className="h-20 w-20 sm:h-20 sm:w-20 md:h-28 md:w-28"
         />
         <div>
-          <h1 className="text-title text-[42px] font-bold sm:mt-8">
+          <h1 className="text-title text-[42px] font-bold sm:mt-4">
             {t('welcomeBack')}
           </h1>
           <p className="text-text text-primary text-lg font-medium">

@@ -17,7 +17,7 @@ export const RegisterForm: React.FC = () => {
         onSubmit={(e) => {
           void form.handleSubmit(handleSubmit)(e);
         }}
-        className="mt-4 w-full space-y-4 sm:max-w-sm md:max-w-md lg:max-w-lg"
+        className="w-full space-y-4 sm:max-w-sm md:max-w-md lg:max-w-lg"
       >
         <RegisterFields />
 
