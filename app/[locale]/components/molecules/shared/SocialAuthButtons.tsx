@@ -16,7 +16,7 @@ export const SocialAuthButtons: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center gap-4 sm:flex-row">
+    <div className="flex w-full flex-col justify-center gap-4 sm:flex-row">
       <Button variant={'social'} size={'xl'} onClick={handleGoogleAuth}>
         <Image
           src="/icon_google.webp"

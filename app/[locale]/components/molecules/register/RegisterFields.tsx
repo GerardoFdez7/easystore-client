@@ -1,18 +1,59 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { FormField } from '@molecules/shared/FormField';
+import { useFormContext } from 'react-hook-form';
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from '@shadcn/ui/form';
+import Input from '@atoms/shared/OutsideInput';
 
 export const RegisterFields: React.FC = () => {
   const t = useTranslations('Register');
+  const { control } = useFormContext();
 
   return (
     <>
-      <FormField name="email" label={t('email')} type="email" />
-      <FormField name="password" label={t('password')} type="password" />
       <FormField
+        control={control}
+        name="email"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>{t('email')}</FormLabel>
+            <FormControl>
+              <Input type="email" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={control}
+        name="password"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>{t('password')}</FormLabel>
+            <FormControl>
+              <Input type="password" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={control}
         name="confirmPassword"
-        label={t('confirmPassword')}
-        type="password"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>{t('confirmPassword')}</FormLabel>
+            <FormControl>
+              <Input type="password" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
       />
     </>
   );
