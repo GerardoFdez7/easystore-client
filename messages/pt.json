@@ -163,6 +163,14 @@
     "messageAccount": "Já tem uma conta?",
     "registerWithGoogle": "Usar Google",
     "registerWithFacebook": "Usar Facebook",
-    "login": "Entrar"
+    "login": "Entrar",
+    "invalidEmailFormat": "Formato de e-mail inválido",
+    "passwordTooShort": "A senha deve ter pelo menos 8 caracteres",
+    "passwordTooLong": "A senha deve ter no máximo 255 caracteres",
+    "passwordsDoNotMatch": "As senhas não coincidem",
+    "termsMessage": "Ao continuar, você aceita os",
+    "termsAndConditions": "Termos e Condições",
+    "and": "e a",
+    "privacyPolicy": "Política de Privacidade"
   }
 }

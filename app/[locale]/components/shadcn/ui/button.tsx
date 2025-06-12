@@ -22,7 +22,7 @@ const buttonVariants = cva(
           'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 disabled:pointer-events-none disabled:opacity-50',
         link: 'text-primary underline-offset-4 hover:underline disabled:pointer-events-none disabled:opacity-50',
         social:
-          'gap-2 bg-[#EBDBF5] text-lg font-bold w-60 rounded-full disabled:pointer-events-none disabled:opacity-50',
+          'gap-2 bg-[#EBDBF5] text-lg font-bold rounded-full disabled:pointer-events-none disabled:opacity-50',
         auth: 'bg-primary hover:bg-black hover:cursor-pointer rounded-full py-3 font-bold text-xl text-white w-full disabled:pointer-events-none disabled:bg-black',
       },
       size: {

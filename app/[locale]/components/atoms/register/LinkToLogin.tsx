@@ -7,7 +7,7 @@ export default function LinkToLogin() {
   const t = useTranslations('Register');
 
   return (
-    <p className="text-text font-medium">
+    <p className="font-medium">
       {t('messageAccount')}{' '}
       <LinkText href="/login" className="text-secondary">
         {t('login')}
