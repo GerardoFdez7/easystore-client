@@ -13,12 +13,12 @@ export default function HeaderRegister() {
         <LanguageButton />
       </div>
 
-      <div className="mt-12 flex flex-col justify-center text-center sm:mt-22 sm:flex-row sm:space-x-4">
+      <div className="mt-8 flex flex-col justify-center text-center sm:mt-22 sm:flex-row sm:space-x-4">
         <div>
           <h1 className="text-title text-4xl font-bold">
             {t('registerTitle')}
           </h1>
-          <p className="text-primary mt-4 text-center text-lg font-medium">
+          <p className="text-primary mt-2 text-center text-lg font-medium">
             {t('registerMessage')}
           </p>
         </div>
