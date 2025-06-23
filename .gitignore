@@ -55,6 +55,3 @@ app/[locale]/lib/graphql/generated.ts
 
 .vscode/
 .github/*
-lint-staged.config.js
-eslint.config.mjs
-.prettierrc
