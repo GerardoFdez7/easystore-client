@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import * as React from "react";
+import * as React from 'react';
 import {
   Package,
   Users,
@@ -10,29 +10,31 @@ import {
   Gift,
   UserCheck,
   Archive,
-} from "lucide-react";
-import ImageDashboard from "@atoms/dashboard/ImageDashboard";
-import ButtonSidebar from "@atoms/dashboard/ButtonSidebar";
+} from 'lucide-react';
+import ImageDashboard from '@atoms/dashboard/ImageDashboard';
+import ButtonSidebar from '@atoms/dashboard/ButtonSidebar';
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-} from "@shadcn/ui/sidebar";
+} from '@shadcn/ui/sidebar';
 
-export function SiderbarDashboard({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function SiderbarDashboard({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar className="mt-20 h-auto" collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <div className="mb-2">
           <ImageDashboard />
-          <h3 className="font-semibold text-title  text-center w-full">
+          <h3 className="text-title w-full text-center font-semibold">
             COMPANY NAME
           </h3>
         </div>
       </SidebarHeader>
       <SidebarContent>
-        <div className="p-6 flex flex-col h-full">
+        <div className="flex h-full flex-col px-6 py-2">
           <nav className="space-y-2">
             <ButtonSidebar
               icon={<BarChart3 />}

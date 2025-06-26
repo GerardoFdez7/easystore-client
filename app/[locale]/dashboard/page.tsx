@@ -1,4 +1,4 @@
-import DashboardPage from "@templates/Dashboard";
+import DashboardPage from '@templates/Dashboard';
 
 export default function Dashboard() {
   return <DashboardPage />;

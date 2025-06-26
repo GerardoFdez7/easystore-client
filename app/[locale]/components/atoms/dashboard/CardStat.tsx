@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react';
 import {
   Card,
   CardHeader,
@@ -6,17 +6,17 @@ import {
   CardDescription,
   CardFooter,
   CardAction,
-} from "@shadcn/ui/card"
-import { Badge } from "@shadcn/ui/badge"
+} from '@shadcn/ui/card';
+import { Badge } from '@shadcn/ui/badge';
 
 type CardStatProps = {
-  description: string
-  amount: string
-  trend?: string
-  icon?: React.ReactNode
-  footerText?: string
-  footerSubtext?: string
-}
+  description: string;
+  amount: string;
+  trend?: string;
+  icon?: React.ReactNode;
+  footerText?: string;
+  footerSubtext?: string;
+};
 
 export default function CardStat({
   description,
@@ -57,5 +57,5 @@ export default function CardStat({
         </CardFooter>
       )}
     </Card>
-  )
+  );
 }
