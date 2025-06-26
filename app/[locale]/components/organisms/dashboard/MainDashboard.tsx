@@ -1,67 +1,29 @@
-"use client";
+'use client';
 
-import WelcomeDashboard from "@molecules/dashboard/WelcomeDashboard";
-import TabDashboard from "@molecules/dashboard/TabDashboard";
-import { DataTable } from "app/[locale]/components/shadcn/data-table";
-import { SiteHeader } from "@molecules/dashboard/SiteHeader";
+import WelcomeDashboard from '@atoms/dashboard/WelcomeDashboard';
+import TabDashboard from '@molecules/dashboard/TabDashboard';
+import { DataTable } from 'app/[locale]/components/shadcn/data-table';
+import { SiteHeader } from '@molecules/dashboard/SiteHeader';
 
 import {
   SidebarInset,
   SidebarProvider,
-} from "app/[locale]/components/shadcn/ui/sidebar";
+} from 'app/[locale]/components/shadcn/ui/sidebar';
 
-import data from "../../../../dashboard/data.json";
-import { SiderbarDashboard } from "@molecules/dashboard/Sidebar";
-import { KPICards } from "@molecules/dashboard/KPICards";
-import { ChartTotalSales } from "@molecules/dashboard/ChartTotalSales";
-import TopProducts from "@molecules/dashboard/TopProducts";
+import data from '../../../../dashboard/data.json';
+import { SiderbarDashboard } from '@molecules/dashboard/Sidebar';
+import { KPICards } from '@molecules/dashboard/KPICards';
+import { ChartTotalSales } from '@molecules/dashboard/ChartTotalSales';
+import TopProducts from '@molecules/dashboard/TopProducts';
 
 export default function MainDashboard() {
-  const salesData = [
-    {
-      order: "#3456",
-      date: "Jul 3, 2023",
-      customer: "Sarah Liu",
-      total: "$100.00",
-      status: "Delivered",
-    },
-    {
-      order: "#3456",
-      date: "Jul 4, 2023",
-      customer: "John Smith",
-      total: "$200.00",
-      status: "Shipped",
-    },
-    {
-      order: "#3456",
-      date: "Jul 5, 2023",
-      customer: "Jane Doe",
-      total: "$300.00",
-      status: "Delivered",
-    },
-    {
-      order: "#3456",
-      date: "Jul 6, 2023",
-      customer: "Sam Johnson",
-      total: "$400.00",
-      status: "Shipped",
-    },
-    {
-      order: "#3456",
-      date: "Jul 7, 2023",
-      customer: "Chris Davis",
-      total: "$500.00",
-      status: "Delivered",
-    },
-  ];
-
   return (
-    <main>
+    <main className="pt-22 2xl:m-5">
       <SidebarProvider
         style={
           {
-            "--sidebar-width": "calc(var(--spacing) * 72)",
-            "--header-height": "calc(var(--spacing) * 12)",
+            '--sidebar-width': 'calc(var(--spacing) * 72)',
+            '--header-height': 'calc(var(--spacing) * 12)',
           } as React.CSSProperties
         }
       >
@@ -74,15 +36,19 @@ export default function MainDashboard() {
                 <WelcomeDashboard />
                 <KPICards />
                 <TabDashboard />
-                {/* Top Products */}
                 <div className="px-4 lg:px-6">
+                  {/* Total Sales */}
                   <ChartTotalSales />
-                </div>
-                {/* Top Products */}
-                <DataTable data={data} />
-                {/* Top Products */}
-                <div className="px-4 lg:px-6">
+
+                  {/* Sales Overview */}
+                  <DataTable data={data} />
+
+                  {/* Top Products */}
                   <TopProducts />
+
+                  {/* Customer satisfaction */}
+
+                  {/* Reviews */}
                 </div>
               </div>
             </div>

@@ -1,5 +1,5 @@
-import CardStat from "@atoms/dashboard/CardStat";
-import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
+import CardStat from '@atoms/dashboard/CardStat';
+import { IconTrendingDown, IconTrendingUp } from '@tabler/icons-react';
 
 export function KPICards() {
   return (
