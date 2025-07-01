@@ -46,12 +46,12 @@ export default function TopProducts() {
   ];
 
   return (
-    <div className="py-10">
+    <section className="py-10">
       <h1 className="text-title mb-4 text-2xl font-bold">Top Products</h1>
       <Card className="mb-8 border-[#e2e8f0] bg-[#ffffff]">
         <CardHeader></CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 @min-7xl:grid-cols-5">
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 2xl:grid-cols-4 @min-7xl:grid-cols-5">
             {products.map((product, index) => (
               <div
                 key={index}
@@ -69,6 +69,6 @@ export default function TopProducts() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </section>
   );
 }

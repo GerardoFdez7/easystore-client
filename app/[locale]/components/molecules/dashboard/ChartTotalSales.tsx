@@ -163,14 +163,14 @@ export function ChartTotalSales() {
   });
 
   return (
-    <div className="pb-10">
+    <section className="pb-10">
       <h1 className="text-title mb-4 text-2xl font-bold">Total Sales</h1>
       <Card className="@container/card">
         <CardHeader>
-          <CardTitle>Total Visitors</CardTitle>
+          <CardTitle className="text-3xl">$1000</CardTitle>
           <CardDescription>
-            <span className="hidden @[540px]/card:block">
-              Total for the last 3 months
+            <span className="text-secondary hidden @[540px]/card:block">
+              +15%
             </span>
             <span className="@[540px]/card:hidden">Last 3 months</span>
           </CardDescription>
@@ -288,6 +288,6 @@ export function ChartTotalSales() {
           </ChartContainer>
         </CardContent>
       </Card>
-    </div>
+    </section>
   );
 }
