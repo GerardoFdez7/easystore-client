@@ -9,6 +9,7 @@ export default function ImageTopProducts() {
         width={166}
         height={66}
         className="rounded-lg"
+        priority
       />
     </div>
   );

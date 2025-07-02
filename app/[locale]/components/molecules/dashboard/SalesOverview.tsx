@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from 'app/[locale]/components/shadcn/ui/table';
+import { useTranslations } from 'next-intl';
 
 const orders = [
   {
@@ -60,28 +61,32 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 export default function SalesOverview() {
+  const t = useTranslations('Dashboard');
+
   return (
     <>
-      <h1 className="text-title mb-4 text-2xl font-bold">Sales Overview</h1>
+      <h1 className="text-title mb-4 text-2xl font-bold">
+        {t('salesOverview')}
+      </h1>
 
       <div className="overflow-x-auto rounded-lg border border-[#e2e8f0] bg-white shadow-lg">
         <Table className="min-w-[600px]">
           <TableHeader>
             <TableRow>
               <TableHead className="text-foreground text-sm font-semibold sm:pl-5">
-                Order
+                {t('order')}
               </TableHead>
               <TableHead className="text-foreground text-sm font-semibold">
-                Date
+                {t('date')}
               </TableHead>
               <TableHead className="text-foreground text-sm font-semibold">
-                Customer
+                {t('customer')}
               </TableHead>
               <TableHead className="text-foreground text-sm font-semibold">
-                Total
+                {t('total')}
               </TableHead>
               <TableHead className="text-foreground text-sm font-semibold">
-                Status
+                {t('status')}
               </TableHead>
             </TableRow>
           </TableHeader>

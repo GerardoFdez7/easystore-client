@@ -1,10 +1,13 @@
 import { Card, CardContent, CardHeader } from '@shadcn/ui/card';
 import { Star } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function Reviews() {
+  const t = useTranslations('Dashboard');
+
   return (
     <section className="py-10">
-      <h1 className="text-title mb-4 text-2xl font-bold">Reviews</h1>
+      <h1 className="text-title mb-4 text-2xl font-bold">{t('reviews')}</h1>
       <Card className="border-[#e2e8f0] bg-[#ffffff]">
         <CardHeader>
           <div className="flex items-center gap-2">
@@ -18,7 +21,7 @@ export default function Reviews() {
               ))}
             </div>
           </div>
-          <div className="text-foreground text-sm">100 reviews</div>
+          <div className="text-foreground text-sm">100 {t('reviews')}</div>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">

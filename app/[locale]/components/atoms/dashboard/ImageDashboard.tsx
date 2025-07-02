@@ -9,6 +9,7 @@ export default function ImageDashboard() {
         width={160}
         height={120}
         className="rounded-lg"
+        priority
       />
     </div>
   );
