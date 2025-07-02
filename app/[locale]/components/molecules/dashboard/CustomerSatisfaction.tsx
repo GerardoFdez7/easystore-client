@@ -18,7 +18,7 @@ const data = [
 const chartConfig = {
   count: {
     label: 'Cantidad',
-    color: '#bd5cf5',
+    color: 'var(--color-primary)',
   },
 };
 
