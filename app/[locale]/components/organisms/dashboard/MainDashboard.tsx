@@ -16,8 +16,11 @@ import TopProducts from '@molecules/dashboard/TopProducts';
 import CustomerSatisfaction from '@molecules/dashboard/CustomerSatisfaction';
 import Reviews from '@molecules/dashboard/Reviews';
 import SalesOverview from '@molecules/dashboard/SalesOverview';
+import { useTranslations } from 'next-intl';
 
 export default function MainDashboard() {
+  const t = useTranslations('Dashboard');
+
   return (
     <main className="pt-22 2xl:m-5">
       <SidebarProvider
@@ -30,7 +33,7 @@ export default function MainDashboard() {
       >
         <SiderbarDashboard />
         <SidebarInset>
-          <SiteHeader />
+          <SiteHeader title={t('dashboard')} />
           <div className="flex flex-1 flex-col">
             <div className="@container/main flex flex-1 flex-col gap-2">
               <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">

@@ -6,8 +6,11 @@ import {
 } from '@shadcn/ui/dropdown-menu';
 import { Button } from '@shadcn/ui/button';
 import { LogOut, User } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function MenuOwnerName() {
+  const t = useTranslations('Dashboard');
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -20,13 +23,13 @@ export default function MenuOwnerName() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem className="cursor-pointer text-lg">
           <User className="mr-2 h-4 w-4" />
-          Profile
+          {t('profile')}
         </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem className="cursor-pointer text-lg">
           <LogOut className="mr-2 h-4 w-4" />
-          Log out
+          {t('logOut')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

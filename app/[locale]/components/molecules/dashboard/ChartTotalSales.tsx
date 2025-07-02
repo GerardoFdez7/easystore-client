@@ -26,6 +26,7 @@ import {
 } from '@shadcn/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@shadcn/ui/toggle-group';
 import { useIsMobile } from '@hooks/use-mobile';
+import { useTranslations } from 'next-intl';
 
 export const description = 'An interactive area chart';
 
@@ -138,6 +139,8 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function ChartTotalSales() {
+  const t = useTranslations('Dashboard');
+
   const isMobile = useIsMobile();
 
   const [timeRange, setTimeRange] = React.useState('90d');
@@ -164,7 +167,7 @@ export function ChartTotalSales() {
 
   return (
     <section className="pb-10">
-      <h1 className="text-title mb-4 text-2xl font-bold">Total Sales</h1>
+      <h1 className="text-title mb-4 text-2xl font-bold">{t('totalSales')}</h1>
       <Card className="@container/card">
         <CardHeader>
           <CardTitle className="text-3xl">$1000</CardTitle>
@@ -172,7 +175,6 @@ export function ChartTotalSales() {
             <span className="text-secondary hidden @[540px]/card:block">
               +15%
             </span>
-            <span className="@[540px]/card:hidden">Last 3 months</span>
           </CardDescription>
           <CardAction>
             <ToggleGroup
@@ -182,9 +184,9 @@ export function ChartTotalSales() {
               variant="outline"
               className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
             >
-              <ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
-              <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
-              <ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
+              <ToggleGroupItem value="90d">{t('3months')}</ToggleGroupItem>
+              <ToggleGroupItem value="30d">{t('30days')}</ToggleGroupItem>
+              <ToggleGroupItem value="7d">{t('7days')}</ToggleGroupItem>
             </ToggleGroup>
             <Select value={timeRange} onValueChange={setTimeRange}>
               <SelectTrigger
@@ -196,13 +198,13 @@ export function ChartTotalSales() {
               </SelectTrigger>
               <SelectContent className="rounded-xl">
                 <SelectItem value="90d" className="rounded-lg">
-                  Last 3 months
+                  {t('3months')}
                 </SelectItem>
                 <SelectItem value="30d" className="rounded-lg">
-                  Last 30 days
+                  {t('30days')}
                 </SelectItem>
                 <SelectItem value="7d" className="rounded-lg">
-                  Last 7 days
+                  {t('7days')}
                 </SelectItem>
               </SelectContent>
             </Select>

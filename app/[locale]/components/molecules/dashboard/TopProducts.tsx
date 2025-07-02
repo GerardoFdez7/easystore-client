@@ -1,7 +1,10 @@
 import ImageTopProducts from '@atoms/dashboard/ImageTopProducts';
 import { Card, CardContent, CardHeader } from '@shadcn/ui/card';
+import { useTranslations } from 'next-intl';
 
 export default function TopProducts() {
+  const t = useTranslations('Dashboard');
+
   const products = [
     {
       name: "Women's T-shirt",
@@ -47,7 +50,7 @@ export default function TopProducts() {
 
   return (
     <section className="py-10">
-      <h1 className="text-title mb-4 text-2xl font-bold">Top Products</h1>
+      <h1 className="text-title mb-4 text-2xl font-bold">{t('topProducts')}</h1>
       <Card className="mb-8 border-[#e2e8f0] bg-[#ffffff]">
         <CardHeader></CardHeader>
         <CardContent>

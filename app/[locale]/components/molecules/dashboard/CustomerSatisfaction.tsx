@@ -4,6 +4,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@shadcn/ui/chart';
+import { useTranslations } from 'next-intl';
 import { BarChart, Bar, XAxis, YAxis } from 'recharts';
 
 const data = [
@@ -22,15 +23,17 @@ const chartConfig = {
 };
 
 export default function CustomerSatisfaction() {
+  const t = useTranslations('Dashboard');
+
   return (
     <section>
       <h1 className="text-title mb-4 text-2xl font-bold">
-        Customer satisfaction
+        {t('customerSatisfaction')}
       </h1>
 
       <Card className="border-[#e2e8f0] bg-[#ffffff]">
         <CardHeader>
-          <div className="text-foreground text-sm">Average rating</div>
+          <div className="text-foreground text-sm">{t('avarageRating')}</div>
           <div className="text-title text-3xl font-bold">4.5</div>
         </CardHeader>
         <CardContent className="px-2 sm:px-6">
