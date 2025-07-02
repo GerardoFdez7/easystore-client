@@ -19,10 +19,13 @@ import {
   SidebarFooter,
   SidebarHeader,
 } from '@shadcn/ui/sidebar';
+import { useTranslations } from 'next-intl';
 
 export function SiderbarDashboard({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
+  const t = useTranslations('Dashboard');
+
   return (
     <Sidebar className="mt-20 h-auto" collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -38,31 +41,39 @@ export function SiderbarDashboard({
           <nav className="space-y-2">
             <ButtonSidebar
               icon={<BarChart3 />}
-              label="Dashboard"
+              label={t('dashboard')}
               route="dashboard"
             />
-            <ButtonSidebar icon={<Package />} label="Orders" route="orders" />
+            <ButtonSidebar
+              icon={<Package />}
+              label={t('orders')}
+              route="orders"
+            />
             <ButtonSidebar
               icon={<Archive />}
-              label="Products"
+              label={t('products')}
               route="products"
             />
             <ButtonSidebar
               icon={<Users />}
-              label="Customers"
+              label={t('customers')}
               route="customers"
             />
             <ButtonSidebar
               icon={<Gift />}
-              label="Promotions"
+              label={t('promotions')}
               route="promotions"
             />
             <ButtonSidebar
               icon={<UserCheck />}
-              label="Employees"
+              label={t('employees')}
               route="employees"
             />
-            <ButtonSidebar icon={<Eye />} label="Preview" route="preview" />
+            <ButtonSidebar
+              icon={<Eye />}
+              label={t('preview')}
+              route="preview"
+            />
           </nav>
         </div>
       </SidebarContent>
@@ -70,7 +81,7 @@ export function SiderbarDashboard({
         <div className="px-4">
           <ButtonSidebar
             icon={<Settings />}
-            label="Settings"
+            label={t('settings')}
             route="settings"
           />
         </div>
