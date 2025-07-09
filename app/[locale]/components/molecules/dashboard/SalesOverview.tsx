@@ -16,46 +16,70 @@ const orders = [
     date: '2024-06-01',
     customer: 'Alice Johnson',
     total: '$120.00',
-    status: 'Paid',
+    status: 'PROCESSING',
   },
   {
     order: 'ORD-002',
     date: '2024-06-02',
     customer: 'Bob Smith',
     total: '$80.00',
-    status: 'Pending',
+    status: 'CONFIRMED',
   },
   {
     order: 'ORD-003',
     date: '2024-06-03',
     customer: 'Charlie Brown',
     total: '$150.00',
-    status: 'Paid',
+    status: 'SHIPPED',
   },
   {
     order: 'ORD-004',
     date: '2024-06-04',
     customer: 'Diana Prince',
     total: '$200.00',
-    status: 'Cancelled',
+    status: 'COMPLETED',
   },
   {
     order: 'ORD-005',
     date: '2024-06-05',
     customer: 'Eve Adams',
     total: '$95.00',
-    status: 'Paid',
+    status: 'CANCELLED',
   },
 ];
 
 function StatusBadge({ status }: { status: string }) {
+  const t = useTranslations('Dashboard');
+  let label = status;
+
   let color = 'bg-foreground';
-  if (status === 'Paid') color = 'bg-green-100 text-green-700';
-  if (status === 'Pending') color = 'bg-yellow-100 text-yellow-700';
-  if (status === 'Cancelled') color = 'bg-red-100 text-red-700';
+  switch (status) {
+    case 'PROCESSING':
+      color = 'bg-yellow-100 text-yellow-700';
+      label = t('processing');
+      break;
+    case 'CONFIRMED':
+      color = 'bg-blue-100 text-blue-700';
+      label = t('confirmed');
+      break;
+    case 'SHIPPED':
+      color = 'bg-purple-100 text-purple-700';
+      label = t('shipped');
+      break;
+    case 'COMPLETED':
+      color = 'bg-green-100 text-green-700';
+      label = t('completed');
+      break;
+    case 'CANCELLED':
+      color = 'bg-red-100 text-red-700';
+      label = t('cancelled');
+      break;
+    default:
+      color = 'bg-gray-100 text-gray-700';
+  }
   return (
     <span className={`rounded-full px-3 py-1 text-xs font-semibold ${color}`}>
-      {status}
+      {label}
     </span>
   );
 }

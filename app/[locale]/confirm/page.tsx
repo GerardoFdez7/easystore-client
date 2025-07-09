@@ -1,5 +1,5 @@
-import ConfirmRegisterPage from '@templates/ConfirmRegister';
+import ConfirmRegisterTemplate from '@templates/ConfirmRegister';
 
-export default function ConfirmRegister() {
-  return <ConfirmRegisterPage />;
+export default function ConfirmRegisterPage() {
+  return <ConfirmRegisterTemplate />;
 }
