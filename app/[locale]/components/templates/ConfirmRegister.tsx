@@ -2,7 +2,7 @@ import HeaderConfirmRegister from '@organisms/confirm-register/HeaderConfirmRegi
 import MainConfirmRegister from '@organisms/confirm-register/MainConfirmRegister';
 import Footer from '@organisms/shared/Footer';
 
-export default function ConfirmRegister() {
+export default function ConfirmRegisterTemplate() {
   return (
     <div className="bg-background min-h-screen">
       <HeaderConfirmRegister />

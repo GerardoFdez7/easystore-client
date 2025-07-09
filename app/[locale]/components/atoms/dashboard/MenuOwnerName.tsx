@@ -23,11 +23,11 @@ export default function MenuOwnerName() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuItem className="cursor-pointer text-lg">
+        <DropdownMenuItem className="cursor-pointer text-[16px] sm:text-lg">
           <User className="mr-2 h-4 w-4" />
           {t('profile')}
         </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer text-lg">
+        <DropdownMenuItem className="cursor-pointer text-[16px] sm:text-lg">
           <LogOut className="mr-2 h-4 w-4" />
           {t('logOut')}
         </DropdownMenuItem>

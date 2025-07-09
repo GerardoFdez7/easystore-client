@@ -3,12 +3,7 @@
 import WelcomeDashboard from '@atoms/dashboard/WelcomeDashboard';
 import TabDashboard from '@molecules/dashboard/TabDashboard';
 import { SiteHeader } from '@atoms/shared/SiteHeader';
-
-import {
-  SidebarInset,
-  SidebarProvider,
-} from 'app/[locale]/components/shadcn/ui/sidebar';
-
+import { SidebarInset, SidebarProvider } from '@shadcn/ui/sidebar';
 import { SiderbarDashboard } from '@molecules/shared/Sidebar';
 import { KPICards } from '@molecules/dashboard/KPICards';
 import { ChartTotalSales } from '@molecules/dashboard/ChartTotalSales';

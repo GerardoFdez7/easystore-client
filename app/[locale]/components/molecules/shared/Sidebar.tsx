@@ -11,7 +11,7 @@ import {
   UserCheck,
   Archive,
 } from 'lucide-react';
-import ImageDashboard from '@atoms/dashboard/ImageDashboard';
+import OwnerLogo from '@atoms/dashboard/OwnerLogo';
 import ButtonSidebar from '@atoms/dashboard/ButtonSidebar';
 import {
   Sidebar,
@@ -30,7 +30,7 @@ export function SiderbarDashboard({
     <Sidebar className="mt-20 h-auto" collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <div className="mb-2">
-          <ImageDashboard />
+          <OwnerLogo />
           <h3 className="text-title w-full text-center font-semibold">
             COMPANY NAME
           </h3>

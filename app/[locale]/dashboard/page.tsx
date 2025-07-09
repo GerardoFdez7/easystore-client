@@ -1,5 +1,5 @@
-import DashboardPage from '@templates/Dashboard';
+import DashboardTemplate from '@templates/Dashboard';
 
-export default function Dashboard() {
-  return <DashboardPage />;
+export default function DashboardPage() {
+  return <DashboardTemplate />;
 }

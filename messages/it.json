@@ -217,6 +217,11 @@
     "promotions": "Promozioni",
     "employees": "Dipendenti",
     "preview": "Anteprima",
-    "settings": "Impostazioni"
+    "settings": "Impostazioni",
+    "processing": "In elaborazione",
+    "confirmed": "Confermato",
+    "shipped": "Spedito",
+    "completed": "Completato",
+    "cancelled": "Annullato"
   }
 }
