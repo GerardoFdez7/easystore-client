@@ -234,5 +234,29 @@
     "shipped": "Enviado",
     "completed": "Completado",
     "cancelled": "Cancelado"
+  },
+  "Privacy": {
+    "tableOfContents": "Tabla de contenido",
+    "pageTitle": "Privacy Policy",
+    "introTitle": "Introducción",
+    "introP1": "En EasyStore, nuestra misión es …",
+    "introP2": "Esta Privacy Policy te ayudará …",
+    "valuesTitle": "Nuestros valores",
+    "valuesP1": "La confianza es la base …",
+    "valuesP2": "...",
+    "whyTitle": "¿Por qué procesamos tu información?",
+    "whyP1": "...",
+    "whereTitle": "¿Dónde vemos tu información?",
+    "whereP1": "...",
+    "howLongTitle": "¿Por cuánto tiempo la guardamos?",
+    "howLongP1": "...",
+    "protectTitle": "¿Cómo protegemos tu información?",
+    "protectP1": "...",
+    "protectP2": "...",
+    "cookiesTitle": "Uso de cookies y otras tecnologías",
+    "cookiesP1": "...",
+    "cookiesP2": "...",
+    "contactTitle": "Cómo contactarnos",
+    "contactP1": "Si tienes dudas, contáctanos en …"
   }
 }
