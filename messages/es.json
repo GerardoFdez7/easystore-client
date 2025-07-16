@@ -237,26 +237,32 @@
   },
   "Privacy": {
     "tableOfContents": "Tabla de contenido",
-    "pageTitle": "Privacy Policy",
+    "pageTitle": "Política de privacidad",
+
     "introTitle": "Introducción",
-    "introP1": "En EasyStore, nuestra misión es …",
-    "introP2": "Esta Privacy Policy te ayudará …",
+    "introP1": "En EasyStore, nuestra misión es impulsar el comercio de todas las microempresas y pymes en Guatemala. Para lograrlo, recopilamos y utilizamos información sobre ti y otras personas que interactúan con nuestra plataforma.",
+    "introP2": "Esta Política de Privacidad te ayudará a comprender mejor cómo recopilamos, usamos y compartimos tu información personal. Si cambiamos nuestras prácticas de privacidad, podremos actualizar esta política. Si algún cambio es significativo, te lo notificaremos (por ejemplo, a través del panel de control de EasyStore o por correo electrónico).",
+
     "valuesTitle": "Nuestros valores",
-    "valuesP1": "La confianza es la base …",
-    "valuesP2": "...",
+    "valuesP1": "La confianza es la base de la plataforma EasyStore. Creemos que hacer lo correcto con tu información es fundamental. Tres valores principales nos guían en el desarrollo de nuestros productos y servicios en Guatemala:",
+    "valuesP2": "• Tu información te pertenece: analizamos cuidadosamente qué datos necesitamos para brindar nuestros servicios y nos esforzamos por limitar la recopilación a lo estrictamente necesario. Cuando la información ya no es requerida, la eliminamos o anonimamos. Al desarrollar y mejorar EasyStore, nuestros ingenieros trabajan de la mano con nuestros equipos de privacidad y seguridad para garantizar que la privacidad siempre sea una prioridad. Nuestro principio guía es que tu información te pertenece y nuestro objetivo es usarla solo para tu beneficio.\n• Protegemos tu información de terceros: si un tercero solicita tu información personal, nos negaremos a compartirla a menos que nos des tu permiso o estemos obligados por ley guatemalteca. Cuando estemos legalmente obligados a compartir tu información personal, te lo notificaremos con antelación, a menos que la ley nos prohíba hacerlo.\n• Ayudamos a comerciantes y socios a cumplir sus obligaciones de privacidad: muchos usuarios de EasyStore no cuentan con un equipo de privacidad dedicado. Para nosotros, es vital ayudarlos a cumplir sus obligaciones de privacidad en el contexto guatemalteco. Por eso diseñamos nuestros productos y servicios para que sean fáciles de usar y respetuosos con la privacidad. También ofrecemos documentación clara y respondemos a las preguntas que recibimos sobre privacidad.",
+
     "whyTitle": "¿Por qué procesamos tu información?",
-    "whyP1": "...",
-    "whereTitle": "¿Dónde vemos tu información?",
-    "whereP1": "...",
-    "howLongTitle": "¿Por cuánto tiempo la guardamos?",
-    "howLongP1": "...",
-    "protectTitle": "¿Cómo protegemos tu información?",
-    "protectP1": "...",
-    "protectP2": "...",
-    "cookiesTitle": "Uso de cookies y otras tecnologías",
-    "cookiesP1": "...",
-    "cookiesP2": "...",
+    "whyP1": "Generalmente procesamos tu información cuando es necesario para cumplir una obligación contractual (por ejemplo, procesar tus pagos de suscripción para usar la plataforma EasyStore), o cuando nosotros o alguien con quien trabajamos necesita usar tu información personal por motivos comerciales (por ejemplo, brindarte un servicio). Estos \"intereses legítimos\" incluyen:\n• Prevención de riesgos y fraudes.\n• Responder preguntas o brindar otros tipos de soporte.\n• Ayudar a comerciantes a encontrar y usar aplicaciones en nuestra tienda de apps.\n• Proporcionar y mejorar nuestros productos y servicios.\n• Ofrecer informes y análisis.\n• Probar funciones o servicios adicionales.\n• Asistir en marketing, publicidad u otras comunicaciones.\n\nSolo procesamos datos personales para estos \"intereses legítimos\" después de evaluar los posibles riesgos para tu privacidad y equilibrarlos con medidas como ofrecer transparencia total, darte control sobre tus datos donde corresponda, limitar la información que almacenamos, definir claramente cómo la usamos y por cuánto tiempo, así como aplicar salvaguardas técnicas.\n\nTambién podemos procesar tu información personal si nos das tu consentimiento. En particular, cuando no podamos basarnos en otra base legal, cuando solicites transferir datos a un tercero, cuando recibamos tus datos de un tercero con tu consentimiento o cuando la ley requiera tu consentimiento (por ejemplo, en campañas de marketing). En cualquier momento puedes revocar tu consentimiento modificando tus preferencias de comunicación, cancelando la suscripción o contactándonos.\n\nSegún seas comerciante, cliente, socio o visitante, consulta nuestras políticas complementarias de privacidad para conocer los fines de procesamiento, categorías de destinatarios y bases legales aplicables.",
+
+    "whereTitle": "Dónde enviamos tu información",
+    "whereP1": "EasyStore es una empresa que opera en Guatemala, pero para brindar nuestros servicios podemos colaborar con proveedores de servicios que procesen datos fuera de Guatemala, incluidos los Estados Unidos. Estos datos pueden estar sujetos a leyes locales. Tomamos medidas contractuales y técnicas para proteger tu información al transferirla a otros países.\n\nSegún seas comerciante, cliente, socio o visitante, consulta nuestras políticas suplementarias de privacidad para más detalles.",
+
+    "howLongTitle": "¿Por cuánto tiempo conservamos tu información?",
+    "howLongP1": "Conservamos tu información personal solo mientras sea necesario para los fines por los que la recopilamos. Al determinar la duración adecuada, consideramos la cantidad, naturaleza y sensibilidad de los datos, el riesgo de uso no autorizado o divulgación, los fines del procesamiento y si podemos lograr esos fines mediante otros medios, así como las obligaciones legales de Guatemala (por ejemplo, fiscales).\n\nSi dejas de usar nuestros servicios o eliminas tu cuenta, suprimiremos tu información o la almacenaremos de forma agregada y anónima, a menos que exista una obligación legal de conservarla por un período específico.\n\nSi eres un comerciante y cierras tu tienda, dejas de pagar la suscripción o cancelamos tu cuenta, conservamos la información de la tienda durante un año antes de eliminarla.\n\nCuando un cliente compra en una tienda gestionada por EasyStore, actúa el comerciante como responsable de los datos y nosotros como procesadores.",
+
+    "protectTitle": "Cómo protegemos tu información",
+    "protectP1": "Nuestros equipos trabajan sin descanso para proteger tu información y garantizar la seguridad e integridad de la plataforma. Implementamos medidas técnicas, administrativas y físicas, incluyendo cifrado (SSL/TLS), controles de acceso y auditorías periódicas.\n\nSin embargo, ningún método de transmisión o almacenamiento electrónico es 100 % seguro, por lo que no podemos garantizar una seguridad absoluta.",
+
+    "cookiesTitle": "Cómo usamos cookies y otras tecnologías de seguimiento",
+    "cookiesP1": "Usamos cookies y tecnologías similares en nuestro sitio web y servicios. Para más detalles, consulta nuestra política de cookies, donde encontrarás la lista de terceros que establecen cookies y cómo desactivarlas.",
+
     "contactTitle": "Cómo contactarnos",
-    "contactP1": "Si tienes dudas, contáctanos en …"
+    "contactP1": "Si deseas consultar, presentar una solicitud o presentar una queja sobre el procesamiento de tus datos personales, contacta al equipo de soporte de EasyStore o envía un correo a la dirección indicada. Si necesitas una solicitud legalmente vinculante (p. ej., citación o mandato judicial), contáctanos directamente para recibir las pautas correspondientes.\n\nSi tienes una relación directa con EasyStore, somos responsables de tus datos. Si compras en una tienda de un tercero que usa EasyStore, ese comerciante es el responsable y nosotros actuamos como procesadores."
   }
 }

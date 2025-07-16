@@ -234,5 +234,35 @@
     "shipped": "Expédié",
     "completed": "Terminé",
     "cancelled": "Annulé"
+  },
+  "Privacy": {
+    "tableOfContents": "Table des matières",
+    "pageTitle": "Politique de confidentialité",
+
+    "introTitle": "Introduction",
+    "introP1": "Chez EasyStore, notre mission est de stimuler le commerce pour toutes les microentreprises et PME au Guatemala. Pour y parvenir, nous collectons et utilisons des informations vous concernant et concernant d’autres personnes qui interagissent avec notre plateforme.",
+    "introP2": "Cette politique de confidentialité vous aidera à mieux comprendre comment nous collectons, utilisons et partageons vos informations personnelles. Si nous modifions nos pratiques, nous pourrons mettre à jour cette politique. En cas de changement important, nous vous en informerons (par exemple via le panneau de contrôle EasyStore ou par e‑mail).",
+
+    "valuesTitle": "Nos valeurs",
+    "valuesP1": "La confiance est le fondement de la plateforme EasyStore. Nous estimons qu’il est essentiel de bien traiter vos données personnelles. Trois valeurs principales guident le développement de nos produits et services au Guatemala :",
+    "valuesP2": "• Vos informations vous appartiennent : nous analysons soigneusement les données nécessaires à nos services et nous nous efforçons de limiter la collecte au strict nécessaire. Lorsqu’elles ne sont plus requises, nous les supprimons ou les anonymisons. Nos ingénieurs collaborent étroitement avec les équipes sécurité et confidentialité pour faire de la protection des données une priorité.\n• Nous protégeons vos informations vis‑à‑vis de tiers : si un tiers demande vos données personnelles, nous refuserons de les transmettre sauf si vous y consentez ou si la loi guatémaltèque nous y oblige. Le cas échéant, nous vous en informerons auparavant, sauf interdiction légale.\n• Nous aidons commerçants et partenaires à respecter leurs obligations en matière de confidentialité : beaucoup d’entre eux ne disposent pas d’équipe dédiée. Nous concevons donc nos produits et services pour qu’ils soient conviviaux et conformes au RGPD et aux législations locales, avec documentation claire et support réactif.",
+
+    "whyTitle": "Pourquoi traitons‑nous vos données ?",
+    "whyP1": "En général, nous traitons vos données lorsque cela est nécessaire pour respecter une obligation contractuelle (par exemple, traiter vos paiements d’abonnement pour utiliser EasyStore), ou lorsque nous ou nos partenaires avons un intérêt légitime à utiliser vos données à des fins professionnelles (par exemple, vous fournir un service). Ces « intérêts légitimes » incluent :\n• Prévention des fraudes et risques.\n• Support client et réponses à vos questions.\n• Aide à la découverte et à l’usage d’applications sur notre App Store.\n• Fourniture et amélioration de nos produits et services.\n• Reporting et analyses.\n• Tests de nouvelles fonctionnalités.\n• Actions marketing, publicitaires et autres communications.\n\nNous n’activons ces traitements qu’après avoir évalué les risques pour votre vie privée et mis en place des mesures appropriées : transparence totale, contrôle utilisateur, minimisation des données, conservation limitée, et garanties techniques.\n\nNous pouvons également traiter vos données si vous nous avez donné votre consentement, notamment lorsque la loi l’exige (campagnes marketing, transfert de données à un tiers, etc.). Vous pouvez retirer votre consentement à tout moment via vos préférences ou en nous contactant.\n\nSelon que vous soyez commerçant, client, partenaire ou visiteur, consultez nos politiques de confidentialité complémentaires pour connaître les finalités, destinataires et bases légales applicables.",
+
+    "whereTitle": "Où transférons‑nous vos données ?",
+    "whereP1": "EasyStore est une société basée au Guatemala, mais pour assurer nos services nous pouvons faire appel à des prestataires situés dans d’autres pays, y compris aux États‑Unis. Vos données peuvent alors être soumises aux lois locales. Nous mettons en place les garanties contractuelles et techniques nécessaires pour protéger vos données lors de ces transferts.\n\nSelon votre profil (commerçant, client, partenaire, visiteur), référez‑vous à nos politiques de confidentialité complémentaires pour plus de détails.",
+
+    "howLongTitle": "Durée de conservation des données",
+    "howLongP1": "Nous conservons vos données personnelles uniquement le temps nécessaire aux finalités pour lesquelles nous les collectons. Pour déterminer la durée de conservation appropriée, nous considérons la nature, la sensibilité des données, les risques d’usage non autorisé, les finalités du traitement et la législation guatémaltèque applicable (ex : obligations fiscales).\n\nSi vous cessez d’utiliser nos services ou supprimez votre compte, nous supprimons vos données ou les anonymisons, sauf obligation légale contraire.\n\nSi vous êtes commerçant et fermez votre boutique EasyStore, arrêtez vos paiements d’abonnement ou si votre compte est résilié, nous conservons vos données de boutique pendant 1 an avant suppression.\n\nQuand un client achète chez un commerçant utilisant EasyStore, c’est ce commerçant (et non EasyStore) qui définit la durée de conservation de ses clients.",
+
+    "protectTitle": "Comment protégeons‑nous vos données ?",
+    "protectP1": "Nous mettons tout en œuvre pour protéger vos données et assurer la sécurité et l’intégrité de notre plateforme. Nous appliquons des mesures techniques, organisationnelles et physiques (chiffrement SSL/TLS, contrôles d’accès, audits réguliers).\n\nToutefois, aucune méthode de transmission ou de stockage électronique n’est infaillible, et nous ne pouvons garantir une sécurité à 100 %.",
+
+    "cookiesTitle": "Cookies et technologies de suivi",
+    "cookiesP1": "Nous utilisons des cookies et technologies similaires sur notre site et services. Pour en savoir plus—liste des tiers déposant des cookies et mode de désactivation—consultez notre Politique de cookies.",
+
+    "contactTitle": "Nous contacter",
+    "contactP1": "Pour toute question, demande ou réclamation relative au traitement de vos données personnelles, contactez le support EasyStore ou écrivez‑nous à l’adresse indiquée. Pour une demande juridiquement contraignante (ex : assignation ou ordonnance judiciaire), merci de nous contacter directement pour obtenir les instructions appropriées.\n\nSi EasyStore a une relation directe avec vous, nous sommes responsables de vos données. Si vous achetez chez un tiers utilisant EasyStore, ce commerçant est responsable de vos données et nous intervenons comme sous‑traitant."
   }
 }
