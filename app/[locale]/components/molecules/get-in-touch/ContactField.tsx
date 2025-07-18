@@ -30,6 +30,7 @@ export const ContactFields: React.FC = () => {
       <FormField
         control={control}
         name="fullName"
+        rules={{ required: true }}
         render={({ field, fieldState }) => (
           <FormItem>
             <FormLabel>{t('fullName')}</FormLabel>
@@ -50,6 +51,7 @@ export const ContactFields: React.FC = () => {
         <FormField
           control={control}
           name="businessEmail"
+          rules={{ required: true }}
           render={({ field, fieldState }) => (
             <FormItem>
               <FormLabel>{t('businessEmail')}</FormLabel>
@@ -68,6 +70,7 @@ export const ContactFields: React.FC = () => {
         <FormField
           control={control}
           name="businessPhone"
+          rules={{ required: true }}
           render={({ field, fieldState }) => (
             <FormItem>
               <FormLabel>{t('businessPhone')}</FormLabel>
@@ -89,6 +92,7 @@ export const ContactFields: React.FC = () => {
       <FormField
         control={control}
         name="company"
+        rules={{ required: true }}
         render={({ field, fieldState }) => (
           <FormItem>
             <FormLabel>{t('company')}</FormLabel>
@@ -108,6 +112,7 @@ export const ContactFields: React.FC = () => {
       <FormField
         control={control}
         name="websiteUrl"
+        rules={{ required: true }}
         render={({ field, fieldState }) => (
           <FormItem>
             <FormLabel>{t('websiteUrl')}</FormLabel>
@@ -129,6 +134,7 @@ export const ContactFields: React.FC = () => {
         <FormField
           control={control}
           name="country"
+          rules={{ required: true }}
           render={({ field }) => (
             <FormItem>
               <FormLabel>{t('country')}</FormLabel>
@@ -151,6 +157,7 @@ export const ContactFields: React.FC = () => {
         <FormField
           control={control}
           name="annualRevenue"
+          rules={{ required: true }}
           render={({ field }) => (
             <FormItem>
               <FormLabel>{t('annualRevenue')}</FormLabel>
@@ -177,6 +184,7 @@ export const ContactFields: React.FC = () => {
       <FormField
         control={control}
         name="isAgency"
+        rules={{ required: true }}
         render={({ field }) => (
           <FormItem>
             <FormLabel>{t('isAgency')}</FormLabel>
