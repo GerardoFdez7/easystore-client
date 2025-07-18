@@ -1,4 +1,3 @@
-// app/[locale]/components/organisms/get-in-touch/MainTouch.tsx
 'use client';
 
 import React from 'react';
@@ -29,7 +28,6 @@ export default function MainTouch() {
     console.log('submitted:', data);
   });
 
-  // 2) Lo envolvemos en un callback que devuelve void
   const handleFormSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     void rawSubmit(e);

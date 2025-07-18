@@ -376,5 +376,32 @@
     "miscEntireAgreementSection": "9.4. Accord complet\nCes Conditions, conjointement avec la Politique de confidentialité d’EasyStore et tout autre avis légal publié sur la plateforme, constituent l’intégralité de l’accord entre vous et EasyStore en ce qui concerne l’utilisation des services, et remplacent tout accord, communication ou proposition antérieure ou contemporaine, orale ou écrite.",
     "miscAssignmentSection": "9.5. Cession\nVous ne pouvez pas céder ou transférer ces Conditions, ni aucun de vos droits ou obligations en vertu de celles-ci, sans le consentement écrit préalable d’EasyStore. EasyStore peut céder ou transférer ces Conditions et ses droits et obligations sans restriction.",
     "miscNoticesSection": "9.6. Notifications\nToute notification ou communication qu’EasyStore est tenu ou autorisé à vous envoyer en vertu de ces Conditions sera faite par e‑mail à l’adresse enregistrée dans votre compte ou par publication sur la plateforme. La notification sera réputée reçue lorsqu’elle est envoyée par e‑mail ou publiée. Il vous incombe de tenir à jour vos coordonnées."
+  },
+  "GetInTouch": {
+    "title": "Contactez un expert.",
+    "features": {
+      "unlimitedProducts": "Produits illimités",
+      "unlimitedWarehouses": "Entrepôts illimités",
+      "unlimitedEmployeeAccounts": "Comptes d’employé illimités",
+      "customSite": "Site 100 % personnalisé",
+      "prioritySupport": "Support téléphonique prioritaire 24/7",
+      "completeAnalytics": "Analytique complète",
+      "customDomain": "Domaine personnalisé inclus",
+      "inventorySync": "Synchronisation des stocks",
+      "aiContent": "IA pour le contenu des produits"
+    },
+    "fullName": "Nom complet",
+    "businessEmail": "E‑mail professionnel",
+    "businessPhone": "Téléphone professionnel",
+    "company": "Entreprise",
+    "websiteUrl": "URL du site web",
+    "country": "Pays",
+    "annualRevenue": "Revenu annuel en ligne",
+    "isAgency": "Êtes‑vous une agence nous contactant au nom d'une marque ?",
+    "yes": "Oui",
+    "no": "Non",
+    "submit": "Envoyer",
+    "privacyNoticePrefix": "En soumettant ce formulaire, vous acceptez qu’EasyStore et ses partenaires utilisent vos données aux fins de promouvoir les services d’EasyStore, conformément à la politique de confidentialité d’EasyStore. Vous pouvez vous désabonner des e-mails en cliquant sur se désabonner et de tout autre marketing comme expliqué dans notre",
+    "privacyPolicy": "Politique de confidentialité."
   }
 }

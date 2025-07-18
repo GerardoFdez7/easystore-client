@@ -378,30 +378,30 @@
     "miscNoticesSection": "9.6. Notificaciones\nCualquier notificación o comunicación que EasyStore esté obligado o autorizado a enviarle en virtud de estos Términos se realizará por correo electrónico a la dirección registrada en su cuenta o publicándola en la plataforma. La notificación se considerará recibida cuando se envíe por correo electrónico o se publique. Es su responsabilidad mantener actualizada su información de contacto."
   },
   "GetInTouch": {
-    "title": "Get in touch with an expert.",
+    "title": "Ponte en contacto con un experto.",
     "features": {
-      "unlimitedProducts": "Unlimited products",
-      "unlimitedWarehouses": "Unlimited warehouses",
-      "unlimitedEmployeeAccounts": "Unlimited employee accounts",
-      "customSite": "100% custom site",
-      "prioritySupport": "24/7 priority customer telephone support",
-      "completeAnalytics": "Complete analytics",
-      "customDomain": "Custom domain included",
-      "inventorySync": "Inventory synchronization",
-      "aiContent": "AI for product content"
+      "unlimitedProducts": "Productos ilimitados",
+      "unlimitedWarehouses": "Almacenes ilimitados",
+      "unlimitedEmployeeAccounts": "Cuentas de empleado ilimitadas",
+      "customSite": "Sitio 100% personalizado",
+      "prioritySupport": "Soporte telefónico prioritario 24/7",
+      "completeAnalytics": "Análisis completos",
+      "customDomain": "Dominio personalizado incluido",
+      "inventorySync": "Sincronización de inventario",
+      "aiContent": "IA para contenido de productos"
     },
-    "fullName": "Full Name",
-    "businessEmail": "Business Email",
-    "businessPhone": "Business Phone",
-    "company": "Company",
-    "websiteUrl": "Website URL",
-    "country": "Country",
-    "annualRevenue": "Annual online revenue",
-    "isAgency": "Are you an agency contacting us on behalf of a brand?",
-    "yes": "Yes",
+    "fullName": "Nombre completo",
+    "businessEmail": "Correo electrónico empresarial",
+    "businessPhone": "Teléfono empresarial",
+    "company": "Empresa",
+    "websiteUrl": "URL del sitio web",
+    "country": "País",
+    "annualRevenue": "Ingresos anuales en línea",
+    "isAgency": "¿Eres una agencia que nos contacta en nombre de una marca?",
+    "yes": "Sí",
     "no": "No",
-    "submit": "Submit",
-    "privacyNoticePrefix": "By submitting this form, you agree to EasyStore and its partners using your data for the purposes of marketing EasyStore’s services to you, in accordance with EasyStore’s Privacy Policy. You may opt out from emails by clicking unsubscribe and from all other marketing as detailed in our",
-    "privacyPolicy": "Privacy Policy."
+    "submit": "Enviar",
+    "privacyNoticePrefix": "Al enviar este formulario, aceptas que EasyStore y sus socios usen tus datos con el fin de promocionar los servicios de EasyStore, de acuerdo con la Política de privacidad de EasyStore. Puedes darte de baja de los correos electrónicos haciendo clic en cancelar suscripción y de cualquier otro marketing según se detalla en nuestra",
+    "privacyPolicy": "Política de privacidad."
   }
 }
