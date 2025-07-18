@@ -172,5 +172,32 @@
     "termsAndConditions": "Conditions générales",
     "and": "et la",
     "privacyPolicy": "Politique de confidentialité"
+  },
+  "GetInTouch": {
+    "title": "Contactez un expert.",
+    "features": {
+      "unlimitedProducts": "Produits illimités",
+      "unlimitedWarehouses": "Entrepôts illimités",
+      "unlimitedEmployeeAccounts": "Comptes d’employé illimités",
+      "customSite": "Site 100 % personnalisé",
+      "prioritySupport": "Support téléphonique prioritaire 24/7",
+      "completeAnalytics": "Analytique complète",
+      "customDomain": "Domaine personnalisé inclus",
+      "inventorySync": "Synchronisation des stocks",
+      "aiContent": "IA pour le contenu des produits"
+    },
+    "fullName": "Nom complet",
+    "businessEmail": "E‑mail professionnel",
+    "businessPhone": "Téléphone professionnel",
+    "company": "Entreprise",
+    "websiteUrl": "URL du site web",
+    "country": "Pays",
+    "annualRevenue": "Revenu annuel en ligne",
+    "isAgency": "Êtes‑vous une agence nous contactant au nom d'une marque ?",
+    "yes": "Oui",
+    "no": "Non",
+    "submit": "Envoyer",
+    "privacyNoticePrefix": "En soumettant ce formulaire, vous acceptez qu’EasyStore et ses partenaires utilisent vos données aux fins de promouvoir les services d’EasyStore, conformément à la politique de confidentialité d’EasyStore. Vous pouvez vous désabonner des e-mails en cliquant sur se désabonner et de tout autre marketing comme expliqué dans notre",
+    "privacyPolicy": "Politique de confidentialité."
   }
 }
