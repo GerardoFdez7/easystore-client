@@ -376,5 +376,32 @@
     "miscEntireAgreementSection": "9.4. Entire Agreement\nThese Terms, together with EasyStore's Privacy Policy and any other legal notices published by EasyStore on the Platform, constitute the entire agreement between you and EasyStore with respect to the use of the Services, and supersede any prior or contemporaneous agreements, communications or proposals, whether oral or written, between you and EasyStore.",
     "miscAssignmentSection": "9.5. Assignment\nYou may not assign or transfer these Terms, or any of your rights or obligations hereunder, without the prior written consent of EasyStore. EasyStore may assign or transfer these Terms and its rights and obligations without restriction.",
     "miscNoticesSection": "9.6. Notices\nAny notice or communication that EasyStore is required or permitted to send to you under these Terms will be made by email to the email address registered in your account. The notice will be deemed received when it is sent by email or posted on the Platform. It is your responsibility to keep your contact information up to date."
+  },
+  "GetInTouch": {
+    "title": "Get in touch with an expert.",
+    "features": {
+      "unlimitedProducts": "Unlimited products",
+      "unlimitedWarehouses": "Unlimited warehouses",
+      "unlimitedEmployeeAccounts": "Unlimited employee accounts",
+      "customSite": "100% custom site",
+      "prioritySupport": "24/7 priority customer telephone support",
+      "completeAnalytics": "Complete analytics",
+      "customDomain": "Custom domain included",
+      "inventorySync": "Inventory synchronization",
+      "aiContent": "AI for product content"
+    },
+    "fullName": "Full Name",
+    "businessEmail": "Business Email",
+    "businessPhone": "Business Phone",
+    "company": "Company",
+    "websiteUrl": "Website URL",
+    "country": "Country",
+    "annualRevenue": "Annual online revenue",
+    "isAgency": "Are you an agency contacting us on behalf of a brand?",
+    "yes": "Yes",
+    "no": "No",
+    "submit": "Submit",
+    "privacyNoticePrefix": "By submitting this form, you agree to EasyStore and its partners using your data for the purposes of marketing EasyStore’s services to you, in accordance with EasyStore’s Privacy Policy. You may opt out from emails by clicking unsubscribe and from all other marketing as detailed in our",
+    "privacyPolicy": "Privacy Policy."
   }
 }

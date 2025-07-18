@@ -378,5 +378,32 @@
     "miscEntireAgreementSection": "9.4. Accordo completo\nQuesti Termini, unitamente all’Informativa sulla privacy di EasyStore e ad altri avvisi legali pubblicati sulla piattaforma, costituiscono l’intero accordo tra lei ed EasyStore in merito all’utilizzo dei servizi, sostituendo qualsiasi accordo, comunicazione o proposta precedente o contemporanea, orale o scritta.",
     "miscAssignmentSection": "9.5. Assegnazione\nNon può cedere o trasferire questi Termini, né alcuno dei suoi diritti o obblighi ai sensi degli stessi, senza il previo consenso scritto di EasyStore. EasyStore può cedere o trasferire i presenti Termini e i diritti e obblighi ivi previsti senza restrizioni.",
     "miscNoticesSection": "9.6. Comunicazioni\nQualsiasi comunicazione che EasyStore sia tenuta o autorizzata a inviarle in virtù dei presenti Termini sarà effettuata via e‑mail all’indirizzo registrato nel suo account o pubblicata sulla piattaforma. La comunicazione si considera ricevuta all’invio o alla pubblicazione. È sua responsabilità mantenere aggiornate le informazioni di contatto."
+  },
+  "GetInTouch": {
+    "title": "Contatta un esperto.",
+    "features": {
+      "unlimitedProducts": "Prodotti illimitati",
+      "unlimitedWarehouses": "Magazzini illimitati",
+      "unlimitedEmployeeAccounts": "Account dipendenti illimitati",
+      "customSite": "Sito 100% personalizzato",
+      "prioritySupport": "Supporto telefonico prioritario 24/7",
+      "completeAnalytics": "Analisi complete",
+      "customDomain": "Dominio personalizzato incluso",
+      "inventorySync": "Sincronizzazione inventario",
+      "aiContent": "IA per contenuti dei prodotti"
+    },
+    "fullName": "Nome e cognome",
+    "businessEmail": "Email aziendale",
+    "businessPhone": "Telefono aziendale",
+    "company": "Azienda",
+    "websiteUrl": "URL del sito web",
+    "country": "Paese",
+    "annualRevenue": "Ricavi online annuali",
+    "isAgency": "Sei un’agenzia che ci contatta per conto di un marchio?",
+    "yes": "Sì",
+    "no": "No",
+    "submit": "Invia",
+    "privacyNoticePrefix": "Inviando questo modulo, accetti che EasyStore e i suoi partner utilizzino i tuoi dati per finalità di marketing dei servizi EasyStore, in conformità con l’informativa sulla privacy di EasyStore. Puoi rinunciare alle email facendo clic su annulla iscrizione e a qualsiasi altra attività di marketing come dettagliato nella nostra",
+    "privacyPolicy": "Informativa sulla privacy."
   }
 }
