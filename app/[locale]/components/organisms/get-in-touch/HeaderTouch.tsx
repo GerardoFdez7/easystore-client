@@ -1,5 +1,4 @@
 import Logo from '@atoms/landing/Logo';
-import MobileMenu from '@molecules/landing/MobileMenu';
 import { LanguageButton } from '@atoms/shared/ButtonLanguage';
 
 export default function HeaderTouch() {
@@ -8,7 +7,6 @@ export default function HeaderTouch() {
       <Logo />
       <div className="flex items-center gap-2">
         <LanguageButton />
-        <MobileMenu />
       </div>
     </header>
   );
