@@ -1,0 +1,48 @@
+mutation createCategory($input: CreateCategoryInput!) {
+  createCategory(input: $input) {
+    name
+    description
+    cover
+    tenantId
+    updatedAt
+    createdAt
+    subCategories {
+      cover
+      createdAt
+      description
+      name
+      subCategories {
+        cover
+        createdAt
+        description
+        name
+        tenantId
+        updatedAt
+      }
+      tenantId
+      updatedAt
+    }
+  }
+}
+
+mutation updateCategory($id: ID!, $tenantId: ID!, $input: UpdateCategoryInput!) {
+
+  updateCategory(id: $id, tenantId: $tenantId, input: $input) {
+    name
+    description
+    cover
+    createdAt
+    subCategories {
+      name
+      description
+      cover
+    }
+  }
+}
+
+mutation delete($id: ID!, $tenantId: ID!) {
+  deleteCategory(id: $id, tenantId: $tenantId) {
+    name
+    description
+  }
+}

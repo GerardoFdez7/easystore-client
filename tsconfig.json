@@ -22,7 +22,6 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "utils": ["app/[locale]/lib/utils/cn"],
       "@atoms/*": ["./app/[locale]/components/atoms/*"],
       "@molecules/*": ["./app/[locale]/components/molecules/*"],
       "@organisms/*": ["./app/[locale]/components/organisms/*"],
@@ -32,8 +31,10 @@
       "@hooks/*": ["app/[locale]/hooks/*"],
       "@types/*": ["app/[locale]/types/*"],
       "@assets/*": ["app/[locale]/assets/*"],
-      "@lib/*": ["app/[locale]/lib/*"],
-      "@consts/*": ["app/[locale]/lib/consts/*"],
+      "@lib/*": ["./lib/*"],
+      "utils": ["./lib/utils/cn"],
+      "@graphql/*": ["./lib/graphql/*"],
+      "@consts/*": ["./lib/consts/*"],
       "@i18n/*": ["./i18n/*"]
     }
   },

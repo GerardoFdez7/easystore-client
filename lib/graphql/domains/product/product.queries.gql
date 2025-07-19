@@ -1,0 +1,156 @@
+query getId($tenantId: String!, $id: String!) {
+  getProductById(tenantId: $tenantId, id: $id) {
+    name
+    shortDescription
+    longDescription
+    cover
+    brand
+    manufacturer
+    tags
+    media {
+      mediaType
+      position
+      url
+    }
+    categories {
+      categoryId
+    }
+    variants {
+      price
+      condition
+      attributes {
+        key
+        value
+      }
+      weight
+      dimension {
+        height
+        width
+        length
+      }
+      sku
+      ean
+      upc
+      isbn
+      barcode
+      variantCover
+      variantMedia {
+        mediaType
+        url
+        position
+        variantId
+        productId
+      }
+      warranties {
+        coverage
+        instructions
+        months
+      }
+      installmentPayments {
+        interestRate
+        months
+      }
+      personalizationOptions
+    }
+    sustainabilities {
+      certification
+      recycledPercentage
+    }
+    updatedAt
+    createdAt
+    tenantId
+    productType
+    isArchived
+  }
+}
+
+query getAll(
+  $tenantId: String!
+  $page: Float = 1
+  $limit: Float = 10
+  $categoriesIds: [Int!] = []
+  $type: TypeEnum = PHYSICAL
+  $sortBy: SortBy = NAME
+  $sortOrder: SortOrder = ASC
+  $includeSoftDeleted: Boolean = false
+  $name: String = ""
+) {
+  getAllProducts(
+    tenantId: $tenantId
+    page: $page
+    limit: $limit
+    categoriesIds: $categoriesIds
+    type: $type
+    sortBy: $sortBy
+    sortOrder: $sortOrder
+    includeSoftDeleted: $includeSoftDeleted
+    name: $name
+  ) {
+    products {
+      name
+      brand
+      categories {
+        categoryId
+      }
+      cover
+      createdAt
+      longDescription
+      manufacturer
+      media {
+        mediaType
+        position
+        productId
+        url
+        variantId
+      }
+      isArchived
+      productType
+      shortDescription
+      sustainabilities {
+        certification
+        recycledPercentage
+      }
+      tags
+      tenantId
+      updatedAt
+      variants {
+        attributes {
+          key
+          value
+        }
+        barcode
+        condition
+        dimension {
+          height
+          length
+          width
+        }
+        ean
+        installmentPayments {
+          interestRate
+          months
+        }
+        isbn
+        personalizationOptions
+        price
+        sku
+        upc
+        variantCover
+        variantMedia {
+          mediaType
+          position
+          productId
+          url
+          variantId
+        }
+        warranties {
+          coverage
+          instructions
+          months
+        }
+        weight
+      }
+    }
+    total
+  }
+}

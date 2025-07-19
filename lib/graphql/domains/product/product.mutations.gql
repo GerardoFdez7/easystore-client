@@ -1,0 +1,155 @@
+mutation createProduct($input: CreateProductInput!) {
+  createProduct(input: $input) {
+    name
+    shortDescription
+    longDescription
+    productType
+    cover
+    tags
+    brand
+    manufacturer
+    tenantId
+    variants {
+      attributes {
+        key
+        value
+      }
+      price
+      weight
+      variantCover
+      upc
+      sku
+      personalizationOptions
+      isbn
+      installmentPayments {
+        months
+        interestRate
+      }
+      ean
+      dimension {
+        width
+        length
+        height
+      }
+      condition
+      barcode
+      warranties {
+        instructions
+        months
+        coverage
+      }
+      variantMedia {
+        variantId
+        url
+        productId
+        position
+        mediaType
+      }
+    }
+    createdAt
+    updatedAt
+    sustainabilities {
+      recycledPercentage
+      certification
+    }
+    isArchived
+    media {
+      url
+      productId
+      position
+      mediaType
+      variantId
+    }
+    categories {
+      categoryId
+    }
+  }
+}
+
+mutation update($id: String!, $tenantId: String!, $input: UpdateProductInput!) {
+  updateProduct(id: $id, tenantId: $tenantId, input: $input) {
+    brand
+    categories {
+      categoryId
+    }
+    cover
+    createdAt
+    isArchived
+    longDescription
+    manufacturer
+    media {
+      mediaType
+      position
+      productId
+      url
+      variantId
+    }
+    name
+    productType
+    shortDescription
+    sustainabilities {
+      certification
+      recycledPercentage
+    }
+    tags
+    tenantId
+    updatedAt
+    variants {
+      attributes {
+        key
+        value
+      }
+      barcode
+      condition
+      dimension {
+        height
+        length
+        width
+      }
+      ean
+      installmentPayments {
+        interestRate
+        months
+      }
+      isbn
+      personalizationOptions
+      price
+      sku
+      upc
+      variantCover
+      variantMedia {
+        mediaType
+        position
+        productId
+        url
+        variantId
+      }
+      warranties {
+        coverage
+        instructions
+        months
+      }
+      weight
+    }
+  }
+}
+
+mutation softDelete($id: String!, $tenantId: String!) {
+  softDeleteProduct(id: $id, tenantId: $tenantId) {
+    name
+    isArchived
+  }
+}
+
+mutation restore($id: String!, $tenantId: String!) {
+  restoreProduct(id: $id, tenantId: $tenantId) {
+    name
+    isArchived
+  }
+}
+
+mutation hardDelete($id: String!, $tenantId: String!) {
+  hardDeleteProduct(id: $id, tenantId: $tenantId) {
+    name
+  }
+}

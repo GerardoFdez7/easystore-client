@@ -1,8 +1,10 @@
 overwrite: true
+require:
+  - dotenv/config
 schema: ${NEXT_PUBLIC_GRAPHQL_URI}
-documents: 'src/**/*.gql'
+documents: 'lib/graphql/**/*.gql'
 generates:
-  app/[locale]/lib/graphql/generated.ts:
+  lib/graphql/generated.ts:
     plugins:
       - 'typescript'
       - 'typescript-operations'

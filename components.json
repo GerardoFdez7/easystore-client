@@ -12,8 +12,8 @@
   },
   "aliases": {
     "components": "app/[locale]/components/shadcn",
-    "utils": "@lib/utils/cn",
-    "lib": "@lib",
+    "utils": "./lib/utils/cn",
+    "lib": "./lib",
     "hooks": "@hooks"
   },
   "iconLibrary": "lucide"

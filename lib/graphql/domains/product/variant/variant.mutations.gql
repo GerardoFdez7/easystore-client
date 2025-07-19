@@ -1,0 +1,100 @@
+mutation addVariantToProduct($input: CreateVariantInput!) {
+  addVariant(input: $input) {
+    variants {
+      price
+      condition
+      attributes {
+        key
+        value
+      }
+    }
+  }
+}
+
+mutation updateVariantInProduct(
+  $id: String!
+  $productId: String!
+  $tenantId: String!
+  $input: UpdateVariantInput!
+) {
+  updateVariant(
+    id: $id
+    productId: $productId
+    tenantId: $tenantId
+    input: $input
+  ) {
+    variants {
+      attributes {
+        key
+        value
+      }
+      barcode
+      condition
+      weight
+      dimension {
+        height
+        length
+        width
+      }
+      ean
+      installmentPayments {
+        interestRate
+        months
+      }
+      isbn
+      personalizationOptions
+      price
+      sku
+      upc
+      variantCover
+      variantMedia {
+        mediaType
+        position
+        productId
+        url
+        variantId
+      }
+      warranties {
+        coverage
+        instructions
+        months
+      }
+    }
+  }
+}
+
+mutation archiveVariantOfProduct(
+  $id: String!
+  $productId: String!
+  $tenantId: String!
+) {
+  archiveVariant(id: $id, productId: $productId, tenantId: $tenantId) {
+    variants {
+      isArchived
+    }
+  }
+}
+
+mutation restoreVariantOfProduct(
+  $id: String!
+  $productId: String!
+  $tenantId: String!
+) {
+  restoreVariant(id: $id, productId: $productId, tenantId: $tenantId) {
+    variants {
+      isArchived
+    }
+  }
+}
+
+mutation removeVariantfromProduct(
+  $id: String!
+  $productId: String!
+  $tenantId: String!
+) {
+  removeVariant(id: $id, productId: $productId, tenantId: $tenantId) {
+    variants {
+      sku
+    }
+  }
+}

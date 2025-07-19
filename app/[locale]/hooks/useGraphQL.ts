@@ -6,10 +6,11 @@ import { GraphQLFormattedError } from 'graphql/error';
 
 type UseGraphQLResult<TResult, TVariables extends OperationVariables> = Omit<
   QueryResult<TResult, TVariables>,
-  'data'
+  'data' | 'loading'
 > & {
   errors?: readonly GraphQLFormattedError[];
   data: TResult | undefined;
+  isLoading: boolean;
 };
 
 export const useGraphQL = <
@@ -19,19 +20,23 @@ export const useGraphQL = <
   query: DocumentNode,
   variables?: TVariables,
 ): UseGraphQLResult<TResult, TVariables> => {
-  const { data, error, ...rest } = useQuery<TResult, TVariables>(query, {
-    variables,
-    errorPolicy: 'all',
-    onError: (error) => {
-      console.error('GraphQL Error:', error);
+  const { data, error, loading, ...rest } = useQuery<TResult, TVariables>(
+    query,
+    {
+      variables,
+      errorPolicy: 'all',
+      onError: (error) => {
+        console.error('GraphQL Error:', error);
+      },
     },
-  });
+  );
 
   return {
     data: data ?? undefined,
     errors: error?.graphQLErrors as
       | readonly GraphQLFormattedError[]
       | undefined,
+    isLoading: loading,
     ...rest,
   };
 };

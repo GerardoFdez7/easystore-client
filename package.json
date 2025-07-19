@@ -11,7 +11,7 @@
     "docker:dev": "docker-compose -f docker-compose.dev.yml up",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "gql": "npx graphql-codegen && npx graphql-codegen --check",
+    "gql": "set NODE_OPTIONS=-r dotenv/config && npx graphql-codegen && npx graphql-codegen --check",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -63,7 +63,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@typescript-eslint/parser": "^8.28.0",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.6.1",
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
     "eslint-config-prettier": "^10.1.1",

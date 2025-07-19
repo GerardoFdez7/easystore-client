@@ -1,29 +1,13 @@
-import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
-// import { useGraphQL } from './useGraphQL';
-// import { gql } from '@apollo/client';
+import { useLoginMutation, AccountTypeEnum } from '@graphql/generated';
+import type { LoginMutationVariables } from '@graphql/generated';
 
-// GraphQL mutation (replace this with the actual mutation)
-// const loginUser = gql`
-//   mutation LoginUser($email: String!, $password: String!) {
-//     loginUser(input: { email: $email, password: $password }) {
-//       token
-//       user {
-//         id
-//         email
-//         # Add other fields as needed
-//       }
-//     }
-//   }
-// `;
-
-export const useLogin = () => {
+export const useLogin = (accountType: AccountTypeEnum) => {
   const t = useTranslations('Login');
-  const [isLoading, setIsLoading] = useState(false);
 
   // Schema validation based on backend value objects
   const loginFormSchema = z.object({
@@ -44,55 +28,74 @@ export const useLogin = () => {
     },
   });
 
-  // You can use this when your GraphQL mutation is ready
-  // const { data, errors, loading } = useGraphQL(LOGIN_USER);
+  // Use the generated mutation hook
+  const [loginMutation, { data, error, loading }] = useLoginMutation({
+    onCompleted: (data) => {
+      // Store tokens in localStorage
+      localStorage.setItem('accessToken', data.login.accessToken);
+      localStorage.setItem('refreshToken', data.login.refreshToken);
 
-  const handleSubmit = async (data: LoginFormValues) => {
-    setIsLoading(true);
+      toast.success('Login successful!', {
+        description: 'Welcome back! You have been successfully logged in.',
+      });
 
+      // Redirect to dashboard
+      window.location.href = '/dashboard';
+    },
+    onError: (error) => {
+      // Handle GraphQL errors
+      if (error.graphQLErrors?.length > 0) {
+        const graphQLError = error.graphQLErrors[0];
+        if (
+          graphQLError.message.includes('Invalid credentials') ||
+          graphQLError.message.includes('unauthorized')
+        ) {
+          toast.error('Invalid credentials', {
+            description: 'Please check your email and password and try again.',
+          });
+        } else if (graphQLError.message.includes('account not found')) {
+          toast.warning('Account not found', {
+            description: 'Please check your email or create a new account.',
+          });
+        } else {
+          toast.error('Login failed', {
+            description: graphQLError.message,
+          });
+        }
+      } else if (error.networkError) {
+        toast.error('Network error', {
+          description: 'Please check your connection and try again.',
+        });
+      } else {
+        toast.error('Unexpected error occurred', {
+          description: 'Something went wrong. Please try again.',
+        });
+      }
+    },
+  });
+
+  const handleSubmit = async (formData: LoginFormValues) => {
     try {
-      // For now, simulate API call
-      console.log('Login data:', data);
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      const variables: LoginMutationVariables = {
+        email: formData.email,
+        password: formData.password,
+        accountType,
+      };
 
-      // Replace the above with:
-      // const result = await mutate({
-      //   variables: {
-      //     email: data.email,
-      //     password: data.password
-      //   }
-      // });
-
-      toast.success('Login Sucessful!');
-
-      // Handle successful login (e.g., store token, redirect)
-      // localStorage.setItem('token', result.data.loginUser.token);
-      // router.push('/dashboard');
+      await loginMutation({ variables });
     } catch (error) {
+      // Error handling is done in the onError callback
       console.error('Login error:', error);
-      toast.error('Unexpected error occurred', {
-        description:
-          'Something went wrong. Please check your connection and try again.',
-      });
-      // other cases
-      toast.warning('Invalid credentials', {
-        description:
-          'The email or password you entered is incorrect. Please try again.',
-      });
-      toast.error('Account disabled', {
-        description:
-          'Your account has been disabled. Please contact support for assistance.',
-      });
-    } finally {
-      setIsLoading(false);
     }
   };
 
   return {
     form,
     handleSubmit,
-    isLoading,
+    isLoading: loading,
     loginFormSchema,
+    data,
+    error,
   };
 };
 

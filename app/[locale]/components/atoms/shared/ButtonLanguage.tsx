@@ -39,7 +39,7 @@ export const LanguageButton = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="text-text hover:text-gray-90 flex cursor-pointer items-center gap-1 text-2xl font-medium">
+        <button className="text-title hover:text-gray-90 flex cursor-pointer items-center gap-1 text-2xl font-medium">
           <Globe size={24} className="h-6 w-6 md:h-7 md:w-7" />
           {languageAbbreviations[selectedLanguage]}
         </button>

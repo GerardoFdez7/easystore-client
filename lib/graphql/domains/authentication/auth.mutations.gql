@@ -1,0 +1,21 @@
+mutation register($email: String!, $password: String!, $accountType: AccountTypeEnum!) {
+  register(input: {
+    email: $email,
+    password: $password,
+    accountType: $accountType
+  }) {
+    email
+    accountType
+  }
+}
+
+mutation login($email: String!, $password: String!, $accountType: AccountTypeEnum!) {
+  login(input: {
+    email: $email,
+    password: $password,
+    accountType: $accountType
+  }) {
+    accessToken
+    refreshToken
+  }
+}

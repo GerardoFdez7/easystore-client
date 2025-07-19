@@ -12,6 +12,7 @@ const ignorePatterns = [
   '*.config.ts',
   '*.config.mjs',
   '.storybook',
+  '**/generated.ts'
 ];
 
 const eslintConfig = [

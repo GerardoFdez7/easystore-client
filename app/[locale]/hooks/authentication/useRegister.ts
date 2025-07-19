@@ -1,25 +1,17 @@
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
-//import { useGraphQL } from '@hooks/useGraphQL';
-//import { gql } from '@apollo/client';
+import {
+  useRegisterMutation,
+  AccountTypeEnum,
+  RegisterMutationVariables,
+} from '@graphql/generated';
 
-// GraphQL mutation (replace this with the actual mutation)
-// const registerUser = gql`
-//   mutation RegisterUser($email: String!, $password: String!) {
-//     registerUser(input: { email: $email, password: $password }) {
-//       email
-//     }
-//   }
-// `;
-
-export const useRegister = () => {
+export const useRegister = (accountType: AccountTypeEnum) => {
   const t = useTranslations('Register');
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   // Schema validation based on backend value objects
@@ -48,45 +40,65 @@ export const useRegister = () => {
     },
   });
 
-  // Use this when your GraphQL mutation is ready
-  // const { data, errors, loading } = useGraphQL(registerUser);
-
-  const handleSubmit = async (data: RegisterFormValues) => {
-    setIsLoading(true);
-
-    try {
-      // For now, simulate API call
-      console.log('Register data:', data);
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-
-      // Replace the above with:
-      // const result = await mutate({
-      //   variables: {
-      //     email: data.email,
-      //     password: data.password
-      //   }
-      // });
+  // Use the generated mutation hook
+  const [registerMutation, { data, error, loading }] = useRegisterMutation({
+    onCompleted: (data) => {
+      toast.success('Registration successful!', {
+        description: `Welcome ${data.register.email}!`,
+      });
       router.push('/login');
-    } catch (_error) {
-      // Handle errors here
-      toast.warning('Associated account', {
-        description:
-          'Try logging in or recover your password if you have forgotten it.',
-      });
-      toast.error('Unexpected error occurred', {
-        description:
-          'Something went wrong. Please check your connection and try again.',
-      });
-    } finally {
-      setIsLoading(false);
+    },
+    onError: (error) => {
+      // Handle GraphQL errors
+      if (error.graphQLErrors?.length > 0) {
+        const graphQLError = error.graphQLErrors[0];
+        if (
+          graphQLError.message.includes('already exists') ||
+          graphQLError.message.includes('duplicate')
+        ) {
+          toast.warning('Associated account', {
+            description:
+              'Try logging in or recover your password if you have forgotten it.',
+          });
+        } else {
+          toast.error('Registration failed', {
+            description: graphQLError.message,
+          });
+        }
+      } else if (error.networkError) {
+        toast.error('Network error', {
+          description: 'Please check your connection and try again.',
+        });
+      } else {
+        toast.error('Unexpected error occurred', {
+          description: 'Something went wrong. Please try again.',
+        });
+      }
+    },
+  });
+
+  const handleSubmit = async (formData: RegisterFormValues) => {
+    try {
+      const variables: RegisterMutationVariables = {
+        email: formData.email,
+        password: formData.password,
+        accountType,
+      };
+
+      await registerMutation({ variables });
+    } catch (error) {
+      // Error handling is done in the onError callback
+      console.error('Registration error:', error);
     }
   };
 
   return {
     form,
     handleSubmit,
-    isLoading,
+    isLoading: loading,
     registerFormSchema,
+    data,
+    error,
   };
 };
 

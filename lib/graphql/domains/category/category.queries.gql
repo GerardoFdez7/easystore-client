@@ -1,0 +1,89 @@
+query findById($id: ID!, $tenantId: ID!) {
+  getCategoryById(id: $id, tenantId: $tenantId) {
+    name
+    description
+    cover
+    tenantId
+    updatedAt
+    createdAt
+    subCategories {
+      name
+      description
+      cover
+      createdAt
+      subCategories {
+        name
+        description
+        cover
+        createdAt
+        subCategories {
+          cover
+          createdAt
+          description
+          name
+          tenantId
+          updatedAt
+        }
+        tenantId
+        updatedAt
+      }
+      tenantId
+      updatedAt
+    }
+  }
+}
+
+query findAll(
+  $tenantId: ID!
+  $page: Int = 1
+  $limit: Int = 25
+  $name: String = ""
+  $parentId: ID = ""
+  $sortBy: SortBy = CREATED_AT
+  $sortOrder: SortOrder = DESC
+) {
+  getAllCategories(
+    tenantId: $tenantId
+    page: $page
+    limit: $limit
+    name: $name
+    parentId: $parentId
+    sortBy: $sortBy
+    sortOrder: $sortOrder
+  ) {
+    categories {
+      name
+      description
+      cover
+      tenantId
+      updatedAt
+      createdAt
+      subCategories {
+        name
+        description
+        cover
+        createdAt
+        subCategories {
+          name
+          description
+          cover
+          createdAt
+          subCategories {
+            cover
+            createdAt
+            description
+            name
+            tenantId
+            updatedAt
+          }
+          tenantId
+          updatedAt
+        }
+        tenantId
+        updatedAt
+      }
+    }
+    total
+    hasMore
+  }
+}

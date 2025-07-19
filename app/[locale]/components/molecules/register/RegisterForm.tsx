@@ -3,13 +3,20 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { useRegister } from '@hooks/authentication';
+import { AccountTypeEnum } from '@graphql/generated';
 import { Form } from '@shadcn/ui/form';
 import RegisterFields from '@molecules/register/RegisterFields';
 import ButtonLoadable from '@atoms/shared/ButtonLoadable';
 
-export const RegisterForm: React.FC = () => {
+interface RegisterFormProps {
+  accountType?: AccountTypeEnum;
+}
+
+export const RegisterForm: React.FC<RegisterFormProps> = ({
+  accountType = AccountTypeEnum.Tenant,
+}) => {
   const t = useTranslations('Register');
-  const { form, handleSubmit, isLoading } = useRegister();
+  const { form, handleSubmit, isLoading } = useRegister(accountType);
 
   return (
     <Form {...form}>
