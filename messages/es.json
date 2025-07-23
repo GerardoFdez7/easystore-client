@@ -151,7 +151,21 @@
     "register": "Regístrate",
     "invalidEmailFormat": "Formato de correo electrónico inválido",
     "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
-    "passwordTooLong": "La contraseña debe tener como máximo 255 caracteres"
+    "passwordTooLong": "La contraseña debe tener como máximo 255 caracteres",
+    "loginSuccessful": "¡Inicio de sesión exitoso!",
+    "loginSuccessfulDescription": "¡Bienvenido de nuevo! Has iniciado sesión correctamente.",
+    "invalidCredentials": "Credenciales inválidas",
+    "invalidCredentialsDescription": "Por favor verifica tu correo electrónico y contraseña e intenta de nuevo.",
+    "accountNotFound": "Cuenta no encontrada",
+    "accountNotFoundDescription": "Por favor verifica tu correo electrónico o crea una nueva cuenta.",
+    "loginFailed": "Error al iniciar sesión",
+    "networkError": "Error de red",
+    "networkErrorDescription": "Verifica tu conexión e inténtalo de nuevo.",
+    "unexpectedError": "Ocurrió un error inesperado",
+    "unexpectedErrorDescription": "Algo salió mal. Inténtalo de nuevo.",
+    "logoutSuccessful": "¡Cierre de sesión exitoso!",
+    "logoutSuccessfulDescription": "Has cerrado sesión exitosamente.",
+    "logoutFailed": "Error al cerrar sesión"
   },
   "Register": {
     "registerTitle": "Registrarse",
@@ -171,6 +185,15 @@
     "termsMessage": "Al continuar, aceptas los",
     "termsAndConditions": "Términos y Condiciones",
     "and": "y la",
-    "privacyPolicy": "Política de privacidad"
+    "privacyPolicy": "Política de privacidad",
+    "registrationSuccessful": "¡Registro exitoso!",
+    "registrationSuccessfulDescription": "¡Bienvenido {email}!",
+    "associatedAccount": "Cuenta asociada",
+    "associatedAccountDescription": "Intenta iniciar sesión o recupera tu contraseña si la has olvidado.",
+    "registrationFailed": "Error en el registro",
+    "networkError": "Error de red",
+    "networkErrorDescription": "Por favor verifica tu conexión e intenta de nuevo.",
+    "unexpectedError": "Ocurrió un error inesperado",
+    "unexpectedErrorDescription": "Algo salió mal. Por favor intenta de nuevo."
   }
 }

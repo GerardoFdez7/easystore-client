@@ -151,7 +151,21 @@
     "register": "Registrati",
     "invalidEmailFormat": "Formato email non valido",
     "passwordTooShort": "La password deve contenere almeno 8 caratteri",
-    "passwordTooLong": "La password deve contenere al massimo 255 caratteri"
+    "passwordTooLong": "La password deve contenere al massimo 255 caratteri",
+    "loginSuccessful": "Accesso riuscito!",
+    "loginSuccessfulDescription": "Bentornato! Hai effettuato l'accesso con successo.",
+    "invalidCredentials": "Credenziali non valide",
+    "invalidCredentialsDescription": "Controlla la tua email e password e riprova.",
+    "accountNotFound": "Account non trovato",
+    "accountNotFoundDescription": "Controlla la tua email o crea un nuovo account.",
+    "loginFailed": "Accesso fallito",
+    "networkError": "Errore di rete",
+    "networkErrorDescription": "Controlla la tua connessione e riprova.",
+    "unexpectedError": "Si è verificato un errore imprevisto",
+    "unexpectedErrorDescription": "Qualcosa è andato storto. Riprova.",
+    "logoutSuccessful": "Logout riuscito!",
+    "logoutSuccessfulDescription": "Sei stato disconnesso con successo.",
+    "logoutFailed": "Logout fallito"
   },
   "Register": {
     "registerTitle": "Registro",
@@ -173,6 +187,15 @@
     "termsMessage": "Continuando, accetti i",
     "termsAndConditions": "Termini e Condizioni",
     "and": "e la",
-    "privacyPolicy": "Politica sulla privacy"
+    "privacyPolicy": "Politica sulla privacy",
+    "registrationSuccessful": "Registrazione riuscita!",
+    "registrationSuccessfulDescription": "Benvenuto {email}!",
+    "associatedAccount": "Account associato",
+    "associatedAccountDescription": "Prova ad accedere o recupera la password se l'hai dimenticata.",
+    "registrationFailed": "Registrazione fallita",
+    "networkError": "Errore di rete",
+    "networkErrorDescription": "Controlla la tua connessione e riprova.",
+    "unexpectedError": "Si è verificato un errore imprevisto",
+    "unexpectedErrorDescription": "Qualcosa è andato storto. Riprova."
   }
 }

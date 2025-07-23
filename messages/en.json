@@ -151,7 +151,21 @@
     "register": "Register",
     "invalidEmailFormat": "Invalid email format",
     "passwordTooShort": "Password must be at least 8 characters",
-    "passwordTooLong": "Password must be at most 255 characters"
+    "passwordTooLong": "Password must be at most 255 characters",
+    "loginSuccessful": "Login successful!",
+    "loginSuccessfulDescription": "Welcome back! You have been successfully logged in.",
+    "invalidCredentials": "Invalid credentials",
+    "invalidCredentialsDescription": "Please check your email and password and try again.",
+    "accountNotFound": "Account not found",
+    "accountNotFoundDescription": "Please check your email or create a new account.",
+    "loginFailed": "Login failed",
+    "networkError": "Network error",
+    "networkErrorDescription": "Please check your connection and try again.",
+    "unexpectedError": "An unexpected error occurred",
+    "unexpectedErrorDescription": "Something went wrong. Please try again.",
+    "logoutSuccessful": "Logout successful!",
+    "logoutSuccessfulDescription": "You have been successfully logged out.",
+    "logoutFailed": "Logout failed"
   },
   "Register": {
     "registerTitle": "Register",
@@ -171,6 +185,15 @@
     "termsMessage": "By continuing, you accept the",
     "termsAndConditions": "Terms and Conditions",
     "and": "and",
-    "privacyPolicy": "Privacy Policy"
+    "privacyPolicy": "Privacy Policy",
+    "registrationSuccessful": "Registration successful!",
+    "registrationSuccessfulDescription": "Welcome {email}!",
+    "associatedAccount": "Associated account",
+    "associatedAccountDescription": "Try logging in or recover your password if you have forgotten it.",
+    "registrationFailed": "Registration failed",
+    "networkError": "Network error",
+    "networkErrorDescription": "Please check your connection and try again.",
+    "unexpectedError": "Unexpected error occurred",
+    "unexpectedErrorDescription": "Something went wrong. Please try again."
   }
 }

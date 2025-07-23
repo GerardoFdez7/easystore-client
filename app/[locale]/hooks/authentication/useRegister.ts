@@ -43,8 +43,10 @@ export const useRegister = (accountType: AccountTypeEnum) => {
   // Use the generated mutation hook
   const [registerMutation, { data, error, loading }] = useRegisterMutation({
     onCompleted: (data) => {
-      toast.success('Registration successful!', {
-        description: `Welcome ${data.register.email}!`,
+      toast.success(t('registrationSuccessful'), {
+        description: t('registrationSuccessfulDescription', {
+          email: data.register.email,
+        }),
       });
       router.push('/login');
     },
@@ -56,22 +58,21 @@ export const useRegister = (accountType: AccountTypeEnum) => {
           graphQLError.message.includes('already exists') ||
           graphQLError.message.includes('duplicate')
         ) {
-          toast.warning('Associated account', {
-            description:
-              'Try logging in or recover your password if you have forgotten it.',
+          toast.warning(t('associatedAccount'), {
+            description: t('associatedAccountDescription'),
           });
         } else {
-          toast.error('Registration failed', {
+          toast.error(t('registrationFailed'), {
             description: graphQLError.message,
           });
         }
       } else if (error.networkError) {
-        toast.error('Network error', {
-          description: 'Please check your connection and try again.',
+        toast.error(t('networkError'), {
+          description: t('networkErrorDescription'),
         });
       } else {
-        toast.error('Unexpected error occurred', {
-          description: 'Something went wrong. Please try again.',
+        toast.error(t('unexpectedError'), {
+          description: t('unexpectedErrorDescription'),
         });
       }
     },

@@ -145,13 +145,27 @@
     "password": "Mot de passe",
     "changePassword": "Mot de passe oublié ?",
     "buttonLogin": "Se connecter",
-    "messageAccount": "Vous n’avez pas de compte ?",
+    "messageAccount": "Vous n'avez pas de compte ?",
     "loginWithGoogle": "Utiliser Google",
     "loginWithFacebook": "Utiliser Facebook",
     "register": "S'inscrire",
     "invalidEmailFormat": "Format d'e-mail invalide",
     "passwordTooShort": "Le mot de passe doit contenir au moins 8 caractères",
-    "passwordTooLong": "Le mot de passe doit contenir au maximum 255 caractères"
+    "passwordTooLong": "Le mot de passe doit contenir au maximum 255 caractères",
+    "loginSuccessful": "Connexion réussie !",
+    "loginSuccessfulDescription": "Bon retour ! Vous vous êtes connecté avec succès.",
+    "invalidCredentials": "Identifiants invalides",
+    "invalidCredentialsDescription": "Veuillez vérifier votre e-mail et mot de passe et réessayer.",
+    "accountNotFound": "Compte introuvable",
+    "accountNotFoundDescription": "Veuillez vérifier votre e-mail ou créer un nouveau compte.",
+    "loginFailed": "Échec de la connexion",
+    "networkError": "Erreur réseau",
+    "networkErrorDescription": "Veuillez vérifier votre connexion et réessayer.",
+    "unexpectedError": "Une erreur inattendue s'est produite",
+    "unexpectedErrorDescription": "Quelque chose s'est mal passé. Veuillez réessayer.",
+    "logoutSuccessful": "Déconnexion réussie !",
+    "logoutSuccessfulDescription": "Vous avez été déconnecté avec succès.",
+    "logoutFailed": "Échec de la déconnexion"
   },
   "Register": {
     "registerTitle": "Registre",
@@ -171,6 +185,15 @@
     "termsMessage": "En continuant, vous acceptez les",
     "termsAndConditions": "Conditions générales",
     "and": "et la",
-    "privacyPolicy": "Politique de confidentialité"
+    "privacyPolicy": "Politique de confidentialité",
+    "registrationSuccessful": "Inscription réussie !",
+    "registrationSuccessfulDescription": "Bienvenue {email} !",
+    "associatedAccount": "Compte associé",
+    "associatedAccountDescription": "Essayez de vous connecter ou récupérez votre mot de passe si vous l'avez oublié.",
+    "registrationFailed": "Échec de l'inscription",
+    "networkError": "Erreur réseau",
+    "networkErrorDescription": "Veuillez vérifier votre connexion et réessayer.",
+    "unexpectedError": "Une erreur inattendue s'est produite",
+    "unexpectedErrorDescription": "Quelque chose s'est mal passé. Veuillez réessayer."
   }
 }

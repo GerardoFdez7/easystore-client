@@ -17,5 +17,14 @@ mutation login($email: String!, $password: String!, $accountType: AccountTypeEnu
   }) {
     accessToken
     refreshToken
+    userId
+  }
+}
+
+mutation logout($token: String!) {
+  logout(input: {
+    token: $token
+  }) {
+    success
   }
 }

@@ -34,9 +34,10 @@ export const useLogin = (accountType: AccountTypeEnum) => {
       // Store tokens in localStorage
       localStorage.setItem('accessToken', data.login.accessToken);
       localStorage.setItem('refreshToken', data.login.refreshToken);
+      localStorage.setItem('userId', data.login.userId);
 
-      toast.success('Login successful!', {
-        description: 'Welcome back! You have been successfully logged in.',
+      toast.success(t('loginSuccessful'), {
+        description: t('loginSuccessfulDescription'),
       });
 
       // Redirect to dashboard
@@ -50,25 +51,25 @@ export const useLogin = (accountType: AccountTypeEnum) => {
           graphQLError.message.includes('Invalid credentials') ||
           graphQLError.message.includes('unauthorized')
         ) {
-          toast.error('Invalid credentials', {
-            description: 'Please check your email and password and try again.',
+          toast.error(t('invalidCredentials'), {
+            description: t('invalidCredentialsDescription'),
           });
         } else if (graphQLError.message.includes('account not found')) {
-          toast.warning('Account not found', {
-            description: 'Please check your email or create a new account.',
+          toast.warning(t('accountNotFound'), {
+            description: t('accountNotFoundDescription'),
           });
         } else {
-          toast.error('Login failed', {
+          toast.error(t('loginFailed'), {
             description: graphQLError.message,
           });
         }
       } else if (error.networkError) {
-        toast.error('Network error', {
-          description: 'Please check your connection and try again.',
+        toast.error(t('networkError'), {
+          description: t('networkErrorDescription'),
         });
       } else {
-        toast.error('Unexpected error occurred', {
-          description: 'Something went wrong. Please try again.',
+        toast.error(t('unexpectedError'), {
+          description: t('unexpectedErrorDescription'),
         });
       }
     },
