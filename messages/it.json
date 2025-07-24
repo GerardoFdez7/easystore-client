@@ -378,5 +378,25 @@
     "miscEntireAgreementSection": "9.4. Accordo completo\nQuesti Termini, unitamente all’Informativa sulla privacy di EasyStore e ad altri avvisi legali pubblicati sulla piattaforma, costituiscono l’intero accordo tra lei ed EasyStore in merito all’utilizzo dei servizi, sostituendo qualsiasi accordo, comunicazione o proposta precedente o contemporanea, orale o scritta.",
     "miscAssignmentSection": "9.5. Assegnazione\nNon può cedere o trasferire questi Termini, né alcuno dei suoi diritti o obblighi ai sensi degli stessi, senza il previo consenso scritto di EasyStore. EasyStore può cedere o trasferire i presenti Termini e i diritti e obblighi ivi previsti senza restrizioni.",
     "miscNoticesSection": "9.6. Comunicazioni\nQualsiasi comunicazione che EasyStore sia tenuta o autorizzata a inviarle in virtù dei presenti Termini sarà effettuata via e‑mail all’indirizzo registrato nel suo account o pubblicata sulla piattaforma. La comunicazione si considera ricevuta all’invio o alla pubblicazione. È sua responsabilità mantenere aggiornate le informazioni di contatto."
+  },
+  "Profile": {
+    "defaultName": "Il tuo nome",
+    "description": "Descrizione",
+    "storeProfileTitle": "Profilo del negozio",
+    "storeProfileDescription": "I clienti vedranno il logo, il nome e la descrizione del tuo negozio quando visiteranno il tuo profilo principale. Assicurati che tutto sia aggiornato.",
+    "logOut": "Disconnetti",
+    "domain": "Dominio",
+    "phone": "Telefono (opzionale)",
+    "email": "Email",
+    "password": "Password",
+    "passwordChangedNotice": "Hai cambiato la password 4 mesi fa",
+    "changePassword": "Cambia password",
+    "plan": "Piano",
+    "currentPlan": "Piano Base",
+    "changePlan": "Cambia piano",
+    "edit": "Modifica",
+    "save": "Salva",
+    "uploadPhoto": "Carica foto profilo",
+    "enterDescription": "Inserisci una descrizione..."
   }
 }

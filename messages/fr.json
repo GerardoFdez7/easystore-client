@@ -376,5 +376,25 @@
     "miscEntireAgreementSection": "9.4. Accord complet\nCes Conditions, conjointement avec la Politique de confidentialité d’EasyStore et tout autre avis légal publié sur la plateforme, constituent l’intégralité de l’accord entre vous et EasyStore en ce qui concerne l’utilisation des services, et remplacent tout accord, communication ou proposition antérieure ou contemporaine, orale ou écrite.",
     "miscAssignmentSection": "9.5. Cession\nVous ne pouvez pas céder ou transférer ces Conditions, ni aucun de vos droits ou obligations en vertu de celles-ci, sans le consentement écrit préalable d’EasyStore. EasyStore peut céder ou transférer ces Conditions et ses droits et obligations sans restriction.",
     "miscNoticesSection": "9.6. Notifications\nToute notification ou communication qu’EasyStore est tenu ou autorisé à vous envoyer en vertu de ces Conditions sera faite par e‑mail à l’adresse enregistrée dans votre compte ou par publication sur la plateforme. La notification sera réputée reçue lorsqu’elle est envoyée par e‑mail ou publiée. Il vous incombe de tenir à jour vos coordonnées."
+  },
+  "Profile": {
+    "defaultName": "Votre nom",
+    "description": "Description",
+    "storeProfileTitle": "Profil de la boutique",
+    "storeProfileDescription": "Les clients verront le logo, le nom et la description de votre boutique lorsqu’ils visiteront votre profil principal. Assurez-vous que tout soit à jour.",
+    "logOut": "Se déconnecter",
+    "domain": "Domaine",
+    "phone": "Téléphone (optionnel)",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "passwordChangedNotice": "Vous avez modifié votre mot de passe il y a 4 mois",
+    "changePassword": "Changer le mot de passe",
+    "plan": "Abonnement",
+    "currentPlan": "Plan Basique",
+    "changePlan": "Changer d’abonnement",
+    "edit": "Modifier",
+    "save": "Enregistrer",
+    "uploadPhoto": "Télécharger une photo de profil",
+    "enterDescription": "Entrez une description..."
   }
 }
