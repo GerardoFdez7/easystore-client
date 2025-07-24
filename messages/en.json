@@ -704,5 +704,25 @@
     "submitErrorTitle": "Something went wrong",
     "submitErrorDescription": "Please try again later.",
     "unknownError": "Unknown error"
+  },
+  "Profile": {
+    "defaultName": "Your Name",
+    "description": "Description",
+    "storeProfileTitle": "Store Profile",
+    "storeProfileDescription": "Customers will see your store's logo, name, and description when they visit your main profile. Make sure everything is up to date.",
+    "logOut": "Log out",
+    "domain": "Domain",
+    "phone": "Phone (optional)",
+    "email": "Email",
+    "password": "Password",
+    "passwordChangedNotice": "You changed your password 4 months ago",
+    "changePassword": "Change password",
+    "plan": "Plan",
+    "currentPlan": "Plan Basic",
+    "changePlan": "Change plan",
+    "edit": "Edit",
+    "save": "Save",
+    "uploadPhoto": "Upload profile photo",
+    "enterDescription": "Enter description..."
   }
 }

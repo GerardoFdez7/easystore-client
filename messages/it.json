@@ -707,5 +707,25 @@
     "submitErrorTitle": "Si è verificato un problema",
     "submitErrorDescription": "Riprova più tardi.",
     "unknownError": "Errore sconosciuto"
+  },
+  "Profile": {
+    "defaultName": "Il tuo nome",
+    "description": "Descrizione",
+    "storeProfileTitle": "Profilo del negozio",
+    "storeProfileDescription": "I clienti vedranno il logo, il nome e la descrizione del tuo negozio quando visiteranno il tuo profilo principale. Assicurati che tutto sia aggiornato.",
+    "logOut": "Disconnetti",
+    "domain": "Dominio",
+    "phone": "Telefono (opzionale)",
+    "email": "Email",
+    "password": "Password",
+    "passwordChangedNotice": "Hai cambiato la password 4 mesi fa",
+    "changePassword": "Cambia password",
+    "plan": "Piano",
+    "currentPlan": "Piano Base",
+    "changePlan": "Cambia piano",
+    "edit": "Modifica",
+    "save": "Salva",
+    "uploadPhoto": "Carica foto profilo",
+    "enterDescription": "Inserisci una descrizione..."
   }
 }

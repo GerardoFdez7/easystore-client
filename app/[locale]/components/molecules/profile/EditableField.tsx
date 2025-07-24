@@ -32,7 +32,7 @@ export function EditableField({
           variant="ghost"
           size="icon"
           type="button"
-          className="text-[#10b981]"
+          className="text-secondary"
           onClick={() => setIsEditing((prev) => !prev)}
         >
           {isEditing ? (
