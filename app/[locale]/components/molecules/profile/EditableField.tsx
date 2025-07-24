@@ -1,6 +1,10 @@
+'use client';
+
 import Input from '@atoms/shared/OutsideInput';
-import { Label } from '@shadcn//ui/label';
-import { Edit2 } from 'lucide-react';
+import { Label } from '@shadcn/ui/label';
+import { Button } from '@shadcn/ui/button';
+import { Edit2, Save } from 'lucide-react';
+import { useState } from 'react';
 
 export function EditableField({
   label,
@@ -9,16 +13,34 @@ export function EditableField({
   label: string;
   value: string;
 }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentValue, setCurrentValue] = useState(value);
+
   return (
-    <div className="mb-6">
+    <div className="mb-6 w-full">
       <Label className="mb-2 block font-medium text-[#423f3d]">{label}</Label>
-      <div className="relative">
+
+      <div className="flex items-center gap-2">
         <Input
-          value={value}
-          className="border-gray-200 bg-white pr-10"
-          readOnly
+          value={currentValue}
+          readOnly={!isEditing}
+          onChange={(e) => setCurrentValue(e.target.value)}
+          className="flex-1 border-gray-200 bg-white"
         />
-        <Edit2 className="absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 cursor-pointer text-[#10b981]" />
+
+        <Button
+          variant="ghost"
+          size="icon"
+          type="button"
+          className="text-[#10b981]"
+          onClick={() => setIsEditing((prev) => !prev)}
+        >
+          {isEditing ? (
+            <Save className="h-4 w-4" />
+          ) : (
+            <Edit2 className="h-4 w-4" />
+          )}
+        </Button>
       </div>
     </div>
   );
