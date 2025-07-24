@@ -705,5 +705,25 @@
     "submitErrorTitle": "Algo deu errado",
     "submitErrorDescription": "Tente novamente mais tarde.",
     "unknownError": "Erro desconhecido"
+  },
+  "Profile": {
+    "defaultName": "Seu nome",
+    "description": "Descrição",
+    "storeProfileTitle": "Perfil da loja",
+    "storeProfileDescription": "Os clientes verão o logotipo, nome e descrição da sua loja ao visitarem seu perfil principal. Certifique-se de que tudo esteja atualizado.",
+    "logOut": "Sair",
+    "domain": "Domínio",
+    "phone": "Telefone (opcional)",
+    "email": "E-mail",
+    "password": "Senha",
+    "passwordChangedNotice": "Você alterou sua senha há 4 meses",
+    "changePassword": "Alterar senha",
+    "plan": "Plano",
+    "currentPlan": "Plano Básico",
+    "changePlan": "Alterar plano",
+    "edit": "Editar",
+    "save": "Salvar",
+    "uploadPhoto": "Carregar foto de perfil",
+    "enterDescription": "Digite uma descrição..."
   }
 }

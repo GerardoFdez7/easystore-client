@@ -5,12 +5,14 @@ import { Edit2, Save, Camera } from 'lucide-react';
 import Image from 'next/image';
 import Input from '@atoms/shared/OutsideInput';
 import { Button } from '@shadcn/ui/button';
+import { useTranslations } from 'next-intl';
 
 export function ProfileLogo() {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState('');
   const [image, setImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const t = useTranslations('Profile');
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -22,7 +24,6 @@ export function ProfileLogo() {
 
   return (
     <div className="mb-8 flex flex-col items-center text-center">
-      {/* Imagen de perfil */}
       <div className="relative mb-4 h-28 w-28 overflow-hidden rounded-full border border-gray-200 bg-white">
         {image ? (
           <Image src={image} alt="Profile" className="object-cover" fill />
@@ -47,7 +48,6 @@ export function ProfileLogo() {
         />
       </div>
 
-      {/* Nombre editable */}
       <div className="flex w-full max-w-[220px] items-center gap-2">
         {isEditing ? (
           <Input
@@ -57,7 +57,7 @@ export function ProfileLogo() {
           />
         ) : (
           <span className="flex-1 text-lg font-semibold text-[#423f3d]">
-            {name || 'Your Name'}
+            {name || t('defaultName')}
           </span>
         )}
 
@@ -65,7 +65,7 @@ export function ProfileLogo() {
           type="button"
           size="icon"
           variant="ghost"
-          className="text-[#10b981]"
+          className="text-secondary"
           onClick={() => setIsEditing((prev) => !prev)}
         >
           {isEditing ? (

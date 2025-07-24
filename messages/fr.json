@@ -705,5 +705,25 @@
     "submitErrorTitle": "Un problème est survenu",
     "submitErrorDescription": "Veuillez réessayer plus tard.",
     "unknownError": "Erreur inconnue"
+  },
+  "Profile": {
+    "defaultName": "Votre nom",
+    "description": "Description",
+    "storeProfileTitle": "Profil de la boutique",
+    "storeProfileDescription": "Les clients verront le logo, le nom et la description de votre boutique lorsqu’ils visiteront votre profil principal. Assurez-vous que tout soit à jour.",
+    "logOut": "Se déconnecter",
+    "domain": "Domaine",
+    "phone": "Téléphone (optionnel)",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "passwordChangedNotice": "Vous avez modifié votre mot de passe il y a 4 mois",
+    "changePassword": "Changer le mot de passe",
+    "plan": "Abonnement",
+    "currentPlan": "Plan Basique",
+    "changePlan": "Changer d’abonnement",
+    "edit": "Modifier",
+    "save": "Enregistrer",
+    "uploadPhoto": "Télécharger une photo de profil",
+    "enterDescription": "Entrez une description..."
   }
 }

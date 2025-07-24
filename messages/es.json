@@ -705,5 +705,25 @@
     "submitErrorTitle": "Algo salió mal",
     "submitErrorDescription": "Por favor, inténtalo de nuevo más tarde.",
     "unknownError": "Error desconocido"
+  },
+  "Profile": {
+    "defaultName": "Tu nombre",
+    "description": "Descripción",
+    "storeProfileTitle": "Perfil de la tienda",
+    "storeProfileDescription": "Los clientes verán el logo, nombre y descripción de tu tienda cuando visiten tu perfil principal. Asegúrate de que todo esté actualizado.",
+    "logOut": "Cerrar sesión",
+    "domain": "Dominio",
+    "phone": "Teléfono (opcional)",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "passwordChangedNotice": "Cambiaste tu contraseña hace 4 meses",
+    "changePassword": "Cambiar contraseña",
+    "plan": "Plan",
+    "currentPlan": "Plan Básico",
+    "changePlan": "Cambiar plan",
+    "edit": "Editar",
+    "save": "Guardar",
+    "uploadPhoto": "Subir foto de perfil",
+    "enterDescription": "Ingresa una descripción..."
   }
 }
