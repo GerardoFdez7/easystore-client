@@ -17,7 +17,7 @@ const ButtonLoadable: React.FC<ButtonLoadableProps> = ({
   isLoading = false,
   loadingText,
   children,
-  loaderSize = 10,
+  loaderSize = 12,
   disabled,
   ...props
 }) => {

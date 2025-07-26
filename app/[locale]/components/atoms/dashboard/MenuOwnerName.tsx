@@ -1,3 +1,5 @@
+'use client';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,9 +9,11 @@ import {
 import { Button } from '@shadcn/ui/button';
 import { LogOut, User } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useRouter } from '@i18n/navigation';
 
 export default function MenuOwnerName() {
   const t = useTranslations('Dashboard');
+  const router = useRouter();
 
   return (
     <DropdownMenu>
@@ -17,13 +21,16 @@ export default function MenuOwnerName() {
         <Button
           variant="ghost"
           size="sm"
-          className="text-foreground hover:text-title text-sm"
+          className="text-title hover:bg-hover text-sm"
         >
           ON
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuItem className="cursor-pointer text-[16px] sm:text-lg">
+        <DropdownMenuItem
+          className="cursor-pointer text-[16px] sm:text-lg"
+          onClick={() => router.push('/profile')}
+        >
           <User className="mr-2 h-4 w-4" />
           {t('profile')}
         </DropdownMenuItem>

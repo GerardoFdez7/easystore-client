@@ -1,8 +1,8 @@
-import { Bell, ShieldQuestionIcon } from 'lucide-react';
-
 import Logo from '@atoms/landing/Logo';
 import MenuOwnerName from '@atoms/dashboard/MenuOwnerName';
 import ThemeToggle from '@atoms/shared/ThemeToggle';
+import NotificationButton from '@atoms/shared/NotificationButton';
+// import { ShieldQuestionIcon } from 'lucide-react';
 
 export default function HeaderDashboard() {
   return (
@@ -10,8 +10,8 @@ export default function HeaderDashboard() {
       <div className="flex items-center justify-between">
         <Logo />
         <div className="flex items-center gap-4">
-          <ShieldQuestionIcon className="text-foreground hover:text-title h-5 w-5" />
-          <Bell className="text-foreground hover:text-title h-5 w-5" />
+          {/* <ShieldQuestionIcon className="text-title hover:bg-hover h-5 w-5" /> */}
+          <NotificationButton />
           <ThemeToggle />
           <MenuOwnerName />
         </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import WelcomeDashboard from '@atoms/dashboard/WelcomeDashboard';
-import TabDashboard from '@molecules/dashboard/TabDashboard';
+// import TabDashboard from '@molecules/dashboard/TabDashboard';
 import { SiteHeader } from '@atoms/shared/SiteHeader';
 import { SidebarInset, SidebarProvider } from '@shadcn/ui/sidebar';
 import { SiderbarDashboard } from '@molecules/shared/Sidebar';
@@ -34,7 +34,7 @@ export default function MainDashboard() {
               <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
                 <WelcomeDashboard />
                 <KPICards />
-                <TabDashboard />
+                {/* <TabDashboard /> */}
                 <div className="px-5">
                   {/* Total Sales */}
                   <ChartTotalSales />
