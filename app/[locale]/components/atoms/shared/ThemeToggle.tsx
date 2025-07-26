@@ -17,7 +17,12 @@ export default function ThemeToggle() {
     setMounted(true);
   }, []);
 
-  if (!mounted || !isDarkModeEnabled) {
+  if (!mounted) {
+    return null;
+  }
+
+  // Hide the toggle only on pages that explicitly don't support dark mode
+  if (!isDarkModeEnabled) {
     return null;
   }
 
@@ -30,7 +35,7 @@ export default function ThemeToggle() {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      className="h-9 w-9 rounded-md hover:bg-[#615b5b]"
+      className="hover:bg-hover h-9 w-9 rounded-md"
       aria-label="Toggle theme"
     >
       <Sun className="h-4 w-4 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />

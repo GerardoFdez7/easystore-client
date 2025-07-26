@@ -59,27 +59,22 @@ export function PageThemeProvider({ children }: { children: React.ReactNode }) {
       '/it/privacy',
     ];
 
-    // Define the views that should have dark mode enabled
-    const darkModePages = [
-      '/en/dashboard',
-      '/es/dashboard',
-      '/fr/dashboard',
-      '/pt/dashboard',
-      '/it/dashboard',
-    ];
-
     // Check if current path is in the list of pages without dark mode
-    const shouldDisableDarkMode = noDarkModePages.some((path) =>
-      pathname.startsWith(path),
-    );
+    // Use exact match or ensure we're not matching partial paths incorrectly
+    const shouldDisableDarkMode = noDarkModePages.some((path) => {
+      // For root locale paths like '/en', '/es', etc., use exact match
+      if (path.split('/').length === 2) {
+        return pathname === path;
+      }
+      // For other paths, use startsWith but ensure it's a complete path segment
+      return (
+        pathname.startsWith(path) &&
+        (pathname === path || pathname.startsWith(path + '/'))
+      );
+    });
 
-    // Check if current path is in the list of pages with dark mode
-    const shouldEnableDarkMode = darkModePages.some((path) =>
-      pathname.startsWith(path),
-    );
-
-    // Enable dark mode if it's explicitly allowed, disable if it's explicitly forbidden
-    setIsDarkModeEnabled(shouldEnableDarkMode || !shouldDisableDarkMode);
+    // Enable dark mode for all pages except those in noDarkModePages
+    setIsDarkModeEnabled(!shouldDisableDarkMode);
   }, [pathname]);
 
   return (
