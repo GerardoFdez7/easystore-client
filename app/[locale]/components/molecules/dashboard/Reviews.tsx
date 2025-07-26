@@ -8,7 +8,7 @@ export default function Reviews() {
   return (
     <section className="py-10">
       <h1 className="text-title mb-4 text-2xl font-bold">{t('reviews')}</h1>
-      <Card className="border-[#e2e8f0] bg-[#ffffff]">
+      <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
             <span className="text-title text-3xl font-bold">5.0</span>

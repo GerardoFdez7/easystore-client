@@ -59,12 +59,27 @@ export function PageThemeProvider({ children }: { children: React.ReactNode }) {
       '/it/privacy',
     ];
 
+    // Define the views that should have dark mode enabled
+    const darkModePages = [
+      '/en/dashboard',
+      '/es/dashboard',
+      '/fr/dashboard',
+      '/pt/dashboard',
+      '/it/dashboard',
+    ];
+
     // Check if current path is in the list of pages without dark mode
     const shouldDisableDarkMode = noDarkModePages.some((path) =>
       pathname.startsWith(path),
     );
 
-    setIsDarkModeEnabled(!shouldDisableDarkMode);
+    // Check if current path is in the list of pages with dark mode
+    const shouldEnableDarkMode = darkModePages.some((path) =>
+      pathname.startsWith(path),
+    );
+
+    // Enable dark mode if it's explicitly allowed, disable if it's explicitly forbidden
+    setIsDarkModeEnabled(shouldEnableDarkMode || !shouldDisableDarkMode);
   }, [pathname]);
 
   return (

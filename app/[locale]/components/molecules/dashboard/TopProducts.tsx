@@ -51,7 +51,7 @@ export default function TopProducts() {
   return (
     <section className="py-10">
       <h1 className="text-title mb-4 text-2xl font-bold">{t('topProducts')}</h1>
-      <Card className="mb-8 border-[#e2e8f0] bg-[#ffffff]">
+      <Card className="mb-8">
         <CardHeader></CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 2xl:grid-cols-4 @min-7xl:grid-cols-5">

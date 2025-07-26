@@ -35,8 +35,8 @@ export default function ButtonSidebar({
       className={cn(
         'w-full justify-start',
         isSelected
-          ? 'bg-title hover:bg-title text-white hover:text-white'
-          : 'text-foreground hover:text-title hover:bg-[#d7d7d7]',
+          ? 'bg-title hover:bg-title dark:bg-hover dark:hover:bg-hover text-white hover:text-white'
+          : 'text-foreground hover:text-title dark:hover:bg-hover hover:bg-[#d7d7d7]',
         className,
       )}
     >
