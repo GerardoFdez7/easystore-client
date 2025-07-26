@@ -31,7 +31,7 @@ export default function CustomerSatisfaction() {
         {t('customerSatisfaction')}
       </h1>
 
-      <Card className="border-[#e2e8f0] bg-[#ffffff]">
+      <Card>
         <CardHeader>
           <div className="text-foreground text-sm">{t('avarageRating')}</div>
           <div className="text-title text-3xl font-bold">4.5</div>

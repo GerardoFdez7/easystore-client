@@ -93,8 +93,8 @@ export default function SalesOverview() {
         {t('salesOverview')}
       </h1>
 
-      <div className="overflow-x-auto rounded-lg border border-[#e2e8f0] bg-white shadow-lg">
-        <Table className="min-w-[600px]">
+      <div className="overflow-x-auto rounded-lg shadow-lg">
+        <Table className="bg-card min-w-[600px]">
           <TableHeader>
             <TableRow>
               <TableHead className="text-foreground text-sm font-semibold sm:pl-5">
@@ -116,10 +116,7 @@ export default function SalesOverview() {
           </TableHeader>
           <TableBody>
             {orders.map((order) => (
-              <TableRow
-                key={order.order}
-                className="hover:bg-background transition"
-              >
+              <TableRow key={order.order} className="hover:bg-hover transition">
                 <TableCell className="font-mono text-sm sm:pl-5">
                   {order.order}
                 </TableCell>
