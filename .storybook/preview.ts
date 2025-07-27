@@ -1,6 +1,7 @@
 import type { Preview } from '@storybook/react';
 import '../app/[locale]/globals.css';
 import { withNextIntl } from './decorators/withNextIntl';
+import { withNextThemes } from './decorators/withNextThemes';
 
 const preview: Preview = {
   parameters: {
@@ -14,11 +15,11 @@ const preview: Preview = {
       appDirectory: true,
     },
   },
-  decorators: [withNextIntl],
+  decorators: [withNextIntl, withNextThemes],
   globalTypes: {
     locale: {
       name: 'Locale',
-      description: 'Internationalization locale',
+      description: 'Internationalization',
       defaultValue: 'en',
       toolbar: {
         icon: 'globe',
@@ -28,6 +29,19 @@ const preview: Preview = {
           { value: 'fr', title: 'Français' },
           { value: 'it', title: 'Italiano' },
           { value: 'pt', title: 'Português' },
+        ],
+      },
+    },
+    theme: {
+      name: 'Theme',
+      description: 'Themes',
+      defaultValue: 'system',
+      toolbar: {
+        icon: 'circlehollow',
+        items: [
+          { value: 'light', title: 'Light' },
+          { value: 'dark', title: 'Dark' },
+          { value: 'system', title: 'System' },
         ],
       },
     },
