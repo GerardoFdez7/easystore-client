@@ -25,7 +25,7 @@ import {
   SelectValue,
 } from '@shadcn/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@shadcn/ui/toggle-group';
-import { useIsMobile } from '@hooks/use-mobile';
+import { useIsMobile } from '@hooks/useMobile';
 import { useTranslations } from 'next-intl';
 
 export const description = 'An interactive area chart';
@@ -130,11 +130,11 @@ const chartConfig = {
   },
   desktop: {
     label: 'Desktop',
-    color: 'var(--primary)',
+    color: 'var(--foreground)',
   },
   mobile: {
     label: 'Mobile',
-    color: 'var(--primary)',
+    color: 'var(--foreground)',
   },
 } satisfies ChartConfig;
 

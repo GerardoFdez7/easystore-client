@@ -16,7 +16,7 @@ export default function Reviews() {
               {[1, 2, 3, 4, 5].map((star) => (
                 <Star
                   key={star}
-                  className="fill-primary text-primary h-4 w-4"
+                  className="fill-foreground text-foreground h-4 w-4"
                 />
               ))}
             </div>

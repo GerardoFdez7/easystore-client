@@ -1,23 +1,23 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import OwnerMenu from '@molecules/dashboard/OwnerMenu';
 import { ApolloWrapper } from '@lib/apollo/apollo-provider';
-import DashboardPage from '@templates/Dashboard';
 
-const meta: Meta<typeof DashboardPage> = {
-  title: 'Templates/Dashboard',
-  component: DashboardPage,
+const meta: Meta<typeof OwnerMenu> = {
+  title: 'Molecules/Dashboard/OwnerMenu',
+  component: OwnerMenu,
   parameters: {
-    layout: 'fullscreen',
+    layout: 'centered',
   },
   tags: ['autodocs'],
 };
 export default meta;
 
-type Story = StoryObj<typeof DashboardPage>;
+type Story = StoryObj<typeof OwnerMenu>;
 
 export const Default: Story = {
   render: () => (
     <ApolloWrapper>
-      <DashboardPage />
+      <OwnerMenu />
     </ApolloWrapper>
   ),
 };

@@ -10,10 +10,9 @@ export const useLogout = () => {
   const [logoutMutation, { data, error, loading }] = useLogoutMutation({
     onCompleted: (data) => {
       if (data.logout.success) {
-        // Clear tokens from localStorage
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('userId');
+        // Clear tokens from sessionStorage
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('userId');
 
         toast.success(t('logoutSuccessful'), {
           description: t('logoutSuccessfulDescription'),
@@ -44,13 +43,12 @@ export const useLogout = () => {
 
   const handleLogout = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = sessionStorage.getItem('accessToken');
 
       if (!token) {
-        // If no token, just clear localStorage and redirect
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('userId');
+        // If no token, just clear sessionStorage and redirect
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('userId');
         window.location.href = '/login';
         return;
       }

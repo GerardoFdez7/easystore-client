@@ -31,10 +31,9 @@ export const useLogin = (accountType: AccountTypeEnum) => {
   // Use the generated mutation hook
   const [loginMutation, { data, error, loading }] = useLoginMutation({
     onCompleted: (data) => {
-      // Store tokens in localStorage
-      localStorage.setItem('accessToken', data.login.accessToken);
-      localStorage.setItem('refreshToken', data.login.refreshToken);
-      localStorage.setItem('userId', data.login.userId);
+      // Store token in sessionStorage
+      sessionStorage.setItem('accessToken', data.login.accessToken);
+      sessionStorage.setItem('userId', data.login.userId);
 
       toast.success(t('loginSuccessful'), {
         description: t('loginSuccessfulDescription'),

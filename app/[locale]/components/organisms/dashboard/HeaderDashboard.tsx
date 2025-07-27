@@ -1,5 +1,5 @@
 import Logo from '@atoms/landing/Logo';
-import MenuOwnerName from '@atoms/dashboard/MenuOwnerName';
+import OwnerMenu from '@molecules/dashboard/OwnerMenu';
 import ThemeToggle from '@atoms/shared/ThemeToggle';
 import NotificationButton from '@atoms/shared/NotificationButton';
 // import { ShieldQuestionIcon } from 'lucide-react';
@@ -13,7 +13,7 @@ export default function HeaderDashboard() {
           {/* <ShieldQuestionIcon className="text-title hover:bg-hover h-5 w-5" /> */}
           <NotificationButton />
           <ThemeToggle />
-          <MenuOwnerName />
+          <OwnerMenu />
         </div>
       </div>
     </header>

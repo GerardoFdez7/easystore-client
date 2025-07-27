@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { ThemeProvider } from '@shadcn/features/theme-provider.';
+import { ThemeProvider } from '@shadcn/features/theme-provider';
 import { ApolloWrapper } from '@lib/apollo/apollo-provider';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { routing } from '@i18n/routing';
 import { Toaster } from '@shadcn/ui/sonner';
+import ProtectedRoute from '@atoms/shared/ProtectedRoute';
 import './globals.css';
 
 // Load Inter font with all weights
@@ -38,7 +39,9 @@ export default async function RootLayout({
       <body className={`${inter.variable} antialiased`}>
         <ApolloWrapper>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <NextIntlClientProvider>{children}</NextIntlClientProvider>
+            <NextIntlClientProvider>
+              <ProtectedRoute>{children}</ProtectedRoute>
+            </NextIntlClientProvider>
             <Toaster />
           </ThemeProvider>
         </ApolloWrapper>
