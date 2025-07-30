@@ -13,14 +13,15 @@ The authentication system provides global protection for the application with a 
 Provides authentication state and methods:
 
 ```typescript
-const { isAuthenticated, isLoading, redirectToLogin } = useAuth();
+const { isAuthenticated, isLoading, redirectToLogin, refreshAuth } = useAuth();
 ```
 
 **Features:**
 
-- Checks sessionStorage for access tokens
-- Listens for storage changes (multi-tab logout)
+- Uses GraphQL `validateToken` query to check authentication with HttpOnly cookies
+- Performs server-side authentication validation for enhanced security
 - Handles redirects and logout
+- Don't relies on client-side token storage
 
 ### 2. ProtectedRoute Component (`@atoms/shared/ProtectedRoute`)
 
@@ -109,24 +110,51 @@ import AuthGuard from '@atoms/shared/AuthGuard';
 
 ## Token Management
 
-The system uses sessionStorage for token storage:
+The system uses secure HttpOnly cookies for token storage:
 
-- `accessToken`: Main authentication token
-- `userId`: User identifier
+- `accessToken`: Main authentication token (HttpOnly, Secure, SameSite)
 
-And HttpOnly secure Cookie for `refreshToken`
+**Security Benefits:**
+
+- HttpOnly cookies prevent XSS attacks by making tokens inaccessible to JavaScript
+- Secure flag ensures cookies are only sent over HTTPS
+- SameSite protection against CSRF attacks
+- Server-side validation through GraphQL queries
+
+## Authentication Flow
+
+### Login Process
+
+1. User submits credentials via `useLogin` hook
+2. GraphQL mutation sends credentials to backend
+3. Backend validates credentials and sets HttpOnly cookies
+4. User is redirected to dashboard after successful authentication
+
+### Authentication Check
+
+1. `useAuth` hook calls GraphQL `validateToken` query
+2. Query automatically includes HttpOnly cookies in request
+3. Backend validates token and returns authentication status
+4. Frontend updates `isAuthenticated` state accordingly
+
+### Logout Process
+
+1. `useLogout` hook calls GraphQL logout mutation
+2. Backend clears HttpOnly cookies
+3. Frontend redirects to login page
 
 ## Future Enhancements
 
-1. **Server-Side Validation**: Add API calls to validate tokens
-2. **Token Refresh**: Implement automatic token refresh
-3. **Role-Based Access**: Add user roles and permissions
-4. **Session Management**: Add session timeout handling
-5. **Remember Me**: Add persistent login option
+1. **Token Refresh**: Implement automatic token refresh
+2. **Role-Based Access**: Add user roles and permissions
+3. **Session Management**: Add session timeout handling
+4. **Remember Me**: Add persistent login option
 
 ## Testing Authentication
 
-1. **Unauthenticated Access**: Visit `/dashboard` without tokens → should redirect to `/login`
+1. **Unauthenticated Access**: Visit `/dashboard` without valid cookies → should redirect to `/login`
 2. **Authenticated Access**: Login and visit `/dashboard` → should show content
 3. **Public Routes**: Visit `/`, `/login`, `/register` → should work without authentication
-4. **Multi-Tab Logout**: Logout in one tab → other tabs should detect and redirect
+4. **Cookie Security**: Check browser dev tools → `accessToken` should be HttpOnly and not accessible via JavaScript
+5. **Server Validation**: Authentication state is validated server-side through GraphQL queries
+6. **Cross-Tab Behavior**: Authentication state is consistent across browser tabs

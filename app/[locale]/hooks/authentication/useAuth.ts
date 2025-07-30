@@ -2,6 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from '@i18n/navigation';
+import { useApolloClient } from '@apollo/client';
+import { gql } from '@apollo/client';
+
+const validateToken = gql`
+  query validateToken {
+    validateToken {
+      success
+      message
+    }
+  }
+`;
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -14,18 +25,24 @@ export const useAuth = () => {
     isLoading: true,
   });
   const router = useRouter();
+  const client = useApolloClient();
 
   useEffect(() => {
-    const checkAuth = () => {
+    const checkAuth = async () => {
       try {
-        const accessToken = sessionStorage.getItem('accessToken');
-        // TO DO: Send request to validate token
+        const { data } = await client.query({
+          query: validateToken,
+          fetchPolicy: 'network-only', // Always check with server
+          errorPolicy: 'none', // Don't cache errors
+        });
+
+        const isAuthenticated = data?.validateToken?.success || false;
+
         setAuthState({
-          isAuthenticated: !!accessToken,
+          isAuthenticated,
           isLoading: false,
         });
-      } catch (error) {
-        console.error('Auth check error:', error);
+      } catch (_error) {
         setAuthState({
           isAuthenticated: false,
           isLoading: false,
@@ -33,18 +50,8 @@ export const useAuth = () => {
       }
     };
 
-    checkAuth();
-
-    // Listen for storage changes (logout from another tab)
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'accessToken') {
-        checkAuth();
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
+    void checkAuth();
+  }, [client]);
 
   const redirectToLogin = () => {
     router.push('/login');

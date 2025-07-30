@@ -1,0 +1,6 @@
+query validateToken {
+  validateToken {
+    success
+    message
+  }
+}

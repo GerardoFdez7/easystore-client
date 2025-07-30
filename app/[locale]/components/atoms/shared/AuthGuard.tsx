@@ -1,5 +1,3 @@
-'use client';
-
 import { useAuth } from '@hooks/authentication/useAuth';
 
 interface AuthGuardProps {

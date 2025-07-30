@@ -3,7 +3,6 @@ mutation createCategory($input: CreateCategoryInput!) {
     name
     description
     cover
-    tenantId
     updatedAt
     createdAt
     subCategories {
@@ -16,18 +15,16 @@ mutation createCategory($input: CreateCategoryInput!) {
         createdAt
         description
         name
-        tenantId
         updatedAt
       }
-      tenantId
       updatedAt
     }
   }
 }
 
-mutation updateCategory($id: ID!, $tenantId: ID!, $input: UpdateCategoryInput!) {
+mutation updateCategory($id: ID!, $input: UpdateCategoryInput!) {
 
-  updateCategory(id: $id, tenantId: $tenantId, input: $input) {
+  updateCategory(id: $id, input: $input) {
     name
     description
     cover
@@ -40,8 +37,8 @@ mutation updateCategory($id: ID!, $tenantId: ID!, $input: UpdateCategoryInput!) 
   }
 }
 
-mutation delete($id: ID!, $tenantId: ID!) {
-  deleteCategory(id: $id, tenantId: $tenantId) {
+mutation delete($id: ID!) {
+  deleteCategory(id: $id) {
     name
     description
   }

@@ -1,25 +1,22 @@
 import { useTranslations } from 'next-intl';
+import { useRouter } from '@i18n/navigation';
 import { toast } from 'sonner';
 import { useLogoutMutation } from '@graphql/generated';
-import type { LogoutMutationVariables } from '@graphql/generated';
 
 export const useLogout = () => {
   const t = useTranslations('Login');
+  const router = useRouter();
 
   // Use the generated mutation hook
   const [logoutMutation, { data, error, loading }] = useLogoutMutation({
     onCompleted: (data) => {
-      if (data.logout.success) {
-        // Clear tokens from sessionStorage
-        sessionStorage.removeItem('accessToken');
-        sessionStorage.removeItem('userId');
-
+      if (data.logout.success === true) {
         toast.success(t('logoutSuccessful'), {
           description: t('logoutSuccessfulDescription'),
         });
 
         // Redirect to login page
-        window.location.href = '/login';
+        router.push('/login');
       }
     },
     onError: (error) => {
@@ -43,21 +40,8 @@ export const useLogout = () => {
 
   const handleLogout = async () => {
     try {
-      const token = sessionStorage.getItem('accessToken');
-
-      if (!token) {
-        // If no token, just clear sessionStorage and redirect
-        sessionStorage.removeItem('accessToken');
-        sessionStorage.removeItem('userId');
-        window.location.href = '/login';
-        return;
-      }
-
-      const variables: LogoutMutationVariables = {
-        token,
-      };
-
-      await logoutMutation({ variables });
+      await logoutMutation();
+      window.location.href = '/login';
     } catch (error) {
       // Error handling is done in the onError callback
       console.error('Logout error:', error);

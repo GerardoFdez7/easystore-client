@@ -1,9 +1,8 @@
-query findById($id: ID!, $tenantId: ID!) {
-  getCategoryById(id: $id, tenantId: $tenantId) {
+query findById($id: ID!) {
+  getCategoryById(id: $id) {
     name
     description
     cover
-    tenantId
     updatedAt
     createdAt
     subCategories {
@@ -21,20 +20,16 @@ query findById($id: ID!, $tenantId: ID!) {
           createdAt
           description
           name
-          tenantId
           updatedAt
         }
-        tenantId
         updatedAt
       }
-      tenantId
       updatedAt
     }
   }
 }
 
 query findAll(
-  $tenantId: ID!
   $page: Int = 1
   $limit: Int = 25
   $name: String = ""
@@ -43,7 +38,6 @@ query findAll(
   $sortOrder: SortOrder = DESC
 ) {
   getAllCategories(
-    tenantId: $tenantId
     page: $page
     limit: $limit
     name: $name
@@ -55,7 +49,6 @@ query findAll(
       name
       description
       cover
-      tenantId
       updatedAt
       createdAt
       subCategories {
@@ -73,13 +66,10 @@ query findAll(
             createdAt
             description
             name
-            tenantId
             updatedAt
           }
-          tenantId
           updatedAt
         }
-        tenantId
         updatedAt
       }
     }

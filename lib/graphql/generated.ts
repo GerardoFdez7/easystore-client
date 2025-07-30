@@ -74,6 +74,12 @@ export type AuthIdentity = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type AuthenticationInput = {
+  accountType: AccountTypeEnum;
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
 export type Category = {
   __typename?: 'Category';
   cover: Scalars['String']['output'];
@@ -81,7 +87,6 @@ export type Category = {
   description: Scalars['String']['output'];
   name: Scalars['String']['output'];
   subCategories: Array<Category>;
-  tenantId: Scalars['ID']['output'];
   updatedAt: Scalars['DateTime']['output'];
 };
 
@@ -102,7 +107,6 @@ export type CreateCategoryInput = {
   name: Scalars['String']['input'];
   parentId?: InputMaybe<Scalars['ID']['input']>;
   subCategories?: InputMaybe<Array<CreateCategoryInput>>;
-  tenantId: Scalars['ID']['input'];
 };
 
 export type CreateDimensionInput = {
@@ -186,28 +190,6 @@ export type Installment = {
   months: Scalars['Int']['output'];
 };
 
-export type LoginAuthInput = {
-  accountType: AccountTypeEnum;
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-};
-
-export type LoginResponse = {
-  __typename?: 'LoginResponse';
-  accessToken: Scalars['String']['output'];
-  refreshToken: Scalars['String']['output'];
-  userId: Scalars['ID']['output'];
-};
-
-export type LogoutAuthInput = {
-  token: Scalars['String']['input'];
-};
-
-export type LogoutResponse = {
-  __typename?: 'LogoutResponse';
-  success: Scalars['Boolean']['output'];
-};
-
 export type Media = {
   __typename?: 'Media';
   mediaType: MediaTypeEnum;
@@ -230,8 +212,8 @@ export type Mutation = {
   createProduct: Product;
   deleteCategory: Category;
   hardDeleteProduct: Product;
-  login: LoginResponse;
-  logout: LogoutResponse;
+  login: Response;
+  logout: Response;
   register: AuthIdentity;
   removeVariant: Product;
   restoreProduct: Product;
@@ -262,7 +244,6 @@ export type MutationCreateProductArgs = {
 
 export type MutationDeleteCategoryArgs = {
   id: Scalars['ID']['input'];
-  tenantId: Scalars['ID']['input'];
 };
 
 export type MutationHardDeleteProductArgs = {
@@ -271,15 +252,11 @@ export type MutationHardDeleteProductArgs = {
 };
 
 export type MutationLoginArgs = {
-  input: LoginAuthInput;
-};
-
-export type MutationLogoutArgs = {
-  input: LogoutAuthInput;
+  input: AuthenticationInput;
 };
 
 export type MutationRegisterArgs = {
-  input: RegisterAuthInput;
+  input: AuthenticationInput;
 };
 
 export type MutationRemoveVariantArgs = {
@@ -307,7 +284,6 @@ export type MutationSoftDeleteProductArgs = {
 export type MutationUpdateCategoryArgs = {
   id: Scalars['ID']['input'];
   input: UpdateCategoryInput;
-  tenantId: Scalars['ID']['input'];
 };
 
 export type MutationUpdateProductArgs = {
@@ -368,6 +344,7 @@ export type Query = {
   getAllProducts: PaginatedProductsType;
   getCategoryById: Category;
   getProductById: Product;
+  validateToken: Response;
 };
 
 export type QueryGetAllCategoriesArgs = {
@@ -378,7 +355,6 @@ export type QueryGetAllCategoriesArgs = {
   parentId?: InputMaybe<Scalars['ID']['input']>;
   sortBy?: InputMaybe<SortBy>;
   sortOrder?: InputMaybe<SortOrder>;
-  tenantId: Scalars['ID']['input'];
 };
 
 export type QueryGetAllProductsArgs = {
@@ -395,7 +371,6 @@ export type QueryGetAllProductsArgs = {
 
 export type QueryGetCategoryByIdArgs = {
   id: Scalars['ID']['input'];
-  tenantId: Scalars['ID']['input'];
 };
 
 export type QueryGetProductByIdArgs = {
@@ -403,10 +378,10 @@ export type QueryGetProductByIdArgs = {
   tenantId: Scalars['String']['input'];
 };
 
-export type RegisterAuthInput = {
-  accountType: AccountTypeEnum;
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
+export type Response = {
+  __typename?: 'Response';
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
 };
 
 export enum SortBy {
@@ -558,21 +533,21 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = {
   __typename?: 'Mutation';
-  login: {
-    __typename?: 'LoginResponse';
-    accessToken: string;
-    refreshToken: string;
-    userId: string;
-  };
+  login: { __typename?: 'Response'; success: boolean; message: string };
 };
 
-export type LogoutMutationVariables = Exact<{
-  token: Scalars['String']['input'];
-}>;
+export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
 
 export type LogoutMutation = {
   __typename?: 'Mutation';
-  logout: { __typename?: 'LogoutResponse'; success: boolean };
+  logout: { __typename?: 'Response'; success: boolean; message: string };
+};
+
+export type ValidateTokenQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ValidateTokenQuery = {
+  __typename?: 'Query';
+  validateToken: { __typename?: 'Response'; success: boolean; message: string };
 };
 
 export type CreateCategoryMutationVariables = Exact<{
@@ -586,7 +561,6 @@ export type CreateCategoryMutation = {
     name: string;
     description: string;
     cover: string;
-    tenantId: string;
     updatedAt: any;
     createdAt: any;
     subCategories: Array<{
@@ -595,7 +569,6 @@ export type CreateCategoryMutation = {
       createdAt: any;
       description: string;
       name: string;
-      tenantId: string;
       updatedAt: any;
       subCategories: Array<{
         __typename?: 'Category';
@@ -603,7 +576,6 @@ export type CreateCategoryMutation = {
         createdAt: any;
         description: string;
         name: string;
-        tenantId: string;
         updatedAt: any;
       }>;
     }>;
@@ -612,7 +584,6 @@ export type CreateCategoryMutation = {
 
 export type UpdateCategoryMutationVariables = Exact<{
   id: Scalars['ID']['input'];
-  tenantId: Scalars['ID']['input'];
   input: UpdateCategoryInput;
 }>;
 
@@ -635,7 +606,6 @@ export type UpdateCategoryMutation = {
 
 export type DeleteMutationVariables = Exact<{
   id: Scalars['ID']['input'];
-  tenantId: Scalars['ID']['input'];
 }>;
 
 export type DeleteMutation = {
@@ -649,7 +619,6 @@ export type DeleteMutation = {
 
 export type FindByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
-  tenantId: Scalars['ID']['input'];
 }>;
 
 export type FindByIdQuery = {
@@ -659,7 +628,6 @@ export type FindByIdQuery = {
     name: string;
     description: string;
     cover: string;
-    tenantId: string;
     updatedAt: any;
     createdAt: any;
     subCategories: Array<{
@@ -668,7 +636,6 @@ export type FindByIdQuery = {
       description: string;
       cover: string;
       createdAt: any;
-      tenantId: string;
       updatedAt: any;
       subCategories: Array<{
         __typename?: 'Category';
@@ -676,7 +643,6 @@ export type FindByIdQuery = {
         description: string;
         cover: string;
         createdAt: any;
-        tenantId: string;
         updatedAt: any;
         subCategories: Array<{
           __typename?: 'Category';
@@ -684,7 +650,6 @@ export type FindByIdQuery = {
           createdAt: any;
           description: string;
           name: string;
-          tenantId: string;
           updatedAt: any;
         }>;
       }>;
@@ -693,7 +658,6 @@ export type FindByIdQuery = {
 };
 
 export type FindAllQueryVariables = Exact<{
-  tenantId: Scalars['ID']['input'];
   page?: InputMaybe<Scalars['Int']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -713,7 +677,6 @@ export type FindAllQuery = {
       name: string;
       description: string;
       cover: string;
-      tenantId: string;
       updatedAt: any;
       createdAt: any;
       subCategories: Array<{
@@ -722,7 +685,6 @@ export type FindAllQuery = {
         description: string;
         cover: string;
         createdAt: any;
-        tenantId: string;
         updatedAt: any;
         subCategories: Array<{
           __typename?: 'Category';
@@ -730,7 +692,6 @@ export type FindAllQuery = {
           description: string;
           cover: string;
           createdAt: any;
-          tenantId: string;
           updatedAt: any;
           subCategories: Array<{
             __typename?: 'Category';
@@ -738,7 +699,6 @@ export type FindAllQuery = {
             createdAt: any;
             description: string;
             name: string;
-            tenantId: string;
             updatedAt: any;
           }>;
         }>;
@@ -1319,9 +1279,8 @@ export const LoginDocument = gql`
     login(
       input: { email: $email, password: $password, accountType: $accountType }
     ) {
-      accessToken
-      refreshToken
-      userId
+      success
+      message
     }
   }
 `;
@@ -1368,9 +1327,10 @@ export type LoginMutationOptions = Apollo.BaseMutationOptions<
   LoginMutationVariables
 >;
 export const LogoutDocument = gql`
-  mutation logout($token: String!) {
-    logout(input: { token: $token }) {
+  mutation logout {
+    logout {
       success
+      message
     }
   }
 `;
@@ -1392,7 +1352,6 @@ export type LogoutMutationFn = Apollo.MutationFunction<
  * @example
  * const [logoutMutation, { data, loading, error }] = useLogoutMutation({
  *   variables: {
- *      token: // value for 'token'
  *   },
  * });
  */
@@ -1414,13 +1373,90 @@ export type LogoutMutationOptions = Apollo.BaseMutationOptions<
   LogoutMutation,
   LogoutMutationVariables
 >;
+export const ValidateTokenDocument = gql`
+  query validateToken {
+    validateToken {
+      success
+      message
+    }
+  }
+`;
+
+/**
+ * __useValidateTokenQuery__
+ *
+ * To run a query within a React component, call `useValidateTokenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useValidateTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useValidateTokenQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useValidateTokenQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ValidateTokenQuery,
+    ValidateTokenQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ValidateTokenQuery, ValidateTokenQueryVariables>(
+    ValidateTokenDocument,
+    options,
+  );
+}
+export function useValidateTokenLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ValidateTokenQuery,
+    ValidateTokenQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ValidateTokenQuery, ValidateTokenQueryVariables>(
+    ValidateTokenDocument,
+    options,
+  );
+}
+export function useValidateTokenSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        ValidateTokenQuery,
+        ValidateTokenQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    ValidateTokenQuery,
+    ValidateTokenQueryVariables
+  >(ValidateTokenDocument, options);
+}
+export type ValidateTokenQueryHookResult = ReturnType<
+  typeof useValidateTokenQuery
+>;
+export type ValidateTokenLazyQueryHookResult = ReturnType<
+  typeof useValidateTokenLazyQuery
+>;
+export type ValidateTokenSuspenseQueryHookResult = ReturnType<
+  typeof useValidateTokenSuspenseQuery
+>;
+export type ValidateTokenQueryResult = Apollo.QueryResult<
+  ValidateTokenQuery,
+  ValidateTokenQueryVariables
+>;
 export const CreateCategoryDocument = gql`
   mutation createCategory($input: CreateCategoryInput!) {
     createCategory(input: $input) {
       name
       description
       cover
-      tenantId
       updatedAt
       createdAt
       subCategories {
@@ -1433,10 +1469,8 @@ export const CreateCategoryDocument = gql`
           createdAt
           description
           name
-          tenantId
           updatedAt
         }
-        tenantId
         updatedAt
       }
     }
@@ -1486,12 +1520,8 @@ export type CreateCategoryMutationOptions = Apollo.BaseMutationOptions<
   CreateCategoryMutationVariables
 >;
 export const UpdateCategoryDocument = gql`
-  mutation updateCategory(
-    $id: ID!
-    $tenantId: ID!
-    $input: UpdateCategoryInput!
-  ) {
-    updateCategory(id: $id, tenantId: $tenantId, input: $input) {
+  mutation updateCategory($id: ID!, $input: UpdateCategoryInput!) {
+    updateCategory(id: $id, input: $input) {
       name
       description
       cover
@@ -1523,7 +1553,6 @@ export type UpdateCategoryMutationFn = Apollo.MutationFunction<
  * const [updateCategoryMutation, { data, loading, error }] = useUpdateCategoryMutation({
  *   variables: {
  *      id: // value for 'id'
- *      tenantId: // value for 'tenantId'
  *      input: // value for 'input'
  *   },
  * });
@@ -1550,8 +1579,8 @@ export type UpdateCategoryMutationOptions = Apollo.BaseMutationOptions<
   UpdateCategoryMutationVariables
 >;
 export const DeleteDocument = gql`
-  mutation delete($id: ID!, $tenantId: ID!) {
-    deleteCategory(id: $id, tenantId: $tenantId) {
+  mutation delete($id: ID!) {
+    deleteCategory(id: $id) {
       name
       description
     }
@@ -1576,7 +1605,6 @@ export type DeleteMutationFn = Apollo.MutationFunction<
  * const [deleteMutation, { data, loading, error }] = useDeleteMutation({
  *   variables: {
  *      id: // value for 'id'
- *      tenantId: // value for 'tenantId'
  *   },
  * });
  */
@@ -1599,12 +1627,11 @@ export type DeleteMutationOptions = Apollo.BaseMutationOptions<
   DeleteMutationVariables
 >;
 export const FindByIdDocument = gql`
-  query findById($id: ID!, $tenantId: ID!) {
-    getCategoryById(id: $id, tenantId: $tenantId) {
+  query findById($id: ID!) {
+    getCategoryById(id: $id) {
       name
       description
       cover
-      tenantId
       updatedAt
       createdAt
       subCategories {
@@ -1622,13 +1649,10 @@ export const FindByIdDocument = gql`
             createdAt
             description
             name
-            tenantId
             updatedAt
           }
-          tenantId
           updatedAt
         }
-        tenantId
         updatedAt
       }
     }
@@ -1648,7 +1672,6 @@ export const FindByIdDocument = gql`
  * const { data, loading, error } = useFindByIdQuery({
  *   variables: {
  *      id: // value for 'id'
- *      tenantId: // value for 'tenantId'
  *   },
  * });
  */
@@ -1701,7 +1724,6 @@ export type FindByIdQueryResult = Apollo.QueryResult<
 >;
 export const FindAllDocument = gql`
   query findAll(
-    $tenantId: ID!
     $page: Int = 1
     $limit: Int = 25
     $name: String = ""
@@ -1710,7 +1732,6 @@ export const FindAllDocument = gql`
     $sortOrder: SortOrder = DESC
   ) {
     getAllCategories(
-      tenantId: $tenantId
       page: $page
       limit: $limit
       name: $name
@@ -1722,7 +1743,6 @@ export const FindAllDocument = gql`
         name
         description
         cover
-        tenantId
         updatedAt
         createdAt
         subCategories {
@@ -1740,13 +1760,10 @@ export const FindAllDocument = gql`
               createdAt
               description
               name
-              tenantId
               updatedAt
             }
-            tenantId
             updatedAt
           }
-          tenantId
           updatedAt
         }
       }
@@ -1768,7 +1785,6 @@ export const FindAllDocument = gql`
  * @example
  * const { data, loading, error } = useFindAllQuery({
  *   variables: {
- *      tenantId: // value for 'tenantId'
  *      page: // value for 'page'
  *      limit: // value for 'limit'
  *      name: // value for 'name'
@@ -1779,8 +1795,7 @@ export const FindAllDocument = gql`
  * });
  */
 export function useFindAllQuery(
-  baseOptions: Apollo.QueryHookOptions<FindAllQuery, FindAllQueryVariables> &
-    ({ variables: FindAllQueryVariables; skip?: boolean } | { skip: boolean }),
+  baseOptions?: Apollo.QueryHookOptions<FindAllQuery, FindAllQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<FindAllQuery, FindAllQueryVariables>(

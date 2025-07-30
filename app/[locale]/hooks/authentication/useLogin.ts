@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl';
+import { useRouter } from '@i18n/navigation';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,6 +9,7 @@ import type { LoginMutationVariables } from '@graphql/generated';
 
 export const useLogin = (accountType: AccountTypeEnum) => {
   const t = useTranslations('Login');
+  const router = useRouter();
 
   // Schema validation based on backend value objects
   const loginFormSchema = z.object({
@@ -31,16 +33,13 @@ export const useLogin = (accountType: AccountTypeEnum) => {
   // Use the generated mutation hook
   const [loginMutation, { data, error, loading }] = useLoginMutation({
     onCompleted: (data) => {
-      // Store token in sessionStorage
-      sessionStorage.setItem('accessToken', data.login.accessToken);
-      sessionStorage.setItem('userId', data.login.userId);
+      if (data.login.success === true) {
+        toast.success(t('loginSuccessful'), {
+          description: t('loginSuccessfulDescription'),
+        });
 
-      toast.success(t('loginSuccessful'), {
-        description: t('loginSuccessfulDescription'),
-      });
-
-      // Redirect to dashboard
-      window.location.href = '/dashboard';
+        router.push('/dashboard');
+      }
     },
     onError: (error) => {
       // Handle GraphQL errors

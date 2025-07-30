@@ -1,11 +1,14 @@
 import { Card, CardContent, CardHeader } from '@shadcn/ui/card';
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from '@shadcn/ui/chart';
+import { ChartContainer } from '@shadcn/ui/chart';
 import { useTranslations } from 'next-intl';
-import { BarChart, Bar, XAxis, YAxis } from 'recharts';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
 
 const data = [
   { rating: '1', count: 2 },
@@ -38,16 +41,18 @@ export default function CustomerSatisfaction() {
         </CardHeader>
         <CardContent className="px-2 sm:px-6">
           <ChartContainer config={chartConfig} className="h-48 w-full">
-            <BarChart data={data} margin={{ left: -25 }}>
-              <XAxis dataKey="rating" />
-              <YAxis allowDecimals={false} />
-              <Bar
-                dataKey="count"
-                fill="var(--color-count)"
-                radius={[6, 6, 0, 0]}
-              />
-              <ChartTooltip content={<ChartTooltipContent />} />
-            </BarChart>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={data} margin={{ left: -25 }}>
+                <XAxis dataKey="rating" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Bar
+                  dataKey="count"
+                  fill="var(--color-count)"
+                  radius={[6, 6, 0, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
           </ChartContainer>
         </CardContent>
       </Card>
