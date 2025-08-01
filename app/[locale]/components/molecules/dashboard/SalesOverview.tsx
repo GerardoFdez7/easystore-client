@@ -93,7 +93,7 @@ export default function SalesOverview() {
         {t('salesOverview')}
       </h1>
 
-      <div className="overflow-x-auto rounded-lg shadow-lg">
+      <div className="overflow-x-auto rounded-lg shadow-sm">
         <Table className="bg-card min-w-[600px]">
           <TableHeader>
             <TableRow>
