@@ -1,17 +1,11 @@
 import HeaderDashboard from '@organisms/shared/HeaderDashboard';
-import SidebarLayout from '@organisms/shared/SidebarLayout';
-import UnderConstructionTemplate from '@templates/UnderConstruction';
-import { useTranslations } from 'next-intl';
+import MainProducts from '@organisms/products/MainProducts';
 
 export default function ProductsTemplate() {
-  const t = useTranslations('Dashboard');
-
   return (
-    <>
+    <div className="bg-background flex min-h-screen flex-col">
       <HeaderDashboard />
-      <SidebarLayout title={t('products')}>
-        <UnderConstructionTemplate />
-      </SidebarLayout>
-    </>
+      <MainProducts />
+    </div>
   );
 }
