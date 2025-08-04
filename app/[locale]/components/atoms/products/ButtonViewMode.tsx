@@ -11,7 +11,7 @@ export default function ButtonViewMode({ onViewModeToggle }: ButtonViewProps) {
       onClick={onViewModeToggle}
       className="h-16 w-16"
     >
-      <Grid3X3 className="text-foreground size-6" />
+      <Grid3X3 className="text-foreground size-5 sm:size-6" />
     </Button>
   );
 }
