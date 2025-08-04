@@ -5,7 +5,7 @@ export function getClient() {
     cache: new InMemoryCache(),
     link: new HttpLink({
       uri: process.env.NEXT_PUBLIC_GRAPHQL_URI,
-      credentials: 'omit',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },

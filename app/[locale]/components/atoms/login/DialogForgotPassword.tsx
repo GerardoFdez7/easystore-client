@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   Dialog,
   DialogContent,
@@ -22,6 +23,7 @@ export default function DialogForgotPassword({
   const [email, setEmail] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const { handleForgotPassword, isLoading, error } = useForgotPassword();
+  const t = useTranslations('ForgotPassword');
 
   // Reset email when dialog opens
   useEffect(() => {
@@ -43,7 +45,7 @@ export default function DialogForgotPassword({
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Forgot Password</DialogTitle>
+          <DialogTitle>{t('title')}</DialogTitle>
         </DialogHeader>
         <form
           onSubmit={(e) => {
@@ -53,8 +55,8 @@ export default function DialogForgotPassword({
         >
           <Input
             type="email"
-            label="Email"
-            placeholder="ejemplo@correo.com"
+            label={t('email')}
+            placeholder={t('emailPlaceholder')}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -66,9 +68,9 @@ export default function DialogForgotPassword({
             size="xl"
             className="w-full"
             isLoading={isLoading}
-            loadingText="Sending..."
+            loadingText={t('sending')}
           >
-            Send Reset Link
+            {t('sendResetLink')}
           </ButtonLoadable>
         </form>
       </DialogContent>
