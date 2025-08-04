@@ -1,7 +1,7 @@
 overwrite: true
 require:
   - dotenv/config
-schema: http://localhost:3000/gql
+schema: ${NEXT_PUBLIC_GRAPHQL_URI}
 documents: 'lib/graphql/**/*.gql'
 generates:
   lib/graphql/generated.ts:
