@@ -23,7 +23,9 @@ export function FilterDropdown({
 }: FilterDropdownProps) {
   return (
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className={`${width} bg-card rounded-full`}>
+      <SelectTrigger
+        className={`${width} bg-card w-[110px] rounded-full sm:w-[160px]`}
+      >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
