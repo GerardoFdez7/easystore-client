@@ -20,6 +20,27 @@ mutation login($email: String!, $password: String!, $accountType: AccountTypeEnu
   }
 }
 
+mutation forgotPassword($email: String!, $accountType: AccountTypeEnum!) {
+  forgotPassword(input: {
+    email: $email,
+    accountType: $accountType
+  }) {
+    success
+    message
+  }
+}
+
+mutation updatePassword($email: String!, $password: String!, $accountType: AccountTypeEnum!) {
+  updatePassword(input: {
+    email: $email,
+    password: $password,
+    accountType: $accountType
+  }) {
+    success
+    message
+  }
+}
+
 mutation logout {
   logout {
     success
