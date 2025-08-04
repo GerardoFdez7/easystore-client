@@ -10,6 +10,7 @@ import {
 } from '@shadcn/ui/dialog';
 import Input from '@atoms/shared/OutsideInput';
 import ButtonLoadable from '@atoms/shared/ButtonLoadable';
+import { useForgotPassword } from '@hooks/authentication/useForgotPassword';
 
 interface DialogForgotPasswordProps {
   children: React.ReactNode;
@@ -19,8 +20,8 @@ export default function DialogForgotPassword({
   children,
 }: DialogForgotPasswordProps) {
   const [email, setEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const { handleForgotPassword, isLoading, error } = useForgotPassword();
 
   // Reset email when dialog opens
   useEffect(() => {
@@ -29,17 +30,12 @@ export default function DialogForgotPassword({
     }
   }, [isOpen]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log('Sending reset password email to:', email);
-      setIsOpen(false);
-      setEmail('');
-      setIsLoading(false);
-    }, 1000);
+    const result = await handleForgotPassword(email);
+
+    if (result.success) setIsOpen(false);
   };
 
   return (
@@ -49,7 +45,12 @@ export default function DialogForgotPassword({
         <DialogHeader>
           <DialogTitle>Forgot Password</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form
+          onSubmit={(e) => {
+            void handleSubmit(e);
+          }}
+          className="space-y-4"
+        >
           <Input
             type="email"
             label="Email"
@@ -58,6 +59,7 @@ export default function DialogForgotPassword({
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+          {error && <p className="text-sm text-red-600">{error}</p>}
           <ButtonLoadable
             type="submit"
             variant="auth"
