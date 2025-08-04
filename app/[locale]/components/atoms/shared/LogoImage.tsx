@@ -1,8 +1,4 @@
-// shared/LogoImage.tsx
-'use client';
-
 import Image, { ImageProps } from 'next/image';
-import React from 'react';
 
 type LogoImageProps = Omit<ImageProps, 'src' | 'alt'> & {
   src?: string;

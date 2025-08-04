@@ -1,21 +1,32 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from '@i18n/navigation';
 
-const Logo = () => {
-  const scrollToTop = () => {
+type LogoProps = {
+  redirectTo: string;
+};
+
+const Logo = ({ redirectTo }: LogoProps) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    // Always scroll to top first
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
+
+    // Then navigate to the specified destination
+    router.push(redirectTo);
   };
 
   return (
     <div
       className="flex cursor-pointer items-center"
-      onClick={scrollToTop}
+      onClick={handleClick}
       role="button"
-      aria-label="Scroll to top"
+      aria-label="Navigate to home or scroll to top"
     >
       <Image
         src={'/logo.webp'}
