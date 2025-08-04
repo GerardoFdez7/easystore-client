@@ -43,27 +43,56 @@ export function ProductsToolbar({
         <ButtonAddProduct />
       </div>
 
-      <div className="flex items-center gap-4">
-        <SearchBar
-          placeholder="Search products"
-          value={searchValue}
-          onChange={onSearchChange}
-        />
-        <FilterDropdown
-          placeholder="Status"
-          options={statusOptions}
-          value={statusFilter}
-          onChange={onStatusFilterChange}
-          width="w-32"
-        />
-        <FilterDropdown
-          placeholder="Category"
-          options={categoryOptions}
-          value={categoryFilter}
-          onChange={onCategoryFilterChange}
-          width="w-36"
-        />
-        <ButtonViewMode onViewModeToggle={onViewModeToggle} />
+      <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+        {/* SearchBar + Filters container (only visible on large screens) */}
+        <div className="flex flex-col gap-4 xl:flex-1 xl:flex-row xl:items-center">
+          <SearchBar
+            placeholder="Search products"
+            value={searchValue}
+            onChange={onSearchChange}
+          />
+          {/* Filters only visible on large screens within this container */}
+          <div className="hidden gap-4 xl:ml-4 xl:flex">
+            <FilterDropdown
+              placeholder="Status"
+              options={statusOptions}
+              value={statusFilter}
+              onChange={onStatusFilterChange}
+              width="w-32"
+            />
+            <FilterDropdown
+              placeholder="Category"
+              options={categoryOptions}
+              value={categoryFilter}
+              onChange={onCategoryFilterChange}
+              width="w-36"
+            />
+          </div>
+        </div>
+
+        {/* Filters and button container for small/medium screens */}
+        <div className="flex flex-row items-center justify-between gap-1 xl:justify-end">
+          {/* Filters visible only on small/medium screens */}
+          <div className="flex gap-1 sm:gap-4 xl:hidden">
+            <FilterDropdown
+              placeholder="Status"
+              options={statusOptions}
+              value={statusFilter}
+              onChange={onStatusFilterChange}
+              width="w-32"
+            />
+            <FilterDropdown
+              placeholder="Category"
+              options={categoryOptions}
+              value={categoryFilter}
+              onChange={onCategoryFilterChange}
+              width="w-36"
+            />
+          </div>
+          <div className="flex justify-end">
+            <ButtonViewMode onViewModeToggle={onViewModeToggle} />
+          </div>
+        </div>
       </div>
     </div>
   );
