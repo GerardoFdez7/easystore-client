@@ -1,10 +1,13 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 import LogoImage from '@atoms/shared/LogoImage';
 import { LanguageButton } from '@atoms/shared/ButtonLanguage';
 
 export default function HeaderResetPassword() {
+  const t = useTranslations('ResetPassword');
+
   return (
     <header className="px-4 py-6 sm:px-8 md:px-16 lg:px-32">
       <div className="absolute top-4 right-4 sm:top-6 sm:right-8 md:top-6 md:right-16">
@@ -19,10 +22,10 @@ export default function HeaderResetPassword() {
         />
         <div>
           <h1 className="text-title text-[42px] font-bold sm:mt-4">
-            Reset Password
+            {t('title')}
           </h1>
           <p className="text-text text-primary text-lg font-medium">
-            Enter your new password to update your account
+            {t('description')}
           </p>
         </div>
       </div>

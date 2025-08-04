@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 import {
   FormField,
   FormItem,
@@ -14,6 +15,7 @@ export const ResetPasswordFields: React.FC = () => {
   const { control } = useFormContext();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const t = useTranslations('ResetPassword');
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -30,7 +32,7 @@ export const ResetPasswordFields: React.FC = () => {
         name="password"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>New Password</FormLabel>
+            <FormLabel>{t('password')}</FormLabel>
             <FormControl>
               <div className="relative">
                 <Input type={showPassword ? 'text' : 'password'} {...field} />
@@ -57,7 +59,7 @@ export const ResetPasswordFields: React.FC = () => {
         name="confirmPassword"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Confirm Password</FormLabel>
+            <FormLabel>{t('confirmPassword')}</FormLabel>
             <FormControl>
               <div className="relative">
                 <Input

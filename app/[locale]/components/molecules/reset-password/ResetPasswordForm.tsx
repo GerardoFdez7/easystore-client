@@ -5,27 +5,31 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Form } from '@shadcn/ui/form';
 import ButtonLoadable from '@atoms/shared/ButtonLoadable';
 import ResetPasswordFields from '@atoms/reset-password/ResetPasswordFields';
 import { useUpdatePassword } from '@hooks/authentication/useUpdatePassword';
-
-const resetPasswordSchema = z
-  .object({
-    password: z.string().min(8, 'Password must be at least 8 characters'),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ['confirmPassword'],
-  });
-
-type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
+import { useRouter } from '@i18n/navigation';
 
 export const ResetPasswordForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const searchParams = useSearchParams();
   const { handleUpdatePassword, isLoading, error } = useUpdatePassword();
+  const t = useTranslations('ResetPassword');
+  const router = useRouter();
+
+  const resetPasswordSchema = z
+    .object({
+      password: z.string().min(8, t('passwordTooShort')),
+      confirmPassword: z.string(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t('passwordsDoNotMatch'),
+      path: ['confirmPassword'],
+    });
+
+  type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
   const form = useForm<ResetPasswordFormData>({
     resolver: zodResolver(resetPasswordSchema),
@@ -46,28 +50,17 @@ export const ResetPasswordForm: React.FC = () => {
   }, [searchParams]);
 
   const handleSubmit = async (data: ResetPasswordFormData) => {
-    if (!email) {
-      console.error('No email found in URL parameters');
-      return;
-    }
+    if (!email) return;
 
     const result = await handleUpdatePassword(email, data.password);
 
-    if (result.success) {
-      // TODO: Show success message and redirect to login
-      console.log('Password updated successfully:', result.message);
-      // Redirect to login page
-      window.location.href = '/dashboard';
-    } else {
-      // Error is handled by the hook
-      console.error('Failed to update password:', result.message);
-    }
+    if (result.success) router.push('/login');
   };
 
   if (!email) {
     return (
       <div className="text-center">
-        <p className="text-red-600">Invalid reset link. Email not found.</p>
+        <p className="text-red-600">{t('invalidResetLink')}</p>
       </div>
     );
   }
@@ -82,7 +75,8 @@ export const ResetPasswordForm: React.FC = () => {
       >
         <div className="mb-4 text-center">
           <p className="text-sm text-gray-600">
-            Updating password for: <span className="font-medium">{email}</span>
+            {t('updatingPasswordFor')}{' '}
+            <span className="font-medium">{email}</span>
           </p>
         </div>
         <ResetPasswordFields />
@@ -93,8 +87,9 @@ export const ResetPasswordForm: React.FC = () => {
           size="xl"
           className="w-full"
           isLoading={isLoading}
+          loadingText={t('updating')}
         >
-          Update Password
+          {t('updatePassword')}
         </ButtonLoadable>
       </form>
     </Form>
