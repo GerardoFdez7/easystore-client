@@ -555,6 +555,12 @@
     "completed": "Completato",
     "cancelled": "Annullato"
   },
+  "Products": {
+    "addProduct": "Aggiungi un prodotto",
+    "status": "Stato",
+    "category": "Categoria",
+    "searchProducts": "Cerca prodotti"
+  },
   "Privacy": {
     "tableOfContents": "Indice",
     "pageTitle": "Informativa sulla privacy",
