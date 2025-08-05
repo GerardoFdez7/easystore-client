@@ -4,12 +4,17 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
-import { useLoginMutation, AccountTypeEnum } from '@graphql/generated';
-import type { LoginMutationVariables } from '@graphql/generated';
+import {
+  useLoginMutation,
+  AccountTypeEnum,
+  LoginMutationVariables,
+} from '@graphql/generated';
+import { useAuth } from '@hooks/authentication/useAuth';
 
 export const useLogin = (accountType: AccountTypeEnum) => {
   const t = useTranslations('Login');
   const router = useRouter();
+  const { checkAuth } = useAuth();
 
   // Schema validation based on backend value objects
   const loginFormSchema = z.object({
@@ -37,6 +42,8 @@ export const useLogin = (accountType: AccountTypeEnum) => {
         toast.success(t('loginSuccessful'), {
           description: t('loginSuccessfulDescription'),
         });
+
+        void checkAuth();
 
         router.push('/dashboard');
       }

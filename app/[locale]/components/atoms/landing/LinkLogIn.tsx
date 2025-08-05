@@ -6,7 +6,7 @@ export default function LinkLog() {
   return (
     <Link
       href="/login/"
-      className="text-text text-2xl font-medium hover:text-gray-900"
+      className="text-title text-2xl font-medium hover:text-gray-900"
     >
       {t('login')}
     </Link>

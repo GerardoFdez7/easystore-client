@@ -27,31 +27,34 @@ export const useAuth = () => {
   const router = useRouter();
   const client = useApolloClient();
 
+  const checkAuth = async () => {
+    try {
+      const { data } = await client.query({
+        query: validateToken,
+        fetchPolicy: 'network-only', // Always check with server
+        errorPolicy: 'none', // Don't cache errors
+      });
+
+      const isAuthenticated = data?.validateToken?.success || false;
+
+      setAuthState({
+        isAuthenticated,
+        isLoading: false,
+      });
+
+      return isAuthenticated;
+    } catch (_error) {
+      setAuthState({
+        isAuthenticated: false,
+        isLoading: false,
+      });
+      return false;
+    }
+  };
+
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const { data } = await client.query({
-          query: validateToken,
-          fetchPolicy: 'network-only', // Always check with server
-          errorPolicy: 'none', // Don't cache errors
-        });
-
-        const isAuthenticated = data?.validateToken?.success || false;
-
-        setAuthState({
-          isAuthenticated,
-          isLoading: false,
-        });
-      } catch (_error) {
-        setAuthState({
-          isAuthenticated: false,
-          isLoading: false,
-        });
-      }
-    };
-
     void checkAuth();
-  }, [client]);
+  });
 
   const redirectToLogin = () => {
     router.push('/login');
@@ -60,6 +63,7 @@ export const useAuth = () => {
   return {
     ...authState,
     redirectToLogin,
+    checkAuth,
   };
 };
 
