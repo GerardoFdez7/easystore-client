@@ -24,14 +24,14 @@ export function ProductTableRow({
 }: ProductTableRowProps) {
   return (
     <TableRow className="bg-card hover:bg-hover border-b">
-      <TableCell>
+      <TableCell className="px-3">
         <Checkbox checked={isSelected} onCheckedChange={onSelect} />
       </TableCell>
       <TableCell>
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 overflow-hidden rounded-full">
+          <div className="h-10 w-10 overflow-hidden rounded-lg">
             <Image
-              src={product.image || '/placeholder.svg'}
+              src={product.image || '/default.webp'}
               alt={product.name}
               width={40}
               height={40}
