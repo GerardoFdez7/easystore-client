@@ -17,11 +17,11 @@ export default function MainDashboard() {
   const products = [
     {
       id: '1',
-      name: 'Eco-Friendly Water Bottle',
+      name: 'Phone',
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '/placeholder.svg?height=200&width=300',
+      image: '',
     },
     {
       id: '2',
@@ -29,7 +29,7 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '/placeholder.svg?height=200&width=300',
+      image: '/phone.webp',
     },
     {
       id: '3',
@@ -37,7 +37,7 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '/placeholder.svg?height=200&width=300',
+      image: '/phone.webp',
     },
     {
       id: '4',
@@ -45,7 +45,7 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '/placeholder.svg?height=200&width=300',
+      image: '/phone.webp',
     },
     {
       id: '5',
@@ -53,7 +53,7 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '/placeholder.svg?height=200&width=300',
+      image: '/phone.webp',
     },
     {
       id: '6',
@@ -61,7 +61,7 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '/placeholder.svg?height=200&width=300',
+      image: '/phone.webp',
     },
     {
       id: '7',
@@ -69,7 +69,7 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '/placeholder.svg?height=200&width=300',
+      image: '/phone.webp',
     },
   ];
 
