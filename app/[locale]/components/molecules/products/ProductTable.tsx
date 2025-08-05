@@ -35,15 +35,15 @@ export function ProductTable({
   return (
     <div className="overflow-hidden rounded-lg border shadow-lg">
       <Table>
-        <TableHeader>
+        <TableHeader className="text-[12px] sm:text-[14px]">
           <TableRow className="bg-card">
-            <TableHead className="w-12">
+            <TableHead className="w-9 px-3">
               <Checkbox
                 checked={selectedProducts.length === products.length}
                 onCheckedChange={onSelectAll}
               />
             </TableHead>
-            <TableHead className="text-foreground font-medium">
+            <TableHead className="text-foreground text-center font-medium">
               Product
             </TableHead>
             <TableHead className="text-foreground font-medium">
@@ -57,7 +57,7 @@ export function ProductTable({
             </TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="text-[12px] sm:text-[14px]">
           {products.map((product) => (
             <ProductTableRow
               key={product.id}
