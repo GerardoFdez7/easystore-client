@@ -29,7 +29,7 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '/phone.webp',
+      image: '',
     },
     {
       id: '3',
@@ -37,7 +37,7 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '/phone.webp',
+      image: '',
     },
     {
       id: '4',
@@ -45,7 +45,7 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '/phone.webp',
+      image: '',
     },
     {
       id: '5',
@@ -53,7 +53,7 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '/phone.webp',
+      image: '',
     },
     {
       id: '6',
@@ -61,7 +61,7 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '/phone.webp',
+      image: '',
     },
     {
       id: '7',
@@ -69,7 +69,7 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '/phone.webp',
+      image: '',
     },
   ];
 
