@@ -4,6 +4,7 @@ import ButtonAddProduct from '@atoms/products/ButtonAddProduct';
 import ButtonViewMode from '@atoms/products/ButtonViewMode';
 import { FilterDropdown } from '@atoms/products/FilterDropdown';
 import { SearchBar } from '@atoms/products/SearchBar';
+import { useTranslations } from 'next-intl';
 
 interface ProductsToolbarProps {
   searchValue?: string;
@@ -25,14 +26,16 @@ export function ProductsToolbar({
   onCategoryFilterChange,
   onViewModeToggle,
 }: ProductsToolbarProps) {
+  const t = useTranslations('Products');
+
   const statusOptions = [
-    { value: 'status', label: 'Status' },
+    { value: 'status', label: t('status') },
     { value: 'active', label: 'Active' },
     { value: 'inactive', label: 'Inactive' },
   ];
 
   const categoryOptions = [
-    { value: 'category', label: 'Category' },
+    { value: 'category', label: t('category') },
     { value: 'home-kitchen', label: 'Home & Kitchen' },
     { value: 'electronics', label: 'Electronics' },
   ];
@@ -47,21 +50,21 @@ export function ProductsToolbar({
         {/* SearchBar + Filters container (only visible on large screens) */}
         <div className="flex flex-col gap-4 xl:flex-1 xl:flex-row xl:items-center">
           <SearchBar
-            placeholder="Search products"
+            placeholder={t('searchProducts')}
             value={searchValue}
             onChange={onSearchChange}
           />
           {/* Filters only visible on large screens within this container */}
           <div className="hidden gap-4 xl:ml-4 xl:flex">
             <FilterDropdown
-              placeholder="Status"
+              placeholder={t('status')}
               options={statusOptions}
               value={statusFilter}
               onChange={onStatusFilterChange}
               width="w-32"
             />
             <FilterDropdown
-              placeholder="Category"
+              placeholder={t('category')}
               options={categoryOptions}
               value={categoryFilter}
               onChange={onCategoryFilterChange}
@@ -75,14 +78,14 @@ export function ProductsToolbar({
           {/* Filters visible only on small/medium screens */}
           <div className="flex gap-1 sm:gap-4 xl:hidden">
             <FilterDropdown
-              placeholder="Status"
+              placeholder={t('status')}
               options={statusOptions}
               value={statusFilter}
               onChange={onStatusFilterChange}
               width="w-32"
             />
             <FilterDropdown
-              placeholder="Category"
+              placeholder={t('category')}
               options={categoryOptions}
               value={categoryFilter}
               onChange={onCategoryFilterChange}

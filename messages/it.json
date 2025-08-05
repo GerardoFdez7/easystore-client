@@ -236,5 +236,11 @@
     "shipped": "Spedito",
     "completed": "Completato",
     "cancelled": "Annullato"
+  },
+  "Products": {
+    "addProduct": "Aggiungi un prodotto",
+    "status": "Stato",
+    "category": "Categoria",
+    "searchProducts": "Cerca prodotti"
   }
 }
