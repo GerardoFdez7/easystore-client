@@ -26,7 +26,7 @@ export function ProductCard({
       <div className="relative">
         <div className="h-48 w-full overflow-hidden">
           <Image
-            src={product.image || '/placeholder.svg'}
+            src={product.image || '/default.webp'}
             alt={product.name}
             width={300}
             height={200}
@@ -42,23 +42,25 @@ export function ProductCard({
         </div>
       </div>
       <div className="p-4">
-        <h3 className="text-title mb-3 text-lg font-medium">{product.name}</h3>
+        <h3 className="text-title mb-3 text-[16px] font-medium">
+          {product.name}
+        </h3>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-foreground text-sm">Status:</span>
-            <span className="text-foreground font-medium">
+            <span className="text-foreground text-sm font-medium">
               {product.status}
             </span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-foreground text-sm">Inventory:</span>
-            <span className="text-foreground font-medium">
+            <span className="text-foreground text-sm font-medium">
               {product.inventory}
             </span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-foreground text-sm">Category:</span>
-            <span className="text-foreground">{product.category}</span>
+            <span className="text-foreground text-sm">{product.category}</span>
           </div>
         </div>
       </div>
