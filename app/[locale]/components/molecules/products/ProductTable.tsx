@@ -10,13 +10,21 @@ import {
 } from '@shadcn/ui/table';
 import { ProductTableRow } from '@atoms/products/ProductTableRow';
 
+interface MediaItem {
+  id: string;
+  url: string;
+  position: number;
+  mediaType: 'IMAGE' | 'VIDEO';
+}
+
 interface Product {
   id: string;
   name: string;
   status: string;
   inventory: number;
   category: string;
-  image: string;
+  cover: string;
+  media?: MediaItem[];
 }
 
 interface ProductTableProps {
