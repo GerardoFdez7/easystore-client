@@ -1,6 +1,11 @@
-'use client';
-
 import { ProductCard } from '@atoms/products/ProductCard';
+
+interface MediaItem {
+  id: string;
+  url: string;
+  position: number;
+  mediaType: 'IMAGE' | 'VIDEO';
+}
 
 interface Product {
   id: string;
@@ -8,7 +13,8 @@ interface Product {
   status: string;
   inventory: number;
   category: string;
-  image: string;
+  cover: string;
+  media?: MediaItem[];
 }
 
 interface ProductGridProps {

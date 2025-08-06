@@ -1,4 +1,4 @@
-import { CarouselItem } from '@shadcn/ui/carousel';
+import { CarouselItem } from '@shadcn/ui/carousel-landing';
 import { ReactNode } from 'react';
 
 interface ItemFeatureProps {

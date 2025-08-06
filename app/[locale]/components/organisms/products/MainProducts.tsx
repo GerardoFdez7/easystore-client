@@ -21,7 +21,21 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '',
+      cover: '/phone.webp',
+      media: [
+        {
+          id: 'media_001',
+          url: '/default.webp',
+          position: 1,
+          mediaType: 'IMAGE' as const,
+        },
+        {
+          id: 'media_002',
+          url: '/phone.webp',
+          position: 2,
+          mediaType: 'IMAGE' as const,
+        },
+      ],
     },
     {
       id: '2',
@@ -29,7 +43,15 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '',
+      cover: '/default.webp',
+      media: [
+        {
+          id: 'media_003',
+          url: '/phone.webp',
+          position: 1,
+          mediaType: 'IMAGE' as const,
+        },
+      ],
     },
     {
       id: '3',
@@ -37,7 +59,27 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '',
+      cover: '/phone.webp',
+      media: [
+        {
+          id: 'media_004',
+          url: '/default.webp',
+          position: 1,
+          mediaType: 'IMAGE' as const,
+        },
+        {
+          id: 'media_005',
+          url: '/phone.webp',
+          position: 2,
+          mediaType: 'IMAGE' as const,
+        },
+        {
+          id: 'media_006',
+          url: '/default.webp',
+          position: 3,
+          mediaType: 'IMAGE' as const,
+        },
+      ],
     },
     {
       id: '4',
@@ -45,7 +87,8 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '',
+      cover: '/default.webp',
+      // No media - only cover will be shown
     },
     {
       id: '5',
@@ -53,7 +96,21 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '',
+      cover: '/phone.webp',
+      media: [
+        {
+          id: 'media_007',
+          url: '/default.webp',
+          position: 1,
+          mediaType: 'IMAGE' as const,
+        },
+        {
+          id: 'media_008',
+          url: '/phone.webp',
+          position: 2,
+          mediaType: 'IMAGE' as const,
+        },
+      ],
     },
     {
       id: '6',
@@ -61,7 +118,21 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '',
+      cover: '/default.webp',
+      media: [
+        {
+          id: 'media_009',
+          url: '/phone.webp',
+          position: 1,
+          mediaType: 'IMAGE' as const,
+        },
+        {
+          id: 'media_010',
+          url: 'https://example.com/video.mp4',
+          position: 2,
+          mediaType: 'VIDEO' as const, // This will be filtered out
+        },
+      ],
     },
     {
       id: '7',
@@ -69,7 +140,8 @@ export default function MainDashboard() {
       status: 'Active',
       inventory: 150,
       category: 'Home & Kitchen',
-      image: '',
+      cover: '/phone.webp',
+      // No media - only cover will be shown
     },
   ];
 
