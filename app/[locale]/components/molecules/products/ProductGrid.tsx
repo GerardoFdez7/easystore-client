@@ -19,8 +19,8 @@ interface Product {
 
 interface ProductGridProps {
   products: Product[];
-  selectedProducts: string[];
-  onSelectProduct: (productId: string, checked: boolean) => void;
+  selectedProducts?: string[];
+  onSelectProduct?: (productId: string, checked: boolean) => void;
 }
 
 export function ProductGrid({
@@ -34,8 +34,8 @@ export function ProductGrid({
         <ProductCard
           key={product.id}
           product={product}
-          isSelected={selectedProducts.includes(product.id)}
-          onSelect={(checked) => onSelectProduct(product.id, checked)}
+          isSelected={selectedProducts?.includes(product.id)}
+          onSelect={(checked) => onSelectProduct?.(product.id, checked)}
         />
       ))}
     </div>
