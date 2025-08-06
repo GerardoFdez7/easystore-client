@@ -2,13 +2,21 @@ import { Checkbox } from '@shadcn/ui/checkbox';
 import { TableCell, TableRow } from '@shadcn/ui/table';
 import Image from 'next/image';
 
+interface MediaItem {
+  id: string;
+  url: string;
+  position: number;
+  mediaType: 'IMAGE' | 'VIDEO';
+}
+
 interface Product {
   id: string;
   name: string;
   status: string;
   inventory: number;
   category: string;
-  image: string;
+  cover: string; // Mandatory cover image
+  media?: MediaItem[]; // Optional media array
 }
 
 interface ProductTableRowProps {
@@ -31,25 +39,19 @@ export function ProductTableRow({
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 overflow-hidden rounded-lg">
             <Image
-              src={product.image || '/default.webp'}
+              src={product.cover}
               alt={product.name}
               width={40}
               height={40}
               className="h-full w-full object-cover"
             />
           </div>
-          <span className="text-foreground">{product.name}</span>
+          <span className="text-foreground font-medium">{product.name}</span>
         </div>
       </TableCell>
-      <TableCell>
-        <span className="text-foreground">{product.status}</span>
-      </TableCell>
-      <TableCell>
-        <span className="text-foreground">{product.inventory}</span>
-      </TableCell>
-      <TableCell>
-        <span className="text-foreground">{product.category}</span>
-      </TableCell>
+      <TableCell className="text-foreground">{product.status}</TableCell>
+      <TableCell className="text-foreground">{product.inventory}</TableCell>
+      <TableCell className="text-foreground">{product.category}</TableCell>
     </TableRow>
   );
 }
