@@ -19,6 +19,7 @@ type CarouselProps = {
   plugins?: CarouselPlugin;
   orientation?: 'horizontal' | 'vertical';
   setApi?: (api: CarouselApi) => void;
+  startAtEnd?: boolean;
 };
 
 type CarouselContextProps = {
@@ -47,6 +48,7 @@ function Carousel({
   opts,
   setApi,
   plugins,
+  startAtEnd,
   className,
   children,
   ...props
@@ -60,6 +62,10 @@ function Carousel({
   );
   const [canScrollPrev, setCanScrollPrev] = React.useState(false);
   const [canScrollNext, setCanScrollNext] = React.useState(false);
+  const [isUserInteracting, setIsUserInteracting] = React.useState(false);
+  const [scrollDirection, setScrollDirection] = React.useState<
+    'forward' | 'backward'
+  >('forward');
 
   const onSelect = React.useCallback((api: CarouselApi) => {
     if (!api) return;
@@ -95,6 +101,17 @@ function Carousel({
 
   React.useEffect(() => {
     if (!api) return;
+
+    if (startAtEnd && window.innerWidth <= 1024) {
+      const lastIndex = api.scrollSnapList().length - 1;
+      api.scrollTo(lastIndex);
+    }
+
+    if (setApi) setApi(api);
+  }, [api, startAtEnd, setApi]);
+
+  React.useEffect(() => {
+    if (!api) return;
     onSelect(api);
     api.on('reInit', onSelect);
     api.on('select', onSelect);
@@ -103,6 +120,51 @@ function Carousel({
       api?.off('select', onSelect);
     };
   }, [api, onSelect]);
+
+  React.useEffect(() => {
+    if (!api) return;
+
+    const onPointerDown = () => setIsUserInteracting(true);
+    const onPointerUp = () => setIsUserInteracting(false);
+
+    const container = api.containerNode();
+    container?.addEventListener('pointerdown', onPointerDown);
+    container?.addEventListener('pointerup', onPointerUp);
+
+    return () => {
+      container?.removeEventListener('pointerdown', onPointerDown);
+      container?.removeEventListener('pointerup', onPointerUp);
+    };
+  }, [api]);
+
+  React.useEffect(() => {
+    if (!api) return;
+
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 1024;
+    if (!isMobile) return;
+
+    const interval = setInterval(() => {
+      if (!api || isUserInteracting) return;
+
+      if (scrollDirection === 'forward') {
+        if (api.canScrollNext()) {
+          api.scrollNext();
+        } else {
+          setScrollDirection('backward');
+          api.scrollPrev();
+        }
+      } else {
+        if (api.canScrollPrev()) {
+          api.scrollPrev();
+        } else {
+          setScrollDirection('forward');
+          api.scrollNext();
+        }
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [api, isUserInteracting, scrollDirection]);
 
   return (
     <CarouselContext.Provider
@@ -144,7 +206,9 @@ function CarouselContent({ className, ...props }: React.ComponentProps<'div'>) {
       <div
         className={cn(
           'flex',
-          orientation === 'horizontal' ? '-ml-4' : '-mt-4 flex-col',
+          orientation === 'horizontal'
+            ? 'flex justify-center-safe gap-4 xl:justify-center'
+            : '-mt-4 flex-col',
           className,
         )}
         {...props}
@@ -162,8 +226,8 @@ function CarouselItem({ className, ...props }: React.ComponentProps<'div'>) {
       aria-roledescription="slide"
       data-slot="carousel-item"
       className={cn(
-        'min-w-0 shrink-0 grow-0 basis-full',
-        orientation === 'horizontal' ? 'pl-4' : 'pt-4',
+        'min-w-0 shrink-0 grow-0 basis-full select-none hover:cursor-pointer',
+        orientation === 'horizontal' ? 'pl-1' : 'pt-4',
         className,
       )}
       {...props}
