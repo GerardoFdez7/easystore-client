@@ -1,0 +1,61 @@
+query findWarehouseById($id: ID!) {
+  getWarehouseById(id: $id) {
+    id
+    name
+    addressId
+    createdAt
+    updatedAt
+    stockPerWarehouses {
+      id
+      warehouseId
+      qtyAvailable
+      qtyReserved
+      lotNumber
+      serialNumbers
+      productLocation
+      estimatedReplenishmentDate
+    }
+  }
+}
+
+query findAllWarehouses(
+  $page: Int = 1
+  $limit: Int = 10
+  $name: String
+  $addressId: ID
+  $variantId: ID
+  $lowStockThreshold: Int
+  $sortBy: SortBy
+  $sortOrder: SortOrder
+) {
+  getAllWarehouses(
+    page: $page
+    limit: $limit
+    name: $name
+    addressId: $addressId
+    variantId: $variantId
+    lowStockThreshold: $lowStockThreshold
+    sortBy: $sortBy
+    sortOrder: $sortOrder
+  ) {
+    warehouses {
+      id
+      name
+      addressId
+      createdAt
+      updatedAt
+      stockPerWarehouses {
+        id
+        warehouseId
+        qtyAvailable
+        qtyReserved
+        lotNumber
+        serialNumbers
+        productLocation
+        estimatedReplenishmentDate
+      }
+    }
+    total
+    hasMore
+  }
+}

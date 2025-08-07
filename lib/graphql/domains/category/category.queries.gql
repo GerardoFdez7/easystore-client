@@ -1,4 +1,4 @@
-query findById($id: ID!) {
+query findCategoryById($id: ID!) {
   getCategoryById(id: $id) {
     name
     description
@@ -29,7 +29,8 @@ query findById($id: ID!) {
   }
 }
 
-query findAll(
+query findAllCategories(
+
   $page: Int = 1
   $limit: Int = 25
   $name: String = ""

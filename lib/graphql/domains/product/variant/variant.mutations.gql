@@ -14,15 +14,9 @@ mutation addVariantToProduct($input: CreateVariantInput!) {
 mutation updateVariantInProduct(
   $id: String!
   $productId: String!
-  $tenantId: String!
   $input: UpdateVariantInput!
 ) {
-  updateVariant(
-    id: $id
-    productId: $productId
-    tenantId: $tenantId
-    input: $input
-  ) {
+  updateVariant(id: $id, productId: $productId, input: $input) {
     variants {
       attributes {
         key
@@ -63,36 +57,24 @@ mutation updateVariantInProduct(
   }
 }
 
-mutation archiveVariantOfProduct(
-  $id: String!
-  $productId: String!
-  $tenantId: String!
-) {
-  archiveVariant(id: $id, productId: $productId, tenantId: $tenantId) {
+mutation archiveVariantOfProduct($id: String!, $productId: String!) {
+  archiveVariant(id: $id, productId: $productId) {
     variants {
       isArchived
     }
   }
 }
 
-mutation restoreVariantOfProduct(
-  $id: String!
-  $productId: String!
-  $tenantId: String!
-) {
-  restoreVariant(id: $id, productId: $productId, tenantId: $tenantId) {
+mutation restoreVariantOfProduct($id: String!, $productId: String!) {
+  restoreVariant(id: $id, productId: $productId) {
     variants {
       isArchived
     }
   }
 }
 
-mutation removeVariantfromProduct(
-  $id: String!
-  $productId: String!
-  $tenantId: String!
-) {
-  removeVariant(id: $id, productId: $productId, tenantId: $tenantId) {
+mutation removeVariantfromProduct($id: String!, $productId: String!) {
+  removeVariant(id: $id, productId: $productId) {
     variants {
       sku
     }

@@ -1,0 +1,87 @@
+mutation addStockToWarehouse(
+  $warehouseId: ID!
+  $variantId: ID!
+  $input: AddStockToWarehouseInput!
+  $reason: String
+) {
+  addStockToWarehouse(
+    warehouseId: $warehouseId
+    variantId: $variantId
+    input: $input
+    reason: $reason
+  ) {
+    id
+    name
+    addressId
+    createdAt
+    updatedAt
+    stockPerWarehouses {
+      id
+      warehouseId
+      qtyAvailable
+      qtyReserved
+      lotNumber
+      serialNumbers
+      productLocation
+      estimatedReplenishmentDate
+    }
+  }
+}
+
+mutation updateStockInWarehouse(
+  $warehouseId: ID!
+  $stockId: ID!
+  $input: UpdateStockInWarehouseInput!
+  $reason: String
+) {
+  updateStockInWarehouse(
+    warehouseId: $warehouseId
+    stockId: $stockId
+    input: $input
+    reason: $reason
+  ) {
+    id
+    name
+    addressId
+    createdAt
+    updatedAt
+    stockPerWarehouses {
+      id
+      warehouseId
+      qtyAvailable
+      qtyReserved
+      lotNumber
+      serialNumbers
+      productLocation
+      estimatedReplenishmentDate
+    }
+  }
+}
+
+mutation removeStockFromWarehouse(
+  $warehouseId: ID!
+  $stockId: ID!
+  $reason: String
+) {
+  removeStockFromWarehouse(
+    warehouseId: $warehouseId
+    stockId: $stockId
+    reason: $reason
+  ) {
+    id
+    name
+    addressId
+    createdAt
+    updatedAt
+    stockPerWarehouses {
+      id
+      warehouseId
+      qtyAvailable
+      qtyReserved
+      lotNumber
+      serialNumbers
+      productLocation
+      estimatedReplenishmentDate
+    }
+  }
+}

@@ -1,5 +1,5 @@
-query getId($tenantId: String!, $id: String!) {
-  getProductById(tenantId: $tenantId, id: $id) {
+query findProductById($id: String!) {
+  getProductById(id: $id) {
     name
     shortDescription
     longDescription
@@ -58,14 +58,12 @@ query getId($tenantId: String!, $id: String!) {
     }
     updatedAt
     createdAt
-    tenantId
     productType
     isArchived
   }
 }
 
-query getAll(
-  $tenantId: String!
+query findAllProducts(
   $page: Float = 1
   $limit: Float = 10
   $categoriesIds: [Int!] = []
@@ -76,7 +74,6 @@ query getAll(
   $name: String = ""
 ) {
   getAllProducts(
-    tenantId: $tenantId
     page: $page
     limit: $limit
     categoriesIds: $categoriesIds
@@ -111,7 +108,6 @@ query getAll(
         recycledPercentage
       }
       tags
-      tenantId
       updatedAt
       variants {
         attributes {

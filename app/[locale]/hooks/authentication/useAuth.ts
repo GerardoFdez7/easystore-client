@@ -2,17 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from '@i18n/navigation';
-import { useApolloClient } from '@apollo/client';
-import { gql } from '@apollo/client';
-
-const validateToken = gql`
-  query validateToken {
-    validateToken {
-      success
-      message
-    }
-  }
-`;
+import { useValidateTokenQuery } from '@graphql/generated';
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -25,17 +15,18 @@ export const useAuth = () => {
     isLoading: true,
   });
   const router = useRouter();
-  const client = useApolloClient();
+
+  // Use the generated query hook
+  const { data, error, loading, refetch } = useValidateTokenQuery({
+    fetchPolicy: 'network-only', // Always check with server
+    errorPolicy: 'none', // Don't cache errors
+    notifyOnNetworkStatusChange: true,
+  });
 
   const checkAuth = async () => {
     try {
-      const { data } = await client.query({
-        query: validateToken,
-        fetchPolicy: 'network-only', // Always check with server
-        errorPolicy: 'none', // Don't cache errors
-      });
-
-      const isAuthenticated = data?.validateToken?.success || false;
+      const result = await refetch();
+      const isAuthenticated = result.data?.validateToken?.success || false;
 
       setAuthState({
         isAuthenticated,
@@ -53,8 +44,14 @@ export const useAuth = () => {
   };
 
   useEffect(() => {
-    void checkAuth();
-  });
+    if (!loading) {
+      const isAuthenticated = data?.validateToken?.success || false;
+      setAuthState({
+        isAuthenticated,
+        isLoading: false,
+      });
+    }
+  }, [data, loading, error]);
 
   const redirectToLogin = () => {
     router.push('/login');

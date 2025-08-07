@@ -8,7 +8,6 @@ mutation createProduct($input: CreateProductInput!) {
     tags
     brand
     manufacturer
-    tenantId
     variants {
       attributes {
         key
@@ -66,8 +65,8 @@ mutation createProduct($input: CreateProductInput!) {
   }
 }
 
-mutation update($id: String!, $tenantId: String!, $input: UpdateProductInput!) {
-  updateProduct(id: $id, tenantId: $tenantId, input: $input) {
+mutation update($id: String!, $input: UpdateProductInput!) {
+  updateProduct(id: $id, input: $input) {
     brand
     categories {
       categoryId
@@ -92,7 +91,6 @@ mutation update($id: String!, $tenantId: String!, $input: UpdateProductInput!) {
       recycledPercentage
     }
     tags
-    tenantId
     updatedAt
     variants {
       attributes {
@@ -134,22 +132,22 @@ mutation update($id: String!, $tenantId: String!, $input: UpdateProductInput!) {
   }
 }
 
-mutation softDelete($id: String!, $tenantId: String!) {
-  softDeleteProduct(id: $id, tenantId: $tenantId) {
+mutation softDelete($id: String!) {
+  softDeleteProduct(id: $id) {
     name
     isArchived
   }
 }
 
-mutation restore($id: String!, $tenantId: String!) {
-  restoreProduct(id: $id, tenantId: $tenantId) {
+mutation restore($id: String!) {
+  restoreProduct(id: $id) {
     name
     isArchived
   }
 }
 
-mutation hardDelete($id: String!, $tenantId: String!) {
-  hardDeleteProduct(id: $id, tenantId: $tenantId) {
+mutation hardDelete($id: String!) {
+  hardDeleteProduct(id: $id) {
     name
   }
 }

@@ -1,0 +1,27 @@
+query findAddressById($id: ID!) {
+  getAddressById(id: $id) {
+    addressLine1
+    addressLine2
+    addressType
+    city
+    countryId
+    deliveryNum
+    name
+    postalCode
+  }
+}
+
+query findAllAddresses($addressType: AddressTypeEnum) {
+  getAllAddresses(addressType: $addressType) {
+    addresses {
+      addressLine1
+      addressLine2
+      addressType
+      city
+      countryId
+      deliveryNum
+      name
+      postalCode
+    }
+  }
+}

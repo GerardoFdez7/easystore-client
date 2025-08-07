@@ -1,0 +1,35 @@
+query findAllMovements(
+  $warehouseId: ID!
+  $page: Int = 1
+  $limit: Int = 10
+  $variantId: ID
+  $createdById: ID
+  $dateFrom: DateTime
+  $dateTo: DateTime
+  $includeDeleted: Boolean = false
+  $sortBy: SortBy
+  $sortOrder: SortOrder
+) {
+  getAllStockMovements(
+    warehouseId: $warehouseId
+    page: $page
+    limit: $limit
+    variantId: $variantId
+    createdById: $createdById
+    dateFrom: $dateFrom
+    dateTo: $dateTo
+    includeDeleted: $includeDeleted
+    sortBy: $sortBy
+    sortOrder: $sortOrder
+  ) {
+    stockMovements {
+      id
+      warehouseId
+      deltaQty
+      reason
+      occurredAt
+    }
+    total
+    hasMore
+  }
+}

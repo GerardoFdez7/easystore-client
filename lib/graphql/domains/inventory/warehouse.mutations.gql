@@ -1,0 +1,59 @@
+mutation createWarehouse($input: CreateWarehouseInput!) {
+  createWarehouse(input: $input) {
+    id
+    name
+    addressId
+    createdAt
+    updatedAt
+    stockPerWarehouses {
+      id
+      warehouseId
+      qtyAvailable
+      qtyReserved
+      lotNumber
+      serialNumbers
+      productLocation
+      estimatedReplenishmentDate
+    }
+  }
+}
+
+mutation updateWarehouse($id: ID!, $input: UpdateWarehouseInput!) {
+  updateWarehouse(id: $id, input: $input) {
+    id
+    name
+    addressId
+    createdAt
+    updatedAt
+    stockPerWarehouses {
+      id
+      warehouseId
+      qtyAvailable
+      qtyReserved
+      lotNumber
+      serialNumbers
+      productLocation
+      estimatedReplenishmentDate
+    }
+  }
+}
+
+mutation deleteWarehouse($id: ID!) {
+  deleteWarehouse(id: $id) {
+    id
+    name
+    addressId
+    createdAt
+    updatedAt
+    stockPerWarehouses {
+      id
+      warehouseId
+      qtyAvailable
+      qtyReserved
+      lotNumber
+      serialNumbers
+      productLocation
+      estimatedReplenishmentDate
+    }
+  }
+}

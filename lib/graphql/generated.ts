@@ -37,6 +37,15 @@ export enum AccountTypeEnum {
   Tenant = 'TENANT',
 }
 
+export type AddStockToWarehouseInput = {
+  estimatedReplenishmentDate?: InputMaybe<Scalars['DateTime']['input']>;
+  lotNumber?: InputMaybe<Scalars['String']['input']>;
+  productLocation?: InputMaybe<Scalars['String']['input']>;
+  qtyAvailable: Scalars['Int']['input'];
+  qtyReserved?: InputMaybe<Scalars['Int']['input']>;
+  serialNumbers?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
 export type AddVariantToProductInput = {
   attributes: Array<CreateAttributeInput>;
   barcode?: InputMaybe<Scalars['String']['input']>;
@@ -53,6 +62,30 @@ export type AddVariantToProductInput = {
   variantMedia?: InputMaybe<Array<CreateMediaInput>>;
   warranties?: InputMaybe<Array<CreateWarrantyInput>>;
   weight?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type AddressType = {
+  __typename?: 'AddressType';
+  addressLine1: Scalars['String']['output'];
+  addressLine2: Scalars['String']['output'];
+  addressType: AddressTypeEnum;
+  city: Scalars['String']['output'];
+  countryId: Scalars['ID']['output'];
+  deliveryNum: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  postalCode: Scalars['String']['output'];
+};
+
+/** Types of addresses */
+export enum AddressTypeEnum {
+  Billing = 'BILLING',
+  Shipping = 'SHIPPING',
+  Warehouse = 'WAREHOUSE',
+}
+
+export type AddressesType = {
+  __typename?: 'AddressesType';
+  address: Array<AddressType>;
 };
 
 export type Attribute = {
@@ -95,6 +128,17 @@ export enum ConditionEnum {
   Refurbished = 'REFURBISHED',
   Used = 'USED',
 }
+
+export type CreateAddressInput = {
+  addressLine1: Scalars['String']['input'];
+  addressLine2?: InputMaybe<Scalars['String']['input']>;
+  addressType: AddressTypeEnum;
+  city: Scalars['String']['input'];
+  countryId: Scalars['ID']['input'];
+  deliveryNum?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  postalCode?: InputMaybe<Scalars['String']['input']>;
+};
 
 export type CreateAttributeInput = {
   key: Scalars['String']['input'];
@@ -142,7 +186,6 @@ export type CreateProductInput = {
   shortDescription: Scalars['String']['input'];
   sustainabilities?: InputMaybe<Array<CreateSustainabilityInput>>;
   tags?: InputMaybe<Array<Scalars['String']['input']>>;
-  tenantId: Scalars['ID']['input'];
   variants: Array<AddVariantToProductInput>;
 };
 
@@ -163,12 +206,16 @@ export type CreateVariantInput = {
   price: Scalars['Float']['input'];
   productId: Scalars['ID']['input'];
   sku?: InputMaybe<Scalars['String']['input']>;
-  tenantId: Scalars['ID']['input'];
   upc?: InputMaybe<Scalars['String']['input']>;
   variantCover?: InputMaybe<Scalars['String']['input']>;
   variantMedia?: InputMaybe<Array<CreateMediaInput>>;
   warranties?: InputMaybe<Array<CreateWarrantyInput>>;
   weight?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type CreateWarehouseInput = {
+  addressId: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
 };
 
 export type CreateWarrantyInput = {
@@ -206,22 +253,38 @@ export enum MediaTypeEnum {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addStockToWarehouse: Warehouse;
   addVariant: Product;
   archiveVariant: Product;
+  createAddress: AddressType;
   createCategory: Category;
   createProduct: Product;
+  createWarehouse: Warehouse;
+  deleteAddress: AddressType;
   deleteCategory: Category;
+  deleteWarehouse: Warehouse;
   hardDeleteProduct: Product;
   login: Response;
   logout: Response;
   register: AuthIdentity;
+  removeStockFromWarehouse: Warehouse;
   removeVariant: Product;
   restoreProduct: Product;
   restoreVariant: Product;
   softDeleteProduct: Product;
+  updateAddress: AddressType;
   updateCategory: Category;
   updateProduct: Product;
+  updateStockInWarehouse: Warehouse;
   updateVariant: Product;
+  updateWarehouse: Warehouse;
+};
+
+export type MutationAddStockToWarehouseArgs = {
+  input: AddStockToWarehouseInput;
+  reason?: InputMaybe<Scalars['String']['input']>;
+  variantId: Scalars['ID']['input'];
+  warehouseId: Scalars['ID']['input'];
 };
 
 export type MutationAddVariantArgs = {
@@ -231,7 +294,10 @@ export type MutationAddVariantArgs = {
 export type MutationArchiveVariantArgs = {
   id: Scalars['String']['input'];
   productId: Scalars['String']['input'];
-  tenantId: Scalars['String']['input'];
+};
+
+export type MutationCreateAddressArgs = {
+  input: CreateAddressInput;
 };
 
 export type MutationCreateCategoryArgs = {
@@ -242,13 +308,24 @@ export type MutationCreateProductArgs = {
   input: CreateProductInput;
 };
 
+export type MutationCreateWarehouseArgs = {
+  input: CreateWarehouseInput;
+};
+
+export type MutationDeleteAddressArgs = {
+  id: Scalars['ID']['input'];
+};
+
 export type MutationDeleteCategoryArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type MutationDeleteWarehouseArgs = {
   id: Scalars['ID']['input'];
 };
 
 export type MutationHardDeleteProductArgs = {
   id: Scalars['String']['input'];
-  tenantId: Scalars['String']['input'];
 };
 
 export type MutationLoginArgs = {
@@ -259,26 +336,33 @@ export type MutationRegisterArgs = {
   input: AuthenticationInput;
 };
 
+export type MutationRemoveStockFromWarehouseArgs = {
+  reason?: InputMaybe<Scalars['String']['input']>;
+  stockId: Scalars['ID']['input'];
+  warehouseId: Scalars['ID']['input'];
+};
+
 export type MutationRemoveVariantArgs = {
   id: Scalars['String']['input'];
   productId: Scalars['String']['input'];
-  tenantId: Scalars['String']['input'];
 };
 
 export type MutationRestoreProductArgs = {
   id: Scalars['String']['input'];
-  tenantId: Scalars['String']['input'];
 };
 
 export type MutationRestoreVariantArgs = {
   id: Scalars['String']['input'];
   productId: Scalars['String']['input'];
-  tenantId: Scalars['String']['input'];
 };
 
 export type MutationSoftDeleteProductArgs = {
   id: Scalars['String']['input'];
-  tenantId: Scalars['String']['input'];
+};
+
+export type MutationUpdateAddressArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateAddressInput;
 };
 
 export type MutationUpdateCategoryArgs = {
@@ -289,14 +373,24 @@ export type MutationUpdateCategoryArgs = {
 export type MutationUpdateProductArgs = {
   id: Scalars['String']['input'];
   input: UpdateProductInput;
-  tenantId: Scalars['String']['input'];
+};
+
+export type MutationUpdateStockInWarehouseArgs = {
+  input: UpdateStockInWarehouseInput;
+  reason?: InputMaybe<Scalars['String']['input']>;
+  stockId: Scalars['ID']['input'];
+  warehouseId: Scalars['ID']['input'];
 };
 
 export type MutationUpdateVariantArgs = {
   id: Scalars['String']['input'];
   input: UpdateVariantInput;
   productId: Scalars['String']['input'];
-  tenantId: Scalars['String']['input'];
+};
+
+export type MutationUpdateWarehouseArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateWarehouseInput;
 };
 
 export type PaginatedCategoriesType = {
@@ -311,6 +405,20 @@ export type PaginatedProductsType = {
   hasMore: Scalars['Boolean']['output'];
   products: Array<Product>;
   total: Scalars['Int']['output'];
+};
+
+export type PaginatedStockMovementsType = {
+  __typename?: 'PaginatedStockMovementsType';
+  hasMore: Scalars['Boolean']['output'];
+  stockMovements: Array<StockMovement>;
+  total: Scalars['Int']['output'];
+};
+
+export type PaginatedWarehousesType = {
+  __typename?: 'PaginatedWarehousesType';
+  hasMore: Scalars['Boolean']['output'];
+  total: Scalars['Int']['output'];
+  warehouses: Array<Warehouse>;
 };
 
 export type Product = {
@@ -328,7 +436,6 @@ export type Product = {
   shortDescription: Scalars['String']['output'];
   sustainabilities?: Maybe<Array<Sustainability>>;
   tags?: Maybe<Array<Scalars['String']['output']>>;
-  tenantId: Scalars['ID']['output'];
   updatedAt: Scalars['DateTime']['output'];
   variants?: Maybe<Array<Variant>>;
 };
@@ -340,11 +447,24 @@ export type ProductCategory = {
 
 export type Query = {
   __typename?: 'Query';
+  getAddressById: AddressType;
+  getAllAddresses: AddressesType;
   getAllCategories: PaginatedCategoriesType;
   getAllProducts: PaginatedProductsType;
+  getAllStockMovements: PaginatedStockMovementsType;
+  getAllWarehouses: PaginatedWarehousesType;
   getCategoryById: Category;
   getProductById: Product;
+  getWarehouseById: Warehouse;
   validateToken: Response;
+};
+
+export type QueryGetAddressByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type QueryGetAllAddressesArgs = {
+  addressType?: InputMaybe<AddressTypeEnum>;
 };
 
 export type QueryGetAllCategoriesArgs = {
@@ -365,8 +485,31 @@ export type QueryGetAllProductsArgs = {
   page?: InputMaybe<Scalars['Float']['input']>;
   sortBy?: InputMaybe<SortBy>;
   sortOrder?: InputMaybe<SortOrder>;
-  tenantId: Scalars['String']['input'];
   type?: InputMaybe<TypeEnum>;
+};
+
+export type QueryGetAllStockMovementsArgs = {
+  createdById?: InputMaybe<Scalars['ID']['input']>;
+  dateFrom?: InputMaybe<Scalars['DateTime']['input']>;
+  dateTo?: InputMaybe<Scalars['DateTime']['input']>;
+  includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  sortBy?: InputMaybe<SortBy>;
+  sortOrder?: InputMaybe<SortOrder>;
+  variantId?: InputMaybe<Scalars['ID']['input']>;
+  warehouseId: Scalars['ID']['input'];
+};
+
+export type QueryGetAllWarehousesArgs = {
+  addressId?: InputMaybe<Scalars['ID']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  lowStockThreshold?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  sortBy?: InputMaybe<SortBy>;
+  sortOrder?: InputMaybe<SortOrder>;
+  variantId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type QueryGetCategoryByIdArgs = {
@@ -375,7 +518,10 @@ export type QueryGetCategoryByIdArgs = {
 
 export type QueryGetProductByIdArgs = {
   id: Scalars['String']['input'];
-  tenantId: Scalars['String']['input'];
+};
+
+export type QueryGetWarehouseByIdArgs = {
+  id: Scalars['ID']['input'];
 };
 
 export type Response = {
@@ -395,6 +541,27 @@ export enum SortOrder {
   Desc = 'DESC',
 }
 
+export type StockMovement = {
+  __typename?: 'StockMovement';
+  deltaQty: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  occurredAt: Scalars['DateTime']['output'];
+  reason: Scalars['String']['output'];
+  warehouseId: Scalars['ID']['output'];
+};
+
+export type StockPerWarehouse = {
+  __typename?: 'StockPerWarehouse';
+  estimatedReplenishmentDate?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  lotNumber?: Maybe<Scalars['String']['output']>;
+  productLocation?: Maybe<Scalars['String']['output']>;
+  qtyAvailable: Scalars['Int']['output'];
+  qtyReserved: Scalars['Int']['output'];
+  serialNumbers?: Maybe<Array<Scalars['String']['output']>>;
+  warehouseId: Scalars['ID']['output'];
+};
+
 export type Sustainability = {
   __typename?: 'Sustainability';
   certification: Scalars['String']['output'];
@@ -405,6 +572,17 @@ export enum TypeEnum {
   Digital = 'DIGITAL',
   Physical = 'PHYSICAL',
 }
+
+export type UpdateAddressInput = {
+  addressLine1?: InputMaybe<Scalars['String']['input']>;
+  addressLine2?: InputMaybe<Scalars['String']['input']>;
+  addressType?: InputMaybe<AddressTypeEnum>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  countryId?: InputMaybe<Scalars['ID']['input']>;
+  deliveryNum?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  postalCode?: InputMaybe<Scalars['String']['input']>;
+};
 
 export type UpdateAttributeInput = {
   key?: InputMaybe<Scalars['String']['input']>;
@@ -454,6 +632,15 @@ export type UpdateProductInput = {
   tags?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+export type UpdateStockInWarehouseInput = {
+  estimatedReplenishmentDate?: InputMaybe<Scalars['DateTime']['input']>;
+  lotNumber?: InputMaybe<Scalars['String']['input']>;
+  productLocation?: InputMaybe<Scalars['String']['input']>;
+  qtyAvailable?: InputMaybe<Scalars['Int']['input']>;
+  qtyReserved?: InputMaybe<Scalars['Int']['input']>;
+  serialNumbers?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
 export type UpdateSustainabilityInput = {
   certification?: InputMaybe<Scalars['String']['input']>;
   recycledPercentage?: InputMaybe<Scalars['Float']['input']>;
@@ -475,6 +662,11 @@ export type UpdateVariantInput = {
   variantMedia?: InputMaybe<Array<UpdateMediaInput>>;
   warranties?: InputMaybe<Array<UpdateWarrantyInput>>;
   weight?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type UpdateWarehouseInput = {
+  addressId?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateWarrantyInput = {
@@ -503,11 +695,120 @@ export type Variant = {
   weight?: Maybe<Scalars['Float']['output']>;
 };
 
+export type Warehouse = {
+  __typename?: 'Warehouse';
+  addressId: Scalars['ID']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  stockPerWarehouses: Array<StockPerWarehouse>;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 export type Warranty = {
   __typename?: 'Warranty';
   coverage: Scalars['String']['output'];
   instructions: Scalars['String']['output'];
   months: Scalars['Float']['output'];
+};
+
+export type CreateAddressMutationVariables = Exact<{
+  input: CreateAddressInput;
+}>;
+
+export type CreateAddressMutation = {
+  __typename?: 'Mutation';
+  createAddress: {
+    __typename?: 'AddressType';
+    addressLine1: string;
+    addressLine2: string;
+    addressType: AddressTypeEnum;
+    city: string;
+    countryId: string;
+    deliveryNum: string;
+    name: string;
+    postalCode: string;
+  };
+};
+
+export type UpdateAddressMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  input: UpdateAddressInput;
+}>;
+
+export type UpdateAddressMutation = {
+  __typename?: 'Mutation';
+  updateAddress: {
+    __typename?: 'AddressType';
+    addressLine1: string;
+    addressLine2: string;
+    addressType: AddressTypeEnum;
+    city: string;
+    countryId: string;
+    deliveryNum: string;
+    name: string;
+    postalCode: string;
+  };
+};
+
+export type DeleteAddressMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteAddressMutation = {
+  __typename?: 'Mutation';
+  deleteAddress: {
+    __typename?: 'AddressType';
+    addressLine1: string;
+    addressLine2: string;
+    addressType: AddressTypeEnum;
+    city: string;
+    countryId: string;
+    deliveryNum: string;
+    name: string;
+    postalCode: string;
+  };
+};
+
+export type FindAddressByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type FindAddressByIdQuery = {
+  __typename?: 'Query';
+  getAddressById: {
+    __typename?: 'AddressType';
+    addressLine1: string;
+    addressLine2: string;
+    addressType: AddressTypeEnum;
+    city: string;
+    countryId: string;
+    deliveryNum: string;
+    name: string;
+    postalCode: string;
+  };
+};
+
+export type FindAllAddressesQueryVariables = Exact<{
+  addressType?: InputMaybe<AddressTypeEnum>;
+}>;
+
+export type FindAllAddressesQuery = {
+  __typename?: 'Query';
+  getAllAddresses: {
+    __typename?: 'AddressesType';
+    address: Array<{
+      __typename?: 'AddressType';
+      addressLine1: string;
+      addressLine2: string;
+      addressType: AddressTypeEnum;
+      city: string;
+      countryId: string;
+      deliveryNum: string;
+      name: string;
+      postalCode: string;
+    }>;
+  };
 };
 
 export type RegisterMutationVariables = Exact<{
@@ -617,11 +918,11 @@ export type DeleteMutation = {
   };
 };
 
-export type FindByIdQueryVariables = Exact<{
+export type FindCategoryByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
-export type FindByIdQuery = {
+export type FindCategoryByIdQuery = {
   __typename?: 'Query';
   getCategoryById: {
     __typename?: 'Category';
@@ -657,7 +958,7 @@ export type FindByIdQuery = {
   };
 };
 
-export type FindAllQueryVariables = Exact<{
+export type FindAllCategoriesQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -666,7 +967,7 @@ export type FindAllQueryVariables = Exact<{
   sortOrder?: InputMaybe<SortOrder>;
 }>;
 
-export type FindAllQuery = {
+export type FindAllCategoriesQuery = {
   __typename?: 'Query';
   getAllCategories: {
     __typename?: 'PaginatedCategoriesType';
@@ -707,6 +1008,273 @@ export type FindAllQuery = {
   };
 };
 
+export type FindAllMovementsQueryVariables = Exact<{
+  warehouseId: Scalars['ID']['input'];
+  page?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  variantId?: InputMaybe<Scalars['ID']['input']>;
+  createdById?: InputMaybe<Scalars['ID']['input']>;
+  dateFrom?: InputMaybe<Scalars['DateTime']['input']>;
+  dateTo?: InputMaybe<Scalars['DateTime']['input']>;
+  includeDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  sortBy?: InputMaybe<SortBy>;
+  sortOrder?: InputMaybe<SortOrder>;
+}>;
+
+export type FindAllMovementsQuery = {
+  __typename?: 'Query';
+  getAllStockMovements: {
+    __typename?: 'PaginatedStockMovementsType';
+    total: number;
+    hasMore: boolean;
+    stockMovements: Array<{
+      __typename?: 'StockMovement';
+      id: string;
+      warehouseId: string;
+      deltaQty: number;
+      reason: string;
+      occurredAt: any;
+    }>;
+  };
+};
+
+export type AddStockToWarehouseMutationVariables = Exact<{
+  warehouseId: Scalars['ID']['input'];
+  variantId: Scalars['ID']['input'];
+  input: AddStockToWarehouseInput;
+  reason?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type AddStockToWarehouseMutation = {
+  __typename?: 'Mutation';
+  addStockToWarehouse: {
+    __typename?: 'Warehouse';
+    id: string;
+    name: string;
+    addressId: string;
+    createdAt: any;
+    updatedAt: any;
+    stockPerWarehouses: Array<{
+      __typename?: 'StockPerWarehouse';
+      id: string;
+      warehouseId: string;
+      qtyAvailable: number;
+      qtyReserved: number;
+      lotNumber?: string | null;
+      serialNumbers?: Array<string> | null;
+      productLocation?: string | null;
+      estimatedReplenishmentDate?: any | null;
+    }>;
+  };
+};
+
+export type UpdateStockInWarehouseMutationVariables = Exact<{
+  warehouseId: Scalars['ID']['input'];
+  stockId: Scalars['ID']['input'];
+  input: UpdateStockInWarehouseInput;
+  reason?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type UpdateStockInWarehouseMutation = {
+  __typename?: 'Mutation';
+  updateStockInWarehouse: {
+    __typename?: 'Warehouse';
+    id: string;
+    name: string;
+    addressId: string;
+    createdAt: any;
+    updatedAt: any;
+    stockPerWarehouses: Array<{
+      __typename?: 'StockPerWarehouse';
+      id: string;
+      warehouseId: string;
+      qtyAvailable: number;
+      qtyReserved: number;
+      lotNumber?: string | null;
+      serialNumbers?: Array<string> | null;
+      productLocation?: string | null;
+      estimatedReplenishmentDate?: any | null;
+    }>;
+  };
+};
+
+export type RemoveStockFromWarehouseMutationVariables = Exact<{
+  warehouseId: Scalars['ID']['input'];
+  stockId: Scalars['ID']['input'];
+  reason?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type RemoveStockFromWarehouseMutation = {
+  __typename?: 'Mutation';
+  removeStockFromWarehouse: {
+    __typename?: 'Warehouse';
+    id: string;
+    name: string;
+    addressId: string;
+    createdAt: any;
+    updatedAt: any;
+    stockPerWarehouses: Array<{
+      __typename?: 'StockPerWarehouse';
+      id: string;
+      warehouseId: string;
+      qtyAvailable: number;
+      qtyReserved: number;
+      lotNumber?: string | null;
+      serialNumbers?: Array<string> | null;
+      productLocation?: string | null;
+      estimatedReplenishmentDate?: any | null;
+    }>;
+  };
+};
+
+export type CreateWarehouseMutationVariables = Exact<{
+  input: CreateWarehouseInput;
+}>;
+
+export type CreateWarehouseMutation = {
+  __typename?: 'Mutation';
+  createWarehouse: {
+    __typename?: 'Warehouse';
+    id: string;
+    name: string;
+    addressId: string;
+    createdAt: any;
+    updatedAt: any;
+    stockPerWarehouses: Array<{
+      __typename?: 'StockPerWarehouse';
+      id: string;
+      warehouseId: string;
+      qtyAvailable: number;
+      qtyReserved: number;
+      lotNumber?: string | null;
+      serialNumbers?: Array<string> | null;
+      productLocation?: string | null;
+      estimatedReplenishmentDate?: any | null;
+    }>;
+  };
+};
+
+export type UpdateWarehouseMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  input: UpdateWarehouseInput;
+}>;
+
+export type UpdateWarehouseMutation = {
+  __typename?: 'Mutation';
+  updateWarehouse: {
+    __typename?: 'Warehouse';
+    id: string;
+    name: string;
+    addressId: string;
+    createdAt: any;
+    updatedAt: any;
+    stockPerWarehouses: Array<{
+      __typename?: 'StockPerWarehouse';
+      id: string;
+      warehouseId: string;
+      qtyAvailable: number;
+      qtyReserved: number;
+      lotNumber?: string | null;
+      serialNumbers?: Array<string> | null;
+      productLocation?: string | null;
+      estimatedReplenishmentDate?: any | null;
+    }>;
+  };
+};
+
+export type DeleteWarehouseMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteWarehouseMutation = {
+  __typename?: 'Mutation';
+  deleteWarehouse: {
+    __typename?: 'Warehouse';
+    id: string;
+    name: string;
+    addressId: string;
+    createdAt: any;
+    updatedAt: any;
+    stockPerWarehouses: Array<{
+      __typename?: 'StockPerWarehouse';
+      id: string;
+      warehouseId: string;
+      qtyAvailable: number;
+      qtyReserved: number;
+      lotNumber?: string | null;
+      serialNumbers?: Array<string> | null;
+      productLocation?: string | null;
+      estimatedReplenishmentDate?: any | null;
+    }>;
+  };
+};
+
+export type FindWarehouseByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type FindWarehouseByIdQuery = {
+  __typename?: 'Query';
+  getWarehouseById: {
+    __typename?: 'Warehouse';
+    id: string;
+    name: string;
+    addressId: string;
+    createdAt: any;
+    updatedAt: any;
+    stockPerWarehouses: Array<{
+      __typename?: 'StockPerWarehouse';
+      id: string;
+      warehouseId: string;
+      qtyAvailable: number;
+      qtyReserved: number;
+      lotNumber?: string | null;
+      serialNumbers?: Array<string> | null;
+      productLocation?: string | null;
+      estimatedReplenishmentDate?: any | null;
+    }>;
+  };
+};
+
+export type FindAllWarehousesQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  addressId?: InputMaybe<Scalars['ID']['input']>;
+  variantId?: InputMaybe<Scalars['ID']['input']>;
+  lowStockThreshold?: InputMaybe<Scalars['Int']['input']>;
+  sortBy?: InputMaybe<SortBy>;
+  sortOrder?: InputMaybe<SortOrder>;
+}>;
+
+export type FindAllWarehousesQuery = {
+  __typename?: 'Query';
+  getAllWarehouses: {
+    __typename?: 'PaginatedWarehousesType';
+    total: number;
+    hasMore: boolean;
+    warehouses: Array<{
+      __typename?: 'Warehouse';
+      id: string;
+      name: string;
+      addressId: string;
+      createdAt: any;
+      updatedAt: any;
+      stockPerWarehouses: Array<{
+        __typename?: 'StockPerWarehouse';
+        id: string;
+        warehouseId: string;
+        qtyAvailable: number;
+        qtyReserved: number;
+        lotNumber?: string | null;
+        serialNumbers?: Array<string> | null;
+        productLocation?: string | null;
+        estimatedReplenishmentDate?: any | null;
+      }>;
+    }>;
+  };
+};
+
 export type CreateProductMutationVariables = Exact<{
   input: CreateProductInput;
 }>;
@@ -723,7 +1291,6 @@ export type CreateProductMutation = {
     tags?: Array<string> | null;
     brand?: string | null;
     manufacturer?: string | null;
-    tenantId: string;
     createdAt: any;
     updatedAt: any;
     isArchived: boolean;
@@ -792,7 +1359,6 @@ export type CreateProductMutation = {
 
 export type UpdateMutationVariables = Exact<{
   id: Scalars['String']['input'];
-  tenantId: Scalars['String']['input'];
   input: UpdateProductInput;
 }>;
 
@@ -810,7 +1376,6 @@ export type UpdateMutation = {
     productType: TypeEnum;
     shortDescription: string;
     tags?: Array<string> | null;
-    tenantId: string;
     updatedAt: any;
     categories?: Array<{
       __typename?: 'ProductCategory';
@@ -877,7 +1442,6 @@ export type UpdateMutation = {
 
 export type SoftDeleteMutationVariables = Exact<{
   id: Scalars['String']['input'];
-  tenantId: Scalars['String']['input'];
 }>;
 
 export type SoftDeleteMutation = {
@@ -891,7 +1455,6 @@ export type SoftDeleteMutation = {
 
 export type RestoreMutationVariables = Exact<{
   id: Scalars['String']['input'];
-  tenantId: Scalars['String']['input'];
 }>;
 
 export type RestoreMutation = {
@@ -901,7 +1464,6 @@ export type RestoreMutation = {
 
 export type HardDeleteMutationVariables = Exact<{
   id: Scalars['String']['input'];
-  tenantId: Scalars['String']['input'];
 }>;
 
 export type HardDeleteMutation = {
@@ -909,12 +1471,11 @@ export type HardDeleteMutation = {
   hardDeleteProduct: { __typename?: 'Product'; name: string };
 };
 
-export type GetIdQueryVariables = Exact<{
-  tenantId: Scalars['String']['input'];
+export type FindProductByIdQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
-export type GetIdQuery = {
+export type FindProductByIdQuery = {
   __typename?: 'Query';
   getProductById: {
     __typename?: 'Product';
@@ -927,7 +1488,6 @@ export type GetIdQuery = {
     tags?: Array<string> | null;
     updatedAt: any;
     createdAt: any;
-    tenantId: string;
     productType: TypeEnum;
     isArchived: boolean;
     media?: Array<{
@@ -991,8 +1551,7 @@ export type GetIdQuery = {
   };
 };
 
-export type GetAllQueryVariables = Exact<{
-  tenantId: Scalars['String']['input'];
+export type FindAllProductsQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Float']['input']>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   categoriesIds?: InputMaybe<
@@ -1005,7 +1564,7 @@ export type GetAllQueryVariables = Exact<{
   name?: InputMaybe<Scalars['String']['input']>;
 }>;
 
-export type GetAllQuery = {
+export type FindAllProductsQuery = {
   __typename?: 'Query';
   getAllProducts: {
     __typename?: 'PaginatedProductsType';
@@ -1022,7 +1581,6 @@ export type GetAllQuery = {
       productType: TypeEnum;
       shortDescription: string;
       tags?: Array<string> | null;
-      tenantId: string;
       updatedAt: any;
       categories?: Array<{
         __typename?: 'ProductCategory';
@@ -1112,7 +1670,6 @@ export type AddVariantToProductMutation = {
 export type UpdateVariantInProductMutationVariables = Exact<{
   id: Scalars['String']['input'];
   productId: Scalars['String']['input'];
-  tenantId: Scalars['String']['input'];
   input: UpdateVariantInput;
 }>;
 
@@ -1169,7 +1726,6 @@ export type UpdateVariantInProductMutation = {
 export type ArchiveVariantOfProductMutationVariables = Exact<{
   id: Scalars['String']['input'];
   productId: Scalars['String']['input'];
-  tenantId: Scalars['String']['input'];
 }>;
 
 export type ArchiveVariantOfProductMutation = {
@@ -1186,7 +1742,6 @@ export type ArchiveVariantOfProductMutation = {
 export type RestoreVariantOfProductMutationVariables = Exact<{
   id: Scalars['String']['input'];
   productId: Scalars['String']['input'];
-  tenantId: Scalars['String']['input'];
 }>;
 
 export type RestoreVariantOfProductMutation = {
@@ -1203,7 +1758,6 @@ export type RestoreVariantOfProductMutation = {
 export type RemoveVariantfromProductMutationVariables = Exact<{
   id: Scalars['String']['input'];
   productId: Scalars['String']['input'];
-  tenantId: Scalars['String']['input'];
 }>;
 
 export type RemoveVariantfromProductMutation = {
@@ -1214,6 +1768,354 @@ export type RemoveVariantfromProductMutation = {
   };
 };
 
+export const CreateAddressDocument = gql`
+  mutation createAddress($input: CreateAddressInput!) {
+    createAddress(input: $input) {
+      addressLine1
+      addressLine2
+      addressType
+      city
+      countryId
+      deliveryNum
+      name
+      postalCode
+    }
+  }
+`;
+export type CreateAddressMutationFn = Apollo.MutationFunction<
+  CreateAddressMutation,
+  CreateAddressMutationVariables
+>;
+
+/**
+ * __useCreateAddressMutation__
+ *
+ * To run a mutation, you first call `useCreateAddressMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAddressMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAddressMutation, { data, loading, error }] = useCreateAddressMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateAddressMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateAddressMutation,
+    CreateAddressMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateAddressMutation,
+    CreateAddressMutationVariables
+  >(CreateAddressDocument, options);
+}
+export type CreateAddressMutationHookResult = ReturnType<
+  typeof useCreateAddressMutation
+>;
+export type CreateAddressMutationResult =
+  Apollo.MutationResult<CreateAddressMutation>;
+export type CreateAddressMutationOptions = Apollo.BaseMutationOptions<
+  CreateAddressMutation,
+  CreateAddressMutationVariables
+>;
+export const UpdateAddressDocument = gql`
+  mutation updateAddress($id: ID!, $input: UpdateAddressInput!) {
+    updateAddress(id: $id, input: $input) {
+      addressLine1
+      addressLine2
+      addressType
+      city
+      countryId
+      deliveryNum
+      name
+      postalCode
+    }
+  }
+`;
+export type UpdateAddressMutationFn = Apollo.MutationFunction<
+  UpdateAddressMutation,
+  UpdateAddressMutationVariables
+>;
+
+/**
+ * __useUpdateAddressMutation__
+ *
+ * To run a mutation, you first call `useUpdateAddressMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAddressMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAddressMutation, { data, loading, error }] = useUpdateAddressMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateAddressMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateAddressMutation,
+    UpdateAddressMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateAddressMutation,
+    UpdateAddressMutationVariables
+  >(UpdateAddressDocument, options);
+}
+export type UpdateAddressMutationHookResult = ReturnType<
+  typeof useUpdateAddressMutation
+>;
+export type UpdateAddressMutationResult =
+  Apollo.MutationResult<UpdateAddressMutation>;
+export type UpdateAddressMutationOptions = Apollo.BaseMutationOptions<
+  UpdateAddressMutation,
+  UpdateAddressMutationVariables
+>;
+export const DeleteAddressDocument = gql`
+  mutation deleteAddress($id: ID!) {
+    deleteAddress(id: $id) {
+      addressLine1
+      addressLine2
+      addressType
+      city
+      countryId
+      deliveryNum
+      name
+      postalCode
+    }
+  }
+`;
+export type DeleteAddressMutationFn = Apollo.MutationFunction<
+  DeleteAddressMutation,
+  DeleteAddressMutationVariables
+>;
+
+/**
+ * __useDeleteAddressMutation__
+ *
+ * To run a mutation, you first call `useDeleteAddressMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAddressMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAddressMutation, { data, loading, error }] = useDeleteAddressMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteAddressMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteAddressMutation,
+    DeleteAddressMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteAddressMutation,
+    DeleteAddressMutationVariables
+  >(DeleteAddressDocument, options);
+}
+export type DeleteAddressMutationHookResult = ReturnType<
+  typeof useDeleteAddressMutation
+>;
+export type DeleteAddressMutationResult =
+  Apollo.MutationResult<DeleteAddressMutation>;
+export type DeleteAddressMutationOptions = Apollo.BaseMutationOptions<
+  DeleteAddressMutation,
+  DeleteAddressMutationVariables
+>;
+export const FindAddressByIdDocument = gql`
+  query findAddressById($id: ID!) {
+    getAddressById(id: $id) {
+      addressLine1
+      addressLine2
+      addressType
+      city
+      countryId
+      deliveryNum
+      name
+      postalCode
+    }
+  }
+`;
+
+/**
+ * __useFindAddressByIdQuery__
+ *
+ * To run a query within a React component, call `useFindAddressByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindAddressByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindAddressByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFindAddressByIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    FindAddressByIdQuery,
+    FindAddressByIdQueryVariables
+  > &
+    (
+      | { variables: FindAddressByIdQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<FindAddressByIdQuery, FindAddressByIdQueryVariables>(
+    FindAddressByIdDocument,
+    options,
+  );
+}
+export function useFindAddressByIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FindAddressByIdQuery,
+    FindAddressByIdQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    FindAddressByIdQuery,
+    FindAddressByIdQueryVariables
+  >(FindAddressByIdDocument, options);
+}
+export function useFindAddressByIdSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        FindAddressByIdQuery,
+        FindAddressByIdQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    FindAddressByIdQuery,
+    FindAddressByIdQueryVariables
+  >(FindAddressByIdDocument, options);
+}
+export type FindAddressByIdQueryHookResult = ReturnType<
+  typeof useFindAddressByIdQuery
+>;
+export type FindAddressByIdLazyQueryHookResult = ReturnType<
+  typeof useFindAddressByIdLazyQuery
+>;
+export type FindAddressByIdSuspenseQueryHookResult = ReturnType<
+  typeof useFindAddressByIdSuspenseQuery
+>;
+export type FindAddressByIdQueryResult = Apollo.QueryResult<
+  FindAddressByIdQuery,
+  FindAddressByIdQueryVariables
+>;
+export const FindAllAddressesDocument = gql`
+  query findAllAddresses($addressType: AddressTypeEnum) {
+    getAllAddresses(addressType: $addressType) {
+      address {
+        addressLine1
+        addressLine2
+        addressType
+        city
+        countryId
+        deliveryNum
+        name
+        postalCode
+      }
+    }
+  }
+`;
+
+/**
+ * __useFindAllAddressesQuery__
+ *
+ * To run a query within a React component, call `useFindAllAddressesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindAllAddressesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindAllAddressesQuery({
+ *   variables: {
+ *      addressType: // value for 'addressType'
+ *   },
+ * });
+ */
+export function useFindAllAddressesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    FindAllAddressesQuery,
+    FindAllAddressesQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<FindAllAddressesQuery, FindAllAddressesQueryVariables>(
+    FindAllAddressesDocument,
+    options,
+  );
+}
+export function useFindAllAddressesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FindAllAddressesQuery,
+    FindAllAddressesQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    FindAllAddressesQuery,
+    FindAllAddressesQueryVariables
+  >(FindAllAddressesDocument, options);
+}
+export function useFindAllAddressesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        FindAllAddressesQuery,
+        FindAllAddressesQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    FindAllAddressesQuery,
+    FindAllAddressesQueryVariables
+  >(FindAllAddressesDocument, options);
+}
+export type FindAllAddressesQueryHookResult = ReturnType<
+  typeof useFindAllAddressesQuery
+>;
+export type FindAllAddressesLazyQueryHookResult = ReturnType<
+  typeof useFindAllAddressesLazyQuery
+>;
+export type FindAllAddressesSuspenseQueryHookResult = ReturnType<
+  typeof useFindAllAddressesSuspenseQuery
+>;
+export type FindAllAddressesQueryResult = Apollo.QueryResult<
+  FindAllAddressesQuery,
+  FindAllAddressesQueryVariables
+>;
 export const RegisterDocument = gql`
   mutation register(
     $email: String!
@@ -1626,8 +2528,8 @@ export type DeleteMutationOptions = Apollo.BaseMutationOptions<
   DeleteMutation,
   DeleteMutationVariables
 >;
-export const FindByIdDocument = gql`
-  query findById($id: ID!) {
+export const FindCategoryByIdDocument = gql`
+  query findCategoryById($id: ID!) {
     getCategoryById(id: $id) {
       name
       description
@@ -1660,70 +2562,81 @@ export const FindByIdDocument = gql`
 `;
 
 /**
- * __useFindByIdQuery__
+ * __useFindCategoryByIdQuery__
  *
- * To run a query within a React component, call `useFindByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFindCategoryByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindCategoryByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFindByIdQuery({
+ * const { data, loading, error } = useFindCategoryByIdQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useFindByIdQuery(
-  baseOptions: Apollo.QueryHookOptions<FindByIdQuery, FindByIdQueryVariables> &
-    ({ variables: FindByIdQueryVariables; skip?: boolean } | { skip: boolean }),
+export function useFindCategoryByIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    FindCategoryByIdQuery,
+    FindCategoryByIdQueryVariables
+  > &
+    (
+      | { variables: FindCategoryByIdQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<FindByIdQuery, FindByIdQueryVariables>(
-    FindByIdDocument,
+  return Apollo.useQuery<FindCategoryByIdQuery, FindCategoryByIdQueryVariables>(
+    FindCategoryByIdDocument,
     options,
   );
 }
-export function useFindByIdLazyQuery(
+export function useFindCategoryByIdLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    FindByIdQuery,
-    FindByIdQueryVariables
+    FindCategoryByIdQuery,
+    FindCategoryByIdQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<FindByIdQuery, FindByIdQueryVariables>(
-    FindByIdDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<
+    FindCategoryByIdQuery,
+    FindCategoryByIdQueryVariables
+  >(FindCategoryByIdDocument, options);
 }
-export function useFindByIdSuspenseQuery(
+export function useFindCategoryByIdSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<FindByIdQuery, FindByIdQueryVariables>,
+    | Apollo.SuspenseQueryHookOptions<
+        FindCategoryByIdQuery,
+        FindCategoryByIdQueryVariables
+      >,
 ) {
   const options =
     baseOptions === Apollo.skipToken
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<FindByIdQuery, FindByIdQueryVariables>(
-    FindByIdDocument,
-    options,
-  );
+  return Apollo.useSuspenseQuery<
+    FindCategoryByIdQuery,
+    FindCategoryByIdQueryVariables
+  >(FindCategoryByIdDocument, options);
 }
-export type FindByIdQueryHookResult = ReturnType<typeof useFindByIdQuery>;
-export type FindByIdLazyQueryHookResult = ReturnType<
-  typeof useFindByIdLazyQuery
+export type FindCategoryByIdQueryHookResult = ReturnType<
+  typeof useFindCategoryByIdQuery
 >;
-export type FindByIdSuspenseQueryHookResult = ReturnType<
-  typeof useFindByIdSuspenseQuery
+export type FindCategoryByIdLazyQueryHookResult = ReturnType<
+  typeof useFindCategoryByIdLazyQuery
 >;
-export type FindByIdQueryResult = Apollo.QueryResult<
-  FindByIdQuery,
-  FindByIdQueryVariables
+export type FindCategoryByIdSuspenseQueryHookResult = ReturnType<
+  typeof useFindCategoryByIdSuspenseQuery
 >;
-export const FindAllDocument = gql`
-  query findAll(
+export type FindCategoryByIdQueryResult = Apollo.QueryResult<
+  FindCategoryByIdQuery,
+  FindCategoryByIdQueryVariables
+>;
+export const FindAllCategoriesDocument = gql`
+  query findAllCategories(
     $page: Int = 1
     $limit: Int = 25
     $name: String = ""
@@ -1774,16 +2687,16 @@ export const FindAllDocument = gql`
 `;
 
 /**
- * __useFindAllQuery__
+ * __useFindAllCategoriesQuery__
  *
- * To run a query within a React component, call `useFindAllQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindAllQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFindAllCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindAllCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFindAllQuery({
+ * const { data, loading, error } = useFindAllCategoriesQuery({
  *   variables: {
  *      page: // value for 'page'
  *      limit: // value for 'limit'
@@ -1794,49 +2707,819 @@ export const FindAllDocument = gql`
  *   },
  * });
  */
-export function useFindAllQuery(
-  baseOptions?: Apollo.QueryHookOptions<FindAllQuery, FindAllQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<FindAllQuery, FindAllQueryVariables>(
-    FindAllDocument,
-    options,
-  );
-}
-export function useFindAllLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FindAllQuery,
-    FindAllQueryVariables
+export function useFindAllCategoriesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    FindAllCategoriesQuery,
+    FindAllCategoriesQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<FindAllQuery, FindAllQueryVariables>(
-    FindAllDocument,
-    options,
-  );
+  return Apollo.useQuery<
+    FindAllCategoriesQuery,
+    FindAllCategoriesQueryVariables
+  >(FindAllCategoriesDocument, options);
 }
-export function useFindAllSuspenseQuery(
+export function useFindAllCategoriesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FindAllCategoriesQuery,
+    FindAllCategoriesQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    FindAllCategoriesQuery,
+    FindAllCategoriesQueryVariables
+  >(FindAllCategoriesDocument, options);
+}
+export function useFindAllCategoriesSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<FindAllQuery, FindAllQueryVariables>,
+    | Apollo.SuspenseQueryHookOptions<
+        FindAllCategoriesQuery,
+        FindAllCategoriesQueryVariables
+      >,
 ) {
   const options =
     baseOptions === Apollo.skipToken
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<FindAllQuery, FindAllQueryVariables>(
-    FindAllDocument,
+  return Apollo.useSuspenseQuery<
+    FindAllCategoriesQuery,
+    FindAllCategoriesQueryVariables
+  >(FindAllCategoriesDocument, options);
+}
+export type FindAllCategoriesQueryHookResult = ReturnType<
+  typeof useFindAllCategoriesQuery
+>;
+export type FindAllCategoriesLazyQueryHookResult = ReturnType<
+  typeof useFindAllCategoriesLazyQuery
+>;
+export type FindAllCategoriesSuspenseQueryHookResult = ReturnType<
+  typeof useFindAllCategoriesSuspenseQuery
+>;
+export type FindAllCategoriesQueryResult = Apollo.QueryResult<
+  FindAllCategoriesQuery,
+  FindAllCategoriesQueryVariables
+>;
+export const FindAllMovementsDocument = gql`
+  query findAllMovements(
+    $warehouseId: ID!
+    $page: Int = 1
+    $limit: Int = 10
+    $variantId: ID
+    $createdById: ID
+    $dateFrom: DateTime
+    $dateTo: DateTime
+    $includeDeleted: Boolean = false
+    $sortBy: SortBy
+    $sortOrder: SortOrder
+  ) {
+    getAllStockMovements(
+      warehouseId: $warehouseId
+      page: $page
+      limit: $limit
+      variantId: $variantId
+      createdById: $createdById
+      dateFrom: $dateFrom
+      dateTo: $dateTo
+      includeDeleted: $includeDeleted
+      sortBy: $sortBy
+      sortOrder: $sortOrder
+    ) {
+      stockMovements {
+        id
+        warehouseId
+        deltaQty
+        reason
+        occurredAt
+      }
+      total
+      hasMore
+    }
+  }
+`;
+
+/**
+ * __useFindAllMovementsQuery__
+ *
+ * To run a query within a React component, call `useFindAllMovementsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindAllMovementsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindAllMovementsQuery({
+ *   variables: {
+ *      warehouseId: // value for 'warehouseId'
+ *      page: // value for 'page'
+ *      limit: // value for 'limit'
+ *      variantId: // value for 'variantId'
+ *      createdById: // value for 'createdById'
+ *      dateFrom: // value for 'dateFrom'
+ *      dateTo: // value for 'dateTo'
+ *      includeDeleted: // value for 'includeDeleted'
+ *      sortBy: // value for 'sortBy'
+ *      sortOrder: // value for 'sortOrder'
+ *   },
+ * });
+ */
+export function useFindAllMovementsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    FindAllMovementsQuery,
+    FindAllMovementsQueryVariables
+  > &
+    (
+      | { variables: FindAllMovementsQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<FindAllMovementsQuery, FindAllMovementsQueryVariables>(
+    FindAllMovementsDocument,
     options,
   );
 }
-export type FindAllQueryHookResult = ReturnType<typeof useFindAllQuery>;
-export type FindAllLazyQueryHookResult = ReturnType<typeof useFindAllLazyQuery>;
-export type FindAllSuspenseQueryHookResult = ReturnType<
-  typeof useFindAllSuspenseQuery
+export function useFindAllMovementsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FindAllMovementsQuery,
+    FindAllMovementsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    FindAllMovementsQuery,
+    FindAllMovementsQueryVariables
+  >(FindAllMovementsDocument, options);
+}
+export function useFindAllMovementsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        FindAllMovementsQuery,
+        FindAllMovementsQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    FindAllMovementsQuery,
+    FindAllMovementsQueryVariables
+  >(FindAllMovementsDocument, options);
+}
+export type FindAllMovementsQueryHookResult = ReturnType<
+  typeof useFindAllMovementsQuery
 >;
-export type FindAllQueryResult = Apollo.QueryResult<
-  FindAllQuery,
-  FindAllQueryVariables
+export type FindAllMovementsLazyQueryHookResult = ReturnType<
+  typeof useFindAllMovementsLazyQuery
+>;
+export type FindAllMovementsSuspenseQueryHookResult = ReturnType<
+  typeof useFindAllMovementsSuspenseQuery
+>;
+export type FindAllMovementsQueryResult = Apollo.QueryResult<
+  FindAllMovementsQuery,
+  FindAllMovementsQueryVariables
+>;
+export const AddStockToWarehouseDocument = gql`
+  mutation addStockToWarehouse(
+    $warehouseId: ID!
+    $variantId: ID!
+    $input: AddStockToWarehouseInput!
+    $reason: String
+  ) {
+    addStockToWarehouse(
+      warehouseId: $warehouseId
+      variantId: $variantId
+      input: $input
+      reason: $reason
+    ) {
+      id
+      name
+      addressId
+      createdAt
+      updatedAt
+      stockPerWarehouses {
+        id
+        warehouseId
+        qtyAvailable
+        qtyReserved
+        lotNumber
+        serialNumbers
+        productLocation
+        estimatedReplenishmentDate
+      }
+    }
+  }
+`;
+export type AddStockToWarehouseMutationFn = Apollo.MutationFunction<
+  AddStockToWarehouseMutation,
+  AddStockToWarehouseMutationVariables
+>;
+
+/**
+ * __useAddStockToWarehouseMutation__
+ *
+ * To run a mutation, you first call `useAddStockToWarehouseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddStockToWarehouseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addStockToWarehouseMutation, { data, loading, error }] = useAddStockToWarehouseMutation({
+ *   variables: {
+ *      warehouseId: // value for 'warehouseId'
+ *      variantId: // value for 'variantId'
+ *      input: // value for 'input'
+ *      reason: // value for 'reason'
+ *   },
+ * });
+ */
+export function useAddStockToWarehouseMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddStockToWarehouseMutation,
+    AddStockToWarehouseMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AddStockToWarehouseMutation,
+    AddStockToWarehouseMutationVariables
+  >(AddStockToWarehouseDocument, options);
+}
+export type AddStockToWarehouseMutationHookResult = ReturnType<
+  typeof useAddStockToWarehouseMutation
+>;
+export type AddStockToWarehouseMutationResult =
+  Apollo.MutationResult<AddStockToWarehouseMutation>;
+export type AddStockToWarehouseMutationOptions = Apollo.BaseMutationOptions<
+  AddStockToWarehouseMutation,
+  AddStockToWarehouseMutationVariables
+>;
+export const UpdateStockInWarehouseDocument = gql`
+  mutation updateStockInWarehouse(
+    $warehouseId: ID!
+    $stockId: ID!
+    $input: UpdateStockInWarehouseInput!
+    $reason: String
+  ) {
+    updateStockInWarehouse(
+      warehouseId: $warehouseId
+      stockId: $stockId
+      input: $input
+      reason: $reason
+    ) {
+      id
+      name
+      addressId
+      createdAt
+      updatedAt
+      stockPerWarehouses {
+        id
+        warehouseId
+        qtyAvailable
+        qtyReserved
+        lotNumber
+        serialNumbers
+        productLocation
+        estimatedReplenishmentDate
+      }
+    }
+  }
+`;
+export type UpdateStockInWarehouseMutationFn = Apollo.MutationFunction<
+  UpdateStockInWarehouseMutation,
+  UpdateStockInWarehouseMutationVariables
+>;
+
+/**
+ * __useUpdateStockInWarehouseMutation__
+ *
+ * To run a mutation, you first call `useUpdateStockInWarehouseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateStockInWarehouseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateStockInWarehouseMutation, { data, loading, error }] = useUpdateStockInWarehouseMutation({
+ *   variables: {
+ *      warehouseId: // value for 'warehouseId'
+ *      stockId: // value for 'stockId'
+ *      input: // value for 'input'
+ *      reason: // value for 'reason'
+ *   },
+ * });
+ */
+export function useUpdateStockInWarehouseMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateStockInWarehouseMutation,
+    UpdateStockInWarehouseMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateStockInWarehouseMutation,
+    UpdateStockInWarehouseMutationVariables
+  >(UpdateStockInWarehouseDocument, options);
+}
+export type UpdateStockInWarehouseMutationHookResult = ReturnType<
+  typeof useUpdateStockInWarehouseMutation
+>;
+export type UpdateStockInWarehouseMutationResult =
+  Apollo.MutationResult<UpdateStockInWarehouseMutation>;
+export type UpdateStockInWarehouseMutationOptions = Apollo.BaseMutationOptions<
+  UpdateStockInWarehouseMutation,
+  UpdateStockInWarehouseMutationVariables
+>;
+export const RemoveStockFromWarehouseDocument = gql`
+  mutation removeStockFromWarehouse(
+    $warehouseId: ID!
+    $stockId: ID!
+    $reason: String
+  ) {
+    removeStockFromWarehouse(
+      warehouseId: $warehouseId
+      stockId: $stockId
+      reason: $reason
+    ) {
+      id
+      name
+      addressId
+      createdAt
+      updatedAt
+      stockPerWarehouses {
+        id
+        warehouseId
+        qtyAvailable
+        qtyReserved
+        lotNumber
+        serialNumbers
+        productLocation
+        estimatedReplenishmentDate
+      }
+    }
+  }
+`;
+export type RemoveStockFromWarehouseMutationFn = Apollo.MutationFunction<
+  RemoveStockFromWarehouseMutation,
+  RemoveStockFromWarehouseMutationVariables
+>;
+
+/**
+ * __useRemoveStockFromWarehouseMutation__
+ *
+ * To run a mutation, you first call `useRemoveStockFromWarehouseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveStockFromWarehouseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeStockFromWarehouseMutation, { data, loading, error }] = useRemoveStockFromWarehouseMutation({
+ *   variables: {
+ *      warehouseId: // value for 'warehouseId'
+ *      stockId: // value for 'stockId'
+ *      reason: // value for 'reason'
+ *   },
+ * });
+ */
+export function useRemoveStockFromWarehouseMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RemoveStockFromWarehouseMutation,
+    RemoveStockFromWarehouseMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    RemoveStockFromWarehouseMutation,
+    RemoveStockFromWarehouseMutationVariables
+  >(RemoveStockFromWarehouseDocument, options);
+}
+export type RemoveStockFromWarehouseMutationHookResult = ReturnType<
+  typeof useRemoveStockFromWarehouseMutation
+>;
+export type RemoveStockFromWarehouseMutationResult =
+  Apollo.MutationResult<RemoveStockFromWarehouseMutation>;
+export type RemoveStockFromWarehouseMutationOptions =
+  Apollo.BaseMutationOptions<
+    RemoveStockFromWarehouseMutation,
+    RemoveStockFromWarehouseMutationVariables
+  >;
+export const CreateWarehouseDocument = gql`
+  mutation createWarehouse($input: CreateWarehouseInput!) {
+    createWarehouse(input: $input) {
+      id
+      name
+      addressId
+      createdAt
+      updatedAt
+      stockPerWarehouses {
+        id
+        warehouseId
+        qtyAvailable
+        qtyReserved
+        lotNumber
+        serialNumbers
+        productLocation
+        estimatedReplenishmentDate
+      }
+    }
+  }
+`;
+export type CreateWarehouseMutationFn = Apollo.MutationFunction<
+  CreateWarehouseMutation,
+  CreateWarehouseMutationVariables
+>;
+
+/**
+ * __useCreateWarehouseMutation__
+ *
+ * To run a mutation, you first call `useCreateWarehouseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateWarehouseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createWarehouseMutation, { data, loading, error }] = useCreateWarehouseMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateWarehouseMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateWarehouseMutation,
+    CreateWarehouseMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateWarehouseMutation,
+    CreateWarehouseMutationVariables
+  >(CreateWarehouseDocument, options);
+}
+export type CreateWarehouseMutationHookResult = ReturnType<
+  typeof useCreateWarehouseMutation
+>;
+export type CreateWarehouseMutationResult =
+  Apollo.MutationResult<CreateWarehouseMutation>;
+export type CreateWarehouseMutationOptions = Apollo.BaseMutationOptions<
+  CreateWarehouseMutation,
+  CreateWarehouseMutationVariables
+>;
+export const UpdateWarehouseDocument = gql`
+  mutation updateWarehouse($id: ID!, $input: UpdateWarehouseInput!) {
+    updateWarehouse(id: $id, input: $input) {
+      id
+      name
+      addressId
+      createdAt
+      updatedAt
+      stockPerWarehouses {
+        id
+        warehouseId
+        qtyAvailable
+        qtyReserved
+        lotNumber
+        serialNumbers
+        productLocation
+        estimatedReplenishmentDate
+      }
+    }
+  }
+`;
+export type UpdateWarehouseMutationFn = Apollo.MutationFunction<
+  UpdateWarehouseMutation,
+  UpdateWarehouseMutationVariables
+>;
+
+/**
+ * __useUpdateWarehouseMutation__
+ *
+ * To run a mutation, you first call `useUpdateWarehouseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateWarehouseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateWarehouseMutation, { data, loading, error }] = useUpdateWarehouseMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateWarehouseMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateWarehouseMutation,
+    UpdateWarehouseMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateWarehouseMutation,
+    UpdateWarehouseMutationVariables
+  >(UpdateWarehouseDocument, options);
+}
+export type UpdateWarehouseMutationHookResult = ReturnType<
+  typeof useUpdateWarehouseMutation
+>;
+export type UpdateWarehouseMutationResult =
+  Apollo.MutationResult<UpdateWarehouseMutation>;
+export type UpdateWarehouseMutationOptions = Apollo.BaseMutationOptions<
+  UpdateWarehouseMutation,
+  UpdateWarehouseMutationVariables
+>;
+export const DeleteWarehouseDocument = gql`
+  mutation deleteWarehouse($id: ID!) {
+    deleteWarehouse(id: $id) {
+      id
+      name
+      addressId
+      createdAt
+      updatedAt
+      stockPerWarehouses {
+        id
+        warehouseId
+        qtyAvailable
+        qtyReserved
+        lotNumber
+        serialNumbers
+        productLocation
+        estimatedReplenishmentDate
+      }
+    }
+  }
+`;
+export type DeleteWarehouseMutationFn = Apollo.MutationFunction<
+  DeleteWarehouseMutation,
+  DeleteWarehouseMutationVariables
+>;
+
+/**
+ * __useDeleteWarehouseMutation__
+ *
+ * To run a mutation, you first call `useDeleteWarehouseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteWarehouseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteWarehouseMutation, { data, loading, error }] = useDeleteWarehouseMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteWarehouseMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteWarehouseMutation,
+    DeleteWarehouseMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteWarehouseMutation,
+    DeleteWarehouseMutationVariables
+  >(DeleteWarehouseDocument, options);
+}
+export type DeleteWarehouseMutationHookResult = ReturnType<
+  typeof useDeleteWarehouseMutation
+>;
+export type DeleteWarehouseMutationResult =
+  Apollo.MutationResult<DeleteWarehouseMutation>;
+export type DeleteWarehouseMutationOptions = Apollo.BaseMutationOptions<
+  DeleteWarehouseMutation,
+  DeleteWarehouseMutationVariables
+>;
+export const FindWarehouseByIdDocument = gql`
+  query findWarehouseById($id: ID!) {
+    getWarehouseById(id: $id) {
+      id
+      name
+      addressId
+      createdAt
+      updatedAt
+      stockPerWarehouses {
+        id
+        warehouseId
+        qtyAvailable
+        qtyReserved
+        lotNumber
+        serialNumbers
+        productLocation
+        estimatedReplenishmentDate
+      }
+    }
+  }
+`;
+
+/**
+ * __useFindWarehouseByIdQuery__
+ *
+ * To run a query within a React component, call `useFindWarehouseByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindWarehouseByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindWarehouseByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFindWarehouseByIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    FindWarehouseByIdQuery,
+    FindWarehouseByIdQueryVariables
+  > &
+    (
+      | { variables: FindWarehouseByIdQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    FindWarehouseByIdQuery,
+    FindWarehouseByIdQueryVariables
+  >(FindWarehouseByIdDocument, options);
+}
+export function useFindWarehouseByIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FindWarehouseByIdQuery,
+    FindWarehouseByIdQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    FindWarehouseByIdQuery,
+    FindWarehouseByIdQueryVariables
+  >(FindWarehouseByIdDocument, options);
+}
+export function useFindWarehouseByIdSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        FindWarehouseByIdQuery,
+        FindWarehouseByIdQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    FindWarehouseByIdQuery,
+    FindWarehouseByIdQueryVariables
+  >(FindWarehouseByIdDocument, options);
+}
+export type FindWarehouseByIdQueryHookResult = ReturnType<
+  typeof useFindWarehouseByIdQuery
+>;
+export type FindWarehouseByIdLazyQueryHookResult = ReturnType<
+  typeof useFindWarehouseByIdLazyQuery
+>;
+export type FindWarehouseByIdSuspenseQueryHookResult = ReturnType<
+  typeof useFindWarehouseByIdSuspenseQuery
+>;
+export type FindWarehouseByIdQueryResult = Apollo.QueryResult<
+  FindWarehouseByIdQuery,
+  FindWarehouseByIdQueryVariables
+>;
+export const FindAllWarehousesDocument = gql`
+  query findAllWarehouses(
+    $page: Int = 1
+    $limit: Int = 10
+    $name: String
+    $addressId: ID
+    $variantId: ID
+    $lowStockThreshold: Int
+    $sortBy: SortBy
+    $sortOrder: SortOrder
+  ) {
+    getAllWarehouses(
+      page: $page
+      limit: $limit
+      name: $name
+      addressId: $addressId
+      variantId: $variantId
+      lowStockThreshold: $lowStockThreshold
+      sortBy: $sortBy
+      sortOrder: $sortOrder
+    ) {
+      warehouses {
+        id
+        name
+        addressId
+        createdAt
+        updatedAt
+        stockPerWarehouses {
+          id
+          warehouseId
+          qtyAvailable
+          qtyReserved
+          lotNumber
+          serialNumbers
+          productLocation
+          estimatedReplenishmentDate
+        }
+      }
+      total
+      hasMore
+    }
+  }
+`;
+
+/**
+ * __useFindAllWarehousesQuery__
+ *
+ * To run a query within a React component, call `useFindAllWarehousesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindAllWarehousesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindAllWarehousesQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *      limit: // value for 'limit'
+ *      name: // value for 'name'
+ *      addressId: // value for 'addressId'
+ *      variantId: // value for 'variantId'
+ *      lowStockThreshold: // value for 'lowStockThreshold'
+ *      sortBy: // value for 'sortBy'
+ *      sortOrder: // value for 'sortOrder'
+ *   },
+ * });
+ */
+export function useFindAllWarehousesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    FindAllWarehousesQuery,
+    FindAllWarehousesQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    FindAllWarehousesQuery,
+    FindAllWarehousesQueryVariables
+  >(FindAllWarehousesDocument, options);
+}
+export function useFindAllWarehousesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FindAllWarehousesQuery,
+    FindAllWarehousesQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    FindAllWarehousesQuery,
+    FindAllWarehousesQueryVariables
+  >(FindAllWarehousesDocument, options);
+}
+export function useFindAllWarehousesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        FindAllWarehousesQuery,
+        FindAllWarehousesQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    FindAllWarehousesQuery,
+    FindAllWarehousesQueryVariables
+  >(FindAllWarehousesDocument, options);
+}
+export type FindAllWarehousesQueryHookResult = ReturnType<
+  typeof useFindAllWarehousesQuery
+>;
+export type FindAllWarehousesLazyQueryHookResult = ReturnType<
+  typeof useFindAllWarehousesLazyQuery
+>;
+export type FindAllWarehousesSuspenseQueryHookResult = ReturnType<
+  typeof useFindAllWarehousesSuspenseQuery
+>;
+export type FindAllWarehousesQueryResult = Apollo.QueryResult<
+  FindAllWarehousesQuery,
+  FindAllWarehousesQueryVariables
 >;
 export const CreateProductDocument = gql`
   mutation createProduct($input: CreateProductInput!) {
@@ -1849,7 +3532,6 @@ export const CreateProductDocument = gql`
       tags
       brand
       manufacturer
-      tenantId
       variants {
         attributes {
           key
@@ -1951,12 +3633,8 @@ export type CreateProductMutationOptions = Apollo.BaseMutationOptions<
   CreateProductMutationVariables
 >;
 export const UpdateDocument = gql`
-  mutation update(
-    $id: String!
-    $tenantId: String!
-    $input: UpdateProductInput!
-  ) {
-    updateProduct(id: $id, tenantId: $tenantId, input: $input) {
+  mutation update($id: String!, $input: UpdateProductInput!) {
+    updateProduct(id: $id, input: $input) {
       brand
       categories {
         categoryId
@@ -1981,7 +3659,6 @@ export const UpdateDocument = gql`
         recycledPercentage
       }
       tags
-      tenantId
       updatedAt
       variants {
         attributes {
@@ -2042,7 +3719,6 @@ export type UpdateMutationFn = Apollo.MutationFunction<
  * const [updateMutation, { data, loading, error }] = useUpdateMutation({
  *   variables: {
  *      id: // value for 'id'
- *      tenantId: // value for 'tenantId'
  *      input: // value for 'input'
  *   },
  * });
@@ -2066,8 +3742,8 @@ export type UpdateMutationOptions = Apollo.BaseMutationOptions<
   UpdateMutationVariables
 >;
 export const SoftDeleteDocument = gql`
-  mutation softDelete($id: String!, $tenantId: String!) {
-    softDeleteProduct(id: $id, tenantId: $tenantId) {
+  mutation softDelete($id: String!) {
+    softDeleteProduct(id: $id) {
       name
       isArchived
     }
@@ -2092,7 +3768,6 @@ export type SoftDeleteMutationFn = Apollo.MutationFunction<
  * const [softDeleteMutation, { data, loading, error }] = useSoftDeleteMutation({
  *   variables: {
  *      id: // value for 'id'
- *      tenantId: // value for 'tenantId'
  *   },
  * });
  */
@@ -2118,8 +3793,8 @@ export type SoftDeleteMutationOptions = Apollo.BaseMutationOptions<
   SoftDeleteMutationVariables
 >;
 export const RestoreDocument = gql`
-  mutation restore($id: String!, $tenantId: String!) {
-    restoreProduct(id: $id, tenantId: $tenantId) {
+  mutation restore($id: String!) {
+    restoreProduct(id: $id) {
       name
       isArchived
     }
@@ -2144,7 +3819,6 @@ export type RestoreMutationFn = Apollo.MutationFunction<
  * const [restoreMutation, { data, loading, error }] = useRestoreMutation({
  *   variables: {
  *      id: // value for 'id'
- *      tenantId: // value for 'tenantId'
  *   },
  * });
  */
@@ -2167,8 +3841,8 @@ export type RestoreMutationOptions = Apollo.BaseMutationOptions<
   RestoreMutationVariables
 >;
 export const HardDeleteDocument = gql`
-  mutation hardDelete($id: String!, $tenantId: String!) {
-    hardDeleteProduct(id: $id, tenantId: $tenantId) {
+  mutation hardDelete($id: String!) {
+    hardDeleteProduct(id: $id) {
       name
     }
   }
@@ -2192,7 +3866,6 @@ export type HardDeleteMutationFn = Apollo.MutationFunction<
  * const [hardDeleteMutation, { data, loading, error }] = useHardDeleteMutation({
  *   variables: {
  *      id: // value for 'id'
- *      tenantId: // value for 'tenantId'
  *   },
  * });
  */
@@ -2217,9 +3890,9 @@ export type HardDeleteMutationOptions = Apollo.BaseMutationOptions<
   HardDeleteMutation,
   HardDeleteMutationVariables
 >;
-export const GetIdDocument = gql`
-  query getId($tenantId: String!, $id: String!) {
-    getProductById(tenantId: $tenantId, id: $id) {
+export const FindProductByIdDocument = gql`
+  query findProductById($id: String!) {
+    getProductById(id: $id) {
       name
       shortDescription
       longDescription
@@ -2278,7 +3951,6 @@ export const GetIdDocument = gql`
       }
       updatedAt
       createdAt
-      tenantId
       productType
       isArchived
     }
@@ -2286,67 +3958,81 @@ export const GetIdDocument = gql`
 `;
 
 /**
- * __useGetIdQuery__
+ * __useFindProductByIdQuery__
  *
- * To run a query within a React component, call `useGetIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFindProductByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindProductByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetIdQuery({
+ * const { data, loading, error } = useFindProductByIdQuery({
  *   variables: {
- *      tenantId: // value for 'tenantId'
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetIdQuery(
-  baseOptions: Apollo.QueryHookOptions<GetIdQuery, GetIdQueryVariables> &
-    ({ variables: GetIdQueryVariables; skip?: boolean } | { skip: boolean }),
+export function useFindProductByIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    FindProductByIdQuery,
+    FindProductByIdQueryVariables
+  > &
+    (
+      | { variables: FindProductByIdQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetIdQuery, GetIdQueryVariables>(
-    GetIdDocument,
+  return Apollo.useQuery<FindProductByIdQuery, FindProductByIdQueryVariables>(
+    FindProductByIdDocument,
     options,
   );
 }
-export function useGetIdLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetIdQuery, GetIdQueryVariables>,
+export function useFindProductByIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FindProductByIdQuery,
+    FindProductByIdQueryVariables
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetIdQuery, GetIdQueryVariables>(
-    GetIdDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<
+    FindProductByIdQuery,
+    FindProductByIdQueryVariables
+  >(FindProductByIdDocument, options);
 }
-export function useGetIdSuspenseQuery(
+export function useFindProductByIdSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<GetIdQuery, GetIdQueryVariables>,
+    | Apollo.SuspenseQueryHookOptions<
+        FindProductByIdQuery,
+        FindProductByIdQueryVariables
+      >,
 ) {
   const options =
     baseOptions === Apollo.skipToken
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<GetIdQuery, GetIdQueryVariables>(
-    GetIdDocument,
-    options,
-  );
+  return Apollo.useSuspenseQuery<
+    FindProductByIdQuery,
+    FindProductByIdQueryVariables
+  >(FindProductByIdDocument, options);
 }
-export type GetIdQueryHookResult = ReturnType<typeof useGetIdQuery>;
-export type GetIdLazyQueryHookResult = ReturnType<typeof useGetIdLazyQuery>;
-export type GetIdSuspenseQueryHookResult = ReturnType<
-  typeof useGetIdSuspenseQuery
+export type FindProductByIdQueryHookResult = ReturnType<
+  typeof useFindProductByIdQuery
 >;
-export type GetIdQueryResult = Apollo.QueryResult<
-  GetIdQuery,
-  GetIdQueryVariables
+export type FindProductByIdLazyQueryHookResult = ReturnType<
+  typeof useFindProductByIdLazyQuery
 >;
-export const GetAllDocument = gql`
-  query getAll(
-    $tenantId: String!
+export type FindProductByIdSuspenseQueryHookResult = ReturnType<
+  typeof useFindProductByIdSuspenseQuery
+>;
+export type FindProductByIdQueryResult = Apollo.QueryResult<
+  FindProductByIdQuery,
+  FindProductByIdQueryVariables
+>;
+export const FindAllProductsDocument = gql`
+  query findAllProducts(
     $page: Float = 1
     $limit: Float = 10
     $categoriesIds: [Int!] = []
@@ -2357,7 +4043,6 @@ export const GetAllDocument = gql`
     $name: String = ""
   ) {
     getAllProducts(
-      tenantId: $tenantId
       page: $page
       limit: $limit
       categoriesIds: $categoriesIds
@@ -2392,7 +4077,6 @@ export const GetAllDocument = gql`
           recycledPercentage
         }
         tags
-        tenantId
         updatedAt
         variants {
           attributes {
@@ -2438,18 +4122,17 @@ export const GetAllDocument = gql`
 `;
 
 /**
- * __useGetAllQuery__
+ * __useFindAllProductsQuery__
  *
- * To run a query within a React component, call `useGetAllQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAllQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFindAllProductsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindAllProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetAllQuery({
+ * const { data, loading, error } = useFindAllProductsQuery({
  *   variables: {
- *      tenantId: // value for 'tenantId'
  *      page: // value for 'page'
  *      limit: // value for 'limit'
  *      categoriesIds: // value for 'categoriesIds'
@@ -2461,47 +4144,59 @@ export const GetAllDocument = gql`
  *   },
  * });
  */
-export function useGetAllQuery(
-  baseOptions: Apollo.QueryHookOptions<GetAllQuery, GetAllQueryVariables> &
-    ({ variables: GetAllQueryVariables; skip?: boolean } | { skip: boolean }),
+export function useFindAllProductsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    FindAllProductsQuery,
+    FindAllProductsQueryVariables
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetAllQuery, GetAllQueryVariables>(
-    GetAllDocument,
+  return Apollo.useQuery<FindAllProductsQuery, FindAllProductsQueryVariables>(
+    FindAllProductsDocument,
     options,
   );
 }
-export function useGetAllLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetAllQuery, GetAllQueryVariables>,
+export function useFindAllProductsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FindAllProductsQuery,
+    FindAllProductsQueryVariables
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetAllQuery, GetAllQueryVariables>(
-    GetAllDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<
+    FindAllProductsQuery,
+    FindAllProductsQueryVariables
+  >(FindAllProductsDocument, options);
 }
-export function useGetAllSuspenseQuery(
+export function useFindAllProductsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<GetAllQuery, GetAllQueryVariables>,
+    | Apollo.SuspenseQueryHookOptions<
+        FindAllProductsQuery,
+        FindAllProductsQueryVariables
+      >,
 ) {
   const options =
     baseOptions === Apollo.skipToken
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<GetAllQuery, GetAllQueryVariables>(
-    GetAllDocument,
-    options,
-  );
+  return Apollo.useSuspenseQuery<
+    FindAllProductsQuery,
+    FindAllProductsQueryVariables
+  >(FindAllProductsDocument, options);
 }
-export type GetAllQueryHookResult = ReturnType<typeof useGetAllQuery>;
-export type GetAllLazyQueryHookResult = ReturnType<typeof useGetAllLazyQuery>;
-export type GetAllSuspenseQueryHookResult = ReturnType<
-  typeof useGetAllSuspenseQuery
+export type FindAllProductsQueryHookResult = ReturnType<
+  typeof useFindAllProductsQuery
 >;
-export type GetAllQueryResult = Apollo.QueryResult<
-  GetAllQuery,
-  GetAllQueryVariables
+export type FindAllProductsLazyQueryHookResult = ReturnType<
+  typeof useFindAllProductsLazyQuery
+>;
+export type FindAllProductsSuspenseQueryHookResult = ReturnType<
+  typeof useFindAllProductsSuspenseQuery
+>;
+export type FindAllProductsQueryResult = Apollo.QueryResult<
+  FindAllProductsQuery,
+  FindAllProductsQueryVariables
 >;
 export const AddVariantToProductDocument = gql`
   mutation addVariantToProduct($input: CreateVariantInput!) {
@@ -2564,15 +4259,9 @@ export const UpdateVariantInProductDocument = gql`
   mutation updateVariantInProduct(
     $id: String!
     $productId: String!
-    $tenantId: String!
     $input: UpdateVariantInput!
   ) {
-    updateVariant(
-      id: $id
-      productId: $productId
-      tenantId: $tenantId
-      input: $input
-    ) {
+    updateVariant(id: $id, productId: $productId, input: $input) {
       variants {
         attributes {
           key
@@ -2633,7 +4322,6 @@ export type UpdateVariantInProductMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      id: // value for 'id'
  *      productId: // value for 'productId'
- *      tenantId: // value for 'tenantId'
  *      input: // value for 'input'
  *   },
  * });
@@ -2660,12 +4348,8 @@ export type UpdateVariantInProductMutationOptions = Apollo.BaseMutationOptions<
   UpdateVariantInProductMutationVariables
 >;
 export const ArchiveVariantOfProductDocument = gql`
-  mutation archiveVariantOfProduct(
-    $id: String!
-    $productId: String!
-    $tenantId: String!
-  ) {
-    archiveVariant(id: $id, productId: $productId, tenantId: $tenantId) {
+  mutation archiveVariantOfProduct($id: String!, $productId: String!) {
+    archiveVariant(id: $id, productId: $productId) {
       variants {
         isArchived
       }
@@ -2692,7 +4376,6 @@ export type ArchiveVariantOfProductMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      id: // value for 'id'
  *      productId: // value for 'productId'
- *      tenantId: // value for 'tenantId'
  *   },
  * });
  */
@@ -2718,12 +4401,8 @@ export type ArchiveVariantOfProductMutationOptions = Apollo.BaseMutationOptions<
   ArchiveVariantOfProductMutationVariables
 >;
 export const RestoreVariantOfProductDocument = gql`
-  mutation restoreVariantOfProduct(
-    $id: String!
-    $productId: String!
-    $tenantId: String!
-  ) {
-    restoreVariant(id: $id, productId: $productId, tenantId: $tenantId) {
+  mutation restoreVariantOfProduct($id: String!, $productId: String!) {
+    restoreVariant(id: $id, productId: $productId) {
       variants {
         isArchived
       }
@@ -2750,7 +4429,6 @@ export type RestoreVariantOfProductMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      id: // value for 'id'
  *      productId: // value for 'productId'
- *      tenantId: // value for 'tenantId'
  *   },
  * });
  */
@@ -2776,12 +4454,8 @@ export type RestoreVariantOfProductMutationOptions = Apollo.BaseMutationOptions<
   RestoreVariantOfProductMutationVariables
 >;
 export const RemoveVariantfromProductDocument = gql`
-  mutation removeVariantfromProduct(
-    $id: String!
-    $productId: String!
-    $tenantId: String!
-  ) {
-    removeVariant(id: $id, productId: $productId, tenantId: $tenantId) {
+  mutation removeVariantfromProduct($id: String!, $productId: String!) {
+    removeVariant(id: $id, productId: $productId) {
       variants {
         sku
       }
@@ -2808,7 +4482,6 @@ export type RemoveVariantfromProductMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      id: // value for 'id'
  *      productId: // value for 'productId'
- *      tenantId: // value for 'tenantId'
  *   },
  * });
  */
