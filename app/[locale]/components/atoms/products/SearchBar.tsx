@@ -15,7 +15,7 @@ export function SearchBar({ placeholder, value, onChange }: SearchBarProps) {
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
-        className="bg-card rounded-full pl-10"
+        className="bg-card rounded-full pl-10 text-[13px] sm:text-[14px]"
       />
     </div>
   );

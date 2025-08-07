@@ -558,7 +558,14 @@
     "addProduct": "Ajouter un produit",
     "status": "Statut",
     "category": "Categorie",
-    "searchProducts": "Rechercher des produits"
+    "searchProducts": "Rechercher des produits",
+    "all": "Tous",
+    "actives": "Actifs",
+    "archived": "Archivés",
+    "physical": "Physique",
+    "digital": "Digital",
+    "type": "Type",
+    "products": "Produits"
   },
   "Privacy": {
     "tableOfContents": "Table des matières",

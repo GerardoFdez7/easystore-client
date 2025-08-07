@@ -24,13 +24,17 @@ export function FilterDropdown({
   return (
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger
-        className={`${width} bg-card w-[110px] rounded-full sm:w-[160px]`}
+        className={`${width} bg-card w-[110px] rounded-full text-[13px] sm:w-[160px] sm:text-[14px]`}
       >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
         {options.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
+          <SelectItem
+            className="text-[13px] sm:text-[14px]"
+            key={option.value}
+            value={option.value}
+          >
             {option.label}
           </SelectItem>
         ))}
