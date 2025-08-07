@@ -9,6 +9,9 @@ import {
   TableRow,
 } from '@shadcn/ui/table';
 import { ProductTableRow } from '@atoms/products/ProductTableRow';
+import TabFilterProducts from '@atoms/products/TabFilterProducts';
+import { FilterType } from '@atoms/products/TabFilterProducts';
+import { useTranslations } from 'next-intl';
 
 interface MediaItem {
   id: string;
@@ -32,6 +35,8 @@ interface ProductTableProps {
   selectedProducts: string[];
   onSelectProduct: (productId: string, checked: boolean) => void;
   onSelectAll: (checked: boolean) => void;
+  selectedFilter: FilterType;
+  setSelectedFilter: (filter: FilterType) => void;
 }
 
 export function ProductTable({
@@ -39,12 +44,20 @@ export function ProductTable({
   selectedProducts,
   onSelectProduct,
   onSelectAll,
+  selectedFilter,
+  setSelectedFilter,
 }: ProductTableProps) {
+  const t = useTranslations('Products');
+
   return (
     <div className="overflow-hidden rounded-lg border shadow-lg">
-      <Table>
+      <TabFilterProducts
+        selectedFilter={selectedFilter}
+        setSelectedFilter={setSelectedFilter}
+      />
+      <Table className="bg-card">
         <TableHeader className="text-[12px] sm:text-[14px]">
-          <TableRow className="bg-card">
+          <TableRow>
             <TableHead className="w-9 px-3">
               <Checkbox
                 checked={selectedProducts.length === products.length}
@@ -52,16 +65,16 @@ export function ProductTable({
               />
             </TableHead>
             <TableHead className="text-foreground text-center font-medium">
-              Product
+              {t('products')}
             </TableHead>
             <TableHead className="text-foreground font-medium">
-              Status
+              {t('status')}
             </TableHead>
             <TableHead className="text-foreground font-medium">
-              Inventory
+              {t('type')}
             </TableHead>
             <TableHead className="text-foreground font-medium">
-              Category
+              {t('category')}
             </TableHead>
           </TableRow>
         </TableHeader>
