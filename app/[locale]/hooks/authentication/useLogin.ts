@@ -38,8 +38,7 @@ export const useLogin = (accountType: AccountTypeEnum) => {
           description: t('loginSuccessfulDescription'),
         });
 
-        //router.push('/dashboard');
-        window.location.replace('/dashboard');
+        router.push('/dashboard');
       }
     },
     onError: (error) => {
