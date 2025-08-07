@@ -3,6 +3,7 @@ export const PublicRoutes = [
   '/',
   '/login',
   '/register',
+  '/reset-password',
   '/terms',
   '/privacy',
   '/contact',
