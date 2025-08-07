@@ -557,7 +557,14 @@
     "addProduct": "Add Product",
     "status": "Status",
     "category": "Category",
-    "searchProducts": "Search Products"
+    "searchProducts": "Search Products",
+    "all": "All",
+    "actives": "Actives",
+    "archived": "Archived",
+    "physical": "Physical",
+    "digital": "Digital",
+    "type": "Type",
+    "products": "Products"
   },
   "Privacy": {
     "tableOfContents": "Table of contents",
