@@ -6,13 +6,18 @@ import { ProductTable } from '@molecules/products/ProductTable';
 import { ProductGrid } from '@molecules/products/ProductGrid';
 import { useState } from 'react';
 import { ProductsToolbar } from '@molecules/products/Toolbar';
+import { FilterType } from '@atoms/products/TabFilterProducts';
+import { useTranslations } from 'next-intl';
 
 export default function MainDashboard() {
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
   const [searchValue, setSearchValue] = useState('');
-  const [statusFilter, setStatusFilter] = useState('status');
+  const [typeFilter, setTypeFilter] = useState('type');
   const [categoryFilter, setCategoryFilter] = useState('category');
+  const [selectedFilter, setSelectedFilter] = useState<FilterType>('All');
+
+  const t = useTranslations('Products');
 
   const products = [
     {
@@ -177,7 +182,7 @@ export default function MainDashboard() {
       >
         <SiderbarDashboard />
         <SidebarInset>
-          <SiteHeader title="Products" />
+          <SiteHeader title={t('products')} />
           <div className="flex flex-1 flex-col">
             <div className="@container/main flex flex-1 flex-col gap-2">
               <div className="flex flex-col gap-4 px-5 py-4 md:gap-6 md:py-6">
@@ -185,8 +190,8 @@ export default function MainDashboard() {
                 <ProductsToolbar
                   searchValue={searchValue}
                   onSearchChange={setSearchValue}
-                  statusFilter={statusFilter}
-                  onStatusFilterChange={setStatusFilter}
+                  typeFilter={typeFilter}
+                  onTypeFilterChange={setTypeFilter}
                   categoryFilter={categoryFilter}
                   onCategoryFilterChange={setCategoryFilter}
                   viewMode={viewMode}
@@ -195,6 +200,8 @@ export default function MainDashboard() {
 
                 {viewMode === 'table' ? (
                   <ProductTable
+                    selectedFilter={selectedFilter}
+                    setSelectedFilter={setSelectedFilter}
                     products={products}
                     selectedProducts={selectedProducts}
                     onSelectProduct={handleProductSelect}

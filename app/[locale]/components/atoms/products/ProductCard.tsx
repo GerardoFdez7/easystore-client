@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { Checkbox } from '@shadcn/ui/checkbox';
 import {
   Carousel,
@@ -8,7 +9,7 @@ import {
   type CarouselApi,
 } from '@shadcn/ui/carousel';
 import Image from 'next/image';
-import * as React from 'react';
+import { useTranslations } from 'next-intl';
 
 interface MediaItem {
   id: string;
@@ -40,15 +41,14 @@ export function ProductCard({
 }: ProductCardProps) {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
-  const [count, setCount] = React.useState(0);
   const [previewIndex, setPreviewIndex] = React.useState<number | null>(null);
+  const t = useTranslations('Products');
 
   React.useEffect(() => {
     if (!api) {
       return;
     }
 
-    setCount(api.scrollSnapList().length);
     setCurrent(api.selectedScrollSnap() + 1);
 
     api.on('select', () => {
@@ -173,27 +173,16 @@ export function ProductCard({
         )}
       </div>
       <div className="p-4">
-        <div className="text-muted-foreground text-center text-xs">
-          Slide {current} of {count}
-        </div>
         <h3 className="text-title mb-3 text-[16px] font-medium">
           {product.name}
         </h3>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-foreground text-sm">Status:</span>
-            <span className="text-foreground text-sm font-medium">
-              {product.status}
-            </span>
+            <span className="text-foreground text-sm">{t('status')}:</span>
+            <span className="text-foreground text-sm">{product.status}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-foreground text-sm">Inventory:</span>
-            <span className="text-foreground text-sm font-medium">
-              {product.inventory}
-            </span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-foreground text-sm">Category:</span>
+            <span className="text-foreground text-sm">{t('category')}:</span>
             <span className="text-foreground text-sm">{product.category}</span>
           </div>
         </div>
