@@ -9,8 +9,8 @@ import { useTranslations } from 'next-intl';
 interface ProductsToolbarProps {
   searchValue?: string;
   onSearchChange?: (value: string) => void;
-  statusFilter?: string;
-  onStatusFilterChange?: (value: string) => void;
+  typeFilter?: string;
+  onTypeFilterChange?: (value: string) => void;
   categoryFilter?: string;
   onCategoryFilterChange?: (value: string) => void;
   viewMode: 'table' | 'cards';
@@ -20,18 +20,18 @@ interface ProductsToolbarProps {
 export function ProductsToolbar({
   searchValue,
   onSearchChange,
-  statusFilter,
-  onStatusFilterChange,
+  typeFilter,
+  onTypeFilterChange,
   categoryFilter,
   onCategoryFilterChange,
   onViewModeToggle,
 }: ProductsToolbarProps) {
   const t = useTranslations('Products');
 
-  const statusOptions = [
-    { value: 'status', label: t('status') },
-    { value: 'active', label: 'Active' },
-    { value: 'inactive', label: 'Inactive' },
+  const typeOptions = [
+    { value: 'type', label: t('type') },
+    { value: 'physical', label: t('physical') },
+    { value: 'digital', label: t('digital') },
   ];
 
   const categoryOptions = [
@@ -57,10 +57,10 @@ export function ProductsToolbar({
           {/* Filters only visible on large screens within this container */}
           <div className="hidden gap-4 xl:ml-4 xl:flex">
             <FilterDropdown
-              placeholder={t('status')}
-              options={statusOptions}
-              value={statusFilter}
-              onChange={onStatusFilterChange}
+              placeholder={t('type')}
+              options={typeOptions}
+              value={typeFilter}
+              onChange={onTypeFilterChange}
               width="w-32"
             />
             <FilterDropdown
@@ -78,10 +78,10 @@ export function ProductsToolbar({
           {/* Filters visible only on small/medium screens */}
           <div className="flex gap-1 sm:gap-4 xl:hidden">
             <FilterDropdown
-              placeholder={t('status')}
-              options={statusOptions}
-              value={statusFilter}
-              onChange={onStatusFilterChange}
+              placeholder={t('type')}
+              options={typeOptions}
+              value={typeFilter}
+              onChange={onTypeFilterChange}
               width="w-32"
             />
             <FilterDropdown
