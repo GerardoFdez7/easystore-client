@@ -1,0 +1,166 @@
+[
+  {
+    "id": "tech",
+    "name": "Tecnología",
+    "imageUrl": "/laptop.webp",
+    "description": "Gadgets, hardware y accesorios.",
+    "products": [
+      {
+        "id": "p1",
+        "name": "Ergo Chair",
+        "imageUrl": "/laptop.webp",
+        "status": "active"
+      },
+      {
+        "id": "p2",
+        "name": "Standing Desk",
+        "imageUrl": "/laptop.webp",
+        "status": "active"
+      },
+      {
+        "id": "p3",
+        "name": "Monitor 27\"",
+        "imageUrl": "/laptop.webp",
+        "status": "inactive"
+      },
+      {
+        "id": "p4",
+        "name": "LED Desk Lamp",
+        "imageUrl": "/laptop.webp",
+        "status": "active"
+      }
+    ]
+  },
+  {
+    "id": "computers",
+    "name": "Computers",
+    "imageUrl": "/laptop.webp",
+    "description": "Laptops, desktops y periféricos.",
+    "products": [
+      {
+        "id": "p5",
+        "name": "Gaming Laptop",
+        "imageUrl": "/laptop.webp",
+        "status": "active"
+      },
+      {
+        "id": "p6",
+        "name": "Mini PC",
+        "imageUrl": "/laptop.webp",
+        "status": "active"
+      }
+    ]
+  },
+  {
+    "id": "gaming",
+    "name": "Gaming",
+    "imageUrl": "/laptop.webp",
+    "description": "Consolas y accesorios para jugar.",
+    "products": [
+      {
+        "id": "p7",
+        "name": "Gamepad Pro",
+        "imageUrl": "/laptop.webp",
+        "status": "active"
+      }
+    ]
+  },
+  {
+    "id": "home-garden",
+    "name": "Home & Garden",
+    "imageUrl": "/laptop.webp",
+    "description": "Muebles, decoración y herramientas para el hogar.",
+    "products": [
+      {
+        "id": "p8",
+        "name": "Sofa Moderno",
+        "imageUrl": "/laptop.webp",
+        "status": "active"
+      },
+      {
+        "id": "p9",
+        "name": "Set de Jardinería",
+        "imageUrl": "/laptop.webp",
+        "status": "inactive"
+      },
+      {
+        "id": "p10",
+        "name": "Mesa de Centro",
+        "imageUrl": "/laptop.webp",
+        "status": "active"
+      }
+    ]
+  },
+  {
+    "id": "fashion",
+    "name": "Fashion",
+    "imageUrl": "/laptop.webp",
+    "description": "Ropa, zapatos y accesorios.",
+    "products": [
+      {
+        "id": "p11",
+        "name": "Chaqueta de Cuero",
+        "imageUrl": "/laptop.webp",
+        "status": "active"
+      },
+      {
+        "id": "p12",
+        "name": "Sneakers Urbanos",
+        "imageUrl": "/laptop.webp",
+        "status": "active"
+      },
+      {
+        "id": "p13",
+        "name": "Bolso de Mano",
+        "imageUrl": "/laptop.webp",
+        "status": "inactive"
+      }
+    ]
+  },
+  {
+    "id": "books-media",
+    "name": "Books & Media",
+    "imageUrl": "/laptop.webp",
+    "description": "Libros, revistas y material multimedia.",
+    "products": [
+      {
+        "id": "p14",
+        "name": "Novela de Ciencia Ficción",
+        "imageUrl": "/laptop.webp",
+        "status": "active"
+      },
+      {
+        "id": "p15",
+        "name": "Revista de Tecnología",
+        "imageUrl": "/laptop.webp",
+        "status": "active"
+      }
+    ]
+  },
+  {
+    "id": "mobile",
+    "name": "Mobile",
+    "imageUrl": "/laptop.webp",
+    "description": "Smartphones, tablets y accesorios móviles.",
+    "products": [
+      {
+        "id": "p16",
+        "name": "Smartphone X12",
+        "imageUrl": "/laptop.webp",
+        "status": "active"
+      },
+      {
+        "id": "p17",
+        "name": "Cargador Inalámbrico",
+        "imageUrl": "/laptop.webp",
+        "status": "inactive"
+      },
+      {
+        "id": "p18",
+        "name": "Auriculares Bluetooth",
+        "imageUrl": "/laptop.webp",
+        "status": "active"
+      }
+    ]
+  }
+]
