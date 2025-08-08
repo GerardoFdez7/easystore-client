@@ -1113,5 +1113,12 @@
       "deliveryInstructionsMaxLength": "Delivery instructions must be at most 200 characters",
       "phoneNumberInvalid": "Invalid phone number format"
     }
+  },
+  "Category": {
+    "category": "Categories",
+    "welcomeCategory": "Categories",
+    "addCategory": "Add Category",
+    "searchPlaceholder": "Search categories...",
+    "categoryCount": "categories"
   }
 }

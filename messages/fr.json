@@ -1072,5 +1072,12 @@
       "countryRequired": "Pays requis",
       "stateRequired": "État/Province requis"
     }
+  },
+  "Category": {
+    "category": "Catégories",
+    "welcomeCategory": "Catégories",
+    "addCategory": "Ajouter une catégorie",
+    "searchPlaceholder": "Rechercher des catégories...",
+    "categoryCount": "catégories"
   }
 }

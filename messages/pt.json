@@ -1073,5 +1073,12 @@
       "stateRequired": "Estado/Província obrigatório",
       "addressNamePlaceholder": "Endereço Principal"
     }
+  },
+  "Category": {
+    "category": "Categorias",
+    "welcomeCategory": "Categorias",
+    "addCategory": "Adicionar categoria",
+    "searchPlaceholder": "Buscar categorias...",
+    "categoryCount": "categorias"
   }
 }
