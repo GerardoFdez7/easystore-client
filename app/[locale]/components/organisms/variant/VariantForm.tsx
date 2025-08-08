@@ -50,7 +50,10 @@ export default function VariantForm() {
   };
 
   return (
-    <form onSubmit={onSubmit} className="mx-auto w-full max-w-3xl space-y-8">
+    <form
+      onSubmit={onSubmit}
+      className="mx-auto w-full max-w-3xl space-y-8 px-4 sm:px-6 lg:max-w-4xl"
+    >
       <MediaUploader
         t={t}
         preview={preview}
@@ -65,7 +68,6 @@ export default function VariantForm() {
         condition={condition}
         setCondition={setCondition}
       />
-
       <AttributesCard
         t={t}
         attributes={attributes}
@@ -73,18 +75,21 @@ export default function VariantForm() {
         notes={notes}
         setNotes={setNotes}
       />
-
       <DimensionsRow t={t} />
       <CodesList t={t} />
 
-      {/* Actions inline */}
-      <div className="flex items-center justify-end gap-3">
-        <Button type="button" variant="outline" className="px-6">
+      {/* Actions responsive */}
+      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full px-6 sm:w-auto"
+        >
           {t('cancel')}
         </Button>
         <Button
           type="submit"
-          className="text-background hover:bg-foreground/90 bg-black px-6"
+          className="text-background hover:bg-foreground/90 w-full bg-black px-6 sm:w-auto"
         >
           {t('saveChanges')}
         </Button>

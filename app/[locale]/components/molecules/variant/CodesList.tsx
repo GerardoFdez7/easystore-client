@@ -6,7 +6,7 @@ const fields = ['sku', 'upc', 'ean', 'isbn'] as const;
 
 export default function CodesList({ t }: { t: (k: string) => string }) {
   return (
-    <section className="space-y-4">
+    <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
       {fields.map((f) => (
         <div key={f} className="space-y-1.5">
           <Label htmlFor={f} className="text-foreground/80 text-xs">
