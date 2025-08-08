@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { Pencil } from 'lucide-react';
 import { Button } from '@shadcn/ui/button';
+import { useTranslations } from 'next-intl';
 
 type Props = {
   name: string;
@@ -17,6 +18,7 @@ export default function CategoryCard({
   count = 0,
   onEdit,
 }: Props) {
+  const t = useTranslations('Category');
   return (
     <div className="w-full rounded-lg bg-white p-2 shadow-sm ring-1 ring-gray-200">
       {/* Imagen con relación 4:3 para consistencia */}
@@ -45,7 +47,9 @@ export default function CategoryCard({
         </Button>
       </div>
 
-      <p className="mt-0.5 text-xs text-[#94a3b8]">{count} categories</p>
+      <p className="mt-0.5 text-xs text-[#94a3b8]">
+        {count} {t('categoryCount', { count })}
+      </p>
     </div>
   );
 }

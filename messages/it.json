@@ -1074,5 +1074,12 @@
       "stateRequired": "Stato/Provincia richiesto",
       "addressNamePlaceholder": "Indirizzo Principale"
     }
+  },
+  "Category": {
+    "category": "Categorie",
+    "welcomeCategory": "Categorie",
+    "addCategory": "Aggiungi categoria",
+    "searchPlaceholder": "Cerca categorie...",
+    "categoryCount": "categorie"
   }
 }
