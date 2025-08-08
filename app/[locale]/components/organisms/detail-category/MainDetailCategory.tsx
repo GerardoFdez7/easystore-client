@@ -25,15 +25,18 @@ export default function MainDetailCategory({ id }: { id: string }) {
         <SidebarInset>
           <SiteHeader title={isNew ? t('addCategory') : t('editCategory')} />
 
-          {/* Contenido */}
-          <div className="flex flex-1 flex-col gap-4 py-4 md:gap-6 md:py-6">
-            {/* Título de la vista de detalle */}
-            <div className="px-5">
-              <WelcomeDetailCategory />
-            </div>
+          <div className="flex w-full flex-1 flex-col gap-6 py-4 md:py-6">
+            <div className="w-full px-4 sm:px-6 lg:px-8">
+              {/* Título */}
+              <div className="mb-2">
+                <WelcomeDetailCategory />
+              </div>
 
-            {/* Formulario de detalle */}
-            <DetailCategory id={id} />
+              {/* Form + listado */}
+              <div className="mx-auto w-full max-w-7xl">
+                <DetailCategory id={id} />
+              </div>
+            </div>
           </div>
         </SidebarInset>
       </SidebarProvider>
