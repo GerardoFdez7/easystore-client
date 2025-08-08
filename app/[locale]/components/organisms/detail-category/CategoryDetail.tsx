@@ -80,14 +80,12 @@ export default function CategoryDetail({ id }: { id: string }) {
     [products],
   );
 
-  const onToggleSelect = (pid: string, val: boolean) => {
+  const onToggleSelect = (pid: string, val: boolean) =>
     setProducts((prev) =>
       prev.map((p) => (p.id === pid ? { ...p, selected: val } : p)),
     );
-  };
-  const onRemove = (pid: string) => {
+  const onRemove = (pid: string) =>
     setProducts((prev) => prev.filter((p) => p.id !== pid));
-  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -104,45 +102,47 @@ export default function CategoryDetail({ id }: { id: string }) {
     }
   };
 
-  const handleCancel = () => {
-    router.back();
-  };
+  const handleCancel = () => router.back();
 
   return (
-    <div className="mx-auto w-full max-w-[980px] px-5 pb-12">
-      <div className="mb-4">
-        <label className="mb-1 block text-sm font-medium text-[#64748b]">
-          {t('title')}
-        </label>
-        <Input
-          value={title}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setTitle(e.target.value)
-          }
-          placeholder={t('titlePlaceholder')}
-          className="bg-white"
-          disabled={loading}
-        />
+    <div className="w-full">
+      {/* Bloque de inputs */}
+      <div className="mx-auto w-full max-w-4xl">
+        <div className="mb-4">
+          <label className="mb-1 block text-sm font-medium text-[#64748b]">
+            {t('title')}
+          </label>
+          <Input
+            value={title}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setTitle(e.target.value)
+            }
+            placeholder={t('titlePlaceholder')}
+            className="bg-white"
+            disabled={loading}
+          />
+        </div>
+
+        <div className="mb-6 sm:mb-8">
+          <label className="mb-1 block text-sm font-medium text-[#64748b]">
+            {t('description')}
+          </label>
+          <Textarea
+            value={description}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+              setDescription(e.target.value)
+            }
+            placeholder={t('descriptionPlaceholder')}
+            className="min-h-[120px] bg-white"
+            disabled={loading}
+          />
+        </div>
       </div>
 
-      <div className="mb-8">
-        <label className="mb-1 block text-sm font-medium text-[#64748b]">
-          {t('description')}
-        </label>
-        <Textarea
-          value={description}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-            setDescription(e.target.value)
-          }
-          placeholder={t('descriptionPlaceholder')}
-          className="min-h-[120px] bg-white"
-          disabled={loading}
-        />
-      </div>
-
+      {/* Caja de productos */}
       <div
         className={cn(
-          'rounded-lg bg-white p-4 shadow-sm ring-1 ring-gray-200',
+          'mx-auto w-full max-w-4xl rounded-lg bg-white p-3 shadow-sm ring-1 ring-gray-200 sm:p-4',
           loading && 'opacity-70',
         )}
       >
@@ -161,17 +161,24 @@ export default function CategoryDetail({ id }: { id: string }) {
         />
       </div>
 
-      <div className="mt-8 flex items-center justify-end gap-3">
-        <Button variant="outline" onClick={handleCancel} disabled={saving}>
-          {t('cancel')}
-        </Button>
-        <Button
-          className="bg-black text-white hover:bg-black/90"
-          onClick={() => void handleSave()}
-          disabled={saving || loading || !title.trim()}
-        >
-          {isNew ? t('create') : t('save')}
-        </Button>
+      <div className="mt-6 sm:mt-8">
+        <div className="mx-auto flex w-full max-w-7xl flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
+          <Button
+            variant="outline"
+            onClick={handleCancel}
+            disabled={saving}
+            className="w-full sm:w-auto"
+          >
+            {t('cancel')}
+          </Button>
+          <Button
+            className="w-full bg-black text-white hover:bg-black/90 sm:w-auto"
+            onClick={() => void handleSave()}
+            disabled={saving || loading || !title.trim()}
+          >
+            {isNew ? t('create') : t('save')}
+          </Button>
+        </div>
       </div>
     </div>
   );
