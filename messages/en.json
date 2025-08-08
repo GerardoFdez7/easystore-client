@@ -831,5 +831,12 @@
     "storeNameUpdated": "Store name updated successfully.",
     "logoUpdated": "Logo updated successfully.",
     "noPhone": "No phone number"
+  },
+  "Category": {
+    "category": "Categories",
+    "welcomeCategory": "Categories",
+    "addCategory": "Add Category",
+    "searchPlaceholder": "Search categories...",
+    "categoryCount": "categories"
   }
 }

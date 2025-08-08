@@ -834,5 +834,12 @@
     "logoUpdated": "Logotipo atualizado com sucesso.",
 
     "noPhone": "Sem número de telefone"
+  },
+  "Category": {
+    "category": "Categorias",
+    "welcomeCategory": "Categorias",
+    "addCategory": "Adicionar categoria",
+    "searchPlaceholder": "Buscar categorias...",
+    "categoryCount": "categorias"
   }
 }

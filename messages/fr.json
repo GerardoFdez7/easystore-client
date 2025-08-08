@@ -833,5 +833,12 @@
     "logoUpdated": "Logo mis à jour avec succès.",
 
     "noPhone": "Aucun numéro de téléphone"
+  },
+  "Category": {
+    "category": "Catégories",
+    "welcomeCategory": "Catégories",
+    "addCategory": "Ajouter une catégorie",
+    "searchPlaceholder": "Rechercher des catégories...",
+    "categoryCount": "catégories"
   }
 }

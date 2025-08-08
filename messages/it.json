@@ -836,5 +836,12 @@
     "logoUpdated": "Logo aggiornato correttamente.",
 
     "noPhone": "Nessun numero di telefono"
+  },
+  "Category": {
+    "category": "Categorie",
+    "welcomeCategory": "Categorie",
+    "addCategory": "Aggiungi categoria",
+    "searchPlaceholder": "Cerca categorie...",
+    "categoryCount": "categorie"
   }
 }
