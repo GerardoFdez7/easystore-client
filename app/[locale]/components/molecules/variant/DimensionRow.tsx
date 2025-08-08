@@ -8,7 +8,7 @@ export default function DimensionsRow({ t }: { t: (k: string) => string }) {
       <h3 className="text-foreground/90 text-sm font-semibold">
         {t('dimension')}
       </h3>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="space-y-1.5">
           <Label htmlFor="height" className="text-foreground/80 text-xs">
             {t('height')}
