@@ -234,5 +234,12 @@
     "shipped": "Enviado",
     "completed": "Completado",
     "cancelled": "Cancelado"
+  },
+  "Category": {
+    "category": "Categorías",
+    "welcomeCategory": "Categorías",
+    "addCategory": "Agregar categoría",
+    "searchPlaceholder": "Buscar categorías...",
+    "categoryCount": "categorías"
   }
 }
