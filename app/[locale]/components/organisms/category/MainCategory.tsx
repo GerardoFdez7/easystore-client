@@ -2,6 +2,7 @@
 
 import WelcomeCategory from '@atoms/category/WelcomeCategory';
 import SearchCategory from '@atoms/category/SearchCategory';
+import CategoryGrid from '@molecules/category/CategoryGrid';
 import { SiteHeader } from '@atoms/shared/SiteHeader';
 import { SidebarInset, SidebarProvider } from '@shadcn/ui/sidebar';
 import { SiderbarDashboard } from '@molecules/shared/Sidebar';
@@ -23,13 +24,12 @@ export default function MainCategory() {
         <SiderbarDashboard />
         <SidebarInset>
           <SiteHeader title={t('category')} />
-          <div className="flex flex-1 flex-col">
-            <div className="@container/main flex flex-1 flex-col gap-2">
-              <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-                <WelcomeCategory />
-                <SearchCategory />
-              </div>
+          <div className="flex flex-1 flex-col p-5">
+            <div className="mb-4 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+              <WelcomeCategory />
+              <SearchCategory />
             </div>
+            <CategoryGrid />
           </div>
         </SidebarInset>
       </SidebarProvider>
