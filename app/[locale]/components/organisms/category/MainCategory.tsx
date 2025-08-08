@@ -11,9 +11,17 @@ import CategoryGrid from '@molecules/category/CategoryGrid';
 import CategoryTree from '@molecules/category/CategoryTree';
 import { Button } from '@shadcn/ui/button';
 import { Plus } from 'lucide-react';
+import { useRouter, useParams } from 'next/navigation';
 
 export default function MainCategory() {
   const t = useTranslations('Category');
+  const router = useRouter();
+  const params = useParams<{ locale?: string }>();
+  const locale = params?.locale;
+
+  const goToNew = () => {
+    router.push(locale ? `/${locale}/category/new` : `/category/new`);
+  };
 
   return (
     <main className="pt-22 2xl:m-5">
@@ -43,7 +51,7 @@ export default function MainCategory() {
                     <Button
                       type="button"
                       className="rounded-full bg-black px-4 py-2 text-white hover:bg-black/90"
-                      onClick={() => alert(t('addCategory'))}
+                      onClick={goToNew}
                     >
                       <Plus className="mr-2 h-4 w-4" />
                       {t('addCategory')}
