@@ -20,7 +20,7 @@ export default function PriceConditionRow({
   setCondition: (c: Condition) => void;
 }) {
   return (
-    <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div className="space-y-1.5">
         <Label htmlFor="price" className="text-foreground/80 text-xs">
           {t('price')}
