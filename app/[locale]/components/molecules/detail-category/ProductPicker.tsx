@@ -60,10 +60,10 @@ export default function ProductPicker({
 
   return (
     <div className="space-y-3">
-      {/* top controls */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        {/* search */}
-        <div className="relative w-[340px] max-w-full">
+      {/* Controles superiores */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
+        {/* Buscador */}
+        <div className="relative w-full">
           <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-slate-400" />
           <Input
             value={query}
@@ -77,7 +77,8 @@ export default function ProductPicker({
           />
         </div>
 
-        <div className="flex items-center gap-2">
+        {/* Acciones */}
+        <div className="flex flex-wrap items-center justify-start gap-2 sm:justify-end">
           <Button
             variant="outline"
             size="sm"
@@ -95,7 +96,7 @@ export default function ProductPicker({
             }}
             disabled={disabled}
           >
-            <SelectTrigger className="h-9 w-[126px]">
+            <SelectTrigger className="h-9 w-[140px]">
               <SelectValue placeholder={t('order')} />
             </SelectTrigger>
             <SelectContent>
@@ -106,17 +107,17 @@ export default function ProductPicker({
         </div>
       </div>
 
-      {/* list */}
+      {/* Lista */}
       <div className="overflow-hidden rounded-md ring-1 ring-gray-200">
         {filtered.map((p, idx) => (
           <div
             key={p.id}
             className={cn(
-              'grid grid-cols-[40px_1fr_auto_auto_40px] items-center gap-2 px-3 py-2',
-              'border-b border-gray-100 bg-white last:border-none',
+              'flex flex-col gap-2 border-b border-gray-100 bg-white px-3 py-2 last:border-none',
+              'md:grid md:grid-cols-[40px_1fr_auto_auto_40px] md:items-center md:gap-2',
             )}
           >
-            <div className="flex items-center justify-center">
+            <div className="flex items-center md:justify-center">
               <Checkbox
                 checked={p.selected}
                 onCheckedChange={(v) => onToggleSelect(p.id, Boolean(v))}
@@ -136,7 +137,7 @@ export default function ProductPicker({
               <span className="truncate text-sm text-[#423f3d]">{p.name}</span>
             </div>
 
-            <div className="flex justify-end">
+            <div className="md:justify-end">
               <Badge
                 className={cn(
                   'rounded-full px-3 py-1 text-[11px]',
@@ -152,9 +153,11 @@ export default function ProductPicker({
               </Badge>
             </div>
 
-            <div className="text-right text-xs text-slate-400">#{idx + 1}</div>
+            <div className="hidden text-right text-xs text-slate-400 md:block">
+              #{idx + 1}
+            </div>
 
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-end md:justify-center">
               <Button
                 size="icon"
                 variant="ghost"
