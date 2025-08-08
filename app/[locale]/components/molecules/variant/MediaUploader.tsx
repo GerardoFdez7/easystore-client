@@ -31,10 +31,10 @@ export default function MediaUploader({
           <div
             onDragOver={(e) => e.preventDefault()}
             onDrop={onDrop}
-            className="mx-auto flex h-40 w-full max-w-2xl flex-col items-center justify-center rounded-lg border-2 border-dashed"
+            className="mx-auto flex h-40 w-full max-w-2xl flex-col items-center justify-center rounded-lg border-2 border-dashed sm:h-48 md:h-56"
           >
             {preview ? (
-              <div className="relative h-32 w-72">
+              <div className="relative h-32 w-64 sm:h-40 sm:w-80 md:h-48 md:w-96">
                 <Image
                   src={preview}
                   alt="preview"

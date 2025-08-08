@@ -35,8 +35,9 @@ export default function AttributesCard({
   return (
     <section className="space-y-2">
       <Card className="rounded-xl border">
-        <CardContent className="p-4 md:p-5">
-          <div className="mb-4 flex items-center justify-between">
+        <CardContent className="p-4 sm:p-5">
+          {/* header envuelve en móvil */}
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
             <h3 className="text-foreground/90 text-sm font-semibold">
               {t('attributes')}
             </h3>
@@ -51,25 +52,26 @@ export default function AttributesCard({
             </Button>
           </div>
 
-          <div className="mb-4 grid grid-cols-12 gap-3">
+          {/* filas: 1 columna en móvil, 12 cols desde sm */}
+          <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-12">
             {attributes.map((a) => (
               <React.Fragment key={a.id}>
                 <Input
                   placeholder={t('attributeKey')}
-                  className="col-span-5 bg-white"
+                  className="bg-white sm:col-span-5"
                   value={a.key}
                   onChange={(e) => upd(a.id, 'key', e.target.value)}
                 />
                 <Input
                   placeholder={t('attributeValue')}
-                  className="col-span-6 bg-white"
+                  className="bg-white sm:col-span-6"
                   value={a.value}
                   onChange={(e) => upd(a.id, 'value', e.target.value)}
                 />
                 <Button
                   type="button"
                   variant="ghost"
-                  className="col-span-1"
+                  className="justify-self-end sm:col-span-1"
                   onClick={() => del(a.id)}
                   aria-label={t('removeAttribute')}
                 >
