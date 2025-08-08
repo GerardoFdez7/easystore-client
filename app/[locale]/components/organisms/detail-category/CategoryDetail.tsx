@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Input from '@atoms/shared/OutsideInput';
 import { Textarea } from '@shadcn/ui/textarea';
@@ -10,68 +10,13 @@ import ProductPicker, {
   type Product,
 } from '@molecules/detail-category/ProductPicker';
 import { cn } from 'utils';
-
-type CategoryDTO = {
-  id: string;
-  title: string;
-  description: string;
-  products: Product[];
-};
-
-async function fetchCategory(id: string): Promise<CategoryDTO | null> {
-  await new Promise((r) => setTimeout(r, 400));
-  if (id === 'new') return null;
-  return {
-    id,
-    title: 'Office & Workspace',
-    description:
-      'Products and accessories for productive home and office environments.',
-    products: [
-      {
-        id: 'p1',
-        name: 'Ergo Chair',
-        imageUrl: '/laptop.webp',
-        status: 'active',
-        selected: true,
-      },
-      {
-        id: 'p2',
-        name: 'Standing Desk',
-        imageUrl: '/laptop.webp',
-        status: 'active',
-        selected: true,
-      },
-      {
-        id: 'p3',
-        name: 'Monitor 27"',
-        imageUrl: '/laptop.webp',
-        status: 'inactive',
-        selected: false,
-      },
-      {
-        id: 'p4',
-        name: 'LED Desk Lamp',
-        imageUrl: '/laptop.webp',
-        status: 'active',
-        selected: false,
-      },
-    ],
-  };
-}
-
-async function saveCategory(payload: {
-  id?: string;
-  title: string;
-  description: string;
-  productIds: string[];
-}) {
-  await new Promise((r) => setTimeout(r, 600));
-  return payload.id ?? 'new-id-123';
-}
+import { getCategoryById, upsertCategory } from '@lib/data/categories';
 
 export default function CategoryDetail({ id }: { id: string }) {
   const t = useTranslations('CategoryDetail');
   const router = useRouter();
+  const params = useParams<{ locale?: string }>();
+  const locale = params?.locale;
   const isNew = id === 'new';
 
   const [loading, setLoading] = useState(true);
@@ -85,13 +30,7 @@ export default function CategoryDetail({ id }: { id: string }) {
     void (async () => {
       try {
         setLoading(true);
-        const data = await fetchCategory(id);
-        if (!mounted) return;
-        if (data) {
-          setTitle(data.title);
-          setDescription(data.description);
-          setProducts(data.products);
-        } else {
+        if (isNew) {
           setTitle('');
           setDescription('');
           setProducts(
@@ -111,15 +50,30 @@ export default function CategoryDetail({ id }: { id: string }) {
               selected: false,
             })),
           );
+        } else {
+          const data = await getCategoryById(id);
+          if (!mounted) return;
+          if (!data) {
+            router.replace(locale ? `/${locale}/category` : `/category`);
+            return;
+          }
+          setTitle(data.name);
+          setDescription(data.description);
+          setProducts(
+            data.products.map((p) => ({
+              ...p,
+              selected: p.status === 'active',
+            })),
+          );
         }
       } finally {
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
-    })(); // <- marcamos la promesa con `void`
+    })();
     return () => {
       mounted = false;
     };
-  }, [id]);
+  }, [id, isNew, locale, router]);
 
   const selectedIds = useMemo(
     () => products.filter((p) => p.selected).map((p) => p.id),
@@ -131,7 +85,6 @@ export default function CategoryDetail({ id }: { id: string }) {
       prev.map((p) => (p.id === pid ? { ...p, selected: val } : p)),
     );
   };
-
   const onRemove = (pid: string) => {
     setProducts((prev) => prev.filter((p) => p.id !== pid));
   };
@@ -139,14 +92,13 @@ export default function CategoryDetail({ id }: { id: string }) {
   const handleSave = async () => {
     setSaving(true);
     try {
-      // si no necesitas usar el id resultante, no lo guardes
-      await saveCategory({
+      await upsertCategory({
         id: isNew ? undefined : id,
-        title,
+        name: title,
         description,
         productIds: selectedIds,
       });
-      router.push('/category');
+      router.push(locale ? `/${locale}/category` : `/category`);
     } finally {
       setSaving(false);
     }
@@ -158,7 +110,6 @@ export default function CategoryDetail({ id }: { id: string }) {
 
   return (
     <div className="mx-auto w-full max-w-[980px] px-5 pb-12">
-      {/* Title */}
       <div className="mb-4">
         <label className="mb-1 block text-sm font-medium text-[#64748b]">
           {t('title')}
@@ -174,7 +125,6 @@ export default function CategoryDetail({ id }: { id: string }) {
         />
       </div>
 
-      {/* Description */}
       <div className="mb-8">
         <label className="mb-1 block text-sm font-medium text-[#64748b]">
           {t('description')}
@@ -190,7 +140,6 @@ export default function CategoryDetail({ id }: { id: string }) {
         />
       </div>
 
-      {/* Products box */}
       <div
         className={cn(
           'rounded-lg bg-white p-4 shadow-sm ring-1 ring-gray-200',
@@ -200,7 +149,6 @@ export default function CategoryDetail({ id }: { id: string }) {
         <h3 className="mb-3 text-center text-sm font-medium text-[#64748b]">
           {t('products')}
         </h3>
-
         <ProductPicker
           items={products}
           onToggleSelect={onToggleSelect}
@@ -213,7 +161,6 @@ export default function CategoryDetail({ id }: { id: string }) {
         />
       </div>
 
-      {/* Footer actions */}
       <div className="mt-8 flex items-center justify-end gap-3">
         <Button variant="outline" onClick={handleCancel} disabled={saving}>
           {t('cancel')}
