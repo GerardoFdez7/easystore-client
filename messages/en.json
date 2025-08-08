@@ -1120,5 +1120,29 @@
     "addCategory": "Add Category",
     "searchPlaceholder": "Search categories...",
     "categoryCount": "categories"
+  },
+  "CategoryDetail": {
+    "welcomeDetailCategory": "Category detail",
+    "addCategory": "Add Category",
+    "editCategory": "Edit Category",
+
+    "title": "Title",
+    "titlePlaceholder": "Enter the category title",
+    "description": "Description",
+    "descriptionPlaceholder": "Write a short description for this category",
+
+    "products": "Products",
+    "searchProducts": "Search products",
+    "explore": "Explore",
+    "order": "Order",
+    "orderAsc": "Ascending",
+    "orderDesc": "Descending",
+    "statusActive": "Active",
+    "statusInactive": "Inactive",
+    "showMore": "Show more",
+
+    "cancel": "Cancel",
+    "create": "Create",
+    "save": "Save"
   }
 }
