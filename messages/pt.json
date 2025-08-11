@@ -171,7 +171,7 @@
     "title": "Esqueci minha senha",
     "email": "E-mail",
     "emailPlaceholder": "exemplo@email.com",
-    "sendResetLink": "Enviar link de redefinição",
+    "sendResetLink": "Enviar",
     "sending": "Enviando...",
     "resetLinkSent": "Link de redefinição enviado com sucesso!",
     "resetLinkSentDescription": "Verifique seu e-mail para as instruções de redefinição de senha.",
@@ -200,7 +200,9 @@
     "networkError": "Erro de rede",
     "networkErrorDescription": "Verifique sua conexão e tente novamente.",
     "unexpectedError": "Ocorreu um erro inesperado",
-    "unexpectedErrorDescription": "Algo deu errado. Tente novamente."
+    "unexpectedErrorDescription": "Algo deu errado. Tente novamente.",
+    "passwordTooLong": "A senha deve ter no máximo 255 caracteres",
+    "tokenRequired": "O token é obrigatório"
   },
   "Register": {
     "registerTitle": "Cadastre-se",

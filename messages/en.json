@@ -171,7 +171,7 @@
     "title": "Forgot Password",
     "email": "Email",
     "emailPlaceholder": "example@email.com",
-    "sendResetLink": "Send Reset Link",
+    "sendResetLink": "Send",
     "sending": "Sending...",
     "resetLinkSent": "Reset link sent successfully!",
     "resetLinkSentDescription": "Please check your email for instructions to reset your password.",
@@ -200,7 +200,9 @@
     "networkError": "Network error",
     "networkErrorDescription": "Please check your connection and try again.",
     "unexpectedError": "An unexpected error occurred",
-    "unexpectedErrorDescription": "Something went wrong. Please try again."
+    "unexpectedErrorDescription": "Something went wrong. Please try again.",
+    "passwordTooLong": "Password must be at most 255 characters",
+    "tokenRequired": "Token is required"
   },
   "Register": {
     "registerTitle": "Register",

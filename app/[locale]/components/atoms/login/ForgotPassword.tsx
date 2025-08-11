@@ -8,7 +8,7 @@ export default function ForgotPassword() {
     <DialogForgotPassword>
       <button
         type="button"
-        className="cursor-pointer text-sm text-gray-600 underline hover:text-blue-800"
+        className="text-text hover:text-secondary cursor-pointer text-sm underline"
       >
         {t('changePassword')}
       </button>

@@ -171,7 +171,7 @@
     "title": "Password dimenticata",
     "email": "Email",
     "emailPlaceholder": "esempio@email.com",
-    "sendResetLink": "Invia link di reset",
+    "sendResetLink": "Invia",
     "sending": "Invio in corso...",
     "resetLinkSent": "Link di reset inviato con successo!",
     "resetLinkSentDescription": "Controlla la tua email per le istruzioni per reimpostare la password.",
@@ -200,7 +200,9 @@
     "networkError": "Errore di rete",
     "networkErrorDescription": "Controlla la tua connessione e riprova.",
     "unexpectedError": "Si è verificato un errore imprevisto",
-    "unexpectedErrorDescription": "Qualcosa è andato storto. Riprova."
+    "unexpectedErrorDescription": "Qualcosa è andato storto. Riprova.",
+    "passwordTooLong": "La password deve contenere al massimo 255 caratteri",
+    "tokenRequired": "Il token è obbligatorio"
   },
   "Register": {
     "registerTitle": "Registro",

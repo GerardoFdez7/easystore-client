@@ -52,7 +52,11 @@ export const ResetPasswordForm: React.FC = () => {
   const handleSubmit = async (data: ResetPasswordFormData) => {
     if (!email) return;
 
-    const result = await handleUpdatePassword(email, data.password);
+    const result = await handleUpdatePassword(
+      email,
+      data.password,
+      data.confirmPassword,
+    );
 
     if (result.success) router.push('/login');
   };

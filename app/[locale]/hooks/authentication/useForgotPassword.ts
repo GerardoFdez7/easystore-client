@@ -1,49 +1,40 @@
 'use client';
 
 import { useState } from 'react';
-import { useMutation, gql } from '@apollo/client';
-import { AccountTypeEnum } from '@graphql/generated';
-
-const forgotPasswordMutation = gql`
-  mutation forgotPassword($email: String!, $accountType: AccountTypeEnum!) {
-    forgotPassword(input: { email: $email, accountType: $accountType }) {
-      success
-      message
-    }
-  }
-`;
-
-interface ForgotPasswordData {
-  forgotPassword: {
-    success: boolean;
-    message: string;
-  };
-}
-
-interface ForgotPasswordVars {
-  email: string;
-  accountType: AccountTypeEnum;
-}
+import { useTranslations } from 'next-intl';
+import { z } from 'zod';
+import {
+  useForgotPasswordMutation,
+  ForgotPasswordMutationVariables,
+  AccountTypeEnum,
+} from '@graphql/generated';
 
 export const useForgotPassword = () => {
+  const t = useTranslations('Login');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [forgotPassword] = useMutation<ForgotPasswordData, ForgotPasswordVars>(
-    forgotPasswordMutation,
-  );
+  // Schema validation based on backend value objects
+  const forgotPasswordSchema = z.object({
+    email: z.string().email({ message: t('invalidEmailFormat') }),
+  });
+
+  const [forgotPasswordMutation] = useForgotPasswordMutation();
 
   const handleForgotPassword = async (email: string) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const { data } = await forgotPassword({
-        variables: {
-          email,
-          accountType: AccountTypeEnum.Tenant,
-        },
-      });
+      // Validate email format
+      const validatedData = forgotPasswordSchema.parse({ email });
+
+      const variables: ForgotPasswordMutationVariables = {
+        email: validatedData.email,
+        accountType: AccountTypeEnum.Tenant,
+      };
+
+      const { data } = await forgotPasswordMutation({ variables });
 
       if (data?.forgotPassword.success) {
         return { success: true, message: data.forgotPassword.message };
@@ -52,6 +43,12 @@ export const useForgotPassword = () => {
         return { success: false, message: data?.forgotPassword.message };
       }
     } catch (err) {
+      if (err instanceof z.ZodError) {
+        const errorMessage = err.errors[0]?.message || 'Invalid email format';
+        setError(errorMessage);
+        return { success: false, message: errorMessage };
+      }
+
       const errorMessage =
         err instanceof Error ? err.message : 'An error occurred';
       setError(errorMessage);
@@ -65,6 +62,7 @@ export const useForgotPassword = () => {
     handleForgotPassword,
     isLoading,
     error,
+    forgotPasswordSchema,
   };
 };
 

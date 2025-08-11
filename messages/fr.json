@@ -171,7 +171,7 @@
     "title": "Mot de passe oublié",
     "email": "E-mail",
     "emailPlaceholder": "exemple@email.com",
-    "sendResetLink": "Envoyer le lien de réinitialisation",
+    "sendResetLink": "Envoyer",
     "sending": "Envoi en cours...",
     "resetLinkSent": "Lien de réinitialisation envoyé avec succès !",
     "resetLinkSentDescription": "Veuillez vérifier votre e-mail pour les instructions de réinitialisation du mot de passe.",
@@ -200,7 +200,9 @@
     "networkError": "Erreur réseau",
     "networkErrorDescription": "Veuillez vérifier votre connexion et réessayer.",
     "unexpectedError": "Une erreur inattendue s'est produite",
-    "unexpectedErrorDescription": "Quelque chose s'est mal passé. Veuillez réessayer."
+    "unexpectedErrorDescription": "Quelque chose s'est mal passé. Veuillez réessayer.",
+    "passwordTooLong": "Le mot de passe doit contenir au maximum 255 caractères",
+    "tokenRequired": "Le token est requis"
   },
   "Register": {
     "registerTitle": "Registre",
