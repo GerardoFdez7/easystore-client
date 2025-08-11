@@ -1,5 +1,6 @@
 import CardPlan from '@atoms/confirm-register/CardPlan';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 
 type PlanEnterpriseProps = {
   price: string;
@@ -26,9 +27,11 @@ export default function PlanEnterprise({ price }: PlanEnterpriseProps) {
       ]}
     >
       <div className="flex justify-center">
-        <button className="text-title w-fit border-b-3 border-black text-4xl font-extrabold">
-          {t('buttonEnterprise')}
-        </button>
+        <Link href="/touch">
+          <button className="text-title w-fit cursor-pointer border-b-3 border-black text-4xl font-extrabold">
+            {t('buttonEnterprise')}
+          </button>
+        </Link>
       </div>
     </CardPlan>
   );
