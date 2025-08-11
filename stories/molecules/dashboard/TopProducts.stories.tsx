@@ -1,5 +1,5 @@
 import TopProducts from '@molecules/dashboard/TopProducts';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 
 const meta: Meta<typeof TopProducts> = {
   title: 'Molecules/Dashboard/TopProducts',

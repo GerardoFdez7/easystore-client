@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import Main from '@organisms/confirm-register/MainConfirmRegister';
 
 const meta: Meta<typeof Main> = {

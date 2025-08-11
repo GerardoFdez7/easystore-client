@@ -1,6 +1,6 @@
 import { SiderbarDashboard } from '@molecules/shared/Sidebar';
 import { SidebarProvider } from '@shadcn/ui/sidebar';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 
 const meta: Meta<typeof SiderbarDashboard> = {
   title: 'Molecules/Shared/Sidebar',

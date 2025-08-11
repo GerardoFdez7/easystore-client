@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import HeaderDashboard from '@organisms/dashboard/HeaderDashboard';
 
 const meta: Meta<typeof HeaderDashboard> = {

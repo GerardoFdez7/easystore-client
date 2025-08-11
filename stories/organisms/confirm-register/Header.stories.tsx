@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import Header from '@organisms/confirm-register/HeaderConfirmRegister';
 
 const meta: Meta<typeof Header> = {

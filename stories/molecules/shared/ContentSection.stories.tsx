@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { ContentSection } from '@molecules/shared/ContentSection';
 
 const meta: Meta<typeof ContentSection> = {

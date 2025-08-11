@@ -1,5 +1,5 @@
 import { ChartTotalSales } from '@molecules/dashboard/ChartTotalSales';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 
 const meta: Meta<typeof ChartTotalSales> = {
   title: 'Molecules/Dashboard/ChartTotalSales',

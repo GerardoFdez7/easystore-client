@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import HeaderPlan from '@atoms/confirm-register/HeaderPlan';
 
 const meta: Meta<typeof HeaderPlan> = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import PrivacyTemplate from '@templates/Privacy';
 
 const meta: Meta<typeof PrivacyTemplate> = {

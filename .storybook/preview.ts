@@ -1,7 +1,8 @@
-import type { Preview } from '@storybook/react';
+import type { Preview } from '@storybook/nextjs';
 import '../app/[locale]/globals.css';
 import { withNextIntl } from './decorators/withNextIntl';
 import { withNextThemes } from './decorators/withNextThemes';
+import { withApollo } from './decorators/withApollo';
 
 const preview: Preview = {
   parameters: {
@@ -15,7 +16,7 @@ const preview: Preview = {
       appDirectory: true,
     },
   },
-  decorators: [withNextIntl, withNextThemes],
+  decorators: [withApollo, withNextIntl, withNextThemes],
   globalTypes: {
     locale: {
       name: 'Locale',

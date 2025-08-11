@@ -1,5 +1,5 @@
 import { KPICards } from '@molecules/dashboard/KPICards';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 
 const meta: Meta<typeof KPICards> = {
   title: 'Molecules/Dashboard/KPICards',

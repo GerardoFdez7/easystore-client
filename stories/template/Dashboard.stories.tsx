@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { ApolloWrapper } from '@lib/apollo/apollo-provider';
 import DashboardPage from '@templates/Dashboard';
 

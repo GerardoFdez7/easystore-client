@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import LogoutConfirmDialog from '@atoms/dashboard/LogoutConfirmDialog';
 import { Button } from '@shadcn/ui/button';
 import { ApolloWrapper } from '@lib/apollo/apollo-provider';

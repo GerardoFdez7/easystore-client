@@ -1,5 +1,5 @@
 import CustomerSatisfaction from '@molecules/dashboard/CustomerSatisfaction';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 
 const meta: Meta<typeof CustomerSatisfaction> = {
   title: 'Molecules/Dashboard/CustomerSatisfaction',

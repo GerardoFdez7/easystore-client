@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import HeaderLanding from '@organisms/landing/HeaderLanding';
 
 const meta: Meta<typeof HeaderLanding> = {

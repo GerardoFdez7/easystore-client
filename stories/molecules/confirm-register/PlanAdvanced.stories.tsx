@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import PlanAdvanced from '@molecules/confirm-register/PlanAdvanced';
 
 const meta: Meta<typeof PlanAdvanced> = {

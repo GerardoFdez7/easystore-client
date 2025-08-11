@@ -1,5 +1,5 @@
 import CardStat from '@atoms/dashboard/CardStat';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { ArrowUpRight } from 'lucide-react';
 
 const meta: Meta<typeof CardStat> = {
