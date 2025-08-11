@@ -58,7 +58,7 @@ export function Combobox({
             {selected ? selected.label : placeholder}
           </span>
           <ChevronDown
-            className="pointer-events-none size-4 opacity-70"
+            className="border-primary text-primary/80 pointer-events-none inline-flex size-4 items-center justify-center rounded-full border"
             aria-hidden
           />
         </button>
