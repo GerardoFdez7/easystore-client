@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import CardPlan from '@atoms/confirm-register/CardPlan';
 
 const meta: Meta<typeof CardPlan> = {

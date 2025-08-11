@@ -1,5 +1,5 @@
 import WelcomeDashboard from '@atoms/dashboard/WelcomeDashboard';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 
 const meta: Meta<typeof WelcomeDashboard> = {
   title: 'Atoms/Dashboard/WelcomeDashboard',

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import Pricing from '@organisms/shared/Pricing';
 import { useState } from 'react';
 

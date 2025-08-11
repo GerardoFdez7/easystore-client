@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { PrivacyContent } from '@organisms/privacy/PrivacyContent';
 
 const meta: Meta<typeof PrivacyContent> = {

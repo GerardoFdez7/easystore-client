@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@shadcn/ui/tooltip';
 import { Button } from '@shadcn/ui/button';
 

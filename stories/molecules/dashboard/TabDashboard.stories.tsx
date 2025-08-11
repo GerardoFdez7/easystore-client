@@ -1,5 +1,5 @@
 import TabDashboard from '@molecules/dashboard/TabDashboard';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 
 const meta: Meta<typeof TabDashboard> = {
   title: 'Molecules/Dashboard/TabDashboard',

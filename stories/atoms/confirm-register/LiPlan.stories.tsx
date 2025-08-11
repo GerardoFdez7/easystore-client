@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import LiPlan from '@atoms/confirm-register/LiPlan';
 
 const meta: Meta<typeof LiPlan> = {

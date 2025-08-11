@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import OwnerMenuItem from '@atoms/dashboard/OwnerMenuItem';
 import { User } from 'lucide-react';
 import {
