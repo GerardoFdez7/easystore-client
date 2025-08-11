@@ -15,7 +15,7 @@ import { useRouter } from '@i18n/navigation';
 export const ResetPasswordForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const searchParams = useSearchParams();
-  const { handleUpdatePassword, isLoading, error } = useUpdatePassword();
+  const { handleUpdatePassword, isLoading } = useUpdatePassword();
   const t = useTranslations('ResetPassword');
   const router = useRouter();
 
@@ -57,8 +57,9 @@ export const ResetPasswordForm: React.FC = () => {
       data.password,
       data.confirmPassword,
     );
-
-    if (result.success) router.push('/login');
+    if (result.success) {
+      router.push('/login');
+    }
   };
 
   if (!email) {
@@ -78,7 +79,6 @@ export const ResetPasswordForm: React.FC = () => {
         className="w-full space-y-6 sm:max-w-sm md:max-w-md lg:max-w-lg"
       >
         <ResetPasswordFields />
-        {error && <p className="text-center text-sm text-red-600">{error}</p>}
         <ButtonLoadable
           type="submit"
           variant="auth"

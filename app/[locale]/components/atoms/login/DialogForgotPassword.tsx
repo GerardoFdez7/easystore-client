@@ -22,7 +22,7 @@ export default function DialogForgotPassword({
 }: DialogForgotPasswordProps) {
   const [email, setEmail] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-  const { handleForgotPassword, isLoading, error } = useForgotPassword();
+  const { handleForgotPassword, isLoading } = useForgotPassword();
   const t = useTranslations('ForgotPassword');
 
   // Reset email when dialog opens
@@ -36,8 +36,9 @@ export default function DialogForgotPassword({
     e.preventDefault();
 
     const result = await handleForgotPassword(email);
-
-    if (result.success) setIsOpen(false);
+    if (result.success) {
+      setIsOpen(false);
+    }
   };
 
   return (
@@ -61,7 +62,6 @@ export default function DialogForgotPassword({
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          {error && <p className="text-sm text-red-600">{error}</p>}
           <ButtonLoadable
             type="submit"
             variant="auth"
