@@ -1,48 +1,57 @@
 'use client';
 
 import { useState } from 'react';
-import { useMutation, gql } from '@apollo/client';
-
-const updatePasswordMutation = gql`
-  mutation updatePassword($token: String!, $password: String!) {
-    updatePassword(input: { token: $token, password: $password }) {
-      success
-      message
-    }
-  }
-`;
-
-interface UpdatePasswordData {
-  updatePassword: {
-    success: boolean;
-    message: string;
-  };
-}
-
-interface UpdatePasswordVars {
-  token: string;
-  password: string;
-}
+import { useTranslations } from 'next-intl';
+import { z } from 'zod';
+import {
+  useUpdatePasswordMutation,
+  UpdatePasswordMutationVariables,
+} from '@graphql/generated';
 
 export const useUpdatePassword = () => {
+  const t = useTranslations('ResetPassword');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [updatePassword] = useMutation<UpdatePasswordData, UpdatePasswordVars>(
-    updatePasswordMutation,
-  );
+  // Schema validation based on backend value objects
+  const updatePasswordSchema = z
+    .object({
+      token: z.string().min(1, { message: t('tokenRequired') }),
+      password: z
+        .string()
+        .min(8, { message: t('passwordTooShort') })
+        .max(255, { message: t('passwordTooLong') }),
+      confirmPassword: z.string(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t('passwordsDoNotMatch'),
+      path: ['confirmPassword'],
+    });
 
-  const handleUpdatePassword = async (token: string, password: string) => {
+  const [updatePasswordMutation] = useUpdatePasswordMutation();
+
+  const handleUpdatePassword = async (
+    token: string,
+    password: string,
+    confirmPassword: string,
+  ) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const { data } = await updatePassword({
-        variables: {
-          token,
-          password,
-        },
+      // Validate password requirements and confirmation
+      const validatedData = updatePasswordSchema.parse({
+        token,
+        password,
+        confirmPassword,
       });
+
+      const variables: UpdatePasswordMutationVariables = {
+        token: validatedData.token,
+        password: validatedData.password,
+      };
+
+      const { data } = await updatePasswordMutation({ variables });
 
       if (data?.updatePassword.success) {
         return { success: true, message: data.updatePassword.message };
@@ -51,6 +60,12 @@ export const useUpdatePassword = () => {
         return { success: false, message: data?.updatePassword.message };
       }
     } catch (err) {
+      if (err instanceof z.ZodError) {
+        const errorMessage = err.errors[0]?.message || 'Validation error';
+        setError(errorMessage);
+        return { success: false, message: errorMessage };
+      }
+
       const errorMessage =
         err instanceof Error ? err.message : 'An error occurred';
       setError(errorMessage);
@@ -64,6 +79,7 @@ export const useUpdatePassword = () => {
     handleUpdatePassword,
     isLoading,
     error,
+    updatePasswordSchema,
   };
 };
 
