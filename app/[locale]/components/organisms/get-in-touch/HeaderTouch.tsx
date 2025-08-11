@@ -1,5 +1,6 @@
 import Logo from '@atoms/shared/Logo';
 import { LanguageButton } from '@atoms/shared/ButtonLanguage';
+import Link from 'next/link';
 
 export default function HeaderTouch() {
   return (
