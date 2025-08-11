@@ -2,17 +2,10 @@
 
 import { useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
-import { AccountTypeEnum } from '@graphql/generated';
 
 const updatePasswordMutation = gql`
-  mutation updatePassword(
-    $email: String!
-    $password: String!
-    $accountType: AccountTypeEnum!
-  ) {
-    updatePassword(
-      input: { email: $email, password: $password, accountType: $accountType }
-    ) {
+  mutation updatePassword($token: String!, $password: String!) {
+    updatePassword(input: { token: $token, password: $password }) {
       success
       message
     }
@@ -27,9 +20,8 @@ interface UpdatePasswordData {
 }
 
 interface UpdatePasswordVars {
-  email: string;
+  token: string;
   password: string;
-  accountType: AccountTypeEnum;
 }
 
 export const useUpdatePassword = () => {
@@ -40,16 +32,15 @@ export const useUpdatePassword = () => {
     updatePasswordMutation,
   );
 
-  const handleUpdatePassword = async (email: string, password: string) => {
+  const handleUpdatePassword = async (token: string, password: string) => {
     setIsLoading(true);
     setError(null);
 
     try {
       const { data } = await updatePassword({
         variables: {
-          email,
+          token,
           password,
-          accountType: AccountTypeEnum.Tenant,
         },
       });
 
