@@ -1,37 +1,18 @@
 'use client';
 
 import React from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 import { Form } from '@shadcn/ui/form';
 import ContactFields from '@molecules/get-in-touch/ContactField';
 import FeaturesList from '@molecules/get-in-touch/FeatureList';
 import ButtonLoadable from '@atoms/shared/ButtonLoadable';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { useTouch } from '@hooks/authentication/useTouch';
 
 export default function MainTouch() {
   const t = useTranslations('GetInTouch');
-  const methods = useForm({
-    defaultValues: {
-      fullName: '',
-      businessEmail: '',
-      businessPhone: '',
-      company: '',
-      websiteUrl: '',
-      country: '',
-      annualRevenue: '',
-      isAgency: 'no',
-    },
-  });
-
-  const rawSubmit = methods.handleSubmit(async (data) => {
-    console.log('submitted:', data);
-  });
-
-  const handleFormSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
-    void rawSubmit(e);
-  };
+  const { form, handleSubmit, isLoading } = useTouch();
 
   return (
     <div className="flex-1 bg-gray-100 pt-16">
@@ -45,15 +26,21 @@ export default function MainTouch() {
           </section>
 
           <section className="rounded-lg p-6">
-            <FormProvider {...methods}>
-              <Form {...methods}>
-                <form onSubmit={handleFormSubmit} className="space-y-6">
+            <FormProvider {...form}>
+              <Form {...form}>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    void form.handleSubmit(handleSubmit)(e);
+                  }}
+                  className="space-y-6"
+                >
                   <ContactFields />
 
                   <ButtonLoadable
                     type="submit"
                     className="bg-primary hover:bg-primary/90 h-12 w-full rounded-lg font-medium text-white"
-                    isLoading={false}
+                    isLoading={isLoading}
                   >
                     {t('submit')}
                   </ButtonLoadable>
