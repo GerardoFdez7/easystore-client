@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { z } from 'zod';
+import { toast } from 'sonner';
 import {
   useUpdatePasswordMutation,
   UpdatePasswordMutationVariables,
@@ -11,7 +12,6 @@ import {
 export const useUpdatePassword = () => {
   const t = useTranslations('ResetPassword');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   // Schema validation based on backend value objects
   const updatePasswordSchema = z
@@ -34,9 +34,8 @@ export const useUpdatePassword = () => {
     token: string,
     password: string,
     confirmPassword: string,
-  ) => {
+  ): Promise<{ success: boolean }> => {
     setIsLoading(true);
-    setError(null);
 
     try {
       // Validate password requirements and confirmation
@@ -51,25 +50,33 @@ export const useUpdatePassword = () => {
         password: validatedData.password,
       };
 
-      const { data } = await updatePasswordMutation({ variables });
+      const result = await updatePasswordMutation({ variables });
 
-      if (data?.updatePassword.success) {
-        return { success: true, message: data.updatePassword.message };
+      if (result.data?.updatePassword.success) {
+        toast.success(t('passwordUpdated'), {
+          description: t('passwordUpdatedDescription'),
+        });
+        return { success: true };
       } else {
-        setError(data?.updatePassword.message || 'Failed to update password');
-        return { success: false, message: data?.updatePassword.message };
+        toast.error(t('passwordUpdateFailed'), {
+          description:
+            result.data?.updatePassword.message ||
+            t('passwordUpdateFailedDescription'),
+        });
+        return { success: false };
       }
     } catch (err) {
       if (err instanceof z.ZodError) {
-        const errorMessage = err.errors[0]?.message || 'Validation error';
-        setError(errorMessage);
-        return { success: false, message: errorMessage };
+        const errorMessage = err.errors[0]?.message || t('validationError');
+        toast.error(t('validationError'), {
+          description: errorMessage,
+        });
+      } else {
+        toast.error(t('unexpectedError'), {
+          description: t('unexpectedErrorDescription'),
+        });
       }
-
-      const errorMessage =
-        err instanceof Error ? err.message : 'An error occurred';
-      setError(errorMessage);
-      return { success: false, message: errorMessage };
+      return { success: false };
     } finally {
       setIsLoading(false);
     }
@@ -78,7 +85,6 @@ export const useUpdatePassword = () => {
   return {
     handleUpdatePassword,
     isLoading,
-    error,
     updatePasswordSchema,
   };
 };

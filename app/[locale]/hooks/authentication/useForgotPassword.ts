@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { z } from 'zod';
+import { toast } from 'sonner';
 import {
   useForgotPasswordMutation,
   ForgotPasswordMutationVariables,
@@ -10,9 +11,8 @@ import {
 } from '@graphql/generated';
 
 export const useForgotPassword = () => {
-  const t = useTranslations('Login');
+  const t = useTranslations('ForgotPassword');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   // Schema validation based on backend value objects
   const forgotPasswordSchema = z.object({
@@ -21,9 +21,10 @@ export const useForgotPassword = () => {
 
   const [forgotPasswordMutation] = useForgotPasswordMutation();
 
-  const handleForgotPassword = async (email: string) => {
+  const handleForgotPassword = async (
+    email: string,
+  ): Promise<{ success: boolean }> => {
     setIsLoading(true);
-    setError(null);
 
     try {
       // Validate email format
@@ -34,25 +35,33 @@ export const useForgotPassword = () => {
         accountType: AccountTypeEnum.Tenant,
       };
 
-      const { data } = await forgotPasswordMutation({ variables });
+      const result = await forgotPasswordMutation({ variables });
 
-      if (data?.forgotPassword.success) {
-        return { success: true, message: data.forgotPassword.message };
+      if (result.data?.forgotPassword.success) {
+        toast.success(t('resetEmailSent'), {
+          description: t('resetEmailSentDescription'),
+        });
+        return { success: true };
       } else {
-        setError(data?.forgotPassword.message || 'Failed to send reset email');
-        return { success: false, message: data?.forgotPassword.message };
+        toast.error(t('resetEmailFailed'), {
+          description:
+            result.data?.forgotPassword.message ||
+            t('resetEmailFailedDescription'),
+        });
+        return { success: false };
       }
     } catch (err) {
       if (err instanceof z.ZodError) {
-        const errorMessage = err.errors[0]?.message || 'Invalid email format';
-        setError(errorMessage);
-        return { success: false, message: errorMessage };
+        const errorMessage = err.errors[0]?.message || t('invalidEmailFormat');
+        toast.error(t('validationError'), {
+          description: errorMessage,
+        });
+      } else {
+        toast.error(t('unexpectedError'), {
+          description: t('unexpectedErrorDescription'),
+        });
       }
-
-      const errorMessage =
-        err instanceof Error ? err.message : 'An error occurred';
-      setError(errorMessage);
-      return { success: false, message: errorMessage };
+      return { success: false };
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +70,6 @@ export const useForgotPassword = () => {
   return {
     handleForgotPassword,
     isLoading,
-    error,
     forgotPasswordSchema,
   };
 };
