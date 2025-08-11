@@ -40,7 +40,7 @@ export const ContactFields: React.FC = () => {
               <InputCn
                 {...field}
                 placeholder={t('fullName')}
-                error={fieldState.error?.message}
+                aria-invalid={!!fieldState.error}
               />
             </FormControl>
             <FormMessage />
@@ -62,7 +62,7 @@ export const ContactFields: React.FC = () => {
                   type="email"
                   {...field}
                   placeholder={t('businessEmail')}
-                  error={fieldState.error?.message}
+                  aria-invalid={!!fieldState.error}
                 />
               </FormControl>
               <FormMessage />
@@ -81,7 +81,7 @@ export const ContactFields: React.FC = () => {
                   type="tel"
                   {...field}
                   placeholder={t('businessPhone')}
-                  error={fieldState.error?.message}
+                  aria-invalid={!!fieldState.error}
                 />
               </FormControl>
               <FormMessage />
@@ -102,7 +102,7 @@ export const ContactFields: React.FC = () => {
               <InputCn
                 {...field}
                 placeholder={t('company')}
-                error={fieldState.error?.message}
+                aria-invalid={!!fieldState.error}
               />
             </FormControl>
             <FormMessage />
@@ -123,7 +123,7 @@ export const ContactFields: React.FC = () => {
                 type="url"
                 {...field}
                 placeholder={t('websiteUrl')}
-                error={fieldState.error?.message}
+                aria-invalid={!!fieldState.error}
               />
             </FormControl>
             <FormMessage />
