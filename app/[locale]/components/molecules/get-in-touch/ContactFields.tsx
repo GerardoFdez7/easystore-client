@@ -11,17 +11,9 @@ import {
   FormMessage,
 } from '@shadcn/ui/form';
 import InputCn from '@atoms/shared/OutsideInput';
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from '@shadcn/ui/select';
 import { RadioGroup, RadioGroupItem } from '@shadcn/ui/radio-group';
-import { Combobox } from '../../shadcn/ui/combobox';
-import { CircleChevronDown } from 'lucide-react';
-import { getTranslatedCountries } from '@lib/consts/countries';
+import { Combobox } from '@shadcn/ui/combobox';
+import { COUNTRIES } from '@lib/consts/countries';
 
 export const ContactFields: React.FC = () => {
   const t = useTranslations('GetInTouch');
