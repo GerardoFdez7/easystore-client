@@ -402,6 +402,21 @@
     "no": "No",
     "submit": "Submit",
     "privacyNoticePrefix": "By submitting this form, you agree to EasyStore and its partners using your data for the purposes of marketing EasyStore’s services to you, in accordance with EasyStore’s Privacy Policy. You may opt out from emails by clicking unsubscribe and from all other marketing as detailed in our",
-    "privacyPolicy": "Privacy Policy."
+    "privacyPolicy": "Privacy Policy.",
+    "fullNameTooShort": "Full name is too short",
+    "fullNameTooLong": "Full name is too long",
+    "invalidEmailFormat": "Invalid email format",
+    "invalidPhone": "Invalid phone number",
+    "companyTooShort": "Company is required",
+    "companyTooLong": "Company name is too long",
+    "invalidUrl": "Invalid URL",
+    "countryRequired": "Country is required",
+    "annualRevenueRequired": "Annual revenue is required",
+
+    "submittedTitle": "Request sent",
+    "submittedDescription": "We will contact you shortly.",
+    "submitErrorTitle": "Something went wrong",
+    "submitErrorDescription": "Please try again later.",
+    "unknownError": "Unknown error"
   }
 }

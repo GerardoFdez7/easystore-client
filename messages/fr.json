@@ -402,6 +402,21 @@
     "no": "Non",
     "submit": "Envoyer",
     "privacyNoticePrefix": "En soumettant ce formulaire, vous acceptez qu’EasyStore et ses partenaires utilisent vos données aux fins de promouvoir les services d’EasyStore, conformément à la politique de confidentialité d’EasyStore. Vous pouvez vous désabonner des e-mails en cliquant sur se désabonner et de tout autre marketing comme expliqué dans notre",
-    "privacyPolicy": "Politique de confidentialité."
+    "privacyPolicy": "Politique de confidentialité.",
+    "fullNameTooShort": "Le nom est trop court",
+    "fullNameTooLong": "Le nom est trop long",
+    "invalidEmailFormat": "Format d’e-mail invalide",
+    "invalidPhone": "Numéro de téléphone invalide",
+    "companyTooShort": "L’entreprise est requise",
+    "companyTooLong": "Le nom de l’entreprise est trop long",
+    "invalidUrl": "URL invalide",
+    "countryRequired": "Le pays est requis",
+    "annualRevenueRequired": "Le chiffre d’affaires annuel est requis",
+
+    "submittedTitle": "Demande envoyée",
+    "submittedDescription": "Nous vous contacterons bientôt.",
+    "submitErrorTitle": "Un problème est survenu",
+    "submitErrorDescription": "Veuillez réessayer plus tard.",
+    "unknownError": "Erreur inconnue"
   }
 }

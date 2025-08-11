@@ -402,6 +402,21 @@
     "no": "Não",
     "submit": "Enviar",
     "privacyNoticePrefix": "Ao enviar este formulário, você concorda que a EasyStore e seus parceiros usem seus dados para fins de marketing dos serviços da EasyStore, de acordo com a Política de Privacidade da EasyStore. Você pode optar por não receber e‑mails clicando em cancelar inscrição e de qualquer outro marketing conforme detalhado em nossa",
-    "privacyPolicy": "Política de Privacidade."
+    "privacyPolicy": "Política de Privacidade.",
+    "fullNameTooShort": "O nome é muito curto",
+    "fullNameTooLong": "O nome é muito longo",
+    "invalidEmailFormat": "Formato de e-mail inválido",
+    "invalidPhone": "Número de telefone inválido",
+    "companyTooShort": "A empresa é obrigatória",
+    "companyTooLong": "O nome da empresa é muito longo",
+    "invalidUrl": "URL inválida",
+    "countryRequired": "O país é obrigatório",
+    "annualRevenueRequired": "A receita anual é obrigatória",
+
+    "submittedTitle": "Solicitação enviada",
+    "submittedDescription": "Entraremos em contato em breve.",
+    "submitErrorTitle": "Algo deu errado",
+    "submitErrorDescription": "Tente novamente mais tarde.",
+    "unknownError": "Erro desconhecido"
   }
 }
