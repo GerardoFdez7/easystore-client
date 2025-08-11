@@ -30,11 +30,10 @@ mutation forgotPassword($email: String!, $accountType: AccountTypeEnum!) {
   }
 }
 
-mutation updatePassword($email: String!, $password: String!, $accountType: AccountTypeEnum!) {
-  updatePassword(input: {
-    email: $email,
+mutation updatePassword($token: String!, $password: String!) {
+  updatePassword(input: {    
+    token: $token
     password: $password,
-    accountType: $accountType
   }) {
     success
     message

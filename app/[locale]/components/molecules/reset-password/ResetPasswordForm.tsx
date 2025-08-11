@@ -41,7 +41,7 @@ export const ResetPasswordForm: React.FC = () => {
 
   // Extract email from URL parameters
   useEffect(() => {
-    const emailParam = searchParams.get('email');
+    const emailParam = searchParams.get('token');
     if (emailParam) {
       // Decode the email (handles %40 -> @)
       const decodedEmail = decodeURIComponent(emailParam);
@@ -73,12 +73,6 @@ export const ResetPasswordForm: React.FC = () => {
         }}
         className="w-full space-y-6 sm:max-w-sm md:max-w-md lg:max-w-lg"
       >
-        <div className="mb-4 text-center">
-          <p className="text-sm text-gray-600">
-            {t('updatingPasswordFor')}{' '}
-            <span className="font-medium">{email}</span>
-          </p>
-        </div>
         <ResetPasswordFields />
         {error && <p className="text-center text-sm text-red-600">{error}</p>}
         <ButtonLoadable
