@@ -35,32 +35,18 @@ export const useForgotPassword = () => {
         accountType: AccountTypeEnum.Tenant,
       };
 
-      const result = await forgotPasswordMutation({ variables });
+      await forgotPasswordMutation({ variables });
 
-      if (result.data?.forgotPassword.success) {
-        toast.success(t('resetEmailSent'), {
-          description: t('resetEmailSentDescription'),
-        });
-        return { success: true };
-      } else {
-        toast.error(t('resetEmailFailed'), {
-          description:
-            result.data?.forgotPassword.message ||
-            t('resetEmailFailedDescription'),
-        });
-        return { success: false };
-      }
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        const errorMessage = err.errors[0]?.message || t('invalidEmailFormat');
-        toast.error(t('validationError'), {
-          description: errorMessage,
-        });
-      } else {
-        toast.error(t('unexpectedError'), {
-          description: t('unexpectedErrorDescription'),
-        });
-      }
+      // Always show generic success message for security reasons
+      // regardless of whether the email exists or not
+      toast.success(t('resetEmailSent'), {
+        description: t('resetEmailSentDescription'),
+      });
+      return { success: true };
+    } catch (_err) {
+      toast.error(t('unexpectedError'), {
+        description: t('unexpectedErrorDescription'),
+      });
       return { success: false };
     } finally {
       setIsLoading(false);
