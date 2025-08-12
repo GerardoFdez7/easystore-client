@@ -2,6 +2,8 @@
 
 import LoginForm from '@molecules/login/LoginForm';
 import ForgotPassword from '@atoms/login/ForgotPassword';
+import ResetPasswordForm from '@molecules/login/ResetPasswordForm';
+
 // import SocialRegisterButtons from '@molecules/shared/SocialAuthButtons';
 
 export default function MainLogin() {
@@ -10,6 +12,7 @@ export default function MainLogin() {
       <LoginForm />
       <ForgotPassword />
       {/* <SocialRegisterButtons /> */}
+      <ResetPasswordForm />
     </main>
   );
 }
