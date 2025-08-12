@@ -20,10 +20,11 @@ import {
 } from '@shadcn/ui/select';
 import { RadioGroup, RadioGroupItem } from '@shadcn/ui/radio-group';
 import { Combobox } from '@shadcn/ui/combobox';
-import { COUNTRIES } from '@lib/consts/countries';
+import { getTranslatedCountries } from '@lib/consts/countries';
 
 export const ContactFields: React.FC = () => {
   const t = useTranslations('GetInTouch');
+  const tRoot = useTranslations();
   const { control } = useFormContext();
 
   return (
@@ -37,11 +38,7 @@ export const ContactFields: React.FC = () => {
           <FormItem>
             <FormLabel>{t('fullName')}</FormLabel>
             <FormControl>
-              <InputCn
-                {...field}
-                placeholder={t('fullName')}
-                aria-invalid={!!fieldState.error}
-              />
+              <InputCn {...field} aria-invalid={!!fieldState.error} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -61,7 +58,6 @@ export const ContactFields: React.FC = () => {
                 <InputCn
                   type="email"
                   {...field}
-                  placeholder={t('businessEmail')}
                   aria-invalid={!!fieldState.error}
                 />
               </FormControl>
@@ -80,7 +76,6 @@ export const ContactFields: React.FC = () => {
                 <InputCn
                   type="tel"
                   {...field}
-                  placeholder={t('businessPhone')}
                   aria-invalid={!!fieldState.error}
                 />
               </FormControl>
@@ -99,11 +94,7 @@ export const ContactFields: React.FC = () => {
           <FormItem>
             <FormLabel>{t('company')}</FormLabel>
             <FormControl>
-              <InputCn
-                {...field}
-                placeholder={t('company')}
-                aria-invalid={!!fieldState.error}
-              />
+              <InputCn {...field} aria-invalid={!!fieldState.error} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -114,7 +105,6 @@ export const ContactFields: React.FC = () => {
       <FormField
         control={control}
         name="websiteUrl"
-        rules={{ required: true }}
         render={({ field, fieldState }) => (
           <FormItem>
             <FormLabel>{t('websiteUrl')}</FormLabel>
@@ -122,7 +112,6 @@ export const ContactFields: React.FC = () => {
               <InputCn
                 type="url"
                 {...field}
-                placeholder={t('websiteUrl')}
                 aria-invalid={!!fieldState.error}
               />
             </FormControl>
@@ -137,18 +126,18 @@ export const ContactFields: React.FC = () => {
           control={control}
           name="country"
           rules={{ required: true }}
-          render={({ field /*, _fieldState*/ }) => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel>{t('country')}</FormLabel>
               <FormControl>
                 <Combobox
-                  items={COUNTRIES.map((c) => ({
+                  items={getTranslatedCountries(tRoot).map((c) => ({
                     value: c.code,
                     label: c.name,
                   }))}
                   value={field.value}
                   onValueChange={field.onChange}
-                  placeholder={t('country')}
+                  placeholder={t('selectCountry')}
                 />
               </FormControl>
               <FormMessage />
@@ -167,7 +156,7 @@ export const ContactFields: React.FC = () => {
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger className="h-12 w-full">
-                    <SelectValue placeholder={t('annualRevenue')} />
+                    <SelectValue placeholder={t('selectAnnualRevenue')} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="0-100k">$0 – $100k</SelectItem>

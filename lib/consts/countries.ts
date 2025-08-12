@@ -1,5 +1,15 @@
 export type Country = { code: string; name: string };
 
+// Function to get translated country names
+export const getTranslatedCountries = (
+  t: (key: string) => string,
+): Country[] => {
+  return COUNTRIES.map((country) => ({
+    code: country.code,
+    name: t(`Countries.${country.code}`),
+  }));
+};
+
 export const COUNTRIES: Country[] = [
   { code: 'AF', name: 'Afghanistan' },
   { code: 'AX', name: 'Åland Islands' },
