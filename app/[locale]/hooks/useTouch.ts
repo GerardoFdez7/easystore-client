@@ -10,22 +10,6 @@ import { toast } from 'sonner';
 
 const phoneRegex = /^[+\d().\-\s]{6,20}$/;
 
-type ContactResponse =
-  | { ok: true }
-  | { ok: false; message?: string; error?: string; detail?: string };
-
-function pickMessage(body: unknown): string | undefined {
-  if (typeof body === 'string') return body;
-  if (body && typeof body === 'object') {
-    const obj = body as Record<string, unknown>;
-    for (const key of ['message', 'error', 'detail']) {
-      const v = obj[key];
-      if (typeof v === 'string' && v.trim()) return v;
-    }
-  }
-  return undefined;
-}
-
 export const annualRevenueEnum = z.enum([
   '0-100k',
   '100k-500k',
@@ -43,6 +27,11 @@ export const buildTouchFormSchema = (t: ReturnType<typeof useTranslations>) =>
       })
       .max(255, {
         message: t('fullNameTooLong', { default: 'Full name is too long' }),
+      })
+      .regex(/^\S+\s+\S+.*$/, {
+        message: t('fullNameRequiresTwoWords', {
+          default: 'Please enter at least first and last name',
+        }),
       }),
     businessEmail: z.string().email({
       message: t('invalidEmailFormat', { default: 'Invalid email format' }),
@@ -60,7 +49,9 @@ export const buildTouchFormSchema = (t: ReturnType<typeof useTranslations>) =>
       }),
     websiteUrl: z
       .string()
-      .url({ message: t('invalidUrl', { default: 'Invalid URL' }) }),
+      .url({ message: t('invalidUrl', { default: 'Invalid URL' }) })
+      .optional()
+      .or(z.literal('')),
     country: z.string().min(1, {
       message: t('countryRequired', { default: 'Country is required' }),
     }),
@@ -94,31 +85,19 @@ export const useTouch = () => {
     },
   });
 
-  const handleSubmit = async (data: TouchFormValues): Promise<void> => {
+  const handleSubmit = async (_data: TouchFormValues): Promise<void> => {
     setIsLoading(true);
     try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
+      // Mock GraphQL request simulation
+      await new Promise((resolve) =>
+        setTimeout(resolve, 1500 + Math.random() * 1000),
+      );
 
-      if (!res.ok) {
-        let body: unknown;
-        try {
-          body = await res.json();
-        } catch {
-          /* ignore non-JSON bodies */
-        }
-        const msg = pickMessage(body) ?? `HTTP ${res.status}`;
-        throw new Error(msg);
-      }
+      // Random success/failure simulation (80% success rate)
+      const isSuccess = Math.random() > 0.2;
 
-      const payload = (await res.json().catch(() => undefined)) as
-        | ContactResponse
-        | undefined;
-      if (payload && 'ok' in payload && payload.ok === false) {
-        throw new Error(pickMessage(payload) ?? 'Request failed');
+      if (!isSuccess) {
+        throw new Error('Mock error: Request failed');
       }
 
       toast.success(t('submittedTitle', { default: 'Request sent 🎉' }), {
