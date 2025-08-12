@@ -8,7 +8,7 @@ import FeaturesList from '@molecules/get-in-touch/FeatureList';
 import ButtonLoadable from '@atoms/shared/ButtonLoadable';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useTouch } from '@hooks/authentication/useTouch';
+import { useTouch } from '@hooks/useTouch';
 
 export default function MainTouch() {
   const t = useTranslations('GetInTouch');
@@ -39,7 +39,9 @@ export default function MainTouch() {
 
                   <ButtonLoadable
                     type="submit"
-                    className="bg-primary hover:bg-primary/90 h-12 w-full rounded-lg font-medium text-white"
+                    variant="auth"
+                    size="xl"
+                    className="w-full"
                     isLoading={isLoading}
                   >
                     {t('submit')}
