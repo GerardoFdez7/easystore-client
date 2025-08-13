@@ -1,14 +1,19 @@
 // @hooks/get-in-touch/useTouch.ts
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
+import {
+  useGetInTouchMutation,
+  GetInTouchMutationVariables,
+} from '@graphql/generated';
 
-const phoneRegex = /^[+\d().\-\s]{6,20}$/;
+const phoneRegex = /^[+\d().-\s]{6,20}$/;
 
 export const annualRevenueEnum = z.enum([
   '0-100k',
@@ -67,6 +72,7 @@ export type TouchFormValues = z.infer<ReturnType<typeof buildTouchFormSchema>>;
 
 export const useTouch = () => {
   const t = useTranslations('GetInTouch');
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const touchFormSchema = buildTouchFormSchema(t);
@@ -85,42 +91,57 @@ export const useTouch = () => {
     },
   });
 
-  const handleSubmit = async (_data: TouchFormValues): Promise<void> => {
-    setIsLoading(true);
-    try {
-      // Mock GraphQL request simulation
-      await new Promise((resolve) =>
-        setTimeout(resolve, 1500 + Math.random() * 1000),
-      );
-
-      // Random success/failure simulation (80% success rate)
-      const isSuccess = Math.random() > 0.2;
-
-      if (!isSuccess) {
-        throw new Error('Mock error: Request failed');
-      }
-
+  const [getInTouchMutation] = useGetInTouchMutation({
+    onCompleted: (data) => {
       toast.success(t('submittedTitle', { default: 'Request sent 🎉' }), {
         description: t('submittedDescription', {
           default: 'We will contact you shortly.',
         }),
       });
       form.reset();
-    } catch (err: unknown) {
-      const msg =
-        err instanceof Error && err.message
-          ? err.message
-          : t('unknownError', { default: 'Unknown error' });
-
-      toast.error(t('submitErrorTitle', { default: 'Something went wrong' }), {
-        description:
-          msg ||
-          t('submitErrorDescription', {
-            default: 'Please try again later.',
+      router.push('/');
+    },
+    onError: (error) => {
+      if (error.graphQLErrors?.length > 0) {
+        const graphQLError = error.graphQLErrors[0];
+        toast.error(
+          t('submitErrorTitle', { default: 'Something went wrong' }),
+          {
+            description: graphQLError.message,
+          },
+        );
+      } else if (error.networkError) {
+        toast.error(t('networkError', { default: 'Network Error' }), {
+          description: t('networkErrorDescription', {
+            default: 'Please check your internet connection and try again.',
           }),
-      });
-    } finally {
-      setIsLoading(false);
+        });
+      } else {
+        toast.error(t('unexpectedError', { default: 'Unexpected Error' }), {
+          description: t('unexpectedErrorDescription', {
+            default: 'An unexpected error occurred. Please try again later.',
+          }),
+        });
+      }
+    },
+  });
+
+  const handleSubmit = async (formData: TouchFormValues) => {
+    try {
+      const variables: GetInTouchMutationVariables = {
+        fullName: formData.fullName,
+        businessEmail: formData.businessEmail,
+        businessPhone: formData.businessPhone,
+        company: formData.company,
+        websiteUrl: formData.websiteUrl || '',
+        country: formData.country,
+        annualRevenue: formData.annualRevenue,
+        isAgency: formData.isAgency,
+      };
+
+      await getInTouchMutation({ variables });
+    } catch (error) {
+      console.error('Get in touch error:', error);
     }
   };
 

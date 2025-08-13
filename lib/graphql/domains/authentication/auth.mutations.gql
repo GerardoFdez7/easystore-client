@@ -47,3 +47,27 @@ mutation logout {
   }
 }
 
+mutation getInTouch(
+  $fullName: String!
+  $businessEmail: String!
+  $businessPhone: String!
+  $company: String!
+  $websiteUrl: String!
+  $country: String!
+  $annualRevenue: String!
+  $isAgency: String!
+) {
+  getInTouch(input: {
+    fullName: $fullName
+    businessEmail: $businessEmail
+    businessPhone: $businessPhone
+    company: $company
+    websiteUrl: $websiteUrl
+    country: $country
+    annualRevenue: $annualRevenue
+    isAgency: $isAgency
+  }) {
+    success
+    message
+  }
+}
