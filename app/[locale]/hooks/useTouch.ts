@@ -92,7 +92,7 @@ export const useTouch = () => {
   });
 
   const [getInTouchMutation] = useGetInTouchMutation({
-    onCompleted: (data) => {
+    onCompleted: () => {
       toast.success(t('submittedTitle', { default: 'Request sent 🎉' }), {
         description: t('submittedDescription', {
           default: 'We will contact you shortly.',
@@ -100,6 +100,7 @@ export const useTouch = () => {
       });
       form.reset();
       router.push('/');
+      setIsLoading(false);
     },
     onError: (error) => {
       if (error.graphQLErrors?.length > 0) {
@@ -123,11 +124,13 @@ export const useTouch = () => {
           }),
         });
       }
+      setIsLoading(false);
     },
   });
 
   const handleSubmit = async (formData: TouchFormValues) => {
     try {
+      setIsLoading(true);
       const variables: GetInTouchMutationVariables = {
         fullName: formData.fullName,
         businessEmail: formData.businessEmail,
@@ -142,6 +145,7 @@ export const useTouch = () => {
       await getInTouchMutation({ variables });
     } catch (error) {
       console.error('Get in touch error:', error);
+      setIsLoading(false);
     }
   };
 
