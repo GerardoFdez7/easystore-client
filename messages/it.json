@@ -726,6 +726,11 @@
     "edit": "Modifica",
     "save": "Salva",
     "uploadPhoto": "Carica foto profilo",
-    "enterDescription": "Inserisci una descrizione..."
+    "enterDescription": "Inserisci una descrizione...",
+    "add": "Aggiungi",
+    "change": "Modifica",
+    "connectWithGoogle": "Connettiti con Google",
+    "connectWithFacebook": "Connettiti con Facebook",
+    "verified": "verificato"
   }
 }
