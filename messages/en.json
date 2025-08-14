@@ -723,6 +723,11 @@
     "edit": "Edit",
     "save": "Save",
     "uploadPhoto": "Upload profile photo",
-    "enterDescription": "Enter description..."
+    "enterDescription": "Enter description...",
+    "add": "Add",
+    "change": "Change",
+    "connectWithGoogle": "Connect with Google",
+    "connectWithFacebook": "Connect with Facebook",
+    "verified": "verified"
   }
 }
