@@ -1,7 +1,9 @@
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@shadcn/ui/select';
@@ -29,15 +31,18 @@ export function FilterDropdown({
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        {options.map((option) => (
-          <SelectItem
-            className="text-[13px] sm:text-[14px]"
-            key={option.value}
-            value={option.value}
-          >
-            {option.label}
-          </SelectItem>
-        ))}
+        <SelectGroup>
+          <SelectLabel>{placeholder}</SelectLabel>
+          {options.map((option) => (
+            <SelectItem
+              className="text-[13px] sm:text-[14px]"
+              key={option.value}
+              value={option.value}
+            >
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectGroup>
       </SelectContent>
     </Select>
   );
