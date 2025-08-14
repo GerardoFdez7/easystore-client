@@ -1,40 +1,38 @@
 'use client';
 
-import { ArrowLeft, LogOut } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { ProfileLogo } from '@atoms/profile/ProfileLogo';
 import { DescriptionEditor } from '@molecules/profile/DescriptionEditor';
 import { useTranslations } from 'next-intl';
+import { LogOut } from 'lucide-react';
+import { Button } from '@shadcn/ui/button';
 
 export function Sidebar() {
-  const router = useRouter();
   const t = useTranslations('Profile');
 
   return (
-    <div className="w-full max-w-[320px] shrink-0 border-r border-gray-200 bg-white px-6 pt-4 pb-6">
-      <div className="mt-6 mb-8">
-        <ArrowLeft
-          className="mb-6 h-6 w-6 cursor-pointer text-[#423f3d]"
-          onClick={() => router.back()}
-        />
+    <aside className="flex w-full max-w-[360px] shrink-0 flex-col justify-between px-6 pt-2 pb-8">
+      <div>
+        <ProfileLogo />
+        <DescriptionEditor />
+        <div className="mt-6">
+          <h3 className="mb-2 text-sm font-medium text-[#111827]">
+            {t('storeProfileTitle')}
+          </h3>
+          <p className="text-sm leading-relaxed text-[#6b7280]">
+            {t('storeProfileDescription')}
+          </p>
+        </div>
       </div>
 
-      <ProfileLogo />
-      <DescriptionEditor />
-
-      <div className="mb-8 text-center">
-        <h3 className="mb-2 font-medium text-[#423f3d]">
-          {t('storeProfileTitle')}
-        </h3>
-        <p className="text-sm leading-relaxed text-[#64748b]">
-          {t('storeProfileDescription')}
-        </p>
+      <div className="mt-6">
+        <Button
+          variant="outline"
+          className="h-10 w-full justify-start rounded-lg border-gray-200 bg-white px-4 text-gray-800 shadow-sm hover:bg-gray-50"
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          {t('logOut')}
+        </Button>
       </div>
-
-      <div className="flex cursor-pointer items-center gap-2 text-[#423f3d]">
-        <LogOut className="h-4 w-4" />
-        <span className="font-medium">{t('logOut')}</span>
-      </div>
-    </div>
+    </aside>
   );
 }

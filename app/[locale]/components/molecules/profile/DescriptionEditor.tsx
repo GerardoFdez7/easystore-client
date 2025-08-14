@@ -12,15 +12,15 @@ export function DescriptionEditor() {
   const t = useTranslations('Profile');
 
   return (
-    <div className="mb-8 flex w-full flex-col items-center text-center">
-      <div className="mb-2 flex items-center gap-2">
-        <span className="font-medium text-[#423f3d]">{t('description')}</span>
+    <div className="mb-8 w-full">
+      <div className="mb-2 flex items-center justify-between">
+        <span className="font-medium text-[#111827]">{t('description')}</span>
         <Button
           variant="ghost"
           size="icon"
-          className="text-[#10b981]"
           type="button"
-          onClick={() => setIsEditing((prev) => !prev)}
+          className="text-secondary"
+          onClick={() => setIsEditing((v) => !v)}
         >
           {isEditing ? (
             <Save className="h-4 w-4" />
@@ -35,7 +35,7 @@ export function DescriptionEditor() {
         onChange={(e) => setDescription(e.target.value)}
         readOnly={!isEditing}
         placeholder={t('enterDescription')}
-        className="min-h-[180px] w-full resize-none rounded-lg border border-gray-200 bg-[#f5f5f5] p-3 text-sm placeholder:text-gray-400"
+        className="min-h-[200px] w-full resize-none rounded-lg border border-gray-200 bg-white p-3 text-sm shadow-sm placeholder:text-gray-400"
       />
     </div>
   );
