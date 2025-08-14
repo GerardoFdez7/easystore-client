@@ -43,9 +43,13 @@ export const useLogin = (accountType: AccountTypeEnum) => {
           description: t('loginSuccessfulDescription'),
         });
 
-        void checkAuth();
-
-        router.push('/dashboard');
+        checkAuth()
+          .then(() => {
+            router.push('/dashboard');
+          })
+          .catch((error) => {
+            console.error('Auth check failed:', error);
+          });
       }
     },
     onError: (error) => {
