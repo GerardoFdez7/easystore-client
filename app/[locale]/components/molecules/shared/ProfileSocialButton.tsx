@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { Button } from '@shadcn/ui/button';
 
 export const ProfileSocialButtons: React.FC = () => {
-  const t = useTranslations('Register');
+  const t = useTranslations('Profile');
 
   const handleGoogleAuth = () => {
     alert('We are working really hard on this feature!');
@@ -33,7 +33,7 @@ export const ProfileSocialButtons: React.FC = () => {
           height={20}
           className="mr-3 inline-block"
         />
-        <span className="text-sm font-medium">{t('registerWithGoogle')}</span>
+        <span className="text-sm font-medium">{t('connectWithGoogle')}</span>
       </Button>
 
       {/* Facebook */}
@@ -51,7 +51,7 @@ export const ProfileSocialButtons: React.FC = () => {
           height={20}
           className="mr-3 inline-block"
         />
-        <span className="text-sm font-medium">{t('registerWithFacebook')}</span>
+        <span className="text-sm font-medium">{t('connectWithFacebook')}</span>
       </Button>
     </div>
   );
