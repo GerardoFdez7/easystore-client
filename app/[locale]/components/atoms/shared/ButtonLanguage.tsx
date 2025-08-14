@@ -20,6 +20,9 @@ export const LanguageButton = () => {
   useEffect(() => {
     const lang = pathname?.substring(1, 3) || 'en';
     setSelectedLanguage(lang);
+
+    // Set NEXT_LOCALE cookie automatically when component mounts or locale changes
+    document.cookie = `NEXT_LOCALE=${lang}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`;
   }, [pathname]);
 
   const handleLanguageChange = (lang: string) => {
