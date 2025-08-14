@@ -3,8 +3,7 @@
 import { Sidebar } from '@organisms/profile/Sidebar';
 import { EditableField } from '@molecules/profile/EditableField';
 import { Button } from '@shadcn/ui/button';
-import SocialAuthButtons from '@molecules/shared/SocialAuthButtons';
-import { Label } from '@shadcn/ui/label';
+import ProfileSocialButtons from '@molecules/shared/ProfileSocialButton';
 import { useTranslations } from 'next-intl';
 
 export default function MainProfile() {
@@ -12,47 +11,81 @@ export default function MainProfile() {
 
   return (
     <div className="flex min-h-screen justify-center bg-[#f3f4f6] px-4 pt-20 md:px-8 lg:px-16">
-      <div className="flex w-full max-w-[1200px] flex-col gap-6 md:flex-row">
+      <div className="flex w-full max-w-[1200px] gap-0">
         <Sidebar />
+        {/* separador vertical */}
+        <div className="hidden w-px bg-gray-200 md:block" />
 
-        <main className="max-w-[700px] flex-1 p-4 md:p-8">
-          <EditableField label={t('domain')} value="" />
-          <EditableField label={t('phone')} value="" />
-          <EditableField label={t('email')} value="" />
+        <main className="flex-1 p-4 md:p-10">
+          <div className="max-w-[720px]">
+            <EditableField
+              label={t('domain')}
+              value=""
+              iconEditable
+              saveLabel={t('save')}
+              onSave={(v) => {
+                console.log('saved domain:', v);
+              }}
+            />
 
-          <div className="mb-8">
-            <Label className="mb-4 block font-medium text-[#423f3d]">
-              {t('password')}
-            </Label>
-            <div className="rounded-lg border border-gray-200 bg-white p-6">
-              <p className="mb-4 text-sm text-[#64748b]">
-                {t('passwordChangedNotice')}
-              </p>
-              <Button
-                variant="outline"
-                className="w-full border-[#423f3d] text-[#423f3d] hover:bg-[#423f3d] hover:text-white"
-              >
-                {t('changePassword')}
-              </Button>
-            </div>
+            <EditableField
+              label={t('phone')}
+              value=""
+              actionLabel={t('add')}
+              saveLabel={t('save')}
+              onAction={() => {}}
+              onSave={(v) => {
+                console.log('saved phone:', v);
+              }}
+            />
+
+            <EditableField
+              label={t('email')}
+              value=""
+              statusChip={{ label: t('verified'), tone: 'success' }}
+              actionLabel={t('change')}
+              saveLabel={t('save')}
+              onSave={(v) => {
+                console.log('saved email:', v);
+              }}
+            />
+
+            <section className="mb-8 grid grid-cols-[140px_1fr] items-start gap-6">
+              <div className="pt-2 text-sm font-medium text-[#111827]">
+                {t('password')}
+              </div>
+              <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+                <p className="mb-4 text-sm text-[#6b7280]">
+                  {t('passwordChangedNotice')}
+                </p>
+                <Button
+                  variant="outline"
+                  className="w-full rounded-full border-[#1f2937] text-[#1f2937] hover:bg-[#1f2937] hover:text-white"
+                >
+                  {t('changePassword')}
+                </Button>
+              </div>
+            </section>
+
+            <section className="mb-10 grid grid-cols-[140px_1fr] items-start gap-6">
+              <div className="pt-2 text-sm font-medium text-[#111827]">
+                {t('plan')}
+              </div>
+              <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+                <p className="mb-4 text-sm text-[#6b7280]">
+                  {t('currentPlan')}
+                </p>
+                <Button
+                  variant="outline"
+                  className="w-full rounded-full border-[#1f2937] text-[#1f2937] hover:bg-[#1f2937] hover:text-white"
+                >
+                  {t('changePlan')}
+                </Button>
+              </div>
+            </section>
+
+            <ProfileSocialButtons />
           </div>
-
-          <div className="mb-8">
-            <Label className="mb-4 block font-medium text-[#423f3d]">
-              {t('plan')}
-            </Label>
-            <div className="rounded-lg border border-gray-200 bg-white p-6">
-              <p className="mb-4 text-sm text-[#64748b]">{t('currentPlan')}</p>
-              <Button
-                variant="outline"
-                className="w-full border-[#423f3d] text-[#423f3d] hover:bg-[#423f3d] hover:text-white"
-              >
-                {t('changePlan')}
-              </Button>
-            </div>
-          </div>
-
-          <SocialAuthButtons />
         </main>
       </div>
     </div>
