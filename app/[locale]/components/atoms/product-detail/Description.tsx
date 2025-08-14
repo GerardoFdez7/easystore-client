@@ -15,11 +15,11 @@ export default function Description({
 }: DescriptionProps) {
   return (
     <div>
-      <label className="mb-2 block text-sm font-medium text-[#000000]">
+      <label className="text-title mb-2 block text-sm font-medium">
         {label}
       </label>
       <Textarea
-        className={cn('h-10 border-[#e2e8f0] bg-[#ffffff]', className)}
+        className={cn('h-10 border-[#e2e8f0]', className)}
         defaultValue={defaultValue}
         {...props}
       />
