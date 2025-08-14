@@ -6,17 +6,9 @@ import { SiderbarDashboard } from '@molecules/shared/Sidebar';
 import { useState } from 'react';
 import { Button } from '@shadcn/ui/button';
 import { Input } from '@shadcn/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@shadcn/ui/select';
 import { Checkbox } from '@shadcn/ui/checkbox';
-import { Badge } from '@shadcn/ui/badge';
 import { Card, CardContent } from '@shadcn/ui/card';
-import { Archive, Upload, Plus, X, Trash2 } from 'lucide-react';
+import { Archive, Plus, X, Trash2 } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,11 +22,16 @@ import {
 } from '@shadcn/ui/alert-dialog';
 import Title from '@atoms/product-detail/Title';
 import Description from '@atoms/product-detail/Description';
+import Multimedia from '@atoms/product-detail/Multimedia';
+import Category from '@molecules/product-detail/Category';
+import TypeProduct from '@atoms/product-detail/TypeProduct';
+import Tags from '@molecules/product-detail/Tags';
+import TableVariants from '@molecules/product-detail/TableVariants';
 
 export default function MainProductDetail() {
-  const [tags, setTags] = useState(['Gaming', 'Gaming', 'Gaming']);
+  const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState('');
-  const [selectedCategories, setSelectedCategories] = useState(['Computers']);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [isArchived, setIsArchived] = useState(false);
 
   const addTag = () => {
@@ -52,11 +49,6 @@ export default function MainProductDetail() {
     setSelectedCategories(selectedCategories.filter((_, i) => i !== index));
   };
 
-  const variants = [
-    { id: 1, name: 'Variant 1', price: '₡ 2000.00', stock: '10' },
-    { id: 2, name: 'Variant 2', price: '₡ 2000.00', stock: '10' },
-    { id: 3, name: 'Variant 3', price: '₡ 2000.00', stock: '10' },
-  ];
   return (
     <main className="pt-22 2xl:m-5">
       <SidebarProvider
@@ -85,209 +77,29 @@ export default function MainProductDetail() {
                   <Description label="Long Description" className="h-30" />
 
                   {/* Multimedia */}
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-[#000000]">
-                      Multimedia
-                    </label>
-                    <Card className="border-2 border-dashed border-[#d9d9d9] bg-[#ffffff]">
-                      <CardContent className="p-12 text-center">
-                        <div className="space-y-4">
-                          <div className="text-lg font-medium text-[#000000]">
-                            Multimedia
-                          </div>
-                          <div className="text-sm text-[#737373]">
-                            Drag and drop or browse to upload
-                          </div>
-                          <Button
-                            variant="outline"
-                            className="border-[#d9d9d9] text-[#737373]"
-                          >
-                            <Upload className="mr-2 h-4 w-4" />
-                            Upload
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
+                  <Multimedia />
 
                   {/* Category */}
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-[#000000]">
-                      Category
-                    </label>
-                    <div className="mb-3 flex items-center gap-2">
-                      <Select
-                        value=""
-                        onValueChange={(value) => {
-                          if (value && !selectedCategories.includes(value)) {
-                            setSelectedCategories([
-                              ...selectedCategories,
-                              value,
-                            ]);
-                          }
-                        }}
-                      >
-                        <SelectTrigger className="w-full border-[#e2e8f0] bg-[#ffffff]">
-                          <SelectValue placeholder="Select a category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="computers">Computers</SelectItem>
-                          <SelectItem value="electronics">
-                            Electronics
-                          </SelectItem>
-                          <SelectItem value="accessories">
-                            Accessories
-                          </SelectItem>
-                          <SelectItem value="gaming">Gaming</SelectItem>
-                          <SelectItem value="software">Software</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedCategories.map((category, index) => (
-                        <Badge
-                          key={index}
-                          variant="secondary"
-                          className="bg-[#d9d9d9] text-[#000000] hover:bg-[#c4c0c0]"
-                        >
-                          {category}
-                          <button
-                            onClick={() => removeCategory(index)}
-                            className="ml-2"
-                          >
-                            <X className="h-3 w-3" />
-                          </button>
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
+                  <Category
+                    selectedCategories={selectedCategories}
+                    setSelectedCategories={setSelectedCategories}
+                    removeCategory={removeCategory}
+                  />
 
                   {/* Variants */}
-                  <div>
-                    <div className="mb-4 flex items-center justify-between">
-                      <label className="text-sm font-medium text-[#000000]">
-                        Variants
-                      </label>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="border-[#d9d9d9] text-[#737373]"
-                      >
-                        <Plus className="mr-2 h-4 w-4" />
-                        Add variant
-                      </Button>
-                    </div>
-
-                    <Card className="border-[#e2e8f0] bg-[#ffffff]">
-                      <CardContent className="p-0">
-                        <div className="overflow-x-auto">
-                          <table className="w-full">
-                            <thead className="border-b border-[#e2e8f0]">
-                              <tr>
-                                <th className="p-4 text-left text-sm font-medium text-[#737373]">
-                                  <Checkbox />
-                                </th>
-                                <th className="p-4 text-left text-sm font-medium text-[#737373]">
-                                  Variant
-                                </th>
-                                <th className="p-4 text-left text-sm font-medium text-[#737373]">
-                                  Price
-                                </th>
-                                <th className="p-4 text-left text-sm font-medium text-[#737373]">
-                                  Stock
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {variants.map((variant) => (
-                                <tr
-                                  key={variant.id}
-                                  className="border-b border-[#e2e8f0] last:border-b-0"
-                                >
-                                  <td className="p-4">
-                                    <Checkbox />
-                                  </td>
-                                  <td className="p-4">
-                                    <div className="flex items-center gap-3">
-                                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#737373] text-sm font-medium text-[#ffffff]">
-                                        V
-                                      </div>
-                                      <span className="text-sm text-[#000000]">
-                                        {variant.name}
-                                      </span>
-                                    </div>
-                                  </td>
-                                  <td className="p-4 text-sm text-[#000000]">
-                                    {variant.price}
-                                  </td>
-                                  <td className="p-4 text-sm text-[#000000]">
-                                    {variant.stock}
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
+                  <TableVariants />
 
                   {/* Type Product */}
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-[#000000]">
-                      Type Product
-                    </label>
-                    <Select defaultValue="physical">
-                      <SelectTrigger className="border-[#e2e8f0] bg-[#ffffff]">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="physical">PHYSICAL</SelectItem>
-                        <SelectItem value="digital">DIGITAL</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  <TypeProduct />
 
                   {/* Tags */}
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-[#000000]">
-                      Tags
-                    </label>
-                    <div className="mb-3 flex items-center gap-2">
-                      <Input
-                        value={newTag}
-                        onChange={(e) => setNewTag(e.target.value)}
-                        placeholder="Gaming"
-                        className="border-[#e2e8f0] bg-[#ffffff]"
-                        onKeyPress={(e) => e.key === 'Enter' && addTag()}
-                      />
-                      <Button
-                        onClick={addTag}
-                        size="sm"
-                        variant="outline"
-                        className="border-[#d9d9d9]"
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {tags.map((tag, index) => (
-                        <Badge
-                          key={index}
-                          variant="secondary"
-                          className="bg-[#d9d9d9] text-[#000000] hover:bg-[#c4c0c0]"
-                        >
-                          {tag}
-                          <button
-                            onClick={() => removeTag(index)}
-                            className="ml-2"
-                          >
-                            <X className="h-3 w-3" />
-                          </button>
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
+                  <Tags
+                    tags={tags}
+                    newTag={newTag}
+                    setNewTag={setNewTag}
+                    addTag={addTag}
+                    removeTag={removeTag}
+                  />
 
                   {/* Brand Fields */}
                   <div className="grid grid-cols-2 gap-4">
