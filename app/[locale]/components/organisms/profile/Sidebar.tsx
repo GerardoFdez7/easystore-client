@@ -10,11 +10,11 @@ export function Sidebar() {
   const t = useTranslations('Profile');
 
   return (
-    <aside className="flex w-full max-w-[360px] shrink-0 flex-col justify-between px-6 pt-2 pb-8">
-      <div>
+    <aside className="flex w-full flex-col px-4 pt-2 pb-6 sm:px-6 md:max-w-[360px] md:shrink-0 md:justify-between md:pb-8">
+      <div className="border-b border-gray-200 pb-6 md:border-none md:pb-0">
         <ProfileLogo />
         <DescriptionEditor />
-        <div className="mt-6">
+        <div className="mt-4 sm:mt-6">
           <h3 className="mb-2 text-sm font-medium text-[#111827]">
             {t('storeProfileTitle')}
           </h3>
@@ -24,7 +24,7 @@ export function Sidebar() {
         </div>
       </div>
 
-      <div className="mt-6">
+      <div className="mt-4 md:mt-auto">
         <Button
           variant="outline"
           className="h-10 w-full justify-start rounded-lg border-gray-200 bg-white px-4 text-gray-800 shadow-sm hover:bg-gray-50"

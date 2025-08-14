@@ -20,8 +20,8 @@ export function ProfileLogo() {
   };
 
   return (
-    <div className="mb-8 flex flex-col items-center">
-      <div className="relative mb-5 h-28 w-28 overflow-hidden rounded-full border border-gray-200 bg-white shadow-sm">
+    <div className="mb-8 flex w-full flex-col items-center">
+      <div className="relative mx-auto mb-5 h-24 w-24 overflow-hidden rounded-full border border-gray-200 bg-white shadow-sm sm:h-28 sm:w-28">
         {image ? (
           <Image src={image} alt="Profile" className="object-cover" fill />
         ) : (
@@ -44,7 +44,7 @@ export function ProfileLogo() {
         />
       </div>
 
-      <div className="flex w-full max-w-[260px] items-center gap-2">
+      <div className="mx-auto flex w-full max-w-[260px] items-center justify-center gap-2">
         {isEditing ? (
           <Input
             value={name}
@@ -52,7 +52,7 @@ export function ProfileLogo() {
             className="flex-1 border-gray-200 bg-white text-center"
           />
         ) : (
-          <span className="flex-1 text-base font-semibold text-[#111827]">
+          <span className="flex-1 text-center text-base font-semibold text-[#111827]">
             {name || t('defaultName')}
           </span>
         )}
@@ -63,6 +63,7 @@ export function ProfileLogo() {
           variant="ghost"
           className="text-secondary"
           onClick={() => setIsEditing((v) => !v)}
+          aria-label={isEditing ? 'Save' : 'Edit'}
         >
           {isEditing ? (
             <Save className="h-4 w-4" />
