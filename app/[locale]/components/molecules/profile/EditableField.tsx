@@ -82,7 +82,7 @@ export function EditableField({
         )}
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <Input
           ref={inputRef}
           value={currentValue}
@@ -91,46 +91,48 @@ export function EditableField({
             setCurrentValue(e.target.value)
           }
           onKeyDown={handleKeyDown}
-          className="h-10 rounded-md border-gray-200 bg-white text-sm shadow-sm"
+          className="h-10 min-w-0 flex-1 rounded-md border-gray-200 bg-white text-sm shadow-sm"
         />
 
-        {actionLabel ? (
-          isEditing ? (
-            <Button
-              type="button"
-              variant="link"
-              className="text-secondary h-9 px-2 underline-offset-2 hover:underline"
-              onClick={save}
-            >
-              {saveLabel}
-            </Button>
+        <div className="flex w-full justify-end md:w-auto">
+          {actionLabel ? (
+            isEditing ? (
+              <Button
+                type="button"
+                variant="link"
+                className="text-secondary h-9 px-2 underline-offset-2 hover:underline"
+                onClick={save}
+              >
+                {saveLabel}
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                variant="link"
+                className="text-secondary h-9 px-2 underline-offset-2 hover:underline"
+                onClick={startEditing}
+              >
+                {actionLabel}
+              </Button>
+            )
           ) : (
-            <Button
-              type="button"
-              variant="link"
-              className="text-secondary h-9 px-2 underline-offset-2 hover:underline"
-              onClick={startEditing}
-            >
-              {actionLabel}
-            </Button>
-          )
-        ) : (
-          iconEditable && (
-            <Button
-              type="button"
-              variant="link"
-              className="text-secondary h-9 px-2"
-              onClick={isEditing ? save : startEditing}
-              aria-label={isEditing ? 'Save' : 'Edit'}
-            >
-              {isEditing ? (
-                <SaveIcon className="h-4 w-4" />
-              ) : (
-                <Edit2 className="h-4 w-4" />
-              )}
-            </Button>
-          )
-        )}
+            iconEditable && (
+              <Button
+                type="button"
+                variant="link"
+                className="text-secondary h-9 px-2"
+                onClick={isEditing ? save : startEditing}
+                aria-label={isEditing ? 'Save' : 'Edit'}
+              >
+                {isEditing ? (
+                  <SaveIcon className="h-4 w-4" />
+                ) : (
+                  <Edit2 className="h-4 w-4" />
+                )}
+              </Button>
+            )
+          )}
+        </div>
       </div>
     </div>
   );

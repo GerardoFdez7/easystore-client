@@ -13,8 +13,10 @@ export function DescriptionEditor() {
 
   return (
     <div className="mb-8 w-full">
-      <div className="mb-2 flex items-center justify-between">
-        <span className="font-medium text-[#111827]">{t('description')}</span>
+      <div className="mb-2 flex items-center justify-between gap-2">
+        <span className="text-center font-medium text-[#111827]">
+          {t('description')}
+        </span>
         <Button
           variant="ghost"
           size="icon"
@@ -35,7 +37,7 @@ export function DescriptionEditor() {
         onChange={(e) => setDescription(e.target.value)}
         readOnly={!isEditing}
         placeholder={t('enterDescription')}
-        className="min-h-[200px] w-full resize-none rounded-lg border border-gray-200 bg-white p-3 text-sm shadow-sm placeholder:text-gray-400"
+        className="min-h-[140px] w-full resize-none rounded-lg border border-gray-200 bg-white p-3 text-sm shadow-sm placeholder:text-gray-400 sm:min-h-[200px]"
       />
     </div>
   );
