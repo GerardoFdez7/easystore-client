@@ -13,8 +13,8 @@ export default function MainDashboard() {
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
   const [searchValue, setSearchValue] = useState('');
-  const [typeFilter, setTypeFilter] = useState('type');
-  const [categoryFilter, setCategoryFilter] = useState('category');
+  const [typeFilter, setTypeFilter] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('All');
 
   const t = useTranslations('Products');

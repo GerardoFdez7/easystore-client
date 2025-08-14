@@ -1,6 +1,9 @@
+'use client';
+
 import { Checkbox } from '@shadcn/ui/checkbox';
 import { TableCell, TableRow } from '@shadcn/ui/table';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface MediaItem {
   id: string;
@@ -30,8 +33,30 @@ export function ProductTableRow({
   isSelected,
   onSelect,
 }: ProductTableRowProps) {
+  const router = useRouter();
+
+  const handleRowClick = (e: React.MouseEvent) => {
+    // Prevent navigation when clicking on checkbox
+    if (
+      (e.target as HTMLElement).closest('input[type="checkbox"]') ||
+      (e.target as HTMLElement).closest('[role="checkbox"]')
+    ) {
+      return;
+    }
+
+    // Create URL-friendly product name
+    const productSlug = product.name
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '');
+    router.push(`/products/${productSlug}`);
+  };
+
   return (
-    <TableRow className="bg-card hover:bg-hover border-b">
+    <TableRow
+      className="bg-card hover:bg-hover cursor-pointer border-b transition-colors"
+      onClick={handleRowClick}
+    >
       <TableCell className="px-3">
         <Checkbox checked={isSelected} onCheckedChange={onSelect} />
       </TableCell>

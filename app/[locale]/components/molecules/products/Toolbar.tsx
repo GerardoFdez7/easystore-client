@@ -29,13 +29,11 @@ export function ProductsToolbar({
   const t = useTranslations('Products');
 
   const typeOptions = [
-    { value: 'type', label: t('type') },
     { value: 'physical', label: t('physical') },
     { value: 'digital', label: t('digital') },
   ];
 
   const categoryOptions = [
-    { value: 'category', label: t('category') },
     { value: 'home-kitchen', label: 'Home & Kitchen' },
     { value: 'electronics', label: 'Electronics' },
   ];
