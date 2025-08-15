@@ -3,13 +3,28 @@
 import { Textarea } from '@shadcn/ui/textarea';
 import { Button } from '@shadcn/ui/button';
 import { Edit2, Save } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
-export function DescriptionEditor() {
+export function DescriptionEditor({
+  value,
+  onSave,
+  loading = false,
+}: {
+  value?: string;
+  onSave?: (v: string) => void | Promise<unknown>;
+  loading?: boolean;
+}) {
   const [isEditing, setIsEditing] = useState(false);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState(value ?? '');
   const t = useTranslations('Profile');
+
+  useEffect(() => setDescription(value ?? ''), [value]);
+
+  const handleToggle = () => {
+    if (isEditing) void onSave?.(description);
+    setIsEditing((v) => !v);
+  };
 
   return (
     <div className="mb-8 w-full">
@@ -22,7 +37,8 @@ export function DescriptionEditor() {
           size="icon"
           type="button"
           className="text-secondary"
-          onClick={() => setIsEditing((v) => !v)}
+          onClick={handleToggle}
+          disabled={loading}
         >
           {isEditing ? (
             <Save className="h-4 w-4" />
