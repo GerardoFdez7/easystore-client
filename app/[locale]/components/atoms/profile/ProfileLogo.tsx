@@ -1,37 +1,60 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Edit2, Save, Camera } from 'lucide-react';
 import Image from 'next/image';
 import { Input } from '@shadcn/ui/input';
 import { Button } from '@shadcn/ui/button';
-import { useTranslations } from 'next-intl';
 
-export function ProfileLogo() {
+export function ProfileLogo({
+  name: nameProp,
+  logoUrl,
+  onNameSave,
+  onLogoFile,
+  loading = false,
+}: {
+  name?: string;
+  logoUrl?: string | null;
+  onNameSave?: (v: string) => void | Promise<unknown>;
+  onLogoFile?: (f: File) => void | Promise<unknown>;
+  loading?: boolean;
+}) {
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState('');
-  const [image, setImage] = useState<string | null>(null);
+  const [name, setName] = useState(nameProp ?? '');
+  const [preview, setPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const t = useTranslations('Profile');
+
+  // sincroniza cuando venga del hook
+  useEffect(() => setName(nameProp ?? ''), [nameProp]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) setImage(URL.createObjectURL(file));
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setPreview(url); // preview instantánea
+    void onLogoFile?.(file); // subida real
   };
 
   return (
     <div className="mb-8 flex w-full flex-col items-center">
       <div className="relative mx-auto mb-5 h-24 w-24 overflow-hidden rounded-full border border-gray-200 bg-white shadow-sm sm:h-28 sm:w-28">
-        {image ? (
-          <Image src={image} alt="Profile" className="object-cover" fill />
+        {preview || logoUrl ? (
+          <Image
+            src={preview ?? (logoUrl as string)}
+            alt="Profile"
+            className="object-cover"
+            fill
+          />
         ) : (
           <div className="h-full w-full bg-gray-100" />
         )}
+
         <button
           type="button"
           className="absolute right-1 bottom-1 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-[#111827] shadow hover:bg-gray-50"
           onClick={() => fileInputRef.current?.click()}
           aria-label="Upload logo"
+          disabled={loading}
         >
           <Camera className="h-5 w-5" />
         </button>
@@ -53,7 +76,7 @@ export function ProfileLogo() {
           />
         ) : (
           <span className="flex-1 text-center text-base font-semibold text-[#111827]">
-            {name || t('defaultName')}
+            {nameProp ?? ''}
           </span>
         )}
 
@@ -62,8 +85,12 @@ export function ProfileLogo() {
           size="icon"
           variant="ghost"
           className="text-secondary"
-          onClick={() => setIsEditing((v) => !v)}
+          onClick={() => {
+            if (isEditing) void onNameSave?.(name);
+            setIsEditing((v) => !v);
+          }}
           aria-label={isEditing ? 'Save' : 'Edit'}
+          disabled={loading}
         >
           {isEditing ? (
             <Save className="h-4 w-4" />
