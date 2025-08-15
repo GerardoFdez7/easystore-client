@@ -729,6 +729,28 @@
     "change": "Alterar",
     "connectWithGoogle": "Conectar com o Google",
     "connectWithFacebook": "Conectar com o Facebook",
-    "verified": "verificado"
+    "verified": "verificado",
+    "submitErrorTitle": "Algo deu errado",
+    "savedChangesTitle": "Alterações salvas 🎉",
+    "unknownError": "Erro desconhecido",
+
+    "domainTooShort": "O domínio é muito curto",
+    "domainTooLong": "O domínio é muito longo",
+    "noSpacesAllowed": "Não são permitidos espaços",
+    "invalidPhone": "Número de telefone inválido",
+    "invalidEmailFormat": "Formato de e-mail inválido",
+    "descriptionTooLong": "A descrição está muito longa",
+    "storeNameTooShort": "O nome da loja é muito curto",
+    "storeNameTooLong": "O nome da loja é muito longo",
+    "invalidUrl": "URL inválida",
+
+    "domainUpdated": "Domínio atualizado com sucesso.",
+    "phoneUpdated": "Telefone atualizado com sucesso.",
+    "emailUpdated": "E-mail atualizado com sucesso.",
+    "descriptionUpdated": "Descrição atualizada com sucesso.",
+    "storeNameUpdated": "Nome da loja atualizado com sucesso.",
+    "logoUpdated": "Logotipo atualizado com sucesso.",
+
+    "noPhone": "Sem número de telefone"
   }
 }

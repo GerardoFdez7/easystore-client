@@ -728,6 +728,27 @@
     "change": "Change",
     "connectWithGoogle": "Connect with Google",
     "connectWithFacebook": "Connect with Facebook",
-    "verified": "verified"
+    "verified": "verified",
+    "submitErrorTitle": "Something went wrong",
+    "savedChangesTitle": "Changes saved",
+    "unknownError": "Unknown error",
+
+    "domainTooShort": "Domain is too short",
+    "domainTooLong": "Domain is too long",
+    "noSpacesAllowed": "No spaces allowed",
+    "invalidPhone": "Invalid phone number",
+    "invalidEmailFormat": "Invalid email format",
+    "descriptionTooLong": "Description is too long",
+    "storeNameTooShort": "Store name is too short",
+    "storeNameTooLong": "Store name is too long",
+    "invalidUrl": "Invalid URL",
+
+    "domainUpdated": "Domain updated successfully.",
+    "phoneUpdated": "Phone updated successfully.",
+    "emailUpdated": "Email updated successfully.",
+    "descriptionUpdated": "Description updated successfully.",
+    "storeNameUpdated": "Store name updated successfully.",
+    "logoUpdated": "Logo updated successfully.",
+    "noPhone": "No phone number"
   }
 }
