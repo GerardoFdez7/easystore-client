@@ -285,6 +285,19 @@
     "completed": "Completato",
     "cancelled": "Annullato"
   },
+  "Products": {
+    "addProduct": "Aggiungi un prodotto",
+    "status": "Stato",
+    "category": "Categoria",
+    "searchProducts": "Cerca prodotti",
+    "all": "Tutti",
+    "actives": "Attivi",
+    "archived": "Archiviati",
+    "physical": "Fisico",
+    "digital": "Digitale",
+    "type": "Tipo",
+    "products": "Prodotti"
+  },
   "Privacy": {
     "tableOfContents": "Indice",
     "pageTitle": "Informativa sulla privacy",

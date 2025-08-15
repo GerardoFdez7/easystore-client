@@ -283,6 +283,19 @@
     "completed": "Completado",
     "cancelled": "Cancelado"
   },
+  "Products": {
+    "addProduct": "Agregar producto",
+    "status": "Estado",
+    "category": "Categoría",
+    "searchProducts": "Buscar productos",
+    "all": "Todos",
+    "actives": "Activos",
+    "archived": "Archivados",
+    "physical": "Físico",
+    "digital": "Digital",
+    "type": "Tipo",
+    "products": "Productos"
+  },
   "Privacy": {
     "tableOfContents": "Tabla de contenido",
     "pageTitle": "Política de privacidad",
