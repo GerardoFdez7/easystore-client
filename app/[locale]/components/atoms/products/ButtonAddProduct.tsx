@@ -5,7 +5,7 @@ export default function ButtonAddProduct() {
   const t = useTranslations('Products');
 
   return (
-    <Button className="hover:bg-foreground rounded-xl bg-black px-6 text-white dark:hover:bg-[#423f3d]">
+    <Button className="text-title hover:bg-title border-title border-2 bg-transparent hover:text-white dark:hover:bg-white dark:hover:text-black">
       {t('addProduct')}
     </Button>
   );
