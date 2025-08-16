@@ -2,6 +2,7 @@ import BadgeTag from '@atoms/product-detail/BadgeTag';
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -49,11 +50,13 @@ export default function Category({
             <SelectValue placeholder="Select a category" />
           </SelectTrigger>
           <SelectContent>
-            {availableCategories.map((category) => (
-              <SelectItem key={category.id} value={category.id}>
-                {category.name}
-              </SelectItem>
-            ))}
+            <SelectGroup>
+              {availableCategories.map((category) => (
+                <SelectItem key={category.id} value={category.id}>
+                  {category.name}
+                </SelectItem>
+              ))}
+            </SelectGroup>
           </SelectContent>
         </Select>
       </div>
