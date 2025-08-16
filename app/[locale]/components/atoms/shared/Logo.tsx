@@ -30,7 +30,7 @@ const Logo = ({ redirectTo }: LogoProps) => {
     >
       <Image
         src={'/logo.webp'}
-        alt="Cart Icon"
+        alt="EasyStore Logo"
         width={60}
         height={64}
         className="max-[580px]:h-[10vw] max-[580px]:w-[10vw]"
