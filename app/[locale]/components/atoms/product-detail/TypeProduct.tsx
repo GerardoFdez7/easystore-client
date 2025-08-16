@@ -13,7 +13,7 @@ export default function TypeProduct() {
         Type Product
       </label>
       <Select defaultValue="physical">
-        <SelectTrigger className="border-[#e2e8f0] bg-[#ffffff]">
+        <SelectTrigger className="w-[240px] border-[#e2e8f0] bg-[#ffffff] sm:w-[300px]">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

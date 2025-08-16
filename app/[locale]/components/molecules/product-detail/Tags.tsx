@@ -20,9 +20,7 @@ export default function Tags({
 }: TagsProps) {
   return (
     <div>
-      <label className="mb-2 block text-sm font-medium text-[#000000]">
-        Tags
-      </label>
+      <label className="text-title mb-2 block text-sm font-medium">Tags</label>
       <div className="mb-3 flex items-center gap-2">
         <Input
           value={newTag}
