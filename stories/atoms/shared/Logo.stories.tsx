@@ -4,7 +4,7 @@ import Logo from '@atoms/shared/Logo';
 const meta: Meta<typeof Logo> = {
   title: 'Atoms/Shared/Logo',
   component: Logo,
-  args: { src: '/logo.webp', alt: 'EasyStore Logo', label: 'EasyStore' },
+  args: { redirectTo: '/' },
 };
 
 export default meta;
