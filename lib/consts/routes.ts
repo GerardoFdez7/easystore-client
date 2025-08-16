@@ -3,10 +3,8 @@ export const PublicRoutes = [
   '/',
   '/login',
   '/register',
-  '/reset-password',
   '/terms',
   '/privacy',
-  '/contact',
 ] as const;
 
 // Helper function to check if a route is public
