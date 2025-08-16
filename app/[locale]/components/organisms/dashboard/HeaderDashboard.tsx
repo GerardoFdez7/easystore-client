@@ -1,4 +1,4 @@
-import Logo from '@atoms/landing/Logo';
+import Logo from '@atoms/shared/Logo';
 import OwnerMenu from '@molecules/dashboard/OwnerMenu';
 import ThemeToggle from '@atoms/shared/ThemeToggle';
 import NotificationButton from '@atoms/shared/NotificationButton';

@@ -1,4 +1,4 @@
-import Logo from '@atoms/landing/Logo';
+import Logo from '@atoms/shared/Logo';
 import ButtonPrimary from '@atoms/landing/ButtonPrimary';
 import MobileMenu from '@molecules/landing/MobileMenu';
 import NaviLinks from '@molecules/landing/NaviLinks';

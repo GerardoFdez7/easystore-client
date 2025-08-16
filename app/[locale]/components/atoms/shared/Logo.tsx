@@ -1,57 +1,43 @@
 'use client';
 
-import Image, { StaticImageData } from 'next/image';
-import React from 'react';
-import { cn } from '@lib/utils/cn';
+import Image from 'next/image';
+import { useRouter } from '@i18n/navigation';
 
-export interface LogoProps {
-  src: string | StaticImageData;
-  alt: string;
-  width?: number;
-  height?: number;
-  label?: string;
-  className?: string;
-  labelClassName?: string;
-  onClick?: () => void;
-}
+type LogoProps = {
+  redirectTo: string;
+};
 
-const Logo: React.FC<LogoProps> = ({
-  src,
-  alt,
-  width = 60,
-  height = 64,
-  label = '',
-  className = '',
-  labelClassName = 'text-title text-[40px] font-extrabold',
-  onClick,
-}) => {
+const Logo = ({ redirectTo }: LogoProps) => {
+  const router = useRouter();
+
   const handleClick = () => {
-    if (onClick) {
-      onClick();
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    // Always scroll to top first
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+
+    // Then navigate to the specified destination
+    router.push(redirectTo);
   };
 
   return (
     <div
-      role="button"
-      aria-label="logo"
+      className="flex cursor-pointer items-center"
       onClick={handleClick}
-      className={cn('flex cursor-pointer items-center', className)}
+      role="button"
+      aria-label="Navigate to home or scroll to top"
     >
       <Image
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
+        src={'/logo.webp'}
+        alt="Cart Icon"
+        width={60}
+        height={64}
         className="max-[580px]:h-[10vw] max-[580px]:w-[10vw]"
       />
-      {label && (
-        <span className={cn(labelClassName, 'max-[580px]:text-[6vw]')}>
-          {label}
-        </span>
-      )}
+      <span className="text-title text-[40px] font-extrabold max-[580px]:text-[6vw]">
+        EasyStore
+      </span>
     </div>
   );
 };
