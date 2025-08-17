@@ -26,16 +26,16 @@ export default function DeleteProduct() {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>¿Eliminar producto?</AlertDialogTitle>
+          <AlertDialogTitle>Delete product?</AlertDialogTitle>
           <AlertDialogDescription>
-            Esta acción no se puede deshacer. El producto será eliminado
-            permanentemente de la base de datos.
+            This action cannot be undone. The product will be permanently
+            deleted from the database.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction className="bg-[#ed2727] text-white hover:bg-[#d12525]">
-            Eliminar
+            Delete
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

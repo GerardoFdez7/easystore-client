@@ -6,7 +6,6 @@ import { SiderbarDashboard } from '@molecules/shared/Sidebar';
 import { useState } from 'react';
 import InputProduct from '@atoms/product-detail/InputProduct';
 import Description from '@atoms/product-detail/Description';
-import Multimedia from '@molecules/product-detail/Multimedia';
 import Category from '@molecules/product-detail/Category';
 import TypeProduct from '@atoms/product-detail/TypeProduct';
 import Tags from '@molecules/product-detail/Tags';
@@ -65,7 +64,6 @@ export default function MainProductDetail() {
                   <Description label="Long Description" className="h-30" />
 
                   {/* Multimedia */}
-                  <Multimedia />
 
                   {/* Category */}
                   <Category

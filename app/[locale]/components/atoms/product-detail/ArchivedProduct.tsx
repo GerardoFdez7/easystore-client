@@ -24,18 +24,18 @@ export default function ArchivedProduct() {
           className="border border-black bg-[#ffffff] hover:bg-[#000000] hover:text-[#ffffff]"
         >
           <Archive className="mr-2 h-4 w-4" />
-          {isArchived ? 'Desarchivar producto' : 'Archivar producto'}
+          {isArchived ? 'Unarchive product' : 'Archive product'}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {isArchived ? '¿Desarchivar producto?' : '¿Archivar producto?'}
+            {isArchived ? '¿Unarchive product?' : '¿Archive product?'}
           </AlertDialogTitle>
           <AlertDialogDescription>
             {isArchived
-              ? 'Esta acción hará que el producto vuelva a estar disponible en la tienda.'
-              : 'Esta acción ocultará el producto de la tienda pero mantendrá toda su información.'}
+              ? 'This action will make the product available again in the store.'
+              : 'This action will hide the product from the store but keep all its information.'}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -44,7 +44,7 @@ export default function ArchivedProduct() {
             onClick={() => setIsArchived(!isArchived)}
             className="bg-title hover:bg-title/80 text-white dark:text-black"
           >
-            {isArchived ? 'Desarchivar' : 'Archivar'}
+            {isArchived ? 'Unarchive' : 'Archive'}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
