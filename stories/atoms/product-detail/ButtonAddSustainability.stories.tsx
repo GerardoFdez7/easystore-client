@@ -1,0 +1,17 @@
+import type { Meta, StoryObj } from '@storybook/react';
+import ButtonAddSustainability from '@atoms/product-detail/ButtonAddSustainability';
+
+const meta: Meta<typeof ButtonAddSustainability> = {
+  title: 'Atoms/Product Detail/ButtonAddSustainability',
+  component: ButtonAddSustainability,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+};
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};
