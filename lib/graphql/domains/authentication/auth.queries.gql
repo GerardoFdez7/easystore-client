@@ -4,3 +4,11 @@ query validateToken {
     message
   }
 }
+
+query getMediaToken {
+  getMediaUploadToken {
+    token
+    expire
+    signature
+  }
+}
