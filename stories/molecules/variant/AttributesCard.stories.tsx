@@ -17,10 +17,14 @@ const t = (k: string) =>
     ({
       attributes: 'Attributes',
       addAttribute: 'Add Attribute',
-      attributeKey: 'KEY',
-      attributeValue: 'VALUE',
-      removeAttribute: 'Remove attribute',
-      notes: 'Notes',
+      attributeKey: 'Key',
+      attributeKeyPlaceholder: 'Enter key',
+      attributeValue: 'Value',
+      attributeValuePlaceholder: 'Enter value',
+      noAttributesYet: 'No attributes yet.',
+      moveUp: 'Move up',
+      moveDown: 'Move down',
+      delete: 'Delete',
     }) as Record<string, string>
   )[k] ?? k;
 
@@ -28,15 +32,13 @@ const Wrapper: React.FC = () => {
   const [attributes, setAttributes] = React.useState<Attribute[]>([
     { id: '1', key: '', value: '' },
   ]);
-  const [notes, setNotes] = React.useState('');
+
   return (
     <div className="w-[720px]">
       <AttributesCard
         t={t}
         attributes={attributes}
         setAttributes={setAttributes}
-        notes={notes}
-        setNotes={setNotes}
       />
     </div>
   );
