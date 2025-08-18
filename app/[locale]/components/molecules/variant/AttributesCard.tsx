@@ -15,8 +15,6 @@ export default function AttributesCard({
   t: (k: string) => string;
   attributes: Attribute[];
   setAttributes: (fn: (prev: Attribute[]) => Attribute[]) => void;
-  notes: string;
-  setNotes: (v: string) => void;
 }) {
   const add = () =>
     setAttributes((prev) => [

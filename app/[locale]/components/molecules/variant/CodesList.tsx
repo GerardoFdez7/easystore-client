@@ -2,7 +2,7 @@
 import { Input } from '@shadcn/ui/input';
 import { Label } from '@shadcn/ui/label';
 
-const fields = ['sku', 'upc', 'ean', 'isbn'] as const;
+const fields = ['sku', 'barcode', 'upc', 'ean', 'isbn'] as const;
 
 export default function CodesList({ t }: { t: (k: string) => string }) {
   return (

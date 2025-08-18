@@ -9,6 +9,12 @@ import DimensionsRow from '@molecules/variant/DimensionRow';
 import CodesList from '@molecules/variant/CodesList';
 import type { Attribute, Condition } from '@lib/utils/types/variant';
 import { Button } from '@shadcn/ui/button';
+import PersonalizationList from '@molecules/variant/PersonalizationList';
+import ArchiveToggle from '@molecules/variant/ArchiveToggle';
+import InstallmentPayments, {
+  Installment,
+} from '@molecules/variant/InstallmentPayment';
+import WarrantyFields, { Warranty } from '@molecules/variant/WarrantyFields';
 
 export default function VariantForm() {
   const t = useTranslations('Variant');
@@ -32,10 +38,23 @@ export default function VariantForm() {
   const [condition, setCondition] = React.useState<Condition>('NEW');
   const [price, setPrice] = React.useState<string>('');
 
+  const [personalizationOptions, setPersonalizationOptions] = React.useState<
+    string[]
+  >([]);
+  const [isArchived, setIsArchived] = React.useState(false);
+  const [installment, setInstallment] = React.useState<Installment>({
+    months: '',
+    interestRate: '',
+  });
+  const [warranty, setWarranty] = React.useState<Warranty>({
+    months: '',
+    coverage: '',
+    instructions: '',
+  });
+
   const [attributes, setAttributes] = React.useState<Attribute[]>([
     { id: crypto.randomUUID(), key: '', value: '' },
   ]);
-  const [notes, setNotes] = React.useState('');
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,8 +64,12 @@ export default function VariantForm() {
       ...payload,
       condition,
       attributes,
-      notes,
+      price,
       hasImage: !!preview,
+      installmentPayments: installment,
+      warranties: warranty,
+      personalizationOptions,
+      isArchived,
     });
     alert('Saved (mock). Conecta tu acción real.');
   };
@@ -77,13 +100,30 @@ export default function VariantForm() {
         t={t}
         attributes={attributes}
         setAttributes={setAttributes}
-        notes={notes}
-        setNotes={setNotes}
       />
       <DimensionsRow t={t} />
       <CodesList t={t} />
 
-      {/* Actions responsive */}
+      <PersonalizationList
+        t={t}
+        options={personalizationOptions}
+        setOptions={setPersonalizationOptions}
+      />
+
+      <ArchiveToggle
+        t={t}
+        isArchived={isArchived}
+        setIsArchived={setIsArchived}
+      />
+
+      <InstallmentPayments
+        t={t}
+        installment={installment}
+        setInstallment={setInstallment}
+      />
+
+      <WarrantyFields t={t} warranty={warranty} setWarranty={setWarranty} />
+
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
         <Button
           type="button"
