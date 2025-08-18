@@ -27,8 +27,10 @@ export default function WarrantyFields({
       <h3 className="text-foreground/90 text-sm font-semibold">
         {t('warranties')}
       </h3>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="space-y-1.5">
+
+      {/* 2 columnas; textarea a lo ancho */}
+      <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+        <div className="min-w-0 space-y-1">
           <Label htmlFor="wMonths" className="text-foreground/80 text-xs">
             {t('warrantyMonths')}
           </Label>
@@ -36,36 +38,36 @@ export default function WarrantyFields({
             id="wMonths"
             inputMode="numeric"
             type="text"
+            className="h-9 bg-white text-sm"
+            placeholder={t('warrantyMonthsPlaceholder')}
             value={warranty.months}
             onChange={(e) => set('months', e.target.value.replace(/\D/g, ''))}
-            placeholder={t('warrantyMonthsPlaceholder')}
-            className="h-9 bg-white text-sm"
           />
         </div>
 
-        <div className="space-y-1.5 sm:col-span-2">
+        <div className="min-w-0 space-y-1">
           <Label htmlFor="wCoverage" className="text-foreground/80 text-xs">
             {t('warrantyCoverage')}
           </Label>
           <Input
             id="wCoverage"
+            className="h-9 bg-white text-sm"
+            placeholder={t('warrantyCoveragePlaceholder')}
             value={warranty.coverage}
             onChange={(e) => set('coverage', e.target.value)}
-            placeholder={t('warrantyCoveragePlaceholder')}
-            className="h-9 bg-white text-sm"
           />
         </div>
 
-        <div className="space-y-1.5 sm:col-span-3">
+        <div className="min-w-0 space-y-1 sm:col-span-2">
           <Label htmlFor="wInstr" className="text-foreground/80 text-xs">
             {t('warrantyInstructions')}
           </Label>
           <Textarea
             id="wInstr"
+            className="min-h-24 bg-white text-sm"
+            placeholder={t('warrantyInstructionsPlaceholder')}
             value={warranty.instructions}
             onChange={(e) => set('instructions', e.target.value)}
-            placeholder={t('warrantyInstructionsPlaceholder')}
-            className="min-h-24 bg-white"
           />
         </div>
       </div>
