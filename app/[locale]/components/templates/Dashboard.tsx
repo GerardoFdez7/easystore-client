@@ -1,4 +1,4 @@
-import HeaderDashboard from '@organisms/dashboard/HeaderDashboard';
+import HeaderDashboard from '@organisms/shared/HeaderDashboard';
 import MainDashboard from '@organisms/dashboard/MainDashboard';
 
 export default function DashboardTemplate() {
