@@ -27,12 +27,16 @@ const t = (k: string) =>
 
 const Wrapper: React.FC = () => {
   const [condition, setCondition] = React.useState<Condition>('NEW');
+  const [price, setPrice] = React.useState<string>('');
+
   return (
     <div className="w-[720px]">
       <PriceConditionRow
         t={t}
         condition={condition}
         setCondition={setCondition}
+        price={price}
+        setPrice={setPrice}
       />
     </div>
   );
