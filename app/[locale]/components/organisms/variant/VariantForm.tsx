@@ -30,6 +30,8 @@ export default function VariantForm() {
   };
 
   const [condition, setCondition] = React.useState<Condition>('NEW');
+  const [price, setPrice] = React.useState<string>('');
+
   const [attributes, setAttributes] = React.useState<Attribute[]>([
     { id: crypto.randomUUID(), key: '', value: '' },
   ]);
@@ -67,6 +69,9 @@ export default function VariantForm() {
         t={t}
         condition={condition}
         setCondition={setCondition}
+        price={price}
+        setPrice={setPrice}
+        currency="Q" // tenant
       />
       <AttributesCard
         t={t}

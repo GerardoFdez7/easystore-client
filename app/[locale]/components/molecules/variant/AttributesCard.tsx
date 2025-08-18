@@ -44,11 +44,11 @@ export default function AttributesCard({
     });
 
   return (
-    <section className="space-y-2">
+    <section className="space-y-1">
       <Card className="rounded-xl border">
         <CardContent className="p-4 sm:p-5">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-            <h3 className="text-foreground/90 text-sm font-semibold">
+            <h3 className="text-foreground/90 ml-5 text-sm font-semibold">
               {t('attributes')}
             </h3>
             <Button
