@@ -703,7 +703,32 @@
     "isbnPlaceholder": "ex. 978-3-16-148410-0",
     "heightPlaceholder": "ex. 25 cm",
     "widthPlaceholder": "ex. 10 cm",
-    "lengthPlaceholder": "ex. 40 cm"
+
+    "lengthPlaceholder": "ex. 40 cm",
+    "personalizationOptions": "Options de personnalisation",
+    "addPersonalization": "Ajouter une personnalisation",
+    "noPersonalizations": "Aucune option de personnalisation pour le moment",
+    "personalizationPlaceholder": "ex. Gravure : Ana",
+
+    "barcode": "Code-barres",
+    "barcodePlaceholder": "ex. 123456789012",
+    "codes": "Codes",
+
+    "isArchived": "Archivé",
+    "isArchivedHint": "Les variantes archivées sont masquées dans les listes mais restent accessibles via les requêtes.",
+    "installmentPayments": "Paiements échelonnés",
+    "months": "Mois",
+    "monthsPlaceholder": "ex. 12",
+    "interestRate": "Taux d'intérêt",
+    "interestRatePlaceholder": "ex. 18",
+
+    "warranties": "Garanties",
+    "warrantyMonths": "Mois de garantie",
+    "warrantyMonthsPlaceholder": "ex. 12",
+    "warrantyCoverage": "Couverture",
+    "warrantyCoveragePlaceholder": "ex. Couvre les défauts de fabrication",
+    "warrantyInstructions": "Instructions",
+    "warrantyInstructionsPlaceholder": "ex. Conservez le reçu ; contactez le support pour un RMA"
   },
   "GetInTouch": {
     "title": "Contactez un expert.",
