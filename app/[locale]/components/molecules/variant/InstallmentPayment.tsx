@@ -22,8 +22,10 @@ export default function InstallmentPayments({
       <h3 className="text-foreground/90 text-sm font-semibold">
         {t('installmentPayments')}
       </h3>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="space-y-1.5">
+
+      {/* 2 columnas, compacto y alineado */}
+      <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+        <div className="min-w-0 space-y-1">
           <Label htmlFor="months" className="text-foreground/80 text-xs">
             {t('months')}
           </Label>
@@ -31,14 +33,14 @@ export default function InstallmentPayments({
             id="months"
             inputMode="numeric"
             type="text"
+            className="h-9 bg-white text-sm"
             placeholder={t('monthsPlaceholder')}
             value={installment.months}
             onChange={(e) => set('months', e.target.value.replace(/\D/g, ''))}
-            className="h-9 bg-white text-sm"
           />
         </div>
 
-        <div className="space-y-1.5">
+        <div className="min-w-0 space-y-1">
           <Label htmlFor="interestRate" className="text-foreground/80 text-xs">
             {t('interestRate')}
           </Label>
@@ -50,12 +52,12 @@ export default function InstallmentPayments({
               id="interestRate"
               inputMode="decimal"
               type="text"
+              className="h-9 bg-white pr-9 text-sm"
               placeholder={t('interestRatePlaceholder')}
               value={installment.interestRate}
               onChange={(e) =>
                 set('interestRate', e.target.value.replace(/[^0-9.]/g, ''))
               }
-              className="h-9 bg-white pr-9 text-sm"
             />
           </div>
         </div>

@@ -703,7 +703,32 @@
     "isbnPlaceholder": "p. ej., 978-3-16-148410-0",
     "heightPlaceholder": "p. ej., 25 cm",
     "widthPlaceholder": "p. ej., 10 cm",
-    "lengthPlaceholder": "p. ej., 40 cm"
+
+    "lengthPlaceholder": "p. ej., 40 cm",
+    "personalizationOptions": "Opciones de personalización",
+    "addPersonalization": "Agregar personalización",
+    "noPersonalizations": "Aún no hay opciones de personalización",
+    "personalizationPlaceholder": "p. ej., Grabado: Ana",
+
+    "barcode": "Código de barras",
+    "barcodePlaceholder": "p. ej., 123456789012",
+    "codes": "Códigos",
+
+    "isArchived": "Archivado",
+    "isArchivedHint": "Las variantes archivadas se ocultan en las listas pero siguen siendo recuperables mediante consultas.",
+    "installmentPayments": "Pagos a plazos",
+    "months": "Meses",
+    "monthsPlaceholder": "p. ej., 12",
+    "interestRate": "Tasa de interés",
+    "interestRatePlaceholder": "p. ej., 18",
+
+    "warranties": "Garantías",
+    "warrantyMonths": "Meses de garantía",
+    "warrantyMonthsPlaceholder": "p. ej., 12",
+    "warrantyCoverage": "Cobertura",
+    "warrantyCoveragePlaceholder": "p. ej., Cubre defectos de fabricación",
+    "warrantyInstructions": "Instrucciones",
+    "warrantyInstructionsPlaceholder": "p. ej., Conserva el recibo; contacta soporte para RMA"
   },
   "GetInTouch": {
     "title": "Ponte en contacto con un experto.",
