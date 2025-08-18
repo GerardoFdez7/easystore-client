@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import HeaderDashboard from '@organisms/dashboard/HeaderDashboard';
+import HeaderDashboard from '@organisms/shared/HeaderDashboard';
 
 const meta: Meta<typeof HeaderDashboard> = {
   title: 'Organisms/Dashboard/HeaderDashboard',
