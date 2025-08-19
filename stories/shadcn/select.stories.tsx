@@ -1,3 +1,4 @@
+import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import {
   Select,
@@ -23,7 +24,7 @@ const meta: Meta<typeof Select> = {
     SelectSeparator,
   },
   decorators: [
-    (Story) => (
+    (Story: React.ComponentType) => (
       <div style={{ padding: 24 }}>
         <Story />
       </div>

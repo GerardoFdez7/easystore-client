@@ -1,4 +1,4 @@
-import Logo from '@atoms/landing/Logo';
+import Logo from '@atoms/shared/Logo';
 import { LanguageButton } from '@atoms/shared/ButtonLanguage';
 
 export default function HeaderTouch() {

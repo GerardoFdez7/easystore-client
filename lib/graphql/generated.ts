@@ -73,7 +73,6 @@ export enum AddressTypeEnum {
 export type AddressesType = {
   __typename?: 'AddressesType';
   addresses: Array<AddressType>;
-  addresses: Array<AddressType>;
 };
 
 export type Attribute = {
@@ -212,6 +211,175 @@ export type CreateWarrantyInput = {
   months: Scalars['Float']['input'];
 };
 
+export enum CurrencyCodes {
+  Aed = 'AED',
+  Afn = 'AFN',
+  All = 'ALL',
+  Amd = 'AMD',
+  Ang = 'ANG',
+  Aoa = 'AOA',
+  Ars = 'ARS',
+  Aud = 'AUD',
+  Awg = 'AWG',
+  Azn = 'AZN',
+  Bam = 'BAM',
+  Bbd = 'BBD',
+  Bdt = 'BDT',
+  Bgn = 'BGN',
+  Bhd = 'BHD',
+  Bif = 'BIF',
+  Bmd = 'BMD',
+  Bnd = 'BND',
+  Bob = 'BOB',
+  Bov = 'BOV',
+  Brl = 'BRL',
+  Bsd = 'BSD',
+  Btn = 'BTN',
+  Bwp = 'BWP',
+  Byr = 'BYR',
+  Bzd = 'BZD',
+  Cad = 'CAD',
+  Cdf = 'CDF',
+  Che = 'CHE',
+  Chf = 'CHF',
+  Chw = 'CHW',
+  Clf = 'CLF',
+  Clp = 'CLP',
+  Cny = 'CNY',
+  Cop = 'COP',
+  Cou = 'COU',
+  Crc = 'CRC',
+  Cuc = 'CUC',
+  Cup = 'CUP',
+  Cve = 'CVE',
+  Czk = 'CZK',
+  Djf = 'DJF',
+  Dkk = 'DKK',
+  Dop = 'DOP',
+  Dzd = 'DZD',
+  Egp = 'EGP',
+  Ern = 'ERN',
+  Etb = 'ETB',
+  Eur = 'EUR',
+  Fjd = 'FJD',
+  Fkp = 'FKP',
+  Gbp = 'GBP',
+  Gel = 'GEL',
+  Ghs = 'GHS',
+  Gip = 'GIP',
+  Gmd = 'GMD',
+  Gnf = 'GNF',
+  Gtq = 'GTQ',
+  Gyd = 'GYD',
+  Hkd = 'HKD',
+  Hnl = 'HNL',
+  Hrk = 'HRK',
+  Htg = 'HTG',
+  Huf = 'HUF',
+  Idr = 'IDR',
+  Ils = 'ILS',
+  Inr = 'INR',
+  Iqd = 'IQD',
+  Irr = 'IRR',
+  Isk = 'ISK',
+  Jmd = 'JMD',
+  Jod = 'JOD',
+  Jpy = 'JPY',
+  Kes = 'KES',
+  Kgs = 'KGS',
+  Khr = 'KHR',
+  Kmf = 'KMF',
+  Kpw = 'KPW',
+  Krw = 'KRW',
+  Kwd = 'KWD',
+  Kyd = 'KYD',
+  Kzt = 'KZT',
+  Lak = 'LAK',
+  Lbp = 'LBP',
+  Lkr = 'LKR',
+  Lrd = 'LRD',
+  Lsl = 'LSL',
+  Lyd = 'LYD',
+  Mad = 'MAD',
+  Mdl = 'MDL',
+  Mga = 'MGA',
+  Mkd = 'MKD',
+  Mmk = 'MMK',
+  Mnt = 'MNT',
+  Mop = 'MOP',
+  Mro = 'MRO',
+  Mur = 'MUR',
+  Mvr = 'MVR',
+  Mwk = 'MWK',
+  Mxn = 'MXN',
+  Mxv = 'MXV',
+  Myr = 'MYR',
+  Mzn = 'MZN',
+  Nad = 'NAD',
+  Ngn = 'NGN',
+  Nio = 'NIO',
+  Nok = 'NOK',
+  Npr = 'NPR',
+  Nzd = 'NZD',
+  Omr = 'OMR',
+  Pab = 'PAB',
+  Pen = 'PEN',
+  Pgk = 'PGK',
+  Php = 'PHP',
+  Pkr = 'PKR',
+  Pln = 'PLN',
+  Pyg = 'PYG',
+  Qar = 'QAR',
+  Ron = 'RON',
+  Rsd = 'RSD',
+  Rub = 'RUB',
+  Rwf = 'RWF',
+  Sar = 'SAR',
+  Sbd = 'SBD',
+  Scr = 'SCR',
+  Sdg = 'SDG',
+  Sek = 'SEK',
+  Sgd = 'SGD',
+  Sll = 'SLL',
+  Sos = 'SOS',
+  Srd = 'SRD',
+  Ssp = 'SSP',
+  Std = 'STD',
+  Svc = 'SVC',
+  Syp = 'SYP',
+  Szl = 'SZL',
+  Thb = 'THB',
+  Tjs = 'TJS',
+  Tmt = 'TMT',
+  Tnd = 'TND',
+  Top = 'TOP',
+  Try = 'TRY',
+  Ttd = 'TTD',
+  Twd = 'TWD',
+  Tzs = 'TZS',
+  Uah = 'UAH',
+  Ugx = 'UGX',
+  Usd = 'USD',
+  Uyi = 'UYI',
+  Uyu = 'UYU',
+  Uzs = 'UZS',
+  Vef = 'VEF',
+  Vnd = 'VND',
+  Vuv = 'VUV',
+  Wst = 'WST',
+  Xaf = 'XAF',
+  Xcd = 'XCD',
+  Xdr = 'XDR',
+  Xof = 'XOF',
+  Xpf = 'XPF',
+  Xsu = 'XSU',
+  Xua = 'XUA',
+  Yer = 'YER',
+  Zar = 'ZAR',
+  Zmw = 'ZMW',
+  Zwl = 'ZWL'
+}
+
 export type Dimension = {
   __typename?: 'Dimension';
   height: Scalars['Float']['output'];
@@ -232,7 +400,7 @@ export type GetInTouchInput = {
   country: Scalars['String']['input'];
   fullName: Scalars['String']['input'];
   isAgency: Scalars['String']['input'];
-  websiteUrl: Scalars['String']['input'];
+  websiteUrl?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Installment = {
@@ -281,9 +449,9 @@ export type Mutation = {
   updateAddress: AddressType;
   updateCategory: Category;
   updatePassword: Response;
-  updatePassword: Response;
   updateProduct: Product;
   updateStockInWarehouse: Warehouse;
+  updateTenant: Tenant;
   updateVariant: Product;
   updateWarehouse: Warehouse;
 };
@@ -425,6 +593,12 @@ export type MutationUpdateStockInWarehouseArgs = {
   reason?: InputMaybe<Scalars['String']['input']>;
   stockId: Scalars['ID']['input'];
   warehouseId: Scalars['ID']['input'];
+};
+
+
+export type MutationUpdateTenantArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateTenantInput;
 };
 
 
@@ -624,6 +798,23 @@ export type Sustainability = {
   recycledPercentage: Scalars['Float']['output'];
 };
 
+export type Tenant = {
+  __typename?: 'Tenant';
+  authIdentityId: Scalars['Int']['output'];
+  businessName: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  currency: CurrencyCodes;
+  defaultBillingAddressId: Scalars['Int']['output'];
+  defaultPhoneNumberId: Scalars['Int']['output'];
+  defaultShippingAddressId: Scalars['Int']['output'];
+  description: Scalars['String']['output'];
+  domain: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  logo: Scalars['String']['output'];
+  ownerName: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 export enum TypeEnum {
   Digital = 'DIGITAL',
   Physical = 'PHYSICAL'
@@ -675,11 +866,6 @@ export type UpdatePasswordInput = {
   token: Scalars['String']['input'];
 };
 
-export type UpdatePasswordInput = {
-  password: Scalars['String']['input'];
-  token: Scalars['String']['input'];
-};
-
 export type UpdateProductCategoryInput = {
   categoryId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -710,6 +896,19 @@ export type UpdateStockInWarehouseInput = {
 export type UpdateSustainabilityInput = {
   certification?: InputMaybe<Scalars['String']['input']>;
   recycledPercentage?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type UpdateTenantInput = {
+  authIdentityId?: InputMaybe<Scalars['Int']['input']>;
+  businessName?: InputMaybe<Scalars['String']['input']>;
+  currency?: InputMaybe<CurrencyCodes>;
+  defaultBillingAddressId?: InputMaybe<Scalars['Int']['input']>;
+  defaultPhoneNumberId?: InputMaybe<Scalars['Int']['input']>;
+  defaultShippingAddressId?: InputMaybe<Scalars['Int']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  domain?: InputMaybe<Scalars['String']['input']>;
+  logo?: InputMaybe<Scalars['String']['input']>;
+  ownerName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateVariantInput = {
@@ -831,6 +1030,22 @@ export type LoginMutationVariables = Exact<{
 
 
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Response', success: boolean, message: string } };
+
+export type ForgotPasswordMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+  accountType: AccountTypeEnum;
+}>;
+
+
+export type ForgotPasswordMutation = { __typename?: 'Mutation', forgotPassword: { __typename?: 'Response', success: boolean, message: string } };
+
+export type UpdatePasswordMutationVariables = Exact<{
+  token: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+}>;
+
+
+export type UpdatePasswordMutation = { __typename?: 'Mutation', updatePassword: { __typename?: 'Response', success: boolean, message: string } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -1372,6 +1587,76 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const ForgotPasswordDocument = gql`
+    mutation forgotPassword($email: String!, $accountType: AccountTypeEnum!) {
+  forgotPassword(input: {email: $email, accountType: $accountType}) {
+    success
+    message
+  }
+}
+    `;
+export type ForgotPasswordMutationFn = Apollo.MutationFunction<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
+
+/**
+ * __useForgotPasswordMutation__
+ *
+ * To run a mutation, you first call `useForgotPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useForgotPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [forgotPasswordMutation, { data, loading, error }] = useForgotPasswordMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      accountType: // value for 'accountType'
+ *   },
+ * });
+ */
+export function useForgotPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ForgotPasswordMutation, ForgotPasswordMutationVariables>(ForgotPasswordDocument, options);
+      }
+export type ForgotPasswordMutationHookResult = ReturnType<typeof useForgotPasswordMutation>;
+export type ForgotPasswordMutationResult = Apollo.MutationResult<ForgotPasswordMutation>;
+export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
+export const UpdatePasswordDocument = gql`
+    mutation updatePassword($token: String!, $password: String!) {
+  updatePassword(input: {token: $token, password: $password}) {
+    success
+    message
+  }
+}
+    `;
+export type UpdatePasswordMutationFn = Apollo.MutationFunction<UpdatePasswordMutation, UpdatePasswordMutationVariables>;
+
+/**
+ * __useUpdatePasswordMutation__
+ *
+ * To run a mutation, you first call `useUpdatePasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePasswordMutation, { data, loading, error }] = useUpdatePasswordMutation({
+ *   variables: {
+ *      token: // value for 'token'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useUpdatePasswordMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePasswordMutation, UpdatePasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePasswordMutation, UpdatePasswordMutationVariables>(UpdatePasswordDocument, options);
+      }
+export type UpdatePasswordMutationHookResult = ReturnType<typeof useUpdatePasswordMutation>;
+export type UpdatePasswordMutationResult = Apollo.MutationResult<UpdatePasswordMutation>;
+export type UpdatePasswordMutationOptions = Apollo.BaseMutationOptions<UpdatePasswordMutation, UpdatePasswordMutationVariables>;
 export const LogoutDocument = gql`
     mutation logout {
   logout {
