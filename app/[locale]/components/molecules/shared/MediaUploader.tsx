@@ -3,8 +3,8 @@
 import FileDropZone from '@atoms/shared/FileDropZone';
 import SpinLoader from '@atoms/shared/SpinLoader';
 import ErrorState from '@atoms/shared/ErrorState';
-import useMediaToken from '@hooks/useMediaToken';
-import { useFileUpload } from '@hooks/useFileUpload';
+import useMediaToken from '@hooks/media/useMediaToken';
+import { useFileUpload } from '@hooks/media/useFileUpload';
 import {
   DefaultAcceptedFileTypes,
   DefaultMaxImageSize,

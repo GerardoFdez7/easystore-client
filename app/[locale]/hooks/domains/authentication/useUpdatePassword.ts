@@ -5,9 +5,11 @@ import { useTranslations } from 'next-intl';
 import { z } from 'zod/v4';
 import { toast } from 'sonner';
 import {
-  useUpdatePasswordMutation,
+  UpdatePasswordDocument,
+  UpdatePasswordMutation,
   UpdatePasswordMutationVariables,
 } from '@graphql/generated';
+import useGraphQLMutation from '../../useMutations';
 
 export const useUpdatePassword = () => {
   const t = useTranslations('ResetPassword');
@@ -42,7 +44,10 @@ export const useUpdatePassword = () => {
       path: ['confirmPassword'],
     });
 
-  const [updatePasswordMutation] = useUpdatePasswordMutation();
+  const { mutate: updatePasswordMutation } = useGraphQLMutation<
+    UpdatePasswordMutation,
+    UpdatePasswordMutationVariables
+  >(UpdatePasswordDocument);
 
   const handleUpdatePassword = async (
     token: string,

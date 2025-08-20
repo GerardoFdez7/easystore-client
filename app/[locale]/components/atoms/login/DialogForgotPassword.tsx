@@ -21,7 +21,7 @@ import {
 } from '@shadcn/ui/form';
 import Input from '@atoms/shared/OutsideInput';
 import ButtonLoadable from '@atoms/shared/ButtonLoadable';
-import { useForgotPassword } from '@hooks/authentication/useForgotPassword';
+import { useForgotPassword } from '@hooks/domains/authentication/useForgotPassword';
 
 interface DialogForgotPasswordProps {
   children: React.ReactNode;

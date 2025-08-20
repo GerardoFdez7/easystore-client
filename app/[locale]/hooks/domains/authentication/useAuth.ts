@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from '@i18n/navigation';
-import { useValidateTokenQuery } from '@graphql/generated';
+import { ValidateTokenDocument, ValidateTokenQuery } from '@graphql/generated';
+import useGraphQLQueries from '../../useQueries';
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -16,12 +17,12 @@ export const useAuth = () => {
   });
   const router = useRouter();
 
-  // Use the generated query hook
-  const { data, error, loading, refetch } = useValidateTokenQuery({
-    fetchPolicy: 'network-only', // Always check with server
-    errorPolicy: 'none', // Don't cache errors
-    notifyOnNetworkStatusChange: true,
-  });
+  // Use the GraphQL queries hook
+  const { data, errors, isLoading, refetch } =
+    useGraphQLQueries<ValidateTokenQuery>(ValidateTokenDocument, undefined, {
+      fetchPolicy: 'network-only', // Always check with server
+      notifyOnNetworkStatusChange: true,
+    });
 
   const checkAuth = async () => {
     try {
@@ -44,14 +45,14 @@ export const useAuth = () => {
   };
 
   useEffect(() => {
-    if (!loading) {
+    if (!isLoading) {
       const isAuthenticated = data?.validateToken?.success || false;
       setAuthState({
         isAuthenticated,
         isLoading: false,
       });
     }
-  }, [data, loading, error]);
+  }, [data, isLoading, errors]);
 
   const redirectToLogin = () => {
     router.push('/login');

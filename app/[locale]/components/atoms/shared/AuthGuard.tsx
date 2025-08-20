@@ -1,4 +1,4 @@
-import { useAuth } from '@hooks/authentication/useAuth';
+import { useAuth } from '@hooks/domains/authentication/useAuth';
 import SpinLoader from '@atoms/shared/SpinLoader';
 
 interface AuthGuardProps {

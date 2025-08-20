@@ -4,7 +4,7 @@ import {
   GetMediaTokenQuery,
   MediaAuthResponse,
 } from '@lib/graphql/generated';
-import { useGraphQL } from './useGraphQL';
+import useGraphQLQueries from '../useQueries';
 
 const useMediaToken = () => {
   const [cachedToken, setCachedToken] = useState<MediaAuthResponse | null>(
@@ -12,15 +12,12 @@ const useMediaToken = () => {
   );
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const refreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const { data, isLoading, errors, refetch } = useGraphQL<GetMediaTokenQuery>(
-    GetMediaTokenDocument,
-    undefined,
-    {
+  const { data, isLoading, errors, refetch } =
+    useGraphQLQueries<GetMediaTokenQuery>(GetMediaTokenDocument, undefined, {
       fetchPolicy: 'cache-first',
       nextFetchPolicy: 'cache-first',
       notifyOnNetworkStatusChange: true,
-    },
-  );
+    });
 
   // Silent refresh function
   const silentRefresh = useCallback(async () => {

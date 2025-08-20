@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { useLogin } from '@hooks/authentication/useLogin';
+import { useLogin } from '@hooks/domains/authentication/useLogin';
 import { AccountTypeEnum } from '@graphql/generated';
 import { Form } from '@shadcn/ui/form';
 import ButtonLoadable from '@atoms/shared/ButtonLoadable';

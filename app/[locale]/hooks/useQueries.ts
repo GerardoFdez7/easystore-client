@@ -25,7 +25,7 @@ interface UseGraphQLOptions {
   pollInterval?: number;
 }
 
-export const useGraphQL = <
+const useGraphQLQueries = <
   TResult,
   TVariables extends OperationVariables = OperationVariables,
 >(
@@ -58,3 +58,5 @@ export const useGraphQL = <
     ...rest,
   };
 };
+
+export default useGraphQLQueries;

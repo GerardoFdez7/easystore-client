@@ -4,9 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSearchParams } from 'next/navigation';
-
 import DialogResetPassword from '@atoms/login/DialogResetPassword';
-import { useUpdatePassword } from '@hooks/authentication/useUpdatePassword';
+import { useUpdatePassword } from '@hooks/domains/authentication/useUpdatePassword';
 
 export interface ResetPasswordFormData {
   password: string;

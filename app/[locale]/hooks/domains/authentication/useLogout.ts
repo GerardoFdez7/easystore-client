@@ -1,16 +1,22 @@
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@i18n/navigation';
 import { toast } from 'sonner';
-import { useLogoutMutation } from '@graphql/generated';
+import { LogoutDocument, LogoutMutation } from '@graphql/generated';
+import useGraphQLMutation from '../../useMutations';
 
 export const useLogout = () => {
   const t = useTranslations('Login');
   const router = useRouter();
 
-  // Use the generated mutation hook
-  const [logoutMutation, { data, error, loading }] = useLogoutMutation({
+  // Use the GraphQL mutation hook
+  const {
+    mutate: logoutMutation,
+    data,
+    errors,
+    isLoading,
+  } = useGraphQLMutation<LogoutMutation>(LogoutDocument, undefined, {
     onCompleted: (data) => {
-      if (data.logout.success === true) {
+      if (data?.logout.success === true) {
         toast.success(t('logoutSuccessful'), {
           description: t('logoutSuccessfulDescription'),
         });
@@ -50,9 +56,9 @@ export const useLogout = () => {
 
   return {
     handleLogout,
-    isLoading: loading,
+    isLoading,
     data,
-    error,
+    errors,
   };
 };
 

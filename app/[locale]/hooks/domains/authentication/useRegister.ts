@@ -5,10 +5,12 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  useRegisterMutation,
+  RegisterDocument,
+  RegisterMutation,
   AccountTypeEnum,
   RegisterMutationVariables,
 } from '@graphql/generated';
+import useGraphQLMutation from '../../useMutations';
 
 export const useRegister = (accountType: AccountTypeEnum) => {
   const t = useTranslations('Register');
@@ -40,43 +42,54 @@ export const useRegister = (accountType: AccountTypeEnum) => {
     },
   });
 
-  // Use the generated mutation hook
-  const [registerMutation, { data, error, loading }] = useRegisterMutation({
-    onCompleted: (data) => {
-      toast.success(t('registrationSuccessful'), {
-        description: t('registrationSuccessfulDescription', {
-          email: data.register.email,
-        }),
-      });
-      router.push('/login');
-    },
-    onError: (error) => {
-      // Handle GraphQL errors
-      if (error.graphQLErrors?.length > 0) {
-        const graphQLError = error.graphQLErrors[0];
-        if (
-          graphQLError.message.includes('already exists') ||
-          graphQLError.message.includes('duplicate')
-        ) {
-          toast.warning(t('associatedAccount'), {
-            description: t('associatedAccountDescription'),
+  // Use the GraphQL mutation hook
+  const {
+    mutate: registerMutation,
+    data,
+    errors,
+    isLoading,
+  } = useGraphQLMutation<RegisterMutation, RegisterMutationVariables>(
+    RegisterDocument,
+    undefined,
+    {
+      onCompleted: (data) => {
+        if (data?.register) {
+          toast.success(t('registrationSuccessful'), {
+            description: t('registrationSuccessfulDescription', {
+              email: data.register.email,
+            }),
+          });
+          router.push('/login');
+        }
+      },
+      onError: (error) => {
+        // Handle GraphQL errors
+        if (error.graphQLErrors?.length > 0) {
+          const graphQLError = error.graphQLErrors[0];
+          if (
+            graphQLError.message.includes('already exists') ||
+            graphQLError.message.includes('duplicate')
+          ) {
+            toast.warning(t('associatedAccount'), {
+              description: t('associatedAccountDescription'),
+            });
+          } else {
+            toast.error(t('registrationFailed'), {
+              description: graphQLError.message,
+            });
+          }
+        } else if (error.networkError) {
+          toast.error(t('networkError'), {
+            description: t('networkErrorDescription'),
           });
         } else {
-          toast.error(t('registrationFailed'), {
-            description: graphQLError.message,
+          toast.error(t('unexpectedError'), {
+            description: t('unexpectedErrorDescription'),
           });
         }
-      } else if (error.networkError) {
-        toast.error(t('networkError'), {
-          description: t('networkErrorDescription'),
-        });
-      } else {
-        toast.error(t('unexpectedError'), {
-          description: t('unexpectedErrorDescription'),
-        });
-      }
+      },
     },
-  });
+  );
 
   const handleSubmit = async (formData: RegisterFormValues) => {
     try {
@@ -96,10 +109,10 @@ export const useRegister = (accountType: AccountTypeEnum) => {
   return {
     form,
     handleSubmit,
-    isLoading: loading,
+    isLoading,
     registerFormSchema,
     data,
-    error,
+    errors,
   };
 };
 
