@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { useRegister } from '@hooks/authentication';
+import { useRegister } from '@hooks/domains/authentication';
 import { AccountTypeEnum } from '@graphql/generated';
 import { Form } from '@shadcn/ui/form';
 import RegisterFields from '@molecules/register/RegisterFields';

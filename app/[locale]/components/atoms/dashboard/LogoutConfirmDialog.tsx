@@ -12,7 +12,7 @@ import {
   AlertDialogTrigger,
 } from '@shadcn/ui/alert-dialog';
 import { useTranslations } from 'next-intl';
-import { useLogout } from '@hooks/authentication/useLogout';
+import { useLogout } from '@hooks/domains/authentication/useLogout';
 
 interface LogoutConfirmDialogProps {
   children: React.ReactNode;

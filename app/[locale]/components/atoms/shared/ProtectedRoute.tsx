@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { usePathname } from '@i18n/navigation';
-import { useAuth } from '@hooks/authentication/useAuth';
+import { useAuth } from '@hooks/domains/authentication/useAuth';
 import { isProtectedRoute } from '@consts/routes';
 import SpinLoader from '@atoms/shared/SpinLoader';
 

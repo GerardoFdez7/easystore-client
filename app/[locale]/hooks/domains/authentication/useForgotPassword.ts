@@ -5,10 +5,12 @@ import { useTranslations } from 'next-intl';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import {
-  useForgotPasswordMutation,
+  ForgotPasswordDocument,
   ForgotPasswordMutationVariables,
+  ForgotPasswordMutation,
   AccountTypeEnum,
 } from '@graphql/generated';
+import useGraphQLMutation from '../../useMutations';
 
 export const useForgotPassword = () => {
   const t = useTranslations('ForgotPassword');
@@ -19,7 +21,10 @@ export const useForgotPassword = () => {
     email: z.string().email({ message: t('invalidEmailFormat') }),
   });
 
-  const [forgotPasswordMutation] = useForgotPasswordMutation();
+  const { mutate: forgotPasswordMutation } = useGraphQLMutation<
+    ForgotPasswordMutation,
+    ForgotPasswordMutationVariables
+  >(ForgotPasswordDocument);
 
   const handleForgotPassword = async (
     email: string,
