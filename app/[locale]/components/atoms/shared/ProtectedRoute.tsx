@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { usePathname } from '@i18n/navigation';
 import { useAuth } from '@hooks/authentication/useAuth';
 import { isProtectedRoute } from '@consts/routes';
+import SpinLoader from '@atoms/shared/SpinLoader';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -26,13 +27,7 @@ export default function ProtectedRoute({
 
   // Show loading state while checking authentication
   if (isLoading) {
-    return (
-      fallback || (
-        <div className="flex min-h-screen items-center justify-center">
-          <div className="border-title h-8 w-8 animate-spin rounded-full border-b-2"></div>
-        </div>
-      )
-    );
+    return fallback || <SpinLoader />;
   }
 
   // For protected routes, only render children if authenticated
