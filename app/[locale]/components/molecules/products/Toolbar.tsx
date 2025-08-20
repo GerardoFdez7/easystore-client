@@ -3,27 +3,23 @@
 import ButtonAddProduct from '@atoms/products/ButtonAddProduct';
 import ButtonViewMode from '@atoms/products/ButtonViewMode';
 import { FilterDropdown } from '@atoms/products/FilterDropdown';
-import { SearchBar } from '@atoms/products/SearchBar';
+import { SearchBar } from '@atoms/shared/SearchBar';
 import { useTranslations } from 'next-intl';
+import { ComboboxCategory } from '@atoms/shared/ComboboxCategory';
 
 interface ProductsToolbarProps {
-  searchValue?: string;
-  onSearchChange?: (value: string) => void;
   typeFilter?: string;
   onTypeFilterChange?: (value: string) => void;
   categoryFilter?: string;
   onCategoryFilterChange?: (value: string) => void;
-  viewMode: 'table' | 'cards';
+  viewMode: string;
   onViewModeToggle: () => void;
 }
 
 export function ProductsToolbar({
-  searchValue,
-  onSearchChange,
   typeFilter,
   onTypeFilterChange,
-  categoryFilter,
-  onCategoryFilterChange,
+  viewMode,
   onViewModeToggle,
 }: ProductsToolbarProps) {
   const t = useTranslations('Products');
@@ -31,11 +27,6 @@ export function ProductsToolbar({
   const typeOptions = [
     { value: 'physical', label: t('physical') },
     { value: 'digital', label: t('digital') },
-  ];
-
-  const categoryOptions = [
-    { value: 'home-kitchen', label: 'Home & Kitchen' },
-    { value: 'electronics', label: 'Electronics' },
   ];
 
   return (
@@ -47,12 +38,6 @@ export function ProductsToolbar({
       <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
         {/* SearchBar + Filters container (only visible on large screens) */}
         <div className="flex flex-col gap-4 xl:flex-1 xl:flex-row xl:items-center">
-          <SearchBar
-            placeholder={t('searchProducts')}
-            value={searchValue}
-            onChange={onSearchChange}
-          />
-          {/* Filters only visible on large screens within this container */}
           <div className="hidden gap-4 xl:ml-4 xl:flex">
             <FilterDropdown
               placeholder={t('type')}
@@ -61,14 +46,19 @@ export function ProductsToolbar({
               onChange={onTypeFilterChange}
               width="w-32"
             />
-            <FilterDropdown
+
+            {/*<FilterDropdown
               placeholder={t('category')}
               options={categoryOptions}
               value={categoryFilter}
               onChange={onCategoryFilterChange}
               width="w-36"
-            />
+            />*/}
+
+            <ComboboxCategory />
           </div>
+          <SearchBar placeholder={t('searchProducts')} />
+          {/* Filters only visible on large screens within this container */}
         </div>
 
         {/* Filters and button container for small/medium screens */}
@@ -82,16 +72,19 @@ export function ProductsToolbar({
               onChange={onTypeFilterChange}
               width="w-32"
             />
-            <FilterDropdown
+            {/*<FilterDropdown
               placeholder={t('category')}
               options={categoryOptions}
               value={categoryFilter}
               onChange={onCategoryFilterChange}
               width="w-36"
-            />
+            />*/}
           </div>
           <div className="flex justify-end">
-            <ButtonViewMode onViewModeToggle={onViewModeToggle} />
+            <ButtonViewMode
+              onViewModeToggle={onViewModeToggle}
+              viewMode={viewMode}
+            />
           </div>
         </div>
       </div>

@@ -23,19 +23,19 @@ export default function TabFilterProducts({
         <TabsList className="bg-card h-auto w-fit justify-start gap-2 py-2 pl-3 sm:gap-4">
           <TabsTrigger
             value="All"
-            className="data-[state=active]:border-title data-[state=active]:text-title text-foreground hover:text-title data-[state=active]:bg-card border-2 px-3 py-1 text-xs font-medium sm:text-sm"
+            className="data-[state=active]:border-title text-foreground hover:text-title data-[state=active]:bg-title border-2 px-3 py-1 text-xs font-medium data-[state=active]:text-white sm:text-sm"
           >
             {t('all')}
           </TabsTrigger>
           <TabsTrigger
             value="Actives"
-            className="data-[state=active]:border-title data-[state=active]:text-title text-foreground hover:text-title data-[state=active]:bg-card border-2 px-3 py-1 text-xs font-medium sm:text-sm"
+            className="data-[state=active]:border-title text-foreground hover:text-title data-[state=active]:bg-title border-2 px-3 py-1 text-xs font-medium data-[state=active]:text-white sm:text-sm"
           >
             {t('actives')}
           </TabsTrigger>
           <TabsTrigger
             value="Archived"
-            className="data-[state=active]:border-title data-[state=active]:text-title text-foreground hover:text-title data-[state=active]:bg-card border-2 px-3 py-1 text-xs font-medium sm:text-sm"
+            className="data-[state=active]:border-title text-foreground hover:text-title data-[state=active]:bg-title border-2 px-3 py-1 text-xs font-medium data-[state=active]:text-white sm:text-sm"
           >
             {t('archived')}
           </TabsTrigger>
