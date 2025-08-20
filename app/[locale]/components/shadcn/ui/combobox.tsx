@@ -20,6 +20,7 @@ type ComboboxProps = {
   value?: string;
   onValueChange?: (v: string) => void;
   placeholder?: string;
+  placeholderInput?: string;
   emptyMessage?: string;
   className?: string;
   disabled?: boolean;
@@ -30,6 +31,7 @@ export function Combobox({
   value,
   onValueChange,
   placeholder = 'Select an option',
+  placeholderInput = 'Search...',
   emptyMessage = 'No results.',
   className,
   disabled,
@@ -69,7 +71,7 @@ export function Combobox({
         className="w-[--radix-popover-trigger-width] p-0"
       >
         <Command>
-          <CommandInput placeholder="Search…" />
+          <CommandInput placeholder={placeholderInput} />
           <CommandList>
             <CommandEmpty>{emptyMessage}</CommandEmpty>
             <CommandGroup>
