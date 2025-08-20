@@ -18,6 +18,7 @@ export function EditableField({
   onAction,
   onSave,
   saveLabel = 'Save',
+  placeholder,
 }: {
   label: string;
   value: string;
@@ -27,6 +28,7 @@ export function EditableField({
   onAction?: () => void;
   onSave?: (nextValue: string) => void | Promise<unknown>;
   saveLabel?: string;
+  placeholder?: string;
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
@@ -96,7 +98,8 @@ export function EditableField({
             setCurrentValue(e.target.value)
           }
           onKeyDown={handleKeyDown}
-          className="h-10 min-w-0 flex-1 rounded-md border-gray-200 bg-white text-sm shadow-sm"
+          placeholder={placeholder}
+          className="h-10 min-w-0 flex-1 rounded-md border-gray-200 bg-white text-sm shadow-sm selection:bg-blue-600 selection:text-white"
         />
 
         <div className="flex w-full justify-end md:w-auto">

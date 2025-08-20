@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import LogoutConfirmDialog from '@atoms/dashboard/LogoutConfirmDialog';
+import LogoutConfirmDialog from '@atoms/shared/LogoutConfirmDialog';
 import { Button } from '@shadcn/ui/button';
 import { ApolloWrapper } from '@lib/apollo/apollo-provider';
 
 const meta: Meta<typeof LogoutConfirmDialog> = {
-  title: 'Atoms/Dashboard/LogoutConfirmDialog',
+  title: 'Atoms/Shared/LogoutConfirmDialog',
   component: LogoutConfirmDialog,
   parameters: {
     layout: 'centered',
