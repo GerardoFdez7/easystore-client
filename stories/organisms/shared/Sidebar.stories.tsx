@@ -1,10 +1,10 @@
-import { SiderbarDashboard } from '@molecules/shared/Sidebar';
+import Sidebar from '@organisms/shared/Sidebar';
 import { SidebarProvider } from '@shadcn/ui/sidebar';
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
-const meta: Meta<typeof SiderbarDashboard> = {
-  title: 'Molecules/Shared/Sidebar',
-  component: SiderbarDashboard,
+const meta: Meta<typeof Sidebar> = {
+  title: 'Organisms/Shared/Sidebar',
+  component: Sidebar,
   parameters: {
     layout: 'centered',
   },
@@ -19,6 +19,6 @@ const meta: Meta<typeof SiderbarDashboard> = {
 };
 export default meta;
 
-type Story = StoryObj<typeof SiderbarDashboard>;
+type Story = StoryObj<typeof Sidebar>;
 
 export const Default: Story = {};

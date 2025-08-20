@@ -27,6 +27,6 @@ export const Default: Story = {
     icon: <Home />,
     label: 'Dashboard',
     route: 'dashboard',
-    variant: 'ghost',
+    variant: 'outline',
   },
 };

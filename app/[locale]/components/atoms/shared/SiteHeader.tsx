@@ -14,7 +14,7 @@ export function SiteHeader({ title }: SiteHeaderProps) {
           orientation="vertical"
           className="mx-2 data-[orientation=vertical]:h-4"
         />
-        <h1 className="text-foreground text-[16px] font-medium sm:text-xl">
+        <h1 className="text-foreground text-xl font-medium sm:text-2xl">
           {title}
         </h1>
       </div>

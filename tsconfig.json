@@ -32,6 +32,7 @@
       "@types/*": ["app/[locale]/types/*"],
       "@assets/*": ["app/[locale]/assets/*"],
       "@lib/*": ["./lib/*"],
+      "@contexts/*": ["lib/contexts/*"],
       "utils": ["./lib/utils/cn"],
       "@graphql/*": ["./lib/graphql/*"],
       "@consts/*": ["./lib/consts/*"],
