@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import Portrait from '@molecules/landing/Portrait';
 import { NextIntlClientProvider } from 'next-intl';
 
@@ -13,6 +13,9 @@ const messages = {
 
 const meta: Meta<typeof Portrait> = {
   title: 'Molecules/Landing/Portrait',
+  parameters: {
+    layout: 'centered',
+  },
   component: Portrait,
 };
 export default meta;

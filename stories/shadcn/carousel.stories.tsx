@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import {
   Carousel,
   CarouselContent,
@@ -9,6 +9,9 @@ import {
 
 const meta: Meta<typeof Carousel> = {
   title: 'Shadcn/Carousel',
+  parameters: {
+    layout: 'centered',
+  },
   component: Carousel,
 };
 export default meta;

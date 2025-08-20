@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -10,6 +10,9 @@ import {
 
 const meta: Meta<typeof Breadcrumb> = {
   title: 'Shadcn/Breadcrumb',
+  parameters: {
+    layout: 'centered',
+  },
   component: Breadcrumb,
 };
 export default meta;

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import MobileMenu from '@molecules/landing/MobileMenu';
 import { NextIntlClientProvider } from 'next-intl';
 
@@ -15,6 +15,9 @@ const messages = {
 
 const meta: Meta<typeof MobileMenu> = {
   title: 'Molecules/Landing/MobileMenu',
+  parameters: {
+    layout: 'centered',
+  },
   component: MobileMenu,
 };
 export default meta;

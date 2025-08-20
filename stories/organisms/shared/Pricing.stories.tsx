@@ -8,7 +8,7 @@ const meta: Meta<typeof Pricing> = {
   title: 'Organisms/Shared/Pricing',
   component: Pricing,
   parameters: {
-    layout: 'centered',
+    layout: 'fullscreen',
   },
   tags: ['autodocs'],
 };

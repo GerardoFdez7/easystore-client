@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { NextIntlClientProvider } from 'next-intl';
 import Everywhere from '@molecules/landing/Everywhere';
 
@@ -11,6 +11,9 @@ const messages = {
 
 const meta: Meta<typeof Everywhere> = {
   title: 'Molecules/Landing/Everywhere',
+  parameters: {
+    layout: 'centered',
+  },
   component: Everywhere,
 };
 export default meta;

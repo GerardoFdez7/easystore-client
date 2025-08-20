@@ -1,9 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { Label } from '@shadcn/ui/label';
 import { Input } from '@shadcn/ui/input';
 
 const meta: Meta<typeof Label> = {
   title: 'Shadcn/Label',
+  parameters: {
+    layout: 'centered',
+  },
   component: Label,
 };
 export default meta;

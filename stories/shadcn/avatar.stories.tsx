@@ -1,8 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { Avatar, AvatarImage, AvatarFallback } from '@shadcn/ui/avatar';
 
 const meta: Meta<typeof Avatar> = {
   title: 'Shadcn/Avatar',
+  parameters: {
+    layout: 'centered',
+  },
   component: Avatar,
   args: {},
 };

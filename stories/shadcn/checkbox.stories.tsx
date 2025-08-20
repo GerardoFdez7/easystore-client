@@ -1,9 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { Checkbox } from '@shadcn/ui/checkbox';
 import { Label } from '@shadcn/ui/label';
 
 const meta: Meta<typeof Checkbox> = {
   title: 'Shadcn/Checkbox',
+  parameters: {
+    layout: 'centered',
+  },
   component: Checkbox,
 };
 export default meta;

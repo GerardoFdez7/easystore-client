@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import {
   Card,
   CardHeader,
@@ -11,6 +11,9 @@ import { Button } from '@shadcn/ui/button';
 
 const meta: Meta<typeof Card> = {
   title: 'Shadcn/Card',
+  parameters: {
+    layout: 'centered',
+  },
   component: Card,
 };
 export default meta;

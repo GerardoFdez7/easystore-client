@@ -1,8 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import LinkPricing from '@atoms/landing/LinkPricing';
 
 const meta: Meta<typeof LinkPricing> = {
   title: 'Atoms/Landing/LinkPricing',
+  parameters: {
+    layout: 'centered',
+  },
   component: LinkPricing,
 };
 
