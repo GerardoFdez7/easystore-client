@@ -24,15 +24,14 @@ export function ProfileLogo({
   const [preview, setPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // sincroniza cuando venga del hook
   useEffect(() => setName(nameProp ?? ''), [nameProp]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const url = URL.createObjectURL(file);
-    setPreview(url); // preview instantánea
-    void onLogoFile?.(file); // subida real
+    setPreview(url); // preview
+    void onLogoFile?.(file);
   };
 
   return (

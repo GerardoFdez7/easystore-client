@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { LogOut } from 'lucide-react';
 import { Button } from '@shadcn/ui/button';
 import { useProfile } from '@hooks/useProfile';
+import LogoutConfirmDialog from '@atoms/shared/LogoutConfirmDialog';
 
 export function Sidebar() {
   const t = useTranslations('Profile');
@@ -28,7 +29,7 @@ export function Sidebar() {
           loading={isLoading}
         />
 
-        <div className="mt-4 sm:mt-6">
+        <div className="mt-4 mb-5 sm:mt-6">
           <h3 className="mb-2 text-sm font-medium text-[#111827]">
             {t('storeProfileTitle')}
           </h3>
@@ -38,14 +39,16 @@ export function Sidebar() {
         </div>
       </div>
 
-      <div className="mt-4 md:mt-auto">
-        <Button
-          variant="outline"
-          className="h-10 w-full justify-start rounded-lg border-gray-200 bg-white px-4 text-gray-800 shadow-sm hover:bg-gray-50"
-        >
-          <LogOut className="mr-2 h-4 w-4" />
-          {t('logOut')}
-        </Button>
+      <div className="mt-5 md:mt-auto">
+        <LogoutConfirmDialog>
+          <Button
+            variant="outline"
+            className="h-10 w-full justify-start rounded-lg border-gray-200 bg-white px-4 text-gray-800 shadow-sm hover:bg-gray-50"
+          >
+            <LogOut className="mr-2 h-4 w-4" />
+            {t('logOut')}
+          </Button>
+        </LogoutConfirmDialog>
       </div>
     </aside>
   );

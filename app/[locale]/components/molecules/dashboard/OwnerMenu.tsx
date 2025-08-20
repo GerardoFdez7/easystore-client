@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback } from '@shadcn/ui/avatar';
 import { LogOut, User } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@i18n/navigation';
-import LogoutConfirmDialog from '@atoms/dashboard/LogoutConfirmDialog';
+import LogoutConfirmDialog from '@atoms/shared/LogoutConfirmDialog';
 import OwnerMenuItem from '@atoms/dashboard/OwnerMenuItem';
 
 export default function OwnerMenu() {

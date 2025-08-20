@@ -1,9 +1,10 @@
 'use client';
 
-import useSWR from 'swr';
+import { gql, NetworkStatus, useApolloClient } from '@apollo/client';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
+import { useGraphQL } from '@hooks/useGraphQL';
 
 export type Profile = {
   id: string;
@@ -18,8 +19,42 @@ export type Profile = {
   passwordChangedAgo?: string | null;
 };
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+/** GraphQL documents (DocumentNode, no casts) */
+const GetProfileDocument = gql`
+  query GetProfile($tenantId: ID) {
+    profile(tenantId: $tenantId) {
+      id
+      domain
+      phone
+      email
+      emailVerified
+      logoUrl
+      description
+      storeName
+      plan
+      passwordChangedAgo
+    }
+  }
+`;
 
+const UpdateProfileDocument = gql`
+  mutation UpdateProfile($tenantId: ID, $input: ProfileInput!) {
+    updateProfile(tenantId: $tenantId, input: $input) {
+      id
+      domain
+      phone
+      email
+      emailVerified
+      logoUrl
+      description
+      storeName
+      plan
+      passwordChangedAgo
+    }
+  }
+`;
+
+/** Extract a human readable error message */
 function pickMessage(body: unknown): string | undefined {
   if (typeof body === 'string') return body;
   if (body && typeof body === 'object') {
@@ -32,20 +67,29 @@ function pickMessage(body: unknown): string | undefined {
   return undefined;
 }
 
+function errorToMessage(e: unknown, fallback: string): string {
+  if (e instanceof Error) return e.message || fallback;
+  return pickMessage(e) ?? (typeof e === 'string' ? e : fallback);
+}
+
 export function useProfile(tenantId?: string) {
   const t = useTranslations('Profile');
+  const apollo = useApolloClient();
 
-  // Endpoint
-  const key = tenantId ? `/api/tenants/${tenantId}/profile` : `/api/profile`;
+  // Query
+  const { data, error, isLoading, networkStatus, refetch } = useGraphQL<{
+    profile: Profile;
+  }>(GetProfileDocument, {
+    tenantId: tenantId ?? null,
+  });
 
-  const { data, error, isLoading, mutate, isValidating } = useSWR<Profile>(
-    key,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    },
-  );
+  const isValidating =
+    networkStatus === NetworkStatus.refetch ||
+    networkStatus === NetworkStatus.setVariables;
 
+  const profile = data?.profile;
+
+  /** Field validators */
   const phoneRegex = /^[+\d().\-\s]{6,20}$/;
   const validators = {
     domain: z
@@ -78,208 +122,153 @@ export function useProfile(tenantId?: string) {
     logoUrl: z.string().url({ message: t('invalidUrl') }),
   };
 
-  // ── PATCH  ─────────────────────────────────
-  const patch = async (patchObj: Partial<Profile>) => {
-    const res = await fetch(key, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(patchObj),
-    });
-    if (!res.ok) {
-      let body: unknown;
-      try {
-        body = await res.json();
-      } catch {}
-      const msg = pickMessage(body) ?? `HTTP ${res.status}`;
-      throw new Error(msg);
+  /** Generic updater using Apollo mutate + optimistic update */
+  const updateField = async (patch: Partial<Profile>) => {
+    if (!profile) return;
+
+    const optimistic: Profile = { ...profile, ...patch };
+
+    try {
+      await apollo.mutate<
+        { updateProfile: Profile },
+        { tenantId?: string | null; input: Partial<Profile> }
+      >({
+        mutation: UpdateProfileDocument,
+        variables: { tenantId: tenantId ?? null, input: patch },
+        optimisticResponse: { updateProfile: optimistic },
+        update(cache, { data: resp }) {
+          const next = resp?.updateProfile ?? optimistic;
+          cache.writeQuery({
+            query: GetProfileDocument,
+            variables: { tenantId: tenantId ?? null },
+            data: { profile: next },
+          });
+        },
+      });
+    } catch (e: unknown) {
+      toast.error(t('submitErrorTitle'), {
+        description: errorToMessage(e, t('unknownError')),
+      });
+      throw e;
     }
-    return (await res.json().catch(() => null)) as Profile | null;
   };
 
-  const updateField = async (patchObj: Partial<Profile>) => {
-    const next = { ...(data as Profile), ...patchObj };
-    await mutate(
-      async () => {
-        const updated = await patch(patchObj);
-        return updated ?? next;
-      },
-      {
-        optimisticData: next,
-        rollbackOnError: true,
-        revalidate: false,
-        populateCache: true,
-      },
-    );
-  };
-
-  // ── Actions by field ─────────────────────────────────
+  /** Actions */
   const updateDomain = async (next: string) => {
     const parsed = validators.domain.safeParse(next);
-    if (!parsed.success)
-      return (
-        toast.error(t('submitErrorTitle'), {
-          description: parsed.error.issues[0]?.message,
-        }),
-        false
-      );
-    try {
-      await updateField({ domain: parsed.data });
-      toast.success(t('savedChangesTitle'), {
-        description: t('domainUpdated'),
-      });
-      return true;
-    } catch (err: unknown) {
+    if (!parsed.success) {
       toast.error(t('submitErrorTitle'), {
-        description: err instanceof Error ? err.message : t('unknownError'),
+        description: parsed.error.issues[0]?.message,
       });
       return false;
     }
+    await updateField({ domain: parsed.data });
+    toast.success(t('savedChangesTitle'), { description: t('domainUpdated') });
+    return true;
   };
 
   const updatePhone = async (next: string) => {
     const parsed = validators.phone.safeParse(next);
-    if (!parsed.success)
-      return (
-        toast.error(t('submitErrorTitle'), {
-          description: parsed.error.issues[0]?.message,
-        }),
-        false
-      );
-    const value = parsed.data.trim() === '' ? null : parsed.data;
-    try {
-      await updateField({ phone: value });
-      toast.success(t('savedChangesTitle'), { description: t('phoneUpdated') });
-      return true;
-    } catch (err: unknown) {
+    if (!parsed.success) {
       toast.error(t('submitErrorTitle'), {
-        description: err instanceof Error ? err.message : t('unknownError'),
+        description: parsed.error.issues[0]?.message,
       });
       return false;
     }
+    const value = parsed.data.trim() === '' ? null : parsed.data;
+    await updateField({ phone: value });
+    toast.success(t('savedChangesTitle'), { description: t('phoneUpdated') });
+    return true;
   };
 
   const updateEmail = async (next: string) => {
     const parsed = validators.email.safeParse(next);
-    if (!parsed.success)
-      return (
-        toast.error(t('submitErrorTitle'), {
-          description: parsed.error.issues[0]?.message,
-        }),
-        false
-      );
-    try {
-      await updateField({ email: parsed.data });
-      toast.success(t('savedChangesTitle'), { description: t('emailUpdated') });
-      return true;
-    } catch (err: unknown) {
+    if (!parsed.success) {
       toast.error(t('submitErrorTitle'), {
-        description: err instanceof Error ? err.message : t('unknownError'),
+        description: parsed.error.issues[0]?.message,
       });
       return false;
     }
+    await updateField({ email: parsed.data });
+    toast.success(t('savedChangesTitle'), { description: t('emailUpdated') });
+    return true;
   };
 
   const updateDescription = async (next: string) => {
     const parsed = validators.description.safeParse(next);
-    if (!parsed.success)
-      return (
-        toast.error(t('submitErrorTitle'), {
-          description: parsed.error.issues[0]?.message,
-        }),
-        false
-      );
-    try {
-      await updateField({ description: parsed.data });
-      toast.success(t('savedChangesTitle'), {
-        description: t('descriptionUpdated'),
-      });
-      return true;
-    } catch (err: unknown) {
+    if (!parsed.success) {
       toast.error(t('submitErrorTitle'), {
-        description: err instanceof Error ? err.message : t('unknownError'),
+        description: parsed.error.issues[0]?.message,
       });
       return false;
     }
+    await updateField({ description: parsed.data });
+    toast.success(t('savedChangesTitle'), {
+      description: t('descriptionUpdated'),
+    });
+    return true;
   };
 
   const updateStoreName = async (next: string) => {
     const parsed = validators.storeName.safeParse(next);
-    if (!parsed.success)
-      return (
-        toast.error(t('submitErrorTitle'), {
-          description: parsed.error.issues[0]?.message,
-        }),
-        false
-      );
-    try {
-      await updateField({ storeName: parsed.data });
-      toast.success(t('savedChangesTitle'), {
-        description: t('storeNameUpdated'),
-      });
-      return true;
-    } catch (err: unknown) {
+    if (!parsed.success) {
       toast.error(t('submitErrorTitle'), {
-        description: err instanceof Error ? err.message : t('unknownError'),
+        description: parsed.error.issues[0]?.message,
       });
       return false;
     }
+    await updateField({ storeName: parsed.data });
+    toast.success(t('savedChangesTitle'), {
+      description: t('storeNameUpdated'),
+    });
+    return true;
   };
 
-  // ── LOGO ─────────────────────────────────
-  /** Case A:  URL (CDN / S3 presigned / etc.) */
   const updateLogoUrl = async (url: string) => {
     const parsed = validators.logoUrl.safeParse(url);
-    if (!parsed.success)
-      return (
-        toast.error(t('submitErrorTitle'), {
-          description: parsed.error.issues[0]?.message,
-        }),
-        false
-      );
-    try {
-      await updateField({ logoUrl: parsed.data });
-      toast.success(t('savedChangesTitle'), { description: t('logoUpdated') });
-      return true;
-    } catch (err: unknown) {
+    if (!parsed.success) {
       toast.error(t('submitErrorTitle'), {
-        description: err instanceof Error ? err.message : t('unknownError'),
+        description: parsed.error.issues[0]?.message,
       });
       return false;
     }
+    await updateField({ logoUrl: parsed.data });
+    toast.success(t('savedChangesTitle'), { description: t('logoUpdated') });
+    return true;
   };
 
-  /** Case B: upload file to API  */
   const updateLogoFromFile = async (file: File) => {
     try {
       const form = new FormData();
       form.append('file', file);
-      const res = await fetch(`${key}/logo`, { method: 'POST', body: form });
-      if (!res.ok) {
-        let body: unknown;
-        try {
-          body = await res.json();
-        } catch {}
-        throw new Error(pickMessage(body) ?? `HTTP ${res.status}`);
-      }
+      const res = await fetch('/api/uploads/logo', {
+        method: 'POST',
+        body: form,
+      });
+      if (!res.ok) throw new Error(await res.text());
       const { url } = (await res.json()) as { url: string };
       await updateLogoUrl(url);
       return true;
-    } catch (err: unknown) {
+    } catch (e: unknown) {
       toast.error(t('submitErrorTitle'), {
-        description: err instanceof Error ? err.message : t('unknownError'),
+        description: errorToMessage(e, t('unknownError')),
       });
       return false;
     }
   };
 
-  const phoneDisplay = data?.phone ?? t('noPhone');
-  const phoneActionLabel = data?.phone ? t('change') : t('add');
+  /** Phone derived values */
+  const rawPhone = (profile?.phone ?? '').trim();
+  const hasPhone = rawPhone.length > 0;
+  const phoneDisplay = hasPhone ? rawPhone : t('noPhone');
+  const phoneActionLabel = hasPhone ? t('change') : t('add');
 
   return {
-    profile: data,
+    profile,
     error,
     isLoading,
     isValidating,
+    hasPhone,
     phoneDisplay,
     phoneActionLabel,
     actions: {
@@ -290,7 +279,7 @@ export function useProfile(tenantId?: string) {
       updateStoreName,
       updateLogoUrl,
       updateLogoFromFile,
-      mutate,
+      mutate: refetch, // still exposed if you want to force a refresh
     },
   };
 }
