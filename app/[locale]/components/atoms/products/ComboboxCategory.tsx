@@ -67,7 +67,8 @@ export default function ComboboxCategory({
       value={value}
       onValueChange={handleValueChange}
       placeholder={t('category')}
-      emptyMessage="No category found."
+      placeholderInput={t('search')}
+      emptyMessage={t('noCategoryFound')}
       className={className}
       disabled={disabled}
     />
