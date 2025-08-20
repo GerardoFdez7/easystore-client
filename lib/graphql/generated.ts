@@ -434,6 +434,7 @@ export type Media = {
 export type MediaAuthResponse = {
   __typename?: 'MediaAuthResponse';
   expire: Scalars['Float']['output'];
+  publicKey: Scalars['String']['output'];
   signature: Scalars['String']['output'];
   token: Scalars['String']['output'];
 };
@@ -1153,6 +1154,7 @@ export type GetMediaTokenQuery = {
     token: string;
     expire: number;
     signature: string;
+    publicKey: string;
   };
 };
 
@@ -2846,6 +2848,7 @@ export const GetMediaTokenDocument = gql`
       token
       expire
       signature
+      publicKey
     }
   }
 `;
