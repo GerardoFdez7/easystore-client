@@ -1,12 +1,14 @@
-import { Button } from '@shadcn/ui/button';
+'use client';
+
 import { usePathname, useRouter } from 'next/navigation';
 import { ReactNode } from 'react';
 import { cn } from 'utils';
+import { SidebarMenuButton } from '@shadcn/ui/sidebar';
 
 type SidebarButtonProps = {
   icon: ReactNode;
   label: string;
-  variant?: 'default' | 'ghost';
+  variant?: 'default' | 'outline';
   className?: string;
   route: string;
 };
@@ -15,7 +17,7 @@ export default function ButtonSidebar({
   icon,
   label,
   route,
-  variant = 'ghost',
+  variant = 'default',
   className = '',
 }: SidebarButtonProps) {
   const router = useRouter();
@@ -29,19 +31,20 @@ export default function ButtonSidebar({
   const isSelected = pathname === fullPath;
 
   return (
-    <Button
+    <SidebarMenuButton
       variant={variant}
+      isActive={isSelected}
+      tooltip={label}
       onClick={() => router.push(fullPath)}
       className={cn(
-        'w-full justify-start',
-        isSelected
-          ? 'bg-title hover:bg-title dark:bg-hover dark:hover:bg-hover text-white hover:text-white'
-          : 'text-foreground hover:text-title dark:hover:bg-hover hover:bg-[#d7d7d7]',
+        'h-12 w-full cursor-pointer justify-start text-base',
         className,
       )}
     >
-      <span className="mr-3 h-4 w-4">{icon}</span>
-      {label}
-    </Button>
+      <div className="flex h-7 w-7 items-center justify-center [&>svg]:h-7 [&>svg]:w-7">
+        {icon}
+      </div>
+      <span className="text-base font-medium">{label}</span>
+    </SidebarMenuButton>
   );
 }

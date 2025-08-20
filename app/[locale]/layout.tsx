@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@shadcn/features/theme-provider';
+import { CountdownProvider } from '@lib/contexts/CountdownContext';
 import { ApolloWrapper } from '@lib/apollo/apollo-provider';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
@@ -40,7 +41,9 @@ export default async function RootLayout({
         <ApolloWrapper>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <NextIntlClientProvider>
-              <ProtectedRoute>{children}</ProtectedRoute>
+              <CountdownProvider>
+                <ProtectedRoute>{children}</ProtectedRoute>
+              </CountdownProvider>
             </NextIntlClientProvider>
             <Toaster />
           </ThemeProvider>

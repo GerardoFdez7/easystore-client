@@ -6,6 +6,21 @@
     "Italian": "Italiano",
     "Portuguese": "Português"
   },
+  "Construction": {
+    "title": "We're Building Something Amazing!",
+    "subtitle": "Get Ready to Launch Your E-Commerce Store with Zero Effort and Very Low Costs!",
+    "launchingIn": "Launching In",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds",
+    "features": {
+      "lightningFast": "Lightning Fast",
+      "lowCost": "Low Cost",
+      "userFriendly": "User Friendly",
+      "quickLaunch": "Quick Launch"
+    }
+  },
   "Countries": {
     "AF": "Afghanistan",
     "AX": "Åland Islands",

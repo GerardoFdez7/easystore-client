@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export default function OwnerLogo() {
   return (
-    <div className="bg-opacity-20 flex justify-center rounded-lg p-4">
+    <div className="bg-opacity-20 flex justify-center rounded-lg p-4 group-data-[collapsible=icon]:hidden">
       <Image
         src="/laptop.webp"
         alt="Image"

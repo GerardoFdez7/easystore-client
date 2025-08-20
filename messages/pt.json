@@ -6,6 +6,21 @@
     "Italian": "Italiano",
     "Portuguese": "Português"
   },
+  "Construction": {
+    "title": "Estamos construindo algo incrível!",
+    "subtitle": "Prepare-se para lançar sua loja de e-commerce sem esforço e com custos muito baixos!",
+    "launchingIn": "Lançamento em",
+    "days": "Dias",
+    "hours": "Horas",
+    "minutes": "Minutos",
+    "seconds": "Segundos",
+    "features": {
+      "lightningFast": "Super Rápido",
+      "lowCost": "Baixo Custo",
+      "userFriendly": "Fácil de Usar",
+      "quickLaunch": "Lançamento Rápido"
+    }
+  },
   "Countries": {
     "AF": "Afeganistão",
     "AX": "Ilhas Åland",

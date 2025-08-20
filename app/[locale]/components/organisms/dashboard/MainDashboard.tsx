@@ -4,7 +4,7 @@ import WelcomeDashboard from '@atoms/dashboard/WelcomeDashboard';
 // import TabDashboard from '@molecules/dashboard/TabDashboard';
 import { SiteHeader } from '@atoms/shared/SiteHeader';
 import { SidebarInset, SidebarProvider } from '@shadcn/ui/sidebar';
-import { SiderbarDashboard } from '@molecules/shared/Sidebar';
+import Sidebar from '@organisms/shared/Sidebar';
 import { KPICards } from '@molecules/dashboard/KPICards';
 import { ChartTotalSales } from '@molecules/dashboard/ChartTotalSales';
 import TopProducts from '@molecules/dashboard/TopProducts';
@@ -26,7 +26,7 @@ export default function MainDashboard() {
           } as React.CSSProperties
         }
       >
-        <SiderbarDashboard />
+        <Sidebar />
         <SidebarInset>
           <SiteHeader title={t('dashboard')} />
           <div className="flex flex-1 flex-col">
