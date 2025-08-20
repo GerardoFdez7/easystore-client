@@ -19,7 +19,6 @@ interface MediaItem {
   position: number;
   mediaType: 'IMAGE' | 'VIDEO';
 }
-
 interface Product {
   id: string;
   name: string;
@@ -29,7 +28,6 @@ interface Product {
   cover: string;
   media?: MediaItem[];
 }
-
 interface ProductTableProps {
   products: Product[];
   selectedProducts: string[];
@@ -57,7 +55,7 @@ export function ProductTable({
       />
       <Table className="bg-card">
         <TableHeader className="text-[12px] sm:text-[14px]">
-          <TableRow>
+          <TableRow className="hover:bg-transparent">
             <TableHead className="w-9 px-3">
               <Checkbox
                 checked={selectedProducts.length === products.length}
