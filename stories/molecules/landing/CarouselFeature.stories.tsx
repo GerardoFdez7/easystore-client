@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { NextIntlClientProvider } from 'next-intl';
 import CarouselFeature from '@molecules/landing/CarouselFeature';
 
@@ -29,6 +29,9 @@ const messages = {
 
 const meta: Meta<typeof CarouselFeature> = {
   title: 'Molecules/Landing/CarouselFeature',
+  parameters: {
+    layout: 'centered',
+  },
   component: CarouselFeature,
 };
 export default meta;

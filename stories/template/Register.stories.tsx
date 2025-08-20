@@ -6,6 +6,7 @@ const meta: Meta<typeof RegisterTemplate> = {
   component: RegisterTemplate,
   tags: ['autodocs'],
   parameters: {
+    layout: 'fullscreen',
     nextjs: {
       appDirectory: true,
     },

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { NextIntlClientProvider } from 'next-intl';
 import RegisterForm from '@molecules/register/RegisterForm';
 import { AccountTypeEnum } from '@graphql/generated';

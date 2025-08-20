@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import {
   Accordion,
   AccordionItem,
@@ -8,6 +8,9 @@ import {
 
 const meta: Meta<typeof Accordion> = {
   title: 'Shadcn/Accordion',
+  parameters: {
+    layout: 'centered',
+  },
   component: Accordion,
 };
 export default meta;

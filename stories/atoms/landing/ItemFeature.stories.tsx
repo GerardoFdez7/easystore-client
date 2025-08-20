@@ -1,10 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { Star } from 'lucide-react';
 import ItemFeature from '@atoms/landing/ItemFeature';
 import { Carousel, CarouselContent } from '@shadcn/ui/carousel';
 
 const meta: Meta<typeof ItemFeature> = {
   title: 'Atoms/Landing/ItemFeature',
+  parameters: {
+    layout: 'centered',
+  },
   component: ItemFeature,
   decorators: [
     (Story) => (

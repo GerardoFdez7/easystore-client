@@ -1,8 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { Toggle } from '@shadcn/ui/toggle';
 
 const meta: Meta<typeof Toggle> = {
   title: 'Shadcn/Toggle',
+  parameters: {
+    layout: 'centered',
+  },
   component: Toggle,
   args: { children: 'Bold' },
 };

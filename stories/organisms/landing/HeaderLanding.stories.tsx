@@ -3,13 +3,15 @@ import HeaderLanding from '@organisms/landing/HeaderLanding';
 
 const meta: Meta<typeof HeaderLanding> = {
   title: 'Organisms/Landing/HeaderLanding',
-  component: HeaderLanding,
-  tags: ['autodocs'],
   parameters: {
+    layout: 'fullscreen',
     nextjs: {
       appDirectory: true,
     },
   },
+
+  component: HeaderLanding,
+  tags: ['autodocs'],
 };
 
 export default meta;

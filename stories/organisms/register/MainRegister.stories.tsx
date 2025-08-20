@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import MainRegister from '@organisms/register/MainRegister';
 import { NextIntlClientProvider } from 'next-intl';
 
@@ -29,6 +29,9 @@ const messages = {
 
 const meta: Meta<typeof MainRegister> = {
   title: 'Organisms/Register/MainRegister',
+  parameters: {
+    layout: 'fullscreen',
+  },
   component: MainRegister,
 };
 export default meta;

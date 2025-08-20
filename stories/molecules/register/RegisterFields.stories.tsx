@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { NextIntlClientProvider } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { Form } from '@shadcn/ui/form';
@@ -14,6 +14,9 @@ const messages = {
 
 const meta: Meta<typeof RegisterFields> = {
   title: 'Molecules/Register/RegisterFields',
+  parameters: {
+    layout: 'centered',
+  },
   component: RegisterFields,
 };
 export default meta;

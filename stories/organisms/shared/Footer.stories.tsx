@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import Footer from '@organisms/shared/Footer';
 import { NextIntlClientProvider } from 'next-intl';
 
@@ -13,6 +13,9 @@ const messages = {
 
 const meta: Meta<typeof Footer> = {
   title: 'Organisms/Shared/Footer',
+  parameters: {
+    layout: 'fullscreen',
+  },
   component: Footer,
 };
 export default meta;

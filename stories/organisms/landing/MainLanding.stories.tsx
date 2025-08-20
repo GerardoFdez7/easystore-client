@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import MainLanding from '@organisms/landing/MainLanding';
 import { NextIntlClientProvider } from 'next-intl';
 
@@ -148,6 +148,9 @@ const messages = {
 
 const meta: Meta<typeof MainLanding> = {
   title: 'Organisms/Landing/MainLanding',
+  parameters: {
+    layout: 'fullscreen',
+  },
   component: MainLanding,
 };
 export default meta;

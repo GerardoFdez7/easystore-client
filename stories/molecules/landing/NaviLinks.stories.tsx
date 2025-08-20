@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import NaviLinks from '@molecules/landing/NaviLinks';
 import { NextIntlClientProvider } from 'next-intl';
 
@@ -15,6 +15,9 @@ const messages = {
 
 const meta: Meta<typeof NaviLinks> = {
   title: 'Molecules/Landing/NaviLinks',
+  parameters: {
+    layout: 'centered',
+  },
   component: NaviLinks,
 };
 export default meta;

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import SocialAuthButtons from '@molecules/shared/SocialAuthButtons';
 import { NextIntlClientProvider } from 'next-intl';
 
@@ -11,6 +11,9 @@ const messages = {
 
 const meta: Meta<typeof SocialAuthButtons> = {
   title: 'Molecules/Shared/SocialAuthButtons',
+  parameters: {
+    layout: 'centered',
+  },
   component: SocialAuthButtons,
 };
 export default meta;

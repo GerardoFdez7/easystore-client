@@ -6,6 +6,7 @@ const meta: Meta<typeof LandingPage> = {
   component: LandingPage,
   tags: ['autodocs'],
   parameters: {
+    layout: 'centered',
     nextjs: {
       appDirectory: true,
     },

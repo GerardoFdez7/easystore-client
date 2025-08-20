@@ -5,7 +5,7 @@ const meta: Meta<typeof HeaderDashboard> = {
   title: 'Organisms/Dashboard/HeaderDashboard',
   component: HeaderDashboard,
   parameters: {
-    layout: 'centered',
+    layout: 'fullscreen',
   },
   tags: ['autodocs'],
 };

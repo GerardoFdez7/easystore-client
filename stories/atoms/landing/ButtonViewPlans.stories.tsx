@@ -1,8 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import ButtonViewPlans from '@atoms/landing/ButtonViewPlans';
 
 const meta: Meta<typeof ButtonViewPlans> = {
   title: 'Atoms/Landing/ButtonViewPlans',
+  parameters: {
+    layout: 'centered',
+  },
   component: ButtonViewPlans,
 };
 

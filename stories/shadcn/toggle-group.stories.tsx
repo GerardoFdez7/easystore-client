@@ -1,8 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { ToggleGroup, ToggleGroupItem } from '@shadcn/ui/toggle-group';
 
 const meta: Meta<typeof ToggleGroup> = {
   title: 'Shadcn/ToggleGroup',
+  parameters: {
+    layout: 'centered',
+  },
   component: ToggleGroup,
 };
 export default meta;

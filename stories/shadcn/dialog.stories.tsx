@@ -1,58 +1,40 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import * as React from 'react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogClose,
+  DialogTrigger,
 } from '@shadcn/ui/dialog';
+import { Button } from '@shadcn/ui/button';
 
 const meta: Meta<typeof Dialog> = {
-  title: 'shadcn/Dialog',
+  title: 'Shadcn/Dialog',
+  parameters: {
+    layout: 'centered',
+  },
   component: Dialog,
-  parameters: { layout: 'centered' },
 };
 export default meta;
 
 type Story = StoryObj<typeof Dialog>;
 
-const DialogExample: React.FC = () => {
-  const [open, setOpen] = React.useState(false);
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
+export const Default: Story = {
+  render: () => (
+    <Dialog>
       <DialogTrigger asChild>
-        <button className="rounded-md border px-4 py-2 text-sm">
-          Open dialog
-        </button>
+        <Button>Open dialog</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Confirm action</DialogTitle>
+          <DialogTitle>Payment details</DialogTitle>
           <DialogDescription>
-            This is a sample dialog using your shadcn wrapper.
+            Enter your billing information securely.
           </DialogDescription>
         </DialogHeader>
-
-        <DialogFooter>
-          <DialogClose asChild>
-            <button className="rounded-md border px-4 py-2 text-sm">
-              Cancel
-            </button>
-          </DialogClose>
-          <button
-            className="rounded-md border px-4 py-2 text-sm"
-            onClick={() => setOpen(false)}
-          >
-            Continue
-          </button>
-        </DialogFooter>
+        <div>Dialog body goes here.</div>
       </DialogContent>
     </Dialog>
-  );
+  ),
 };
-
-export const Basic: Story = { render: () => <DialogExample /> };

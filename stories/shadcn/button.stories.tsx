@@ -1,8 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { Button } from '@shadcn/ui/button';
 
 const meta: Meta<typeof Button> = {
   title: 'Shadcn/Button',
+  parameters: {
+    layout: 'centered',
+  },
   component: Button,
   argTypes: {
     variant: {

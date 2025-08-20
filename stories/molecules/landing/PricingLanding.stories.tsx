@@ -1,10 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import PricingLanding from '@molecules/landing/PricingLanding';
 import { NextIntlClientProvider } from 'next-intl';
 import en from '../../../messages/en.json';
 
 const meta: Meta<typeof PricingLanding> = {
   title: 'Molecules/Landing/PricingLanding',
+  parameters: {
+    layout: 'centered',
+  },
   component: PricingLanding,
 };
 export default meta;

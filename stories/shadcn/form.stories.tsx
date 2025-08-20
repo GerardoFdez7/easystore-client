@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import {
   Form,
   FormField,
@@ -14,6 +14,9 @@ import React from 'react';
 
 const meta: Meta<typeof Form> = {
   title: 'Shadcn/Form',
+  parameters: {
+    layout: 'centered',
+  },
   component: Form,
 };
 export default meta;
