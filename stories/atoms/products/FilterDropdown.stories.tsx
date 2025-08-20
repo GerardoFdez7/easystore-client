@@ -1,4 +1,4 @@
-import { FilterDropdown } from '@atoms/products/FilterDropdown';
+import { FilterDropdown } from '@atoms/products/ComboboxType';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof FilterDropdown> = {
