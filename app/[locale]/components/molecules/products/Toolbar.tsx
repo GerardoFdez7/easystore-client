@@ -2,10 +2,10 @@
 
 import ButtonAddProduct from '@atoms/products/ButtonAddProduct';
 import ButtonViewMode from '@atoms/products/ButtonViewMode';
-import { FilterDropdown } from '@atoms/products/FilterDropdown';
+import ComboboxType from '@atoms/products/ComboboxType';
 import { SearchBar } from '@atoms/shared/SearchBar';
+import ComboboxCategory from '@atoms/products/ComboboxCategory';
 import { useTranslations } from 'next-intl';
-import { ComboboxCategory } from '@atoms/shared/ComboboxCategory';
 
 interface ProductsToolbarProps {
   typeFilter?: string;
@@ -19,15 +19,12 @@ interface ProductsToolbarProps {
 export function ProductsToolbar({
   typeFilter,
   onTypeFilterChange,
+  categoryFilter,
+  onCategoryFilterChange,
   viewMode,
   onViewModeToggle,
 }: ProductsToolbarProps) {
   const t = useTranslations('Products');
-
-  const typeOptions = [
-    { value: 'physical', label: t('physical') },
-    { value: 'digital', label: t('digital') },
-  ];
 
   return (
     <div className="space-y-6">
@@ -39,23 +36,14 @@ export function ProductsToolbar({
         {/* SearchBar + Filters container (only visible on large screens) */}
         <div className="flex flex-col gap-4 xl:flex-1 xl:flex-row xl:items-center">
           <div className="hidden gap-4 xl:ml-4 xl:flex">
-            <FilterDropdown
-              placeholder={t('type')}
-              options={typeOptions}
+            <ComboboxType
               value={typeFilter}
-              onChange={onTypeFilterChange}
-              width="w-32"
+              onValueChange={onTypeFilterChange}
             />
-
-            {/*<FilterDropdown
-              placeholder={t('category')}
-              options={categoryOptions}
+            <ComboboxCategory
               value={categoryFilter}
-              onChange={onCategoryFilterChange}
-              width="w-36"
-            />*/}
-
-            <ComboboxCategory />
+              onValueChange={onCategoryFilterChange}
+            />
           </div>
           <SearchBar placeholder={t('searchProducts')} />
           {/* Filters only visible on large screens within this container */}
@@ -65,20 +53,14 @@ export function ProductsToolbar({
         <div className="flex flex-row items-center justify-between gap-1 xl:justify-end">
           {/* Filters visible only on small/medium screens */}
           <div className="flex gap-1 sm:gap-4 xl:hidden">
-            <FilterDropdown
-              placeholder={t('type')}
-              options={typeOptions}
+            <ComboboxType
               value={typeFilter}
-              onChange={onTypeFilterChange}
-              width="w-32"
+              onValueChange={onTypeFilterChange}
             />
-            {/*<FilterDropdown
-              placeholder={t('category')}
-              options={categoryOptions}
+            <ComboboxCategory
               value={categoryFilter}
-              onChange={onCategoryFilterChange}
-              width="w-36"
-            />*/}
+              onValueChange={onCategoryFilterChange}
+            />
           </div>
           <div className="flex justify-end">
             <ButtonViewMode
