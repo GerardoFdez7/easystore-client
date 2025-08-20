@@ -565,7 +565,10 @@
     "physical": "Físico",
     "digital": "Digital",
     "type": "Tipo",
-    "products": "Productos"
+    "products": "Productos",
+    "noTypeFound": "No se encontró tipo",
+    "noCategoryFound": "No se encontró categoría",
+    "search": "Buscar..."
   },
   "Privacy": {
     "tableOfContents": "Tabla de contenido",
