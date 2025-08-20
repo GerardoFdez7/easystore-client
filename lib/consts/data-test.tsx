@@ -132,98 +132,77 @@ export const products = [
 export const categoryOptions = [
   {
     id: '1',
-    name: 'Ultrabooks',
-    description: 'Thin and light laptops',
-    cover: 'https://easystore.com/default-cover.jpg',
-    subCategories: [],
-  },
-  {
-    id: '2',
-    name: 'Gaming Laptops',
-    description: 'High-performance laptops for gaming',
-    cover: 'https://easystore.com/default-cover.jpg',
-    subCategories: [],
-  },
-  {
-    id: '3',
-    name: 'Laptops',
-    description: 'Portable computing devices',
-    cover: 'https://easystore.com/default-cover.jpg',
-    subCategories: [
-      {
-        id: '4',
-        name: 'Gaming Laptops',
-        description: 'High-performance laptops for gaming',
-        cover: 'https://easystore.com/default-cover.jpg',
-        subCategories: [],
-      },
-      {
-        id: '5',
-        name: 'Ultrabooks',
-        description: 'Thin and light laptops',
-        cover: 'https://easystore.com/default-cover.jpg',
-        subCategories: [],
-      },
-    ],
-  },
-  {
-    id: '6',
-    name: 'Computers',
-    description: 'Laptops, Desktops, and Peripherals',
-    cover: 'https://easystore.com/default-cover.jpg',
-    subCategories: [
-      {
-        id: '7',
-        name: 'Laptops',
-        description: 'Portable computing devices',
-        cover: 'https://easystore.com/default-cover.jpg',
-        subCategories: [
-          {
-            id: '8',
-            name: 'Gaming Laptops',
-            description: 'High-performance laptops for gaming',
-            cover: 'https://easystore.com/default-cover.jpg',
-            subCategories: [],
-          },
-          {
-            id: '9',
-            name: 'Ultrabooks',
-            description: 'Thin and light laptops',
-            cover: 'https://easystore.com/default-cover.jpg',
-            subCategories: [],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: '10',
     name: 'Electronics',
     description: 'All electronic devices and accessories',
-    cover: 'https://easystore.com/default-cover.jpg',
     subCategories: [
       {
-        id: '11',
+        id: '2',
         name: 'Computers',
         description: 'Laptops, Desktops, and Peripherals',
-        cover: 'https://easystore.com/default-cover.jpg',
         subCategories: [
           {
-            id: '12',
+            id: '3',
             name: 'Laptops',
             description: 'Portable computing devices',
-            cover: 'https://easystore.com/default-cover.jpg',
-            subCategories: [],
+            subCategories: [
+              {
+                id: '4',
+                name: 'Gaming Laptops',
+                description: 'High-performance laptops for gaming',
+              },
+              {
+                id: '5',
+                name: 'Ultrabooks',
+                description: 'Thin and light laptops',
+              },
+            ],
+          },
+          {
+            id: '6',
+            name: 'Desktops',
+            description: 'Stationary computing devices',
+          },
+          {
+            id: '7',
+            name: 'Peripherals',
+            description: 'Keyboards, Mice, Monitors, etc.',
+            subCategories: [
+              {
+                id: '8',
+                name: 'Monitors',
+                description: 'Display screens',
+              },
+              {
+                id: '9',
+                name: 'Keyboards',
+                description: 'Input devices for typing',
+              },
+            ],
           },
         ],
       },
+      {
+        id: '10',
+        name: 'Smartphones',
+        description: 'Mobile communication devices',
+        subCategories: [
+          {
+            id: '11',
+            name: 'Android Phones',
+            description: 'Smartphones running Android OS',
+          },
+          {
+            id: '12',
+            name: 'iOS Phones',
+            description: 'Smartphones running iOS',
+          },
+        ],
+      },
+      {
+        id: '13',
+        name: 'Cameras',
+        description: 'Devices for capturing images and videos',
+      },
     ],
-  },
-  {
-    id: '13',
-    name: 'Categoría de prueba',
-    description: 'Descripción de la categoría',
-    cover: 'https://ejemplo.com/cover.jpg',
-    subCategories: [],
   },
 ];
