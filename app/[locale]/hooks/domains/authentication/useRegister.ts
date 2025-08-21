@@ -10,7 +10,7 @@ import {
   AccountTypeEnum,
   RegisterMutationVariables,
 } from '@graphql/generated';
-import useGraphQLMutation from '../../useMutations';
+import useMutation from '../../useMutation';
 
 export const useRegister = (accountType: AccountTypeEnum) => {
   const t = useTranslations('Register');
@@ -48,7 +48,7 @@ export const useRegister = (accountType: AccountTypeEnum) => {
     data,
     errors,
     isLoading,
-  } = useGraphQLMutation<RegisterMutation, RegisterMutationVariables>(
+  } = useMutation<RegisterMutation, RegisterMutationVariables>(
     RegisterDocument,
     undefined,
     {

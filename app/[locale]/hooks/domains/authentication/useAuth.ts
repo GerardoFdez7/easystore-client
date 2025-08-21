@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from '@i18n/navigation';
 import { ValidateTokenDocument, ValidateTokenQuery } from '@graphql/generated';
-import useGraphQLQueries from '../../useQueries';
+import useQuery from '../../useQuery';
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -18,11 +18,14 @@ export const useAuth = () => {
   const router = useRouter();
 
   // Use the GraphQL queries hook
-  const { data, errors, isLoading, refetch } =
-    useGraphQLQueries<ValidateTokenQuery>(ValidateTokenDocument, undefined, {
+  const { data, errors, isLoading, refetch } = useQuery<ValidateTokenQuery>(
+    ValidateTokenDocument,
+    undefined,
+    {
       fetchPolicy: 'network-only', // Always check with server
       notifyOnNetworkStatusChange: true,
-    });
+    },
+  );
 
   const checkAuth = async () => {
     try {

@@ -2,7 +2,7 @@
 
 import {
   QueryResult,
-  useQuery,
+  useQuery as useApolloQuery,
   OperationVariables,
   WatchQueryFetchPolicy,
 } from '@apollo/client';
@@ -25,7 +25,7 @@ interface UseGraphQLOptions {
   pollInterval?: number;
 }
 
-const useGraphQLQueries = <
+const useQuery = <
   TResult,
   TVariables extends OperationVariables = OperationVariables,
 >(
@@ -33,7 +33,7 @@ const useGraphQLQueries = <
   variables?: TVariables,
   options?: UseGraphQLOptions,
 ): UseGraphQLResult<TResult, TVariables> => {
-  const { data, error, loading, ...rest } = useQuery<TResult, TVariables>(
+  const { data, error, loading, ...rest } = useApolloQuery<TResult, TVariables>(
     query,
     {
       variables,
@@ -59,4 +59,4 @@ const useGraphQLQueries = <
   };
 };
 
-export default useGraphQLQueries;
+export default useQuery;

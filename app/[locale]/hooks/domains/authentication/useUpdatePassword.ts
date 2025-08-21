@@ -9,7 +9,7 @@ import {
   UpdatePasswordMutation,
   UpdatePasswordMutationVariables,
 } from '@graphql/generated';
-import useGraphQLMutation from '../../useMutations';
+import useMutation from '../../useMutation';
 
 export const useUpdatePassword = () => {
   const t = useTranslations('ResetPassword');
@@ -44,7 +44,7 @@ export const useUpdatePassword = () => {
       path: ['confirmPassword'],
     });
 
-  const { mutate: updatePasswordMutation } = useGraphQLMutation<
+  const { mutate: updatePasswordMutation } = useMutation<
     UpdatePasswordMutation,
     UpdatePasswordMutationVariables
   >(UpdatePasswordDocument);

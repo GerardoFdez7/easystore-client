@@ -20,6 +20,7 @@ type CarouselProps = {
   orientation?: 'horizontal' | 'vertical';
   setApi?: (api: CarouselApi) => void;
   startAtEnd?: boolean;
+  autoScroll?: boolean;
 };
 
 type CarouselContextProps = {
@@ -49,6 +50,7 @@ function Carousel({
   setApi,
   plugins,
   startAtEnd,
+  autoScroll = true,
   className,
   children,
   ...props
@@ -138,7 +140,7 @@ function Carousel({
   }, [api]);
 
   React.useEffect(() => {
-    if (!api) return;
+    if (!api || !autoScroll) return;
 
     const isMobile = typeof window !== 'undefined' && window.innerWidth <= 1024;
     if (!isMobile) return;
@@ -164,7 +166,7 @@ function Carousel({
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [api, isUserInteracting, scrollDirection]);
+  }, [api, isUserInteracting, scrollDirection, autoScroll]);
 
   return (
     <CarouselContext.Provider

@@ -10,7 +10,7 @@ import {
   ForgotPasswordMutation,
   AccountTypeEnum,
 } from '@graphql/generated';
-import useGraphQLMutation from '../../useMutations';
+import useMutation from '../../useMutation';
 
 export const useForgotPassword = () => {
   const t = useTranslations('ForgotPassword');
@@ -21,7 +21,7 @@ export const useForgotPassword = () => {
     email: z.string().email({ message: t('invalidEmailFormat') }),
   });
 
-  const { mutate: forgotPasswordMutation } = useGraphQLMutation<
+  const { mutate: forgotPasswordMutation } = useMutation<
     ForgotPasswordMutation,
     ForgotPasswordMutationVariables
   >(ForgotPasswordDocument);
