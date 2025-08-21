@@ -30,7 +30,6 @@
       "@schemas/*": ["./app/[locale]/schemas/*"],
       "@hooks/*": ["app/[locale]/hooks/*"],
       "@types/*": ["app/[locale]/types/*"],
-      "@assets/*": ["app/[locale]/assets/*"],
       "@lib/*": ["./lib/*"],
       "@contexts/*": ["lib/contexts/*"],
       "utils": ["./lib/utils/cn"],

@@ -10,7 +10,7 @@ import {
   AccountTypeEnum,
   LoginMutationVariables,
 } from '@graphql/generated';
-import useGraphQLMutation from '../../useMutations';
+import useMutation from '../../useMutation';
 import { useAuth } from '@hooks/domains/authentication/useAuth';
 
 export const useLogin = (accountType: AccountTypeEnum) => {
@@ -43,7 +43,7 @@ export const useLogin = (accountType: AccountTypeEnum) => {
     data,
     errors,
     isLoading,
-  } = useGraphQLMutation<LoginMutation, LoginMutationVariables>(
+  } = useMutation<LoginMutation, LoginMutationVariables>(
     LoginDocument,
     undefined,
     {

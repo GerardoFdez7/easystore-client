@@ -1,7 +1,7 @@
 'use client';
 
 import {
-  useMutation,
+  useMutation as useApolloMutation,
   OperationVariables,
   MutationHookOptions,
   MutationResult,
@@ -18,7 +18,7 @@ type UseGraphQLMutationResult<TResult> = Omit<
   isLoading: boolean;
 };
 
-const useGraphQLMutation = <
+const useMutation = <
   TResult,
   TVariables extends OperationVariables = OperationVariables,
 >(
@@ -26,9 +26,9 @@ const useGraphQLMutation = <
   defaultVariables?: TVariables,
   options?: MutationHookOptions<TResult, TVariables>,
 ): UseGraphQLMutationResult<TResult> & {
-  mutate: ReturnType<typeof useMutation<TResult, TVariables>>[0];
+  mutate: ReturnType<typeof useApolloMutation<TResult, TVariables>>[0];
 } => {
-  const [mutate, { data, error, loading, ...rest }] = useMutation<
+  const [mutate, { data, error, loading, ...rest }] = useApolloMutation<
     TResult,
     TVariables
   >(mutation, {
@@ -52,4 +52,4 @@ const useGraphQLMutation = <
   };
 };
 
-export default useGraphQLMutation;
+export default useMutation;

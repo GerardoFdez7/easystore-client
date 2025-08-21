@@ -2,7 +2,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from '@i18n/navigation';
 import { toast } from 'sonner';
 import { LogoutDocument, LogoutMutation } from '@graphql/generated';
-import useGraphQLMutation from '../../useMutations';
+import useMutation from '../../useMutation';
 
 export const useLogout = () => {
   const t = useTranslations('Login');
@@ -14,7 +14,7 @@ export const useLogout = () => {
     data,
     errors,
     isLoading,
-  } = useGraphQLMutation<LogoutMutation>(LogoutDocument, undefined, {
+  } = useMutation<LogoutMutation>(LogoutDocument, undefined, {
     onCompleted: (data) => {
       if (data?.logout.success === true) {
         toast.success(t('logoutSuccessful'), {
