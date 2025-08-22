@@ -6,6 +6,7 @@ import { MediaUploaderCallbacks, MediaUploaderConfig } from '@lib/types/media';
 import { useMediaUploadLogic } from '@hooks/media/useMediaUploadLogic';
 import { validateFileCount } from '@lib/utils/media';
 import { cn } from 'utils';
+import { useTranslations } from 'next-intl';
 
 interface SingleMediaUploaderProps
   extends MediaUploaderCallbacks,
@@ -28,6 +29,7 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
   maxVideoSize,
   disabled = false,
 }) => {
+  const t = useTranslations('Media');
   const {
     isEditing,
     selectedFiles,
@@ -49,7 +51,7 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
   };
 
   const handleFileSelection = (files: File[]) => {
-    const validation = validateFileCount(files, false);
+    const validation = validateFileCount(files, false, 10, t);
     if (!validation.isValid) {
       onUploadError?.(validation.error || '');
       return;

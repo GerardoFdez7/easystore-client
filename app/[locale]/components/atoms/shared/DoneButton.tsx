@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@shadcn/ui/button';
 import { cn } from 'utils';
+import { useTranslations } from 'next-intl';
 
 interface DoneButtonProps {
   onClick: () => void;
@@ -17,6 +18,7 @@ const DoneButton: React.FC<DoneButtonProps> = ({
   className,
   children,
 }) => {
+  const t = useTranslations('Media');
   return (
     <Button
       onClick={onClick}
@@ -32,7 +34,7 @@ const DoneButton: React.FC<DoneButtonProps> = ({
       {isProcessing && (
         <div className="animate-water-fill absolute inset-0 bg-gray-200/50 dark:bg-gray-700/50" />
       )}
-      {children || (isProcessing ? 'Uploading...' : 'Done')}
+      {children || (isProcessing ? t('uploading') : t('done'))}
     </Button>
   );
 };

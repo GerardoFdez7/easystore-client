@@ -352,6 +352,24 @@
     "pricingTitle": "Select the Ideal Plan for Your Business",
     "pricingDescription": "Discover cost-effective plans brimming with top-tier features designed to captivate your audience, foster customer loyalty, and boost your sales figures."
   },
+  "Media": {
+    "fileTypeNotSupported": "File type {fileType} is not supported. Supported formats: {supportedFormats}",
+    "imageSizeExceeded": "Image size {fileSize} exceeds the {maxSize}MB limit for images",
+    "videoSizeExceeded": "Video size {fileSize} exceeds the {maxSize}MB limit for videos",
+    "dropFilesHere": "Drop files here",
+    "uploadMediaFiles": "Upload media files",
+    "dragAndDropOrClick": "Drag and drop or click to select files",
+    "imagesFormat": "Images: {formats} ({maxSize}MB)",
+    "videosFormat": "Videos: {formats} ({maxSize}MB)",
+    "chooseFiles": "Choose Files",
+    "done": "Done",
+    "maxFilesExceeded": "Cannot upload more than {maxItems} media files",
+    "minFilesRequired": "At least {minItems} media files are required",
+    "mediaUploaderConfigError": "Media uploader configuration error",
+    "uploadFailed": "Upload failed",
+    "uploading": "Uploading...",
+    "cover": "Cover"
+  },
   "ConfirmRegister": {
     "title": "Your Business Details",
     "description": "Tell us about your business and choose a plan",

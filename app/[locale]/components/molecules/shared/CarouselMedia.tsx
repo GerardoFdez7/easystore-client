@@ -19,6 +19,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { MediaItem } from '@lib/types/media';
 import { useCarouselNavigation } from '@hooks/media/useCarouselNavigation';
 import { useDragAndDrop } from '@hooks/media/useDragAndDrop';
+import { useTranslations } from 'next-intl';
 
 interface CarouselMediaProps {
   items: MediaItem[];
@@ -140,6 +141,7 @@ const CarouselMedia = ({
   minItems = 1,
 }: CarouselMediaProps) => {
   const orderedItems = items;
+  const t = useTranslations('Media');
 
   const { selectedIndex, thumbsApi, setMainApi, setThumbsApi, onThumbClick } =
     useCarouselNavigation();
@@ -243,7 +245,7 @@ const CarouselMedia = ({
 
                         {index === 0 && (
                           <span className="text-title mt-1 font-medium">
-                            cover
+                            {t('cover')}
                           </span>
                         )}
                       </div>

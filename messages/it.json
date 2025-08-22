@@ -352,6 +352,25 @@
     "pricingTitle": "Scegli il Piano Ideale per la Tua Attività",
     "pricingDescription": "Scopri piani convenienti ricchi di funzionalità di alto livello pensate per conquistare il tuo pubblico, fidelizzare i clienti e aumentare le vendite."
   },
+  "Media": {
+    "fileTypeNotSupported": "Il tipo di file {fileType} non è supportato. Formati supportati: {supportedFormats}",
+    "imageSizeExceeded": "La dimensione dell'immagine {fileSize} supera il limite di {maxSize}MB per le immagini",
+    "videoSizeExceeded": "La dimensione del video {fileSize} supera il limite di {maxSize}MB per i video",
+    "dropFilesHere": "Trascina i file qui",
+    "uploadMediaFiles": "Carica file multimediali",
+    "dragAndDropOrClick": "Trascina e rilascia o clicca per selezionare i file",
+    "imagesFormat": "Immagini: {formats} ({maxSize}MB)",
+    "videosFormat": "Video: {formats} ({maxSize}MB)",
+    "chooseFiles": "Scegli File",
+    "done": "Fatto",
+    "maxFilesExceeded": "Non è possibile caricare più di {maxItems} file multimediali",
+    "minFilesRequired": "Sono richiesti almeno {minItems} file multimediali",
+    "mediaUploaderConfigError": "Errore di configurazione del caricatore multimediale",
+    "uploadFailed": "Caricamento fallito",
+    "authenticationFailed": "Autenticazione fallita",
+    "uploading": "Caricamento...",
+    "cover": "copertina"
+  },
   "ConfirmRegister": {
     "title": "Dettagli della tua attività",
     "description": "Parlaci della tua attività e scegli un piano",

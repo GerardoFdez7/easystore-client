@@ -5,6 +5,7 @@ import { Button } from '@shadcn/ui/button';
 import { Card, CardContent } from '@shadcn/ui/card';
 import { Upload, AlertCircle } from 'lucide-react';
 import { cn } from 'utils';
+import { useTranslations } from 'next-intl';
 
 interface FileDropZoneProps {
   onFileSelect: (files: File[]) => void;
@@ -33,6 +34,7 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
   const [internalError, setInternalError] = useState<string | null>(null);
   const error = externalError || internalError;
+  const t = useTranslations('Media');
 
   const isVideoFile = (fileType: string): boolean => {
     return fileType.startsWith('video/');
@@ -56,16 +58,26 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
         supportedText += `Videos: ${supportedVideos.join(', ')}`;
       }
 
-      return `File type ${file.type} is not supported. Supported formats: ${supportedText}`;
+      return t('fileTypeNotSupported', {
+        fileType: file.type,
+        supportedFormats: supportedText,
+      });
     }
 
     const fileSizeInMB = file.size / (1024 * 1024);
     const isVideo = isVideoFile(file.type);
     const maxSize = isVideo ? maxVideoSize : maxImageSize;
-    const mediaType = isVideo ? 'video' : 'image';
 
     if (fileSizeInMB > maxSize) {
-      return `${mediaType.charAt(0).toUpperCase() + mediaType.slice(1)} size (${fileSizeInMB.toFixed(1)}MB) exceeds the ${maxSize}MB limit for ${mediaType}s`;
+      return isVideo
+        ? t('videoSizeExceeded', {
+            fileSize: fileSizeInMB.toFixed(1) + 'MB',
+            maxSize: maxSize.toString(),
+          })
+        : t('imageSizeExceeded', {
+            fileSize: fileSizeInMB.toFixed(1) + 'MB',
+            maxSize: maxSize.toString(),
+          });
     }
 
     return null;
@@ -168,10 +180,10 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
 
             <div className="text-center">
               <p className="text-lg font-medium">
-                {isDragOver ? 'Drop files here' : 'Upload media files'}
+                {isDragOver ? t('dropFilesHere') : t('uploadMediaFiles')}
               </p>
               <p className="text-muted-foreground mt-1 text-sm">
-                Drag and drop or click to select files
+                {t('dragAndDropOrClick')}
               </p>
               <p className="text-muted-foreground mt-2 text-xs">
                 {(() => {
@@ -184,11 +196,17 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
 
                   let text = '';
                   if (images.length > 0) {
-                    text += `Images: ${images.join(', ')} (${maxImageSize}MB)`;
+                    text += t('imagesFormat', {
+                      formats: images.join(', '),
+                      maxSize: maxImageSize.toString(),
+                    });
                   }
                   if (videos.length > 0) {
                     if (text) text += ' • ';
-                    text += `Videos: ${videos.join(', ')} (${maxVideoSize}MB)`;
+                    text += t('videosFormat', {
+                      formats: videos.join(', '),
+                      maxSize: maxVideoSize.toString(),
+                    });
                   }
 
                   return text;
@@ -201,7 +219,7 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
               className="border-none shadow-lg"
               disabled={disabled}
             >
-              Choose Files
+              {t('chooseFiles')}
             </Button>
           </div>
 

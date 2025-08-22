@@ -4,6 +4,7 @@ import {
   generateOptimizedFileName,
   getImageKitTransformations,
 } from '@lib/services/media-optimization';
+import { useTranslations } from 'next-intl';
 
 interface UseFileUploadProps {
   onUploadSuccess?: (url: string, fileId: string) => void;
@@ -31,10 +32,11 @@ const useFileUpload = ({
   authenticator,
 }: UseFileUploadProps): UseFileUploadReturn => {
   const [isUploading, setIsUploading] = useState(false);
+  const t = useTranslations('Media');
 
   const handleFileSelect = async (files: File[]) => {
     if (!authenticator) {
-      onUploadError?.('Media uploader configuration error');
+      onUploadError?.(t('mediaUploaderConfigError'));
       return;
     }
 
@@ -76,13 +78,13 @@ const useFileUpload = ({
         } catch (error) {
           console.error('Upload error for file:', file.name, error);
           const errorMessage =
-            error instanceof Error ? error.message : 'Upload failed';
+            error instanceof Error ? error.message : t('uploadFailed');
           onUploadError?.(errorMessage);
         }
       }
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : 'Authentication failed';
+        error instanceof Error ? error.message : t('authenticationFailed');
       onUploadError?.(errorMessage);
     } finally {
       setIsUploading(false);

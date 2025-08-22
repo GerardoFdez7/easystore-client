@@ -352,6 +352,25 @@
     "pricingTitle": "Escolha o Plano Ideal para o Seu Negócio",
     "pricingDescription": "Descubra planos acessíveis repletos de recursos avançados projetados para cativar seu público, fidelizar clientes e aumentar suas vendas."
   },
+  "Media": {
+    "fileTypeNotSupported": "O tipo de arquivo {fileType} não é suportado. Formatos suportados: {supportedFormats}",
+    "imageSizeExceeded": "O tamanho da imagem {fileSize} excede o limite de {maxSize}MB para imagens",
+    "videoSizeExceeded": "O tamanho do vídeo {fileSize} excede o limite de {maxSize}MB para vídeos",
+    "dropFilesHere": "Solte os arquivos aqui",
+    "uploadMediaFiles": "Enviar arquivos de mídia",
+    "dragAndDropOrClick": "Arraste e solte ou clique para selecionar arquivos",
+    "imagesFormat": "Imagens: {formats} ({maxSize}MB)",
+    "videosFormat": "Vídeos: {formats} ({maxSize}MB)",
+    "chooseFiles": "Escolher Arquivos",
+    "done": "Concluído",
+    "maxFilesExceeded": "Não é possível enviar mais de {maxItems} arquivos de mídia",
+    "minFilesRequired": "Pelo menos {minItems} arquivos de mídia são necessários",
+    "mediaUploaderConfigError": "Erro de configuração do carregador de mídia",
+    "uploadFailed": "Falha no envio",
+    "authenticationFailed": "Falha na autenticação",
+    "uploading": "Carregando...",
+    "cover": "capa"
+  },
   "ConfirmRegister": {
     "title": "Detalhes do seu negócio",
     "description": "Conte-nos sobre o seu negócio e escolha um plano",
