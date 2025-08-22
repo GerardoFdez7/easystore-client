@@ -171,6 +171,8 @@ export const useMediaUploadLogic = ({
       resetUploadTracking,
       setIsEditing,
       setSelectedFiles,
+      expectedFileCountRef,
+      uploadedUrlsRef,
     ],
   );
 
