@@ -352,6 +352,25 @@
     "pricingTitle": "Choisissez le Forfait Idéal pour Votre Entreprise",
     "pricingDescription": "Découvrez des forfaits abordables remplis de fonctionnalités haut de gamme conçues pour captiver votre audience, fidéliser vos clients et augmenter vos ventes."
   },
+  "Media": {
+    "fileTypeNotSupported": "Le type de fichier {fileType} n'est pas pris en charge. Formats supportés : {supportedFormats}",
+    "imageSizeExceeded": "La taille de l'image {fileSize} dépasse la limite de {maxSize}MB pour les images",
+    "videoSizeExceeded": "La taille de la vidéo {fileSize} dépasse la limite de {maxSize}MB pour les vidéos",
+    "dropFilesHere": "Déposez les fichiers ici",
+    "uploadMediaFiles": "Télécharger des fichiers multimédias",
+    "dragAndDropOrClick": "Glissez-déposez ou cliquez pour sélectionner des fichiers",
+    "imagesFormat": "Images : {formats} ({maxSize}MB)",
+    "videosFormat": "Vidéos : {formats} ({maxSize}MB)",
+    "chooseFiles": "Choisir des Fichiers",
+    "done": "Terminé",
+    "maxFilesExceeded": "Impossible de télécharger plus de {maxItems} fichiers multimédias",
+    "minFilesRequired": "Au moins {minItems} fichiers multimédias sont requis",
+    "mediaUploaderConfigError": "Erreur de configuration du téléchargeur de médias",
+    "uploadFailed": "Échec du téléchargement",
+    "authenticationFailed": "Échec de l'authentification",
+    "uploading": "Téléchargement...",
+    "cover": "couverture"
+  },
   "ConfirmRegister": {
     "title": "Détails de votre entreprise",
     "description": "Parlez-nous de votre entreprise et choisissez un plan",

@@ -12,6 +12,7 @@ import {
   cleanupObjectUrls,
 } from '@lib/utils/media';
 import { cn } from 'utils';
+import { useTranslations } from 'next-intl';
 
 interface MultipleMediaUploaderProps
   extends MediaUploaderCallbacks,
@@ -36,6 +37,7 @@ const MultipleMediaUploader: React.FC<MultipleMediaUploaderProps> = ({
   maxItems = 10,
   minItems = 2,
 }) => {
+  const t = useTranslations('Media');
   const {
     isEditing,
     selectedFiles,
@@ -59,7 +61,7 @@ const MultipleMediaUploader: React.FC<MultipleMediaUploaderProps> = ({
   };
 
   const handleFileSelection = (files: File[]) => {
-    const validation = validateFileCount(files, true, maxItems);
+    const validation = validateFileCount(files, true, maxItems, t);
     if (!validation.isValid) {
       onUploadError?.(validation.error || '');
       return;
@@ -136,6 +138,7 @@ const MultipleMediaUploader: React.FC<MultipleMediaUploaderProps> = ({
       true,
       maxItems,
       minItems,
+      t,
     );
     if (!validation.isValid) {
       onUploadError?.(validation.error || '');

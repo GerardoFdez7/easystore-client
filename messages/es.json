@@ -352,6 +352,25 @@
     "pricingTitle": "Selecciona el Plan Ideal para Tu Negocio",
     "pricingDescription": "Descubre planes rentables repletos de funciones de primer nivel diseñadas para cautivar a tu audiencia, fomentar la fidelidad del cliente y aumentar tus ventas."
   },
+  "Media": {
+    "fileTypeNotSupported": "El tipo de archivo {fileType} no es compatible. Formatos soportados: {supportedFormats}",
+    "imageSizeExceeded": "El tamaño de la imagen {fileSize} excede el límite de {maxSize}MB para imágenes",
+    "videoSizeExceeded": "El tamaño del video {fileSize} excede el límite de {maxSize}MB para videos",
+    "dropFilesHere": "Suelta los archivos aquí",
+    "uploadMediaFiles": "Subir archivos multimedia",
+    "dragAndDropOrClick": "Arrastra y suelta o haz clic para seleccionar archivos",
+    "imagesFormat": "Imágenes: {formats} ({maxSize}MB)",
+    "videosFormat": "Videos: {formats} ({maxSize}MB)",
+    "chooseFiles": "Elegir Archivos",
+    "done": "Listo",
+    "maxFilesExceeded": "No se pueden subir más de {maxItems} archivos multimedia",
+    "minFilesRequired": "Se requieren al menos {minItems} archivos multimedia",
+    "mediaUploaderConfigError": "Error de configuración del cargador de medios",
+    "uploadFailed": "Error al subir",
+    "authenticationFailed": "Error de autenticación",
+    "uploading": "Subiendo...",
+    "cover": "portada"
+  },
   "ConfirmRegister": {
     "title": "Detalles de tu negocio",
     "description": "Cuéntanos sobre tu negocio y elige un plan",

@@ -27,11 +27,14 @@ export const validateFileCount = (
   files: File[],
   multiple: boolean,
   maxItems: number = 10,
+  translateFn?: (key: string, params?: Record<string, string>) => string,
 ): { isValid: boolean; error?: string } => {
   if (multiple && files.length > maxItems) {
     return {
       isValid: false,
-      error: `No se pueden subir más de ${maxItems} archivos multimedia`,
+      error: translateFn
+        ? translateFn('maxFilesExceeded', { maxItems: maxItems.toString() })
+        : `Cannot upload more than ${maxItems} media files`,
     };
   }
 
@@ -47,18 +50,23 @@ export const validateFileCountForSubmission = (
   multiple: boolean,
   maxItems: number = 10,
   minItems: number = 2,
+  translateFn?: (key: string, params?: Record<string, string>) => string,
 ): { isValid: boolean; error?: string } => {
   if (multiple && files.length > maxItems) {
     return {
       isValid: false,
-      error: `No se pueden subir más de ${maxItems} archivos multimedia`,
+      error: translateFn
+        ? translateFn('maxFilesExceeded', { maxItems: maxItems.toString() })
+        : `Cannot upload more than ${maxItems} media files`,
     };
   }
 
   if (multiple && files.length < minItems) {
     return {
       isValid: false,
-      error: `Se requieren al menos ${minItems} archivos multimedia`,
+      error: translateFn
+        ? translateFn('minFilesRequired', { minItems: minItems.toString() })
+        : `At least ${minItems} media files are required`,
     };
   }
 
