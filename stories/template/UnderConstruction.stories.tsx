@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import UnderConstructionTemplate from '@templates/UnderConstruction';
+import { CountdownProvider } from '@lib/contexts/CountdownContext';
 
 const meta: Meta<typeof UnderConstructionTemplate> = {
   title: 'Templates/UnderConstruction',
@@ -16,7 +17,15 @@ export default meta;
 
 type Story = StoryObj<typeof UnderConstructionTemplate>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  decorators: [
+    (Story) => (
+      <CountdownProvider>
+        <Story />
+      </CountdownProvider>
+    ),
+  ],
+};
 
 export const DarkTheme: Story = {
   parameters: {
@@ -30,9 +39,11 @@ export const DarkTheme: Story = {
   },
   decorators: [
     (Story) => (
-      <div className="dark">
-        <Story />
-      </div>
+      <CountdownProvider>
+        <div className="dark">
+          <Story />
+        </div>
+      </CountdownProvider>
     ),
   ],
 };

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@shadcn/features/theme-provider';
-import { CountdownProvider } from '@lib/contexts/CountdownContext';
+import { CountdownProvider } from '@contexts/CountdownContext';
 import { ApolloWrapper } from '@lib/apollo/apollo-provider';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';

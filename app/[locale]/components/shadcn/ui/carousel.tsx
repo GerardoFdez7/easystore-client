@@ -1,11 +1,10 @@
 'use client';
 
-import * as React from 'react';
+import React from 'react';
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from 'embla-carousel-react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-
 import { cn } from 'utils';
 import { Button } from '@shadcn/ui/button';
 
@@ -50,7 +49,7 @@ function Carousel({
   setApi,
   plugins,
   startAtEnd,
-  autoScroll = true,
+  autoScroll = false,
   className,
   children,
   ...props
@@ -104,7 +103,7 @@ function Carousel({
   React.useEffect(() => {
     if (!api) return;
 
-    if (startAtEnd && window.innerWidth <= 1024) {
+    if (startAtEnd) {
       const lastIndex = api.scrollSnapList().length - 1;
       api.scrollTo(lastIndex);
     }
@@ -141,9 +140,6 @@ function Carousel({
 
   React.useEffect(() => {
     if (!api || !autoScroll) return;
-
-    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 1024;
-    if (!isMobile) return;
 
     const interval = setInterval(() => {
       if (!api || isUserInteracting) return;
@@ -208,9 +204,7 @@ function CarouselContent({ className, ...props }: React.ComponentProps<'div'>) {
       <div
         className={cn(
           'flex',
-          orientation === 'horizontal'
-            ? 'flex justify-center-safe gap-4 xl:justify-center'
-            : '-mt-4 flex-col',
+          orientation === 'horizontal' ? '-ml-4' : '-mt-4 flex-col',
           className,
         )}
         {...props}

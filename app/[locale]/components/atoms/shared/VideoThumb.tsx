@@ -101,7 +101,7 @@ const VideoThumb = ({
       }`}
       onClick={onClick}
     >
-      <div className="relative aspect-video">
+      <div className="relative aspect-square">
         {/* Hidden video element for thumbnail generation */}
         <video
           ref={videoRef}

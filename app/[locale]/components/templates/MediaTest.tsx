@@ -5,13 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@shadcn/ui/card';
 import { Button } from '@shadcn/ui/button';
 import { Badge } from '@shadcn/ui/badge';
 import { CheckCircle, XCircle, Upload } from 'lucide-react';
-import MediaUploader from '@molecules/shared/MediaUploader';
+import MediaUploader from '@organisms/shared/MediaUploader';
+import { useTestMediaPersistence } from '@hooks/useTestMediaPersistence';
+import { useTestMultipleMediaPersistence } from '@hooks/useTestMultipleMediaPersistence';
 import { toast } from 'sonner';
+import ThemeToggle from '@atoms/shared/ThemeToggle';
+import { LanguageButton } from '@atoms/shared/ButtonLanguage';
 
 interface UploadResult {
-  id: string;
   url: string;
-  fileId: string;
   timestamp: Date;
   status: 'success' | 'error';
   message?: string;
@@ -19,27 +21,23 @@ interface UploadResult {
 
 export default function MediaTestTemplate() {
   const [uploadResults, setUploadResults] = useState<UploadResult[]>([]);
+  const { persistMedia } = useTestMediaPersistence();
+  const { persistMultipleMedia } = useTestMultipleMediaPersistence();
 
-  const handleUploadSuccess = (url: string, fileId: string) => {
+  const handleUploadSuccess = (url: string) => {
     const result: UploadResult = {
-      id: Math.random().toString(36).substr(2, 9),
       url,
-      fileId,
       timestamp: new Date(),
       status: 'success',
     };
 
     setUploadResults((prev) => [result, ...prev]);
-    toast.success('File uploaded successfully!', {
-      description: `File ID: ${fileId}`,
-    });
+    toast.success('File uploaded successfully!');
   };
 
   const handleUploadError = (error: string) => {
     const result: UploadResult = {
-      id: Math.random().toString(36).substr(2, 9),
       url: '',
-      fileId: '',
       timestamp: new Date(),
       status: 'error',
       message: error,
@@ -60,19 +58,37 @@ export default function MediaTestTemplate() {
       <div className="mx-auto max-w-6xl space-y-8">
         {/* Header */}
         <div className="space-y-2 text-center">
-          <h1 className="text-3xl font-bold tracking-tight">
-            Media Uploader Test
-          </h1>
+          <div className="flex items-center justify-center gap-4">
+            <ThemeToggle />
+            <h1 className="text-title text-3xl font-bold tracking-tight">
+              Media Uploader Test
+            </h1>
+            <LanguageButton />
+          </div>
           <p className="text-muted-foreground">
             Test the MediaUploader component with ImageKit integration
           </p>
         </div>
         {/* Test Configurations */}
-        {/* Single File Upload */}
-        <h1 className="text-2xl font-bold">Single File Upload</h1>
+        {/* Single File Upload with Persistence */}
+        <h1 className="text-title text-2xl font-bold">Single File Upload</h1>
         <MediaUploader
           onUploadSuccess={handleUploadSuccess}
           onUploadError={handleUploadError}
+          onMediaProcessed={async (processedData) => {
+            try {
+              // Para modo single, tomar el cover
+              const cover = processedData?.cover;
+              if (cover) {
+                const persistedUrl = await persistMedia({
+                  url: cover,
+                });
+                console.log('Media persisted with URL:', persistedUrl);
+              }
+            } catch (error) {
+              console.error('Error persisting media:', error);
+            }
+          }}
           acceptedFileTypes={[
             'image/jpeg',
             'image/png',
@@ -87,12 +103,25 @@ export default function MediaTestTemplate() {
           <p>• Single file only</p>
           <p>• Max 5MB</p>
           <p>• JPEG, PNG, WebP, GIF</p>
+          <p>
+            • <strong>Con hook de persistencia conectado</strong>
+          </p>
         </div>
         {/* Multiple File Upload */}
-        <h1 className="text-2xl font-bold">Multiple File Upload</h1>
+        <h1 className="text-title text-2xl font-bold">Multiple File Upload</h1>
         <MediaUploader
           onUploadSuccess={handleUploadSuccess}
           onUploadError={handleUploadError}
+          onMediaProcessed={async (processedData) => {
+            try {
+              if (processedData) {
+                const persistedData = await persistMultipleMedia(processedData);
+                console.log('Multiple media persisted:', persistedData);
+              }
+            } catch (error) {
+              console.error('Error persisting multiple media:', error);
+            }
+          }}
           acceptedFileTypes={[
             'image/jpeg',
             'image/png',
@@ -110,9 +139,15 @@ export default function MediaTestTemplate() {
           <p>• Multiple files allowed</p>
           <p>• Max 10MB per file</p>
           <p>• JPEG, PNG, WebP, MP4, WebM, AVI, MOV</p>
+          <p>
+            • <strong>Con hook de persistencia múltiple conectado</strong>
+          </p>
+          <p>• Mantiene el carrusel después de la subida</p>
         </div>
         {/* Restricted Upload */}
-        <h1 className="text-2xl font-bold">Restricted Upload (Small Files)</h1>
+        <h1 className="text-title text-2xl font-bold">
+          Restricted Upload (Small Files)
+        </h1>
         <MediaUploader
           onUploadSuccess={handleUploadSuccess}
           onUploadError={handleUploadError}
@@ -127,7 +162,7 @@ export default function MediaTestTemplate() {
           <p>• Single file</p>
         </div>
         {/* Disabled Upload */}
-        <h1 className="text-2xl font-bold">Disabled Upload</h1>
+        <h1 className="text-title text-2xl font-bold">Disabled Upload</h1>
         <MediaUploader
           onUploadSuccess={handleUploadSuccess}
           onUploadError={handleUploadError}
@@ -137,6 +172,7 @@ export default function MediaTestTemplate() {
           <p>• Component disabled</p>
           <p>• No interaction allowed</p>
         </div>
+
         {/* Upload Results */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
@@ -159,7 +195,7 @@ export default function MediaTestTemplate() {
             ) : (
               <div className="space-y-4">
                 {uploadResults.map((result) => (
-                  <div key={result.id} className="rounded-lg border p-4">
+                  <div key={result.url} className="rounded-lg border p-4">
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-3">
                         {result.status === 'success' ? (
@@ -184,9 +220,6 @@ export default function MediaTestTemplate() {
                           </div>
                           {result.status === 'success' ? (
                             <div className="space-y-1">
-                              <p className="text-sm font-medium">
-                                File ID: {result.fileId}
-                              </p>
                               <p className="text-muted-foreground text-sm break-all">
                                 URL: {result.url}
                               </p>
