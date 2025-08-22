@@ -48,17 +48,3 @@ export const Default: Story = {
     autoScroll: false,
   },
 };
-
-export const SingleItem: Story = {
-  args: {
-    items: [
-      {
-        id: '3',
-        type: 'image' as const,
-        src: 'https://picsum.photos/800/600?grayscale',
-        alt: 'Black and white city',
-      },
-    ],
-    autoScroll: false,
-  },
-};

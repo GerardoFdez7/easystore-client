@@ -43,10 +43,10 @@ export const getImageKitTransformations = (fileType: string) => {
   if (isVideo) {
     return;
   } else {
-    // Image optimizations: 4:3 aspect ratio, WebP format, quality optimization
+    // WebP format, quality optimization
     return {
       transformation: {
-        pre: 'ar-4-3,cm-pad_resize,q-80,f-webp,pr-true',
+        pre: 'cm-pad_resize,q-80,f-webp,pr-true',
       },
     };
   }

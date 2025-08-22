@@ -10,6 +10,8 @@ const buttonVariants = cva(
       variant: {
         default:
           'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 disabled:pointer-events-none disabled:opacity-50',
+        title:
+          'bg-title text-primary-foreground shadow-xs hover:bg-title/90 disabled:pointer-events-none disabled:opacity-50',
         destructive:
           'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 disabled:pointer-events-none disabled:opacity-50',
         danger:
@@ -19,7 +21,7 @@ const buttonVariants = cva(
         plans:
           'bg-primary w-full rounded-full font-medium text-white hover:bg-black disabled:pointer-events-none disabled:opacity-50',
         secondary:
-          'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80 disabled:pointer-events-none disabled:opacity-50',
+          'bg-secondary text-white shadow-xs hover:bg-secondary/80 disabled:pointer-events-none disabled:opacity-50',
         ghost:
           'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 disabled:pointer-events-none disabled:opacity-50',
         link: 'text-primary underline-offset-4 hover:underline disabled:pointer-events-none disabled:opacity-50',

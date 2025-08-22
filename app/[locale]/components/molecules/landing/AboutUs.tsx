@@ -14,7 +14,7 @@ export default function AboutUs() {
         <p className="text-text mb-8 text-xl sm:text-3xl">{t('aboutText2')}</p>
         <p className="text-text mb-8 text-xl sm:text-3xl">{t('aboutText3')}</p>
       </div>
-      <div className="md:-mx-20 xl:-mx-35">
+      <div className="flex items-center justify-center md:-mx-20 xl:-mx-35">
         <CarouselAboutUs />
       </div>
     </section>

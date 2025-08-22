@@ -21,7 +21,7 @@ const ImageThumb = ({
       }`}
       onClick={onClick}
     >
-      <div className="relative aspect-video">
+      <div className="relative aspect-square">
         <Image src={imageSrc} alt={altText} fill />
         <div
           className={`absolute inset-0 bg-black/50 transition-opacity duration-300 hover:opacity-0 ${

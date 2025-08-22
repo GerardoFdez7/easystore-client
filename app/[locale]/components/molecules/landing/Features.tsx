@@ -13,7 +13,7 @@ export default function Features() {
 
         <p className="text-text text-xl sm:text-3xl">{t('featureText')}</p>
       </div>
-      <div className="md:-mx-20 xl:-mx-35">
+      <div className="flex items-center justify-center md:-mx-20 xl:-mx-35">
         <CarouselFeature />
       </div>
     </section>

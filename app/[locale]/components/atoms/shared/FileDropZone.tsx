@@ -164,9 +164,7 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
       >
         <CardContent className="p-6">
           <div className="flex flex-col items-center justify-center space-y-4">
-            <div className="bg-muted rounded-full p-4">
-              <Upload className="text-muted-foreground h-8 w-8" />
-            </div>
+            <Upload className="text-muted-foreground h-8 w-8" />
 
             <div className="text-center">
               <p className="text-lg font-medium">

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import MediaUploader from '@molecules/shared/MediaUploader';
+import MediaUploader from '@organisms/shared/MediaUploader';
 import { MockedProvider } from '@apollo/client/testing';
 import { GetMediaTokenDocument } from '@lib/graphql/generated';
 
@@ -23,7 +23,7 @@ const mocks = [
 ];
 
 const meta: Meta<typeof MediaUploader> = {
-  title: 'Molecules/Shared/MediaUploader',
+  title: 'Organisms/Shared/MediaUploader',
   component: MediaUploader,
   parameters: {
     layout: 'centered',
