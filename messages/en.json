@@ -534,6 +534,22 @@
     "completed": "Completed",
     "cancelled": "Cancelled"
   },
+  "Products": {
+    "addProduct": "Add Product",
+    "status": "Status",
+    "category": "Category",
+    "searchProducts": "Search Products",
+    "all": "All",
+    "actives": "Actives",
+    "archived": "Archived",
+    "physical": "Physical",
+    "digital": "Digital",
+    "type": "Type",
+    "products": "Products",
+    "noTypeFound": "No type found",
+    "noCategoryFound": "No category found",
+    "search": "Search..."
+  },
   "Privacy": {
     "tableOfContents": "Table of contents",
     "pageTitle": "Privacy Policy",
