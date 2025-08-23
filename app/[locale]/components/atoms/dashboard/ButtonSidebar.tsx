@@ -37,14 +37,17 @@ export default function ButtonSidebar({
       tooltip={label}
       onClick={() => router.push(fullPath)}
       className={cn(
-        'h-12 w-full cursor-pointer justify-start text-base',
+        'text-text h-12 w-full cursor-pointer justify-start',
+        isSelected
+          ? 'dark:!bg-hover dark:hover:!bg-hover !bg-[#d7d7d7] hover:!bg-[#d7d7d7]'
+          : 'text-foreground hover:text-title dark:hover:bg-hover hover:bg-[#d7d7d7]',
         className,
       )}
     >
-      <div className="flex h-7 w-7 items-center justify-center [&>svg]:h-7 [&>svg]:w-7">
+      <div className="text-tile flex items-center justify-center [&>svg]:h-6 [&>svg]:w-6 lg:[&>svg]:h-6 lg:[&>svg]:w-6">
         {icon}
       </div>
-      <span className="text-base font-medium">{label}</span>
+      <span className="font-medium">{label}</span>
     </SidebarMenuButton>
   );
 }

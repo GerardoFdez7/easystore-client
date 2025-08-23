@@ -12,9 +12,15 @@ interface SingleMediaUploaderProps
   extends MediaUploaderCallbacks,
     MediaUploaderConfig {
   className?: string;
+  hideDoneButton?: boolean;
   renderDoneButton?: (
     onDone: () => void,
     isProcessing: boolean,
+  ) => React.ReactNode;
+  renderEditButton?: (
+    onEdit: () => void,
+    isEditing: boolean,
+    hasMedia: boolean,
   ) => React.ReactNode;
 }
 
@@ -23,7 +29,9 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
   onUploadError,
   onMediaProcessed,
   className,
+  hideDoneButton = false,
   renderDoneButton,
+  renderEditButton,
   acceptedFileTypes,
   maxImageSize,
   maxVideoSize,
@@ -38,6 +46,7 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
     isUploading,
     setIsEditing,
     setSelectedFiles,
+    setPersistedMedia,
     startUpload,
   } = useMediaUploadLogic({
     onUploadSuccess,
@@ -63,6 +72,7 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
 
   const handleRemoveFile = () => {
     setSelectedFiles([]);
+    setPersistedMedia(null);
     setIsEditing(false);
   };
 
@@ -98,25 +108,45 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
             viewOnly={true}
             className="mx-auto"
           />
+          {/* Edit Button */}
+          {renderEditButton && (
+            <div className="flex justify-end">
+              {renderEditButton(
+                () => setIsEditing(true),
+                isEditing,
+                !!persistedMedia,
+              )}
+            </div>
+          )}
         </div>
       ) : (
         <div className="space-y-4">
           <SingleImagePreview
             file={selectedFiles[0]}
+            imageUrl={
+              !selectedFiles[0] &&
+              persistedMedia &&
+              typeof persistedMedia === 'object' &&
+              'url' in persistedMedia
+                ? persistedMedia.url
+                : undefined
+            }
             onRemove={handleRemoveFile}
             isProcessing={isProcessing}
           />
           {/* Done Button */}
-          <div className="flex justify-end">
-            {renderDoneButton ? (
-              renderDoneButton(handleDoneWrapper, isProcessing)
-            ) : (
-              <DoneButton
-                onClick={handleDoneWrapper}
-                isProcessing={isProcessing}
-              />
-            )}
-          </div>
+          {!hideDoneButton && (
+            <div className="flex justify-end">
+              {renderDoneButton ? (
+                renderDoneButton(handleDoneWrapper, isProcessing)
+              ) : (
+                <DoneButton
+                  onClick={handleDoneWrapper}
+                  isProcessing={isProcessing}
+                />
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -8,9 +8,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import {
-  useGetInTouchMutation,
+  GetInTouchDocument,
+  GetInTouchMutation,
   GetInTouchMutationVariables,
 } from '@graphql/generated';
+import useMutation from './useMutation';
 
 const phoneRegex = /^[+\d().-\s]{6,20}$/;
 
@@ -90,7 +92,10 @@ export const useTouch = () => {
     },
   });
 
-  const [getInTouchMutation] = useGetInTouchMutation({
+  const { mutate: getInTouchMutation } = useMutation<
+    GetInTouchMutation,
+    GetInTouchMutationVariables
+  >(GetInTouchDocument, undefined, {
     onCompleted: () => {
       toast.success(t('submittedTitle', { default: 'Request sent 🎉' }), {
         description: t('submittedDescription', {

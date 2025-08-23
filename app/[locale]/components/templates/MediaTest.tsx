@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@shadcn/ui/card';
 import { Button } from '@shadcn/ui/button';
 import { Badge } from '@shadcn/ui/badge';
-import { CheckCircle, XCircle, Upload } from 'lucide-react';
+import { CheckCircle, XCircle, Upload, Loader2 } from 'lucide-react';
 import MediaUploader from '@organisms/shared/MediaUploader';
 import { useTestMediaPersistence } from '@hooks/useTestMediaPersistence';
 import { useTestMultipleMediaPersistence } from '@hooks/useTestMultipleMediaPersistence';
@@ -70,7 +70,7 @@ export default function MediaTestTemplate() {
           </p>
         </div>
         {/* Test Configurations */}
-        {/* Single File Upload with Persistence */}
+        {/* Single File Upload */}
         <h1 className="text-title text-2xl font-bold">Single File Upload</h1>
         <MediaUploader
           onUploadSuccess={handleUploadSuccess}
@@ -98,14 +98,25 @@ export default function MediaTestTemplate() {
           maxImageSize={5}
           maxVideoSize={50}
           multiple={false}
+          renderEditButton={(onEdit, isEditing, hasMedia) => (
+            <Button
+              onClick={onEdit}
+              disabled={isEditing || !hasMedia}
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <Upload className="h-4 w-4" />
+              Edit Media
+            </Button>
+          )}
         />
         <div className="text-muted-foreground text-m">
           <p>• Single file only</p>
           <p>• Max 5MB</p>
           <p>• JPEG, PNG, WebP, GIF</p>
-          <p>
-            • <strong>Con hook de persistencia conectado</strong>
-          </p>
+          <p>• Con hook de persistencia conectado</p>
+          <p>• Con botón de edit personalizado</p>
         </div>
         {/* Multiple File Upload */}
         <h1 className="text-title text-2xl font-bold">Multiple File Upload</h1>
@@ -134,15 +145,29 @@ export default function MediaTestTemplate() {
           maxImageSize={10}
           maxVideoSize={50}
           multiple={true}
+          renderDoneButton={(onDone, isProcessing) => (
+            <Button
+              onClick={onDone}
+              disabled={isProcessing}
+              variant="default"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              {isProcessing ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <CheckCircle className="h-4 w-4" />
+              )}
+              {isProcessing ? 'Uploading...' : 'Finish Upload'}
+            </Button>
+          )}
         />
         <div className="text-muted-foreground text-m">
           <p>• Multiple files allowed</p>
           <p>• Max 10MB per file</p>
           <p>• JPEG, PNG, WebP, MP4, WebM, AVI, MOV</p>
-          <p>
-            • <strong>Con hook de persistencia múltiple conectado</strong>
-          </p>
-          <p>• Mantiene el carrusel después de la subida</p>
+          <p>• Con hook de persistencia múltiple conectado</p>
+          <p>• Con boton done personalizado</p>
         </div>
         {/* Restricted Upload */}
         <h1 className="text-title text-2xl font-bold">
