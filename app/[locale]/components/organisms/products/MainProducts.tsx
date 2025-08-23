@@ -8,16 +8,29 @@ import { useState } from 'react';
 import { ProductsToolbar } from '@molecules/products/Toolbar';
 import { FilterType } from '@atoms/products/TabFilterProducts';
 import { useTranslations } from 'next-intl';
-import { products } from '@lib/consts/data-test';
+import { useGetAllProducts } from '@hooks/products/useGetAllProducts';
+import { TypeEnum, SortBy, SortOrder } from '@graphql/generated';
+import { productsTest } from '@lib/consts/data-test';
 
 export default function MainDashboard() {
+  const t = useTranslations('Products');
+
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
   const [typeFilter, setTypeFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('All');
 
-  const t = useTranslations('Products');
+  const { products, loading, error, total } = useGetAllProducts({
+    page: 1,
+    limit: 10,
+    type: TypeEnum.Physical,
+    sortBy: SortBy.CreatedAt,
+    sortOrder: SortOrder.Asc,
+  });
+
+  if (loading) return <div>Cargando productos...</div>;
+  if (error) return <div>Error al cargar los productos</div>;
 
   const handleProductSelect = (productId: string, checked: boolean) => {
     if (checked) {
@@ -29,7 +42,7 @@ export default function MainDashboard() {
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      setSelectedProducts(products.map((p) => p.id));
+      setSelectedProducts(productsTest.map((p) => p.id));
     } else {
       setSelectedProducts([]);
     }
@@ -65,18 +78,28 @@ export default function MainDashboard() {
                   onViewModeToggle={toggleViewMode}
                 />
 
+                <div>
+                  <p>Total de productos: {total}</p>
+                  {products.map((product) => (
+                    <div key={product.name}>
+                      <h3>{product.name}</h3>
+                      {/* Renderizar otros campos del producto */}
+                    </div>
+                  ))}
+                </div>
+
                 {viewMode === 'table' ? (
                   <ProductTable
                     selectedFilter={selectedFilter}
                     setSelectedFilter={setSelectedFilter}
-                    products={products}
+                    products={productsTest}
                     selectedProducts={selectedProducts}
                     onSelectProduct={handleProductSelect}
                     onSelectAll={handleSelectAll}
                   />
                 ) : (
                   <ProductGrid
-                    products={products}
+                    products={productsTest}
                     selectedProducts={selectedProducts}
                     onSelectProduct={handleProductSelect}
                   />
