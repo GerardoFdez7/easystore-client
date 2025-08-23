@@ -18,9 +18,15 @@ interface MultipleMediaUploaderProps
   extends MediaUploaderCallbacks,
     MediaUploaderConfig {
   className?: string;
+  hideDoneButton?: boolean;
   renderDoneButton?: (
     onDone: () => void,
     isProcessing: boolean,
+  ) => React.ReactNode;
+  renderEditButton?: (
+    onEdit: () => void,
+    isEditing: boolean,
+    hasMedia: boolean,
   ) => React.ReactNode;
 }
 
@@ -29,7 +35,9 @@ const MultipleMediaUploader: React.FC<MultipleMediaUploaderProps> = ({
   onUploadError,
   onMediaProcessed,
   className,
+  hideDoneButton = false,
   renderDoneButton,
+  renderEditButton,
   acceptedFileTypes,
   maxImageSize,
   maxVideoSize,
@@ -174,6 +182,16 @@ const MultipleMediaUploader: React.FC<MultipleMediaUploaderProps> = ({
             maxItems={maxItems}
             minItems={minItems}
           />
+          {/* Edit Button */}
+          {renderEditButton && (
+            <div className="flex justify-end">
+              {renderEditButton(
+                () => setIsEditing(true),
+                isEditing,
+                mediaItems.length > 0,
+              )}
+            </div>
+          )}
         </div>
       ) : (
         // Multiple files mode with CarouselMedia
@@ -191,17 +209,19 @@ const MultipleMediaUploader: React.FC<MultipleMediaUploaderProps> = ({
           />
 
           {/* Done Button */}
-          <div className="flex justify-end">
-            {renderDoneButton ? (
-              renderDoneButton(handleDoneWrapper, isProcessing)
-            ) : (
-              <DoneButton
-                onClick={handleDoneWrapper}
-                isProcessing={isProcessing}
-                disabled={false}
-              />
-            )}
-          </div>
+          {!hideDoneButton && (
+            <div className="flex justify-end">
+              {renderDoneButton ? (
+                renderDoneButton(handleDoneWrapper, isProcessing)
+              ) : (
+                <DoneButton
+                  onClick={handleDoneWrapper}
+                  isProcessing={isProcessing}
+                  disabled={false}
+                />
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

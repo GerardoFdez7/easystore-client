@@ -191,6 +191,7 @@ export const useMediaUploadLogic = ({
     setIsEditing,
     setSelectedFiles,
     setMediaItems,
+    setPersistedMedia,
 
     // Actions
     startUpload,

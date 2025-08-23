@@ -72,6 +72,7 @@ export type AddressType = {
   city: Scalars['String']['output'];
   countryId: Scalars['ID']['output'];
   deliveryNum: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   postalCode: Scalars['String']['output'];
 };
@@ -118,6 +119,7 @@ export type Category = {
   cover: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   description: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   subCategories: Array<Category>;
   updatedAt: Scalars['DateTime']['output'];
@@ -592,7 +594,6 @@ export type MutationUpdateStockInWarehouseArgs = {
 };
 
 export type MutationUpdateTenantArgs = {
-  id: Scalars['String']['input'];
   input: UpdateTenantInput;
 };
 
@@ -641,6 +642,7 @@ export type Product = {
   categories?: Maybe<Array<ProductCategory>>;
   cover: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
   isArchived: Scalars['Boolean']['output'];
   longDescription?: Maybe<Scalars['String']['output']>;
   manufacturer?: Maybe<Scalars['String']['output']>;
@@ -670,6 +672,7 @@ export type Query = {
   getCategoryById: Category;
   getMediaUploadToken: MediaAuthResponse;
   getProductById: Product;
+  getTenantById: Tenant;
   getWarehouseById: Warehouse;
   validateToken: Response;
 };
@@ -785,17 +788,15 @@ export type Sustainability = {
 
 export type Tenant = {
   __typename?: 'Tenant';
-  authIdentityId: Scalars['Int']['output'];
   businessName: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   currency: CurrencyCodes;
-  defaultBillingAddressId: Scalars['Int']['output'];
-  defaultPhoneNumberId: Scalars['Int']['output'];
-  defaultShippingAddressId: Scalars['Int']['output'];
-  description: Scalars['String']['output'];
+  defaultBillingAddressId?: Maybe<Scalars['ID']['output']>;
+  defaultPhoneNumberId?: Maybe<Scalars['ID']['output']>;
+  defaultShippingAddressId?: Maybe<Scalars['ID']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
   domain: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  logo: Scalars['String']['output'];
+  logo?: Maybe<Scalars['String']['output']>;
   ownerName: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -884,12 +885,11 @@ export type UpdateSustainabilityInput = {
 };
 
 export type UpdateTenantInput = {
-  authIdentityId?: InputMaybe<Scalars['Int']['input']>;
   businessName?: InputMaybe<Scalars['String']['input']>;
   currency?: InputMaybe<CurrencyCodes>;
-  defaultBillingAddressId?: InputMaybe<Scalars['Int']['input']>;
-  defaultPhoneNumberId?: InputMaybe<Scalars['Int']['input']>;
-  defaultShippingAddressId?: InputMaybe<Scalars['Int']['input']>;
+  defaultBillingAddressId?: InputMaybe<Scalars['ID']['input']>;
+  defaultPhoneNumberId?: InputMaybe<Scalars['ID']['input']>;
+  defaultShippingAddressId?: InputMaybe<Scalars['ID']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   domain?: InputMaybe<Scalars['String']['input']>;
   logo?: InputMaybe<Scalars['String']['input']>;
@@ -932,6 +932,7 @@ export type Variant = {
   condition: ConditionEnum;
   dimension?: Maybe<Dimension>;
   ean?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
   installmentPayments?: Maybe<Array<Installment>>;
   isArchived?: Maybe<Scalars['Boolean']['output']>;
   isbn?: Maybe<Scalars['String']['output']>;

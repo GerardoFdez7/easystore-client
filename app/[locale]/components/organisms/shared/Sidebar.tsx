@@ -37,7 +37,7 @@ export default function Sidebar({
         </div>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMenu className="gap-3 px-2">
+        <SidebarMenu className="gap-2 px-2">
           <SidebarMenuItem>
             <ButtonSidebar
               icon={<BarChart3 />}

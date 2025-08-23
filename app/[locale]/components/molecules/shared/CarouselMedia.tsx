@@ -200,85 +200,80 @@ const CarouselMedia = ({
       </Carousel>
 
       {/* Thumbnail Carousel */}
-      <div className="px-3 lg:px-5">
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragStart={handleDragStart}
-          onDragOver={handleDragOver}
-          onDragEnd={handleDragEnd}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
+      >
+        <Carousel
+          setApi={setThumbsApi}
+          className="rounded-xl"
+          opts={{
+            containScroll: 'keepSnaps',
+            dragFree: !isDragging,
+            align: 'start',
+            startIndex: 0,
+            watchDrag: !isDragging,
+          }}
         >
-          <Carousel
-            setApi={setThumbsApi}
-            className="overflow-hidden rounded-xl"
-            opts={{
-              containScroll: 'keepSnaps',
-              dragFree: !isDragging,
-              align: 'start',
-              startIndex: 0,
-              watchDrag: !isDragging,
-            }}
-          >
-            <CarouselContent
-              className="gap-2 lg:gap-3"
-              ref={scrollContainerRef}
+          <CarouselContent className="gap-2 lg:gap-3" ref={scrollContainerRef}>
+            <SortableContext
+              items={orderedItems.map((item) => item.id)}
+              strategy={horizontalListSortingStrategy}
             >
-              <SortableContext
-                items={orderedItems.map((item) => item.id)}
-                strategy={horizontalListSortingStrategy}
-              >
-                {orderedItems.map((item, index) => (
-                  <React.Fragment key={item.id}>
-                    <CarouselItem className="basis-auto">
-                      <div className="flex flex-col items-center">
-                        <SortableItem
-                          id={item.id}
-                          index={index}
-                          item={item}
-                          selectedIndex={selectedIndex}
-                          isEditing={isEditing}
-                          onThumbClick={onThumbClick}
-                          onRemoveItem={onRemoveItem}
-                          minItems={minItems}
-                          orderedItemsLength={orderedItems.length}
-                        />
+              {orderedItems.map((item, index) => (
+                <React.Fragment key={item.id}>
+                  <CarouselItem className="basis-auto" role="group">
+                    <div className="flex flex-col items-center">
+                      <SortableItem
+                        id={item.id}
+                        index={index}
+                        item={item}
+                        selectedIndex={selectedIndex}
+                        isEditing={isEditing}
+                        onThumbClick={onThumbClick}
+                        onRemoveItem={onRemoveItem}
+                        minItems={minItems}
+                        orderedItemsLength={orderedItems.length}
+                      />
 
-                        {index === 0 && (
-                          <span className="text-title mt-1 font-medium">
-                            {t('cover')}
-                          </span>
-                        )}
-                      </div>
-                    </CarouselItem>
-                    {index === 0 && (
-                      <div className="flex items-start">
-                        <Separator
-                          orientation="vertical"
-                          className="bg-title !h-35"
-                        />
-                      </div>
-                    )}
-                  </React.Fragment>
-                ))}
-
-                {/* Add more button in editing mode */}
-                {isEditing && onAddMore && orderedItems.length < maxItems && (
-                  <CarouselItem className="basis-auto">
-                    <div
-                      onClick={onAddMore}
-                      className="relative aspect-square min-w-35 flex-[0_0_23%] cursor-pointer overflow-hidden rounded-lg"
-                    >
-                      <div className="flex h-full w-full items-center justify-center border-2 border-dashed border-gray-300 transition-colors hover:border-gray-400">
-                        <Plus className="h-6 w-6 text-gray-400" />
-                      </div>
+                      {index === 0 && (
+                        <span className="text-title mt-1 font-medium">
+                          {t('cover')}
+                        </span>
+                      )}
                     </div>
                   </CarouselItem>
-                )}
-              </SortableContext>
-            </CarouselContent>
-          </Carousel>
-        </DndContext>
-      </div>
+                  {index === 0 && (
+                    <div className="flex items-start">
+                      <Separator
+                        orientation="vertical"
+                        className="bg-title !h-35"
+                      />
+                    </div>
+                  )}
+                </React.Fragment>
+              ))}
+
+              {/* Add more button in editing mode */}
+              {isEditing && onAddMore && orderedItems.length < maxItems && (
+                <CarouselItem className="basis-auto">
+                  <div
+                    onClick={onAddMore}
+                    className="relative aspect-square min-w-35 flex-[0_0_23%] cursor-pointer overflow-hidden rounded-lg"
+                  >
+                    <div className="flex h-full w-full items-center justify-center border-2 border-dashed border-gray-300 transition-colors hover:border-gray-400">
+                      <Plus className="h-6 w-6 text-gray-400" />
+                    </div>
+                  </div>
+                </CarouselItem>
+              )}
+            </SortableContext>
+          </CarouselContent>
+        </Carousel>
+      </DndContext>
     </div>
   );
 };

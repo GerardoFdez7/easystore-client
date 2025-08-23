@@ -30,9 +30,19 @@ export const DefaultVideoSize = 100;
 /**
  * Default settings for multiple file upload
  */
-export const DefaultMultipleUpload = true;
+export const DefaultMultipleUpload = false;
 
 /**
  * Default disabled state
  */
 export const DefaultDisabled = false;
+
+/**
+ * Default maximum number of items
+ */
+export const DefaultMaxItems = 10;
+
+/**
+ * Default minimum number of items
+ */
+export const DefaultMinItems = 1;

@@ -6,6 +6,10 @@ import {
   DefaultAcceptedFileTypes,
   DefaultMaxImageSize,
   DefaultVideoSize,
+  DefaultMultipleUpload,
+  DefaultDisabled,
+  DefaultMaxItems,
+  DefaultMinItems,
 } from '@lib/consts/media-uploader';
 
 interface MediaUploaderProps
@@ -13,9 +17,15 @@ interface MediaUploaderProps
     Partial<MediaUploaderConfig> {
   className?: string;
   multiple?: boolean;
+  hideDoneButton?: boolean;
   renderDoneButton?: (
     onDone: () => void,
     isProcessing: boolean,
+  ) => React.ReactNode;
+  renderEditButton?: (
+    onEdit: () => void,
+    isEditing: boolean,
+    hasMedia: boolean,
   ) => React.ReactNode;
 }
 
@@ -24,14 +34,16 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
   onUploadError,
   onMediaProcessed,
   className,
-  multiple = false,
+  multiple = DefaultMultipleUpload,
   acceptedFileTypes = DefaultAcceptedFileTypes,
   maxImageSize = DefaultMaxImageSize,
   maxVideoSize = DefaultVideoSize,
-  disabled = false,
-  maxItems = 10,
-  minItems = 1,
+  disabled = DefaultDisabled,
+  maxItems = DefaultMaxItems,
+  minItems = DefaultMinItems,
+  hideDoneButton = false,
   renderDoneButton,
+  renderEditButton,
 }) => {
   if (multiple) {
     return (
@@ -40,7 +52,9 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
         onUploadError={onUploadError}
         onMediaProcessed={onMediaProcessed}
         className={className}
+        hideDoneButton={hideDoneButton}
         renderDoneButton={renderDoneButton}
+        renderEditButton={renderEditButton}
         acceptedFileTypes={acceptedFileTypes}
         maxImageSize={maxImageSize}
         maxVideoSize={maxVideoSize}
@@ -57,7 +71,9 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
       onUploadError={onUploadError}
       onMediaProcessed={onMediaProcessed}
       className={className}
+      hideDoneButton={hideDoneButton}
       renderDoneButton={renderDoneButton}
+      renderEditButton={renderEditButton}
       acceptedFileTypes={acceptedFileTypes}
       maxImageSize={maxImageSize}
       maxVideoSize={maxVideoSize}
