@@ -4,6 +4,12 @@ export interface Product {
   name: string;
   brand?: string | null;
   cover: string;
+  media?: Array<{
+    url: string;
+    mediaType: 'IMAGE' | 'VIDEO';
+    position: number;
+  }> | null;
+  isArchived: boolean;
   variants?: Array<{
     sku?: string | null;
     price: number;

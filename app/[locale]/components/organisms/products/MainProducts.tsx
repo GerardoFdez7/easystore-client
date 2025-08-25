@@ -64,7 +64,7 @@ export default function MainDashboard() {
           <SiteHeader title={t('products')} />
           <div className="flex flex-1 flex-col">
             <div className="@container/main flex flex-1 flex-col gap-2">
-              <div className="flex flex-col gap-4 px-5 py-4 md:gap-6 md:py-6">
+              <div className="flex flex-col gap-4 px-2 py-4 md:gap-6 md:py-6">
                 {/* Main Products */}
                 <ProductsToolbar
                   typeFilter={typeFilter}
