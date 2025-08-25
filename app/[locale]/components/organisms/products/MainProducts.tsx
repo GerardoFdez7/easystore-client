@@ -86,7 +86,7 @@ export default function MainDashboard() {
                   />
                 ) : (
                   <ProductGrid
-                    products={productsTest}
+                    products={products}
                     selectedProducts={selectedProducts}
                     onSelectProduct={handleProductSelect}
                   />

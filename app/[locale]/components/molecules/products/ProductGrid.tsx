@@ -1,21 +1,5 @@
 import { ProductCard } from '@atoms/products/ProductCard';
-
-interface MediaItem {
-  id: string;
-  url: string;
-  position: number;
-  mediaType: 'IMAGE' | 'VIDEO';
-}
-
-interface Product {
-  id: string;
-  name: string;
-  status: string;
-  inventory: number;
-  category: string;
-  cover: string;
-  media?: MediaItem[];
-}
+import { Product } from '@lib/consts/products';
 
 interface ProductGridProps {
   products: Product[];
