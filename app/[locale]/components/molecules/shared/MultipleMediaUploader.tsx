@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect } from 'react';
 import FileDropZone from '@atoms/shared/FileDropZone';
 import CarouselMedia from '@molecules/shared/CarouselMedia';
 import DoneButton from '@atoms/shared/DoneButton';
@@ -19,6 +21,7 @@ interface MultipleMediaUploaderProps
     MediaUploaderConfig {
   className?: string;
   hideDoneButton?: boolean;
+  initialMedia?: string[] | null;
   renderDoneButton?: (
     onDone: () => void,
     isProcessing: boolean,
@@ -36,6 +39,7 @@ const MultipleMediaUploader: React.FC<MultipleMediaUploaderProps> = ({
   onMediaProcessed,
   className,
   hideDoneButton = false,
+  initialMedia,
   renderDoneButton,
   renderEditButton,
   acceptedFileTypes,
@@ -56,6 +60,7 @@ const MultipleMediaUploader: React.FC<MultipleMediaUploaderProps> = ({
     setIsEditing,
     setSelectedFiles,
     setMediaItems,
+    setPersistedMedia,
     startUpload,
   } = useMediaUploadLogic({
     onUploadSuccess,
@@ -63,6 +68,13 @@ const MultipleMediaUploader: React.FC<MultipleMediaUploaderProps> = ({
     onMediaProcessed,
     multiple: true,
   });
+
+  // Initialize persistedMedia with initialMedia if provided
+  useEffect(() => {
+    if (initialMedia && initialMedia.length > 0 && !persistedMedia) {
+      setPersistedMedia(initialMedia);
+    }
+  }, [initialMedia, persistedMedia, setPersistedMedia]);
 
   const handleValidationError = (error: string) => {
     onUploadError?.(error);

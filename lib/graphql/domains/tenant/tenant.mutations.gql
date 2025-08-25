@@ -1,0 +1,11 @@
+mutation updateTenantProfile($input: UpdateTenantInput!) {
+  updateTenant(input: $input) {
+    ownerName
+    email
+    businessName
+    description
+    domain
+    logo
+    defaultPhoneNumberId
+  }
+}

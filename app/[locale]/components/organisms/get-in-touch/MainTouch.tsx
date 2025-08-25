@@ -8,7 +8,7 @@ import FeaturesList from '@molecules/get-in-touch/FeatureList';
 import ButtonLoadable from '@atoms/shared/ButtonLoadable';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useTouch } from '@hooks/useTouch';
+import { useTouch } from '@hooks/domains/authentication/useTouch';
 
 export default function MainTouch() {
   const t = useTranslations('GetInTouch');

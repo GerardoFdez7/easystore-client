@@ -1,58 +1,29 @@
 'use client';
 
-import { gql, NetworkStatus, useApolloClient } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
-import { useGraphQL } from '@hooks/useGraphQL';
+import useQuery from '@hooks/useQuery';
+import {
+  FindTenantProfileDocument,
+  FindTenantProfileQuery,
+  UpdateTenantProfileDocument,
+  UpdateTenantProfileMutation,
+  UpdateTenantProfileMutationVariables,
+} from '@lib/graphql/generated';
 
 export type Profile = {
-  id: string;
-  domain: string | null;
-  phone: string | null;
-  email: string | null;
-  emailVerified: boolean;
-  logoUrl: string | null;
-  description: string | null;
-  storeName: string | null;
+  ownerName: string;
+  businessName: string;
+  description?: string | null;
+  domain: string;
+  logo?: string | null;
+  defaultPhoneNumberId?: string | null;
+  email?: string | null;
+  emailVerified?: boolean;
   plan?: string | null;
-  passwordChangedAgo?: string | null;
 };
-
-/** GraphQL documents (DocumentNode, no casts) */
-const GetProfileDocument = gql`
-  query GetProfile($tenantId: ID) {
-    profile(tenantId: $tenantId) {
-      id
-      domain
-      phone
-      email
-      emailVerified
-      logoUrl
-      description
-      storeName
-      plan
-      passwordChangedAgo
-    }
-  }
-`;
-
-const UpdateProfileDocument = gql`
-  mutation UpdateProfile($tenantId: ID, $input: ProfileInput!) {
-    updateProfile(tenantId: $tenantId, input: $input) {
-      id
-      domain
-      phone
-      email
-      emailVerified
-      logoUrl
-      description
-      storeName
-      plan
-      passwordChangedAgo
-    }
-  }
-`;
 
 /** Extract a human readable error message */
 function pickMessage(body: unknown): string | undefined {
@@ -72,22 +43,16 @@ function errorToMessage(e: unknown, fallback: string): string {
   return pickMessage(e) ?? (typeof e === 'string' ? e : fallback);
 }
 
-export function useProfile(tenantId?: string) {
+export function useProfile() {
   const t = useTranslations('Profile');
   const apollo = useApolloClient();
 
-  // Query
-  const { data, error, isLoading, networkStatus, refetch } = useGraphQL<{
-    profile: Profile;
-  }>(GetProfileDocument, {
-    tenantId: tenantId ?? null,
-  });
+  // Query using custom useQuery hook
+  const { data, errors, isLoading, refetch } = useQuery<FindTenantProfileQuery>(
+    FindTenantProfileDocument,
+  );
 
-  const isValidating =
-    networkStatus === NetworkStatus.refetch ||
-    networkStatus === NetworkStatus.setVariables;
-
-  const profile = data?.profile;
+  const profile = data?.getTenantById;
 
   /** Field validators */
   const phoneRegex = /^[+\d().\-\s]{6,20}$/;
@@ -114,34 +79,65 @@ export function useProfile(tenantId?: string) {
       .string()
       .trim()
       .max(2000, { message: t('descriptionTooLong') }),
-    storeName: z
+    businessName: z
       .string()
       .trim()
-      .min(2, { message: t('storeNameTooShort') })
-      .max(100, { message: t('storeNameTooLong') }),
-    logoUrl: z.string().url({ message: t('invalidUrl') }),
+      .min(2, { message: t('businessNameTooShort') })
+      .max(100, { message: t('businessNameTooLong') }),
+    ownerName: z
+      .string()
+      .trim()
+      .min(2, { message: t('ownerNameTooShort') })
+      .max(100, { message: t('ownerNameTooLong') }),
+    logo: z
+      .union([z.string(), z.null()])
+      .refine(
+        (val) => {
+          // Allow null or empty string for logo removal
+          if (val === null || val === '') return true;
+          // Otherwise, validate as URL
+          return z.string().url().safeParse(val).success;
+        },
+        {
+          message: t('invalidUrl'),
+        },
+      )
+      .optional(),
   };
 
   /** Generic updater using Apollo mutate + optimistic update */
   const updateField = async (patch: Partial<Profile>) => {
     if (!profile) return;
 
-    const optimistic: Profile = { ...profile, ...patch };
+    // Create optimistic response excluding email (not updatable)
+    const { email: _email, ...profileWithoutEmail } = profile;
+    const optimistic = {
+      ...profileWithoutEmail,
+      ...patch,
+      // Re-add email from original profile since it's not updatable
+      email: profile.email || '',
+    };
 
     try {
       await apollo.mutate<
-        { updateProfile: Profile },
-        { tenantId?: string | null; input: Partial<Profile> }
+        UpdateTenantProfileMutation,
+        UpdateTenantProfileMutationVariables
       >({
-        mutation: UpdateProfileDocument,
-        variables: { tenantId: tenantId ?? null, input: patch },
-        optimisticResponse: { updateProfile: optimistic },
+        mutation: UpdateTenantProfileDocument,
+        variables: { input: patch },
+        optimisticResponse: { updateTenant: optimistic },
         update(cache, { data: resp }) {
-          const next = resp?.updateProfile ?? optimistic;
+          const serverResponse = resp?.updateTenant;
+          const next = serverResponse
+            ? {
+                ...serverResponse,
+                // Ensure email is preserved from original profile
+                email: profile.email || '',
+              }
+            : optimistic;
           cache.writeQuery({
-            query: GetProfileDocument,
-            variables: { tenantId: tenantId ?? null },
-            data: { profile: next },
+            query: FindTenantProfileDocument,
+            data: { getTenantById: next },
           });
         },
       });
@@ -176,7 +172,7 @@ export function useProfile(tenantId?: string) {
       return false;
     }
     const value = parsed.data.trim() === '' ? null : parsed.data;
-    await updateField({ phone: value });
+    await updateField({ defaultPhoneNumberId: value });
     toast.success(t('savedChangesTitle'), { description: t('phoneUpdated') });
     return true;
   };
@@ -209,65 +205,59 @@ export function useProfile(tenantId?: string) {
     return true;
   };
 
-  const updateStoreName = async (next: string) => {
-    const parsed = validators.storeName.safeParse(next);
+  const updateBusinessName = async (next: string) => {
+    const parsed = validators.businessName.safeParse(next);
     if (!parsed.success) {
       toast.error(t('submitErrorTitle'), {
         description: parsed.error.issues[0]?.message,
       });
       return false;
     }
-    await updateField({ storeName: parsed.data });
+    await updateField({ businessName: parsed.data });
     toast.success(t('savedChangesTitle'), {
-      description: t('storeNameUpdated'),
+      description: t('businessNameUpdated'),
     });
     return true;
   };
 
-  const updateLogoUrl = async (url: string) => {
-    const parsed = validators.logoUrl.safeParse(url);
+  const updateOwnerName = async (next: string) => {
+    const parsed = validators.ownerName.safeParse(next);
     if (!parsed.success) {
       toast.error(t('submitErrorTitle'), {
         description: parsed.error.issues[0]?.message,
       });
       return false;
     }
-    await updateField({ logoUrl: parsed.data });
+    await updateField({ ownerName: parsed.data });
+    toast.success(t('savedChangesTitle'), {
+      description: t('ownerNameUpdated'),
+    });
+    return true;
+  };
+
+  const updateLogo = async (url: string | null) => {
+    const parsed = validators.logo.safeParse(url);
+    if (!parsed.success) {
+      toast.error(t('submitErrorTitle'), {
+        description: parsed.error.issues[0]?.message,
+      });
+      return false;
+    }
+    await updateField({ logo: parsed.data });
     toast.success(t('savedChangesTitle'), { description: t('logoUpdated') });
     return true;
   };
 
-  const updateLogoFromFile = async (file: File) => {
-    try {
-      const form = new FormData();
-      form.append('file', file);
-      const res = await fetch('/api/uploads/logo', {
-        method: 'POST',
-        body: form,
-      });
-      if (!res.ok) throw new Error(await res.text());
-      const { url } = (await res.json()) as { url: string };
-      await updateLogoUrl(url);
-      return true;
-    } catch (e: unknown) {
-      toast.error(t('submitErrorTitle'), {
-        description: errorToMessage(e, t('unknownError')),
-      });
-      return false;
-    }
-  };
-
   /** Phone derived values */
-  const rawPhone = (profile?.phone ?? '').trim();
+  const rawPhone = (profile?.defaultPhoneNumberId ?? '').trim();
   const hasPhone = rawPhone.length > 0;
   const phoneDisplay = hasPhone ? rawPhone : t('noPhone');
   const phoneActionLabel = hasPhone ? t('change') : t('add');
 
   return {
     profile,
-    error,
+    errors,
     isLoading,
-    isValidating,
     hasPhone,
     phoneDisplay,
     phoneActionLabel,
@@ -276,9 +266,9 @@ export function useProfile(tenantId?: string) {
       updatePhone,
       updateEmail,
       updateDescription,
-      updateStoreName,
-      updateLogoUrl,
-      updateLogoFromFile,
+      updateBusinessName,
+      updateOwnerName,
+      updateLogo,
       mutate: refetch, // still exposed if you want to force a refresh
     },
   };

@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import FormFieldSkeleton from '@molecules/shared/FormFieldSkeleton';
+import FormFieldSkeleton from '@atoms/shared/FormFieldSkeleton';
 
 const meta: Meta<typeof FormFieldSkeleton> = {
-  title: 'Molecules/Shared/FormFieldSkeleton',
+  title: 'Atoms/Shared/FormFieldSkeleton',
   component: FormFieldSkeleton,
   parameters: { layout: 'centered' },
   tags: ['autodocs'],
@@ -12,7 +12,7 @@ const meta: Meta<typeof FormFieldSkeleton> = {
   },
   decorators: [
     (Story) => (
-      <div className="w-[720px] rounded-xl border bg-white p-6 shadow-sm">
+      <div className="w-[720px] rounded-xl border p-6 shadow-sm">
         <Story />
       </div>
     ),

@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect } from 'react';
 import FileDropZone from '@atoms/shared/FileDropZone';
 import SingleImagePreview from '@atoms/shared/SingleImagePreview';
 import DoneButton from '@atoms/shared/DoneButton';
@@ -13,6 +15,7 @@ interface SingleMediaUploaderProps
     MediaUploaderConfig {
   className?: string;
   hideDoneButton?: boolean;
+  initialMedia?: string | null;
   renderDoneButton?: (
     onDone: () => void,
     isProcessing: boolean,
@@ -30,6 +33,7 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
   onMediaProcessed,
   className,
   hideDoneButton = false,
+  initialMedia,
   renderDoneButton,
   renderEditButton,
   acceptedFileTypes,
@@ -55,6 +59,16 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
     multiple: false,
   });
 
+  // Initialize persisted media with initial media if provided
+  useEffect(() => {
+    if (initialMedia && !persistedMedia) {
+      setPersistedMedia({ url: initialMedia });
+    } else if (!initialMedia && persistedMedia) {
+      // Clear persisted media when initialMedia is removed
+      setPersistedMedia(null);
+    }
+  }, [initialMedia, persistedMedia, setPersistedMedia]);
+
   const handleValidationError = (error: string) => {
     onUploadError?.(error);
   };
@@ -74,6 +88,11 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
     setSelectedFiles([]);
     setPersistedMedia(null);
     setIsEditing(false);
+
+    // If we're removing persisted media (existing logo), notify parent
+    if (persistedMedia) {
+      void onMediaProcessed?.(null);
+    }
   };
 
   const handleDone = async () => {

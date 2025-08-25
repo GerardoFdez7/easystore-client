@@ -1,0 +1,11 @@
+query findTenantProfile {
+  getTenantById {
+    ownerName
+    email
+    businessName
+    description
+    domain
+    logo
+    defaultPhoneNumberId
+  }
+}

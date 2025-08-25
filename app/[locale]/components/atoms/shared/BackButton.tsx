@@ -1,5 +1,3 @@
-'use client';
-
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@shadcn/ui/button';

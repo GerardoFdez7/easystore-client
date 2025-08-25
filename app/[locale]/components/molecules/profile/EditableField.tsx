@@ -5,7 +5,7 @@ import { Label } from '@shadcn/ui/label';
 import { Button } from '@shadcn/ui/button';
 import { Input } from '@shadcn/ui/input';
 import { Edit2, Save as SaveIcon, CheckCircle2, XCircle } from 'lucide-react';
-import clsx from 'clsx';
+import { cn } from '@lib/utils/cn';
 
 type Chip = { label: string; tone?: 'success' | 'neutral' | 'denied' };
 
@@ -19,8 +19,9 @@ export function EditableField({
   onSave,
   saveLabel = 'Save',
   placeholder,
+  className,
 }: {
-  label: string;
+  label?: string;
   value: string;
   statusChip?: Chip;
   iconEditable?: boolean;
@@ -29,6 +30,7 @@ export function EditableField({
   onSave?: (nextValue: string) => void | Promise<unknown>;
   saveLabel?: string;
   placeholder?: string;
+  className?: string;
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
@@ -64,29 +66,74 @@ export function EditableField({
   };
 
   return (
-    <div className="mb-6 w-full">
-      <div className="mb-2 flex items-center gap-2">
-        <Label className="text-sm font-medium text-[#374151]">{label}</Label>
+    <div className={cn('mb-6 w-full', className)}>
+      <div className="mb-2 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <Label className="text-title font-bold">{label}</Label>
 
-        {statusChip && (
-          <span
-            className={clsx(
-              'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs',
-              statusChip.tone === 'success' && 'text-secondary bg-emerald-50',
-              statusChip.tone === 'denied' && 'text-destructive bg-red-50',
-              (!statusChip.tone || statusChip.tone === 'neutral') &&
-                'bg-gray-100 text-gray-700',
-            )}
-          >
-            {statusChip.tone === 'success' && (
-              <CheckCircle2 className="h-3.5 w-3.5" />
-            )}
-            {statusChip.tone === 'denied' && (
-              <XCircle className="h-3.5 w-3.5" />
-            )}
-            {statusChip.label}
-          </span>
-        )}
+          {statusChip && (
+            <span
+              className={cn(
+                'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs',
+                statusChip.tone === 'success' &&
+                  'text-secondary bg-emerald-50 dark:bg-emerald-900',
+                statusChip.tone === 'denied' &&
+                  'text-error bg-red-50 dark:bg-red-900 dark:text-red-300',
+                (!statusChip.tone || statusChip.tone === 'neutral') &&
+                  'text-title bg-gray-100',
+              )}
+            >
+              {statusChip.tone === 'success' && (
+                <CheckCircle2 className="h-3.5 w-3.5" />
+              )}
+              {statusChip.tone === 'denied' && (
+                <XCircle className="h-3.5 w-3.5" />
+              )}
+              {statusChip.label}
+            </span>
+          )}
+        </div>
+
+        {/* Mobile: Show button next to label */}
+        <div className="flex md:hidden">
+          {actionLabel ? (
+            isEditing ? (
+              <Button
+                type="button"
+                variant="link"
+                className="text-secondary h-9 px-2 underline-offset-2 hover:underline"
+                onClick={save}
+              >
+                {saveLabel}
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                variant="link"
+                className="text-secondary h-9 px-2 underline-offset-2 hover:underline"
+                onClick={startEditing}
+              >
+                {actionLabel}
+              </Button>
+            )
+          ) : (
+            iconEditable && (
+              <Button
+                type="button"
+                variant="link"
+                className="text-secondary h-9 px-2"
+                onClick={isEditing ? save : startEditing}
+                aria-label={isEditing ? 'Save' : 'Edit'}
+              >
+                {isEditing ? (
+                  <SaveIcon className="h-4 w-4" />
+                ) : (
+                  <Edit2 className="h-4 w-4" />
+                )}
+              </Button>
+            )
+          )}
+        </div>
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
@@ -99,10 +146,14 @@ export function EditableField({
           }
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className="h-10 min-w-0 flex-1 rounded-md border-gray-200 bg-white text-sm shadow-sm selection:bg-blue-600 selection:text-white"
+          className={cn(
+            'h-10 min-w-0 flex-1 rounded-md border-gray-200 bg-white shadow-sm',
+            className,
+          )}
         />
 
-        <div className="flex w-full justify-end md:w-auto">
+        {/* Desktop: Show button next to input */}
+        <div className="hidden w-auto md:flex">
           {actionLabel ? (
             isEditing ? (
               <Button

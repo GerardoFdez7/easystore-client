@@ -788,14 +788,15 @@ export type Sustainability = {
 
 export type Tenant = {
   __typename?: 'Tenant';
-  businessName: Scalars['String']['output'];
+  businessName?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   currency: CurrencyCodes;
   defaultBillingAddressId?: Maybe<Scalars['ID']['output']>;
   defaultPhoneNumberId?: Maybe<Scalars['ID']['output']>;
   defaultShippingAddressId?: Maybe<Scalars['ID']['output']>;
   description?: Maybe<Scalars['String']['output']>;
-  domain: Scalars['String']['output'];
+  domain?: Maybe<Scalars['String']['output']>;
+  email: Scalars['String']['output'];
   logo?: Maybe<Scalars['String']['output']>;
   ownerName: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
@@ -2073,6 +2074,40 @@ export type RemoveVariantfromProductMutation = {
   removeVariant: {
     __typename?: 'Product';
     variants?: Array<{ __typename?: 'Variant'; sku?: string | null }> | null;
+  };
+};
+
+export type UpdateTenantProfileMutationVariables = Exact<{
+  input: UpdateTenantInput;
+}>;
+
+export type UpdateTenantProfileMutation = {
+  __typename?: 'Mutation';
+  updateTenant: {
+    __typename?: 'Tenant';
+    ownerName: string;
+    email: string;
+    businessName?: string | null;
+    description?: string | null;
+    domain?: string | null;
+    logo?: string | null;
+    defaultPhoneNumberId?: string | null;
+  };
+};
+
+export type FindTenantProfileQueryVariables = Exact<{ [key: string]: never }>;
+
+export type FindTenantProfileQuery = {
+  __typename?: 'Query';
+  getTenantById: {
+    __typename?: 'Tenant';
+    ownerName: string;
+    email: string;
+    businessName?: string | null;
+    description?: string | null;
+    domain?: string | null;
+    logo?: string | null;
+    defaultPhoneNumberId?: string | null;
   };
 };
 
@@ -5077,3 +5112,142 @@ export type RemoveVariantfromProductMutationOptions =
     RemoveVariantfromProductMutation,
     RemoveVariantfromProductMutationVariables
   >;
+export const UpdateTenantProfileDocument = gql`
+  mutation updateTenantProfile($input: UpdateTenantInput!) {
+    updateTenant(input: $input) {
+      ownerName
+      email
+      businessName
+      description
+      domain
+      logo
+      defaultPhoneNumberId
+    }
+  }
+`;
+export type UpdateTenantProfileMutationFn = Apollo.MutationFunction<
+  UpdateTenantProfileMutation,
+  UpdateTenantProfileMutationVariables
+>;
+
+/**
+ * __useUpdateTenantProfileMutation__
+ *
+ * To run a mutation, you first call `useUpdateTenantProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTenantProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTenantProfileMutation, { data, loading, error }] = useUpdateTenantProfileMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateTenantProfileMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateTenantProfileMutation,
+    UpdateTenantProfileMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateTenantProfileMutation,
+    UpdateTenantProfileMutationVariables
+  >(UpdateTenantProfileDocument, options);
+}
+export type UpdateTenantProfileMutationHookResult = ReturnType<
+  typeof useUpdateTenantProfileMutation
+>;
+export type UpdateTenantProfileMutationResult =
+  Apollo.MutationResult<UpdateTenantProfileMutation>;
+export type UpdateTenantProfileMutationOptions = Apollo.BaseMutationOptions<
+  UpdateTenantProfileMutation,
+  UpdateTenantProfileMutationVariables
+>;
+export const FindTenantProfileDocument = gql`
+  query findTenantProfile {
+    getTenantById {
+      ownerName
+      email
+      businessName
+      description
+      domain
+      logo
+      defaultPhoneNumberId
+    }
+  }
+`;
+
+/**
+ * __useFindTenantProfileQuery__
+ *
+ * To run a query within a React component, call `useFindTenantProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindTenantProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindTenantProfileQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFindTenantProfileQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    FindTenantProfileQuery,
+    FindTenantProfileQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    FindTenantProfileQuery,
+    FindTenantProfileQueryVariables
+  >(FindTenantProfileDocument, options);
+}
+export function useFindTenantProfileLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FindTenantProfileQuery,
+    FindTenantProfileQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    FindTenantProfileQuery,
+    FindTenantProfileQueryVariables
+  >(FindTenantProfileDocument, options);
+}
+export function useFindTenantProfileSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        FindTenantProfileQuery,
+        FindTenantProfileQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    FindTenantProfileQuery,
+    FindTenantProfileQueryVariables
+  >(FindTenantProfileDocument, options);
+}
+export type FindTenantProfileQueryHookResult = ReturnType<
+  typeof useFindTenantProfileQuery
+>;
+export type FindTenantProfileLazyQueryHookResult = ReturnType<
+  typeof useFindTenantProfileLazyQuery
+>;
+export type FindTenantProfileSuspenseQueryHookResult = ReturnType<
+  typeof useFindTenantProfileSuspenseQuery
+>;
+export type FindTenantProfileQueryResult = Apollo.QueryResult<
+  FindTenantProfileQuery,
+  FindTenantProfileQueryVariables
+>;

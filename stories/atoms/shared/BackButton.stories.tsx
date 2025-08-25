@@ -1,11 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import BackButton from '@molecules/shared/BackButton';
+import BackButton from '@atoms/shared/BackButton';
 
 const meta: Meta<typeof BackButton> = {
-  title: 'Molecules/Shared/BackButton',
+  title: 'Atoms/Shared/BackButton',
   component: BackButton,
   parameters: {
     layout: 'centered',
+    nextjs: {
+      appDirectory: true,
+    },
   },
   // Wrap in a relative box so the absolute button is visible
   decorators: [
@@ -18,7 +21,7 @@ const meta: Meta<typeof BackButton> = {
   argTypes: {
     className: { control: 'text' },
     label: { control: 'text' },
-    onBack: { action: 'back' }, // shows an action in the SB panel, no extra imports needed
+    onBack: { action: 'back' },
   },
   tags: ['autodocs'],
 };

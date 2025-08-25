@@ -12,7 +12,7 @@ import {
   GetInTouchMutation,
   GetInTouchMutationVariables,
 } from '@graphql/generated';
-import useMutation from './useMutation';
+import useMutation from '@hooks/useMutation';
 
 const phoneRegex = /^[+\d().-\s]{6,20}$/;
 
