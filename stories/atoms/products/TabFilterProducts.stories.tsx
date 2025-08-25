@@ -1,7 +1,7 @@
 import TabFilterProducts, {
   FilterType,
 } from '@atoms/products/TabFilterProducts';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 
 const meta: Meta<typeof TabFilterProducts> = {
   title: 'Atoms/Products/TabFilterProducts',
