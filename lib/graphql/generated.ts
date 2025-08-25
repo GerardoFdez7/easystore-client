@@ -2225,6 +2225,40 @@ export type FindTenantProfileQuery = {
   };
 };
 
+export type UpdateTenantProfileMutationVariables = Exact<{
+  input: UpdateTenantInput;
+}>;
+
+export type UpdateTenantProfileMutation = {
+  __typename?: 'Mutation';
+  updateTenant: {
+    __typename?: 'Tenant';
+    ownerName: string;
+    email: string;
+    businessName?: string | null;
+    description?: string | null;
+    domain?: string | null;
+    logo?: string | null;
+    defaultPhoneNumberId?: string | null;
+  };
+};
+
+export type FindTenantProfileQueryVariables = Exact<{ [key: string]: never }>;
+
+export type FindTenantProfileQuery = {
+  __typename?: 'Query';
+  getTenantById: {
+    __typename?: 'Tenant';
+    ownerName: string;
+    email: string;
+    businessName?: string | null;
+    description?: string | null;
+    domain?: string | null;
+    logo?: string | null;
+    defaultPhoneNumberId?: string | null;
+  };
+};
+
 export const CreateAddressDocument = {
   kind: 'Document',
   definitions: [
@@ -7557,109 +7591,44 @@ export const RemoveVariantfromProductDocument = {
   RemoveVariantfromProductMutation,
   RemoveVariantfromProductMutationVariables
 >;
-export const UpdateTenantProfileDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'updateTenantProfile' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'input' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'UpdateTenantInput' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'updateTenant' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'input' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'input' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'ownerName' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'email' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'businessName' },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'domain' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'logo' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'defaultPhoneNumberId' },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  UpdateTenantProfileMutation,
-  UpdateTenantProfileMutationVariables
+
+/**
+ * __useRemoveVariantfromProductMutation__
+ *
+ * To run a mutation, you first call `useRemoveVariantfromProductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveVariantfromProductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeVariantfromProductMutation, { data, loading, error }] = useRemoveVariantfromProductMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      productId: // value for 'productId'
+ *   },
+ * });
+ */
+export function useRemoveVariantfromProductMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RemoveVariantfromProductMutation,
+    RemoveVariantfromProductMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    RemoveVariantfromProductMutation,
+    RemoveVariantfromProductMutationVariables
+  >(RemoveVariantfromProductDocument, options);
+}
+export type RemoveVariantfromProductMutationHookResult = ReturnType<
+  typeof useRemoveVariantfromProductMutation
 >;
-export const FindTenantProfileDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'findTenantProfile' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'getTenantById' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'ownerName' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'email' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'businessName' },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'domain' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'logo' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'defaultPhoneNumberId' },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  FindTenantProfileQuery,
-  FindTenantProfileQueryVariables
->;
+export type RemoveVariantfromProductMutationResult =
+  Apollo.MutationResult<RemoveVariantfromProductMutation>;
+export type RemoveVariantfromProductMutationOptions =
+  Apollo.BaseMutationOptions<
+    RemoveVariantfromProductMutation,
+    RemoveVariantfromProductMutationVariables
+  >;
