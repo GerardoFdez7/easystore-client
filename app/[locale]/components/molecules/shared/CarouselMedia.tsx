@@ -251,6 +251,7 @@ const CarouselMedia = ({
                       <Separator
                         orientation="vertical"
                         className="bg-title !h-35"
+                        decorative={true}
                       />
                     </div>
                   )}

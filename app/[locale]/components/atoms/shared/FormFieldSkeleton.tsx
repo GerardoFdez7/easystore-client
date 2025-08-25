@@ -1,5 +1,3 @@
-'use client';
-
 import { Skeleton } from '@shadcn/ui/skeleton';
 
 type Props = {

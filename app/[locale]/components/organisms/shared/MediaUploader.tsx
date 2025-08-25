@@ -18,6 +18,7 @@ interface MediaUploaderProps
   className?: string;
   multiple?: boolean;
   hideDoneButton?: boolean;
+  initialMedia?: string | string[] | null;
   renderDoneButton?: (
     onDone: () => void,
     isProcessing: boolean,
@@ -42,6 +43,7 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
   maxItems = DefaultMaxItems,
   minItems = DefaultMinItems,
   hideDoneButton = false,
+  initialMedia,
   renderDoneButton,
   renderEditButton,
 }) => {
@@ -53,6 +55,7 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
         onMediaProcessed={onMediaProcessed}
         className={className}
         hideDoneButton={hideDoneButton}
+        initialMedia={Array.isArray(initialMedia) ? initialMedia : null}
         renderDoneButton={renderDoneButton}
         renderEditButton={renderEditButton}
         acceptedFileTypes={acceptedFileTypes}
@@ -72,6 +75,7 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({
       onMediaProcessed={onMediaProcessed}
       className={className}
       hideDoneButton={hideDoneButton}
+      initialMedia={typeof initialMedia === 'string' ? initialMedia : null}
       renderDoneButton={renderDoneButton}
       renderEditButton={renderEditButton}
       acceptedFileTypes={acceptedFileTypes}
