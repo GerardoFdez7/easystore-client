@@ -4,23 +4,7 @@ import { Checkbox } from '@shadcn/ui/checkbox';
 import { TableCell, TableRow } from '@shadcn/ui/table';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-
-interface MediaItem {
-  id: string;
-  url: string;
-  position: number;
-  mediaType: 'IMAGE' | 'VIDEO';
-}
-
-interface Product {
-  id: string;
-  name: string;
-  status: string;
-  inventory: number;
-  category: string;
-  cover: string; // Mandatory cover image
-  media?: MediaItem[]; // Optional media array
-}
+import { Product } from '@consts/products';
 
 interface ProductTableRowProps {
   product: Product;
@@ -74,9 +58,20 @@ export function ProductTableRow({
           <span className="text-foreground font-medium">{product.name}</span>
         </div>
       </TableCell>
-      <TableCell className="text-foreground">{product.status}</TableCell>
-      <TableCell className="text-foreground">{product.inventory}</TableCell>
-      <TableCell className="text-foreground">{product.category}</TableCell>
+      <TableCell className="text-foreground">
+        {product.variants?.[0]?.sku || 'N/A'}
+      </TableCell>
+      <TableCell className="text-foreground">
+        {product.variants?.[0]?.price
+          ? `$${product.variants[0].price.toFixed(2)}`
+          : 'N/A'}
+      </TableCell>
+      <TableCell className="text-foreground">
+        {product.variants?.length || 0}
+      </TableCell>
+      <TableCell className="text-foreground">
+        {product.categories?.[0]?.categoryId || 'N/A'}
+      </TableCell>
     </TableRow>
   );
 }

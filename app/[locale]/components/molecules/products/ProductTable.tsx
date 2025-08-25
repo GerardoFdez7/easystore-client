@@ -12,22 +12,8 @@ import { ProductTableRow } from '@atoms/products/ProductTableRow';
 import TabFilterProducts from '@atoms/products/TabFilterProducts';
 import { FilterType } from '@atoms/products/TabFilterProducts';
 import { useTranslations } from 'next-intl';
+import { Product } from '@consts/products';
 
-interface MediaItem {
-  id: string;
-  url: string;
-  position: number;
-  mediaType: 'IMAGE' | 'VIDEO';
-}
-interface Product {
-  id: string;
-  name: string;
-  status: string;
-  inventory: number;
-  category: string;
-  cover: string;
-  media?: MediaItem[];
-}
 interface ProductTableProps {
   products: Product[];
   selectedProducts: string[];
@@ -65,14 +51,13 @@ export function ProductTable({
             <TableHead className="text-foreground text-center font-medium">
               {t('products')}
             </TableHead>
+            <TableHead className="text-foreground font-medium">SKU</TableHead>
+            <TableHead className="text-foreground font-medium">PRICE</TableHead>
             <TableHead className="text-foreground font-medium">
-              {t('status')}
+              No. Variants
             </TableHead>
             <TableHead className="text-foreground font-medium">
-              {t('type')}
-            </TableHead>
-            <TableHead className="text-foreground font-medium">
-              {t('category')}
+              Category
             </TableHead>
           </TableRow>
         </TableHeader>
