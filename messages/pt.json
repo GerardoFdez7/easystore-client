@@ -568,7 +568,9 @@
     "products": "Produtos",
     "noTypeFound": "Tipo não encontrado",
     "noCategoryFound": "Categoria não encontrada",
-    "search": "Buscar..."
+    "search": "Buscar...",
+    "price": "Preço",
+    "variants": "Variantes"
   },
   "Privacy": {
     "tableOfContents": "Índice",

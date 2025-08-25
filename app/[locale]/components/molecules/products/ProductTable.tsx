@@ -52,12 +52,17 @@ export function ProductTable({
               {t('products')}
             </TableHead>
             <TableHead className="text-foreground font-medium">SKU</TableHead>
-            <TableHead className="text-foreground font-medium">PRICE</TableHead>
             <TableHead className="text-foreground font-medium">
-              No. Variants
+              {t('price')}
             </TableHead>
             <TableHead className="text-foreground font-medium">
-              Category
+              {t('variants')}
+            </TableHead>
+            <TableHead className="text-foreground font-medium">
+              {t('category')}
+            </TableHead>
+            <TableHead className="text-foreground font-medium">
+              {t('status')}
             </TableHead>
           </TableRow>
         </TableHeader>

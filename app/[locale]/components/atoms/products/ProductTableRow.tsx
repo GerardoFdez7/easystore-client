@@ -1,6 +1,7 @@
 'use client';
 
 import { Checkbox } from '@shadcn/ui/checkbox';
+import { Badge } from '@shadcn/ui/badge';
 import { TableCell, TableRow } from '@shadcn/ui/table';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -62,15 +63,25 @@ export function ProductTableRow({
         {product.variants?.[0]?.sku || 'N/A'}
       </TableCell>
       <TableCell className="text-foreground">
-        {product.variants?.[0]?.price
-          ? `$${product.variants[0].price.toFixed(2)}`
-          : 'N/A'}
+        {product.variants?.[0]?.price ? `$${product.variants[0].price}` : 'N/A'}
       </TableCell>
       <TableCell className="text-foreground">
         {product.variants?.length || 0}
       </TableCell>
       <TableCell className="text-foreground">
         {product.categories?.[0]?.categoryId || 'N/A'}
+      </TableCell>
+      <TableCell>
+        <Badge
+          variant="outline"
+          className={`${
+            product.isArchived
+              ? 'border-blue-200 bg-blue-500/10 text-blue-600 dark:border-blue-800 dark:text-blue-300'
+              : 'border-green-200 bg-green-500/10 text-green-600 dark:border-green-800 dark:text-green-300'
+          }`}
+        >
+          {product.isArchived ? 'Archived' : 'Active'}
+        </Badge>
       </TableCell>
     </TableRow>
   );
