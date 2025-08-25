@@ -1,5 +1,5 @@
 import { ProductTableRow } from '@atoms/products/ProductTableRow';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { Table, TableBody } from '@shadcn/ui/table';
 
 const meta: Meta<typeof ProductTableRow> = {

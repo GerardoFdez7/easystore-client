@@ -1,5 +1,5 @@
 import { ProductGrid } from '@molecules/products/ProductGrid';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 
 const meta: Meta<typeof ProductGrid> = {
   title: 'Molecules/Products/ProductGrid',

@@ -1,5 +1,5 @@
 import { ProductCard } from '@atoms/products/ProductCard';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 
 const meta: Meta<typeof ProductCard> = {
   title: 'Atoms/Products/ProductCard',
