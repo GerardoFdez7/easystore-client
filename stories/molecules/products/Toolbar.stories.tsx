@@ -1,71 +1,101 @@
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { ProductsToolbar } from '@molecules/products/Toolbar';
-import type { Meta, StoryObj } from '@storybook/react';
+
+// Mock functions for Storybook actions
+const onTypeFilterChange = (value: string) =>
+  console.log('Type filter changed:', value);
+const onCategoryFilterChange = (value: string) =>
+  console.log('Category filter changed:', value);
+const onViewModeToggle = () => console.log('View mode toggled');
 
 const meta: Meta<typeof ProductsToolbar> = {
   title: 'Molecules/Products/Toolbar',
   component: ProductsToolbar,
   parameters: {
     layout: 'fullscreen',
+    nextjs: {
+      appDirectory: true,
+    },
   },
+  tags: ['autodocs'],
   argTypes: {
-    searchValue: { control: 'text' },
-    onSearchChange: { action: 'searchChanged' },
-    typeFilter: { control: 'text' },
-    onTypeFilterChange: { action: 'typeFilterChanged' },
-    categoryFilter: { control: 'text' },
-    onCategoryFilterChange: { action: 'categoryFilterChanged' },
+    typeFilter: {
+      control: 'select',
+      options: ['', 'physical', 'digital'],
+      description: 'The currently selected product type filter',
+    },
+    onTypeFilterChange: {
+      action: 'typeFilterChanged',
+      description: 'Callback when the type filter changes',
+    },
+    categoryFilter: {
+      control: 'text',
+      description: 'The currently selected category ID',
+    },
+    onCategoryFilterChange: {
+      action: 'categoryFilterChanged',
+      description: 'Callback when the category filter changes',
+    },
     viewMode: {
       control: 'radio',
       options: ['table', 'cards'],
+      description: 'The current view mode',
     },
-    onViewModeToggle: { action: 'viewModeToggled' },
+    onViewModeToggle: {
+      action: 'viewModeToggled',
+      description: 'Callback when the view mode is toggled',
+    },
+  },
+  args: {
+    typeFilter: '',
+    onTypeFilterChange,
+    categoryFilter: '',
+    onCategoryFilterChange,
+    viewMode: 'table',
+    onViewModeToggle,
   },
 };
+
 export default meta;
 
 type Story = StoryObj<typeof ProductsToolbar>;
 
 export const Default: Story = {
   args: {
-    searchValue: '',
-    onSearchChange: (value: string) => console.log('Search changed:', value),
     typeFilter: '',
-    onTypeFilterChange: (value: string) =>
-      console.log('Type filter changed:', value),
     categoryFilter: '',
-    onCategoryFilterChange: (value: string) =>
-      console.log('Category filter changed:', value),
     viewMode: 'table',
-    onViewModeToggle: () => console.log('View mode toggled'),
   },
 };
 
-export const WithSearch: Story = {
+export const WithTypeFilter: Story = {
   args: {
-    searchValue: 'Phone',
-    onSearchChange: (value: string) => console.log('Search changed:', value),
-    typeFilter: '',
-    onTypeFilterChange: (value: string) =>
-      console.log('Type filter changed:', value),
-    categoryFilter: '',
-    onCategoryFilterChange: (value: string) =>
-      console.log('Category filter changed:', value),
-    viewMode: 'table',
-    onViewModeToggle: () => console.log('View mode toggled'),
-  },
-};
-
-export const WithFilters: Story = {
-  args: {
-    searchValue: '',
-    onSearchChange: (value: string) => console.log('Search changed:', value),
     typeFilter: 'physical',
-    onTypeFilterChange: (value: string) =>
-      console.log('Type filter changed:', value),
+    categoryFilter: '',
+    viewMode: 'table',
+  },
+};
+
+export const WithCategoryFilter: Story = {
+  args: {
+    typeFilter: '',
     categoryFilter: 'electronics',
-    onCategoryFilterChange: (value: string) =>
-      console.log('Category filter changed:', value),
+    viewMode: 'table',
+  },
+};
+
+export const CardsView: Story = {
+  args: {
+    typeFilter: '',
+    categoryFilter: '',
     viewMode: 'cards',
-    onViewModeToggle: () => console.log('View mode toggled'),
+  },
+};
+
+export const WithAllFilters: Story = {
+  args: {
+    typeFilter: 'digital',
+    categoryFilter: 'software',
+    viewMode: 'cards',
   },
 };

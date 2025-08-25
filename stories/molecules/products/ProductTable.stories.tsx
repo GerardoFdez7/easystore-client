@@ -1,5 +1,5 @@
 import { ProductTable } from '@molecules/products/ProductTable';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { FilterType } from '@atoms/products/TabFilterProducts';
 
 const meta: Meta<typeof ProductTable> = {
