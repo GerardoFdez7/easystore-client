@@ -1,11 +1,11 @@
 'use client';
 
 import { Checkbox } from '@shadcn/ui/checkbox';
-import { Badge } from '@shadcn/ui/badge';
 import { TableCell, TableRow } from '@shadcn/ui/table';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Product } from '@consts/products';
+import ProductStatus from '@atoms/products/ProductStatus';
 
 interface ProductTableRowProps {
   product: Product;
@@ -72,16 +72,7 @@ export function ProductTableRow({
         {product.categories?.[0]?.categoryId || 'N/A'}
       </TableCell>
       <TableCell>
-        <Badge
-          variant="outline"
-          className={`${
-            product.isArchived
-              ? 'border-blue-200 bg-blue-500/10 text-blue-600 dark:border-blue-800 dark:text-blue-300'
-              : 'border-green-200 bg-green-500/10 text-green-600 dark:border-green-800 dark:text-green-300'
-          }`}
-        >
-          {product.isArchived ? 'Archived' : 'Active'}
-        </Badge>
+        <ProductStatus product={product} />
       </TableCell>
     </TableRow>
   );

@@ -10,23 +10,8 @@ import {
 } from '@shadcn/ui/carousel';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-
-interface MediaItem {
-  id: string;
-  url: string;
-  position: number;
-  mediaType: 'IMAGE' | 'VIDEO';
-}
-
-interface Product {
-  id: string;
-  name: string;
-  status: string;
-  inventory: number;
-  category: string;
-  cover: string;
-  media?: MediaItem[];
-}
+import { Product } from '@lib/consts/products';
+import ProductStatus from '@atoms/products/ProductStatus';
 
 interface ProductCardProps {
   product: Product;
@@ -58,7 +43,7 @@ export function ProductCard({
 
   // Sort all media by position (both images and videos)
   const allMedia = product.media
-    ? product.media.sort((a, b) => a.position - b.position)
+    ? [...product.media].sort((a, b) => a.position - b.position)
     : [];
 
   // Create media array: cover first, then all media items
@@ -179,11 +164,13 @@ export function ProductCard({
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-foreground text-sm">{t('status')}:</span>
-            <span className="text-foreground text-sm">{product.status}</span>
+            <ProductStatus product={product} />
           </div>
           <div className="flex items-center justify-between">
             <span className="text-foreground text-sm">{t('category')}:</span>
-            <span className="text-foreground text-sm">{product.category}</span>
+            <span className="text-foreground text-sm">
+              {product.categories?.[0]?.categoryId}
+            </span>
           </div>
         </div>
       </div>
