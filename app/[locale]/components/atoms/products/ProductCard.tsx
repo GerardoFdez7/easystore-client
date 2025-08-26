@@ -9,9 +9,10 @@ import {
   type CarouselApi,
 } from '@shadcn/ui/carousel';
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
+//import { useTranslations } from 'next-intl';
 import { Product } from '@lib/consts/products';
 import ProductStatus from '@atoms/products/ProductStatus';
+import BadgeTag from '@atoms/shared/BadgeTag';
 
 interface ProductCardProps {
   product: Product;
@@ -27,7 +28,7 @@ export function ProductCard({
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [previewIndex, setPreviewIndex] = React.useState<number | null>(null);
-  const t = useTranslations('Products');
+  //const t = useTranslations('Products');
 
   React.useEffect(() => {
     if (!api) {
@@ -162,15 +163,25 @@ export function ProductCard({
           {product.name}
         </h3>
         <div className="space-y-2">
+          <span className="text-foreground text-sm">
+            {product.variants?.[0]?.attributes?.[0]?.value || 'N/A'}
+          </span>
           <div className="flex items-center justify-between">
-            <span className="text-foreground text-sm">{t('status')}:</span>
+            <span className="text-foreground text-sm">
+              ${product.variants?.[0]?.price}
+            </span>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <span className="text-foreground text-sm">{product.brand}</span>
             <ProductStatus product={product} />
           </div>
-          <div className="flex items-center justify-between">
-            <span className="text-foreground text-sm">{t('category')}:</span>
-            <span className="text-foreground text-sm">
-              {product.categories?.[0]?.categoryId}
-            </span>
+          <div className="flex flex-wrap gap-1.5">
+            {product.tags
+              ?.slice(0, 3)
+              .map((tag) => (
+                <BadgeTag key={tag} tag={tag} className="text-xs" />
+              ))}
           </div>
         </div>
       </div>
