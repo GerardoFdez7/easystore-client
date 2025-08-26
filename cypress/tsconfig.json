@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["es5", "dom"],
+    "types": ["cypress", "node"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "../",
+    "paths": {
+      "@/*": ["app/*"],
+      "@atoms/*": ["app/[locale]/components/atoms/*"],
+      "@molecules/*": ["app/[locale]/components/molecules/*"],
+      "@organisms/*": ["app/[locale]/components/organisms/*"],
+      "@templates/*": ["app/[locale]/components/templates/*"],
+      "@shadcn/*": ["app/[locale]/components/shadcn/*"],
+      "@hooks/*": ["app/[locale]/hooks/*"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
+}
