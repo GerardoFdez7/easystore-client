@@ -61,8 +61,8 @@ Follow these instructions to set up and run the EasyStore frontend application:
    npm run gql
    ```
 
-   > [!IMPORTANT]
-   > Run this command after adding new queries or when the backend schema changes.
+> [!IMPORTANT]
+> Run this command after adding new queries or when the backend schema changes.
 
 4. Start the development server:
 
@@ -82,8 +82,7 @@ npm run docker:dev
 To run the application in production mode:
 
 ```bash
-npm run build
-npm run start
+npm run prod
 ```
 
 > [!TIP]
