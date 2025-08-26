@@ -13,7 +13,13 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "gql": "set NODE_OPTIONS=-r dotenv/config && npx graphql-codegen && npx graphql-codegen --check",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "cypress:run:component": "cypress run --component",
+    "cypress:run:e2e": "cypress run --e2e",
+    "test:e2e": "cypress run --e2e --browser chrome",
+    "test:component": "cypress run --component --browser chrome"
   },
   "dependencies": {
     "@apollo/client": "^3.13.5",
@@ -79,6 +85,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@typescript-eslint/parser": "^8.28.0",
+    "cypress": "^15.0.0",
     "dotenv": "^16.6.1",
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
