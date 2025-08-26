@@ -84,6 +84,7 @@ query findAllProducts(
     name: $name
   ) {
     products {
+      id
       name
       brand
       categories {
