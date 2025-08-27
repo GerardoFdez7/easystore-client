@@ -758,5 +758,26 @@
     "storeNameUpdated": "Store name updated successfully.",
     "logoUpdated": "Logo updated successfully.",
     "noPhone": "No phone number"
+  },
+  "StockDetail": {
+    "color": "Color",
+    "product": "Product",
+    "warehouse": "Warehouse",
+    "available": "Available",
+    "reserved": "Reserved",
+    "productLocation": "Product Location",
+    "replenishmentDate": "Estimated Replenishment Date",
+    "lotNumber": "Lot Number",
+    "serialNumbers": "Serial Numbers",
+    "cancel": "Cancel",
+    "saveChanges": "Save Changes",
+    "deleteStock": "Delete Stock",
+    "updateReasonTitle": "Update Reason",
+    "updateReasonDescription": "Please provide a reason for updating the available quantity",
+    "updateReasonLabel": "Reason",
+    "updateReasonPlaceholder": "Enter reason for update",
+    "confirm": "Confirm",
+    "deleteStockTitle": "Delete Stock",
+    "deleteStockDescription": "Are you sure you want to delete this stock? This action cannot be undone."
   }
 }
