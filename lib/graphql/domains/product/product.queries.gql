@@ -89,6 +89,7 @@ query findAllProducts(
       brand
       categories {
         categoryId
+        categoryName
       }
       cover
       createdAt

@@ -10,7 +10,6 @@ import { FilterType } from '@atoms/products/TabFilterProducts';
 import { useTranslations } from 'next-intl';
 import { useGetAllProducts } from '@hooks/products/useGetAllProducts';
 import { SortBy } from '@graphql/generated';
-import { productsTest } from '@lib/consts/data-test';
 
 export default function MainDashboard() {
   const t = useTranslations('Products');
@@ -38,8 +37,8 @@ export default function MainDashboard() {
   };
 
   const handleSelectAll = (checked: boolean) => {
-    if (checked) {
-      setSelectedProducts(productsTest.map((p) => p.id));
+    if (checked && products) {
+      setSelectedProducts(products.map((p) => p.id));
     } else {
       setSelectedProducts([]);
     }

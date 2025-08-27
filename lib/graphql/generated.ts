@@ -230,6 +230,175 @@ export type CreateWarrantyInput = {
   months: Scalars['Float']['input'];
 };
 
+export enum CurrencyCodes {
+  Aed = 'AED',
+  Afn = 'AFN',
+  All = 'ALL',
+  Amd = 'AMD',
+  Ang = 'ANG',
+  Aoa = 'AOA',
+  Ars = 'ARS',
+  Aud = 'AUD',
+  Awg = 'AWG',
+  Azn = 'AZN',
+  Bam = 'BAM',
+  Bbd = 'BBD',
+  Bdt = 'BDT',
+  Bgn = 'BGN',
+  Bhd = 'BHD',
+  Bif = 'BIF',
+  Bmd = 'BMD',
+  Bnd = 'BND',
+  Bob = 'BOB',
+  Bov = 'BOV',
+  Brl = 'BRL',
+  Bsd = 'BSD',
+  Btn = 'BTN',
+  Bwp = 'BWP',
+  Byr = 'BYR',
+  Bzd = 'BZD',
+  Cad = 'CAD',
+  Cdf = 'CDF',
+  Che = 'CHE',
+  Chf = 'CHF',
+  Chw = 'CHW',
+  Clf = 'CLF',
+  Clp = 'CLP',
+  Cny = 'CNY',
+  Cop = 'COP',
+  Cou = 'COU',
+  Crc = 'CRC',
+  Cuc = 'CUC',
+  Cup = 'CUP',
+  Cve = 'CVE',
+  Czk = 'CZK',
+  Djf = 'DJF',
+  Dkk = 'DKK',
+  Dop = 'DOP',
+  Dzd = 'DZD',
+  Egp = 'EGP',
+  Ern = 'ERN',
+  Etb = 'ETB',
+  Eur = 'EUR',
+  Fjd = 'FJD',
+  Fkp = 'FKP',
+  Gbp = 'GBP',
+  Gel = 'GEL',
+  Ghs = 'GHS',
+  Gip = 'GIP',
+  Gmd = 'GMD',
+  Gnf = 'GNF',
+  Gtq = 'GTQ',
+  Gyd = 'GYD',
+  Hkd = 'HKD',
+  Hnl = 'HNL',
+  Hrk = 'HRK',
+  Htg = 'HTG',
+  Huf = 'HUF',
+  Idr = 'IDR',
+  Ils = 'ILS',
+  Inr = 'INR',
+  Iqd = 'IQD',
+  Irr = 'IRR',
+  Isk = 'ISK',
+  Jmd = 'JMD',
+  Jod = 'JOD',
+  Jpy = 'JPY',
+  Kes = 'KES',
+  Kgs = 'KGS',
+  Khr = 'KHR',
+  Kmf = 'KMF',
+  Kpw = 'KPW',
+  Krw = 'KRW',
+  Kwd = 'KWD',
+  Kyd = 'KYD',
+  Kzt = 'KZT',
+  Lak = 'LAK',
+  Lbp = 'LBP',
+  Lkr = 'LKR',
+  Lrd = 'LRD',
+  Lsl = 'LSL',
+  Lyd = 'LYD',
+  Mad = 'MAD',
+  Mdl = 'MDL',
+  Mga = 'MGA',
+  Mkd = 'MKD',
+  Mmk = 'MMK',
+  Mnt = 'MNT',
+  Mop = 'MOP',
+  Mro = 'MRO',
+  Mur = 'MUR',
+  Mvr = 'MVR',
+  Mwk = 'MWK',
+  Mxn = 'MXN',
+  Mxv = 'MXV',
+  Myr = 'MYR',
+  Mzn = 'MZN',
+  Nad = 'NAD',
+  Ngn = 'NGN',
+  Nio = 'NIO',
+  Nok = 'NOK',
+  Npr = 'NPR',
+  Nzd = 'NZD',
+  Omr = 'OMR',
+  Pab = 'PAB',
+  Pen = 'PEN',
+  Pgk = 'PGK',
+  Php = 'PHP',
+  Pkr = 'PKR',
+  Pln = 'PLN',
+  Pyg = 'PYG',
+  Qar = 'QAR',
+  Ron = 'RON',
+  Rsd = 'RSD',
+  Rub = 'RUB',
+  Rwf = 'RWF',
+  Sar = 'SAR',
+  Sbd = 'SBD',
+  Scr = 'SCR',
+  Sdg = 'SDG',
+  Sek = 'SEK',
+  Sgd = 'SGD',
+  Sll = 'SLL',
+  Sos = 'SOS',
+  Srd = 'SRD',
+  Ssp = 'SSP',
+  Std = 'STD',
+  Svc = 'SVC',
+  Syp = 'SYP',
+  Szl = 'SZL',
+  Thb = 'THB',
+  Tjs = 'TJS',
+  Tmt = 'TMT',
+  Tnd = 'TND',
+  Top = 'TOP',
+  Try = 'TRY',
+  Ttd = 'TTD',
+  Twd = 'TWD',
+  Tzs = 'TZS',
+  Uah = 'UAH',
+  Ugx = 'UGX',
+  Usd = 'USD',
+  Uyi = 'UYI',
+  Uyu = 'UYU',
+  Uzs = 'UZS',
+  Vef = 'VEF',
+  Vnd = 'VND',
+  Vuv = 'VUV',
+  Wst = 'WST',
+  Xaf = 'XAF',
+  Xcd = 'XCD',
+  Xdr = 'XDR',
+  Xof = 'XOF',
+  Xpf = 'XPF',
+  Xsu = 'XSU',
+  Xua = 'XUA',
+  Yer = 'YER',
+  Zar = 'ZAR',
+  Zmw = 'ZMW',
+  Zwl = 'ZWL',
+}
+
 export type Dimension = {
   __typename?: 'Dimension';
   height: Scalars['Float']['output'];
@@ -250,7 +419,7 @@ export type GetInTouchInput = {
   country: Scalars['String']['input'];
   fullName: Scalars['String']['input'];
   isAgency: Scalars['String']['input'];
-  websiteUrl: Scalars['String']['input'];
+  websiteUrl?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Installment = {
@@ -309,6 +478,7 @@ export type Mutation = {
   updatePassword: Response;
   updateProduct: Product;
   updateStockInWarehouse: Warehouse;
+  updateTenant: Tenant;
   updateVariant: Product;
   updateWarehouse: Warehouse;
 };
@@ -425,6 +595,10 @@ export type MutationUpdateStockInWarehouseArgs = {
   reason?: InputMaybe<Scalars['String']['input']>;
   stockId: Scalars['ID']['input'];
   warehouseId: Scalars['ID']['input'];
+};
+
+export type MutationUpdateTenantArgs = {
+  input: UpdateTenantInput;
 };
 
 export type MutationUpdateVariantArgs = {
@@ -749,6 +923,18 @@ export type UpdateStockInWarehouseInput = {
 export type UpdateSustainabilityInput = {
   certification?: InputMaybe<Scalars['String']['input']>;
   recycledPercentage?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type UpdateTenantInput = {
+  businessName?: InputMaybe<Scalars['String']['input']>;
+  currency?: InputMaybe<CurrencyCodes>;
+  defaultBillingAddressId?: InputMaybe<Scalars['ID']['input']>;
+  defaultPhoneNumberId?: InputMaybe<Scalars['ID']['input']>;
+  defaultShippingAddressId?: InputMaybe<Scalars['ID']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  domain?: InputMaybe<Scalars['String']['input']>;
+  logo?: InputMaybe<Scalars['String']['input']>;
+  ownerName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateVariantInput = {
@@ -1791,6 +1977,7 @@ export type FindAllProductsQuery = {
       categories?: Array<{
         __typename?: 'ProductCategory';
         categoryId: string;
+        categoryName?: string | null;
       }> | null;
       media?: Array<{
         __typename?: 'Media';

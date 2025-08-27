@@ -177,6 +177,13 @@ export function ProductCard({
             <ProductStatus product={product} />
           </div>
           <div className="flex flex-wrap gap-1.5">
+            {product.categories?.[0]?.categoryName && (
+              <BadgeTag
+                key={product.categories[0].categoryName}
+                tag={product.categories[0].categoryName}
+                className="text-xs"
+              />
+            )}
             {product.tags
               ?.slice(0, 3)
               .map((tag) => (

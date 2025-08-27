@@ -38,7 +38,9 @@ export function ProductTable({
       <TabFilterProducts
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
+        selectedCount={selectedProducts.length}
       />
+
       <Table className="bg-card">
         <TableHeader className="text-[12px] sm:text-[14px]">
           <TableRow className="hover:bg-transparent">
