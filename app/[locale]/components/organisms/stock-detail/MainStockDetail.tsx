@@ -41,28 +41,27 @@ export default function MainStockDetail() {
         <div className="grid grid-cols-1 gap-6">
           <section>
             <div className="flex flex-col space-y-5">
-              {/* Color y Producto */}
-              <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                <div>
-                  <Label htmlFor="color">{t('color')}</Label>
-                  <div className="mt-2 rounded-md border bg-gray-50 p-2">
-                    <span className="text-gray-800">red</span>
-                  </div>
-                </div>
-                <div>
-                  <Label htmlFor="product">{t('product')}</Label>
-                  <div className="mt-2 rounded-md border bg-gray-50 p-2">
-                    <span className="text-gray-800">Nike t-shirts</span>
-                  </div>
-                </div>
+              {/* Color */}
+              <div>
+                <h2 className="text-2xl font-bold">
+                  {t('color')}: <span className="text-gray-800">red</span>
+                </h2>
+              </div>
+
+              {/* Producto */}
+              <div>
+                <h3 className="text-lg">
+                  {t('product')}{' '}
+                  <span className="text-gray-800">Nike t-shirts</span>
+                </h3>
               </div>
 
               {/* Almacén */}
               <div>
-                <Label htmlFor="warehouse">{t('warehouse')}</Label>
-                <div className="mt-2 rounded-md border bg-gray-50 p-2">
+                <h3 className="text-lg">
+                  {t('warehouse')}{' '}
                   <span className="text-gray-800">Jose Warehouse</span>
-                </div>
+                </h3>
               </div>
 
               {/* Disponibilidad y Reservados */}
@@ -70,15 +69,15 @@ export default function MainStockDetail() {
                 <div>
                   <Label htmlFor="available">{t('available')}</Label>
                   <div className="mt-2 flex items-center">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500 text-white">
-                      G
-                    </div>
                     <Input
                       id="available"
                       type="number"
                       defaultValue="6"
-                      className="ml-2"
-                      onClick={() => setShowUpdateReasonDialog(true)}
+                      className="w-full"
+                      onChange={(e) =>
+                        _setAvailableQty(parseInt(e.target.value))
+                      }
+                      onBlur={() => setShowUpdateReasonDialog(true)}
                     />
                   </div>
                 </div>
