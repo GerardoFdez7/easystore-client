@@ -69,7 +69,7 @@ export function ProductTableRow({
         {product.variants?.length || 0}
       </TableCell>
       <TableCell className="text-foreground">
-        {product.categories?.[0]?.categoryId || 'N/A'}
+        {product.categories?.[0]?.categoryName || 'N/A'}
       </TableCell>
       <TableCell>
         <ProductStatus product={product} />
