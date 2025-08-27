@@ -13,6 +13,7 @@ export interface Product {
   categories?: Array<{
     __typename?: 'ProductCategory';
     categoryId: string;
+    categoryName?: string | null;
   }> | null;
   media?: Array<{
     __typename?: 'Media';
