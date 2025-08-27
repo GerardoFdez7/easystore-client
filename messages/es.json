@@ -1028,5 +1028,26 @@
       "countryRequired": "País requerido",
       "stateRequired": "Estado requerido"
     }
+  },
+  "StockDetail": {
+    "color": "Color",
+    "product": "Producto",
+    "warehouse": "Almacén",
+    "available": "Disponible",
+    "reserved": "Reservados",
+    "productLocation": "Ubicación del Producto",
+    "replenishmentDate": "Fecha Estimada de Reabastecimiento",
+    "lotNumber": "Número de Lote",
+    "serialNumbers": "Números de Serie",
+    "cancel": "Cancelar",
+    "saveChanges": "Guardar Cambios",
+    "deleteStock": "Eliminar Stock",
+    "updateReasonTitle": "Razón de Actualización",
+    "updateReasonDescription": "Por favor, proporcione una razón para actualizar la cantidad disponible",
+    "updateReasonLabel": "Razón",
+    "updateReasonPlaceholder": "Ingrese la razón de la actualización",
+    "confirm": "Confirmar",
+    "deleteStockTitle": "Eliminar Stock",
+    "deleteStockDescription": "¿Está seguro de que desea eliminar este stock? Esta acción no se puede deshacer."
   }
 }

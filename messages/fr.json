@@ -1031,5 +1031,26 @@
       "countryRequired": "Pays requis",
       "stateRequired": "État/Province requis"
     }
+  },
+  "StockDetail": {
+    "color": "Couleur",
+    "product": "Produit",
+    "warehouse": "Entrepôt",
+    "available": "Disponible",
+    "reserved": "Réservé",
+    "productLocation": "Emplacement du Produit",
+    "replenishmentDate": "Date de Réapprovisionnement Estimée",
+    "lotNumber": "Numéro de Lot",
+    "serialNumbers": "Numéros de Série",
+    "cancel": "Annuler",
+    "saveChanges": "Enregistrer les Modifications",
+    "deleteStock": "Supprimer le Stock",
+    "updateReasonTitle": "Raison de la Mise à Jour",
+    "updateReasonDescription": "Veuillez fournir une raison pour mettre à jour la quantité disponible",
+    "updateReasonLabel": "Raison",
+    "updateReasonPlaceholder": "Entrez la raison de la mise à jour",
+    "confirm": "Confirmer",
+    "deleteStockTitle": "Supprimer le Stock",
+    "deleteStockDescription": "Êtes-vous sûr de vouloir supprimer ce stock? Cette action ne peut pas être annulée."
   }
 }
