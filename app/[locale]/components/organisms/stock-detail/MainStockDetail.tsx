@@ -20,51 +20,48 @@ export default function MainStockDetail() {
   const [showUpdateReasonDialog, setShowUpdateReasonDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [updateReason, setUpdateReason] = useState('');
-  // Usamos el prefijo _ para indicar que estas variables podrían usarse en el futuro
+  // We use the _ prefix to indicate that these variables might be used in the future
   const [_availableQty, _setAvailableQty] = useState(6);
 
   const handleUpdateAvailable = () => {
     if (updateReason.trim() === '') return;
-    // Aquí iría la lógica para actualizar la cantidad disponible
+    // Here would be the logic to update the available quantity
     setShowUpdateReasonDialog(false);
     setUpdateReason('');
   };
 
   const handleDeleteStock = () => {
-    // Aquí iría la lógica para eliminar el stock
+    // Here would be the logic to delete the stock
     setShowDeleteDialog(false);
   };
 
   return (
-    <div className="flex-1 pt-2">
-      <div className="mx-auto max-w-7xl px-6 py-6">
+    <div className="flex-1 pt-0">
+      <div className="mx-auto max-w-7xl px-6 py-4">
         <div className="grid grid-cols-1 gap-6">
           <section>
             <div className="flex flex-col space-y-5">
-              {/* Color */}
-              <div>
-                <h2 className="text-2xl font-bold">
-                  {t('color')}: <span className="text-gray-800">red</span>
-                </h2>
+              {/* Color and Warehouse - Two columns */}
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                <div>
+                  <h2 className="text-2xl font-bold">
+                    {t('color')}: <span className="text-gray-800">red</span>
+                  </h2>
+                  {/* Product - Reduced space */}
+                  <h3 className="mt-1 text-lg">
+                    {t('product')}{' '}
+                    <span className="text-gray-800">Nike t-shirts</span>
+                  </h3>
+                </div>
+                <div>
+                  <h3 className="text-lg">
+                    {t('warehouse')}{' '}
+                    <span className="text-gray-800">Jose Warehouse</span>
+                  </h3>
+                </div>
               </div>
 
-              {/* Producto */}
-              <div>
-                <h3 className="text-lg">
-                  {t('product')}{' '}
-                  <span className="text-gray-800">Nike t-shirts</span>
-                </h3>
-              </div>
-
-              {/* Almacén */}
-              <div>
-                <h3 className="text-lg">
-                  {t('warehouse')}{' '}
-                  <span className="text-gray-800">Jose Warehouse</span>
-                </h3>
-              </div>
-
-              {/* Disponibilidad y Reservados */}
+              {/* Availability and Reserved */}
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                 <div>
                   <Label htmlFor="available">{t('available')}</Label>
@@ -87,13 +84,13 @@ export default function MainStockDetail() {
                 </div>
               </div>
 
-              {/* Ubicación del Producto */}
+              {/* Product Location */}
               <div>
                 <Label htmlFor="location">{t('productLocation')}</Label>
                 <Input id="location" className="mt-2" />
               </div>
 
-              {/* Fecha de Reabastecimiento y Número de Lote */}
+              {/* Replenishment Date and Lot Number */}
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                 <div>
                   <Label htmlFor="replenishment-date">
@@ -107,7 +104,7 @@ export default function MainStockDetail() {
                 </div>
               </div>
 
-              {/* Números de Serie */}
+              {/* Serial Numbers */}
               <div>
                 <Label>{t('serialNumbers')}</Label>
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -123,7 +120,7 @@ export default function MainStockDetail() {
                 </div>
               </div>
 
-              {/* Botones */}
+              {/* Buttons */}
               <div className="flex justify-end space-x-4 pt-4">
                 <Button
                   variant="destructive"
@@ -140,7 +137,7 @@ export default function MainStockDetail() {
         </div>
       </div>
 
-      {/* Diálogo para la razón de actualización */}
+      {/* Update reason dialog */}
       <Dialog
         open={showUpdateReasonDialog}
         onOpenChange={setShowUpdateReasonDialog}
@@ -175,7 +172,7 @@ export default function MainStockDetail() {
         </DialogContent>
       </Dialog>
 
-      {/* Diálogo para confirmar eliminación */}
+      {/* Delete confirmation dialog */}
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <DialogContent>
           <DialogHeader>
