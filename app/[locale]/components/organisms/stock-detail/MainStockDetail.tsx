@@ -76,7 +76,7 @@ export default function MainStockDetail() {
                     <Input
                       id="available"
                       type="number"
-                      defaultValue="6"
+                      defaultValue="0"
                       className="w-full"
                       placeholder={t('availablePlaceholder')}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
