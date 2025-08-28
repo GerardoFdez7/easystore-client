@@ -760,5 +760,31 @@
     "logoUpdated": "Logo actualizado correctamente.",
 
     "noPhone": "Sin número de teléfono"
+  },
+  "StockDetail": {
+    "color": "Color",
+    "product": "Producto",
+    "warehouse": "Almacén",
+    "available": "Disponible",
+    "availablePlaceholder": "Ingrese cantidad disponible",
+    "reserved": "Reservados",
+    "reservedPlaceholder": "Ingrese cantidad reservada",
+    "productLocation": "Ubicación del Producto",
+    "productLocationPlaceholder": "Ingrese ubicación del producto",
+    "replenishmentDate": "Fecha Estimada de Reabastecimiento",
+    "replenishmentDatePlaceholder": "Seleccione una fecha",
+    "lotNumber": "Número de Lote",
+    "lotNumberPlaceholder": "Ingrese número de lote",
+    "serialNumbers": "Números de Serie",
+    "cancel": "Cancelar",
+    "saveChanges": "Guardar Cambios",
+    "deleteStock": "Eliminar Stock",
+    "updateReasonTitle": "Razón de Actualización",
+    "updateReasonDescription": "Por favor, proporcione una razón para actualizar la cantidad disponible",
+    "updateReasonLabel": "Razón",
+    "updateReasonPlaceholder": "Ingrese la razón de la actualización",
+    "confirm": "Confirmar",
+    "deleteStockTitle": "Eliminar Stock",
+    "deleteStockDescription": "¿Está seguro de que desea eliminar este stock? Esta acción no se puede deshacer."
   }
 }
