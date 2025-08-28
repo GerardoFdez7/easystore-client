@@ -14,6 +14,10 @@ import {
   DialogFooter,
 } from '@shadcn/ui/dialog';
 import { Textarea } from '@shadcn/ui/textarea';
+import { Calendar } from '@shadcn/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@shadcn/ui/popover';
+import { cn } from 'utils';
+import { format } from 'date-fns';
 
 export default function MainStockDetail() {
   const t = useTranslations('StockDetail');
@@ -22,6 +26,7 @@ export default function MainStockDetail() {
   const [updateReason, setUpdateReason] = useState('');
   // We use the _ prefix to indicate that these variables might be used in the future
   const [_availableQty, _setAvailableQty] = useState(6);
+  const [date, setDate] = useState<Date | undefined>(new Date());
 
   const handleUpdateAvailable = () => {
     if (updateReason.trim() === '') return;
@@ -56,7 +61,9 @@ export default function MainStockDetail() {
                 <div>
                   <h3 className="text-lg">
                     {t('warehouse')}{' '}
-                    <span className="text-gray-800">Jose Warehouse</span>
+                    <span className="border-primary border-b-2 px-1 font-bold text-gray-800">
+                      Jose Warehouse
+                    </span>
                   </h3>
                 </div>
               </div>
@@ -71,7 +78,8 @@ export default function MainStockDetail() {
                       type="number"
                       defaultValue="6"
                       className="w-full"
-                      onChange={(e) =>
+                      placeholder={t('availablePlaceholder')}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         _setAvailableQty(parseInt(e.target.value))
                       }
                       onBlur={() => setShowUpdateReasonDialog(true)}
@@ -80,14 +88,23 @@ export default function MainStockDetail() {
                 </div>
                 <div>
                   <Label htmlFor="reserved">{t('reserved')}</Label>
-                  <Input id="reserved" type="number" className="mt-2" />
+                  <Input
+                    id="reserved"
+                    type="number"
+                    className="mt-2"
+                    placeholder={t('reservedPlaceholder')}
+                  />
                 </div>
               </div>
 
               {/* Product Location */}
               <div>
                 <Label htmlFor="location">{t('productLocation')}</Label>
-                <Input id="location" className="mt-2" />
+                <Input
+                  id="location"
+                  className="mt-2"
+                  placeholder={t('productLocationPlaceholder')}
+                />
               </div>
 
               {/* Replenishment Date and Lot Number */}
@@ -96,11 +113,37 @@ export default function MainStockDetail() {
                   <Label htmlFor="replenishment-date">
                     {t('replenishmentDate')}
                   </Label>
-                  <Input id="replenishment-date" type="date" className="mt-2" />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          'mt-2 w-full justify-start text-left font-normal',
+                          !date && 'text-muted-foreground',
+                        )}
+                      >
+                        {date
+                          ? format(date, 'PPP')
+                          : t('replenishmentDatePlaceholder')}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
                 <div>
                   <Label htmlFor="lot-number">{t('lotNumber')}</Label>
-                  <Input id="lot-number" className="mt-2" />
+                  <Input
+                    id="lot-number"
+                    className="mt-2"
+                    placeholder={t('lotNumberPlaceholder')}
+                  />
                 </div>
               </div>
 
@@ -156,7 +199,9 @@ export default function MainStockDetail() {
                 id="reason"
                 placeholder={t('updateReasonPlaceholder')}
                 value={updateReason}
-                onChange={(e) => setUpdateReason(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                  setUpdateReason(e.target.value)
+                }
               />
             </div>
           </div>
