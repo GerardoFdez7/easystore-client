@@ -148,7 +148,7 @@ export type CreateAttributeInput = {
 };
 
 export type CreateCategoryInput = {
-  cover?: InputMaybe<Scalars['String']['input']>;
+  cover: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   parentId?: InputMaybe<Scalars['ID']['input']>;
@@ -659,6 +659,7 @@ export type Product = {
 export type ProductCategory = {
   __typename?: 'ProductCategory';
   categoryId: Scalars['ID']['output'];
+  categoryName?: Maybe<Scalars['String']['output']>;
 };
 
 export type Query = {
@@ -696,7 +697,7 @@ export type QueryGetAllCategoriesArgs = {
 };
 
 export type QueryGetAllProductsArgs = {
-  categoriesIds?: InputMaybe<Array<Scalars['Int']['input']>>;
+  categoriesIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   includeSoftDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -1864,7 +1865,7 @@ export type FindAllProductsQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Float']['input']>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   categoriesIds?: InputMaybe<
-    Array<Scalars['Int']['input']> | Scalars['Int']['input']
+    Array<Scalars['ID']['input']> | Scalars['ID']['input']
   >;
   type?: InputMaybe<TypeEnum>;
   sortBy?: InputMaybe<SortBy>;
@@ -1880,6 +1881,7 @@ export type FindAllProductsQuery = {
     total: number;
     products: Array<{
       __typename?: 'Product';
+      id: string;
       name: string;
       brand?: string | null;
       cover: string;
@@ -1894,6 +1896,7 @@ export type FindAllProductsQuery = {
       categories?: Array<{
         __typename?: 'ProductCategory';
         categoryId: string;
+        categoryName?: string | null;
       }> | null;
       media?: Array<{
         __typename?: 'Media';
@@ -4640,7 +4643,7 @@ export const FindAllProductsDocument = gql`
   query findAllProducts(
     $page: Float = 1
     $limit: Float = 10
-    $categoriesIds: [Int!] = []
+    $categoriesIds: [ID!] = []
     $type: TypeEnum = PHYSICAL
     $sortBy: SortBy = NAME
     $sortOrder: SortOrder = ASC
@@ -4658,10 +4661,12 @@ export const FindAllProductsDocument = gql`
       name: $name
     ) {
       products {
+        id
         name
         brand
         categories {
           categoryId
+          categoryName
         }
         cover
         createdAt

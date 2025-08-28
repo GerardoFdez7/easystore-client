@@ -568,6 +568,24 @@
     "completed": "Completado",
     "cancelled": "Cancelado"
   },
+  "Products": {
+    "addProduct": "Adicionar produto",
+    "status": "Status",
+    "category": "Categoria",
+    "searchProducts": "Buscar produtos",
+    "all": "Todos",
+    "actives": "Ativos",
+    "archived": "Arquivados",
+    "physical": "Físico",
+    "digital": "Digital",
+    "type": "Tipo",
+    "products": "Produtos",
+    "noTypeFound": "Tipo não encontrado",
+    "noCategoryFound": "Categoria não encontrada",
+    "search": "Buscar...",
+    "price": "Preço",
+    "variants": "Variantes"
+  },
   "Privacy": {
     "tableOfContents": "Índice",
     "pageTitle": "Política de Privacidade",
