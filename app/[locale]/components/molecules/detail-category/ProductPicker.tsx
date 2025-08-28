@@ -91,12 +91,12 @@ export default function ProductPicker({
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-md ring-1 ring-gray-200">
+      <div className="overflow-hidden rounded-md">
         {filtered.map((p, idx) => (
           <div
             key={p.id}
             className={cn(
-              'flex flex-col gap-2 border-b border-gray-100 bg-white px-3 py-2 last:border-none',
+              'bg-card border-background flex flex-col gap-2 border-b px-3 py-2 last:border-none',
               'md:grid md:grid-cols-[40px_1fr_auto_auto_40px] md:items-center md:gap-2',
             )}
           >
@@ -109,7 +109,7 @@ export default function ProductPicker({
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="relative h-8 w-8 overflow-hidden rounded-full bg-gray-100">
+              <div className="relative h-8 w-8 overflow-hidden rounded-full">
                 <Image
                   src={p.imageUrl}
                   alt={p.name}
@@ -117,7 +117,7 @@ export default function ProductPicker({
                   className="object-cover"
                 />
               </div>
-              <span className="truncate text-sm text-[#423f3d]">{p.name}</span>
+              <span className="text-text truncate text-sm">{p.name}</span>
             </div>
 
             <div className="md:justify-end">
@@ -125,8 +125,8 @@ export default function ProductPicker({
                 className={cn(
                   'rounded-full px-3 py-1 text-[11px]',
                   p.status === 'active'
-                    ? 'bg-emerald-100 text-emerald-700'
-                    : 'bg-gray-200 text-gray-600',
+                    ? 'bg-secondary/10 text-secondary'
+                    : 'bg-foreground/10 text-text',
                 )}
                 variant="secondary"
               >
@@ -136,7 +136,7 @@ export default function ProductPicker({
               </Badge>
             </div>
 
-            <div className="hidden text-right text-xs text-slate-400 md:block">
+            <div className="text-text hidden text-right text-xs md:block">
               #{idx + 1}
             </div>
 
@@ -148,7 +148,7 @@ export default function ProductPicker({
                 disabled={disabled}
                 aria-label="Remove"
               >
-                <X className="h-4 w-4 text-slate-500" />
+                <X className="text-text text-destructive h-4 w-4" />
               </Button>
             </div>
           </div>

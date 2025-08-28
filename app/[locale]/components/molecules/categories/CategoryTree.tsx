@@ -27,7 +27,7 @@ function TreeItem({
       <Button
         variant="ghost"
         size="sm"
-        className="w-full justify-start gap-2 py-1 text-left text-sm text-[#423f3d] hover:bg-gray-100"
+        className="text-text w-full justify-start gap-2 py-1 text-left text-sm hover:bg-gray-100"
         onClick={() => hasChildren && setOpen((v) => !v)}
         aria-expanded={hasChildren ? open : undefined}
       >

@@ -1,7 +1,7 @@
 'use client';
 
 import { SidebarInset, SidebarProvider } from '@shadcn/ui/sidebar';
-import { SiderbarDashboard } from '@molecules/shared/Sidebar';
+import Sidebar from '@organisms/shared/Sidebar';
 import { SiteHeader } from '@atoms/shared/SiteHeader';
 import { useTranslations } from 'next-intl';
 
@@ -40,7 +40,7 @@ export default function MainCategory() {
           } as React.CSSProperties
         }
       >
-        <SiderbarDashboard />
+        <Sidebar />
         <SidebarInset>
           <SiteHeader title={t('welcomeCategory')} />
 

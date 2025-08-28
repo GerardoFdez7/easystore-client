@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { SidebarInset, SidebarProvider } from '@shadcn/ui/sidebar';
-import { SiderbarDashboard } from '@molecules/shared/Sidebar';
+import Siderbar from '@organisms/shared/Sidebar';
 import { SiteHeader } from '@atoms/shared/SiteHeader';
 import DetailCategory from '@organisms/detail-category/CategoryDetail';
 import WelcomeDetailCategory from '@atoms/detail-category/WelcomeDetailCategory';
@@ -23,7 +23,7 @@ export default function MainDetailCategory({ id }: { id: string }) {
           } as React.CSSProperties
         }
       >
-        <SiderbarDashboard />
+        <Siderbar />
         <SidebarInset>
           <SiteHeader title={isNew ? t('addCategory') : t('editCategory')} />
 
