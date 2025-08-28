@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { ProductsToolbar } from '@molecules/products/Toolbar';
 import { FilterType } from '@atoms/products/TabFilterProducts';
 import { useTranslations } from 'next-intl';
-import { useGetAllProducts } from '@hooks/products/useGetAllProducts';
+import { useGetAllProducts } from '@hooks/domains/products/useGetAllProducts';
 import { SortBy } from '@graphql/generated';
 
 export default function MainDashboard() {

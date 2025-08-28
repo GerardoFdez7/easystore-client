@@ -8,12 +8,14 @@ export type FilterProductsProps = {
   selectedFilter: FilterType;
   setSelectedFilter: (filter: FilterType) => void;
   selectedCount: number;
+  selectedProductIds: string[];
 };
 
 export default function TabFilterProducts({
   selectedFilter,
   setSelectedFilter,
   selectedCount,
+  selectedProductIds,
 }: FilterProductsProps) {
   const t = useTranslations('Products');
 
@@ -48,7 +50,7 @@ export default function TabFilterProducts({
         </Tabs>
         {selectedCount > 0 && (
           <div className="mr-2">
-            <ProductActions />
+            <ProductActions selectedProductIds={selectedProductIds} />
           </div>
         )}
       </div>

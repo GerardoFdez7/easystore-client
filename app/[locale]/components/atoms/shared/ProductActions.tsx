@@ -11,12 +11,13 @@ import { MoreHorizontal } from 'lucide-react';
 import ArchivedProduct from './ArchivedProduct';
 import DeleteProduct from './DeleteProduct';
 
-export default function ProductActions() {
-  const handleDelete = () => {
-    console.log('Deleting product...');
-    // Aquí iría la lógica para eliminar el producto
-  };
+interface ProductActionsProps {
+  selectedProductIds: string[];
+}
 
+export default function ProductActions({
+  selectedProductIds,
+}: ProductActionsProps) {
   const handleArchive = () => {
     console.log('Archiving product...');
     // Aquí iría la lógica para archivar/desarchivar el producto
@@ -40,7 +41,7 @@ export default function ProductActions() {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild className="p-0">
           <div>
-            <DeleteProduct onConfirm={handleDelete} />
+            <DeleteProduct productIds={selectedProductIds} />
           </div>
         </DropdownMenuItem>
       </DropdownMenuContent>

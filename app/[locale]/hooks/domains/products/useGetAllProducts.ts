@@ -4,7 +4,7 @@ import {
   FindAllProductsQuery,
   FindAllProductsQueryVariables,
 } from '@graphql/generated';
-import useQuery from '../useQuery';
+import useQuery from '../../useQuery';
 
 export const useGetAllProducts = (
   variables?: FindAllProductsQueryVariables,
