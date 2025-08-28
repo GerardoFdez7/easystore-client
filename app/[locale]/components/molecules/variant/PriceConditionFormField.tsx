@@ -62,6 +62,7 @@ export default function PriceConditionFormField({
                   {...field}
                   id="price"
                   inputMode="decimal"
+                  required={true}
                   className="sm:w-60"
                   placeholder={t('pricePlaceholder')}
                   value={String(field.value ?? '')}
@@ -93,6 +94,7 @@ export default function PriceConditionFormField({
             <FormControl>
               <Select
                 value={field.value || 'NEW'}
+                required={true}
                 onValueChange={(value) => field.onChange(value as Condition)}
               >
                 <SelectTrigger

@@ -11,6 +11,7 @@ import CodesListFormField from '@molecules/variant/CodesListFormField';
 import PersonalizationOptionsFormField from '@molecules/variant/PersonalizationOptionsFormField';
 import InstallmentPaymentFormField from '@molecules/variant/InstallmentPaymentFormField';
 import WarrantyFormField from '@molecules/variant/WarrantyFormField';
+import SaveButton from '@atoms/shared/SaveButton';
 
 // Mock useVariant hook for testing purposes
 function useVariant() {
@@ -44,7 +45,7 @@ function useVariant() {
 }
 
 export default function MainVariant() {
-  const { form, handleSubmit } = useVariant(); // TO DO: add isLoading state
+  const { form, handleSubmit, isLoading } = useVariant();
   return (
     <main className="mx-4 sm:mx-auto">
       <FormProvider {...form}>
@@ -64,6 +65,9 @@ export default function MainVariant() {
             <PersonalizationOptionsFormField />
             <InstallmentPaymentFormField />
             <WarrantyFormField />
+            <div className="flex justify-end">
+              <SaveButton type="submit" isLoading={isLoading} size="lg" />
+            </div>
           </form>
         </Form>
       </FormProvider>

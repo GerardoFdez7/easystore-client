@@ -79,6 +79,7 @@ export default function AttributesCard() {
                     <Input
                       id="attributeKey"
                       type="text"
+                      required={true}
                       placeholder={t('attributeKeyPlaceholder')}
                       value={newKey}
                       onChange={(e) => setNewKey(e.target.value)}
@@ -89,6 +90,7 @@ export default function AttributesCard() {
                       {t('attributeValue')}
                     </FormLabel>
                     <Input
+                      required={true}
                       placeholder={t('attributeValuePlaceholder')}
                       value={newValue}
                       onChange={(e) => setNewValue(e.target.value)}

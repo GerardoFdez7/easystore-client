@@ -59,10 +59,10 @@ export function useProfile() {
   const validators = {
     domain: z
       .string()
-      .trim()
-      .min(3, { message: t('domainTooShort') })
-      .max(255, { message: t('domainTooLong') })
-      .refine((v) => !/\s/.test(v), { message: t('noSpacesAllowed') }),
+      .regex(
+        /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/i,
+        { message: t('invalidDomain') },
+      ),
     phone: z
       .string()
       .trim()
@@ -77,8 +77,12 @@ export function useProfile() {
       .email({ message: t('invalidEmailFormat') }),
     description: z
       .string()
-      .trim()
-      .max(2000, { message: t('descriptionTooLong') }),
+      .refine((val) => val.trim() === '' || val.trim().length >= 20, {
+        message: t('descriptionTooShort'),
+      })
+      .refine((val) => val.length <= 2000, {
+        message: t('descriptionTooLong'),
+      }),
     businessName: z
       .string()
       .trim()
@@ -153,99 +157,154 @@ export function useProfile() {
   const updateDomain = async (next: string) => {
     const parsed = validators.domain.safeParse(next);
     if (!parsed.success) {
-      toast.error(t('submitErrorTitle'), {
-        description: parsed.error.issues[0]?.message,
-      });
-      return false;
+      return {
+        success: false,
+        error: parsed.error.issues[0]?.message || t('unknownError'),
+      };
     }
-    await updateField({ domain: parsed.data });
-    toast.success(t('savedChangesTitle'), { description: t('domainUpdated') });
-    return true;
+    try {
+      await updateField({ domain: parsed.data });
+      toast.success(t('savedChangesTitle'), {
+        description: t('domainUpdated'),
+      });
+      return { success: true };
+    } catch (e: unknown) {
+      return {
+        success: false,
+        error: errorToMessage(e, t('unknownError')),
+      };
+    }
   };
 
   const updatePhone = async (next: string) => {
     const parsed = validators.phone.safeParse(next);
     if (!parsed.success) {
-      toast.error(t('submitErrorTitle'), {
-        description: parsed.error.issues[0]?.message,
-      });
-      return false;
+      return {
+        success: false,
+        error: parsed.error.issues[0]?.message || t('unknownError'),
+      };
     }
-    const value = parsed.data.trim() === '' ? null : parsed.data;
-    await updateField({ defaultPhoneNumberId: value });
-    toast.success(t('savedChangesTitle'), { description: t('phoneUpdated') });
-    return true;
+    try {
+      const value = parsed.data.trim() === '' ? null : parsed.data;
+      await updateField({ defaultPhoneNumberId: value });
+      toast.success(t('savedChangesTitle'), { description: t('phoneUpdated') });
+      return { success: true };
+    } catch (e: unknown) {
+      return {
+        success: false,
+        error: errorToMessage(e, t('unknownError')),
+      };
+    }
   };
 
   const updateEmail = async (next: string) => {
     const parsed = validators.email.safeParse(next);
     if (!parsed.success) {
-      toast.error(t('submitErrorTitle'), {
-        description: parsed.error.issues[0]?.message,
-      });
-      return false;
+      return {
+        success: false,
+        error: parsed.error.issues[0]?.message || t('unknownError'),
+      };
     }
-    await updateField({ email: parsed.data });
-    toast.success(t('savedChangesTitle'), { description: t('emailUpdated') });
-    return true;
+    try {
+      await updateField({ email: parsed.data });
+      toast.success(t('savedChangesTitle'), { description: t('emailUpdated') });
+      return { success: true };
+    } catch (e: unknown) {
+      return {
+        success: false,
+        error: errorToMessage(e, t('unknownError')),
+      };
+    }
   };
 
   const updateDescription = async (next: string) => {
     const parsed = validators.description.safeParse(next);
     if (!parsed.success) {
-      toast.error(t('submitErrorTitle'), {
-        description: parsed.error.issues[0]?.message,
-      });
-      return false;
+      return {
+        success: false,
+        error: parsed.error.issues[0]?.message || t('unknownError'),
+      };
     }
-    await updateField({ description: parsed.data });
-    toast.success(t('savedChangesTitle'), {
-      description: t('descriptionUpdated'),
-    });
-    return true;
+    try {
+      const value = parsed.data.trim() === '' ? null : parsed.data;
+      await updateField({ description: value });
+      // Only show success toast if there's actual content
+      if (value !== null) {
+        toast.success(t('savedChangesTitle'), {
+          description: t('descriptionUpdated'),
+        });
+      }
+      return { success: true };
+    } catch (e: unknown) {
+      return {
+        success: false,
+        error: errorToMessage(e, t('unknownError')),
+      };
+    }
   };
 
   const updateBusinessName = async (next: string) => {
     const parsed = validators.businessName.safeParse(next);
     if (!parsed.success) {
-      toast.error(t('submitErrorTitle'), {
-        description: parsed.error.issues[0]?.message,
-      });
-      return false;
+      return {
+        success: false,
+        error: parsed.error.issues[0]?.message || t('unknownError'),
+      };
     }
-    await updateField({ businessName: parsed.data });
-    toast.success(t('savedChangesTitle'), {
-      description: t('businessNameUpdated'),
-    });
-    return true;
+    try {
+      await updateField({ businessName: parsed.data });
+      toast.success(t('savedChangesTitle'), {
+        description: t('businessNameUpdated'),
+      });
+      return { success: true };
+    } catch (e: unknown) {
+      return {
+        success: false,
+        error: errorToMessage(e, t('unknownError')),
+      };
+    }
   };
 
   const updateOwnerName = async (next: string) => {
     const parsed = validators.ownerName.safeParse(next);
     if (!parsed.success) {
-      toast.error(t('submitErrorTitle'), {
-        description: parsed.error.issues[0]?.message,
-      });
-      return false;
+      return {
+        success: false,
+        error: parsed.error.issues[0]?.message || t('unknownError'),
+      };
     }
-    await updateField({ ownerName: parsed.data });
-    toast.success(t('savedChangesTitle'), {
-      description: t('ownerNameUpdated'),
-    });
-    return true;
+    try {
+      await updateField({ ownerName: parsed.data });
+      toast.success(t('savedChangesTitle'), {
+        description: t('ownerNameUpdated'),
+      });
+      return { success: true };
+    } catch (e: unknown) {
+      return {
+        success: false,
+        error: errorToMessage(e, t('unknownError')),
+      };
+    }
   };
 
   const updateLogo = async (url: string | null) => {
     const parsed = validators.logo.safeParse(url);
     if (!parsed.success) {
-      toast.error(t('submitErrorTitle'), {
-        description: parsed.error.issues[0]?.message,
-      });
-      return false;
+      return {
+        success: false,
+        error: parsed.error.issues[0]?.message || t('unknownError'),
+      };
     }
-    await updateField({ logo: parsed.data });
-    toast.success(t('savedChangesTitle'), { description: t('logoUpdated') });
-    return true;
+    try {
+      await updateField({ logo: parsed.data });
+      toast.success(t('savedChangesTitle'), { description: t('logoUpdated') });
+      return { success: true };
+    } catch (e: unknown) {
+      return {
+        success: false,
+        error: errorToMessage(e, t('unknownError')),
+      };
+    }
   };
 
   /** Phone derived values */
@@ -261,6 +320,7 @@ export function useProfile() {
     hasPhone,
     phoneDisplay,
     phoneActionLabel,
+    validators,
     actions: {
       updateDomain,
       updatePhone,
@@ -269,7 +329,7 @@ export function useProfile() {
       updateBusinessName,
       updateOwnerName,
       updateLogo,
-      mutate: refetch, // still exposed if you want to force a refresh
+      mutate: refetch, // still exposed if we need to force a refresh
     },
   };
 }

@@ -53,7 +53,7 @@ export function DescriptionEditor({
         onChange={(e) => setDescription(e.target.value)}
         readOnly={!isEditing}
         placeholder={t('enterDescription')}
-        className="placeholder:text-text min-h-[140px] w-full resize-none rounded-lg border border-gray-200 bg-white p-3 shadow-sm sm:min-h-[200px]"
+        className="min-h-[140px] w-full max-w-sm resize-none items-center rounded-lg border border-gray-200 bg-white p-3 shadow-sm sm:min-h-[200px] sm:max-w-md"
       />
     </div>
   );
