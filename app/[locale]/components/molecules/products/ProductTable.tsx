@@ -4,6 +4,7 @@ import { Checkbox } from '@shadcn/ui/checkbox';
 import {
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -39,6 +40,7 @@ export function ProductTable({
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
         selectedCount={selectedProducts.length}
+        selectedProductIds={selectedProducts}
       />
 
       <Table className="bg-card">
@@ -69,14 +71,24 @@ export function ProductTable({
           </TableRow>
         </TableHeader>
         <TableBody className="text-[12px] sm:text-[14px]">
-          {products.map((product) => (
-            <ProductTableRow
-              key={product.id}
-              product={product}
-              isSelected={selectedProducts.includes(product.id)}
-              onSelect={(checked) => onSelectProduct(product.id, checked)}
-            />
-          ))}
+          {products.length > 0 ? (
+            products.map((product) => (
+              <ProductTableRow
+                key={product.id}
+                product={product}
+                isSelected={selectedProducts.includes(product.id)}
+                onSelect={(checked) => onSelectProduct(product.id, checked)}
+              />
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={7} className="h-24 text-center">
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <p className="text-muted-foreground">No products found</p>
+                </div>
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </div>

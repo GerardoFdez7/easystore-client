@@ -10,12 +10,15 @@ import {
   AlertDialogTrigger,
 } from '@shadcn/ui/alert-dialog';
 import { Trash2 } from 'lucide-react';
+import { useDeleteProduct } from '@hooks/domains/products/useDeleteProduct';
 
-export default function DeleteProduct({
-  onConfirm,
-}: {
-  onConfirm: () => void;
-}) {
+interface DeleteProductProps {
+  productIds: string[];
+}
+
+export default function DeleteProduct({ productIds }: DeleteProductProps) {
+  const { handleDelete, isLoading } = useDeleteProduct();
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -38,10 +41,19 @@ export default function DeleteProduct({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            onClick={onConfirm}
+            onClick={() => {
+              const deletePromises = productIds.map((id) => handleDelete(id));
+              Promise.all(deletePromises).catch((error) => {
+                console.error('Error deleting products:', error);
+              });
+              return undefined;
+            }}
             className="bg-[#ed2727] text-white hover:bg-[#d12525]"
+            disabled={isLoading}
           >
-            Delete
+            {isLoading
+              ? 'Deleting...'
+              : `Delete${productIds.length > 1 ? ` (${productIds.length})` : ''}`}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
