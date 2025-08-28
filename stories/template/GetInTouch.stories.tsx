@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import GetInTouchTemplate from '@templates/GetInTouch';
 
 const meta: Meta<typeof GetInTouchTemplate> = {

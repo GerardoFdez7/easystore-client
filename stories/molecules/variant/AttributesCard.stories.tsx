@@ -1,47 +1,69 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import React from 'react';
-import AttributesCard from '@molecules/variant/AttributesCard';
+import { useForm, FormProvider } from 'react-hook-form';
+import AttributesCard from '@molecules/variant/AttributesFormField';
 import type { Attribute } from '@lib/utils/types/variant';
+import AttributesFormField from '@molecules/variant/AttributesFormField';
 
 const meta: Meta<typeof AttributesCard> = {
-  title: 'Molecules/Variant/AttributesCard',
-  component: AttributesCard,
+  title: 'Molecules/Variant/AttributesFormField',
+  component: AttributesFormField,
   parameters: { layout: 'centered' },
 };
 export default meta;
 
 type Story = StoryObj<typeof AttributesCard>;
 
-const t = (k: string) =>
-  (
-    ({
-      attributes: 'Attributes',
-      addAttribute: 'Add Attribute',
-      attributeKey: 'Key',
-      attributeKeyPlaceholder: 'Enter key',
-      attributeValue: 'Value',
-      attributeValuePlaceholder: 'Enter value',
-      noAttributesYet: 'No attributes yet.',
-      moveUp: 'Move up',
-      moveDown: 'Move down',
-      delete: 'Delete',
-    }) as Record<string, string>
-  )[k] ?? k;
+interface FormData {
+  attributes: Attribute[];
+}
 
 const Wrapper: React.FC = () => {
-  const [attributes, setAttributes] = React.useState<Attribute[]>([
-    { id: '1', key: '', value: '' },
-  ]);
+  const methods = useForm<FormData>({
+    defaultValues: {
+      attributes: [
+        { key: 'Color', value: 'Red' },
+        { key: 'Size', value: 'Large' },
+      ],
+    },
+  });
 
   return (
-    <div className="w-[720px]">
-      <AttributesCard
-        t={t}
-        attributes={attributes}
-        setAttributes={setAttributes}
-      />
-    </div>
+    <FormProvider {...methods}>
+      <form className="w-full max-w-2xl space-y-4">
+        <AttributesFormField />
+        <div className="bg-muted mt-4 rounded-lg p-4">
+          <h4 className="mb-2 text-sm font-medium">Form Values:</h4>
+          <pre className="text-xs">
+            {JSON.stringify(methods.watch('attributes'), null, 2)}
+          </pre>
+        </div>
+      </form>
+    </FormProvider>
+  );
+};
+
+const EmptyWrapper: React.FC = () => {
+  const methods = useForm<FormData>({
+    defaultValues: {
+      attributes: [],
+    },
+  });
+
+  return (
+    <FormProvider {...methods}>
+      <form className="w-full max-w-2xl space-y-4">
+        <AttributesFormField />
+        <div className="bg-muted mt-4 rounded-lg p-4">
+          <h4 className="mb-2 text-sm font-medium">Form Values:</h4>
+          <pre className="text-xs">
+            {JSON.stringify(methods.watch('attributes'), null, 2)}
+          </pre>
+        </div>
+      </form>
+    </FormProvider>
   );
 };
 
 export const Default: Story = { render: () => <Wrapper /> };
+export const Empty: Story = { render: () => <EmptyWrapper /> };

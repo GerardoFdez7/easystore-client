@@ -3,7 +3,7 @@
 import React from 'react';
 import { FormProvider } from 'react-hook-form';
 import { Form } from '@shadcn/ui/form';
-import ContactFields from '@molecules/get-in-touch/ContactField';
+import ContactFields from '@molecules/get-in-touch/ContactFields';
 import FeaturesList from '@molecules/get-in-touch/FeatureList';
 import ButtonLoadable from '@atoms/shared/ButtonLoadable';
 import { useTranslations } from 'next-intl';
@@ -15,7 +15,7 @@ export default function MainTouch() {
   const { form, handleSubmit, isLoading } = useTouch();
 
   return (
-    <div className="flex-1 bg-gray-100 pt-16">
+    <main className="flex-1 bg-gray-100 pt-16">
       <div className="mx-auto max-w-7xl px-6 py-12">
         <div className="grid grid-cols-1 items-start gap-16 lg:grid-cols-2">
           <section>
@@ -59,6 +59,6 @@ export default function MainTouch() {
           </section>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

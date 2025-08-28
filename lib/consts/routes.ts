@@ -5,7 +5,6 @@ export const PublicRoutes = [
   '/register',
   '/terms',
   '/privacy',
-  '/contact',
   '/touch',
 ] as const;
 

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import FeaturesList from '@molecules/get-in-touch/FeatureList';
 
 const meta: Meta<typeof FeaturesList> = {

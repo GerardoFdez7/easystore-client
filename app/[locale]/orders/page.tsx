@@ -1,17 +1,5 @@
-import HeaderDashboard from '@organisms/dashboard/HeaderDashboard';
-import SidebarLayout from '@organisms/shared/SidebarLayout';
-import UnderConstructionTemplate from '@templates/UnderConstruction';
-import { useTranslations } from 'next-intl';
+import OrdersTemplate from '@templates/Orders';
 
 export default function OrdersPage() {
-  const t = useTranslations('Dashboard');
-
-  return (
-    <>
-      <HeaderDashboard />
-      <SidebarLayout title={t('orders')}>
-        <UnderConstructionTemplate />
-      </SidebarLayout>
-    </>
-  );
+  return <OrdersTemplate />;
 }

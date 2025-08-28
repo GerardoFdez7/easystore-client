@@ -1,8 +1,8 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { useForm, FormProvider } from 'react-hook-form';
 import { Form } from '@shadcn/ui/form';
-import ContactFields from '@molecules/get-in-touch/ContactField';
+import ContactFields from '@molecules/get-in-touch/ContactFields';
 
 const meta: Meta<typeof ContactFields> = {
   title: 'Molecules/GetInTouch/ContactFields',
