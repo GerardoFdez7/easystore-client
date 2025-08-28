@@ -1,4 +1,4 @@
-import HeaderCategory from '@organisms/category/HeaderCategory';
+import HeaderCategory from '@organisms/categories/HeaderCategory';
 import MainDetailCategory from '@organisms/detail-category/MainDetailCategory';
 
 export default function CategoryDetail({ id }: { id: string }) {

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import Input from '@atoms/shared/OutsideInput';
+import { Input } from '@shadcn/ui/input';
 import { Textarea } from '@shadcn/ui/textarea';
 import { Button } from '@shadcn/ui/button';
 import ProductPicker, {
@@ -12,7 +12,11 @@ import ProductPicker, {
 import { cn } from 'utils';
 import { getCategoryById, upsertCategory } from '@lib/data/categories';
 
-export default function CategoryDetail({ id }: { id: string }) {
+type Props = {
+  id: string;
+  onTitleChange?: (title: string) => void;
+};
+export default function CategoryDetail({ id, onTitleChange }: Props) {
   const t = useTranslations('CategoryDetail');
   const router = useRouter();
   const params = useParams<{ locale?: string }>();
@@ -75,6 +79,10 @@ export default function CategoryDetail({ id }: { id: string }) {
     };
   }, [id, isNew, locale, router]);
 
+  useEffect(() => {
+    onTitleChange?.(title);
+  }, [title, onTitleChange]);
+
   const selectedIds = useMemo(
     () => products.filter((p) => p.selected).map((p) => p.id),
     [products],
@@ -105,33 +113,36 @@ export default function CategoryDetail({ id }: { id: string }) {
   const handleCancel = () => router.back();
 
   return (
-    <div className="w-full">
-      {/* Bloque de inputs */}
-      <div className="mx-auto w-full max-w-4xl">
-        <div className="mb-4">
-          <label className="mb-1 block text-sm font-medium text-[#64748b]">
+    <div className="mx-auto max-w-4xl">
+      <div className="grid gap-6">
+        <div className="space-y-1">
+          <label
+            htmlFor="title"
+            className="block text-sm font-medium text-[#64748b]"
+          >
             {t('title')}
           </label>
           <Input
+            id="title"
             value={title}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setTitle(e.target.value)
-            }
+            onChange={(e) => setTitle(e.target.value)}
             placeholder={t('titlePlaceholder')}
-            className="bg-white"
+            className="h-12 bg-white"
             disabled={loading}
           />
         </div>
 
-        <div className="mb-6 sm:mb-8">
-          <label className="mb-1 block text-sm font-medium text-[#64748b]">
+        <div className="space-y-1">
+          <label
+            htmlFor="description"
+            className="block text-sm font-medium text-[#64748b]"
+          >
             {t('description')}
           </label>
           <Textarea
+            id="description"
             value={description}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-              setDescription(e.target.value)
-            }
+            onChange={(e) => setDescription(e.target.value)}
             placeholder={t('descriptionPlaceholder')}
             className="min-h-[120px] bg-white"
             disabled={loading}
@@ -139,10 +150,9 @@ export default function CategoryDetail({ id }: { id: string }) {
         </div>
       </div>
 
-      {/* Caja de productos */}
       <div
         className={cn(
-          'mx-auto w-full max-w-4xl rounded-lg bg-white p-3 shadow-sm ring-1 ring-gray-200 sm:p-4',
+          'mt-6 rounded-lg bg-white p-3 shadow-sm ring-1 ring-gray-200 sm:p-4',
           loading && 'opacity-70',
         )}
       >
@@ -161,8 +171,8 @@ export default function CategoryDetail({ id }: { id: string }) {
         />
       </div>
 
-      <div className="mt-6 sm:mt-8">
-        <div className="mx-auto flex w-full max-w-7xl flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
+      <div className="mt-6 px-3 sm:mt-8 sm:px-4">
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
           <Button
             variant="outline"
             onClick={handleCancel}
