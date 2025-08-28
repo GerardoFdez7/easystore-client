@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import MainTouch from '@organisms/get-in-touch/MainTouch';
 
 const meta: Meta<typeof MainTouch> = {

@@ -1,38 +1,72 @@
 'use client';
 
-import { SiteHeader } from '@atoms/shared/SiteHeader';
-import { SidebarInset, SidebarProvider } from '@shadcn/ui/sidebar';
-import { SiderbarDashboard } from '@molecules/shared/Sidebar';
-import { useTranslations } from 'next-intl';
-import WelcomeVariant from '@atoms/variant/WelcomeVariant';
-import VariantForm from '@organisms/variant/VariantForm';
+import React from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { Form } from '@shadcn/ui/form';
+import MediaUploader from '@organisms/shared/MediaUploader';
+import PriceConditionFormField from '@molecules/variant/PriceConditionFormField';
+import AttributesFormField from '@molecules/variant/AttributesFormField';
+import DimensionsRow from '@molecules/variant/DimensionRowFormField';
+import CodesListFormField from '@molecules/variant/CodesListFormField';
+import PersonalizationOptionsFormField from '@molecules/variant/PersonalizationOptionsFormField';
+import InstallmentPaymentFormField from '@molecules/variant/InstallmentPaymentFormField';
+import WarrantyFormField from '@molecules/variant/WarrantyFormField';
+
+// Mock useVariant hook for testing purposes
+function useVariant() {
+  const form = useForm({
+    defaultValues: {
+      price: '',
+      condition: '',
+      attributes: [],
+      height: '',
+      width: '',
+      length: '',
+      sku: '',
+      upc: '',
+      ean: '',
+      isbn: '',
+      barcode: '',
+      personalizationOptions: [],
+      installmentPayments: [],
+      warranties: [],
+      isArchived: false,
+    },
+  });
+
+  const handleSubmit = (data: unknown) => {
+    console.log('Form submitted:', data);
+  };
+
+  const isLoading = false;
+
+  return { form, handleSubmit, isLoading };
+}
 
 export default function MainVariant() {
-  const t = useTranslations('Variant');
-
+  const { form, handleSubmit } = useVariant(); // TO DO: add isLoading state
   return (
-    <main className="pt-22 2xl:m-5">
-      <SidebarProvider
-        style={
-          {
-            '--sidebar-width': 'calc(var(--spacing) * 72)',
-            '--header-height': 'calc(var(--spacing) * 12)',
-          } as React.CSSProperties
-        }
-      >
-        <SiderbarDashboard />
-        <SidebarInset>
-          <SiteHeader title={t('variant')} />
-          <div className="flex flex-1 flex-col">
-            <div className="@container/main flex flex-1 flex-col gap-2">
-              <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-                <WelcomeVariant />
-                <VariantForm />
-              </div>
-            </div>
-          </div>
-        </SidebarInset>
-      </SidebarProvider>
+    <main className="mx-4 sm:mx-auto">
+      <FormProvider {...form}>
+        <Form {...form}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              void form.handleSubmit(handleSubmit)(e);
+            }}
+            className="space-y-6"
+          >
+            <MediaUploader />
+            <PriceConditionFormField />
+            <AttributesFormField />
+            <DimensionsRow />
+            <CodesListFormField />
+            <PersonalizationOptionsFormField />
+            <InstallmentPaymentFormField />
+            <WarrantyFormField />
+          </form>
+        </Form>
+      </FormProvider>
     </main>
   );
 }

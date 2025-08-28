@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import VariantTemplate from '@templates/Variant';
 
 const meta: Meta<typeof VariantTemplate> = {
@@ -6,6 +6,9 @@ const meta: Meta<typeof VariantTemplate> = {
   component: VariantTemplate,
   parameters: {
     layout: 'fullscreen',
+    nextjs: {
+      appDirectory: true,
+    },
   },
   tags: ['autodocs'],
 };
