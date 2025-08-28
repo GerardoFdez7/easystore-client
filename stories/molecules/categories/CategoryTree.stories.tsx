@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import CategoryTree from '@molecules/category/CategoryTree';
+import CategoryTree from '@molecules/categories/CategoryTree';
 
 const meta: Meta<typeof CategoryTree> = {
   title: 'Molecules/Category/CategoryTree',

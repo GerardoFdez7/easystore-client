@@ -1,20 +1,21 @@
+// WelcomeCategory.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react';
-import SearchCategory from '@atoms/category/SearchCategory';
+import WelcomeCategory from '@atoms/categories/WelcomeCategory';
 import { NextIntlClientProvider } from 'next-intl';
 
 const messagesMap = {
-  en: { Category: { searchPlaceholder: 'Search categories...' } },
-  es: { Category: { searchPlaceholder: 'Buscar categorías...' } },
-  fr: { Category: { searchPlaceholder: 'Rechercher des catégories...' } },
-  it: { Category: { searchPlaceholder: 'Cerca categorie...' } },
-  pt: { Category: { searchPlaceholder: 'Buscar categorias...' } },
+  en: { Category: { welcomeCategory: 'Categories' } },
+  es: { Category: { welcomeCategory: 'Categorías' } },
+  fr: { Category: { welcomeCategory: 'Catégories' } },
+  it: { Category: { welcomeCategory: 'Categorie' } },
+  pt: { Category: { welcomeCategory: 'Categorias' } },
 };
 
 type Locale = keyof typeof messagesMap;
 
-const meta: Meta<typeof SearchCategory> = {
-  title: 'Atoms/Category/SearchCategory',
-  component: SearchCategory,
+const meta: Meta<typeof WelcomeCategory> = {
+  title: 'Atoms/Category/WelcomeCategory',
+  component: WelcomeCategory,
   argTypes: {
     locale: {
       control: 'select',
@@ -28,7 +29,7 @@ const meta: Meta<typeof SearchCategory> = {
         ((ctx.args as { locale?: Locale }).locale as Locale) ?? 'en';
       return (
         <NextIntlClientProvider locale={locale} messages={messagesMap[locale]}>
-          <div style={{ padding: 16, background: '#f3f4f6', maxWidth: 720 }}>
+          <div style={{ padding: 16 }}>
             <Story />
           </div>
         </NextIntlClientProvider>
@@ -39,5 +40,5 @@ const meta: Meta<typeof SearchCategory> = {
 };
 export default meta;
 
-type Story = StoryObj<typeof SearchCategory>;
+type Story = StoryObj<typeof WelcomeCategory>;
 export const Default: Story = {};

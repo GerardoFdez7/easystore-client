@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { SidebarInset, SidebarProvider } from '@shadcn/ui/sidebar';
 import { SiderbarDashboard } from '@molecules/shared/Sidebar';
 import { SiteHeader } from '@atoms/shared/SiteHeader';
@@ -10,6 +11,7 @@ import { useTranslations } from 'next-intl';
 export default function MainDetailCategory({ id }: { id: string }) {
   const t = useTranslations('CategoryDetail');
   const isNew = id === 'new';
+  const [title, setTitle] = useState<string>('');
 
   return (
     <main className="pt-22 2xl:m-5">
@@ -27,14 +29,12 @@ export default function MainDetailCategory({ id }: { id: string }) {
 
           <div className="flex w-full flex-1 flex-col gap-6 py-4 md:py-6">
             <div className="w-full px-4 sm:px-6 lg:px-8">
-              {/* Título */}
               <div className="mb-2">
-                <WelcomeDetailCategory />
+                <WelcomeDetailCategory name={title} />
               </div>
 
-              {/* Form + listado */}
               <div className="mx-auto w-full max-w-7xl">
-                <DetailCategory id={id} />
+                <DetailCategory id={id} onTitleChange={setTitle} />
               </div>
             </div>
           </div>

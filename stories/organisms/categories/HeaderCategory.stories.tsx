@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import HeaderCategory from '@organisms/category/HeaderCategory';
+import HeaderCategory from '@organisms/categories/HeaderCategory';
 
 const meta: Meta<typeof HeaderCategory> = {
   title: 'Organisms/Category/HeaderCategory',

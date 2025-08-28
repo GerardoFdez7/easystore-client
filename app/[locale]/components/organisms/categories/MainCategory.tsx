@@ -5,22 +5,29 @@ import { SiderbarDashboard } from '@molecules/shared/Sidebar';
 import { SiteHeader } from '@atoms/shared/SiteHeader';
 import { useTranslations } from 'next-intl';
 
-import WelcomeCategory from '@atoms/category/WelcomeCategory';
-import SearchBar from '@atoms/category/SearchCategory';
-import CategoryGrid from '@molecules/category/CategoryGrid';
-import CategoryTree from '@molecules/category/CategoryTree';
+import WelcomeCategory from '@atoms/categories/WelcomeCategory';
+import SearchBar from '@atoms/shared/Search';
+import CategoryGrid from '@molecules/categories/CategoryGrid';
+import CategoryTree from '@molecules/categories/CategoryTree';
 import { Button } from '@shadcn/ui/button';
 import { Plus } from 'lucide-react';
 import { useRouter, useParams } from 'next/navigation';
+import { useSearch } from '@hooks/useSearch';
 
 export default function MainCategory() {
   const t = useTranslations('Category');
   const router = useRouter();
   const params = useParams<{ locale?: string }>();
   const locale = params?.locale;
+  const useCategorySearch = () =>
+    useSearch((q) => {
+      // aquí haces tu fetch / filtro / llamada a onSearch del estado superior
+      // e.g. startTransition(() => refetch({ query: q }))
+      console.log('search:', q);
+    }, 500);
 
   const goToNew = () => {
-    router.push(locale ? `/${locale}/category/new` : `/category/new`);
+    router.push(locale ? `/${locale}/categories/new` : `/categories/new`);
   };
 
   return (
@@ -35,18 +42,14 @@ export default function MainCategory() {
       >
         <SiderbarDashboard />
         <SidebarInset>
-          <SiteHeader title={t('category')} />
+          <SiteHeader title={t('welcomeCategory')} />
 
           <div className="flex flex-1">
             <div className="flex w-full flex-col gap-6 py-4 md:py-6">
-              {/* Contenedor responsive con paddings controlados */}
               <div className="flex w-full flex-col gap-6 px-4 sm:px-6 lg:flex-row lg:items-start lg:gap-8 lg:px-8">
-                {/* COLUMNA IZQUIERDA */}
                 <section className="w-full lg:min-w-0 lg:flex-1">
-                  {/* Título */}
                   <WelcomeCategory />
 
-                  {/* Botón: debajo del título y siempre a la derecha */}
                   <div className="-mt-2 flex justify-end sm:-mt-1">
                     <Button
                       type="button"
@@ -58,20 +61,19 @@ export default function MainCategory() {
                     </Button>
                   </div>
 
-                  {/* Search: 100% de la columna */}
                   <div className="mt-4">
-                    <SearchBar />
+                    <SearchBar
+                      placeholder={t('searchPlaceholder')}
+                      useSearch={useCategorySearch}
+                    />
                   </div>
 
-                  {/* Grid de categorías */}
                   <div className="mt-4">
                     <CategoryGrid />
                   </div>
                 </section>
 
-                {/* COLUMNA DERECHA: Árbol (oculto en < lg) */}
                 <aside className="hidden w-full shrink-0 lg:block lg:w-72">
-                  {/* mt para arrancar donde empieza el search en desktop */}
                   <div className="mt-10">
                     <CategoryTree />
                   </div>

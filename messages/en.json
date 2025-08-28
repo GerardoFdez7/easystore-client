@@ -833,11 +833,12 @@
     "noPhone": "No phone number"
   },
   "Category": {
-    "category": "Categories",
     "welcomeCategory": "Categories",
     "addCategory": "Add Category",
     "searchPlaceholder": "Search categories...",
-    "categoryCount": "categories"
+    "categoryCount": "categories",
+    "expandAll": "Expand all",
+    "collapseAll": "Collapse all"
   },
   "CategoryDetail": {
     "welcomeDetailCategory": "Category detail",

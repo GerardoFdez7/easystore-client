@@ -1,4 +1,4 @@
-import CategoryTemplate from '@templates/Category';
+import CategoryTemplate from '@templates/Categories';
 
 export default function CategoryPage() {
   return <CategoryTemplate />;

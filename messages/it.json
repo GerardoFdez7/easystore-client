@@ -838,11 +838,12 @@
     "noPhone": "Nessun numero di telefono"
   },
   "Category": {
-    "category": "Categorie",
     "welcomeCategory": "Categorie",
     "addCategory": "Aggiungi categoria",
     "searchPlaceholder": "Cerca categorie...",
-    "categoryCount": "categorie"
+    "categoryCount": "categorie",
+    "expandAll": "Espandi tutto",
+    "collapseAll": "Comprimi tutto"
   },
   "CategoryDetail": {
     "welcomeDetailCategory": "Dettaglio categoria",

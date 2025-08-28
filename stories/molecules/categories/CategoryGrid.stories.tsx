@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import CategoryGrid from '@molecules/category/CategoryGrid';
+import CategoryGrid from '@molecules/categories/CategoryGrid';
 import { NextIntlClientProvider } from 'next-intl';
 
 const messages = { Category: { categoryCount: 'categories' } };

@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import { Button } from '@shadcn/ui/button';
-import { Input } from '@shadcn/ui/input';
 import { Checkbox } from '@shadcn/ui/checkbox';
 import {
   Select,
@@ -13,9 +12,11 @@ import {
   SelectValue,
 } from '@shadcn/ui/select';
 import { Badge } from '@shadcn/ui/badge';
-import { X, Search } from 'lucide-react';
+import { X } from 'lucide-react';
 import { cn } from 'utils';
 import { useTranslations } from 'next-intl';
+import { useSearch } from '@hooks/useSearch';
+import SearchBar from '@atoms/shared/Search';
 
 export type Product = {
   id: string;
@@ -41,14 +42,17 @@ export default function ProductPicker({
   disabled,
   onToggleSelect,
   onRemove,
-  onExplore,
   onOrderChange,
-  onSearch,
   onShowMore,
 }: Props) {
   const t = useTranslations('CategoryDetail');
-  const [query, setQuery] = useState('');
+  const [query] = useState('');
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
+
+  const useProductSearch = () =>
+    useSearch((q) => {
+      console.log('search:', q);
+    }, 500);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -60,34 +64,14 @@ export default function ProductPicker({
 
   return (
     <div className="space-y-3">
-      {/* Controles superiores */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
-        {/* Buscador */}
-        <div className="relative w-full">
-          <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-slate-400" />
-          <Input
-            value={query}
-            placeholder={t('searchProducts')}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              onSearch?.(e.target.value);
-            }}
-            className="w-full rounded-full pl-9"
-            disabled={disabled}
-          />
-        </div>
+        <SearchBar
+          placeholder={t('searchProducts')}
+          useSearch={useProductSearch}
+          disabled={disabled}
+        />
 
-        {/* Acciones */}
         <div className="flex flex-wrap items-center justify-start gap-2 sm:justify-end">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onExplore}
-            disabled={disabled}
-          >
-            {t('explore')}
-          </Button>
-
           <Select
             value={order}
             onValueChange={(val: 'asc' | 'desc') => {
@@ -107,7 +91,6 @@ export default function ProductPicker({
         </div>
       </div>
 
-      {/* Lista */}
       <div className="overflow-hidden rounded-md ring-1 ring-gray-200">
         {filtered.map((p, idx) => (
           <div

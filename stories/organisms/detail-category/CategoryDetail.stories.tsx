@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react';
 import MainDetailCategory from '@organisms/detail-category/MainDetailCategory';
 import { NextIntlClientProvider } from 'next-intl';
 
-// 💡 i18n mínimo para esta vista
 const messages = {
   CategoryDetail: {
     welcomeDetailCategory: 'Detalle de categoría',
@@ -31,13 +30,12 @@ const meta: Meta<typeof MainDetailCategory> = {
   title: 'Organisms/DetailCategory/MainDetailCategory',
   component: MainDetailCategory,
   args: {
-    id: 'new', // ⚠️ importante: evita el fetch y los hooks de router
+    id: 'new',
   },
   decorators: [
     (Story) => (
       <NextIntlClientProvider locale="es" messages={messages}>
         <div style={{ background: '#f3f4f6', minHeight: '100vh' }}>
-          {/* El componente ya trae su propio layout con sidebar/header */}
           <Story />
         </div>
       </NextIntlClientProvider>

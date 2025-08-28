@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import MainCategory from '@organisms/category/MainCategory';
+import MainCategory from '@organisms/categories/MainCategory';
 import { NextIntlClientProvider } from 'next-intl';
 
 const messages = {

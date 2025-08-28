@@ -1,5 +1,5 @@
-import HeaderCategory from '@organisms/category/HeaderCategory';
-import MainCategory from '@organisms/category/MainCategory';
+import HeaderCategory from '@organisms/categories/HeaderCategory';
+import MainCategory from '@organisms/categories/MainCategory';
 
 export default function CategoryTemplate() {
   return (
