@@ -1075,11 +1075,12 @@
     }
   },
   "Category": {
-    "category": "Categorias",
     "welcomeCategory": "Categorias",
     "addCategory": "Adicionar categoria",
     "searchPlaceholder": "Buscar categorias...",
-    "categoryCount": "categorias"
+    "categoryCount": "categorias",
+    "expandAll": "Expandir tudo",
+    "collapseAll": "Recolher tudo"
   },
   "CategoryDetail": {
     "welcomeDetailCategory": "Detalhe da categoria",

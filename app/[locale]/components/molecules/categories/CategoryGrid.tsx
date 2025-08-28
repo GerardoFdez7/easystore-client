@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import CategoryCard from '@molecules/category/CategoryCard';
+import CategoryCard from '@molecules/categories/CategoryCard';
 import { getCategoryList, type CategorySummary } from '@lib/data/categories';
 import { useRouter, useParams } from 'next/navigation';
 
@@ -29,7 +29,7 @@ export default function CategoryGrid() {
   }, []);
 
   const goEdit = (id: string) => {
-    router.push(locale ? `/${locale}/category/${id}` : `/category/${id}`);
+    router.push(locale ? `/${locale}/categories/${id}` : `/categories/${id}`);
   };
 
   return (
@@ -40,6 +40,9 @@ export default function CategoryGrid() {
           name={c.name}
           imageUrl={c.imageUrl}
           count={c.count}
+          href={
+            locale ? `/${locale}/categories/${c.id}` : `/categories/${c.id}`
+          }
           onEdit={() => goEdit(c.id)}
         />
       ))}
