@@ -118,7 +118,7 @@ export default function CategoryDetail({ id, onTitleChange }: Props) {
         <div className="space-y-1">
           <label
             htmlFor="title"
-            className="block text-sm font-medium text-[#64748b]"
+            className="text-text block text-sm font-medium"
           >
             {t('title')}
           </label>
@@ -135,7 +135,7 @@ export default function CategoryDetail({ id, onTitleChange }: Props) {
         <div className="space-y-1">
           <label
             htmlFor="description"
-            className="block text-sm font-medium text-[#64748b]"
+            className="text-text block text-sm font-medium"
           >
             {t('description')}
           </label>
@@ -152,11 +152,11 @@ export default function CategoryDetail({ id, onTitleChange }: Props) {
 
       <div
         className={cn(
-          'mt-6 rounded-lg bg-white p-3 shadow-sm ring-1 ring-gray-200 sm:p-4',
+          'mt-6 rounded-lg p-3 shadow-sm ring-1 sm:p-4',
           loading && 'opacity-70',
         )}
       >
-        <h3 className="mb-3 text-center text-sm font-medium text-[#64748b]">
+        <h3 className="text-text mb-3 text-center text-sm font-medium">
           {t('products')}
         </h3>
         <ProductPicker
@@ -182,7 +182,7 @@ export default function CategoryDetail({ id, onTitleChange }: Props) {
             {t('cancel')}
           </Button>
           <Button
-            className="w-full bg-black text-white hover:bg-black/90 sm:w-auto"
+            className="text-text w-full bg-black hover:bg-black/90 sm:w-auto"
             onClick={() => void handleSave()}
             disabled={saving || loading || !title.trim()}
           >

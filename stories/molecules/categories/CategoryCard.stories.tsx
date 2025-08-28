@@ -11,6 +11,7 @@ const meta: Meta<typeof CategoryCard> = {
     name: 'Technology',
     imageUrl: '/laptop.webp',
     count: 12,
+    href: '#',
   },
   decorators: [
     (Story) => (
