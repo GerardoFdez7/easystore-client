@@ -20,7 +20,7 @@ import {
 } from '@shadcn/ui/select';
 import { RadioGroup, RadioGroupItem } from '@shadcn/ui/radio-group';
 import { Combobox } from '@shadcn/ui/combobox';
-import { COUNTRIES } from '@lib/consts/countries';
+import { getTranslatedCountries } from '@lib/consts/countries';
 
 export const ContactFields: React.FC = () => {
   const t = useTranslations('GetInTouch');
@@ -130,23 +130,15 @@ export const ContactFields: React.FC = () => {
             <FormItem className="w-full">
               <FormLabel>{t('country')}</FormLabel>
               <FormControl>
-                <div className="relative w-full">
-                  <Combobox
-                    options={getTranslatedCountries(tRoot).map((c) => ({
-                      value: c.code,
-                      label: c.name,
-                    }))}
-                    value={field.value}
-                    onValueChange={field.onChange}
-                    placeholder={t('selectCountry')}
-                    searchPlaceholder={t('searchCountry')}
-                    emptyMessage={t('noCountriesFound')}
-                    serverSide={true}
-                    className="border-primary w-full font-light [&>svg]:hidden"
-                    width="100%"
-                  />
-                  <CircleChevronDown className="text-primary pointer-events-none absolute top-1/2 right-3 z-10 h-5 w-5 -translate-y-1/2" />
-                </div>
+                <Combobox
+                  items={getTranslatedCountries(tRoot).map((c) => ({
+                    value: c.code,
+                    label: c.name,
+                  }))}
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  placeholder={t('selectCountry')}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -164,7 +156,7 @@ export const ContactFields: React.FC = () => {
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger className="h-12 w-full">
-                    <SelectValue placeholder={t('annualRevenue')} />
+                    <SelectValue placeholder={t('selectAnnualRevenue')} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="0-100k">$0 – $100k</SelectItem>
