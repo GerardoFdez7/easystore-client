@@ -3,14 +3,14 @@ import raw from './categories.json';
 export type Product = {
   id: string;
   name: string;
-  imageUrl: string;
+  cover: string;
   status: 'active' | 'inactive';
 };
 
 export type Category = {
   id: string;
   name: string;
-  imageUrl: string;
+  cover: string;
   description: string;
   products: Product[];
 };
@@ -21,7 +21,7 @@ const DB: Category[] = (raw as Category[]).map((c) => ({ ...c }));
 export type CategorySummary = {
   id: string;
   name: string;
-  imageUrl: string;
+  cover: string;
   count: number;
 };
 
@@ -253,7 +253,7 @@ export async function getCategoryList(): Promise<CategorySummary[]> {
   return DB.map((c) => ({
     id: c.id,
     name: c.name,
-    imageUrl: c.imageUrl,
+    cover: c.cover,
     count: c.products.length,
   }));
 }
@@ -292,12 +292,12 @@ export async function upsertCategory(input: {
   DB.push({
     id: newId,
     name: input.name,
-    imageUrl: '/laptop.webp',
+    cover: '/laptop.webp',
     description: input.description,
     products: input.productIds.map((id) => ({
       id,
       name: `Product ${id}`,
-      imageUrl: '/laptop.webp',
+      cover: '/laptop.webp',
       status: 'active',
     })),
   });

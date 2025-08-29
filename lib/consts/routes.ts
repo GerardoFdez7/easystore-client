@@ -8,7 +8,6 @@ export const PublicRoutes = [
   '/touch',
   '/variant',
   '/contact',
-  '/categories',
 ] as const;
 
 // Helper function to check if a route is public

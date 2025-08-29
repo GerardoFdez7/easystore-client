@@ -67,7 +67,7 @@ export default function CategoryTree() {
 
   return (
     <div className="rounded-lg p-4">
-      <div className="mt-4 mb-2 flex items-center justify-items-start">
+      <div className="-mt-4 mb-2 flex items-center justify-items-start">
         <Button
           size="sm"
           variant="outline"

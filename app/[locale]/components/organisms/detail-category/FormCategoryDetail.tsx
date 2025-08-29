@@ -16,7 +16,7 @@ type Props = {
   id: string;
   onTitleChange?: (title: string) => void;
 };
-export default function CategoryDetail({ id, onTitleChange }: Props) {
+export default function FormCategoryDetail({ id, onTitleChange }: Props) {
   const t = useTranslations('CategoryDetail');
   const router = useRouter();
   const params = useParams<{ locale?: string }>();
@@ -49,7 +49,7 @@ export default function CategoryDetail({ id, onTitleChange }: Props) {
             ].map((name, i) => ({
               id: `temp-${i}`,
               name,
-              imageUrl: '/laptop.webp',
+              cover: '/laptop.webp',
               status: i % 3 === 0 ? 'inactive' : 'active',
               selected: false,
             })),
@@ -58,7 +58,7 @@ export default function CategoryDetail({ id, onTitleChange }: Props) {
           const data = await getCategoryById(id);
           if (!mounted) return;
           if (!data) {
-            router.replace(locale ? `/${locale}/category` : `/category`);
+            router.replace(locale ? `/${locale}/categories` : `/categories`);
             return;
           }
           setTitle(data.name);
@@ -104,7 +104,7 @@ export default function CategoryDetail({ id, onTitleChange }: Props) {
         description,
         productIds: selectedIds,
       });
-      router.push(locale ? `/${locale}/category` : `/category`);
+      router.push(locale ? `/${locale}/categories` : `/categories`);
     } finally {
       setSaving(false);
     }
