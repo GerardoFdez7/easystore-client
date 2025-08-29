@@ -1,12 +1,12 @@
 import CategoryDetail from '@templates/CategoryDetail';
 
 interface CategoryPageProps {
-  params: Promise<{ locale: string; id: string }>;
+  params: Promise<{ locale: string; name: string }>;
 }
 
 export default async function CategoryDetailPage({
   params,
 }: CategoryPageProps) {
-  const { id } = await params;
-  return <CategoryDetail id={id} />;
+  const { name } = await params;
+  return <CategoryDetail slug={decodeURIComponent(name)} />;
 }

@@ -10,24 +10,26 @@ import ProductPicker, {
   type Product,
 } from '@molecules/detail-category/ProductPicker';
 import { cn } from 'utils';
-import { getCategoryById, upsertCategory } from '@lib/data/categories';
+import { getCategoryBySlug, upsertCategory } from '@lib/data/categories';
 
 type Props = {
-  id: string;
+  slug: string;
   onTitleChange?: (title: string) => void;
 };
-export default function FormCategoryDetail({ id, onTitleChange }: Props) {
+export default function FormCategoryDetail({ slug, onTitleChange }: Props) {
   const t = useTranslations('CategoryDetail');
   const router = useRouter();
   const params = useParams<{ locale?: string }>();
   const locale = params?.locale;
-  const isNew = id === 'new';
+  const isNew = slug === 'new';
 
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
   const [saving, setSaving] = useState(false);
+
+  const [categoryId, setCategoryId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     let mounted = true;
@@ -55,12 +57,13 @@ export default function FormCategoryDetail({ id, onTitleChange }: Props) {
             })),
           );
         } else {
-          const data = await getCategoryById(id);
+          const data = await getCategoryBySlug(slug);
           if (!mounted) return;
           if (!data) {
             router.replace(locale ? `/${locale}/categories` : `/categories`);
             return;
           }
+          setCategoryId(data.id);
           setTitle(data.name);
           setDescription(data.description);
           setProducts(
@@ -77,7 +80,7 @@ export default function FormCategoryDetail({ id, onTitleChange }: Props) {
     return () => {
       mounted = false;
     };
-  }, [id, isNew, locale, router]);
+  }, [slug, isNew, locale, router]);
 
   useEffect(() => {
     onTitleChange?.(title);
@@ -99,7 +102,7 @@ export default function FormCategoryDetail({ id, onTitleChange }: Props) {
     setSaving(true);
     try {
       await upsertCategory({
-        id: isNew ? undefined : id,
+        id: isNew ? undefined : categoryId,
         name: title,
         description,
         productIds: selectedIds,
