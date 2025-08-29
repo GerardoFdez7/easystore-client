@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import {
   Package,
@@ -9,6 +11,7 @@ import {
   // BookUser,
   ClipboardList,
   Warehouse,
+  Layers,
 } from 'lucide-react';
 import OwnerLogo from '@atoms/dashboard/OwnerLogo';
 import ButtonSidebar from '@atoms/dashboard/ButtonSidebar';
@@ -19,12 +22,20 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
 } from '@shadcn/ui/sidebar';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@shadcn/ui/collapsible';
+
 import { useTranslations } from 'next-intl';
 
-export default function Sidebar({
-  ...props
-}: React.ComponentProps<typeof ShadcnSidebar>) {
+export default function Sidebar(
+  props: React.ComponentProps<typeof ShadcnSidebar>,
+) {
   const t = useTranslations('Dashboard');
 
   return (
@@ -37,6 +48,7 @@ export default function Sidebar({
           </h3>
         </div>
       </SidebarHeader>
+
       <SidebarContent>
         <SidebarMenu className="gap-2 px-2">
           <SidebarMenuItem>
@@ -46,13 +58,41 @@ export default function Sidebar({
               route="dashboard"
             />
           </SidebarMenuItem>
-          <SidebarMenuItem>
-            <ButtonSidebar
-              icon={<Package />}
-              label={t('products')}
-              route="products"
-            />
-          </SidebarMenuItem>
+
+          <Collapsible defaultOpen className="group/collapsible">
+            <SidebarMenuItem>
+              <CollapsibleTrigger asChild>
+                <ButtonSidebar
+                  icon={<Package />}
+                  label={t('products')}
+                  route="products"
+                />
+                {/* <SidebarMenuButton className="h-12">
+                  <Archive className="h-4 w-4" />
+                  <span className="font-medium">{t('products')}</span>
+                  <ChevronDown
+                    className={cn(
+                      'ml-auto h-4 w-4 transition-transform',
+                      'group-data-[state=open]/collapsible:rotate-180',
+                    )}
+                  />
+                </SidebarMenuButton> */}
+              </CollapsibleTrigger>
+
+              <CollapsibleContent>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <ButtonSidebar
+                      icon={<Layers />}
+                      label={t('categories')}
+                      route="categories"
+                    />
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
+              </CollapsibleContent>
+            </SidebarMenuItem>
+          </Collapsible>
+
           <SidebarMenuItem>
             <ButtonSidebar
               icon={<Warehouse />}
@@ -67,6 +107,7 @@ export default function Sidebar({
               route="orders"
             />
           </SidebarMenuItem>
+
           <SidebarMenuItem>
             <ButtonSidebar
               icon={<Users />}
@@ -97,6 +138,7 @@ export default function Sidebar({
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarContent>
+
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>

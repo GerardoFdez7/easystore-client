@@ -38,7 +38,7 @@ export default function CategoryGrid() {
         <CategoryCard
           key={c.id}
           name={c.name}
-          imageUrl={c.imageUrl}
+          imageUrl={c.cover}
           count={c.count}
           href={
             locale ? `/${locale}/categories/${c.id}` : `/categories/${c.id}`

@@ -1,88 +1,56 @@
 'use client';
 
-import { SidebarInset, SidebarProvider } from '@shadcn/ui/sidebar';
-import Sidebar from '@organisms/shared/Sidebar';
-import { SiteHeader } from '@atoms/shared/SiteHeader';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { Plus } from 'lucide-react';
+import { Button } from '@shadcn/ui/button';
 
-import WelcomeCategory from '@atoms/categories/WelcomeCategory';
 import SearchBar from '@atoms/shared/Search';
 import CategoryGrid from '@molecules/categories/CategoryGrid';
 import CategoryTree from '@molecules/categories/CategoryTree';
-import { Button } from '@shadcn/ui/button';
-import { Plus } from 'lucide-react';
-import { useRouter, useParams } from 'next/navigation';
 import { useSearch } from '@hooks/useSearch';
+
+const useCategorySearch = () =>
+  useSearch((q) => {
+    // tu fetch/filtro/onSearch
+    console.log('search:', q);
+  }, 500);
+
+const withLocale = (locale: string | undefined, path: string) =>
+  locale ? `/${locale}${path}` : path;
 
 export default function MainCategory() {
   const t = useTranslations('Category');
-  const router = useRouter();
   const params = useParams<{ locale?: string }>();
   const locale = params?.locale;
-  const useCategorySearch = () =>
-    useSearch((q) => {
-      // aquí haces tu fetch / filtro / llamada a onSearch del estado superior
-      // e.g. startTransition(() => refetch({ query: q }))
-      console.log('search:', q);
-    }, 500);
-
-  const goToNew = () => {
-    router.push(locale ? `/${locale}/categories/new` : `/categories/new`);
-  };
+  const newHref = withLocale(locale, '/categories/new');
 
   return (
-    <main className="pt-22 2xl:m-5">
-      <SidebarProvider
-        style={
-          {
-            '--sidebar-width': 'calc(var(--spacing) * 72)',
-            '--header-height': 'calc(var(--spacing) * 12)',
-          } as React.CSSProperties
-        }
-      >
-        <Sidebar />
-        <SidebarInset>
-          <SiteHeader title={t('welcomeCategory')} />
+    <main className="2xl:m-5">
+      <section className="mx-auto grid w-full max-w-screen-2xl gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_18rem] lg:px-8">
+        <div className="flex flex-col gap-4">
+          <Button
+            asChild
+            className="self-end rounded-full bg-black text-white hover:bg-black/90"
+          >
+            <Link href={newHref}>
+              <Plus className="mr-2 h-4 w-4" />
+              {t('addCategory')}
+            </Link>
+          </Button>
+          <SearchBar
+            placeholder={t('searchPlaceholder')}
+            useSearch={useCategorySearch}
+          />
+          <CategoryGrid />
+        </div>
 
-          <div className="flex flex-1">
-            <div className="flex w-full flex-col gap-6 py-4 md:py-6">
-              <div className="flex w-full flex-col gap-6 px-4 sm:px-6 lg:flex-row lg:items-start lg:gap-8 lg:px-8">
-                <section className="w-full lg:min-w-0 lg:flex-1">
-                  <WelcomeCategory />
-
-                  <div className="-mt-2 flex justify-end sm:-mt-1">
-                    <Button
-                      type="button"
-                      className="rounded-full bg-black px-4 py-2 text-white hover:bg-black/90"
-                      onClick={goToNew}
-                    >
-                      <Plus className="mr-2 h-4 w-4" />
-                      {t('addCategory')}
-                    </Button>
-                  </div>
-
-                  <div className="mt-4">
-                    <SearchBar
-                      placeholder={t('searchPlaceholder')}
-                      useSearch={useCategorySearch}
-                    />
-                  </div>
-
-                  <div className="mt-4">
-                    <CategoryGrid />
-                  </div>
-                </section>
-
-                <aside className="hidden w-full shrink-0 lg:block lg:w-72">
-                  <div className="mt-10">
-                    <CategoryTree />
-                  </div>
-                </aside>
-              </div>
-            </div>
-          </div>
-        </SidebarInset>
-      </SidebarProvider>
+        {/* Aside sin wrappers extra */}
+        <aside className="hidden lg:block">
+          <CategoryTree />
+        </aside>
+      </section>
     </main>
   );
 }

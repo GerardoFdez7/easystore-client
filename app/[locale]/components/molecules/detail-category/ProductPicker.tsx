@@ -21,7 +21,7 @@ import SearchBar from '@atoms/shared/Search';
 export type Product = {
   id: string;
   name: string;
-  imageUrl: string;
+  cover: string;
   status: 'active' | 'inactive';
   selected: boolean;
 };
@@ -111,7 +111,7 @@ export default function ProductPicker({
             <div className="flex items-center gap-3">
               <div className="relative h-8 w-8 overflow-hidden rounded-full">
                 <Image
-                  src={p.imageUrl}
+                  src={p.cover}
                   alt={p.name}
                   fill
                   className="object-cover"
