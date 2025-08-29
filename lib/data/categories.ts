@@ -258,6 +258,32 @@ export async function getCategoryList(): Promise<CategorySummary[]> {
   }));
 }
 
+// helper consistente con creación (quita tildes, min, guiones)
+const slugifyEs = (s: string) =>
+  s
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // quita acentos
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-') // separa por guiones
+    .replace(/^-+|-+$/g, ''); // limpia extremos
+
+// --- NUEVO ---
+// Detalle por slug (con fallback si el slug es realmente un id)
+export async function getCategoryBySlug(
+  slug: string,
+): Promise<Category | null> {
+  const key = decodeURIComponent(slug);
+
+  // 1) Si el "slug" resulta ser un id válido, reutiliza la función existente
+  const byId = await getCategoryById(key);
+  if (byId) return byId;
+
+  // 2) Buscar por slug generado desde el name
+  const found = DB.find((c) => slugifyEs(c.name) === key);
+  return found ? structuredClone(found) : null;
+}
+
 // Detalle por id
 export async function getCategoryById(id: string): Promise<Category | null> {
   const found = DB.find((c) => c.id === id);
