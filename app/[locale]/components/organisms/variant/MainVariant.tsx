@@ -57,7 +57,7 @@ export default function MainVariant() {
             }}
             className="space-y-6"
           >
-            <MediaUploader />
+            <MediaUploader multiple={true} />
             <PriceConditionFormField />
             <AttributesFormField />
             <DimensionsRow />
