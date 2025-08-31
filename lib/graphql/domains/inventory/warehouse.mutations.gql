@@ -5,16 +5,6 @@ mutation createWarehouse($input: CreateWarehouseInput!) {
     addressId
     createdAt
     updatedAt
-    stockPerWarehouses {
-      id
-      warehouseId
-      qtyAvailable
-      qtyReserved
-      lotNumber
-      serialNumbers
-      productLocation
-      estimatedReplenishmentDate
-    }
   }
 }
 
@@ -40,20 +30,7 @@ mutation updateWarehouse($id: ID!, $input: UpdateWarehouseInput!) {
 
 mutation deleteWarehouse($id: ID!) {
   deleteWarehouse(id: $id) {
-    id
     name
-    addressId
-    createdAt
-    updatedAt
-    stockPerWarehouses {
-      id
-      warehouseId
-      qtyAvailable
-      qtyReserved
-      lotNumber
-      serialNumbers
-      productLocation
-      estimatedReplenishmentDate
-    }
+
   }
 }

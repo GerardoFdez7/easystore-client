@@ -8,6 +8,7 @@ import {
   // Gift,
   // UserCheck,
   Archive,
+  Warehouse,
 } from 'lucide-react';
 import OwnerLogo from '@atoms/dashboard/OwnerLogo';
 import ButtonSidebar from '@atoms/dashboard/ButtonSidebar';
@@ -50,6 +51,13 @@ export default function Sidebar({
               icon={<Archive />}
               label={t('products')}
               route="products"
+            />
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <ButtonSidebar
+              icon={<Warehouse />}
+              label={t('inventory')}
+              route="inventory"
             />
           </SidebarMenuItem>
           <SidebarMenuItem>

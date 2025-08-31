@@ -13,7 +13,7 @@ import { Button } from '@shadcn/ui/button';
 import { Input } from '@shadcn/ui/input';
 import { Plus } from 'lucide-react';
 import ArrayItemBox from '@atoms/shared/ArrayItemBox';
-import type { Attribute } from '@lib/utils/types/variant';
+import type { Attribute } from '@lib/types/variant';
 import { useTranslations } from 'next-intl';
 
 export default function AttributesCard() {

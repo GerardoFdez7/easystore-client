@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import AttributesCard from '@molecules/variant/AttributesFormField';
-import type { Attribute } from '@lib/utils/types/variant';
+import type { Attribute } from '@lib/types/variant';
 import AttributesFormField from '@molecules/variant/AttributesFormField';
 
 const meta: Meta<typeof AttributesCard> = {
