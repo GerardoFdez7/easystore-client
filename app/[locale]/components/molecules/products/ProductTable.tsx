@@ -22,6 +22,7 @@ interface ProductTableProps {
   onSelectAll: (checked: boolean) => void;
   selectedFilter: FilterType;
   setSelectedFilter: (filter: FilterType) => void;
+  onDeleteComplete?: () => void;
 }
 
 export function ProductTable({
@@ -31,6 +32,7 @@ export function ProductTable({
   onSelectAll,
   selectedFilter,
   setSelectedFilter,
+  onDeleteComplete,
 }: ProductTableProps) {
   const t = useTranslations('Products');
 
@@ -41,6 +43,7 @@ export function ProductTable({
         setSelectedFilter={setSelectedFilter}
         selectedCount={selectedProducts.length}
         selectedProductIds={selectedProducts}
+        onDeleteComplete={onDeleteComplete}
       />
 
       <Table className="bg-card">

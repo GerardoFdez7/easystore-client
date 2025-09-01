@@ -10,14 +10,19 @@ import {
   AlertDialogTrigger,
 } from '@shadcn/ui/alert-dialog';
 import { Trash2 } from 'lucide-react';
-import { useDeleteProduct } from '@hooks/domains/products/useDeleteProduct';
+import useMultipleDeleteProducts from '@hooks/domains/products/useMultipleDeleteProducts';
 
 interface DeleteProductProps {
   productIds: string[];
+  onDeleteComplete?: () => void;
 }
 
-export default function DeleteProduct({ productIds }: DeleteProductProps) {
-  const { handleDelete, isLoading } = useDeleteProduct();
+export default function DeleteProduct({
+  productIds,
+  onDeleteComplete,
+}: DeleteProductProps) {
+  const { handleMultipleDelete, isLoading } =
+    useMultipleDeleteProducts(onDeleteComplete);
 
   return (
     <AlertDialog>
@@ -32,22 +37,16 @@ export default function DeleteProduct({ productIds }: DeleteProductProps) {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete product?</AlertDialogTitle>
+          <AlertDialogTitle>Delete products?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. The product will be permanently
+            This action cannot be undone. The products will be permanently
             deleted from the database.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => {
-              const deletePromises = productIds.map((id) => handleDelete(id));
-              Promise.all(deletePromises).catch((error) => {
-                console.error('Error deleting products:', error);
-              });
-              return undefined;
-            }}
+            onClick={() => void handleMultipleDelete(productIds)}
             className="bg-[#ed2727] text-white hover:bg-[#d12525]"
             disabled={isLoading}
           >

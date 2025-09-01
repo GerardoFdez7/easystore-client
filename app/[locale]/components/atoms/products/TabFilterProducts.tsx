@@ -9,6 +9,7 @@ export type FilterProductsProps = {
   setSelectedFilter: (filter: FilterType) => void;
   selectedCount: number;
   selectedProductIds: string[];
+  onDeleteComplete?: () => void;
 };
 
 export default function TabFilterProducts({
@@ -16,6 +17,7 @@ export default function TabFilterProducts({
   setSelectedFilter,
   selectedCount,
   selectedProductIds,
+  onDeleteComplete,
 }: FilterProductsProps) {
   const t = useTranslations('Products');
 
@@ -50,7 +52,10 @@ export default function TabFilterProducts({
         </Tabs>
         {selectedCount > 0 && (
           <div className="mr-2">
-            <ProductActions selectedProductIds={selectedProductIds} />
+            <ProductActions
+              selectedProductIds={selectedProductIds}
+              onDeleteComplete={onDeleteComplete}
+            />
           </div>
         )}
       </div>

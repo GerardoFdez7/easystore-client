@@ -3,14 +3,15 @@ import {
   HardDeleteDocument,
   HardDeleteMutation,
   HardDeleteMutationVariables,
+  FindAllProductsDocument,
 } from '@graphql/generated';
 import useMutation from '../../useMutation';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
+import { useApolloClient } from '@apollo/client';
 
-export const useDeleteProduct = () => {
+export const useMultipleDeleteProducts = (onSuccess?: () => void) => {
+  const client = useApolloClient();
   const t = useTranslations('Products');
-  const router = useRouter();
 
   const {
     mutate: deleteProduct,
@@ -22,10 +23,16 @@ export const useDeleteProduct = () => {
     {
       onCompleted: (data) => {
         if (data?.hardDeleteProduct) {
-          toast.success('Product deleted successfully', {
-            description: 'Product deleted successfully',
-          });
-          router.push('/products');
+          // Refetch the products query
+          client
+            .refetchQueries({
+              include: [FindAllProductsDocument],
+            })
+            .then(() => {
+              // Clear selected products after successful deletion
+              onSuccess?.();
+            })
+            .catch(console.error);
         }
       },
       onError: (error) => {
@@ -48,20 +55,24 @@ export const useDeleteProduct = () => {
     },
   );
 
-  const handleDelete = async (id: string) => {
+  const handleMultipleDelete = async (ids: string[]) => {
     try {
-      await deleteProduct({ variables: { id } });
+      await Promise.all(ids.map((id) => deleteProduct({ variables: { id } })));
+
+      toast.success('Products deleted successfully', {
+        description: `Successfully deleted ${ids.length} product${ids.length > 1 ? 's' : ''}.`,
+      });
     } catch (error) {
       // Error is already handled by the onError callback
-      console.error('Error deleting product:', error);
+      console.error('Error deleting products:', error);
     }
   };
 
   return {
-    handleDelete,
+    handleMultipleDelete,
     isLoading,
     errors,
   };
 };
 
-export default useDeleteProduct;
+export default useMultipleDeleteProducts;

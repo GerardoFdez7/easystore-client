@@ -22,7 +22,18 @@ export const useGetAllProducts = (
     ...(variables || {}),
   });
 
-  const products = useMemo(() => data?.getAllProducts?.products || [], [data]);
+  const products = useMemo(() => {
+    // If there's an error but we have no data, return empty array
+    if (
+      errors?.length &&
+      !data?.getAllProducts?.products?.length &&
+      data?.getAllProducts?.products?.length !== 0 &&
+      data?.getAllProducts?.products !== null
+    ) {
+      return [];
+    }
+    return data?.getAllProducts?.products || [];
+  }, [data, errors]);
 
   const refreshProducts = useCallback(
     (newVariables?: FindAllProductsQueryVariables) => {
