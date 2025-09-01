@@ -13,10 +13,12 @@ import DeleteProduct from './DeleteProduct';
 
 interface ProductActionsProps {
   selectedProductIds: string[];
+  onDeleteComplete?: () => void;
 }
 
 export default function ProductActions({
   selectedProductIds,
+  onDeleteComplete,
 }: ProductActionsProps) {
   const handleArchive = () => {
     console.log('Archiving product...');
@@ -41,7 +43,10 @@ export default function ProductActions({
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild className="p-0">
           <div>
-            <DeleteProduct productIds={selectedProductIds} />
+            <DeleteProduct
+              productIds={selectedProductIds}
+              onDeleteComplete={onDeleteComplete}
+            />
           </div>
         </DropdownMenuItem>
       </DropdownMenuContent>
