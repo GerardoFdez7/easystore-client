@@ -9,7 +9,6 @@ import { ProductsToolbar } from '@molecules/products/Toolbar';
 import { FilterType } from '@atoms/products/TabFilterProducts';
 import { useTranslations } from 'next-intl';
 import { useGetAllProducts } from '@hooks/domains/products/useGetAllProducts';
-import { SortBy } from '@graphql/generated';
 
 export default function MainDashboard() {
   const t = useTranslations('Products');
@@ -22,8 +21,11 @@ export default function MainDashboard() {
   const { products, isLoading, errors } = useGetAllProducts({
     page: 1,
     limit: 10,
-    sortBy: SortBy.CreatedAt,
+    includeSoftDeleted: true,
   });
+  const handleDeleteComplete = () => {
+    setSelectedProducts([]);
+  };
 
   if (isLoading) return <div>Cargando productos...</div>;
   if (errors) return <div>Error al cargar los productos</div>;
@@ -82,6 +84,7 @@ export default function MainDashboard() {
                     selectedProducts={selectedProducts}
                     onSelectProduct={handleProductSelect}
                     onSelectAll={handleSelectAll}
+                    onDeleteComplete={handleDeleteComplete}
                   />
                 ) : (
                   <ProductGrid
