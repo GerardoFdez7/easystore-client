@@ -10,12 +10,18 @@ import {
   AlertDialogTrigger,
 } from '@shadcn/ui/alert-dialog';
 import { Archive } from 'lucide-react';
+import useMultipleSoftDeleteProducts from '@hooks/domains/products/useMultipleSoftDeleteProducts';
 
+interface ArchivedProductProps {
+  productsIds: string[];
+  onSoftDeleteComplete?: () => void;
+}
 export default function ArchivedProduct({
-  onConfirm,
-}: {
-  onConfirm: () => void;
-}) {
+  productsIds,
+  onSoftDeleteComplete,
+}: ArchivedProductProps) {
+  const { handleMultipleSoftDelete, isLoading } =
+    useMultipleSoftDeleteProducts(onSoftDeleteComplete);
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -38,10 +44,13 @@ export default function ArchivedProduct({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction
-            onClick={onConfirm}
+            onClick={() => void handleMultipleSoftDelete(productsIds)}
             className="bg-title border border-black hover:bg-black/85 dark:hover:bg-gray-300"
+            disabled={isLoading}
           >
-            Archive
+            {isLoading
+              ? 'Archiving...'
+              : `Archive${productsIds.length > 1 ? ` (${productsIds.length})` : ''}`}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
