@@ -1,5 +1,5 @@
 import React from 'react';
-import ButtonLoadable from '../../app/[locale]/components/atoms/shared/ButtonLoadable';
+import ButtonLoadable from '@atoms/shared/ButtonLoadable';
 
 describe('ButtonLoadable Component', () => {
   beforeEach(() => {
