@@ -20,11 +20,6 @@ export default function ProductActions({
   selectedProductIds,
   onDeleteComplete,
 }: ProductActionsProps) {
-  const handleArchive = () => {
-    console.log('Archiving product...');
-    // Aquí iría la lógica para archivar/desarchivar el producto
-  };
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -37,7 +32,10 @@ export default function ProductActions({
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem asChild className="p-0">
           <div>
-            <ArchivedProduct onConfirm={handleArchive} />
+            <ArchivedProduct
+              productsIds={selectedProductIds}
+              onSoftDeleteComplete={onDeleteComplete}
+            />
           </div>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
