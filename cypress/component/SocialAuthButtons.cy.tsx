@@ -1,5 +1,5 @@
 import React from 'react';
-import { SocialAuthButtons } from '../../app/[locale]/components/molecules/shared/SocialAuthButtons';
+import { SocialAuthButtons } from '@molecules/shared/SocialAuthButtons';
 
 describe('SocialAuthButtons Component', () => {
   beforeEach(() => {
