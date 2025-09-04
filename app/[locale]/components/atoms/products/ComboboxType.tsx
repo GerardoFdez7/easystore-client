@@ -1,9 +1,10 @@
 import { Combobox } from '@shadcn/ui/combobox';
 import { useTranslations } from 'next-intl';
+import { InputMaybe, TypeEnum } from '@graphql/generated';
 
 type SelectTypeProps = {
-  value?: string;
-  onValueChange?: (value: string) => void;
+  value?: InputMaybe<TypeEnum>;
+  onValueChange?: (value: InputMaybe<TypeEnum>) => void;
   className?: string;
   disabled?: boolean;
 };
@@ -17,22 +18,22 @@ export default function ComboboxType({
   const t = useTranslations('Products');
 
   const typeOptions = [
-    { value: 'physical', label: t('physical') },
-    { value: 'digital', label: t('digital') },
+    { value: TypeEnum.Physical, label: t('physical') },
+    { value: TypeEnum.Digital, label: t('digital') },
   ];
 
   // Handle toggle functionality - deselect if same value is selected
   const handleValueChange = (selectedValue: string) => {
     if (onValueChange) {
-      const newValue = selectedValue === value ? '' : selectedValue;
-      onValueChange(newValue);
+      const newValue = selectedValue === value ? null : selectedValue;
+      onValueChange(newValue as InputMaybe<TypeEnum>);
     }
   };
 
   return (
     <Combobox
       items={typeOptions}
-      value={value}
+      value={value?.toString()}
       onValueChange={handleValueChange}
       placeholder={t('type')}
       placeholderInput={t('search')}

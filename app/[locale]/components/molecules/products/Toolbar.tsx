@@ -7,10 +7,11 @@ import { SearchBar } from '@atoms/shared/SearchBar';
 import ComboboxCategory from '@atoms/products/ComboboxCategory';
 import { useTranslations } from 'next-intl';
 import { memo } from 'react';
+import { InputMaybe, TypeEnum } from '@graphql/generated';
 
 interface ProductsToolbarProps {
-  typeFilter?: string;
-  onTypeFilterChange?: (value: string) => void;
+  typeFilter?: InputMaybe<TypeEnum>;
+  onTypeFilterChange?: (value: InputMaybe<TypeEnum>) => void;
   categoryFilter?: string;
   onCategoryFilterChange?: (value: string) => void;
   viewMode: string;
