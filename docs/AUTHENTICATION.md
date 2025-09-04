@@ -13,7 +13,7 @@ The authentication system provides global protection for the application with a 
 Provides authentication state and methods:
 
 ```typescript
-const { isAuthenticated, isLoading, redirectToLogin, refreshAuth } = useAuth();
+const { isAuthenticated, loading, redirectToLogin, refreshAuth } = useAuth();
 ```
 
 **Features:**

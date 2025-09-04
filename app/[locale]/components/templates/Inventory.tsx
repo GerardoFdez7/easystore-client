@@ -1,6 +1,7 @@
 import HeaderDashboard from '@organisms/shared/HeaderDashboard';
 import SidebarLayout from '@organisms/shared/SidebarLayout';
 import UnderConstructionTemplate from '@templates/UnderConstruction';
+import MainInventory from '@organisms/inventory/MainInventory';
 import { useTranslations } from 'next-intl';
 
 export default function InventoryTemplate() {
@@ -10,6 +11,7 @@ export default function InventoryTemplate() {
     <>
       <HeaderDashboard />
       <SidebarLayout title={t('inventory')}>
+        <MainInventory />
         <UnderConstructionTemplate />
       </SidebarLayout>
     </>

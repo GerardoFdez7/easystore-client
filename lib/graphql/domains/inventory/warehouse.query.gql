@@ -2,9 +2,6 @@ query findWarehouseById($id: ID!) {
   getWarehouseById(id: $id) {
     id
     name
-    addressId
-    createdAt
-    updatedAt
     stockPerWarehouses {
       id
       warehouseId
@@ -14,6 +11,11 @@ query findWarehouseById($id: ID!) {
       serialNumbers
       productLocation
       estimatedReplenishmentDate
+      variantFirstAttribute {
+        key
+        value
+      }
+      productName
     }
   }
 }
@@ -21,10 +23,49 @@ query findWarehouseById($id: ID!) {
 query findInventory(
   $page: Int = 1
   $limit: Int = 10
-  $name: String
   $addressId: ID
   $variantId: ID
+  $isArchived: Boolean
   $lowStockThreshold: Int
+  $sortBy: SortBy
+  $sortOrder: SortOrder
+) {
+  getAllWarehouses(
+    page: $page
+    limit: $limit
+    addressId: $addressId
+    variantId: $variantId
+    isArchived: $isArchived
+    lowStockThreshold: $lowStockThreshold
+    sortBy: $sortBy
+    sortOrder: $sortOrder
+  ) {
+    warehouses {
+      id
+      name
+      stockPerWarehouses {
+        id
+        qtyAvailable
+        qtyReserved
+        estimatedReplenishmentDate
+        variantFirstAttribute {
+          key
+          value
+        }
+        productName
+        variantSku
+      }
+    }
+    total
+    hasMore
+  }
+}
+
+query findWarehouses(
+  $page: Int = 1
+  $limit: Int = 10
+  $name: String
+  $addressId: ID
   $sortBy: SortBy
   $sortOrder: SortOrder
 ) {
@@ -33,23 +74,17 @@ query findInventory(
     limit: $limit
     name: $name
     addressId: $addressId
-    variantId: $variantId
-    lowStockThreshold: $lowStockThreshold
     sortBy: $sortBy
     sortOrder: $sortOrder
+    includeAddresses: true
   ) {
     warehouses {
       id
       name
-      addressId
-      createdAt
-      updatedAt
-      stockPerWarehouses {
-        id
-        qtyAvailable
-        qtyReserved
-        estimatedReplenishmentDate
-      }
+      addressLine1
+      city
+      countryCode
+      postalCode
     }
     total
     hasMore

@@ -15,7 +15,7 @@ interface ProcessedData {
 }
 
 interface UseTestMultipleMediaPersistenceReturn {
-  isLoading: boolean;
+  loading: boolean;
   persistMultipleMedia: (
     processedData: ProcessedData,
   ) => Promise<ProcessedData>;
@@ -30,7 +30,7 @@ interface UseTestMultipleMediaPersistenceReturn {
  */
 export const useTestMultipleMediaPersistence =
   (): UseTestMultipleMediaPersistenceReturn => {
-    const [isLoading, setIsLoading] = useState(false);
+    const [loading, setIsLoading] = useState(false);
     const [savedMediaSets, setSavedMediaSets] = useState<ProcessedData[]>([]);
 
     const persistMultipleMedia = async (
@@ -74,7 +74,7 @@ export const useTestMultipleMediaPersistence =
     };
 
     return {
-      isLoading,
+      loading,
       persistMultipleMedia,
       savedMediaSets,
       clearSavedMedia,

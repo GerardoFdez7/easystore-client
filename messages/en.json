@@ -832,5 +832,14 @@
     "storeNameUpdated": "Store name updated successfully.",
     "logoUpdated": "Logo updated successfully.",
     "noPhone": "No phone number"
+  },
+  "Errors": {
+    "title": "Error",
+    "generic-error": "An unexpected error occurred",
+    "generic-description": "Please try again later or contact support if the problem persists.",
+    "network-error": "A network error occurred. Please check your connection and try again.",
+    "unauthorized-error": "You are not authorized to perform this action.",
+    "internal-server-error": "An internal server error occurred. Please try again later.",
+    "bad-request-error": "The request was invalid. Please check the data and try again."
   }
 }

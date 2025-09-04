@@ -70,11 +70,13 @@ export type AddressType = {
   addressLine2: Scalars['String']['output'];
   addressType: AddressTypeEnum;
   city: Scalars['String']['output'];
-  countryId: Scalars['ID']['output'];
+  countryId: Scalars['String']['output'];
+  deliveryInstructions?: Maybe<Scalars['String']['output']>;
   deliveryNum: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   postalCode: Scalars['String']['output'];
+  stateId: Scalars['String']['output'];
 };
 
 /** Types of addresses */
@@ -131,15 +133,24 @@ export enum ConditionEnum {
   Used = 'USED',
 }
 
+export type CountryType = {
+  __typename?: 'CountryType';
+  code: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+};
+
 export type CreateAddressInput = {
   addressLine1: Scalars['String']['input'];
   addressLine2?: InputMaybe<Scalars['String']['input']>;
   addressType: AddressTypeEnum;
   city: Scalars['String']['input'];
-  countryId: Scalars['ID']['input'];
-  deliveryNum?: InputMaybe<Scalars['String']['input']>;
+  countryId: Scalars['String']['input'];
+  deliveryInstructions?: InputMaybe<Scalars['String']['input']>;
+  deliveryNum: Scalars['String']['input'];
   name: Scalars['String']['input'];
-  postalCode?: InputMaybe<Scalars['String']['input']>;
+  postalCode: Scalars['String']['input'];
+  stateId: Scalars['String']['input'];
 };
 
 export type CreateAttributeInput = {
@@ -148,7 +159,7 @@ export type CreateAttributeInput = {
 };
 
 export type CreateCategoryInput = {
-  cover?: InputMaybe<Scalars['String']['input']>;
+  cover: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   parentId?: InputMaybe<Scalars['ID']['input']>;
@@ -659,6 +670,7 @@ export type Product = {
 export type ProductCategory = {
   __typename?: 'ProductCategory';
   categoryId: Scalars['ID']['output'];
+  categoryName?: Maybe<Scalars['String']['output']>;
 };
 
 export type Query = {
@@ -666,12 +678,14 @@ export type Query = {
   getAddressById: AddressType;
   getAllAddresses: AddressesType;
   getAllCategories: PaginatedCategoriesType;
+  getAllCountries: Array<CountryType>;
   getAllProducts: PaginatedProductsType;
   getAllStockMovements: PaginatedStockMovementsType;
   getAllWarehouses: PaginatedWarehousesType;
   getCategoryById: Category;
   getMediaUploadToken: MediaAuthResponse;
   getProductById: Product;
+  getStatesByCountryId: Array<StateType>;
   getTenantById: Tenant;
   getWarehouseById: Warehouse;
   validateToken: Response;
@@ -696,7 +710,7 @@ export type QueryGetAllCategoriesArgs = {
 };
 
 export type QueryGetAllProductsArgs = {
-  categoriesIds?: InputMaybe<Array<Scalars['Int']['input']>>;
+  categoriesIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   includeSoftDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -721,6 +735,8 @@ export type QueryGetAllStockMovementsArgs = {
 
 export type QueryGetAllWarehousesArgs = {
   addressId?: InputMaybe<Scalars['ID']['input']>;
+  includeAddresses?: InputMaybe<Scalars['Boolean']['input']>;
+  isArchived?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   lowStockThreshold?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -736,6 +752,10 @@ export type QueryGetCategoryByIdArgs = {
 
 export type QueryGetProductByIdArgs = {
   id: Scalars['String']['input'];
+};
+
+export type QueryGetStatesByCountryIdArgs = {
+  countryId: Scalars['ID']['input'];
 };
 
 export type QueryGetWarehouseByIdArgs = {
@@ -759,6 +779,12 @@ export enum SortOrder {
   Desc = 'DESC',
 }
 
+export type StateType = {
+  __typename?: 'StateType';
+  code: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+};
+
 export type StockMovement = {
   __typename?: 'StockMovement';
   deltaQty: Scalars['Int']['output'];
@@ -774,9 +800,13 @@ export type StockPerWarehouse = {
   id: Scalars['ID']['output'];
   lotNumber?: Maybe<Scalars['String']['output']>;
   productLocation?: Maybe<Scalars['String']['output']>;
+  productName?: Maybe<Scalars['String']['output']>;
   qtyAvailable: Scalars['Int']['output'];
   qtyReserved: Scalars['Int']['output'];
   serialNumbers?: Maybe<Array<Scalars['String']['output']>>;
+  variantFirstAttribute?: Maybe<VariantAttribute>;
+  variantId: Scalars['ID']['output'];
+  variantSku?: Maybe<Scalars['String']['output']>;
   warehouseId: Scalars['ID']['output'];
 };
 
@@ -812,10 +842,12 @@ export type UpdateAddressInput = {
   addressLine2?: InputMaybe<Scalars['String']['input']>;
   addressType?: InputMaybe<AddressTypeEnum>;
   city?: InputMaybe<Scalars['String']['input']>;
-  countryId?: InputMaybe<Scalars['ID']['input']>;
+  countryId?: InputMaybe<Scalars['String']['input']>;
+  deliveryInstructions?: InputMaybe<Scalars['String']['input']>;
   deliveryNum?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   postalCode?: InputMaybe<Scalars['String']['input']>;
+  stateId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateAttributeInput = {
@@ -947,12 +979,22 @@ export type Variant = {
   weight?: Maybe<Scalars['Float']['output']>;
 };
 
+export type VariantAttribute = {
+  __typename?: 'VariantAttribute';
+  key: Scalars['String']['output'];
+  value: Scalars['String']['output'];
+};
+
 export type Warehouse = {
   __typename?: 'Warehouse';
   addressId: Scalars['ID']['output'];
+  addressLine1?: Maybe<Scalars['String']['output']>;
+  city?: Maybe<Scalars['String']['output']>;
+  countryCode?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  postalCode?: Maybe<Scalars['String']['output']>;
   stockPerWarehouses: Array<StockPerWarehouse>;
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -1061,6 +1103,31 @@ export type FindAllAddressesQuery = {
       postalCode: string;
     }>;
   };
+};
+
+export type FindAllCountriesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type FindAllCountriesQuery = {
+  __typename?: 'Query';
+  getAllCountries: Array<{
+    __typename?: 'CountryType';
+    id: string;
+    name: string;
+    code: string;
+  }>;
+};
+
+export type FindStatesByCountryIdQueryVariables = Exact<{
+  countryId: Scalars['ID']['input'];
+}>;
+
+export type FindStatesByCountryIdQuery = {
+  __typename?: 'Query';
+  getStatesByCountryId: Array<{
+    __typename?: 'StateType';
+    name: string;
+    code: string;
+  }>;
 };
 
 export type RegisterMutationVariables = Exact<{
@@ -1449,17 +1516,6 @@ export type CreateWarehouseMutation = {
     addressId: string;
     createdAt: any;
     updatedAt: any;
-    stockPerWarehouses: Array<{
-      __typename?: 'StockPerWarehouse';
-      id: string;
-      warehouseId: string;
-      qtyAvailable: number;
-      qtyReserved: number;
-      lotNumber?: string | null;
-      serialNumbers?: Array<string> | null;
-      productLocation?: string | null;
-      estimatedReplenishmentDate?: any | null;
-    }>;
   };
 };
 
@@ -1497,25 +1553,7 @@ export type DeleteWarehouseMutationVariables = Exact<{
 
 export type DeleteWarehouseMutation = {
   __typename?: 'Mutation';
-  deleteWarehouse: {
-    __typename?: 'Warehouse';
-    id: string;
-    name: string;
-    addressId: string;
-    createdAt: any;
-    updatedAt: any;
-    stockPerWarehouses: Array<{
-      __typename?: 'StockPerWarehouse';
-      id: string;
-      warehouseId: string;
-      qtyAvailable: number;
-      qtyReserved: number;
-      lotNumber?: string | null;
-      serialNumbers?: Array<string> | null;
-      productLocation?: string | null;
-      estimatedReplenishmentDate?: any | null;
-    }>;
-  };
+  deleteWarehouse: { __typename?: 'Warehouse'; name: string };
 };
 
 export type FindWarehouseByIdQueryVariables = Exact<{
@@ -1528,9 +1566,6 @@ export type FindWarehouseByIdQuery = {
     __typename?: 'Warehouse';
     id: string;
     name: string;
-    addressId: string;
-    createdAt: any;
-    updatedAt: any;
     stockPerWarehouses: Array<{
       __typename?: 'StockPerWarehouse';
       id: string;
@@ -1541,22 +1576,28 @@ export type FindWarehouseByIdQuery = {
       serialNumbers?: Array<string> | null;
       productLocation?: string | null;
       estimatedReplenishmentDate?: any | null;
+      productName?: string | null;
+      variantFirstAttribute?: {
+        __typename?: 'VariantAttribute';
+        key: string;
+        value: string;
+      } | null;
     }>;
   };
 };
 
-export type FindAllWarehousesQueryVariables = Exact<{
+export type FindInventoryQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
   addressId?: InputMaybe<Scalars['ID']['input']>;
   variantId?: InputMaybe<Scalars['ID']['input']>;
+  isArchived?: InputMaybe<Scalars['Boolean']['input']>;
   lowStockThreshold?: InputMaybe<Scalars['Int']['input']>;
   sortBy?: InputMaybe<SortBy>;
   sortOrder?: InputMaybe<SortOrder>;
 }>;
 
-export type FindAllWarehousesQuery = {
+export type FindInventoryQuery = {
   __typename?: 'Query';
   getAllWarehouses: {
     __typename?: 'PaginatedWarehousesType';
@@ -1566,20 +1607,47 @@ export type FindAllWarehousesQuery = {
       __typename?: 'Warehouse';
       id: string;
       name: string;
-      addressId: string;
-      createdAt: any;
-      updatedAt: any;
       stockPerWarehouses: Array<{
         __typename?: 'StockPerWarehouse';
         id: string;
-        warehouseId: string;
         qtyAvailable: number;
         qtyReserved: number;
-        lotNumber?: string | null;
-        serialNumbers?: Array<string> | null;
-        productLocation?: string | null;
         estimatedReplenishmentDate?: any | null;
+        productName?: string | null;
+        variantSku?: string | null;
+        variantFirstAttribute?: {
+          __typename?: 'VariantAttribute';
+          key: string;
+          value: string;
+        } | null;
       }>;
+    }>;
+  };
+};
+
+export type FindWarehousesQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  addressId?: InputMaybe<Scalars['ID']['input']>;
+  sortBy?: InputMaybe<SortBy>;
+  sortOrder?: InputMaybe<SortOrder>;
+}>;
+
+export type FindWarehousesQuery = {
+  __typename?: 'Query';
+  getAllWarehouses: {
+    __typename?: 'PaginatedWarehousesType';
+    total: number;
+    hasMore: boolean;
+    warehouses: Array<{
+      __typename?: 'Warehouse';
+      id: string;
+      name: string;
+      addressLine1?: string | null;
+      city?: string | null;
+      countryCode?: string | null;
+      postalCode?: string | null;
     }>;
   };
 };
@@ -1864,7 +1932,7 @@ export type FindAllProductsQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Float']['input']>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   categoriesIds?: InputMaybe<
-    Array<Scalars['Int']['input']> | Scalars['Int']['input']
+    Array<Scalars['ID']['input']> | Scalars['ID']['input']
   >;
   type?: InputMaybe<TypeEnum>;
   sortBy?: InputMaybe<SortBy>;
@@ -2458,6 +2526,168 @@ export type FindAllAddressesSuspenseQueryHookResult = ReturnType<
 export type FindAllAddressesQueryResult = Apollo.QueryResult<
   FindAllAddressesQuery,
   FindAllAddressesQueryVariables
+>;
+export const FindAllCountriesDocument = gql`
+  query findAllCountries {
+    getAllCountries {
+      id
+      name
+      code
+    }
+  }
+`;
+
+/**
+ * __useFindAllCountriesQuery__
+ *
+ * To run a query within a React component, call `useFindAllCountriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindAllCountriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindAllCountriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFindAllCountriesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    FindAllCountriesQuery,
+    FindAllCountriesQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<FindAllCountriesQuery, FindAllCountriesQueryVariables>(
+    FindAllCountriesDocument,
+    options,
+  );
+}
+export function useFindAllCountriesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FindAllCountriesQuery,
+    FindAllCountriesQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    FindAllCountriesQuery,
+    FindAllCountriesQueryVariables
+  >(FindAllCountriesDocument, options);
+}
+export function useFindAllCountriesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        FindAllCountriesQuery,
+        FindAllCountriesQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    FindAllCountriesQuery,
+    FindAllCountriesQueryVariables
+  >(FindAllCountriesDocument, options);
+}
+export type FindAllCountriesQueryHookResult = ReturnType<
+  typeof useFindAllCountriesQuery
+>;
+export type FindAllCountriesLazyQueryHookResult = ReturnType<
+  typeof useFindAllCountriesLazyQuery
+>;
+export type FindAllCountriesSuspenseQueryHookResult = ReturnType<
+  typeof useFindAllCountriesSuspenseQuery
+>;
+export type FindAllCountriesQueryResult = Apollo.QueryResult<
+  FindAllCountriesQuery,
+  FindAllCountriesQueryVariables
+>;
+export const FindStatesByCountryIdDocument = gql`
+  query findStatesByCountryId($countryId: ID!) {
+    getStatesByCountryId(countryId: $countryId) {
+      name
+      code
+    }
+  }
+`;
+
+/**
+ * __useFindStatesByCountryIdQuery__
+ *
+ * To run a query within a React component, call `useFindStatesByCountryIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindStatesByCountryIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindStatesByCountryIdQuery({
+ *   variables: {
+ *      countryId: // value for 'countryId'
+ *   },
+ * });
+ */
+export function useFindStatesByCountryIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    FindStatesByCountryIdQuery,
+    FindStatesByCountryIdQueryVariables
+  > &
+    (
+      | { variables: FindStatesByCountryIdQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    FindStatesByCountryIdQuery,
+    FindStatesByCountryIdQueryVariables
+  >(FindStatesByCountryIdDocument, options);
+}
+export function useFindStatesByCountryIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FindStatesByCountryIdQuery,
+    FindStatesByCountryIdQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    FindStatesByCountryIdQuery,
+    FindStatesByCountryIdQueryVariables
+  >(FindStatesByCountryIdDocument, options);
+}
+export function useFindStatesByCountryIdSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        FindStatesByCountryIdQuery,
+        FindStatesByCountryIdQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    FindStatesByCountryIdQuery,
+    FindStatesByCountryIdQueryVariables
+  >(FindStatesByCountryIdDocument, options);
+}
+export type FindStatesByCountryIdQueryHookResult = ReturnType<
+  typeof useFindStatesByCountryIdQuery
+>;
+export type FindStatesByCountryIdLazyQueryHookResult = ReturnType<
+  typeof useFindStatesByCountryIdLazyQuery
+>;
+export type FindStatesByCountryIdSuspenseQueryHookResult = ReturnType<
+  typeof useFindStatesByCountryIdSuspenseQuery
+>;
+export type FindStatesByCountryIdQueryResult = Apollo.QueryResult<
+  FindStatesByCountryIdQuery,
+  FindStatesByCountryIdQueryVariables
 >;
 export const RegisterDocument = gql`
   mutation register(
@@ -3724,16 +3954,6 @@ export const CreateWarehouseDocument = gql`
       addressId
       createdAt
       updatedAt
-      stockPerWarehouses {
-        id
-        warehouseId
-        qtyAvailable
-        qtyReserved
-        lotNumber
-        serialNumbers
-        productLocation
-        estimatedReplenishmentDate
-      }
     }
   }
 `;
@@ -3848,21 +4068,7 @@ export type UpdateWarehouseMutationOptions = Apollo.BaseMutationOptions<
 export const DeleteWarehouseDocument = gql`
   mutation deleteWarehouse($id: ID!) {
     deleteWarehouse(id: $id) {
-      id
       name
-      addressId
-      createdAt
-      updatedAt
-      stockPerWarehouses {
-        id
-        warehouseId
-        qtyAvailable
-        qtyReserved
-        lotNumber
-        serialNumbers
-        productLocation
-        estimatedReplenishmentDate
-      }
     }
   }
 `;
@@ -3914,9 +4120,6 @@ export const FindWarehouseByIdDocument = gql`
     getWarehouseById(id: $id) {
       id
       name
-      addressId
-      createdAt
-      updatedAt
       stockPerWarehouses {
         id
         warehouseId
@@ -3926,6 +4129,11 @@ export const FindWarehouseByIdDocument = gql`
         serialNumbers
         productLocation
         estimatedReplenishmentDate
+        variantFirstAttribute {
+          key
+          value
+        }
+        productName
       }
     }
   }
@@ -4005,13 +4213,13 @@ export type FindWarehouseByIdQueryResult = Apollo.QueryResult<
   FindWarehouseByIdQuery,
   FindWarehouseByIdQueryVariables
 >;
-export const FindAllWarehousesDocument = gql`
-  query findAllWarehouses(
+export const FindInventoryDocument = gql`
+  query findInventory(
     $page: Int = 1
     $limit: Int = 10
-    $name: String
     $addressId: ID
     $variantId: ID
+    $isArchived: Boolean
     $lowStockThreshold: Int
     $sortBy: SortBy
     $sortOrder: SortOrder
@@ -4019,9 +4227,9 @@ export const FindAllWarehousesDocument = gql`
     getAllWarehouses(
       page: $page
       limit: $limit
-      name: $name
       addressId: $addressId
       variantId: $variantId
+      isArchived: $isArchived
       lowStockThreshold: $lowStockThreshold
       sortBy: $sortBy
       sortOrder: $sortOrder
@@ -4029,18 +4237,17 @@ export const FindAllWarehousesDocument = gql`
       warehouses {
         id
         name
-        addressId
-        createdAt
-        updatedAt
         stockPerWarehouses {
           id
-          warehouseId
           qtyAvailable
           qtyReserved
-          lotNumber
-          serialNumbers
-          productLocation
           estimatedReplenishmentDate
+          variantFirstAttribute {
+            key
+            value
+          }
+          productName
+          variantSku
         }
       }
       total
@@ -4050,58 +4257,58 @@ export const FindAllWarehousesDocument = gql`
 `;
 
 /**
- * __useFindAllWarehousesQuery__
+ * __useFindInventoryQuery__
  *
- * To run a query within a React component, call `useFindAllWarehousesQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindAllWarehousesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFindInventoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindInventoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFindAllWarehousesQuery({
+ * const { data, loading, error } = useFindInventoryQuery({
  *   variables: {
  *      page: // value for 'page'
  *      limit: // value for 'limit'
- *      name: // value for 'name'
  *      addressId: // value for 'addressId'
  *      variantId: // value for 'variantId'
+ *      isArchived: // value for 'isArchived'
  *      lowStockThreshold: // value for 'lowStockThreshold'
  *      sortBy: // value for 'sortBy'
  *      sortOrder: // value for 'sortOrder'
  *   },
  * });
  */
-export function useFindAllWarehousesQuery(
+export function useFindInventoryQuery(
   baseOptions?: Apollo.QueryHookOptions<
-    FindAllWarehousesQuery,
-    FindAllWarehousesQueryVariables
+    FindInventoryQuery,
+    FindInventoryQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    FindAllWarehousesQuery,
-    FindAllWarehousesQueryVariables
-  >(FindAllWarehousesDocument, options);
+  return Apollo.useQuery<FindInventoryQuery, FindInventoryQueryVariables>(
+    FindInventoryDocument,
+    options,
+  );
 }
-export function useFindAllWarehousesLazyQuery(
+export function useFindInventoryLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    FindAllWarehousesQuery,
-    FindAllWarehousesQueryVariables
+    FindInventoryQuery,
+    FindInventoryQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    FindAllWarehousesQuery,
-    FindAllWarehousesQueryVariables
-  >(FindAllWarehousesDocument, options);
+  return Apollo.useLazyQuery<FindInventoryQuery, FindInventoryQueryVariables>(
+    FindInventoryDocument,
+    options,
+  );
 }
-export function useFindAllWarehousesSuspenseQuery(
+export function useFindInventorySuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
     | Apollo.SuspenseQueryHookOptions<
-        FindAllWarehousesQuery,
-        FindAllWarehousesQueryVariables
+        FindInventoryQuery,
+        FindInventoryQueryVariables
       >,
 ) {
   const options =
@@ -4109,22 +4316,129 @@ export function useFindAllWarehousesSuspenseQuery(
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
-    FindAllWarehousesQuery,
-    FindAllWarehousesQueryVariables
-  >(FindAllWarehousesDocument, options);
+    FindInventoryQuery,
+    FindInventoryQueryVariables
+  >(FindInventoryDocument, options);
 }
-export type FindAllWarehousesQueryHookResult = ReturnType<
-  typeof useFindAllWarehousesQuery
+export type FindInventoryQueryHookResult = ReturnType<
+  typeof useFindInventoryQuery
 >;
-export type FindAllWarehousesLazyQueryHookResult = ReturnType<
-  typeof useFindAllWarehousesLazyQuery
+export type FindInventoryLazyQueryHookResult = ReturnType<
+  typeof useFindInventoryLazyQuery
 >;
-export type FindAllWarehousesSuspenseQueryHookResult = ReturnType<
-  typeof useFindAllWarehousesSuspenseQuery
+export type FindInventorySuspenseQueryHookResult = ReturnType<
+  typeof useFindInventorySuspenseQuery
 >;
-export type FindAllWarehousesQueryResult = Apollo.QueryResult<
-  FindAllWarehousesQuery,
-  FindAllWarehousesQueryVariables
+export type FindInventoryQueryResult = Apollo.QueryResult<
+  FindInventoryQuery,
+  FindInventoryQueryVariables
+>;
+export const FindWarehousesDocument = gql`
+  query findWarehouses(
+    $page: Int = 1
+    $limit: Int = 10
+    $name: String
+    $addressId: ID
+    $sortBy: SortBy
+    $sortOrder: SortOrder
+  ) {
+    getAllWarehouses(
+      page: $page
+      limit: $limit
+      name: $name
+      addressId: $addressId
+      sortBy: $sortBy
+      sortOrder: $sortOrder
+      includeAddresses: true
+    ) {
+      warehouses {
+        id
+        name
+        addressLine1
+        city
+        countryCode
+        postalCode
+      }
+      total
+      hasMore
+    }
+  }
+`;
+
+/**
+ * __useFindWarehousesQuery__
+ *
+ * To run a query within a React component, call `useFindWarehousesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindWarehousesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindWarehousesQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *      limit: // value for 'limit'
+ *      name: // value for 'name'
+ *      addressId: // value for 'addressId'
+ *      sortBy: // value for 'sortBy'
+ *      sortOrder: // value for 'sortOrder'
+ *   },
+ * });
+ */
+export function useFindWarehousesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    FindWarehousesQuery,
+    FindWarehousesQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<FindWarehousesQuery, FindWarehousesQueryVariables>(
+    FindWarehousesDocument,
+    options,
+  );
+}
+export function useFindWarehousesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FindWarehousesQuery,
+    FindWarehousesQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<FindWarehousesQuery, FindWarehousesQueryVariables>(
+    FindWarehousesDocument,
+    options,
+  );
+}
+export function useFindWarehousesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        FindWarehousesQuery,
+        FindWarehousesQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    FindWarehousesQuery,
+    FindWarehousesQueryVariables
+  >(FindWarehousesDocument, options);
+}
+export type FindWarehousesQueryHookResult = ReturnType<
+  typeof useFindWarehousesQuery
+>;
+export type FindWarehousesLazyQueryHookResult = ReturnType<
+  typeof useFindWarehousesLazyQuery
+>;
+export type FindWarehousesSuspenseQueryHookResult = ReturnType<
+  typeof useFindWarehousesSuspenseQuery
+>;
+export type FindWarehousesQueryResult = Apollo.QueryResult<
+  FindWarehousesQuery,
+  FindWarehousesQueryVariables
 >;
 export const CreateProductDocument = gql`
   mutation createProduct($input: CreateProductInput!) {
@@ -4640,7 +4954,7 @@ export const FindAllProductsDocument = gql`
   query findAllProducts(
     $page: Float = 1
     $limit: Float = 10
-    $categoriesIds: [Int!] = []
+    $categoriesIds: [ID!] = []
     $type: TypeEnum = PHYSICAL
     $sortBy: SortBy = NAME
     $sortOrder: SortOrder = ASC

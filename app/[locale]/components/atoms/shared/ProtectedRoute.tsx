@@ -15,18 +15,18 @@ export default function ProtectedRoute({
   children,
   fallback,
 }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading, redirectToLogin } = useAuth();
+  const { isAuthenticated, loading, redirectToLogin } = useAuth();
   const pathname = usePathname();
 
   useEffect(() => {
     // Only check authentication for protected routes
-    if (isProtectedRoute(pathname) && !isLoading && !isAuthenticated) {
+    if (isProtectedRoute(pathname) && !loading && !isAuthenticated) {
       redirectToLogin();
     }
-  }, [isAuthenticated, isLoading, pathname, redirectToLogin]);
+  }, [isAuthenticated, loading, pathname, redirectToLogin]);
 
   // Show loading state while checking authentication
-  if (isLoading) {
+  if (loading) {
     return fallback || <SpinLoader />;
   }
 

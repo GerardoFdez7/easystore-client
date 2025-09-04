@@ -20,12 +20,12 @@ const mockSchema = z
 function DialogWrapper({
   isOpen = true,
   hasToken = true,
-  isLoading = false,
+  loading = false,
   isTokenInvalid = false,
 }: {
   isOpen?: boolean;
   hasToken?: boolean;
-  isLoading?: boolean;
+  loading?: boolean;
   isTokenInvalid?: boolean;
 }) {
   const form = useForm<ResetPasswordFormData>({
@@ -50,7 +50,7 @@ function DialogWrapper({
         token={hasToken ? 'mock-reset-token' : ''}
         form={form}
         onSubmit={handleSubmit}
-        isLoading={isLoading}
+        loading={loading}
         isTokenInvalid={isTokenInvalid}
       />
     </div>
@@ -84,7 +84,7 @@ export const Default: Story = {
   args: {
     isOpen: true,
     hasToken: true,
-    isLoading: false,
+    loading: false,
   },
 };
 
@@ -92,7 +92,7 @@ export const WithInvalidToken: Story = {
   args: {
     isOpen: true,
     hasToken: true,
-    isLoading: false,
+    loading: false,
     isTokenInvalid: true,
   },
 };
@@ -101,6 +101,6 @@ export const Loading: Story = {
   args: {
     isOpen: true,
     hasToken: true,
-    isLoading: true,
+    loading: true,
   },
 };

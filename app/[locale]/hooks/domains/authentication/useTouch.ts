@@ -12,7 +12,7 @@ import {
   GetInTouchMutation,
   GetInTouchMutationVariables,
 } from '@graphql/generated';
-import useMutation from '@hooks/useMutation';
+import { useMutation } from '@apollo/client';
 
 const phoneRegex = /^[+\d().-\s]{6,20}$/;
 
@@ -74,7 +74,7 @@ export type TouchFormValues = z.infer<ReturnType<typeof buildTouchFormSchema>>;
 export const useTouch = () => {
   const t = useTranslations('GetInTouch');
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const touchFormSchema = buildTouchFormSchema(t);
 
@@ -92,49 +92,23 @@ export const useTouch = () => {
     },
   });
 
-  const { mutate: getInTouchMutation } = useMutation<
+  const [getInTouchMutation] = useMutation<
     GetInTouchMutation,
     GetInTouchMutationVariables
-  >(GetInTouchDocument, undefined, {
+  >(GetInTouchDocument, {
     onCompleted: () => {
-      toast.success(t('submittedTitle', { default: 'Request sent 🎉' }), {
-        description: t('submittedDescription', {
-          default: 'We will contact you shortly.',
-        }),
+      toast.success(t('submittedTitle'), {
+        description: t('submittedDescription'),
       });
       form.reset();
       router.push('/');
-      setIsLoading(false);
-    },
-    onError: (error) => {
-      if (error.graphQLErrors?.length > 0) {
-        const graphQLError = error.graphQLErrors[0];
-        toast.error(
-          t('submitErrorTitle', { default: 'Something went wrong' }),
-          {
-            description: graphQLError.message,
-          },
-        );
-      } else if (error.networkError) {
-        toast.error(t('networkError', { default: 'Network Error' }), {
-          description: t('networkErrorDescription', {
-            default: 'Please check your internet connection and try again.',
-          }),
-        });
-      } else {
-        toast.error(t('unexpectedError', { default: 'Unexpected Error' }), {
-          description: t('unexpectedErrorDescription', {
-            default: 'An unexpected error occurred. Please try again later.',
-          }),
-        });
-      }
-      setIsLoading(false);
+      setLoading(false);
     },
   });
 
   const handleSubmit = async (formData: TouchFormValues) => {
     try {
-      setIsLoading(true);
+      setLoading(true);
       const variables: GetInTouchMutationVariables = {
         fullName: formData.fullName,
         businessEmail: formData.businessEmail,
@@ -149,11 +123,11 @@ export const useTouch = () => {
       await getInTouchMutation({ variables });
     } catch (error) {
       console.error('Get in touch error:', error);
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  return { form, handleSubmit, isLoading, touchFormSchema };
+  return { form, handleSubmit, loading, touchFormSchema };
 };
 
 export default useTouch;

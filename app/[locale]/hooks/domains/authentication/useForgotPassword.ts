@@ -10,18 +10,18 @@ import {
   ForgotPasswordMutation,
   AccountTypeEnum,
 } from '@graphql/generated';
-import useMutation from '../../useMutation';
+import { useMutation } from '@apollo/client';
 
 export const useForgotPassword = () => {
   const t = useTranslations('ForgotPassword');
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Schema validation based on backend value objects
   const forgotPasswordSchema = z.object({
     email: z.string().email({ message: t('invalidEmailFormat') }),
   });
 
-  const { mutate: forgotPasswordMutation } = useMutation<
+  const [forgotPasswordMutation] = useMutation<
     ForgotPasswordMutation,
     ForgotPasswordMutationVariables
   >(ForgotPasswordDocument);
@@ -29,7 +29,7 @@ export const useForgotPassword = () => {
   const handleForgotPassword = async (
     email: string,
   ): Promise<{ success: boolean }> => {
-    setIsLoading(true);
+    setLoading(true);
 
     try {
       // Validate email format
@@ -48,19 +48,17 @@ export const useForgotPassword = () => {
         description: t('resetEmailSentDescription'),
       });
       return { success: true };
-    } catch (_err) {
-      toast.error(t('unexpectedError'), {
-        description: t('unexpectedErrorDescription'),
-      });
+    } catch (err) {
+      console.error(err);
       return { success: false };
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return {
     handleForgotPassword,
-    isLoading,
+    loading,
     forgotPasswordSchema,
   };
 };

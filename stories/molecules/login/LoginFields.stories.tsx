@@ -117,7 +117,7 @@ export const WithErrors: Story = {
     showSubmitButton: true,
   },
   play: async ({ canvasElement }) => {
-    // This would trigger validation errors by submitting empty form
+    // This would trigger validation error by submitting empty form
     const submitButton = canvasElement.querySelector(
       'button[type="submit"]',
     ) as HTMLButtonElement;

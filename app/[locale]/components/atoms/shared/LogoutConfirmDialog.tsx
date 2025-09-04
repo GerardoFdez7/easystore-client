@@ -22,7 +22,7 @@ export default function LogoutConfirmDialog({
   children,
 }: LogoutConfirmDialogProps) {
   const t = useTranslations('Dashboard');
-  const { handleLogout, isLoading } = useLogout();
+  const { handleLogout, loading } = useLogout();
 
   return (
     <AlertDialog>
@@ -38,7 +38,7 @@ export default function LogoutConfirmDialog({
           <AlertDialogCancel>{t('logoutConfirmCancel')}</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => void handleLogout()}
-            disabled={isLoading}
+            disabled={loading}
             variant="danger"
           >
             {t('logoutConfirmAction')}

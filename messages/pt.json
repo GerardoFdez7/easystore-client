@@ -835,5 +835,14 @@
     "logoUpdated": "Logotipo atualizado com sucesso.",
 
     "noPhone": "Sem número de telefone"
+  },
+  "Errors": {
+    "title": "Erro",
+    "generic-error": "Ocorreu um erro inesperado",
+    "generic-description": "Tente novamente mais tarde ou entre em contato com o suporte se o problema persistir.",
+    "network-error": "Ocorreu um erro de rede. Verifique sua conexão e tente novamente.",
+    "unauthorized-error": "Você não está autorizado a realizar esta ação.",
+    "internal-server-error": "Ocorreu um erro interno do servidor. Tente novamente mais tarde.",
+    "bad-request-error": "A solicitação era inválida. Verifique os dados e tente novamente."
   }
 }

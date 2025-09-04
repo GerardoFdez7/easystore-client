@@ -4,7 +4,7 @@ import { useApolloClient } from '@apollo/client';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
-import useQuery from '@hooks/useQuery';
+import { useQuery } from '@apollo/client';
 import {
   FindTenantProfileDocument,
   FindTenantProfileQuery,
@@ -48,7 +48,7 @@ export function useProfile() {
   const apollo = useApolloClient();
 
   // Query using custom useQuery hook
-  const { data, errors, isLoading, refetch } = useQuery<FindTenantProfileQuery>(
+  const { data, error, loading, refetch } = useQuery<FindTenantProfileQuery>(
     FindTenantProfileDocument,
   );
 
@@ -315,8 +315,8 @@ export function useProfile() {
 
   return {
     profile,
-    errors,
-    isLoading,
+    error,
+    loading,
     hasPhone,
     phoneDisplay,
     phoneActionLabel,

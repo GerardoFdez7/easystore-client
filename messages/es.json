@@ -832,7 +832,15 @@
     "ownerNameUpdated": "Nombre del propietario actualizado correctamente.",
     "storeNameUpdated": "Nombre de la tienda actualizado correctamente.",
     "logoUpdated": "Logo actualizado correctamente.",
-
     "noPhone": "Sin número de teléfono"
+  },
+  "Errors": {
+    "title": "Error",
+    "generic-error": "Ocurrió un error inesperado",
+    "generic-description": "Por favor, inténtalo de nuevo más tarde o contacta con el soporte si el problema persiste.",
+    "network-error": "Ocurrió un error de red. Por favor, comprueba tu conexión e inténtalo de nuevo.",
+    "unauthorized-error": "No estás autorizado para realizar esta acción.",
+    "internal-server-error": "Ocurrió un error interno del servidor. Por favor, inténtalo de nuevo más tarde.",
+    "bad-request-error": "La solicitud no es válida. Por favor, comprueba los datos e inténtalo de nuevo."
   }
 }

@@ -26,7 +26,7 @@ type ProfileFormData = {
 
 export default function MainProfile() {
   const t = useTranslations('Profile');
-  const { profile, isLoading, phoneDisplay, hasPhone, actions, validators } =
+  const { profile, loading, phoneDisplay, hasPhone, actions, validators } =
     useProfile();
 
   // Create form schema from validators
@@ -91,7 +91,7 @@ export default function MainProfile() {
   return (
     <Form {...form}>
       <main className="relative mt-6 min-h-full w-full flex-1 md:mt-0">
-        {isLoading ? (
+        {loading ? (
           <>
             <FormFieldSkeleton />
             <FormFieldSkeleton />
