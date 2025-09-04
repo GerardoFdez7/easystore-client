@@ -4,7 +4,7 @@ import { SidebarInset, SidebarProvider } from '@shadcn/ui/sidebar';
 import Sidebar from '@organisms/shared/Sidebar';
 import { ProductTable } from '@molecules/products/ProductTable';
 import { ProductGrid } from '@molecules/products/ProductGrid';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { ProductsToolbar } from '@molecules/products/Toolbar';
 import { FilterType } from '@atoms/products/TabFilterProducts';
 import { useTranslations } from 'next-intl';
@@ -18,10 +18,12 @@ export default function MainDashboard() {
   const [typeFilter, setTypeFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('All');
-  const { products, isLoading, errors } = useGetAllProducts({
+  const [searchTerm, setSearchTerm] = useState('');
+  const { products } = useGetAllProducts({
     page: 1,
     limit: 10,
     includeSoftDeleted: true,
+    name: searchTerm || undefined,
   });
 
   // Get the archived status of selected products
@@ -32,8 +34,10 @@ export default function MainDashboard() {
     setSelectedProducts([]);
   };
 
-  if (isLoading) return <div>Cargando productos...</div>;
-  if (errors) return <div>Error al cargar los productos</div>;
+  //Search
+  const handleSearch = useCallback((term: string) => {
+    setSearchTerm(term);
+  }, []);
 
   const handleProductSelect = (productId: string, checked: boolean) => {
     if (checked) {
@@ -79,6 +83,8 @@ export default function MainDashboard() {
                   onCategoryFilterChange={setCategoryFilter}
                   viewMode={viewMode}
                   onViewModeToggle={toggleViewMode}
+                  searchTerm={searchTerm}
+                  onSearch={handleSearch}
                 />
 
                 {viewMode === 'table' ? (
