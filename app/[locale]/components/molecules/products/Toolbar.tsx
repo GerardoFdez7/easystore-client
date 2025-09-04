@@ -6,6 +6,7 @@ import ComboboxType from '@atoms/products/ComboboxType';
 import { SearchBar } from '@atoms/shared/SearchBar';
 import ComboboxCategory from '@atoms/products/ComboboxCategory';
 import { useTranslations } from 'next-intl';
+import { memo } from 'react';
 
 interface ProductsToolbarProps {
   typeFilter?: string;
@@ -14,15 +15,19 @@ interface ProductsToolbarProps {
   onCategoryFilterChange?: (value: string) => void;
   viewMode: string;
   onViewModeToggle: () => void;
+  searchTerm: string;
+  onSearch: (term: string) => void;
 }
 
-export function ProductsToolbar({
+export const ProductsToolbar = memo(function ProductsToolbar({
   typeFilter,
   onTypeFilterChange,
   categoryFilter,
   onCategoryFilterChange,
   viewMode,
   onViewModeToggle,
+  searchTerm,
+  onSearch,
 }: ProductsToolbarProps) {
   const t = useTranslations('Products');
 
@@ -45,7 +50,11 @@ export function ProductsToolbar({
               onValueChange={onCategoryFilterChange}
             />
           </div>
-          <SearchBar placeholder={t('searchProducts')} />
+          <SearchBar
+            searchTerm={searchTerm}
+            onSearch={onSearch}
+            placeholder={t('searchProducts')}
+          />
           {/* Filters only visible on large screens within this container */}
         </div>
 
@@ -72,4 +81,4 @@ export function ProductsToolbar({
       </div>
     </div>
   );
-}
+});
