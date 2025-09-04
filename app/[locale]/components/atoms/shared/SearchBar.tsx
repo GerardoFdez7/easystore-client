@@ -5,6 +5,7 @@ import { useDebounce } from '@hooks/utils/useDebounce';
 import { cn } from '@lib/utils';
 
 interface SearchBarProps {
+  onSearch: (term: string) => void;
   placeholder?: string;
   searchTerm: string;
   onSearchChange: (searchTerm: string) => void;
