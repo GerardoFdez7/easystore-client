@@ -22,6 +22,7 @@ interface ProductTableProps {
   onSelectAll: (checked: boolean) => void;
   selectedFilter: FilterType;
   setSelectedFilter: (filter: FilterType) => void;
+  isArchived?: boolean | boolean[];
   onDeleteComplete?: () => void;
 }
 
@@ -32,6 +33,7 @@ export function ProductTable({
   onSelectAll,
   selectedFilter,
   setSelectedFilter,
+  isArchived = false,
   onDeleteComplete,
 }: ProductTableProps) {
   const t = useTranslations('Products');
@@ -43,6 +45,7 @@ export function ProductTable({
         setSelectedFilter={setSelectedFilter}
         selectedCount={selectedProducts.length}
         selectedProductIds={selectedProducts}
+        isArchived={isArchived}
         onDeleteComplete={onDeleteComplete}
       />
 

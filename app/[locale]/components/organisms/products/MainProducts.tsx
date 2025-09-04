@@ -23,6 +23,11 @@ export default function MainDashboard() {
     limit: 10,
     includeSoftDeleted: true,
   });
+
+  // Get the archived status of selected products
+  const selectedProductsAreArchived = selectedProducts.map(
+    (id) => products?.find((p) => p.id === id)?.isArchived ?? false,
+  );
   const handleDeleteComplete = () => {
     setSelectedProducts([]);
   };
@@ -82,6 +87,7 @@ export default function MainDashboard() {
                     setSelectedFilter={setSelectedFilter}
                     products={products}
                     selectedProducts={selectedProducts}
+                    isArchived={selectedProductsAreArchived}
                     onSelectProduct={handleProductSelect}
                     onSelectAll={handleSelectAll}
                     onDeleteComplete={handleDeleteComplete}
