@@ -19,7 +19,7 @@ export const useGetAllProducts = (
     FindAllProductsQueryVariables
   >(FindAllProductsDocument, {
     ...defaultVariables,
-    ...(variables || {}),
+    ...(variables || { type: null }),
   });
 
   const products = useMemo(() => {
