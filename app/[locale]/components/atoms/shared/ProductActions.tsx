@@ -13,11 +13,13 @@ import DeleteProduct from './DeleteProduct';
 
 interface ProductActionsProps {
   selectedProductIds: string[];
+  isArchived?: boolean | boolean[];
   onDeleteComplete?: () => void;
 }
 
 export default function ProductActions({
   selectedProductIds,
+  isArchived = false,
   onDeleteComplete,
 }: ProductActionsProps) {
   return (
@@ -34,6 +36,7 @@ export default function ProductActions({
           <div>
             <ArchivedProduct
               productsIds={selectedProductIds}
+              isArchived={isArchived}
               onSoftDeleteComplete={onDeleteComplete}
             />
           </div>

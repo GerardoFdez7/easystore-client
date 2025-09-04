@@ -9,6 +9,7 @@ export type FilterProductsProps = {
   setSelectedFilter: (filter: FilterType) => void;
   selectedCount: number;
   selectedProductIds: string[];
+  isArchived?: boolean | boolean[];
   onDeleteComplete?: () => void;
 };
 
@@ -17,6 +18,7 @@ export default function TabFilterProducts({
   setSelectedFilter,
   selectedCount,
   selectedProductIds,
+  isArchived = false,
   onDeleteComplete,
 }: FilterProductsProps) {
   const t = useTranslations('Products');
@@ -54,6 +56,7 @@ export default function TabFilterProducts({
           <div className="mr-2">
             <ProductActions
               selectedProductIds={selectedProductIds}
+              isArchived={isArchived}
               onDeleteComplete={onDeleteComplete}
             />
           </div>

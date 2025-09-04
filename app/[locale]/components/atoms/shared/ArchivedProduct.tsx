@@ -14,14 +14,19 @@ import useMultipleSoftDeleteProducts from '@hooks/domains/products/useMultipleSo
 
 interface ArchivedProductProps {
   productsIds: string[];
+  isArchived?: boolean | boolean[];
   onSoftDeleteComplete?: () => void;
 }
 export default function ArchivedProduct({
   productsIds,
+  isArchived = false,
   onSoftDeleteComplete,
 }: ArchivedProductProps) {
-  const { handleMultipleSoftDelete, isLoading } =
-    useMultipleSoftDeleteProducts(onSoftDeleteComplete);
+  const { handleMultipleSoftDelete, isLoading } = useMultipleSoftDeleteProducts(
+    {
+      onSuccess: onSoftDeleteComplete,
+    },
+  );
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -35,21 +40,22 @@ export default function ArchivedProduct({
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>¿Archive product?</AlertDialogTitle>
+          <AlertDialogTitle>Archive Products</AlertDialogTitle>
           <AlertDialogDescription>
-            This action will hide the product from the store but keep all its
-            information.
+            Are you sure you want to archive these products?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => void handleMultipleSoftDelete(productsIds)}
+            onClick={() =>
+              void handleMultipleSoftDelete(productsIds, isArchived)
+            }
             className="bg-title border border-black hover:bg-black/85 dark:hover:bg-gray-300"
             disabled={isLoading}
           >
             {isLoading
-              ? 'Archiving...'
+              ? 'Archiving'
               : `Archive${productsIds.length > 1 ? ` (${productsIds.length})` : ''}`}
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -9,7 +9,13 @@ import useMutation from '../../useMutation';
 import { useTranslations } from 'next-intl';
 import { useApolloClient } from '@apollo/client';
 
-export const useMultipleSoftDeleteProducts = (onSuccess?: () => void) => {
+interface UseMultipleSoftDeleteProductsProps {
+  onSuccess?: () => void;
+}
+
+export const useMultipleSoftDeleteProducts = ({
+  onSuccess,
+}: UseMultipleSoftDeleteProductsProps = {}) => {
   const client = useApolloClient();
   const t = useTranslations('Products');
 
@@ -62,14 +68,25 @@ export const useMultipleSoftDeleteProducts = (onSuccess?: () => void) => {
     },
   );
 
-  const handleMultipleSoftDelete = async (ids: string[]) => {
+  const handleMultipleSoftDelete = async (
+    products: Array<{ id: string; isArchived?: boolean }>,
+  ) => {
+    // Filter out already archived products
+    const productsToArchive = products.filter((product) => !product.isArchived);
+
+    if (productsToArchive.length === 0) {
+      return;
+    }
+
     try {
       await Promise.all(
-        ids.map((id) => softDeleteProduct({ variables: { id } })),
+        productsToArchive.map(({ id }) =>
+          softDeleteProduct({ variables: { id } }),
+        ),
       );
 
-      toast.success('Products archived successfully', {
-        description: `Successfully archived ${ids.length} product${ids.length > 1 ? 's' : ''}.`,
+      toast.success('Products archived', {
+        description: `Successfully archived ${productsToArchive.length} products`,
       });
     } catch (error) {
       // Error is already handled by the onError callback
@@ -78,7 +95,23 @@ export const useMultipleSoftDeleteProducts = (onSuccess?: () => void) => {
   };
 
   return {
-    handleMultipleSoftDelete,
+    handleMultipleSoftDelete: (
+      ids: string[],
+      isArchived: boolean | boolean[],
+    ) => {
+      // Handle both single and multiple product cases
+      const products = Array.isArray(isArchived)
+        ? ids.map((id, index) => ({
+            id,
+            isArchived: isArchived[index],
+          }))
+        : ids.map((id) => ({
+            id,
+            isArchived,
+          }));
+
+      return handleMultipleSoftDelete(products);
+    },
     isLoading,
     errors,
   };
