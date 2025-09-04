@@ -17,9 +17,9 @@ export default function AuthGuard({
   fallback,
   requireAuth = true,
 }: AuthGuardProps) {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
 
-  if (isLoading) {
+  if (loading) {
     return fallback || <SpinLoader />;
   }
 

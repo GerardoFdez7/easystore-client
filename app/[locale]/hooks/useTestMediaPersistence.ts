@@ -8,7 +8,7 @@ interface MediaData {
 }
 
 interface UseTestMediaPersistenceReturn {
-  isLoading: boolean;
+  loading: boolean;
   persistMedia: (mediaData: MediaData) => Promise<string>;
   savedMedia: string[];
   clearSavedMedia: () => void;
@@ -19,7 +19,7 @@ interface UseTestMediaPersistenceReturn {
  * En una aplicación real, esto haría llamadas a la API
  */
 export const useTestMediaPersistence = (): UseTestMediaPersistenceReturn => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setIsLoading] = useState(false);
   const [savedMedia, setSavedMedia] = useState<string[]>([]);
 
   const persistMedia = async (mediaData: MediaData): Promise<string> => {
@@ -54,7 +54,7 @@ export const useTestMediaPersistence = (): UseTestMediaPersistenceReturn => {
   };
 
   return {
-    isLoading,
+    loading,
     persistMedia,
     savedMedia,
     clearSavedMedia,

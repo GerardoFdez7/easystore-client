@@ -9,11 +9,11 @@ import {
   UpdatePasswordMutation,
   UpdatePasswordMutationVariables,
 } from '@graphql/generated';
-import useMutation from '../../useMutation';
+import { useMutation } from '@apollo/client';
 
 export const useUpdatePassword = () => {
   const t = useTranslations('ResetPassword');
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setIsLoading] = useState(false);
 
   // Base password validation schema
   const passwordSchema = z
@@ -44,7 +44,7 @@ export const useUpdatePassword = () => {
       path: ['confirmPassword'],
     });
 
-  const { mutate: updatePasswordMutation } = useMutation<
+  const [updatePasswordMutation] = useMutation<
     UpdatePasswordMutation,
     UpdatePasswordMutationVariables
   >(UpdatePasswordDocument);
@@ -53,7 +53,7 @@ export const useUpdatePassword = () => {
     token: string,
     password: string,
     confirmPassword: string,
-  ): Promise<{ success: boolean }> => {
+  ): Promise<{ success: boolean } | undefined> => {
     setIsLoading(true);
 
     try {
@@ -86,66 +86,15 @@ export const useUpdatePassword = () => {
           (lowerErrorMessage.includes('expired') ||
             lowerErrorMessage.includes('invalid'))
         ) {
-          // Don't show toast for token errors, let component handle it
+          // Don't show toast for token error, let component handle it
           return { success: false };
         } else {
-          // Show toast for unexpected errors
-          toast.error(t('unexpectedError'), {
-            description: t('unexpectedErrorDescription'),
-          });
+          console.error('Update password error:', errorMessage);
           return { success: false };
         }
       }
     } catch (err: unknown) {
-      // Handle GraphQL errors
-      if (
-        err &&
-        typeof err === 'object' &&
-        'graphQLErrors' in err &&
-        Array.isArray(err.graphQLErrors) &&
-        err.graphQLErrors.length > 0
-      ) {
-        const graphQLError = err.graphQLErrors[0];
-        const errorMessage = graphQLError.message.toLowerCase();
-
-        // Check if it's a token-related error (invalid/expired)
-        if (
-          errorMessage.includes('token') &&
-          (errorMessage.includes('expired') || errorMessage.includes('invalid'))
-        ) {
-          // Don't show toast for token errors, let component handle it
-          return { success: false };
-        } else {
-          // Show toast for unexpected errors
-          toast.error(t('unexpectedError'), {
-            description: t('unexpectedErrorDescription'),
-          });
-          return { success: false };
-        }
-      } else if (err instanceof Error) {
-        const errorMessage = err.message.toLowerCase();
-
-        // Check if it's a token-related error (invalid/expired)
-        if (
-          errorMessage.includes('token') &&
-          (errorMessage.includes('expired') || errorMessage.includes('invalid'))
-        ) {
-          // Don't show toast for token errors, let component handle it
-          return { success: false };
-        } else {
-          // Show toast for unexpected errors
-          toast.error(t('unexpectedError'), {
-            description: t('unexpectedErrorDescription'),
-          });
-          return { success: false };
-        }
-      } else {
-        // Show toast for unexpected errors
-        toast.error(t('unexpectedError'), {
-          description: t('unexpectedErrorDescription'),
-        });
-        return { success: false };
-      }
+      console.error('Update password error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -153,7 +102,7 @@ export const useUpdatePassword = () => {
 
   return {
     handleUpdatePassword,
-    isLoading,
+    loading,
     formSchema,
     updatePasswordSchema,
   };

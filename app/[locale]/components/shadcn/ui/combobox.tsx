@@ -35,6 +35,8 @@ export interface ComboboxProps {
   align?: 'start' | 'center' | 'end';
   sideOffset?: number;
   width?: string | number;
+  serverSide?: boolean;
+  onSearchChange?: (search: string) => void;
 }
 
 function Combobox({
@@ -52,8 +54,11 @@ function Combobox({
   align = 'start',
   sideOffset = 4,
   width = 200,
+  serverSide = false,
+  onSearchChange,
 }: ComboboxProps) {
   const [internalOpen, setInternalOpen] = React.useState(false);
+  const [search, setSearch] = React.useState('');
 
   // Use controlled state if provided, otherwise use internal state
   const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
@@ -69,8 +74,9 @@ function Combobox({
       const newValue = selectedValue === value ? '' : selectedValue;
       onValueChange?.(newValue);
       setOpen(false);
+      if (serverSide) setSearch('');
     },
-    [value, onValueChange, setOpen],
+    [value, onValueChange, setOpen, serverSide],
   );
 
   const triggerWidth = typeof width === 'number' ? `${width}px` : width;
@@ -101,8 +107,19 @@ function Combobox({
         align={align}
         sideOffset={sideOffset}
       >
-        <Command>
-          <CommandInput placeholder={searchPlaceholder} />
+        <Command shouldFilter={!serverSide}>
+          <CommandInput
+            placeholder={searchPlaceholder}
+            value={serverSide ? search : undefined}
+            onValueChange={
+              serverSide
+                ? (v) => {
+                    setSearch(v);
+                    onSearchChange?.(v);
+                  }
+                : undefined
+            }
+          />
           <CommandList>
             <CommandEmpty>{emptyMessage}</CommandEmpty>
             <CommandGroup>

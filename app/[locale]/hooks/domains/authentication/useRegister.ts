@@ -10,7 +10,7 @@ import {
   AccountTypeEnum,
   RegisterMutationVariables,
 } from '@graphql/generated';
-import useMutation from '../../useMutation';
+import { useMutation, ApolloError } from '@apollo/client';
 
 export const useRegister = (accountType: AccountTypeEnum) => {
   const t = useTranslations('Register');
@@ -43,53 +43,39 @@ export const useRegister = (accountType: AccountTypeEnum) => {
   });
 
   // Use the GraphQL mutation hook
-  const {
-    mutate: registerMutation,
-    data,
-    errors,
-    isLoading,
-  } = useMutation<RegisterMutation, RegisterMutationVariables>(
-    RegisterDocument,
-    undefined,
-    {
-      onCompleted: (data) => {
-        if (data?.register) {
-          toast.success(t('registrationSuccessful'), {
-            description: t('registrationSuccessfulDescription', {
-              email: data.register.email,
-            }),
-          });
-          router.push('/login');
-        }
-      },
-      onError: (error) => {
-        // Handle GraphQL errors
-        if (error.graphQLErrors?.length > 0) {
-          const graphQLError = error.graphQLErrors[0];
-          if (
-            graphQLError.message.includes('already exists') ||
-            graphQLError.message.includes('duplicate')
-          ) {
-            toast.warning(t('associatedAccount'), {
-              description: t('associatedAccountDescription'),
-            });
-          } else {
-            toast.error(t('registrationFailed'), {
-              description: graphQLError.message,
-            });
-          }
-        } else if (error.networkError) {
-          toast.error(t('networkError'), {
-            description: t('networkErrorDescription'),
+  const [registerMutation, { data, error, loading }] = useMutation<
+    RegisterMutation,
+    RegisterMutationVariables
+  >(RegisterDocument, {
+    onCompleted: (data: RegisterMutation) => {
+      if (data?.register) {
+        toast.success(t('registrationSuccessful'), {
+          description: t('registrationSuccessfulDescription', {
+            email: data.register.email,
+          }),
+        });
+        router.push('/login');
+      }
+    },
+    onError: (error: ApolloError) => {
+      // Handle GraphQL error
+      if (error.graphQLErrors?.length > 0) {
+        const graphQLError = error.graphQLErrors[0];
+        if (
+          graphQLError.message.includes('already exists') ||
+          graphQLError.message.includes('duplicate')
+        ) {
+          toast.warning(t('associatedAccount'), {
+            description: t('associatedAccountDescription'),
           });
         } else {
-          toast.error(t('unexpectedError'), {
-            description: t('unexpectedErrorDescription'),
-          });
+          console.error('Registration error:', error);
         }
-      },
+      } else {
+        console.error('Registration error:', error);
+      }
     },
-  );
+  });
 
   const handleSubmit = async (formData: RegisterFormValues) => {
     try {
@@ -109,10 +95,10 @@ export const useRegister = (accountType: AccountTypeEnum) => {
   return {
     form,
     handleSubmit,
-    isLoading,
+    loading,
     registerFormSchema,
     data,
-    errors,
+    error,
   };
 };
 

@@ -835,7 +835,15 @@
     "ownerNameUpdated": "Nome del proprietario aggiornato correttamente.",
     "storeNameUpdated": "Nome del negozio aggiornato correttamente.",
     "logoUpdated": "Logo aggiornato correttamente.",
-
     "noPhone": "Nessun numero di telefono"
+  },
+  "Errors": {
+    "title": "Errore",
+    "generic-error": "Si è verificato un errore imprevisto",
+    "generic-description": "Riprova più tardi o contatta l'assistenza se il problema persiste.",
+    "network-error": "Si è verificato un errore di rete. Controlla la tua connessione e riprova.",
+    "unauthorized-error": "Non sei autorizzato a eseguire questa azione.",
+    "internal-server-error": "Si è verificato un errore interno del server. Riprova più tardi.",
+    "bad-request-error": "La richiesta non era valida. Controlla i dati e riprova."
   }
 }

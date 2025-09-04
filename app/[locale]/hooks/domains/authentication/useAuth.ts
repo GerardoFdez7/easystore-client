@@ -3,28 +3,24 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from '@i18n/navigation';
 import { ValidateTokenDocument, ValidateTokenQuery } from '@graphql/generated';
-import useQuery from '../../useQuery';
+import { useQuery } from '@apollo/client';
 
 interface AuthState {
   isAuthenticated: boolean;
-  isLoading: boolean;
+  loading: boolean;
 }
 
 export const useAuth = () => {
   const [authState, setAuthState] = useState<AuthState>({
     isAuthenticated: false,
-    isLoading: true,
+    loading: true,
   });
   const router = useRouter();
 
   // Use the GraphQL queries hook
-  const { data, errors, isLoading, refetch } = useQuery<ValidateTokenQuery>(
+  const { data, error, loading, refetch } = useQuery<ValidateTokenQuery>(
     ValidateTokenDocument,
     undefined,
-    {
-      fetchPolicy: 'network-only', // Always check with server
-      notifyOnNetworkStatusChange: true,
-    },
   );
 
   const checkAuth = async () => {
@@ -34,28 +30,28 @@ export const useAuth = () => {
 
       setAuthState({
         isAuthenticated,
-        isLoading: false,
+        loading: false,
       });
 
       return isAuthenticated;
     } catch (_error) {
       setAuthState({
         isAuthenticated: false,
-        isLoading: false,
+        loading: false,
       });
       return false;
     }
   };
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!loading) {
       const isAuthenticated = data?.validateToken?.success || false;
       setAuthState({
         isAuthenticated,
-        isLoading: false,
+        loading: false,
       });
     }
-  }, [data, isLoading, errors]);
+  }, [data, loading, error]);
 
   const redirectToLogin = () => {
     router.push('/login');

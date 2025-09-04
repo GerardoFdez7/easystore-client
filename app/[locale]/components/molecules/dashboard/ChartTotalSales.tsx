@@ -25,7 +25,7 @@ import {
   SelectValue,
 } from '@shadcn/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@shadcn/ui/toggle-group';
-import { useIsMobile } from '@hooks/useMobile';
+import { useIsMobile } from '@hooks/utils/useMobile';
 import { useTranslations } from 'next-intl';
 
 export const description = 'An interactive area chart';

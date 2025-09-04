@@ -4,7 +4,7 @@ import {
   GetMediaTokenQuery,
   MediaAuthResponse,
 } from '@lib/graphql/generated';
-import useQuery from '../useQuery';
+import { useQuery } from '@apollo/client';
 
 const useMediaToken = () => {
   const [cachedToken, setCachedToken] = useState<MediaAuthResponse | null>(
@@ -12,9 +12,8 @@ const useMediaToken = () => {
   );
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const refreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const { data, isLoading, errors, refetch } = useQuery<GetMediaTokenQuery>(
+  const { data, loading, error, refetch } = useQuery<GetMediaTokenQuery>(
     GetMediaTokenDocument,
-    undefined,
     {
       fetchPolicy: 'cache-first',
       nextFetchPolicy: 'cache-first',
@@ -66,11 +65,11 @@ const useMediaToken = () => {
         () => void silentRefresh(),
         55 * 60 * 1000,
       );
-    } else if (!isLoading && !data?.getMediaUploadToken && !cachedToken) {
+    } else if (!loading && !data?.getMediaUploadToken && !cachedToken) {
       // Handle case where initial load fails
       setIsInitialLoading(false);
     }
-  }, [data, cachedToken, silentRefresh, isLoading]);
+  }, [data, cachedToken, silentRefresh, loading]);
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -115,8 +114,8 @@ const useMediaToken = () => {
   }, [cachedToken, refetch, silentRefresh]);
 
   return {
-    isLoading: isInitialLoading,
-    errors,
+    loading: isInitialLoading,
+    error,
     authenticator,
   };
 };

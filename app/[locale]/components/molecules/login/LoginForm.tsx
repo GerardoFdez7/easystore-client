@@ -17,7 +17,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   accountType = AccountTypeEnum.Tenant,
 }) => {
   const t = useTranslations('Login');
-  const { form, handleSubmit, isLoading } = useLogin(accountType);
+  const { form, handleSubmit, loading } = useLogin(accountType);
 
   return (
     <Form {...form}>
@@ -34,7 +34,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           variant="auth"
           size="xl"
           className="w-full"
-          isLoading={isLoading}
+          loading={loading}
         >
           {t('buttonLogin')}
         </ButtonLoadable>

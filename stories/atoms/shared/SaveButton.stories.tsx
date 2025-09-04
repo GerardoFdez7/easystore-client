@@ -9,7 +9,7 @@ const meta: Meta<typeof SaveButton> = {
   },
   tags: ['autodocs'],
   argTypes: {
-    isLoading: {
+    loading: {
       control: 'boolean',
       description: 'Shows loading state with spinner',
     },
@@ -63,7 +63,7 @@ type Story = StoryObj<typeof SaveButton>;
 
 export const Default: Story = {
   args: {
-    isLoading: false,
+    loading: false,
     showIcon: true,
     disabled: false,
     translationKey: 'save',
@@ -73,7 +73,7 @@ export const Default: Story = {
 
 export const Loading: Story = {
   args: {
-    isLoading: true,
+    loading: true,
     showIcon: true,
     size: 'xl',
     disabled: false,
@@ -84,7 +84,7 @@ export const Loading: Story = {
 
 export const WithoutIcon: Story = {
   args: {
-    isLoading: false,
+    loading: false,
     showIcon: false,
     variant: 'default',
     size: 'default',
@@ -96,7 +96,7 @@ export const WithoutIcon: Story = {
 
 export const Secondary: Story = {
   args: {
-    isLoading: false,
+    loading: false,
     showIcon: true,
     variant: 'secondary',
     size: 'default',
@@ -108,7 +108,7 @@ export const Secondary: Story = {
 
 export const Outline: Story = {
   args: {
-    isLoading: false,
+    loading: false,
     showIcon: true,
     variant: 'outline',
     size: 'default',
@@ -120,7 +120,7 @@ export const Outline: Story = {
 
 export const Disabled: Story = {
   args: {
-    isLoading: false,
+    loading: false,
     showIcon: true,
     variant: 'default',
     size: 'default',

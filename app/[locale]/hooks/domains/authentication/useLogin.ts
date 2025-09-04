@@ -10,7 +10,7 @@ import {
   AccountTypeEnum,
   LoginMutationVariables,
 } from '@graphql/generated';
-import useMutation from '../../useMutation';
+import { ApolloError, useMutation } from '@apollo/client';
 import { useAuth } from '@hooks/domains/authentication/useAuth';
 
 export const useLogin = (accountType: AccountTypeEnum) => {
@@ -38,62 +38,48 @@ export const useLogin = (accountType: AccountTypeEnum) => {
   });
 
   // Use the GraphQL mutation hook
-  const {
-    mutate: loginMutation,
-    data,
-    errors,
-    isLoading,
-  } = useMutation<LoginMutation, LoginMutationVariables>(
-    LoginDocument,
-    undefined,
-    {
-      onCompleted: (data) => {
-        if (data?.login.success === true) {
-          toast.success(t('loginSuccessful'), {
-            description: t('loginSuccessfulDescription'),
-          });
+  const [loginMutation, { data, error, loading }] = useMutation<
+    LoginMutation,
+    LoginMutationVariables
+  >(LoginDocument, {
+    onCompleted: (data: LoginMutation) => {
+      if (data?.login.success === true) {
+        toast.success(t('loginSuccessful'), {
+          description: t('loginSuccessfulDescription'),
+        });
 
-          checkAuth()
-            .then(() => {
-              router.push('/dashboard');
-            })
-            .catch((error) => {
-              console.error('Auth check failed:', error);
-            });
-        }
-      },
-      onError: (error) => {
-        // Handle GraphQL errors
-        if (error.graphQLErrors?.length > 0) {
-          const graphQLError = error.graphQLErrors[0];
-          if (
-            graphQLError.message.includes('Invalid credentials') ||
-            graphQLError.message.includes('unauthorized')
-          ) {
-            toast.error(t('invalidCredentials'), {
-              description: t('invalidCredentialsDescription'),
-            });
-          } else if (graphQLError.message.includes('account not found')) {
-            toast.warning(t('accountNotFound'), {
-              description: t('accountNotFoundDescription'),
-            });
-          } else {
-            toast.error(t('loginFailed'), {
-              description: graphQLError.message,
-            });
-          }
-        } else if (error.networkError) {
-          toast.error(t('networkError'), {
-            description: t('networkErrorDescription'),
+        checkAuth()
+          .then(() => {
+            router.push('/dashboard');
+          })
+          .catch((error) => {
+            console.error('Auth check failed:', error);
+          });
+      }
+    },
+    onError: (error: ApolloError) => {
+      // Handle GraphQL error
+      if (error.graphQLErrors?.length > 0) {
+        const graphQLError = error.graphQLErrors[0];
+        if (
+          graphQLError.message.includes('Invalid credentials') ||
+          graphQLError.message.includes('unauthorized')
+        ) {
+          toast.error(t('invalidCredentials'), {
+            description: t('invalidCredentialsDescription'),
+          });
+        } else if (graphQLError.message.includes('account not found')) {
+          toast.warning(t('accountNotFound'), {
+            description: t('accountNotFoundDescription'),
           });
         } else {
-          toast.error(t('unexpectedError'), {
-            description: t('unexpectedErrorDescription'),
-          });
+          console.error('Login error:', graphQLError);
         }
-      },
+      } else {
+        console.error('Login error:', error);
+      }
     },
-  );
+  });
 
   const handleSubmit = async (formData: LoginFormValues) => {
     try {
@@ -113,10 +99,10 @@ export const useLogin = (accountType: AccountTypeEnum) => {
   return {
     form,
     handleSubmit,
-    isLoading,
+    loading,
     loginFormSchema,
     data,
-    errors,
+    error,
   };
 };
 
