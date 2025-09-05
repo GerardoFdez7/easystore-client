@@ -63,7 +63,7 @@ export default function ComboboxCategory({
 
   return (
     <Combobox
-      items={items}
+      options={items}
       value={value}
       onValueChange={handleValueChange}
       placeholder={t('category')}

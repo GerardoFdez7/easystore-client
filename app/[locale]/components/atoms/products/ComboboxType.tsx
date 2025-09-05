@@ -32,7 +32,7 @@ export default function ComboboxType({
 
   return (
     <Combobox
-      items={typeOptions}
+      options={typeOptions}
       value={value?.toString()}
       onValueChange={handleValueChange}
       placeholder={t('type')}
