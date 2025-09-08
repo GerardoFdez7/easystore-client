@@ -11,6 +11,7 @@ import {
 } from '@shadcn/ui/alert-dialog';
 import { Archive } from 'lucide-react';
 import useMultipleSoftDeleteProducts from '@hooks/domains/products/useMultipleSoftDeleteProducts';
+import { useTranslations } from 'next-intl';
 
 interface ArchivedProductProps {
   productsIds: string[];
@@ -27,6 +28,7 @@ export default function ArchivedProduct({
       onSuccess: onSoftDeleteComplete,
     },
   );
+  const t = useTranslations('Products');
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -35,18 +37,18 @@ export default function ArchivedProduct({
           onClick={(e) => e.stopPropagation()}
         >
           <Archive className="text-title h-4 w-4" />
-          <span>Archive Products</span>
+          <span>{t('archiveProducts')}</span>
         </div>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Archive Products</AlertDialogTitle>
+          <AlertDialogTitle>{t('archiveProducts')}</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to archive these products?
+            {t('archiveDescription')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
           <AlertDialogAction
             onClick={() =>
               void handleMultipleSoftDelete(productsIds, isArchived)
@@ -55,8 +57,8 @@ export default function ArchivedProduct({
             disabled={isLoading}
           >
             {isLoading
-              ? 'Archiving'
-              : `Archive${productsIds.length > 1 ? ` (${productsIds.length})` : ''}`}
+              ? t('archiving')
+              : `${t('archive')}${productsIds.length > 1 ? ` (${productsIds.length})` : ''}`}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

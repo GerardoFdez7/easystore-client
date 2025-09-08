@@ -570,7 +570,19 @@
     "noCategoryFound": "Categorie non trouvée",
     "search": "Rechercher...",
     "price": "Prix",
-    "variants": "Variantes"
+    "variants": "Variantes",
+    "active": "Actif",
+    "actions": "Actions",
+    "deleteProducts": "Supprimer les produits",
+    "deleteDescription": "Cette action ne peut pas être annulée. Les produits seront supprimés permanentement de la base de données.",
+    "deleting": "Suppression",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "archiveProducts": "Archiver les produits",
+    "archiveDescription": "Cette action ne peut pas être annulée. Les produits seront archivés permanentement de la base de données.",
+    "archiving": "Archivage",
+    "archive": "Archiver",
+    "noProductsFound": "Aucun produit trouvé"
   },
   "Privacy": {
     "tableOfContents": "Table des matières",
