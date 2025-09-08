@@ -31,6 +31,7 @@ export default function FormCategoryDetail({ name, onTitleChange }: Props) {
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [catalog, setCatalog] = useState<CategoryItem[]>([]);
   const [categories, setCategories] = useState<CategoryItem[]>([]);
   const [saving, setSaving] = useState(false);
 
@@ -91,10 +92,44 @@ export default function FormCategoryDetail({ name, onTitleChange }: Props) {
     };
   }, [categoryId]); // se r
 
-  const onToggleSelectCategory = (cid: string, val: boolean) =>
-    setCategories((prev) =>
-      prev.map((c) => (c.id === cid ? { ...c, selected: val } : c)),
-    );
+  // Cargar catálogo
+  useEffect(() => {
+    let mounted = true;
+    void (async () => {
+      const list = await getCategoryList(); // [{id,name,cover,count}]
+      if (!mounted) return;
+
+      const filtered = list.filter((c) => !categoryId || c.id !== categoryId);
+
+      // catálogo de dónde escoger (todas menos la actual)
+      setCatalog(
+        filtered.map((c) => ({
+          id: c.id,
+          name: c.name,
+          cover: c.cover,
+          count: c.count,
+          selected: false,
+        })),
+      );
+
+      // si estás editando y ya tienes subcategorías guardadas, aquí haces setCategories([...])
+      // por ahora dejamos vacío:
+      if (isNew) setCategories([]);
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, [categoryId, isNew]);
+
+  const onAddCategories = (ids: string[]) =>
+    setCategories((prev) => {
+      const already = new Set(prev.map((p) => p.id));
+      const toAdd = catalog.filter(
+        (c) => ids.includes(c.id) && !already.has(c.id),
+      );
+      return [...prev, ...toAdd];
+    });
+
   const onRemoveCategory = (cid: string) =>
     setCategories((prev) => prev.filter((c) => c.id !== cid));
 
@@ -163,13 +198,10 @@ export default function FormCategoryDetail({ name, onTitleChange }: Props) {
         </h3>
         <CategoryPicker
           items={categories}
-          onToggleSelect={onToggleSelectCategory}
+          catalog={catalog}
+          onAdd={onAddCategories}
           onRemove={onRemoveCategory}
           disabled={loading}
-          onExplore={() => alert('Explore clicked')}
-          onOrderChange={(order) => console.log('order:', order)}
-          onSearch={(q) => console.log('search:', q)}
-          onShowMore={() => alert('Show more')}
         />
       </div>
 

@@ -1,120 +1,72 @@
 'use client';
 
 import Image from 'next/image';
-import { useMemo, useState } from 'react';
 import { Button } from '@shadcn/ui/button';
-import { Checkbox } from '@shadcn/ui/checkbox';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@shadcn/ui/select';
 import { Badge } from '@shadcn/ui/badge';
-import { X } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { cn } from 'utils';
 import { useTranslations } from 'next-intl';
-import { useSearch } from '@hooks/useSearch';
-import SearchBar from '@atoms/shared/Search';
+
+import AddSubcategoriesPicker, {
+  type CategoryItem as CatalogItem,
+} from '@molecules/detail-category/AddSubcategory';
 
 export type CategoryItem = {
   id: string;
   name: string;
   cover: string;
-  selected: boolean;
+  description?: string;
+  tags?: string[];
+  selected?: boolean;
   count?: number;
   status?: 'active' | 'inactive';
 };
 
 type Props = {
   items: CategoryItem[];
+  catalog?: CatalogItem[];
   disabled?: boolean;
-  onToggleSelect: (id: string, value: boolean) => void;
+  onAdd?: (ids: string[]) => void;
   onRemove: (id: string) => void;
-  onExplore?: () => void;
   onOrderChange?: (order: 'asc' | 'desc') => void;
   onSearch?: (query: string) => void;
-  onShowMore?: () => void;
+  onToggleSelect?: (id: string, value: boolean) => void;
 };
 
 export default function CategoryPicker({
   items,
+  catalog = [],
   disabled,
-  onToggleSelect,
+  onAdd,
   onRemove,
-  onOrderChange,
-  onSearch,
-  onShowMore,
 }: Props) {
   const t = useTranslations('CategoryDetail');
-  const [query, setQuery] = useState('');
-  const [order, setOrder] = useState<'asc' | 'desc'>('asc');
-
-  // mismo patrón que ProductPicker, pero aquí sí actualizamos el estado local
-  const useCategorySearch = () =>
-    useSearch((q) => {
-      setQuery(q);
-      onSearch?.(q);
-    }, 500);
-
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    const data = q
-      ? items.filter((c) => c.name.toLowerCase().includes(q))
-      : items;
-    return order === 'asc' ? data : [...data].reverse();
-  }, [items, query, order]);
+  const excludeIds = items.map((i) => i.id);
 
   return (
     <div className="space-y-3">
-      <div className="bg-muted/50 grid grid-cols-1 items-center gap-3 sm:grid-cols-[1fr_auto]">
-        <SearchBar
-          placeholder={t('searchCategories')}
-          useSearch={useCategorySearch}
+      <div className="flex w-full items-center justify-end">
+        <AddSubcategoriesPicker
+          className="w-full sm:w-auto"
+          catalog={catalog}
+          excludeIds={excludeIds}
           disabled={disabled}
+          onAdd={onAdd}
         />
-
-        <div className="flex flex-wrap items-center justify-start gap-2 sm:justify-end">
-          <Select
-            value={order}
-            onValueChange={(val: 'asc' | 'desc') => {
-              setOrder(val);
-              onOrderChange?.(val);
-            }}
-            disabled={disabled}
-          >
-            <SelectTrigger className="h-9 w-[140px]">
-              <SelectValue placeholder={t('order')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="asc">{t('orderAsc')}</SelectItem>
-              <SelectItem value="desc">{t('orderDesc')}</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
       </div>
 
       <div className="overflow-hidden rounded-md">
-        {filtered.map((c, idx) => (
+        {items.map((c) => (
           <div
             key={c.id}
             className={cn(
-              'bg-muted flex flex-col gap-2 border-b px-3 py-2 last:border-none',
-              'md:grid md:grid-cols-[40px_1fr_auto_auto_40px] md:items-center md:gap-2',
+              'bg-muted grid grid-cols-[40px_1fr] items-center gap-2 border-b px-3 py-2 last:border-none',
+              'sm:grid-cols-[40px_1fr_auto_40px]',
+              'hover:bg-muted/80 transition',
             )}
           >
-            <div className="flex items-center md:justify-center">
-              <Checkbox
-                checked={c.selected}
-                onCheckedChange={(v) => onToggleSelect(c.id, Boolean(v))}
-                disabled={disabled}
-                className="bg-white"
-              />
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="relative h-8 w-8 overflow-hidden rounded-full">
+            <div className="flex items-center sm:justify-center">
+              <div className="ring-foreground/10 relative h-8 w-8 overflow-hidden rounded-full ring-1">
                 <Image
                   src={c.cover}
                   alt={c.name}
@@ -122,10 +74,32 @@ export default function CategoryPicker({
                   className="object-cover"
                 />
               </div>
-              <span className="text-text truncate text-sm">{c.name}</span>
             </div>
 
-            <div className="md:justify-end">
+            <div className="flex min-w-0 flex-col gap-1">
+              <span className="text-text truncate text-sm">{c.name}</span>
+
+              {c.description ? (
+                <span className="text-text/70 line-clamp-1 text-xs">
+                  {c.description}
+                </span>
+              ) : null}
+
+              {c.tags?.length ? (
+                <div className="flex flex-wrap gap-1">
+                  {c.tags.slice(0, 3).map((tag) => (
+                    <span
+                      key={tag}
+                      className="bg-foreground/10 text-text rounded-full px-2 py-0.5 text-[10px]"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+
+            <div className="hidden sm:flex sm:justify-end">
               <Badge
                 className={cn(
                   'rounded-full px-3 py-1 text-[11px]',
@@ -145,34 +119,47 @@ export default function CategoryPicker({
               </Badge>
             </div>
 
-            <div className="text-text hidden text-right text-xs md:block">
-              #{idx + 1}
-            </div>
-
-            <div className="flex items-center justify-end md:justify-center">
+            <div className="hidden items-center justify-end sm:flex">
               <Button
-                size="icon"
                 variant="ghost"
                 onClick={() => onRemove(c.id)}
                 disabled={disabled}
-                aria-label="Remove"
+                className="hover:bg-destructive/10 gap-2 rounded-full px-3 py-1"
               >
-                <X className="text-text text-destructive h-4 w-4" />
+                <Trash2 className="text-destructive h-4 w-4" />
+              </Button>
+            </div>
+
+            <div className="col-span-2 flex items-center justify-between sm:hidden">
+              <Badge
+                className={cn(
+                  'rounded-full px-3 py-1 text-[11px]',
+                  c.status
+                    ? c.status === 'active'
+                      ? 'bg-secondary/10 text-secondary'
+                      : 'bg-foreground/10 text-text'
+                    : 'bg-foreground/10 text-text',
+                )}
+                variant="secondary"
+              >
+                {typeof c.count === 'number'
+                  ? t('itemsCount', { count: c.count })
+                  : c.status === 'active'
+                    ? t('statusActive')
+                    : t('statusInactive')}
+              </Badge>
+
+              <Button
+                variant="ghost"
+                onClick={() => onRemove(c.id)}
+                disabled={disabled}
+                className="hover:bg-destructive/10 gap-2 rounded-full px-3 py-1"
+              >
+                <Trash2 className="text-destructive h-4 w-4" />
               </Button>
             </div>
           </div>
         ))}
-      </div>
-
-      <div className="flex justify-center">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onShowMore}
-          disabled={disabled}
-        >
-          {t('showMore')}
-        </Button>
       </div>
     </div>
   );

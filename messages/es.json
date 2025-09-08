@@ -1089,22 +1089,16 @@
     "description": "Descripción",
     "descriptionPlaceholder": "Escribe una breve descripción para esta categoría",
 
-    "products": "Productos",
-    "searchProducts": "Buscar productos",
-    "explore": "Explorar",
-    "order": "Orden",
-    "orderAsc": "Ascendente",
-    "orderDesc": "Descendente",
-    "statusActive": "Activo",
-    "statusInactive": "Inactivo",
-    "showMore": "Ver más",
-
     "cancel": "Cancelar",
     "create": "Crear",
     "save": "Guardar",
 
     "categories": "Categorías",
     "searchCategories": "Buscar categorías",
-    "itemsCount": "{count, plural, one {# subcategoría} other {# subcategorías}}"
+    "itemsCount": "{count, plural, one {# subcategoría} other {# subcategorías}}",
+    "add": "Agregar",
+    "addSubcategories": "Agregar subcategorías",
+    "noResults": "Sin resultados",
+    "close": "Cerrar"
   }
 }
