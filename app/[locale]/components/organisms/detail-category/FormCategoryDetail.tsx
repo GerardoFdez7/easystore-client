@@ -1,32 +1,37 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Input } from '@shadcn/ui/input';
 import { Textarea } from '@shadcn/ui/textarea';
 import { Button } from '@shadcn/ui/button';
-import ProductPicker, {
-  type Product,
-} from '@molecules/detail-category/ProductPicker';
+
+import CategoryPicker, {
+  type CategoryItem,
+} from '@molecules/detail-category/CategoryPicker';
 import { cn } from 'utils';
-import { getCategoryBySlug, upsertCategory } from '@lib/data/categories';
+import {
+  getCategoryByName,
+  upsertCategory,
+  getCategoryList,
+} from '@lib/data/categories';
 
 type Props = {
-  slug: string;
+  name: string;
   onTitleChange?: (title: string) => void;
 };
-export default function FormCategoryDetail({ slug, onTitleChange }: Props) {
+export default function FormCategoryDetail({ name, onTitleChange }: Props) {
   const t = useTranslations('CategoryDetail');
   const router = useRouter();
   const params = useParams<{ locale?: string }>();
   const locale = params?.locale;
-  const isNew = slug === 'new';
+  const isNew = name === 'new';
 
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
   const [saving, setSaving] = useState(false);
 
   const [categoryId, setCategoryId] = useState<string | undefined>(undefined);
@@ -39,25 +44,8 @@ export default function FormCategoryDetail({ slug, onTitleChange }: Props) {
         if (isNew) {
           setTitle('');
           setDescription('');
-          setProducts(
-            [
-              'Keyboard',
-              'Mouse',
-              'Headset',
-              'USB Hub',
-              'Webcam',
-              'Ergo Chair',
-              'RGB Lamp',
-            ].map((name, i) => ({
-              id: `temp-${i}`,
-              name,
-              cover: '/laptop.webp',
-              status: i % 3 === 0 ? 'inactive' : 'active',
-              selected: false,
-            })),
-          );
         } else {
-          const data = await getCategoryBySlug(slug);
+          const data = await getCategoryByName(name);
           if (!mounted) return;
           if (!data) {
             router.replace(locale ? `/${locale}/categories` : `/categories`);
@@ -66,12 +54,6 @@ export default function FormCategoryDetail({ slug, onTitleChange }: Props) {
           setCategoryId(data.id);
           setTitle(data.name);
           setDescription(data.description);
-          setProducts(
-            data.products.map((p) => ({
-              ...p,
-              selected: p.status === 'active',
-            })),
-          );
         }
       } finally {
         if (mounted) setLoading(false);
@@ -80,23 +62,41 @@ export default function FormCategoryDetail({ slug, onTitleChange }: Props) {
     return () => {
       mounted = false;
     };
-  }, [slug, isNew, locale, router]);
+  }, [name, isNew, locale, router]);
 
   useEffect(() => {
     onTitleChange?.(title);
   }, [title, onTitleChange]);
 
-  const selectedIds = useMemo(
-    () => products.filter((p) => p.selected).map((p) => p.id),
-    [products],
-  );
+  useEffect(() => {
+    let mounted = true;
+    void (async () => {
+      const list = await getCategoryList();
+      if (!mounted) return;
 
-  const onToggleSelect = (pid: string, val: boolean) =>
-    setProducts((prev) =>
-      prev.map((p) => (p.id === pid ? { ...p, selected: val } : p)),
+      const filtered = list.filter((c) => !categoryId || c.id !== categoryId);
+
+      setCategories(
+        filtered.map((c) => ({
+          id: c.id,
+          name: c.name,
+          cover: c.cover,
+          count: c.count,
+          selected: false,
+        })),
+      );
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, [categoryId]); // se r
+
+  const onToggleSelectCategory = (cid: string, val: boolean) =>
+    setCategories((prev) =>
+      prev.map((c) => (c.id === cid ? { ...c, selected: val } : c)),
     );
-  const onRemove = (pid: string) =>
-    setProducts((prev) => prev.filter((p) => p.id !== pid));
+  const onRemoveCategory = (cid: string) =>
+    setCategories((prev) => prev.filter((c) => c.id !== cid));
 
   const handleSave = async () => {
     setSaving(true);
@@ -105,7 +105,6 @@ export default function FormCategoryDetail({ slug, onTitleChange }: Props) {
         id: isNew ? undefined : categoryId,
         name: title,
         description,
-        productIds: selectedIds,
       });
       router.push(locale ? `/${locale}/categories` : `/categories`);
     } finally {
@@ -155,17 +154,17 @@ export default function FormCategoryDetail({ slug, onTitleChange }: Props) {
 
       <div
         className={cn(
-          'mt-6 rounded-lg p-3 shadow-sm ring-1 sm:p-4',
+          'mt-6 rounded-lg p-3 shadow-sm sm:p-4',
           loading && 'opacity-70',
         )}
       >
         <h3 className="text-text mb-3 text-center text-sm font-medium">
-          {t('products')}
+          {t('categories')}
         </h3>
-        <ProductPicker
-          items={products}
-          onToggleSelect={onToggleSelect}
-          onRemove={onRemove}
+        <CategoryPicker
+          items={categories}
+          onToggleSelect={onToggleSelectCategory}
+          onRemove={onRemoveCategory}
           disabled={loading}
           onExplore={() => alert('Explore clicked')}
           onOrderChange={(order) => console.log('order:', order)}
@@ -185,7 +184,7 @@ export default function FormCategoryDetail({ slug, onTitleChange }: Props) {
             {t('cancel')}
           </Button>
           <Button
-            className="text-text w-full bg-black hover:bg-black/90 sm:w-auto"
+            className="text-accent bg-title hover:bg-accent-foreground w-full sm:w-auto"
             onClick={() => void handleSave()}
             disabled={saving || loading || !title.trim()}
           >

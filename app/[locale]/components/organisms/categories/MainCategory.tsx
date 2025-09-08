@@ -32,7 +32,7 @@ export default function MainCategory() {
         <div className="flex flex-col gap-4">
           <Button
             asChild
-            className="self-end rounded-full bg-black text-white hover:bg-black/90"
+            className="text-accent bg-title self-end rounded-full"
           >
             <Link href={newHref}>
               <Plus className="mr-2 h-4 w-4" />
@@ -46,7 +46,6 @@ export default function MainCategory() {
           <CategoryGrid />
         </div>
 
-        {/* Aside sin wrappers extra */}
         <aside className="hidden lg:block">
           <CategoryTree />
         </aside>

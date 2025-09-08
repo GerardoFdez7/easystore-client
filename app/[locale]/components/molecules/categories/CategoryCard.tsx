@@ -23,11 +23,11 @@ export default function CategoryCard({
 }: Props) {
   const t = useTranslations('Category');
   return (
-    <div className="bg-card w-full rounded-lg p-2 shadow-sm ring-1 ring-gray-200">
+    <div className="bg-card w-full rounded-lg p-2 shadow-sm">
       <div className="relative aspect-[4/3] w-full overflow-hidden rounded-md bg-gray-100">
         <Link
           href={href}
-          className="group relative block aspect-[4/3] w-full overflow-hidden rounded-md bg-gray-100 focus-visible:ring-2 focus-visible:ring-gray-300 focus-visible:outline-none"
+          className="group relative block aspect-[4/3] w-full overflow-hidden rounded-md focus-visible:ring-2 focus-visible:outline-none"
         >
           <Image
             alt={name}

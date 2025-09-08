@@ -1106,6 +1106,9 @@
 
     "cancel": "Annulla",
     "create": "Crea",
-    "save": "Salva"
+    "save": "Salva",
+    "categories": "Categorie",
+    "searchCategories": "Cerca categorie",
+    "itemsCount": "{count, plural, one {# sottocategoria} other {# sottocategorie}}"
   }
 }

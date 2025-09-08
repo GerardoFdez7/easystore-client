@@ -8,5 +8,5 @@ export default async function CategoryDetailPage({
   params,
 }: CategoryPageProps) {
   const { name } = await params;
-  return <CategoryDetail slug={decodeURIComponent(name)} />;
+  return <CategoryDetail name={name} />;
 }

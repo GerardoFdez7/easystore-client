@@ -1,22 +1,11 @@
 import raw from './categories.json';
 
-export type Product = {
-  id: string;
-  name: string;
-  cover: string;
-  status: 'active' | 'inactive';
-};
-
 export type Category = {
   id: string;
   name: string;
   cover: string;
   description: string;
-  products: Product[];
 };
-
-// Para evitar mutar el JSON importado
-const DB: Category[] = (raw as Category[]).map((c) => ({ ...c }));
 
 export type CategorySummary = {
   id: string;
@@ -24,6 +13,23 @@ export type CategorySummary = {
   cover: string;
   count: number;
 };
+
+// Para evitar mutar el JSON importado y omitir cualquier campo de productos
+type RawCategory = {
+  id: string;
+  name: string;
+  cover: string;
+  description: string;
+  // products?: unknown; // ignorado
+};
+
+// DB solo con categorías (sin productos)
+const DB: Category[] = (raw as RawCategory[]).map((c) => ({
+  id: c.id,
+  name: c.name,
+  cover: c.cover,
+  description: c.description,
+}));
 
 // lib/data/category-tree.ts
 export type CategoryNode = { label: string; children?: CategoryNode[] };
@@ -248,13 +254,13 @@ export const categoryTree: CategoryNode[] = [
   },
 ];
 
-// Lista para el grid
+// Lista para el grid (count sin productos → 0 por defecto)
 export async function getCategoryList(): Promise<CategorySummary[]> {
   return DB.map((c) => ({
     id: c.id,
     name: c.name,
     cover: c.cover,
-    count: c.products.length,
+    count: 0,
   }));
 }
 
@@ -268,12 +274,11 @@ const slugifyEs = (s: string) =>
     .replace(/[^a-z0-9]+/g, '-') // separa por guiones
     .replace(/^-+|-+$/g, ''); // limpia extremos
 
-// --- NUEVO ---
 // Detalle por slug (con fallback si el slug es realmente un id)
-export async function getCategoryBySlug(
-  slug: string,
+export async function getCategoryByName(
+  name: string,
 ): Promise<Category | null> {
-  const key = decodeURIComponent(slug);
+  const key = decodeURIComponent(name);
 
   // 1) Si el "slug" resulta ser un id válido, reutiliza la función existente
   const byId = await getCategoryById(key);
@@ -290,12 +295,11 @@ export async function getCategoryById(id: string): Promise<Category | null> {
   return found ? structuredClone(found) : null;
 }
 
-// Crear/actualizar (mock)
+// Crear/actualizar (mock) — sin productos
 export async function upsertCategory(input: {
   id?: string;
   name: string;
   description: string;
-  productIds: string[];
 }): Promise<string> {
   if (input.id) {
     const idx = DB.findIndex((c) => c.id === input.id);
@@ -305,10 +309,6 @@ export async function upsertCategory(input: {
         ...old,
         name: input.name,
         description: input.description,
-        products: old.products.map((p) => ({
-          ...p,
-          status: input.productIds.includes(p.id) ? 'active' : p.status,
-        })),
       };
       return input.id;
     }
@@ -320,12 +320,6 @@ export async function upsertCategory(input: {
     name: input.name,
     cover: '/laptop.webp',
     description: input.description,
-    products: input.productIds.map((id) => ({
-      id,
-      name: `Product ${id}`,
-      cover: '/laptop.webp',
-      status: 'active',
-    })),
   });
   return newId;
 }

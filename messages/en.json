@@ -1133,8 +1133,6 @@
     "description": "Description",
     "descriptionPlaceholder": "Write a short description for this category",
 
-    "products": "Products",
-    "searchProducts": "Search products",
     "explore": "Explore",
     "order": "Order",
     "orderAsc": "Ascending",
@@ -1145,6 +1143,9 @@
 
     "cancel": "Cancel",
     "create": "Create",
-    "save": "Save"
+    "save": "Save",
+    "categories": "Categories",
+    "searchCategories": "Search categories",
+    "itemsCount": "{count, plural, one {# subcategory} other {# subcategories}}"
   }
 }
