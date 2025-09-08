@@ -1104,6 +1104,9 @@
 
     "cancel": "Annuler",
     "create": "Créer",
-    "save": "Enregistrer"
+    "save": "Enregistrer",
+    "categories": "Catégories",
+    "searchCategories": "Rechercher des catégories",
+    "itemsCount": "{count, plural, one {# sous-catégorie} other {# sous-catégories}}"
   }
 }

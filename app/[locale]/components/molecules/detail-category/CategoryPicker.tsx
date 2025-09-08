@@ -18,16 +18,17 @@ import { useTranslations } from 'next-intl';
 import { useSearch } from '@hooks/useSearch';
 import SearchBar from '@atoms/shared/Search';
 
-export type Product = {
+export type CategoryItem = {
   id: string;
   name: string;
   cover: string;
-  status: 'active' | 'inactive';
   selected: boolean;
+  count?: number;
+  status?: 'active' | 'inactive';
 };
 
 type Props = {
-  items: Product[];
+  items: CategoryItem[];
   disabled?: boolean;
   onToggleSelect: (id: string, value: boolean) => void;
   onRemove: (id: string) => void;
@@ -37,37 +38,40 @@ type Props = {
   onShowMore?: () => void;
 };
 
-export default function ProductPicker({
+export default function CategoryPicker({
   items,
   disabled,
   onToggleSelect,
   onRemove,
   onOrderChange,
+  onSearch,
   onShowMore,
 }: Props) {
   const t = useTranslations('CategoryDetail');
-  const [query] = useState('');
+  const [query, setQuery] = useState('');
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
 
-  const useProductSearch = () =>
+  // mismo patrón que ProductPicker, pero aquí sí actualizamos el estado local
+  const useCategorySearch = () =>
     useSearch((q) => {
-      console.log('search:', q);
+      setQuery(q);
+      onSearch?.(q);
     }, 500);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     const data = q
-      ? items.filter((p) => p.name.toLowerCase().includes(q))
+      ? items.filter((c) => c.name.toLowerCase().includes(q))
       : items;
     return order === 'asc' ? data : [...data].reverse();
   }, [items, query, order]);
 
   return (
     <div className="space-y-3">
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
+      <div className="bg-muted/50 grid grid-cols-1 items-center gap-3 sm:grid-cols-[1fr_auto]">
         <SearchBar
-          placeholder={t('searchProducts')}
-          useSearch={useProductSearch}
+          placeholder={t('searchCategories')}
+          useSearch={useCategorySearch}
           disabled={disabled}
         />
 
@@ -92,47 +96,52 @@ export default function ProductPicker({
       </div>
 
       <div className="overflow-hidden rounded-md">
-        {filtered.map((p, idx) => (
+        {filtered.map((c, idx) => (
           <div
-            key={p.id}
+            key={c.id}
             className={cn(
-              'bg-card border-background flex flex-col gap-2 border-b px-3 py-2 last:border-none',
+              'bg-muted flex flex-col gap-2 border-b px-3 py-2 last:border-none',
               'md:grid md:grid-cols-[40px_1fr_auto_auto_40px] md:items-center md:gap-2',
             )}
           >
             <div className="flex items-center md:justify-center">
               <Checkbox
-                checked={p.selected}
-                onCheckedChange={(v) => onToggleSelect(p.id, Boolean(v))}
+                checked={c.selected}
+                onCheckedChange={(v) => onToggleSelect(c.id, Boolean(v))}
                 disabled={disabled}
+                className="bg-white"
               />
             </div>
 
             <div className="flex items-center gap-3">
               <div className="relative h-8 w-8 overflow-hidden rounded-full">
                 <Image
-                  src={p.cover}
-                  alt={p.name}
+                  src={c.cover}
+                  alt={c.name}
                   fill
                   className="object-cover"
                 />
               </div>
-              <span className="text-text truncate text-sm">{p.name}</span>
+              <span className="text-text truncate text-sm">{c.name}</span>
             </div>
 
             <div className="md:justify-end">
               <Badge
                 className={cn(
                   'rounded-full px-3 py-1 text-[11px]',
-                  p.status === 'active'
-                    ? 'bg-secondary/10 text-secondary'
+                  c.status
+                    ? c.status === 'active'
+                      ? 'bg-secondary/10 text-secondary'
+                      : 'bg-foreground/10 text-text'
                     : 'bg-foreground/10 text-text',
                 )}
                 variant="secondary"
               >
-                {p.status === 'active'
-                  ? t('statusActive')
-                  : t('statusInactive')}
+                {typeof c.count === 'number'
+                  ? t('itemsCount', { count: c.count })
+                  : c.status === 'active'
+                    ? t('statusActive')
+                    : t('statusInactive')}
               </Badge>
             </div>
 
@@ -144,7 +153,7 @@ export default function ProductPicker({
               <Button
                 size="icon"
                 variant="ghost"
-                onClick={() => onRemove(p.id)}
+                onClick={() => onRemove(c.id)}
                 disabled={disabled}
                 aria-label="Remove"
               >
