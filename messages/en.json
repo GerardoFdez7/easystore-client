@@ -1133,19 +1133,15 @@
     "description": "Description",
     "descriptionPlaceholder": "Write a short description for this category",
 
-    "explore": "Explore",
-    "order": "Order",
-    "orderAsc": "Ascending",
-    "orderDesc": "Descending",
-    "statusActive": "Active",
-    "statusInactive": "Inactive",
-    "showMore": "Show more",
-
     "cancel": "Cancel",
     "create": "Create",
     "save": "Save",
     "categories": "Categories",
     "searchCategories": "Search categories",
-    "itemsCount": "{count, plural, one {# subcategory} other {# subcategories}}"
+    "itemsCount": "{count, plural, one {# subcategory} other {# subcategories}}",
+    "add": "Add",
+    "addSubcategories": "Add subcategories",
+    "noResults": "No results",
+    "close": "Close"
   }
 }
