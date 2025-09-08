@@ -8,7 +8,7 @@ const meta = {
     layout: 'fullscreen',
   },
   args: {
-    id: 'new',
+    name: 'new',
   },
 } satisfies Meta<typeof MainDetailCategory>;
 
@@ -17,9 +17,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const CreateNew: Story = {
-  args: { id: 'new' },
+  args: { name: 'new' },
 };
 
 export const EditExisting: Story = {
-  args: { id: 'tech' },
+  args: { name: 'tech' },
 };
