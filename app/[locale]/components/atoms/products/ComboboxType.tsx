@@ -32,6 +32,7 @@ export default function ComboboxType({
 
   return (
     <Combobox
+      width={90}
       options={typeOptions}
       value={value?.toString()}
       onValueChange={handleValueChange}

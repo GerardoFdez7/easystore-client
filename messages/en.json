@@ -569,7 +569,19 @@
     "noCategoryFound": "No category found",
     "search": "Search...",
     "price": "Price",
-    "variants": "Variants"
+    "variants": "Variants",
+    "active": "Active",
+    "actions": "Actions",
+    "deleteProducts": "Delete Products",
+    "deleteDescription": "This action cannot be undone. The products will be permanently deleted from the database.",
+    "deleting": "Deleting",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "archiveProducts": "Archive Products",
+    "archiveDescription": "This action cannot be undone. The products will be permanently archived from the database.",
+    "archiving": "Archiving",
+    "archive": "Archive",
+    "noProductsFound": "No products found"
   },
   "Privacy": {
     "tableOfContents": "Table of contents",

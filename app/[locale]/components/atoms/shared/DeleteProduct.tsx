@@ -11,6 +11,7 @@ import {
 } from '@shadcn/ui/alert-dialog';
 import { Trash2 } from 'lucide-react';
 import useMultipleDeleteProducts from '@hooks/domains/products/useMultipleDeleteProducts';
+import { useTranslations } from 'next-intl';
 
 interface DeleteProductProps {
   productIds: string[];
@@ -21,6 +22,7 @@ export default function DeleteProduct({
   productIds,
   onDeleteComplete,
 }: DeleteProductProps) {
+  const t = useTranslations('Products');
   const { handleMultipleDelete, isLoading } =
     useMultipleDeleteProducts(onDeleteComplete);
 
@@ -32,27 +34,26 @@ export default function DeleteProduct({
           onClick={(e) => e.stopPropagation()}
         >
           <Trash2 className="h-4 w-4 text-red-700" />
-          <span className="text-red-700">Delete Products</span>
+          <span className="text-red-700">{t('deleteProducts')}</span>
         </div>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete products?</AlertDialogTitle>
+          <AlertDialogTitle>{t('deleteProducts')}</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. The products will be permanently
-            deleted from the database.
+            {t('deleteDescription')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => void handleMultipleDelete(productIds)}
             className="bg-[#ed2727] text-white hover:bg-[#d12525]"
             disabled={isLoading}
           >
             {isLoading
-              ? 'Deleting...'
-              : `Delete${productIds.length > 1 ? ` (${productIds.length})` : ''}`}
+              ? t('deleting')
+              : `${t('delete')}${productIds.length > 1 ? ` (${productIds.length})` : ''}`}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
