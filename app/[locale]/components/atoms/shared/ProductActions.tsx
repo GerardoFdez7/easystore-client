@@ -10,6 +10,7 @@ import { Button } from '@shadcn/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import ArchivedProduct from './ArchivedProduct';
 import DeleteProduct from './DeleteProduct';
+import { useTranslations } from 'next-intl';
 
 interface ProductActionsProps {
   selectedProductIds: string[];
@@ -22,6 +23,7 @@ export default function ProductActions({
   isArchived = false,
   onDeleteComplete,
 }: ProductActionsProps) {
+  const t = useTranslations('Products');
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -31,7 +33,7 @@ export default function ProductActions({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[250px]">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuLabel>{t('actions')}</DropdownMenuLabel>
         <DropdownMenuItem asChild className="p-0">
           <div>
             <ArchivedProduct

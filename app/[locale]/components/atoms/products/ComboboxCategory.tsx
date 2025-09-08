@@ -40,7 +40,7 @@ type ComboboxCategoryProps = {
 export default function ComboboxCategory({
   value,
   onValueChange,
-  className = 'placeholder:text-muted-foreground text-[12px] sm:text-[14px] w-[120px] sm:w-[200px] bg-card border-input hover:border-input text-foreground h-9 rounded-full px-3 text-left [&_.border-primary]:border-foreground [&_.text-primary\\/80]:text-foreground [&_svg]:text-foreground dark:bg-input/30',
+  className = 'placeholder:text-muted-foreground text-[12px] sm:text-[14px] bg-card border-input hover:border-input text-foreground h-9 rounded-full px-3 text-left [&_.border-primary]:border-foreground [&_.text-primary\\/80]:text-foreground [&_svg]:text-foreground dark:bg-input/30',
   disabled,
 }: ComboboxCategoryProps) {
   const t = useTranslations('Products');
@@ -63,6 +63,7 @@ export default function ComboboxCategory({
 
   return (
     <Combobox
+      width={120}
       options={items}
       value={value}
       onValueChange={handleValueChange}

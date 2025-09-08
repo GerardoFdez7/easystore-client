@@ -1,8 +1,5 @@
 'use client';
 
-import { SiteHeader } from '@atoms/shared/SiteHeader';
-import { SidebarInset, SidebarProvider } from '@shadcn/ui/sidebar';
-import { SiderbarDashboard } from '@molecules/shared/Sidebar';
 import { useState } from 'react';
 import InputProduct from '@atoms/product-detail/InputProduct';
 import Description from '@atoms/product-detail/Description';
@@ -37,82 +34,63 @@ export default function MainProductDetail() {
   };
 
   return (
-    <main className="pt-22 2xl:m-5">
-      <SidebarProvider
-        style={
-          {
-            '--sidebar-width': 'calc(var(--spacing) * 72)',
-            '--header-height': 'calc(var(--spacing) * 12)',
-          } as React.CSSProperties
-        }
-      >
-        <SiderbarDashboard />
-        <SidebarInset>
-          <SiteHeader title="New Product" />
-          <div className="flex flex-1 flex-col">
-            <div className="@container/main flex flex-1 flex-col gap-2">
-              <div className="flex flex-col gap-4 px-5 py-4 md:gap-6 md:py-6">
-                {/* Main Content */}
-                <div className="space-y-6">
-                  {/* Title */}
-                  <InputProduct label="Title" />
+    <main className="m-2 2xl:m-5">
+      {/* Main Content */}
+      <div className="space-y-6">
+        {/* Title */}
+        <InputProduct label="Title" />
 
-                  {/* Short Description */}
-                  <Description label="Short Description" />
+        {/* Short Description */}
+        <Description label="Short Description" />
 
-                  {/* Long Description */}
-                  <Description label="Long Description" className="h-30" />
+        {/* Long Description */}
+        <Description label="Long Description" className="h-30" />
 
-                  {/* Multimedia */}
+        {/* Multimedia */}
 
-                  {/* Category */}
-                  <Category
-                    selectedCategories={selectedCategories}
-                    setSelectedCategories={setSelectedCategories}
-                    removeCategory={removeCategory}
-                  />
+        {/* Category */}
+        <Category
+          selectedCategories={selectedCategories}
+          setSelectedCategories={setSelectedCategories}
+          removeCategory={removeCategory}
+        />
 
-                  {/* Variants */}
-                  <TableVariants />
+        {/* Variants */}
+        <TableVariants />
 
-                  {/* Type Product */}
-                  <TypeProduct />
+        {/* Type Product */}
+        <TypeProduct />
 
-                  {/* Tags */}
-                  <Tags
-                    tags={tags}
-                    newTag={newTag}
-                    setNewTag={setNewTag}
-                    addTag={addTag}
-                    removeTag={removeTag}
-                  />
+        {/* Tags */}
+        <Tags
+          tags={tags}
+          newTag={newTag}
+          setNewTag={setNewTag}
+          addTag={addTag}
+          removeTag={removeTag}
+        />
 
-                  {/* Brand & Manufacturer */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <InputProduct label="Brand" />
-                    <InputProduct label="Manufacturer" />
-                  </div>
+        {/* Brand & Manufacturer */}
+        <div className="grid grid-cols-2 gap-4">
+          <InputProduct label="Brand" />
+          <InputProduct label="Manufacturer" />
+        </div>
 
-                  {/* Sustainability */}
-                  <Sustainability />
+        {/* Sustainability */}
+        <Sustainability />
 
-                  {/* Action Buttons */}
-                  <div className="flex flex-col gap-4 pt-8">
-                    <div className="flex justify-center gap-4 pb-6">
-                      <DeleteProduct />
-                      <ArchivedProduct />
-                    </div>
-                    <div className="flex justify-end gap-4">
-                      <ButtonCancel />
-                      <ButtonSave />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+        {/* Action Buttons */}
+        <div className="flex flex-col gap-4 pt-8">
+          <div className="flex justify-center gap-4 pb-6">
+            <DeleteProduct />
+            <ArchivedProduct />
           </div>
-        </SidebarInset>
-      </SidebarProvider>
+          <div className="flex justify-end gap-4">
+            <ButtonCancel />
+            <ButtonSave />
+          </div>
+        </div>
+      </div>
     </main>
   );
 }

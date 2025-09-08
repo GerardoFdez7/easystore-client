@@ -570,7 +570,19 @@
     "noCategoryFound": "No se encontró categoría",
     "search": "Buscar...",
     "price": "Precio",
-    "variants": "Variantes"
+    "variants": "Variantes",
+    "active": "Activo",
+    "actions": "Acciones",
+    "deleteProducts": "Eliminar Productos",
+    "deleteDescription": "Esta acción no puede ser deshecha. Los productos se eliminarán permanentemente de la base de datos.",
+    "deleting": "Eliminando",
+    "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "archiveProducts": "Archivar Productos",
+    "archiveDescription": "Esta acción no puede ser deshecha. Los productos se archivarán permanentemente de la base de datos.",
+    "archiving": "Archivando",
+    "archive": "Archivar",
+    "noProductsFound": "No se encontraron productos"
   },
   "Privacy": {
     "tableOfContents": "Tabla de contenido",
