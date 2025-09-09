@@ -5,7 +5,7 @@ import {
   SoftDeleteMutationVariables,
   FindAllProductsDocument,
 } from '@graphql/generated';
-import useMutation from '../../useMutation';
+import { useMutation } from '@apollo/client';
 import { useTranslations } from 'next-intl';
 import { useApolloClient } from '@apollo/client';
 
@@ -19,54 +19,49 @@ export const useMultipleSoftDeleteProducts = ({
   const client = useApolloClient();
   const t = useTranslations('Products');
 
-  const {
-    mutate: softDeleteProduct,
-    isLoading,
-    errors,
-  } = useMutation<SoftDeleteMutation, SoftDeleteMutationVariables>(
-    SoftDeleteDocument,
-    undefined,
-    {
-      onCompleted: (data) => {
-        if (data?.softDeleteProduct) {
-          // Refetch the products query
-          client
-            .refetchQueries({
-              include: [FindAllProductsDocument],
-            })
-            .then(() => {
-              onSuccess?.();
-            })
-            .catch(console.error);
-        }
-      },
-      onError: (error) => {
-        // Skip error handling if the product is already archived
-        const isAlreadyArchived = error.graphQLErrors?.some((e) =>
-          e.message.includes('is already soft deleted'),
-        );
-
-        if (isAlreadyArchived) {
-          return; // Skip showing any error toast
-        }
-
-        if (error.graphQLErrors?.length > 0) {
-          const graphQLError = error.graphQLErrors[0];
-          toast.error('Archive failed', {
-            description: graphQLError.message,
-          });
-        } else if (error.networkError) {
-          toast.error(t('networkError'), {
-            description: t('networkErrorDescription'),
-          });
-        } else {
-          toast.error(t('unexpectedError'), {
-            description: t('unexpectedErrorDescription'),
-          });
-        }
-      },
+  const [softDeleteProduct, { loading, error }] = useMutation<
+    SoftDeleteMutation,
+    SoftDeleteMutationVariables
+  >(SoftDeleteDocument, {
+    onCompleted: (data) => {
+      if (data?.softDeleteProduct) {
+        // Refetch the products query
+        client
+          .refetchQueries({
+            include: [FindAllProductsDocument],
+          })
+          .then(() => {
+            onSuccess?.();
+          })
+          .catch(console.error);
+      }
     },
-  );
+    onError: (error) => {
+      // Skip error handling if the product is already archived
+      const isAlreadyArchived = error.graphQLErrors?.some((e) =>
+        e.message.includes('is already soft deleted'),
+      );
+
+      if (isAlreadyArchived) {
+        return; // Skip showing any error toast
+      }
+
+      if (error.graphQLErrors?.length > 0) {
+        const graphQLError = error.graphQLErrors[0];
+        toast.error('Archive failed', {
+          description: graphQLError.message,
+        });
+      } else if (error.networkError) {
+        toast.error(t('networkError'), {
+          description: t('networkErrorDescription'),
+        });
+      } else {
+        toast.error(t('unexpectedError'), {
+          description: t('unexpectedErrorDescription'),
+        });
+      }
+    },
+  });
 
   const handleMultipleSoftDelete = async (
     products: Array<{ id: string; isArchived?: boolean }>,
@@ -112,8 +107,8 @@ export const useMultipleSoftDeleteProducts = ({
 
       return handleMultipleSoftDelete(products);
     },
-    isLoading,
-    errors,
+    loading,
+    error,
   };
 };
 
