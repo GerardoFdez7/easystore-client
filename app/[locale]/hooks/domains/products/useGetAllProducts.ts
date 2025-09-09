@@ -4,7 +4,7 @@ import {
   FindAllProductsQuery,
   FindAllProductsQueryVariables,
 } from '@graphql/generated';
-import useQuery from '../../useQuery';
+import { useQuery } from '@apollo/client';
 
 export const useGetAllProducts = (
   variables?: FindAllProductsQueryVariables,
@@ -14,26 +14,23 @@ export const useGetAllProducts = (
     [],
   );
 
-  const { data, isLoading, errors, refetch } = useQuery<
+  const { data, loading, error, refetch } = useQuery<
     FindAllProductsQuery,
     FindAllProductsQueryVariables
   >(FindAllProductsDocument, {
-    ...defaultVariables,
-    ...(variables || { type: null }),
+    variables: {
+      ...defaultVariables,
+      ...(variables || { type: null }),
+    },
   });
 
   const products = useMemo(() => {
     // If there's an error but we have no data, return empty array
-    if (
-      errors?.length &&
-      !data?.getAllProducts?.products?.length &&
-      data?.getAllProducts?.products?.length !== 0 &&
-      data?.getAllProducts?.products !== null
-    ) {
+    if (error && !data?.getAllProducts?.products?.length) {
       return [];
     }
     return data?.getAllProducts?.products || [];
-  }, [data, errors]);
+  }, [data, error]);
 
   const refreshProducts = useCallback(
     (newVariables?: FindAllProductsQueryVariables) => {
@@ -47,8 +44,9 @@ export const useGetAllProducts = (
 
   return {
     products,
-    isLoading,
-    errors,
+    loading,
+    error,
+    refetch,
     refreshProducts,
     total: data?.getAllProducts?.total || 0,
   };

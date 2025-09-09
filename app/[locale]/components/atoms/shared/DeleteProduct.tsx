@@ -23,8 +23,19 @@ export default function DeleteProduct({
   onDeleteComplete,
 }: DeleteProductProps) {
   const t = useTranslations('Products');
-  const { handleMultipleDelete, isLoading } =
+  const { handleMultipleDelete, loading } =
     useMultipleDeleteProducts(onDeleteComplete);
+
+  //----------------------------
+  // const handleDelete = async () => {
+  //   try {
+  //     await handleMultipleDelete(productIds);
+  //     onDeleteComplete?.();
+  //   } catch (error) {
+  //     console.error('Error deleting products:', error);
+  //   }
+  // };
+  //----------------------------
 
   return (
     <AlertDialog>
@@ -49,9 +60,9 @@ export default function DeleteProduct({
           <AlertDialogAction
             onClick={() => void handleMultipleDelete(productIds)}
             className="bg-[#ed2727] text-white hover:bg-[#d12525]"
-            disabled={isLoading}
+            disabled={loading}
           >
-            {isLoading
+            {loading
               ? t('deleting')
               : `${t('delete')}${productIds.length > 1 ? ` (${productIds.length})` : ''}`}
           </AlertDialogAction>
