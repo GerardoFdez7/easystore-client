@@ -23,11 +23,9 @@ export default function ArchivedProduct({
   isArchived = false,
   onSoftDeleteComplete,
 }: ArchivedProductProps) {
-  const { handleMultipleSoftDelete, isLoading } = useMultipleSoftDeleteProducts(
-    {
-      onSuccess: onSoftDeleteComplete,
-    },
-  );
+  const { handleMultipleSoftDelete, loading } = useMultipleSoftDeleteProducts({
+    onSuccess: onSoftDeleteComplete,
+  });
   const t = useTranslations('Products');
   return (
     <AlertDialog>
@@ -54,9 +52,9 @@ export default function ArchivedProduct({
               void handleMultipleSoftDelete(productsIds, isArchived)
             }
             className="bg-title border border-black hover:bg-black/85 dark:hover:bg-gray-300"
-            disabled={isLoading}
+            disabled={loading}
           >
-            {isLoading
+            {loading
               ? t('archiving')
               : `${t('archive')}${productsIds.length > 1 ? ` (${productsIds.length})` : ''}`}
           </AlertDialogAction>
