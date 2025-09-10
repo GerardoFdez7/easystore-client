@@ -3,8 +3,7 @@ import {
   HardDeleteDocument,
   HardDeleteMutation,
   HardDeleteMutationVariables,
-  FindAllProductsDocument,
-  // FindAllProductsQuery,
+  //FindAllProductsDocument,
 } from '@graphql/generated';
 import { useMutation } from '@apollo/client';
 import { useTranslations } from 'next-intl';
@@ -18,54 +17,25 @@ export const useMultipleDeleteProducts = (onSuccess?: () => void) => {
     HardDeleteMutation,
     HardDeleteMutationVariables
   >(HardDeleteDocument, {
-    //---------------------------------------------------------------
-    // update: (cache, { data }) => {
-    //   if (!data?.hardDeleteProduct) return;
+    onCompleted: () => {
+      try {
+        //Invalidates the cache
+        client.cache.evict({ fieldName: 'getAllProducts' });
 
-    //   // Read current cache
-    //   const existingData = cache.readQuery<FindAllProductsQuery>({
-    //     query: FindAllProductsDocument,
-    //   });
+        // Refetch active queries
+        void client.refetchQueries({ include: ['active'] });
 
-    //   if (!existingData?.getAllProducts?.products) return;
-
-    //   // Update cache
-    //   const deletedProductName = data.hardDeleteProduct.name;
-    //   const updatedProducts = existingData.getAllProducts.products.filter(
-    //     (product) => product.name !== deletedProductName,
-    //   );
-
-    //   cache.writeQuery({
-    //     query: FindAllProductsDocument,
-    //     data: {
-    //       getAllProducts: {
-    //         ...existingData.getAllProducts,
-    //         products: updatedProducts,
-    //         total: Math.max(0, (existingData.getAllProducts.total || 1) - 1),
-    //       },
-    //     },
-    //   });
-    // },
-    //---------------------------------------------------------------
-    onCompleted: (data) => {
-      if (data?.hardDeleteProduct) {
-        // Refetch the products query
-        client
-          .refetchQueries({
-            include: [FindAllProductsDocument],
-          })
-          .then(() => {
-            // Clear selected products after successful deletion
-            onSuccess?.();
-          })
-          .catch(console.error);
+        //Call onSuccess if exists
+        onSuccess?.();
+      } catch (error) {
+        console.error('Error refetching queries:', error);
       }
     },
     onError: (error) => {
       // Handle GraphQL errors
       if (error.graphQLErrors?.length > 0) {
         const graphQLError = error.graphQLErrors[0];
-        toast.error('Delete failed', {
+        toast.error(t('deletionFailed'), {
           description: graphQLError.message,
         });
       } else if (error.networkError) {
@@ -86,17 +56,12 @@ export const useMultipleDeleteProducts = (onSuccess?: () => void) => {
         ids.map((id) =>
           deleteProduct({
             variables: { id },
-            //---------------------
-            // optimisticResponse: {
-            //   hardDeleteProduct: { name: id, __typename: 'Product' },
-            // },
-            //---------------------
           }),
         ),
       );
 
-      toast.success('Products deleted successfully', {
-        description: `Successfully deleted ${ids.length} product${ids.length > 1 ? 's' : ''}.`,
+      toast.success(t('deletionSuccessful'), {
+        description: t('multipleDeletionSuccessfulDescription'),
       });
     } catch (error) {
       // Error is already handled by the onError callback

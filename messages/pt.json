@@ -582,7 +582,15 @@
     "archiveDescription": "Esta ação não pode ser desfeita. Os produtos serão permanentemente arquivados do banco de dados.",
     "archiving": "Arquivando",
     "archive": "Arquivar",
-    "noProductsFound": "Nenhum produto encontrado"
+    "noProductsFound": "Nenhum produto encontrado",
+    "deletionFailed": "Falha na exclusão",
+    "deletionSuccessful": "Exclusão bem-sucedida",
+    "deletionSuccessfulDescription": "Produto excluído com sucesso",
+    "multipleDeletionSuccessfulDescription": "Produtos excluídos com sucesso",
+    "archivingFailed": "Falha no arquivamento",
+    "archivingSuccessful": "Arquivamento bem-sucedido",
+    "archiveSuccessfulDescription": "Produto arquivado com sucesso",
+    "multipleArchiveSuccessfulDescription": "Produtos arquivados com sucesso"
   },
   "Privacy": {
     "tableOfContents": "Índice",
