@@ -56,14 +56,6 @@ export default function MainDashboard() {
     setViewMode(viewMode === 'table' ? 'cards' : 'table');
   };
 
-  //-------------------------------------------
-  // useEffect(() => {
-  //   if (products.length === 0 && !loading) {
-  //     refetch().catch(console.error);
-  //   }
-  // }, [products.length, loading, refetch]);
-  //-------------------------------------------
-
   return (
     <main className="m-2 2xl:m-5">
       {/* Main Products */}

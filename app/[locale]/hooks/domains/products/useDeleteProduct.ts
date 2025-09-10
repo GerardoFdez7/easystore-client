@@ -18,8 +18,8 @@ export const useDeleteProduct = () => {
   >(HardDeleteDocument, {
     onCompleted: (data) => {
       if (data?.hardDeleteProduct) {
-        toast.success('Product deleted successfully', {
-          description: 'Product deleted successfully',
+        toast.success(t('deletionSuccessful'), {
+          description: t('deletionSuccessfulDescription'),
         });
         router.push('/products');
       }
@@ -28,7 +28,7 @@ export const useDeleteProduct = () => {
       // Handle GraphQL errors
       if (error.graphQLErrors?.length > 0) {
         const graphQLError = error.graphQLErrors[0];
-        toast.error('Delete failed', {
+        toast.error(t('deletionFailed'), {
           description: graphQLError.message,
         });
       } else if (error.networkError) {

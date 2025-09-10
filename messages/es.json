@@ -582,7 +582,15 @@
     "archiveDescription": "Esta acción no puede ser deshecha. Los productos se archivarán permanentemente de la base de datos.",
     "archiving": "Archivando",
     "archive": "Archivar",
-    "noProductsFound": "No se encontraron productos"
+    "noProductsFound": "No se encontraron productos",
+    "deletionFailed": "Error al eliminar",
+    "deletionSuccessful": "Eliminación exitosa",
+    "deletionSuccessfulDescription": "Producto eliminado correctamente",
+    "multipleDeletionSuccessfulDescription": "Productos eliminados correctamente",
+    "archivingFailed": "Error al archivar",
+    "archivingSuccessful": "Archivado exitoso",
+    "archiveSuccessfulDescription": "Producto archivado correctamente",
+    "multipleArchiveSuccessfulDescription": "Productos archivados correctamente"
   },
   "Privacy": {
     "tableOfContents": "Tabla de contenido",

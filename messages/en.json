@@ -581,7 +581,15 @@
     "archiveDescription": "This action cannot be undone. The products will be permanently archived from the database.",
     "archiving": "Archiving",
     "archive": "Archive",
-    "noProductsFound": "No products found"
+    "noProductsFound": "No products found",
+    "deletionFailed": "Deletion failed",
+    "deletionSuccessful": "Deletion successful",
+    "deletionSuccessfulDescription": "Product deleted successfully",
+    "multipleDeletionSuccessfulDescription": "Products deleted successfully",
+    "archivingFailed": "Archiving failed",
+    "archivingSuccessful": "Archiving successful",
+    "archiveSuccessfulDescription": "Product archived successfully",
+    "multipleArchiveSuccessfulDescription": "Products archived successfully"
   },
   "Privacy": {
     "tableOfContents": "Table of contents",

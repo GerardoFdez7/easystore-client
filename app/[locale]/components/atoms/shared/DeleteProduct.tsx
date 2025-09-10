@@ -26,17 +26,6 @@ export default function DeleteProduct({
   const { handleMultipleDelete, loading } =
     useMultipleDeleteProducts(onDeleteComplete);
 
-  //----------------------------
-  // const handleDelete = async () => {
-  //   try {
-  //     await handleMultipleDelete(productIds);
-  //     onDeleteComplete?.();
-  //   } catch (error) {
-  //     console.error('Error deleting products:', error);
-  //   }
-  // };
-  //----------------------------
-
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>

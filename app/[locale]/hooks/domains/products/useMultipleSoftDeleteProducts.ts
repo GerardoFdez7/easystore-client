@@ -48,7 +48,7 @@ export const useMultipleSoftDeleteProducts = ({
 
       if (error.graphQLErrors?.length > 0) {
         const graphQLError = error.graphQLErrors[0];
-        toast.error('Archive failed', {
+        toast.error(t('archiveFailed'), {
           description: graphQLError.message,
         });
       } else if (error.networkError) {
@@ -80,8 +80,8 @@ export const useMultipleSoftDeleteProducts = ({
         ),
       );
 
-      toast.success('Products archived', {
-        description: `Successfully archived ${productsToArchive.length} products`,
+      toast.success(t('archiveSuccessful'), {
+        description: t('multipleArchiveSuccessfulDescription'),
       });
     } catch (error) {
       // Error is already handled by the onError callback
