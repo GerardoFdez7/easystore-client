@@ -1101,6 +1101,7 @@
     "add": "Ajouter",
     "addSubcategories": "Ajouter des sous-catégories",
     "noResults": "Aucun résultat",
-    "close": "Fermer"
+    "close": "Fermer",
+    "noCategories": "Aucune catégorie pour le moment."
   }
 }
