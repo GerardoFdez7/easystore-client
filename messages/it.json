@@ -583,7 +583,15 @@
     "archiveDescription": "Questa azione non può essere annullata. I prodotti saranno rimossi permanentemente dal database.",
     "archiving": "Archiviazione",
     "archive": "Archivia",
-    "noProductsFound": "Nessun prodotto trovato"
+    "noProductsFound": "Nessun prodotto trovato",
+    "deletionFailed": "Eliminazione non riuscita",
+    "deletionSuccessful": "Eliminazione riuscita",
+    "deletionSuccessfulDescription": "Prodotto eliminato con successo",
+    "multipleDeletionSuccessfulDescription": "Prodotti eliminati con successo",
+    "archivingFailed": "Archiviazione non riuscita",
+    "archivingSuccessful": "Archiviazione riuscita",
+    "archiveSuccessfulDescription": "Prodotto archiviato con successo",
+    "multipleArchiveSuccessfulDescription": "Prodotti archiviati con successo"
   },
   "Privacy": {
     "tableOfContents": "Indice",

@@ -18,8 +18,8 @@ export const useSoftDeleteProduct = () => {
   >(SoftDeleteDocument, {
     onCompleted: (data) => {
       if (data?.softDeleteProduct) {
-        toast.success('Product archived successfully', {
-          description: 'The product has been moved to the archive',
+        toast.success(t('archiveSuccessful'), {
+          description: t('archiveSuccessfulDescription'),
         });
         router.refresh(); // Refresh the current page to reflect changes
       }
@@ -27,7 +27,7 @@ export const useSoftDeleteProduct = () => {
     onError: (error) => {
       if (error.graphQLErrors?.length > 0) {
         const graphQLError = error.graphQLErrors[0];
-        toast.error('Archive failed', {
+        toast.error(t('archiveFailed'), {
           description: graphQLError.message,
         });
       } else if (error.networkError) {
