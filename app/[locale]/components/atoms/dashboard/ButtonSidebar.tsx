@@ -23,10 +23,10 @@ export default function ButtonSidebar({
   const router = useRouter();
   const pathname = usePathname();
 
-  const pathParts = pathname.split('/');
-  const basePath = pathParts.slice(0, -1).join('/') || '';
-
-  const fullPath = `${basePath}/${route}`;
+  // Get the locale from the path (first segment after the domain)
+  const locale = pathname.split('/')[1];
+  // Create the full path by combining the locale with the route
+  const fullPath = `/${locale}${route.startsWith('/') ? '' : '/'}${route}`;
 
   const isSelected = pathname === fullPath;
 

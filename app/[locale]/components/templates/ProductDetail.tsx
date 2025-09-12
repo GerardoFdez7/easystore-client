@@ -2,12 +2,19 @@ import MainProductDetail from '@organisms/product-detail/MainProductDetail';
 import HeaderDashboard from '@organisms/shared/HeaderDashboard';
 import SidebarLayout from '@organisms/shared/SidebarLayout';
 
-export default function ProductDetailTemplate() {
+interface ProductDetailTemplateProps {
+  param?: string;
+  isNew: boolean;
+}
+export default function ProductDetailTemplate({
+  param,
+  isNew,
+}: ProductDetailTemplateProps) {
   return (
     <>
       <HeaderDashboard />
       <SidebarLayout title="Product Detail">
-        <MainProductDetail />
+        <MainProductDetail param={param ?? ''} isNew={isNew} />
       </SidebarLayout>
     </>
   );
