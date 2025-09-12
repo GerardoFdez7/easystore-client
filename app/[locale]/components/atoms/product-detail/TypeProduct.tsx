@@ -6,19 +6,23 @@ import {
   SelectValue,
 } from '@shadcn/ui/select';
 
-export default function TypeProduct() {
+interface TypeProductProps {
+  value?: string;
+}
+
+export default function TypeProduct({ value }: TypeProductProps) {
   return (
     <div>
       <label className="text-title mb-2 block text-sm font-medium">
         Type Product
       </label>
-      <Select defaultValue="physical">
+      <Select value={value}>
         <SelectTrigger className="w-[240px] border-[#e2e8f0] bg-[#ffffff] sm:w-[300px]">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="physical">PHYSICAL</SelectItem>
-          <SelectItem value="digital">DIGITAL</SelectItem>
+          <SelectItem value="PHYSICAL">PHYSICAL</SelectItem>
+          <SelectItem value="DIGITAL">DIGITAL</SelectItem>
         </SelectContent>
       </Select>
     </div>

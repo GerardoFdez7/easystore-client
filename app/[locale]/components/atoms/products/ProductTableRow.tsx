@@ -30,11 +30,12 @@ export function ProductTableRow({
     }
 
     // Create URL-friendly product name
-    const productSlug = product.name
-      .toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/[^a-z0-9-]/g, '');
-    router.push(`/products/${productSlug}`);
+    //const productSlug = product.name
+    //  .toLowerCase()
+    //  .replace(/\s+/g, '-')
+    //  .replace(/[^a-z0-9-]/g, '');
+    //router.push(`/products/${productSlug}`);
+    router.push(`/products/${product.id}`);
   };
 
   return (

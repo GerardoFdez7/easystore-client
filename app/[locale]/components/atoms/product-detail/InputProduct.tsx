@@ -2,13 +2,13 @@ import { Input } from '@shadcn/ui/input';
 
 type InputProductProps = {
   label?: string;
-  defaultValue?: string;
+  value?: string;
   placeholder?: string;
 };
 
 export default function InputProduct({
   label,
-  defaultValue,
+  value,
   placeholder,
 }: InputProductProps) {
   return (
@@ -20,7 +20,7 @@ export default function InputProduct({
       )}
       <Input
         className="border-[#e2e8f0]"
-        defaultValue={defaultValue}
+        defaultValue={value}
         placeholder={placeholder}
       />
     </div>
