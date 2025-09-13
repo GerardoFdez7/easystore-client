@@ -438,15 +438,7 @@
     "passwordTooLong": "Password must be at most 255 characters",
     "loginSuccessful": "Login successful!",
     "loginSuccessfulDescription": "Welcome back! You have been successfully logged in.",
-    "invalidCredentials": "Invalid credentials",
-    "invalidCredentialsDescription": "Please check your email and password and try again.",
-    "accountNotFound": "Account not found",
-    "accountNotFoundDescription": "Please check your email or create a new account.",
     "loginFailed": "Login failed",
-    "networkError": "Network error",
-    "networkErrorDescription": "Please check your connection and try again.",
-    "unexpectedError": "An unexpected error occurred",
-    "unexpectedErrorDescription": "Something went wrong. Please try again.",
     "logoutSuccessful": "Logout successful!",
     "logoutSuccessfulDescription": "You have been successfully logged out.",
     "logoutFailed": "Logout failed"
@@ -519,14 +511,7 @@
     "and": "and",
     "privacyPolicy": "Privacy Policy",
     "registrationSuccessful": "Registration successful!",
-    "registrationSuccessfulDescription": "Welcome {email}!",
-    "associatedAccount": "Associated account",
-    "associatedAccountDescription": "Try logging in or recover your password if you have forgotten it.",
-    "registrationFailed": "Registration failed",
-    "networkError": "Network error",
-    "networkErrorDescription": "Please check your connection and try again.",
-    "unexpectedError": "Unexpected error occurred",
-    "unexpectedErrorDescription": "Something went wrong. Please try again."
+    "registrationSuccessfulDescription": "Welcome {email}!"
   },
   "Dashboard": {
     "profile": "Profile",
@@ -840,6 +825,20 @@
     "network-error": "A network error occurred. Please check your connection and try again.",
     "unauthorized-error": "You are not authorized to perform this action.",
     "internal-server-error": "An internal server error occurred. Please try again later.",
-    "bad-request-error": "The request was invalid. Please check the data and try again."
+    "bad-request-error": "The request was invalid. Please check the data and try again.",
+    "invalidCredentials": "Invalid credentials",
+    "invalidCredentialsDescription": "Please check your email and password and try again.",
+    "accountLocked": "Account Locked",
+    "accountLockedDescription": "Your account is temporarily locked for 10 minutes due to multiple failed login attempts. Please try again later.",
+    "associatedAccount": "Associated account",
+    "associatedAccountDescription": "Try logging in or recover your password if you have forgotten it."
+  },
+  "Shared": {
+    "sortBy": {
+      "createdAt": "Creation",
+      "name": "Name",
+      "updatedAt": "Update",
+      "placeholder": "Sort by"
+    }
   }
 }

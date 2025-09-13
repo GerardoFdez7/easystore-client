@@ -10,7 +10,7 @@ import {
   AccountTypeEnum,
   RegisterMutationVariables,
 } from '@graphql/generated';
-import { useMutation, ApolloError } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 
 export const useRegister = (accountType: AccountTypeEnum) => {
   const t = useTranslations('Register');
@@ -57,24 +57,6 @@ export const useRegister = (accountType: AccountTypeEnum) => {
         router.push('/login');
       }
     },
-    onError: (error: ApolloError) => {
-      // Handle GraphQL error
-      if (error.graphQLErrors?.length > 0) {
-        const graphQLError = error.graphQLErrors[0];
-        if (
-          graphQLError.message.includes('already exists') ||
-          graphQLError.message.includes('duplicate')
-        ) {
-          toast.warning(t('associatedAccount'), {
-            description: t('associatedAccountDescription'),
-          });
-        } else {
-          console.error('Registration error:', error);
-        }
-      } else {
-        console.error('Registration error:', error);
-      }
-    },
   });
 
   const handleSubmit = async (formData: RegisterFormValues) => {
@@ -86,9 +68,8 @@ export const useRegister = (accountType: AccountTypeEnum) => {
       };
 
       await registerMutation({ variables });
-    } catch (error) {
-      // Error handling is done in the onError callback
-      console.error('Registration error:', error);
+    } catch (_error) {
+      // Error handling is done in error.handler
     }
   };
 

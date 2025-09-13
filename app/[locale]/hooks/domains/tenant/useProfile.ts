@@ -1,10 +1,9 @@
 'use client';
 
-import { useApolloClient } from '@apollo/client';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
-import { useQuery } from '@apollo/client';
+import { useQuery, useApolloClient } from '@apollo/client/react';
 import {
   FindTenantProfileDocument,
   FindTenantProfileQuery,

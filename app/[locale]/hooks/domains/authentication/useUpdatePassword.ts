@@ -9,7 +9,7 @@ import {
   UpdatePasswordMutation,
   UpdatePasswordMutationVariables,
 } from '@graphql/generated';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 
 export const useUpdatePassword = () => {
   const t = useTranslations('ResetPassword');

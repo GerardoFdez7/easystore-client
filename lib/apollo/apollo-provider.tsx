@@ -1,8 +1,19 @@
 'use client';
 
-import { ApolloProvider } from '@apollo/client';
-import { getClient } from './apollo';
+import { ApolloNextAppProvider } from '@apollo/client-integration-nextjs';
+import getClient from './client';
+import { useEffect, useState } from 'react';
 
 export function ApolloWrapper({ children }: React.PropsWithChildren) {
-  return <ApolloProvider client={getClient()}>{children}</ApolloProvider>;
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  return (
+    <ApolloNextAppProvider makeClient={getClient}>
+      {isHydrated ? children : <div></div>}
+    </ApolloNextAppProvider>
+  );
 }

@@ -3,7 +3,8 @@
 import { FC, useState, useMemo } from 'react';
 import { useDebounce } from '@hooks/utils/useDebounce';
 import { Combobox, ComboboxOption } from '@shadcn/ui/combobox';
-import { useFindWarehousesQuery } from '@lib/graphql/generated';
+import { FindWarehousesDocument } from '@graphql/generated';
+import { useQuery } from '@apollo/client/react';
 
 interface WarehouseComboboxProps {
   value?: string;
@@ -20,7 +21,7 @@ const WarehouseCombobox: FC<WarehouseComboboxProps> = ({
 }) => {
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 500);
-  const { data, loading } = useFindWarehousesQuery({
+  const { data, loading } = useQuery(FindWarehousesDocument, {
     variables: { name: debouncedSearch || undefined },
     fetchPolicy: 'cache-and-network',
   });

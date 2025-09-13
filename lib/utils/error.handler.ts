@@ -1,4 +1,4 @@
-import { ApolloError } from '@apollo/client';
+import { GraphQLFormattedError } from 'graphql';
 import { toast } from 'sonner';
 
 import en from '../../messages/en.json';
@@ -15,8 +15,11 @@ const messagesMap = {
   pt,
 };
 
-export function handleApolloError(error: ApolloError) {
-  if (!error) return;
+export function handleApolloError(
+  graphQLErrors?: readonly GraphQLFormattedError[] | null,
+  networkError?: Error | null,
+) {
+  if (!graphQLErrors && !networkError) return;
 
   const locale =
     typeof window !== 'undefined'
@@ -28,7 +31,36 @@ export function handleApolloError(error: ApolloError) {
     messages.Errors?.[key] || key;
 
   const handleGqlError = () => {
-    error.graphQLErrors.forEach((err) => {
+    graphQLErrors?.forEach((err: GraphQLFormattedError) => {
+      if (err.message.includes('Invalid credentials')) {
+        toast.error(t('invalidCredentials'), {
+          description:
+            t('invalidCredentialsDescription') +
+            (process.env.NODE_ENV === 'development' ? ` (${err.message})` : ''),
+        });
+        if (process.env.NODE_ENV === 'development')
+          console.error('Login error:', err.message);
+        return;
+      } else if (err.message.includes('Account is temporarily locked')) {
+        toast.warning(t('accountLocked'), {
+          description:
+            t('accountLockedDescription') +
+            (process.env.NODE_ENV === 'development' ? ` (${err.message})` : ''),
+        });
+        if (process.env.NODE_ENV === 'development')
+          console.error('Login error:', err.message);
+        return;
+      } else if (err.message.includes('already exists')) {
+        toast.warning(t('associatedAccount'), {
+          description:
+            t('associatedAccountDescription') +
+            (process.env.NODE_ENV === 'development' ? ` (${err.message})` : ''),
+        });
+        if (process.env.NODE_ENV === 'development')
+          console.error('Register error:', err.message);
+        return;
+      }
+
       const originalError = err.extensions?.originalError as {
         error?: string;
         statusCode?: number;
@@ -63,37 +95,28 @@ export function handleApolloError(error: ApolloError) {
     toast.error(t('title'), {
       description:
         t('network-error') +
-        (process.env.NODE_ENV === 'development' && error.networkError
-          ? ` Server message: "${error.networkError.message}"`
+        (process.env.NODE_ENV === 'development' && networkError
+          ? ` Backend message: "${networkError.message}"`
           : ''),
     });
-    if (process.env.NODE_ENV === 'development' && error.networkError)
+    if (process.env.NODE_ENV === 'development' && networkError)
       console.error(
         t('title') +
           ': ' +
           t('network-error') +
-          ` Server message: "${error.networkError.message}"`,
+          ` Backend message: "${networkError.message}"`,
       );
   };
 
-  if (error.graphQLErrors.length > 0) {
+  if (graphQLErrors && graphQLErrors.length > 0) {
     handleGqlError();
-  } else if (error.networkError) {
+  } else if (networkError) {
     handleNetworkError();
   } else {
     toast.error(t('generic-error'), {
-      description:
-        t('generic-description') +
-        (process.env.NODE_ENV === 'development' && error.message
-          ? ` Server message: "${error.message}"`
-          : ''),
+      description: t('generic-description'),
     });
-    if (process.env.NODE_ENV === 'development' && error.message)
-      console.error(
-        t('generic-error') +
-          ': ' +
-          t('generic-description') +
-          ` Server message: "${error.message}"`,
-      );
+    if (process.env.NODE_ENV === 'development')
+      console.error(t('generic-error') + ': ' + t('generic-description'));
   }
 }

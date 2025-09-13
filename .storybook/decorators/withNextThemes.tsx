@@ -1,7 +1,7 @@
 'use client';
 
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
 
 type PageThemeContextType = {
   isDarkModeEnabled: boolean;
@@ -15,7 +15,7 @@ function usePageTheme() {
   return useContext(PageThemeContext);
 }
 
-function PageThemeProvider({ children }: { children: React.ReactNode }) {
+function PageThemeProvider({ children }: { children: ReactNode }) {
   const [isDarkModeEnabled] = useState(true);
 
   return (

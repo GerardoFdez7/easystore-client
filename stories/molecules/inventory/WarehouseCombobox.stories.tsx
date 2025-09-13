@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import React from 'react';
 import WarehouseCombobox from '@molecules/inventory/WarehouseCombobox';
-import { MockedProvider } from '@apollo/client/testing';
-import { FindWarehousesDocument } from '@lib/graphql/generated';
+import { MockedProvider } from '@apollo/client/testing/react';
+import { FindWarehousesDocument } from '@graphql/generated';
 
 // Mock data for successful query
 const mockWarehouses = {

@@ -439,15 +439,6 @@
     "passwordTooLong": "La password deve contenere al massimo 255 caratteri",
     "loginSuccessful": "Accesso riuscito!",
     "loginSuccessfulDescription": "Bentornato! Hai effettuato l'accesso con successo.",
-    "invalidCredentials": "Credenziali non valide",
-    "invalidCredentialsDescription": "Controlla la tua email e password e riprova.",
-    "accountNotFound": "Account non trovato",
-    "accountNotFoundDescription": "Controlla la tua email o crea un nuovo account.",
-    "loginFailed": "Accesso fallito",
-    "networkError": "Errore di rete",
-    "networkErrorDescription": "Controlla la tua connessione e riprova.",
-    "unexpectedError": "Si è verificato un errore imprevisto",
-    "unexpectedErrorDescription": "Qualcosa è andato storto. Riprova.",
     "logoutSuccessful": "Logout riuscito!",
     "logoutSuccessfulDescription": "Sei stato disconnesso con successo.",
     "logoutFailed": "Logout fallito"
@@ -522,14 +513,7 @@
     "and": "e la",
     "privacyPolicy": "Politica sulla privacy",
     "registrationSuccessful": "Registrazione riuscita!",
-    "registrationSuccessfulDescription": "Benvenuto {email}!",
-    "associatedAccount": "Account associato",
-    "associatedAccountDescription": "Prova ad accedere o recupera la password se l'hai dimenticata.",
-    "registrationFailed": "Registrazione fallita",
-    "networkError": "Errore di rete",
-    "networkErrorDescription": "Controlla la tua connessione e riprova.",
-    "unexpectedError": "Si è verificato un errore imprevisto",
-    "unexpectedErrorDescription": "Qualcosa è andato storto. Riprova."
+    "registrationSuccessfulDescription": "Benvenuto {email}!"
   },
   "Dashboard": {
     "profile": "Profilo",
@@ -844,6 +828,20 @@
     "network-error": "Si è verificato un errore di rete. Controlla la tua connessione e riprova.",
     "unauthorized-error": "Non sei autorizzato a eseguire questa azione.",
     "internal-server-error": "Si è verificato un errore interno del server. Riprova più tardi.",
-    "bad-request-error": "La richiesta non era valida. Controlla i dati e riprova."
+    "bad-request-error": "La richiesta non era valida. Controlla i dati e riprova.",
+    "invalidCredentials": "Credenziali non valide",
+    "invalidCredentialsDescription": "Controlla la tua email e password e riprova.",
+    "accountLocked": "Account Bloccato",
+    "accountLockedDescription": "Il tuo account è temporaneamente bloccato per 10 minuti a causa di molteplici tentativi di accesso falliti. Riprova più tardi.",
+    "associatedAccount": "Account associato",
+    "associatedAccountDescription": "Prova ad accedere o recupera la password se l'hai dimenticata."
+  },
+  "Shared": {
+    "sortBy": {
+      "createdAt": "Creazione",
+      "name": "Nome",
+      "updatedAt": "Aggiornamento",
+      "placeholder": "Ordina per"
+    }
   }
 }

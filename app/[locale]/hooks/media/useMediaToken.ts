@@ -3,8 +3,8 @@ import {
   GetMediaTokenDocument,
   GetMediaTokenQuery,
   MediaAuthResponse,
-} from '@lib/graphql/generated';
-import { useQuery } from '@apollo/client';
+} from '@graphql/generated';
+import { useQuery } from '@apollo/client/react';
 
 const useMediaToken = () => {
   const [cachedToken, setCachedToken] = useState<MediaAuthResponse | null>(

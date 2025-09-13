@@ -10,7 +10,7 @@ import {
   ForgotPasswordMutation,
   AccountTypeEnum,
 } from '@graphql/generated';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 
 export const useForgotPassword = () => {
   const t = useTranslations('ForgotPassword');
