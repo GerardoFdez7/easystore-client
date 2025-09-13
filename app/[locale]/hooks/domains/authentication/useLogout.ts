@@ -2,7 +2,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from '@i18n/navigation';
 import { toast } from 'sonner';
 import { LogoutDocument, LogoutMutation } from '@graphql/generated';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 
 export const useLogout = () => {
   const t = useTranslations('Login');
@@ -27,9 +27,8 @@ export const useLogout = () => {
     try {
       await logoutMutation();
       window.location.href = '/login';
-    } catch (error) {
-      // Error handling is done in the onError callback
-      console.error('Logout error:', error);
+    } catch (_error) {
+      // Error handling is done in error.handler
     }
   };
 

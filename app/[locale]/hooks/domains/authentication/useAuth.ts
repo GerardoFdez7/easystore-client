@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from '@i18n/navigation';
 import { ValidateTokenDocument, ValidateTokenQuery } from '@graphql/generated';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -20,7 +20,10 @@ export const useAuth = () => {
   // Use the GraphQL queries hook
   const { data, error, loading, refetch } = useQuery<ValidateTokenQuery>(
     ValidateTokenDocument,
-    undefined,
+    {
+      fetchPolicy: 'cache-and-network',
+      errorPolicy: 'all',
+    },
   );
 
   const checkAuth = async () => {

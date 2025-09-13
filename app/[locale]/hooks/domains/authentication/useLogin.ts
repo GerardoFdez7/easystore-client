@@ -10,7 +10,7 @@ import {
   AccountTypeEnum,
   LoginMutationVariables,
 } from '@graphql/generated';
-import { ApolloError, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { useAuth } from '@hooks/domains/authentication/useAuth';
 
 export const useLogin = (accountType: AccountTypeEnum) => {
@@ -57,28 +57,6 @@ export const useLogin = (accountType: AccountTypeEnum) => {
           });
       }
     },
-    onError: (error: ApolloError) => {
-      // Handle GraphQL error
-      if (error.graphQLErrors?.length > 0) {
-        const graphQLError = error.graphQLErrors[0];
-        if (
-          graphQLError.message.includes('Invalid credentials') ||
-          graphQLError.message.includes('unauthorized')
-        ) {
-          toast.error(t('invalidCredentials'), {
-            description: t('invalidCredentialsDescription'),
-          });
-        } else if (graphQLError.message.includes('account not found')) {
-          toast.warning(t('accountNotFound'), {
-            description: t('accountNotFoundDescription'),
-          });
-        } else {
-          console.error('Login error:', graphQLError);
-        }
-      } else {
-        console.error('Login error:', error);
-      }
-    },
   });
 
   const handleSubmit = async (formData: LoginFormValues) => {
@@ -90,9 +68,8 @@ export const useLogin = (accountType: AccountTypeEnum) => {
       };
 
       await loginMutation({ variables });
-    } catch (error) {
-      // Error handling is done in the onError callback
-      console.error('Login error:', error);
+    } catch (_error) {
+      // Error handling is done in error.handler
     }
   };
 

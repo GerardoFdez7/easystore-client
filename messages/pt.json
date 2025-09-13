@@ -439,15 +439,7 @@
     "passwordTooLong": "A senha deve ter no máximo 255 caracteres",
     "loginSuccessful": "Login realizado com sucesso!",
     "loginSuccessfulDescription": "Bem-vindo de volta! Você fez login com sucesso.",
-    "invalidCredentials": "Credenciais inválidas",
-    "invalidCredentialsDescription": "Verifique seu e-mail e senha e tente novamente.",
-    "accountNotFound": "Conta não encontrada",
-    "accountNotFoundDescription": "Verifique seu e-mail ou crie uma nova conta.",
     "loginFailed": "Falha no login",
-    "networkError": "Erro de rede",
-    "networkErrorDescription": "Verifique sua conexão e tente novamente.",
-    "unexpectedError": "Ocorreu um erro inesperado",
-    "unexpectedErrorDescription": "Algo deu errado. Tente novamente.",
     "logoutSuccessful": "Logout realizado com sucesso!",
     "logoutSuccessfulDescription": "Você foi desconectado com sucesso.",
     "logoutFailed": "Falha no logout"
@@ -520,14 +512,7 @@
     "and": "e a",
     "privacyPolicy": "Política de Privacidade",
     "registrationSuccessful": "Cadastro realizado com sucesso!",
-    "registrationSuccessfulDescription": "Bem-vindo {email}!",
-    "associatedAccount": "Conta associada",
-    "associatedAccountDescription": "Tente fazer login ou recupere sua senha se a esqueceu.",
-    "registrationFailed": "Falha no cadastro",
-    "networkError": "Erro de rede",
-    "networkErrorDescription": "Verifique sua conexão e tente novamente.",
-    "unexpectedError": "Ocorreu um erro inesperado",
-    "unexpectedErrorDescription": "Algo deu errado. Tente novamente."
+    "registrationSuccessfulDescription": "Bem-vindo {email}!"
   },
   "Dashboard": {
     "profile": "Perfil",
@@ -843,6 +828,20 @@
     "network-error": "Ocorreu um erro de rede. Verifique sua conexão e tente novamente.",
     "unauthorized-error": "Você não está autorizado a realizar esta ação.",
     "internal-server-error": "Ocorreu um erro interno do servidor. Tente novamente mais tarde.",
-    "bad-request-error": "A solicitação era inválida. Verifique os dados e tente novamente."
+    "bad-request-error": "A solicitação era inválida. Verifique os dados e tente novamente.",
+    "invalidCredentials": "Credenciais inválidas",
+    "invalidCredentialsDescription": "Verifique seu e-mail e senha e tente novamente.",
+    "accountLocked": "Conta Bloqueada",
+    "accountLockedDescription": "Sua conta está temporariamente bloqueada por 10 minutos devido a várias tentativas de login falhas. Por favor, tente novamente mais tarde.",
+    "associatedAccount": "Conta associada",
+    "associatedAccountDescription": "Tente fazer login ou recupere sua senha se a esqueceu."
+  },
+  "Shared": {
+    "sortBy": {
+      "createdAt": "Criação",
+      "name": "Nome",
+      "updatedAt": "Atualização",
+      "placeholder": "Ordenar por"
+    }
   }
 }

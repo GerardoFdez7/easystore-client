@@ -1,11 +1,11 @@
-import React from 'react';
-import { ApolloProvider } from '@apollo/client';
-import { getClient } from '../../lib/apollo/apollo';
+import { ComponentType } from 'react';
+import { ApolloNextAppProvider } from '@apollo/client-integration-nextjs';
+import getClient from '../../lib/apollo/client';
 
-export const withApollo = (Story: React.ComponentType) => {
+export const withApollo = (Story: ComponentType) => {
   return (
-    <ApolloProvider client={getClient()}>
+    <ApolloNextAppProvider makeClient={getClient}>
       <Story />
-    </ApolloProvider>
+    </ApolloNextAppProvider>
   );
 };
