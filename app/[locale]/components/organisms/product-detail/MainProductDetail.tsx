@@ -16,11 +16,24 @@ import { Form, FormField, FormItem, FormMessage } from '@shadcn/ui/form';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import { useGetProductById } from '@hooks/domains/products/useGetProductById';
+import MediaUploader from '@organisms/shared/MediaUploader';
 //import {Product as ProductFormData} from '@lib/consts/products';
+import { useTestMultipleMediaPersistence } from '@hooks/useTestMultipleMediaPersistence';
+import { toast } from 'sonner';
+import { CheckCircle, Loader2, Upload, XCircle } from 'lucide-react';
+import { Button } from '@shadcn/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@shadcn/ui/card';
+import { Badge } from '@shadcn/ui/badge';
 
 interface MainProductDetailProps {
   param: string;
   isNew: boolean;
+}
+interface UploadResult {
+  url: string;
+  timestamp: Date;
+  status: 'success' | 'error';
+  message?: string;
 }
 export default function MainProductDetail({
   param,
@@ -29,6 +42,9 @@ export default function MainProductDetail({
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const { product } = useGetProductById(param);
   const [newTag, setNewTag] = useState('');
+  const [uploadResults, setUploadResults] = useState<UploadResult[]>([]);
+  //const { persistMedia } = useTestMediaPersistence();
+  const { persistMultipleMedia } = useTestMultipleMediaPersistence();
 
   // Initialize form with default values
   const form = useForm({
@@ -100,6 +116,36 @@ export default function MainProductDetail({
     setSelectedCategories(selectedCategories.filter((_, i) => i !== index));
   };
 
+  //Multimedia
+  const handleUploadSuccess = (url: string) => {
+    const result: UploadResult = {
+      url,
+      timestamp: new Date(),
+      status: 'success',
+    };
+
+    setUploadResults((prev) => [result, ...prev]);
+    toast.success('File uploaded successfully!');
+  };
+
+  const handleUploadError = (error: string) => {
+    const result: UploadResult = {
+      url: '',
+      timestamp: new Date(),
+      status: 'error',
+      message: error,
+    };
+
+    setUploadResults((prev) => [result, ...prev]);
+    toast.error('Upload failed!', {
+      description: error,
+    });
+  };
+
+  const clearResults = () => {
+    setUploadResults([]);
+  };
+
   return (
     <Form {...form}>
       <main className="m-2 2xl:m-5">
@@ -142,6 +188,126 @@ export default function MainProductDetail({
           />
 
           {/* Multimedia */}
+          <label className="text-title mb-2 block text-sm font-medium">
+            Multimedia
+          </label>
+          <MediaUploader
+            onUploadSuccess={handleUploadSuccess}
+            onUploadError={handleUploadError}
+            onMediaProcessed={async (processedData) => {
+              try {
+                if (processedData) {
+                  const persistedData =
+                    await persistMultipleMedia(processedData);
+                  console.log('Multiple media persisted:', persistedData);
+                }
+              } catch (error) {
+                console.error('Error persisting multiple media:', error);
+              }
+            }}
+            acceptedFileTypes={[
+              'image/jpeg',
+              'image/png',
+              'image/webp',
+              'video/mp4',
+              'video/webm',
+              'video/avi',
+              'video/mov',
+            ]}
+            maxImageSize={10}
+            maxVideoSize={50}
+            multiple={true}
+            renderDoneButton={(onDone, isProcessing) => (
+              <Button
+                onClick={onDone}
+                disabled={isProcessing}
+                variant="default"
+                size="sm"
+                className="flex items-center gap-2"
+              >
+                {isProcessing ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <CheckCircle className="h-4 w-4" />
+                )}
+                {isProcessing ? 'Uploading...' : 'Finish Upload'}
+              </Button>
+            )}
+          />
+          {/* Upload Results */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Upload Results</CardTitle>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clearResults}
+                disabled={uploadResults.length === 0}
+              >
+                Clear Results
+              </Button>
+            </CardHeader>
+            <CardContent>
+              {uploadResults.length === 0 ? (
+                <div className="text-muted-foreground py-8 text-center">
+                  <Upload className="mx-auto mb-4 h-12 w-12 opacity-50" />
+                  <p>No uploads yet. Try uploading some files above!</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {uploadResults.map((result) => (
+                    <div key={result.url} className="rounded-lg border p-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-start gap-3">
+                          {result.status === 'success' ? (
+                            <CheckCircle className="mt-0.5 h-5 w-5 text-green-500" />
+                          ) : (
+                            <XCircle className="mt-0.5 h-5 w-5 text-red-500" />
+                          )}
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <Badge
+                                variant={
+                                  result.status === 'success'
+                                    ? 'default'
+                                    : 'destructive'
+                                }
+                              >
+                                {result.status}
+                              </Badge>
+                              <span className="text-muted-foreground text-sm">
+                                {result.timestamp.toLocaleTimeString()}
+                              </span>
+                            </div>
+                            {result.status === 'success' ? (
+                              <div className="space-y-1">
+                                <p className="text-muted-foreground text-sm break-all">
+                                  URL: {result.url}
+                                </p>
+                              </div>
+                            ) : (
+                              <p className="text-sm text-red-600">
+                                Error: {result.message}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        {result.status === 'success' && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => window.open(result.url, '_blank')}
+                          >
+                            View File
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
           {/* Category */}
           <Category
