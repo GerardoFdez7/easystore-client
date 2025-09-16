@@ -14,8 +14,10 @@ query findProductById($id: String!) {
     }
     categories {
       categoryId
+      categoryName
     }
     variants {
+      id
       price
       condition
       attributes {

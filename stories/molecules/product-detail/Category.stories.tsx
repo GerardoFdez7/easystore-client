@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Category from '@molecules/product-detail/Category';
+import Category from '@molecules/product-detail/CategoryFilter';
 import { fn } from '@storybook/test';
 import { useState } from 'react';
 
