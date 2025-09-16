@@ -11,11 +11,11 @@ export default function ProductDetailTemplate({
   isNew,
 }: ProductDetailTemplateProps) {
   return (
-    <>
+    <div className="bg-background flex min-h-screen flex-col">
       <HeaderDashboard />
       <SidebarLayout title="Product Detail">
         <MainProductDetail param={param ?? ''} isNew={isNew} />
       </SidebarLayout>
-    </>
+    </div>
   );
 }

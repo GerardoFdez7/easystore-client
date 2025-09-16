@@ -9,20 +9,21 @@ import {
 } from '@shadcn/ui/table';
 import ButtonAddVariant from '@atoms/product-detail/ButtonAddVariant';
 
-const variants = [
-  { id: 1, name: 'Variant 1', price: '₡ 2000.00', stock: '10' },
-  { id: 2, name: 'Variant 2', price: '₡ 2000.00', stock: '10' },
-  { id: 3, name: 'Variant 3', price: '₡ 2000.00', stock: '10' },
-];
+interface Variants {
+  id: string;
+  price: number;
+  attributes: {
+    key: string;
+    value: string;
+  }[];
+  condition: string;
+}
 
-export default function TableVariants() {
+export default function TableVariants({ variants }: { variants: Variants[] }) {
   const router = useRouter();
 
-  const handleRowClick = (variantName: string) => {
-    const slug = encodeURIComponent(
-      variantName.toLowerCase().replace(/\s+/g, '-'),
-    );
-    router.push(`/products/${slug}`);
+  const handleRowClick = (id: string) => {
+    router.push(`/products/${id}`);
   };
 
   return (
@@ -38,7 +39,7 @@ export default function TableVariants() {
             <TableRow>
               <TableHead className="text-title text-center">Variant</TableHead>
               <TableHead className="text-title text-left">Price</TableHead>
-              <TableHead className="text-title text-left">Stock</TableHead>
+              <TableHead className="text-title text-left">Condition</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -46,7 +47,7 @@ export default function TableVariants() {
               <TableRow
                 key={variant.id}
                 className="cursor-pointer transition-colors"
-                onClick={() => handleRowClick(variant.name)}
+                onClick={() => handleRowClick(variant.id)}
               >
                 <TableCell className="pl-5">
                   <div className="flex items-center gap-3">
@@ -54,7 +55,7 @@ export default function TableVariants() {
                       V
                     </div>
                     <span className="text-foreground text-sm">
-                      {variant.name}
+                      {variant.attributes[0]?.value}
                     </span>
                   </div>
                 </TableCell>
@@ -62,7 +63,7 @@ export default function TableVariants() {
                   {variant.price}
                 </TableCell>
                 <TableCell className="text-foreground text-sm">
-                  {variant.stock}
+                  {variant.condition}
                 </TableCell>
               </TableRow>
             ))}

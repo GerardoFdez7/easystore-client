@@ -1,9 +1,10 @@
 import ProductDetailTemplate from '@templates/ProductDetail';
 
-export default function ProductDetailPage({
+export default async function ProductDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  return <ProductDetailTemplate param={params.id} isNew={false} />;
+  const { id } = await params;
+  return <ProductDetailTemplate param={id} isNew={false} />;
 }

@@ -1889,9 +1889,11 @@ export type FindProductByIdQuery = {
     categories?: Array<{
       __typename?: 'ProductCategory';
       categoryId: string;
+      categoryName?: string | null;
     }> | null;
     variants?: Array<{
       __typename?: 'Variant';
+      id: string;
       price: number;
       condition: ConditionEnum;
       weight?: number | null;

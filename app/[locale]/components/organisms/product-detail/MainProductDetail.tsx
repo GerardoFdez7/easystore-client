@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import InputProduct from '@atoms/product-detail/InputProduct';
 import Description from '@atoms/product-detail/Description';
-import Category from '@molecules/product-detail/Category';
+import CategoryFilter from '@molecules/product-detail/CategoryFilter';
 import TypeProduct from '@atoms/product-detail/TypeProduct';
 import Tags from '@molecules/product-detail/Tags';
 import TableVariants from '@molecules/product-detail/TableVariants';
-import Sustainability from '@molecules/product-detail/Sustainability';
+import SustainabilityFormField from '@molecules/product-detail/SustainabilityFormField';
 import DeleteProduct from '@atoms/product-detail/DeleteProduct';
 import ArchivedProduct from '@atoms/product-detail/ArchivedProduct';
 import ButtonCancel from '@atoms/product-detail/ButtonCancel';
@@ -24,6 +24,11 @@ import { CheckCircle, Loader2, Upload, XCircle } from 'lucide-react';
 import { Button } from '@shadcn/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@shadcn/ui/card';
 import { Badge } from '@shadcn/ui/badge';
+import type {
+  Sustainability,
+  Category,
+  Variant,
+} from '@lib/utils/types/product';
 
 interface MainProductDetailProps {
   param: string;
@@ -35,15 +40,14 @@ interface UploadResult {
   status: 'success' | 'error';
   message?: string;
 }
+
 export default function MainProductDetail({
   param,
   isNew,
 }: MainProductDetailProps) {
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const { product } = useGetProductById(param);
   const [newTag, setNewTag] = useState('');
   const [uploadResults, setUploadResults] = useState<UploadResult[]>([]);
-  //const { persistMedia } = useTestMediaPersistence();
   const { persistMultipleMedia } = useTestMultipleMediaPersistence();
 
   // Initialize form with default values
@@ -56,8 +60,10 @@ export default function MainProductDetail({
       shortDescription: '',
       manufacturer: '',
       productType: '',
-      categories: [],
       tags: [] as string[],
+      categories: [] as Category[],
+      variants: [] as Variant[],
+      sustainabilities: [] as Sustainability[],
     },
   });
 
@@ -74,6 +80,26 @@ export default function MainProductDetail({
         longDescription: product.longDescription || '',
         productType: product.productType || '',
         tags: product.tags?.filter((tag): tag is string => Boolean(tag)) || [],
+        categories:
+          product.categories?.map((cat) => ({
+            categoryId: cat.categoryId,
+            categoryName: cat.categoryName ?? undefined,
+          })) || [],
+        variants:
+          product.variants?.map((variant: Variant) => ({
+            id: variant.id,
+            price: variant.price,
+            attributes: Array.isArray(variant.attributes)
+              ? variant.attributes.map(
+                  (attr: { key: string; value: string }) => ({
+                    key: attr.key,
+                    value: attr.value,
+                  }),
+                )
+              : [],
+            condition: variant.condition || '',
+          })) || [],
+        sustainabilities: product.sustainabilities || [],
       });
     } else if (isNew) {
       // Reset form to default values for new product
@@ -85,8 +111,9 @@ export default function MainProductDetail({
         shortDescription: '',
         longDescription: '',
         productType: '',
-        categories: [],
         tags: [],
+        categories: [],
+        sustainabilities: [],
       });
     }
   }, [product, isNew, form]);
@@ -110,10 +137,6 @@ export default function MainProductDetail({
         shouldDirty: true,
       },
     );
-  };
-
-  const removeCategory = (index: number) => {
-    setSelectedCategories(selectedCategories.filter((_, i) => i !== index));
   };
 
   //Multimedia
@@ -148,7 +171,7 @@ export default function MainProductDetail({
 
   return (
     <Form {...form}>
-      <main className="m-2 2xl:m-5">
+      <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         {/* Main Content */}
         <div className="space-y-8">
           {/* Title */}
@@ -310,14 +333,28 @@ export default function MainProductDetail({
           </Card>
 
           {/* Category */}
-          <Category
-            selectedCategories={selectedCategories}
-            setSelectedCategories={setSelectedCategories}
-            removeCategory={removeCategory}
+          <FormField
+            control={form.control}
+            name="categories"
+            render={({ field: { value: categories = [] } }) => (
+              <FormItem>
+                <CategoryFilter selectedCategories={categories} />
+                <FormMessage />
+              </FormItem>
+            )}
           />
 
           {/* Variants */}
-          <TableVariants />
+          <FormField
+            control={form.control}
+            name="variants"
+            render={({ field: { value: variants = [] } }) => (
+              <FormItem>
+                <TableVariants variants={variants} />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           {/* Type Product */}
           <FormField
@@ -374,7 +411,16 @@ export default function MainProductDetail({
           </div>
 
           {/* Sustainability */}
-          <Sustainability />
+          <FormField
+            control={form.control}
+            name="sustainabilities"
+            render={({ field: { value: sustainabilities = [] } }) => (
+              <FormItem>
+                <SustainabilityFormField sustainabilities={sustainabilities} />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           {/* Action Buttons */}
           <div className="flex flex-col gap-4 pt-8">
