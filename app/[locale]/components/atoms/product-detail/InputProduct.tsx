@@ -18,11 +18,7 @@ export default function InputProduct({
           {label}
         </label>
       )}
-      <Input
-        className="border-[#e2e8f0]"
-        defaultValue={value}
-        placeholder={placeholder}
-      />
+      <Input defaultValue={value} placeholder={placeholder} />
     </div>
   );
 }

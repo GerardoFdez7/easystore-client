@@ -2,13 +2,7 @@
 
 import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import {
-  FormField,
-  FormItem,
-  FormControl,
-  FormMessage,
-  FormLabel,
-} from '@shadcn/ui/form';
+import { FormItem, FormControl, FormMessage, FormLabel } from '@shadcn/ui/form';
 import { Button } from '@shadcn/ui/button';
 import { Input } from '@shadcn/ui/input';
 import { Plus } from 'lucide-react';
@@ -23,7 +17,7 @@ interface SustainabilityProps {
 export default function SustainabilityFormField({
   sustainabilities,
 }: SustainabilityProps) {
-  const { control, setValue } = useFormContext();
+  const { setValue } = useFormContext();
   const [newCertification, setNewCertification] = useState('');
   const [newRecycledPercentage, setNewRecycledPercentage] = useState('');
   const t = useTranslations('Variant');
@@ -66,124 +60,114 @@ export default function SustainabilityFormField({
   };
 
   return (
-    <FormField
-      control={control}
-      name="sustainabilities"
-      render={() => (
-        <FormItem>
-          <FormLabel className="text-lg font-semibold">
-            Sustainability
-          </FormLabel>
-          <FormControl>
-            <div className="space-y-4">
-              {/* Persistent input fields for adding new sustainability */}
-              <div className="border-border bg-muted/30 rounded-lg border p-4">
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <div>
-                    <FormLabel htmlFor="attributeKey" className="mb-1">
-                      Certification
-                    </FormLabel>
-                    <Input
-                      id="certification"
-                      type="text"
-                      required={true}
-                      placeholder="Fair Trade"
-                      value={newCertification}
-                      onChange={(e) => setNewCertification(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <FormLabel className="mb-1">Recycled Percentage</FormLabel>
-                    <Input
-                      type="number"
-                      required={true}
-                      placeholder="50%"
-                      value={newRecycledPercentage}
-                      onChange={(e) => setNewRecycledPercentage(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className="mt-3 flex justify-end">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={addAttribute}
-                    disabled={
-                      !newCertification.trim() || !newRecycledPercentage.trim()
-                    }
-                  >
-                    <Plus className="h-4 w-4" /> Add Sustainability
-                  </Button>
-                </div>
+    <FormItem>
+      <FormLabel className="text-lg font-semibold">Sustainability</FormLabel>
+      <FormControl>
+        <div className="space-y-4">
+          {/* Persistent input fields for adding new sustainability */}
+          <div className="border-border bg-muted/30 rounded-lg border p-4">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div>
+                <FormLabel htmlFor="attributeKey" className="mb-1">
+                  Certification
+                </FormLabel>
+                <Input
+                  id="certification"
+                  type="text"
+                  required={true}
+                  placeholder="Fair Trade"
+                  value={newCertification}
+                  onChange={(e) => setNewCertification(e.target.value)}
+                />
               </div>
-
-              {/* Display existing sustainability */}
-              {sustainabilities.length > 0 && (
-                <div className="border-border bg-muted/10 rounded-lg border p-8">
-                  <div className="space-y-3">
-                    {sustainabilities.map((sustainability, index) => (
-                      <ArrayItemBox
-                        key={index}
-                        index={index}
-                        canMoveUp={index > 0}
-                        canMoveDown={index < sustainabilities.length - 1}
-                        onMoveUp={() => moveAttribute(index, 'up')}
-                        onMoveDown={() => moveAttribute(index, 'down')}
-                        onDelete={() => deleteAttribute(index)}
-                        t={t}
-                      >
-                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                          <div>
-                            <FormLabel className="text-xs">
-                              Certification
-                            </FormLabel>
-                            <Input
-                              placeholder="Fair Trade"
-                              value={sustainability.certification}
-                              onChange={(e) =>
-                                updateAttribute(
-                                  index,
-                                  'certification',
-                                  e.target.value,
-                                )
-                              }
-                            />
-                          </div>
-                          <div>
-                            <FormLabel className="text-xs">
-                              Recycled Percentage
-                            </FormLabel>
-                            <Input
-                              type="number"
-                              placeholder="50%"
-                              value={sustainability.recycledPercentage}
-                              onChange={(e) =>
-                                updateAttribute(
-                                  index,
-                                  'recycledPercentage',
-                                  e.target.value,
-                                )
-                              }
-                            />
-                          </div>
-                        </div>
-                      </ArrayItemBox>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {sustainabilities.length === 0 && (
-                <p className="text-muted-foreground py-8 text-center text-sm">
-                  No Sustainability yet
-                </p>
-              )}
+              <div>
+                <FormLabel className="mb-1">Recycled Percentage</FormLabel>
+                <Input
+                  type="number"
+                  required={true}
+                  placeholder="50%"
+                  value={newRecycledPercentage}
+                  onChange={(e) => setNewRecycledPercentage(e.target.value)}
+                />
+              </div>
             </div>
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+            <div className="mt-3 flex justify-end">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addAttribute}
+                disabled={
+                  !newCertification.trim() || !newRecycledPercentage.trim()
+                }
+              >
+                <Plus className="h-4 w-4" /> Add Sustainability
+              </Button>
+            </div>
+          </div>
+
+          {/* Display existing sustainability */}
+          {sustainabilities.length > 0 && (
+            <div className="border-border bg-muted/10 rounded-lg border p-8">
+              <div className="space-y-3">
+                {sustainabilities.map((sustainability, index) => (
+                  <ArrayItemBox
+                    key={index}
+                    index={index}
+                    canMoveUp={index > 0}
+                    canMoveDown={index < sustainabilities.length - 1}
+                    onMoveUp={() => moveAttribute(index, 'up')}
+                    onMoveDown={() => moveAttribute(index, 'down')}
+                    onDelete={() => deleteAttribute(index)}
+                    t={t}
+                  >
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      <div>
+                        <FormLabel className="text-xs">Certification</FormLabel>
+                        <Input
+                          placeholder="Fair Trade"
+                          value={sustainability.certification}
+                          onChange={(e) =>
+                            updateAttribute(
+                              index,
+                              'certification',
+                              e.target.value,
+                            )
+                          }
+                        />
+                      </div>
+                      <div>
+                        <FormLabel className="text-xs">
+                          Recycled Percentage
+                        </FormLabel>
+                        <Input
+                          type="number"
+                          placeholder="50%"
+                          value={sustainability.recycledPercentage}
+                          onChange={(e) =>
+                            updateAttribute(
+                              index,
+                              'recycledPercentage',
+                              e.target.value,
+                            )
+                          }
+                        />
+                      </div>
+                    </div>
+                  </ArrayItemBox>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {sustainabilities.length === 0 && (
+            <p className="text-muted-foreground py-8 text-center text-sm">
+              No Sustainability yet
+            </p>
+          )}
+        </div>
+      </FormControl>
+      <FormMessage />
+    </FormItem>
   );
 }

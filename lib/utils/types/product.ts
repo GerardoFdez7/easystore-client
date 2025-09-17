@@ -13,9 +13,17 @@ export type Variant = {
   price: number;
   attributes: Attribute[];
   condition: string;
+  variantCover?: string;
 };
 
 export type Attribute = {
   key: string;
   value: string;
+};
+
+export type UploadResult = {
+  url: string;
+  timestamp: Date;
+  status: 'success' | 'error';
+  message?: string;
 };
