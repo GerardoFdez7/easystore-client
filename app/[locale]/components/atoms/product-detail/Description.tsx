@@ -20,7 +20,7 @@ export default function Description({
       </label>
       <Textarea
         defaultValue={value}
-        className={cn('h-10 border-[#e2e8f0] bg-white', className)}
+        className={cn('h-10 bg-white', className)}
         {...props}
       />
     </div>

@@ -17,7 +17,7 @@ export default function TypeProduct({ value }: TypeProductProps) {
         Type Product
       </label>
       <Select value={value}>
-        <SelectTrigger className="w-[240px] border-[#e2e8f0] bg-[#ffffff] sm:w-[300px]">
+        <SelectTrigger className="w-[240px] bg-[#ffffff] sm:w-[300px]">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
