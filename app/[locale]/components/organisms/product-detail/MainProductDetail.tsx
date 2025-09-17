@@ -1,11 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import InputProduct from '@atoms/product-detail/InputProduct';
 import Description from '@atoms/product-detail/Description';
-import CategoryFilter from '@molecules/product-detail/CategoryFilter';
 import TypeProduct from '@atoms/product-detail/TypeProduct';
-import Tags from '@molecules/product-detail/Tags';
 import TableVariants from '@molecules/product-detail/TableVariants';
 import SustainabilityFormField from '@molecules/product-detail/SustainabilityFormField';
 import DeleteProduct from '@atoms/product-detail/DeleteProduct';
@@ -27,6 +24,8 @@ import type {
   Variant,
 } from '@lib/utils/types/product';
 import type { Media } from '@lib/graphql/generated';
+import TagsFormField from '@molecules/product-detail/TagsFormField';
+import CategoryFormField from '@molecules/product-detail/CategoryFormField';
 
 interface MainProductDetailProps {
   param: string;
@@ -38,7 +37,6 @@ export default function MainProductDetail({
   isNew,
 }: MainProductDetailProps) {
   const { product } = useGetProductById(param);
-  const [newTag, setNewTag] = useState('');
   // const [setUploadResults] = useState<UploadResult[]>([]);
   // const { persistMultipleMedia } = useTestMultipleMediaPersistence();
 
@@ -112,27 +110,6 @@ export default function MainProductDetail({
       });
     }
   }, [product, isNew, form]);
-
-  const addTag = () => {
-    if (newTag.trim()) {
-      const currentTags = form.getValues('tags') || [];
-      form.setValue('tags', [...currentTags, newTag.trim()], {
-        shouldDirty: true,
-      });
-      setNewTag('');
-    }
-  };
-
-  const removeTag = (index: number) => {
-    const currentTags = form.getValues('tags') || [];
-    form.setValue(
-      'tags',
-      currentTags.filter((_, i) => i !== index),
-      {
-        shouldDirty: true,
-      },
-    );
-  };
 
   // //Multimedia
   // const handleUploadSuccess = (url: string) => {
@@ -215,16 +192,9 @@ export default function MainProductDetail({
           />
 
           {/* Category */}
-          <FormField
-            control={form.control}
-            name="categories"
-            render={({ field: { value: categories = [] } }) => (
-              <FormItem>
-                <CategoryFilter selectedCategories={categories} />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <CategoryFormField />
+
+          {/* <CategoryFormField /> */}
 
           {/* Variants */}
           <FormField
@@ -251,22 +221,7 @@ export default function MainProductDetail({
           />
 
           {/* Tags */}
-          <FormField
-            control={form.control}
-            name="tags"
-            render={({ field: { value: tags = [] } }) => (
-              <FormItem>
-                <Tags
-                  tags={tags}
-                  newTag={newTag}
-                  setNewTag={setNewTag}
-                  addTag={addTag}
-                  removeTag={removeTag}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <TagsFormField />
 
           {/* Brand & Manufacturer */}
           <div className="grid grid-cols-2 gap-4">
