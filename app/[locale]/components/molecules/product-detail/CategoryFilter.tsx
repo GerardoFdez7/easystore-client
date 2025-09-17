@@ -57,7 +57,7 @@ export default function CategoryFilter({
             }
           }}
         >
-          <SelectTrigger className="bg-card w-full border-[#e2e8f0]">
+          <SelectTrigger className="bg-card w-full">
             <SelectValue placeholder="Select a category" />
           </SelectTrigger>
           <SelectContent>

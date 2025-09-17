@@ -26,7 +26,7 @@ export default function Tags({
           value={newTag}
           onChange={(e) => setNewTag(e.target.value)}
           placeholder="Add"
-          className="border-[#e2e8f0] bg-[#ffffff]"
+          className="bg-[#ffffff]"
           onKeyPress={(e) => e.key === 'Enter' && addTag()}
         />
         <Button

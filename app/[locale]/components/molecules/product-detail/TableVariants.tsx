@@ -8,18 +8,10 @@ import {
   TableRow,
 } from '@shadcn/ui/table';
 import ButtonAddVariant from '@atoms/product-detail/ButtonAddVariant';
+import Image from 'next/image';
+import type { Variant } from '@lib/utils/types/product';
 
-interface Variants {
-  id: string;
-  price: number;
-  attributes: {
-    key: string;
-    value: string;
-  }[];
-  condition: string;
-}
-
-export default function TableVariants({ variants }: { variants: Variants[] }) {
+export default function TableVariants({ variants }: { variants: Variant[] }) {
   const router = useRouter();
 
   const handleRowClick = (id: string) => {
@@ -51,10 +43,17 @@ export default function TableVariants({ variants }: { variants: Variants[] }) {
               >
                 <TableCell className="pl-5">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#737373] text-sm font-medium text-[#ffffff]">
-                      V
+                    <div className="h-10 w-10 overflow-hidden rounded-lg">
+                      <Image
+                        src={variant.variantCover ?? '/default.webp'}
+                        alt={variant.attributes[0]?.value || 'Variant Image'}
+                        width={40}
+                        height={40}
+                        className="h-full w-full object-cover"
+                      />
                     </div>
                     <span className="text-foreground text-sm">
+                      {variant.attributes[0]?.key}:{' '}
                       {variant.attributes[0]?.value}
                     </span>
                   </div>
