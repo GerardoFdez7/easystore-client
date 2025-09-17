@@ -17,7 +17,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: () => (
     <div className="w-full max-w-2xl">
-      <Sustainability />
+      <Sustainability sustainabilities={[]} />
     </div>
   ),
 };

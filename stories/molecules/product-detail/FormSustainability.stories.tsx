@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import FormSustainability from '@molecules/product-detail/FormSustainability';
 import { Dialog, DialogTrigger } from '@shadcn/ui/dialog';
 import { Button } from '@shadcn/ui/button';
-import { fn } from '@storybook/test';
+// import { fn } from '@storybook/test';
 
 const meta: Meta<typeof FormSustainability> = {
   title: 'Molecules/Product Detail/FormSustainability',
@@ -12,8 +12,8 @@ const meta: Meta<typeof FormSustainability> = {
   },
   tags: ['autodocs'],
   args: {
-    onSubmit: fn(),
-    onCancel: fn(),
+    onSubmit: () => {},
+    onCancel: () => {},
   },
 };
 
