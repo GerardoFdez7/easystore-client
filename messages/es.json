@@ -841,5 +841,24 @@
       "updatedAt": "Actualización",
       "placeholder": "Ordenar por"
     }
+  },
+  "Inventory": {
+    "noWarehousesTitle": "Aún no hay almacenes",
+    "noWarehousesDescription": "Crea tu primer almacén para comenzar a gestionar tu inventario",
+    "createWarehouse": "Crear almacén",
+    "noProductVariantsFound": "No se encontraron variantes de producto",
+    "emptyStateDescription": "Parece que aún no has añadido ninguna variante de producto a tu almacén. Empieza creando tu primer stock para gestionar tu inventario de forma eficaz.",
+    "addStockButton": "Añadir Stock",
+    "productTableHead": "Producto",
+    "skuTableHead": "SKU",
+    "availableTableHead": "Disponible",
+    "reservedTableHead": "Reservado",
+    "replenishmentDateTableHead": "Fecha de Reposición",
+    "previousButton": "Anterior",
+    "nextButton": "Siguiente",
+    "filterByWarehouse": "Filtrar por almacén",
+    "searchWarehouses": "Buscar almacenes...",
+    "loading": "Cargando...",
+    "noWarehousesFound": "No se encontraron almacenes."
   }
 }

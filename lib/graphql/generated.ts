@@ -1575,6 +1575,7 @@ export type FindWarehouseByIdQuery = {
       serialNumbers?: Array<string> | null;
       productLocation?: string | null;
       estimatedReplenishmentDate?: any | null;
+      variantSku?: string | null;
       productName?: string | null;
       variantFirstAttribute?: {
         __typename?: 'VariantAttribute';
@@ -4898,6 +4899,10 @@ export const FindWarehouseByIdDocument = {
                           kind: 'Name',
                           value: 'estimatedReplenishmentDate',
                         },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variantSku' },
                       },
                       {
                         kind: 'Field',

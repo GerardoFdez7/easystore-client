@@ -92,10 +92,6 @@ const meta: Meta<typeof WarehouseCombobox> = {
       action: 'onChange',
       description: 'Callback when warehouse selection changes',
     },
-    placeholder: {
-      control: 'text',
-      description: 'Placeholder text when no warehouse is selected',
-    },
     disabled: {
       control: 'boolean',
       description: 'Whether the select is disabled',
@@ -115,18 +111,14 @@ export default meta;
 type Story = StoryObj<typeof WarehouseCombobox>;
 
 export const Default: Story = {
-  args: {
-    placeholder: 'Select warehouse...',
-  },
+  args: {},
   parameters: {
     mocks: [successMock],
   },
 };
 
-export const Loading: Story = {
-  args: {
-    placeholder: 'Select warehouse...',
-  },
+export const NotFound: Story = {
+  args: {},
   parameters: {
     mocks: [loadingMock],
   },
@@ -135,7 +127,6 @@ export const Loading: Story = {
 export const WithSelectedValue: Story = {
   args: {
     value: '2',
-    placeholder: 'Select warehouse...',
   },
   parameters: {
     mocks: [successMock],
@@ -145,7 +136,6 @@ export const WithSelectedValue: Story = {
 export const Disabled: Story = {
   args: {
     disabled: true,
-    placeholder: 'Select warehouse...',
   },
   parameters: {
     mocks: [successMock],
@@ -161,7 +151,6 @@ const InteractiveComponent = () => {
       <WarehouseCombobox
         value={selectedWarehouse}
         onChange={setSelectedWarehouse}
-        placeholder="Choose a warehouse"
       />
       <div className="text-muted-foreground text-sm">
         Selected Warehouse ID: {selectedWarehouse || 'None'}

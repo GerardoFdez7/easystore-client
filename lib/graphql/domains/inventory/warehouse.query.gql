@@ -11,6 +11,7 @@ query findWarehouseById($id: ID!) {
       serialNumbers
       productLocation
       estimatedReplenishmentDate
+      variantSku
       variantFirstAttribute {
         key
         value

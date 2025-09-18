@@ -13,34 +13,27 @@ import {
 } from '@shadcn/ui/table';
 import { cn, formatDate } from '@lib/utils';
 import { FindInventoryQueryVariables } from '@graphql/generated';
-
-export type InventoryItem = {
-  id: string;
-  variantFirstAttribute: {
-    key: string;
-    value: string;
-  };
-  productName: string;
-  sku: string;
-  available: number;
-  reserved: number;
-  replenishmentDate: string;
-};
+import { InventoryItem } from '@lib/types/inventory';
+import { Package, Plus } from 'lucide-react';
+import EmptyState from '@molecules/shared/EmptyState';
+import { useTranslations } from 'next-intl';
 
 type InventoryTableProps = {
   variables: FindInventoryQueryVariables;
   className?: string;
   inventory: InventoryItem[];
+  onCreateStock?: () => void;
 };
 
 export default function InventoryTable({
   className,
   inventory,
+  onCreateStock,
 }: InventoryTableProps) {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 25;
-
+  const t = useTranslations('Inventory');
   const handleSelectAll = (checked: boolean) => {
     setSelectedRows(checked ? inventory.map((item) => item.id) : []);
   };
@@ -56,6 +49,22 @@ export default function InventoryTable({
   const currentItems = inventory.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(inventory.length / itemsPerPage);
 
+  // Show empty state if no inventory items
+  if (inventory.length === 0) {
+    return (
+      <div className={cn('w-full', className)}>
+        <EmptyState
+          icon={Package}
+          title={t('noProductVariantsFound')}
+          description={t('emptyStateDescription')}
+          buttonText={t('addStockButton')}
+          buttonIcon={Plus}
+          onButtonClick={() => onCreateStock?.()}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className={cn('w-full', className)}>
       <Table>
@@ -67,11 +76,11 @@ export default function InventoryTable({
                 onCheckedChange={handleSelectAll}
               />
             </TableHead>
-            <TableHead>Product</TableHead>
-            <TableHead>SKU</TableHead>
-            <TableHead>Available</TableHead>
-            <TableHead>Reserved</TableHead>
-            <TableHead>Replenishment Date</TableHead>
+            <TableHead>{t('productTableHead')}</TableHead>
+            <TableHead>{t('skuTableHead')}</TableHead>
+            <TableHead>{t('availableTableHead')}</TableHead>
+            <TableHead>{t('reservedTableHead')}</TableHead>
+            <TableHead>{t('replenishmentDateTableHead')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -94,10 +103,12 @@ export default function InventoryTable({
                   <span className="text-start">{item.productName}</span>
                 </div>
               </TableCell>
-              <TableCell>{item.sku || '-'}</TableCell>
-              <TableCell>{item.available}</TableCell>
-              <TableCell>{item.reserved}</TableCell>
-              <TableCell>{formatDate(item.replenishmentDate)}</TableCell>
+              <TableCell>{item.variantSku || '-'}</TableCell>
+              <TableCell>{item.qtyAvailable}</TableCell>
+              <TableCell>{item.qtyReserved}</TableCell>
+              <TableCell>
+                {formatDate(item.estimatedReplenishmentDate)}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -109,7 +120,7 @@ export default function InventoryTable({
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
         >
-          Previous
+          {t('previousButton')}
         </Button>
         <Button
           variant="outline"
@@ -119,7 +130,7 @@ export default function InventoryTable({
           }
           disabled={currentPage === totalPages}
         >
-          Next
+          {t('nextButton')}
         </Button>
       </div>
     </div>

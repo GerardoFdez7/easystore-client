@@ -840,5 +840,24 @@
       "updatedAt": "Update",
       "placeholder": "Sort by"
     }
+  },
+  "Inventory": {
+    "noWarehousesTitle": "No warehouses yet",
+    "noWarehousesDescription": "Create your first warehouse to start managing your inventory",
+    "createWarehouse": "Create warehouse",
+    "noProductVariantsFound": "No Product Variants Found",
+    "emptyStateDescription": "It seems you haven't added any product variants to your warehouse yet. Start by creating your first stock to manage your inventory effectively.",
+    "addStockButton": "Add Stock",
+    "productTableHead": "Product",
+    "skuTableHead": "SKU",
+    "availableTableHead": "Available",
+    "reservedTableHead": "Reserved",
+    "replenishmentDateTableHead": "Replenishment Date",
+    "previousButton": "Previous",
+    "nextButton": "Next",
+    "filterByWarehouse": "Filter by warehouse",
+    "searchWarehouses": "Search warehouses...",
+    "loading": "Loading...",
+    "noWarehousesFound": "No warehouses found."
   }
 }

@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import { usePathname } from '@i18n/navigation';
 import { useAuth } from '@hooks/domains/authentication/useAuth';
 import { isProtectedRoute } from '@consts/routes';
-import SpinLoader from '@atoms/shared/SpinLoader';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -27,7 +26,7 @@ export default function ProtectedRoute({
 
   // Show loading state while checking authentication
   if (loading) {
-    return fallback || <SpinLoader />;
+    return fallback;
   }
 
   // For protected routes, only render children if authenticated

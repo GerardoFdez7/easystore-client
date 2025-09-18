@@ -1,4 +1,4 @@
-import { InventoryItem } from '@molecules/inventory/InventoryTable';
+import { InventoryItem } from '@lib/types/inventory';
 
 export const generateMockInventoryData = (count: number): InventoryItem[] => {
   const mockInventoryTableData: InventoryItem[] = [];
@@ -17,10 +17,12 @@ export const generateMockInventoryData = (count: number): InventoryItem[] => {
               : 'Large',
       },
       productName: `Product ${i}`,
-      sku: `SKU${String(i).padStart(3, '0')}`,
-      available: Math.floor(Math.random() * 200) + 50,
-      reserved: Math.floor(Math.random() * 40) + 10,
-      replenishmentDate: `2024-0${Math.floor(Math.random() * 9) + 1}-0${Math.floor(Math.random() * 9) + 1}`,
+      variantSku: `SKU${String(i).padStart(3, '0')}`,
+      qtyAvailable: Math.floor(Math.random() * 100) + 1,
+      qtyReserved: Math.floor(Math.random() * 20),
+      estimatedReplenishmentDate: new Date(
+        Date.now() + Math.random() * 30 * 24 * 60 * 60 * 1000,
+      ).toISOString(),
     });
   }
   return mockInventoryTableData;
