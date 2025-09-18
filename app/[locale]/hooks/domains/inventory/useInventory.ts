@@ -1,19 +1,55 @@
 import {
   FindInventoryQueryVariables,
   FindInventoryDocument,
+  FindInventoryQuery,
+  FindWarehouseByIdDocument,
+  FindWarehouseByIdQueryVariables,
+  FindWarehouseByIdQuery,
 } from '@graphql/generated';
-import { InventoryItem } from '@molecules/inventory/InventoryTable';
-import { useSuspenseQuery } from '@apollo/client/react';
+import { InventoryItem } from '@lib/types/inventory';
+import { useQuery } from '@apollo/client/react';
 
-export const useInventory = (variables: FindInventoryQueryVariables) => {
-  const { data } = useSuspenseQuery(FindInventoryDocument, {
-    variables,
+// Type for the stock data from both queries
+type StockData =
+  | NonNullable<
+      FindWarehouseByIdQuery['getWarehouseById']
+    >['stockPerWarehouses'][0]
+  | NonNullable<
+      FindInventoryQuery['getAllWarehouses']['warehouses'][0]
+    >['stockPerWarehouses'][0];
+
+export const useInventory = (
+  variables: FindInventoryQueryVariables,
+  warehouseId?: string,
+) => {
+  // Use warehouse-specific query if warehouseId is provided
+  const warehouseQuery = useQuery(FindWarehouseByIdDocument, {
+    variables: { id: warehouseId } as FindWarehouseByIdQueryVariables,
+    skip: !warehouseId,
   });
 
-  const inventoryData =
-    data?.getAllWarehouses?.warehouses?.flatMap(
-      (warehouse) => warehouse.stockPerWarehouses || [],
-    ) || [];
+  // Use general inventory query if no specific warehouse is selected
+  const inventoryQuery = useQuery(FindInventoryDocument, {
+    variables,
+    skip: !!warehouseId,
+  });
+
+  // Determine which query to use based on warehouseId
+  const { loading, error } = warehouseId ? warehouseQuery : inventoryQuery;
+
+  let inventoryData: StockData[] = [];
+
+  if (warehouseId && warehouseQuery.data) {
+    // Handle warehouse-specific data structure
+    inventoryData =
+      warehouseQuery.data.getWarehouseById?.stockPerWarehouses || [];
+  } else if (!warehouseId && inventoryQuery.data) {
+    // Handle general inventory data structure
+    inventoryData =
+      inventoryQuery.data?.getAllWarehouses?.warehouses?.flatMap(
+        (warehouse) => warehouse.stockPerWarehouses || [],
+      ) || [];
+  }
 
   const formattedInventory: InventoryItem[] = inventoryData.map((item) => ({
     id: item.id,
@@ -22,13 +58,15 @@ export const useInventory = (variables: FindInventoryQueryVariables) => {
       value: item.variantFirstAttribute?.value ?? '',
     },
     productName: item.productName ?? '',
-    sku: item.variantSku ?? '',
-    available: item.qtyAvailable ?? 0,
-    reserved: item.qtyReserved ?? 0,
-    replenishmentDate: item.estimatedReplenishmentDate ?? '',
+    variantSku: item.variantSku ?? '',
+    qtyAvailable: item.qtyAvailable ?? 0,
+    qtyReserved: item.qtyReserved ?? 0,
+    estimatedReplenishmentDate: item.estimatedReplenishmentDate ?? '',
   }));
 
   return {
     inventory: formattedInventory,
+    loading,
+    error,
   };
 };

@@ -24,9 +24,9 @@ export interface ComboboxProps {
   options: ComboboxOption[];
   value?: string;
   onValueChange?: (value: string) => void;
-  placeholder?: string;
-  searchPlaceholder?: string;
-  emptyMessage?: string;
+  placeholder: string;
+  searchPlaceholder: string;
+  emptyMessage: string;
   className?: string;
   disabled?: boolean;
   open?: boolean;
@@ -43,9 +43,9 @@ function Combobox({
   options = [],
   value,
   onValueChange,
-  placeholder = 'Select option...',
-  searchPlaceholder = 'Search...',
-  emptyMessage = 'No option found.',
+  placeholder,
+  searchPlaceholder,
+  emptyMessage,
   className,
   disabled = false,
   open: controlledOpen,

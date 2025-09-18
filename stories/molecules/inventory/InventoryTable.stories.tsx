@@ -1,13 +1,13 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/nextjs';
 import InventoryTable from '@molecules/inventory/InventoryTable';
 import { FindInventoryQueryVariables } from '@graphql/generated';
 import { useInventoryStorybook } from './hooks/useInventoryStorybook';
-import React from 'react';
+import { ComponentProps } from 'react';
 import { mockInventoryTableData } from '@lib/utils';
 
 // Wrapper component for Storybook that uses the non-suspense hook
 const InventoryTableStorybook = (
-  props: React.ComponentProps<typeof InventoryTable>,
+  props: ComponentProps<typeof InventoryTable>,
 ) => {
   const { inventory, loading, error } = useInventoryStorybook(
     props.variables,
@@ -39,5 +39,20 @@ export const Default: Story = {
   args: {
     variables: variables,
     inventory: mockInventoryTableData,
+  },
+};
+
+export const Empty: Story = {
+  args: {
+    variables: variables,
+    inventory: [],
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'This story demonstrates the empty state of the InventoryTable component. The empty state is displayed when the `inventory` prop is an empty array. It shows a message indicating no product variants were found and provides a button to add stock.',
+      },
+    },
   },
 };

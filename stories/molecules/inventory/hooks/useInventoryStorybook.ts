@@ -2,7 +2,7 @@ import {
   FindInventoryQueryVariables,
   FindInventoryDocument,
 } from '@graphql/generated';
-import { InventoryItem } from '@molecules/inventory/InventoryTable';
+import { InventoryItem } from '@lib/types/inventory';
 import { useQuery } from '@apollo/client/react';
 
 export const useInventoryStorybook = (
@@ -34,10 +34,10 @@ export const useInventoryStorybook = (
       value: item.variantFirstAttribute?.value ?? '',
     },
     productName: item.productName ?? '',
-    sku: item.variantSku ?? '',
-    available: item.qtyAvailable ?? 0,
-    reserved: item.qtyReserved ?? 0,
-    replenishmentDate: item.estimatedReplenishmentDate ?? '',
+    variantSku: item.variantSku ?? '',
+    qtyAvailable: item.qtyAvailable ?? 0,
+    qtyReserved: item.qtyReserved ?? 0,
+    estimatedReplenishmentDate: item.estimatedReplenishmentDate ?? '',
   }));
 
   return {

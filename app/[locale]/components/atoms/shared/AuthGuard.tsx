@@ -1,5 +1,4 @@
 import { useAuth } from '@hooks/domains/authentication/useAuth';
-import SpinLoader from '@atoms/shared/SpinLoader';
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -20,7 +19,7 @@ export default function AuthGuard({
   const { isAuthenticated, loading } = useAuth();
 
   if (loading) {
-    return fallback || <SpinLoader />;
+    return fallback;
   }
 
   if (requireAuth && !isAuthenticated) {
