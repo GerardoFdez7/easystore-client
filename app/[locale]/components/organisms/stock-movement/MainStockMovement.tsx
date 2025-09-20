@@ -12,12 +12,10 @@ interface StockMovementItem {
   id: string;
   productName: string;
   variantSku?: string;
-  movementType: 'IN' | 'OUT' | 'ADJUSTMENT';
-  quantity: number;
+  deltaQuantity: number;
   reason: string;
+  createdBy: string;
   date: string;
-  location?: string;
-  reference?: string;
 }
 
 export default function MainStockMovement() {
@@ -31,34 +29,28 @@ export default function MainStockMovement() {
       id: '1',
       productName: 'iPhone 15 Pro Max',
       variantSku: 'IPH15PM-256-BLK',
-      movementType: 'OUT',
-      quantity: 5,
+      deltaQuantity: -5,
       reason: 'Sale',
+      createdBy: 'John Doe',
       date: '2024-01-15T10:30:00Z',
-      location: 'Main Warehouse',
-      reference: 'ORD-001',
     },
     {
       id: '2',
       productName: 'Samsung Galaxy S24',
       variantSku: 'SGS24-128-WHT',
-      movementType: 'IN',
-      quantity: 10,
+      deltaQuantity: 10,
       reason: 'Restock',
+      createdBy: 'Jane Smith',
       date: '2024-01-14T14:20:00Z',
-      location: 'Main Warehouse',
-      reference: 'PO-002',
     },
     {
       id: '3',
       productName: 'MacBook Air M2',
       variantSku: 'MBA-M2-256-SLV',
-      movementType: 'ADJUSTMENT',
-      quantity: 2,
+      deltaQuantity: 2,
       reason: 'Inventory Count Adjustment',
+      createdBy: 'Admin User',
       date: '2024-01-13T09:15:00Z',
-      location: 'Main Warehouse',
-      reference: 'ADJ-003',
     },
   ];
 

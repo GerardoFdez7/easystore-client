@@ -21,12 +21,10 @@ type StockMovementItem = {
   id: string;
   productName: string;
   variantSku?: string;
-  movementType: 'IN' | 'OUT' | 'ADJUSTMENT';
-  quantity: number;
+  deltaQuantity: number;
   reason: string;
+  createdBy: string;
   date: string;
-  location?: string;
-  reference?: string;
 };
 
 type StockMovementTableProps = {
@@ -60,20 +58,6 @@ export default function StockMovementTable({
   const currentItems = stockMovements.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(stockMovements.length / itemsPerPage);
 
-  // Get movement type styling
-  const getMovementTypeStyle = (type: string) => {
-    switch (type) {
-      case 'IN':
-        return 'bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium';
-      case 'OUT':
-        return 'bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium';
-      case 'ADJUSTMENT':
-        return 'bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium';
-      default:
-        return 'bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs font-medium';
-    }
-  };
-
   // Show empty state if no stock movement items
   if (stockMovements.length === 0) {
     return (
@@ -103,10 +87,9 @@ export default function StockMovementTable({
             </TableHead>
             <TableHead>{t('productTableHead')}</TableHead>
             <TableHead>{t('skuTableHead')}</TableHead>
-            <TableHead>{t('movementTypeTableHead')}</TableHead>
-            <TableHead>{t('quantityTableHead')}</TableHead>
+            <TableHead>{t('deltaQuantityTableHead')}</TableHead>
             <TableHead>{t('reasonTableHead')}</TableHead>
-            <TableHead>{t('locationTableHead')}</TableHead>
+            <TableHead>{t('createdByTableHead')}</TableHead>
             <TableHead>{t('dateTableHead')}</TableHead>
           </TableRow>
         </TableHeader>
@@ -126,39 +109,21 @@ export default function StockMovementTable({
                   <span className="text-start font-medium">
                     {item.productName}
                   </span>
-                  {item.reference && (
-                    <span className="text-start text-sm text-gray-500">
-                      Ref: {item.reference}
-                    </span>
-                  )}
                 </div>
               </TableCell>
               <TableCell>{item.variantSku || '-'}</TableCell>
               <TableCell>
-                <span className={getMovementTypeStyle(item.movementType)}>
-                  {item.movementType}
-                </span>
-              </TableCell>
-              <TableCell>
                 <span
                   className={
-                    item.movementType === 'IN'
-                      ? 'font-medium text-green-600'
-                      : item.movementType === 'OUT'
-                        ? 'font-medium text-red-600'
-                        : 'font-medium text-blue-600'
+                    item.deltaQuantity >= 0 ? 'text-green-600' : 'text-red-600'
                   }
                 >
-                  {item.movementType === 'IN'
-                    ? '+'
-                    : item.movementType === 'OUT'
-                      ? '-'
-                      : '±'}
-                  {item.quantity}
+                  {item.deltaQuantity >= 0 ? '+' : ''}
+                  {item.deltaQuantity}
                 </span>
               </TableCell>
               <TableCell>{item.reason}</TableCell>
-              <TableCell>{item.location || '-'}</TableCell>
+              <TableCell>{item.createdBy}</TableCell>
               <TableCell>{formatDate(item.date)}</TableCell>
             </TableRow>
           ))}
