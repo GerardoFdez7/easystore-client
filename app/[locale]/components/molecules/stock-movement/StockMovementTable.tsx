@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { Checkbox } from '@shadcn/ui/checkbox';
 import { Button } from '@shadcn/ui/button';
 import {
   Table,
@@ -38,20 +37,9 @@ export default function StockMovementTable({
   stockMovements,
   onCreateMovement,
 }: StockMovementTableProps) {
-  const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 25;
   const t = useTranslations('StockMovement');
-
-  const handleSelectAll = (checked: boolean) => {
-    setSelectedRows(checked ? stockMovements.map((item) => item.id) : []);
-  };
-
-  const handleSelectRow = (id: string, checked: boolean) => {
-    setSelectedRows((prev) =>
-      checked ? [...prev, id] : prev.filter((rowId) => rowId !== id),
-    );
-  };
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -79,12 +67,6 @@ export default function StockMovementTable({
       <Table>
         <TableHeader className="text-lg">
           <TableRow>
-            <TableHead className="pl-2">
-              <Checkbox
-                checked={selectedRows.length === stockMovements.length}
-                onCheckedChange={handleSelectAll}
-              />
-            </TableHead>
             <TableHead>{t('productTableHead')}</TableHead>
             <TableHead>{t('skuTableHead')}</TableHead>
             <TableHead>{t('deltaQuantityTableHead')}</TableHead>
@@ -96,14 +78,6 @@ export default function StockMovementTable({
         <TableBody>
           {currentItems.map((item) => (
             <TableRow key={item.id}>
-              <TableCell>
-                <Checkbox
-                  checked={selectedRows.includes(item.id)}
-                  onCheckedChange={(checked) =>
-                    handleSelectRow(item.id, checked as boolean)
-                  }
-                />
-              </TableCell>
               <TableCell>
                 <div className="flex flex-col">
                   <span className="text-start font-medium">
@@ -123,7 +97,7 @@ export default function StockMovementTable({
                 </span>
               </TableCell>
               <TableCell>{item.reason}</TableCell>
-              <TableCell>{item.createdBy}</TableCell>
+              <TableCell>{item.createdBy ? item.createdBy : '-'}</TableCell>
               <TableCell>{formatDate(item.date)}</TableCell>
             </TableRow>
           ))}
