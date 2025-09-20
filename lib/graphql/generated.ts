@@ -1770,6 +1770,7 @@ export type UpdateMutation = {
     categories?: Array<{
       __typename?: 'ProductCategory';
       categoryId: string;
+      categoryName?: string | null;
     }> | null;
     media?: Array<{
       __typename?: 'Media';
@@ -1786,6 +1787,7 @@ export type UpdateMutation = {
     }> | null;
     variants?: Array<{
       __typename?: 'Variant';
+      id: string;
       barcode?: string | null;
       condition: ConditionEnum;
       ean?: string | null;

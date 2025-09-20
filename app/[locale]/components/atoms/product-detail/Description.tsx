@@ -4,6 +4,7 @@ import { cn } from 'utils';
 type DescriptionProps = {
   label: string;
   value?: string;
+  onChange?: (value: string) => void;
   className?: string;
 };
 
@@ -11,6 +12,7 @@ export default function Description({
   label,
   className,
   value,
+  onChange,
   ...props
 }: DescriptionProps) {
   return (
@@ -19,7 +21,8 @@ export default function Description({
         {label}
       </label>
       <Textarea
-        defaultValue={value}
+        value={value || ''}
+        onChange={(e) => onChange?.(e.target.value)}
         className={cn('h-10 bg-white', className)}
         {...props}
       />

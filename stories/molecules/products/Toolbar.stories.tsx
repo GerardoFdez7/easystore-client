@@ -1,8 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { ProductsToolbar } from '@molecules/products/Toolbar';
+import { TypeEnum } from '@lib/graphql/generated';
 
 // Mock functions for Storybook actions
-const onTypeFilterChange = (value: string) =>
+import type { InputMaybe } from '@lib/graphql/generated';
+
+const onTypeFilterChange = (value: InputMaybe<TypeEnum>) =>
   console.log('Type filter changed:', value);
 const onCategoryFilterChange = (value: string) =>
   console.log('Category filter changed:', value);
@@ -47,7 +50,7 @@ const meta: Meta<typeof ProductsToolbar> = {
     },
   },
   args: {
-    typeFilter: '',
+    typeFilter: undefined,
     onTypeFilterChange,
     categoryFilter: '',
     onCategoryFilterChange,
@@ -62,7 +65,7 @@ type Story = StoryObj<typeof ProductsToolbar>;
 
 export const Default: Story = {
   args: {
-    typeFilter: '',
+    typeFilter: undefined,
     categoryFilter: '',
     viewMode: 'table',
   },
@@ -70,31 +73,15 @@ export const Default: Story = {
 
 export const WithTypeFilter: Story = {
   args: {
-    typeFilter: 'physical',
+    typeFilter: TypeEnum.Physical,
     categoryFilter: '',
     viewMode: 'table',
-  },
-};
-
-export const WithCategoryFilter: Story = {
-  args: {
-    typeFilter: '',
-    categoryFilter: 'electronics',
-    viewMode: 'table',
-  },
-};
-
-export const CardsView: Story = {
-  args: {
-    typeFilter: '',
-    categoryFilter: '',
-    viewMode: 'cards',
   },
 };
 
 export const WithAllFilters: Story = {
   args: {
-    typeFilter: 'digital',
+    typeFilter: TypeEnum.Digital,
     categoryFilter: 'software',
     viewMode: 'cards',
   },
