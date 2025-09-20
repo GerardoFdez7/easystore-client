@@ -6,7 +6,7 @@ export default function StockMovementTemplate() {
   return (
     <>
       <HeaderDashboard />
-      <SidebarLayout title="Stock Movement">
+      <SidebarLayout title="Stock Movement History">
         <MainStockMovement />
       </SidebarLayout>
     </>
