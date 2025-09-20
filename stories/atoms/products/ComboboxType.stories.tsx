@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import ComboboxType from '@atoms/products/ComboboxType';
+import { TypeEnum } from '@lib/graphql/generated';
 
 const meta: Meta<typeof ComboboxType> = {
   title: 'Atoms/Products/ComboboxType',
@@ -27,7 +28,7 @@ const meta: Meta<typeof ComboboxType> = {
     },
   },
   args: {
-    value: '',
+    value: undefined,
     onValueChange: () => {},
     disabled: false,
   },
@@ -39,18 +40,18 @@ type Story = StoryObj<typeof ComboboxType>;
 
 export const Default: Story = {
   args: {
-    value: '',
+    value: undefined,
   },
 };
 
 export const WithPhysicalSelected: Story = {
   args: {
-    value: 'physical',
+    value: TypeEnum.Physical,
   },
 };
 
 export const WithDigitalSelected: Story = {
   args: {
-    value: 'digital',
+    value: TypeEnum.Digital,
   },
 };

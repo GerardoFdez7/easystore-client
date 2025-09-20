@@ -7,7 +7,7 @@ export default function TagsFormField() {
       label="Tags"
       placeholder="Add"
       addButtonText="Add tag"
-      emptyStateText="e"
+      emptyStateText="No tags added"
       deleteAriaLabel={'Delete'}
     />
   );

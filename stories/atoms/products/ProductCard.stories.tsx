@@ -38,6 +38,9 @@ const mockProduct = {
       mediaType: 'IMAGE' as const,
     },
   ],
+  isArchived: false,
+  productType: 'Standard',
+  shortDescription: 'A reusable eco-friendly water bottle.',
 };
 
 export const Default: Story = {
@@ -61,24 +64,9 @@ export const WithoutMedia: Story = {
     product: {
       ...mockProduct,
       media: undefined,
-    },
-    isSelected: false,
-    onSelect: (checked: boolean) => console.log('Selected:', checked),
-  },
-};
-
-export const WithVideo: Story = {
-  args: {
-    product: {
-      ...mockProduct,
-      media: [
-        {
-          id: 'media_video',
-          url: '/sample-video.mp4',
-          position: 1,
-          mediaType: 'VIDEO' as const,
-        },
-      ],
+      isArchived: false,
+      productType: 'Standard',
+      shortDescription: 'A reusable eco-friendly water bottle.',
     },
     isSelected: false,
     onSelect: (checked: boolean) => console.log('Selected:', checked),
