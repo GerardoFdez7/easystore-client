@@ -70,6 +70,7 @@ mutation update($id: String!, $input: UpdateProductInput!) {
     brand
     categories {
       categoryId
+      categoryName
     }
     cover
     createdAt
@@ -93,6 +94,7 @@ mutation update($id: String!, $input: UpdateProductInput!) {
     tags
     updatedAt
     variants {
+      id
       attributes {
         key
         value

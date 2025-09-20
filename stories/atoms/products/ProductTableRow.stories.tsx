@@ -42,6 +42,9 @@ const mockProduct = {
       mediaType: 'IMAGE' as const,
     },
   ],
+  isArchived: false,
+  productType: 'physical',
+  shortDescription: 'A modern smartphone.',
 };
 
 export const Default: Story = {

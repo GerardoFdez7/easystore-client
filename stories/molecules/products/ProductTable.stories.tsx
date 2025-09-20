@@ -40,6 +40,9 @@ const mockProducts = [
         mediaType: 'IMAGE' as const,
       },
     ],
+    isArchived: false,
+    productType: 'Physical',
+    shortDescription: 'A modern smartphone.',
   },
   {
     id: '2',
@@ -56,6 +59,9 @@ const mockProducts = [
         mediaType: 'IMAGE' as const,
       },
     ],
+    isArchived: false,
+    productType: 'Physical',
+    shortDescription: 'Reusable water bottle.',
   },
   {
     id: '3',
@@ -64,6 +70,9 @@ const mockProducts = [
     inventory: 25,
     category: 'Electronics',
     cover: '/phone.webp',
+    isArchived: true,
+    productType: 'Physical',
+    shortDescription: 'Noise-cancelling headphones.',
   },
 ];
 
