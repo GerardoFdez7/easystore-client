@@ -1272,7 +1272,33 @@
       "addressRequired": "Indirizzo richiesto",
       "countryRequired": "Paese richiesto",
       "stateRequired": "Stato/Provincia richiesto",
-      "addressNamePlaceholder": "Indirizzo Principale"
+      "addressNamePlaceholder": "Indirizzo Principale",
+      "noWarehousesFound": "Nessun magazzino trovato."
+    },
+    "StockMovement": {
+      "noMovementsTitle": "Nessun movimento di stock ancora",
+      "noMovementsDescription": "Crea il tuo primo movimento di stock per iniziare a tracciare i cambiamenti dell'inventario",
+      "createMovement": "Crea movimento",
+      "noMovementsFound": "Nessun movimento di stock trovato",
+      "emptyStateDescription": "Sembra che tu non abbia ancora registrato movimenti di stock. Inizia creando il tuo primo movimento per tracciare efficacemente i cambiamenti dell'inventario.",
+      "addMovementButton": "Aggiungi Movimento",
+      "productTableHead": "Prodotto",
+      "skuTableHead": "SKU",
+      "movementTypeTableHead": "Tipo di Movimento",
+      "quantityTableHead": "Quantità",
+      "reasonTableHead": "Motivo",
+      "performedByTableHead": "Eseguito da",
+      "dateTableHead": "Data",
+      "locationTableHead": "Posizione",
+      "referenceTableHead": "Riferimento",
+      "previousButton": "Precedente",
+      "nextButton": "Successivo",
+      "loading": "Caricamento...",
+      "movementTypes": {
+        "IN": "Entrata di Stock",
+        "OUT": "Uscita di Stock",
+        "ADJUSTMENT": "Aggiustamento"
+      }
     }
   },
   "Category": {

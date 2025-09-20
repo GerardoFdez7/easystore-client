@@ -1260,6 +1260,31 @@
       "deliveryInstructionsMinLength": "Delivery instructions must be at least 10 characters",
       "deliveryInstructionsMaxLength": "Delivery instructions must be at most 200 characters",
       "phoneNumberInvalid": "Invalid phone number format"
+    },
+    "StockMovement": {
+      "noMovementsTitle": "No stock movements yet",
+      "noMovementsDescription": "Create your first stock movement to start tracking inventory changes",
+      "createMovement": "Create movement",
+      "noMovementsFound": "No Stock Movements Found",
+      "emptyStateDescription": "It seems you haven't recorded any stock movements yet. Start by creating your first movement to track inventory changes effectively.",
+      "addMovementButton": "Add Movement",
+      "productTableHead": "Product",
+      "skuTableHead": "SKU",
+      "movementTypeTableHead": "Movement Type",
+      "quantityTableHead": "Quantity",
+      "reasonTableHead": "Reason",
+      "performedByTableHead": "Performed By",
+      "dateTableHead": "Date",
+      "locationTableHead": "Location",
+      "referenceTableHead": "Reference",
+      "previousButton": "Previous",
+      "nextButton": "Next",
+      "loading": "Loading...",
+      "movementTypes": {
+        "IN": "Stock In",
+        "OUT": "Stock Out",
+        "ADJUSTMENT": "Adjustment"
+      }
     }
   },
   "Category": {

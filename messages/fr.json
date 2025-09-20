@@ -1270,7 +1270,33 @@
       "phoneNumberInvalid": "Format de numéro de téléphone invalide",
       "addressRequired": "Adresse requise",
       "countryRequired": "Pays requis",
-      "stateRequired": "État/Province requis"
+      "stateRequired": "État/Province requis",
+      "noWarehousesFound": "Aucun entrepôt trouvé."
+    },
+    "StockMovement": {
+      "noMovementsTitle": "Aucun mouvement de stock pour le moment",
+      "noMovementsDescription": "Créez votre premier mouvement de stock pour commencer à suivre les changements d'inventaire",
+      "createMovement": "Créer un mouvement",
+      "noMovementsFound": "Aucun mouvement de stock trouvé",
+      "emptyStateDescription": "Il semble que vous n'ayez pas encore enregistré de mouvements de stock. Commencez par créer votre premier mouvement pour suivre efficacement les changements d'inventaire.",
+      "addMovementButton": "Ajouter un mouvement",
+      "productTableHead": "Produit",
+      "skuTableHead": "SKU",
+      "movementTypeTableHead": "Type de mouvement",
+      "quantityTableHead": "Quantité",
+      "reasonTableHead": "Raison",
+      "performedByTableHead": "Effectué par",
+      "dateTableHead": "Date",
+      "locationTableHead": "Emplacement",
+      "referenceTableHead": "Référence",
+      "previousButton": "Précédent",
+      "nextButton": "Suivant",
+      "loading": "Chargement...",
+      "movementTypes": {
+        "IN": "Entrée de stock",
+        "OUT": "Sortie de stock",
+        "ADJUSTMENT": "Ajustement"
+      }
     }
   },
   "Category": {
