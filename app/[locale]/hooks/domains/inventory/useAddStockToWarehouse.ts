@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 import {
   AddStockToWarehouseDocument,
   AddStockToWarehouseMutation,
@@ -10,24 +11,25 @@ import {
 import useMutation from '../../useMutation';
 
 export const useAddStockToWarehouse = () => {
+  const t = useTranslations();
+
   // Schema validation based on backend AddStockToWarehouseInput
   const addStockFormSchema = z.object({
-    warehouseId: z.string().min(1, { message: 'Warehouse ID is required' }),
-    variantId: z.string().min(1, { message: 'Variant ID is required' }),
+    warehouseId: z.string().min(1, { message: t('Stock.warehouseIdRequired') }),
+    variantId: z.string().min(1, { message: t('Stock.variantIdRequired') }),
     qtyAvailable: z
       .number()
       .int()
-      .min(0, { message: 'Available quantity must be a positive number' }),
+      .min(0, { message: t('Stock.qtyAvailableMustBePositive') }),
     qtyReserved: z
       .number()
       .int()
-      .min(0, { message: 'Reserved quantity must be a positive number' })
+      .min(0, { message: t('Stock.qtyReservedMustBePositive') })
       .optional(),
     productLocation: z.string().optional(),
-    estimatedReplenishmentDate: z.date().optional(),
+    replenishmentDate: z.date().optional(),
     lotNumber: z.string().optional(),
-    serialNumbers: z.array(z.string()).optional(),
-    reason: z.string().optional(),
+    serialNumber: z.string().optional(),
   });
 
   type AddStockFormValues = z.infer<typeof addStockFormSchema>;
@@ -40,10 +42,9 @@ export const useAddStockToWarehouse = () => {
       qtyAvailable: 0,
       qtyReserved: 0,
       productLocation: '',
-      estimatedReplenishmentDate: undefined,
+      replenishmentDate: undefined,
       lotNumber: '',
-      serialNumbers: [],
-      reason: '',
+      serialNumber: '',
     },
   });
 
@@ -59,8 +60,10 @@ export const useAddStockToWarehouse = () => {
   >(AddStockToWarehouseDocument, undefined, {
     onCompleted: (data) => {
       if (data?.addStockToWarehouse) {
-        toast.success('Stock agregado exitosamente', {
-          description: `Stock agregado al almacén ${data.addStockToWarehouse.name}`,
+        toast.success(t('Stock.stockAddedSuccessfully'), {
+          description: t('Stock.stockAddedDescription', {
+            warehouseName: data.addStockToWarehouse.name,
+          }),
         });
 
         // Reset form after successful submission
@@ -72,29 +75,29 @@ export const useAddStockToWarehouse = () => {
       if (error.graphQLErrors?.length > 0) {
         const graphQLError = error.graphQLErrors[0];
         if (graphQLError.message.includes('warehouse not found')) {
-          toast.error('Almacén no encontrado', {
-            description: 'El almacén especificado no existe',
+          toast.error(t('Stock.warehouseNotFound'), {
+            description: t('Stock.warehouseNotFoundDescription'),
           });
         } else if (graphQLError.message.includes('variant not found')) {
-          toast.error('Variante no encontrada', {
-            description: 'La variante del producto no existe',
+          toast.error(t('Stock.variantNotFound'), {
+            description: t('Stock.variantNotFoundDescription'),
           });
         } else if (graphQLError.message.includes('insufficient permissions')) {
-          toast.error('Permisos insuficientes', {
-            description: 'No tienes permisos para agregar stock a este almacén',
+          toast.error(t('Stock.insufficientPermissions'), {
+            description: t('Stock.insufficientPermissionsDescription'),
           });
         } else {
-          toast.error('Error al agregar stock', {
+          toast.error(t('Stock.addStockFailed'), {
             description: graphQLError.message,
           });
         }
       } else if (error.networkError) {
-        toast.error('Error de conexión', {
-          description: 'No se pudo conectar con el servidor',
+        toast.error(t('Stock.networkError'), {
+          description: t('Stock.networkErrorDescription'),
         });
       } else {
-        toast.error('Error inesperado', {
-          description: 'Ocurrió un error inesperado al agregar el stock',
+        toast.error(t('Stock.unexpectedError'), {
+          description: t('Stock.unexpectedErrorDescription'),
         });
       }
     },
@@ -107,27 +110,22 @@ export const useAddStockToWarehouse = () => {
         ...formData,
         qtyReserved: formData.qtyReserved || undefined,
         productLocation: formData.productLocation || undefined,
-        estimatedReplenishmentDate:
-          formData.estimatedReplenishmentDate || undefined,
+        replenishmentDate: formData.replenishmentDate || undefined,
         lotNumber: formData.lotNumber || undefined,
-        serialNumbers: formData.serialNumbers?.length
-          ? formData.serialNumbers
-          : undefined,
-        reason: formData.reason || undefined,
+        serialNumber: formData.serialNumber || undefined,
       };
 
-      const variables: AddStockToWarehouseMutationVariables = {
+      const variables = {
         warehouseId: cleanedData.warehouseId,
         variantId: cleanedData.variantId,
         input: {
           qtyAvailable: cleanedData.qtyAvailable,
           qtyReserved: cleanedData.qtyReserved,
           productLocation: cleanedData.productLocation,
-          estimatedReplenishmentDate: cleanedData.estimatedReplenishmentDate,
+          replenishmentDate: cleanedData.replenishmentDate,
           lotNumber: cleanedData.lotNumber,
-          serialNumbers: cleanedData.serialNumbers,
+          serialNumber: cleanedData.serialNumber,
         },
-        reason: cleanedData.reason,
       };
 
       await addStockMutation({ variables });
