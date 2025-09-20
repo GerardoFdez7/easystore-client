@@ -24,7 +24,7 @@ export default function MainStockMovement() {
 
   const { stockMovements, loading, error } = useStockMovements(
     variables,
-    !selectedWarehouseId, // Skip query when no warehouse is selected
+    !selectedWarehouseId,
   );
 
   const handleCreateWarehouse = () => {
