@@ -32,11 +32,6 @@ export default function MainStockMovement() {
     console.log('Create warehouse clicked');
   };
 
-  const handleCreateStock = () => {
-    // TODO: Implement stock creation logic
-    console.log('Create stock clicked');
-  };
-
   if (error) {
     return (
       <EmptyState
@@ -66,9 +61,6 @@ export default function MainStockMovement() {
           icon={Warehouse}
           title={t('noStockTitle')}
           description={t('noStockDescription')}
-          buttonText={t('createStock')}
-          buttonIcon={Plus}
-          onButtonClick={handleCreateStock}
         />
       ) : (
         <StockMovementTable stockMovements={stockMovements} />
