@@ -2,85 +2,76 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Package, Plus } from 'lucide-react';
+import { Warehouse, Plus } from 'lucide-react';
+import WarehouseCombobox from '@molecules/inventory/WarehouseCombobox';
 import StockMovementTable from '@molecules/stock-movement/StockMovementTable';
 import StockMovementSkeleton from '@molecules/stock-movement/StockMovementSkeleton';
 import EmptyState from '@molecules/shared/EmptyState';
-
-// Stock movement item interface matching the table component
-interface StockMovementItem {
-  id: string;
-  productName: string;
-  variantSku?: string;
-  deltaQuantity: number;
-  reason: string;
-  createdBy: string;
-  date: string;
-}
+import SkeletonWrapper from '@molecules/shared/SkeletonWrapper';
+import { FindAllMovementsQueryVariables } from '@graphql/generated';
+import { useStockMovements } from '@hooks/domains/stock-movement/useStockMovements';
 
 export default function MainStockMovement() {
   const t = useTranslations('StockMovement');
-  const [loading] = useState(false); // This will be replaced with actual data fetching
-  const [error] = useState(false); // This will be replaced with actual error handling
+  const [selectedWarehouseId, setSelectedWarehouseId] = useState<string>('');
 
-  // Mock data - replace with actual data fetching hook
-  const mockStockMovements: StockMovementItem[] = [
-    {
-      id: '1',
-      productName: 'iPhone 15 Pro Max',
-      variantSku: 'IPH15PM-256-BLK',
-      deltaQuantity: -5,
-      reason: 'Sale',
-      createdBy: 'John Doe',
-      date: '2024-01-15T10:30:00Z',
-    },
-    {
-      id: '2',
-      productName: 'Samsung Galaxy S24',
-      variantSku: 'SGS24-128-WHT',
-      deltaQuantity: 10,
-      reason: 'Restock',
-      createdBy: 'Jane Smith',
-      date: '2024-01-14T14:20:00Z',
-    },
-    {
-      id: '3',
-      productName: 'MacBook Air M2',
-      variantSku: 'MBA-M2-256-SLV',
-      deltaQuantity: 2,
-      reason: 'Inventory Count Adjustment',
-      createdBy: 'Admin User',
-      date: '2024-01-13T09:15:00Z',
-    },
-  ];
+  // Variables for the stock movements query
+  const variables: FindAllMovementsQueryVariables = {
+    warehouseId: selectedWarehouseId || '1', // Default warehouse ID when none selected
+    page: 1,
+    limit: 50,
+  };
 
-  const handleCreateMovement = () => {
-    // TODO: Implement stock movement creation logic
-    console.log('Create stock movement clicked');
+  const { stockMovements, loading, error } = useStockMovements(
+    variables,
+    !selectedWarehouseId, // Skip query when no warehouse is selected
+  );
+
+  const handleCreateWarehouse = () => {
+    // TODO: Implement warehouse creation logic
+    console.log('Create warehouse clicked');
+  };
+
+  const handleCreateStock = () => {
+    // TODO: Implement stock creation logic
+    console.log('Create stock clicked');
   };
 
   if (error) {
     return (
       <EmptyState
-        icon={Package}
-        title={t('noMovementsTitle')}
-        description={t('noMovementsDescription')}
-        buttonText={t('createMovement')}
+        icon={Warehouse}
+        title={t('noWarehousesTitle')}
+        description={t('noWarehousesDescription')}
+        buttonText={t('createWarehouse')}
         buttonIcon={Plus}
-        onButtonClick={handleCreateMovement}
+        onButtonClick={handleCreateWarehouse}
       />
     );
   }
 
   return (
     <div className="mx-4 flex w-full max-w-7xl flex-col gap-4 sm:mx-auto">
+      <SkeletonWrapper loading={loading}>
+        <WarehouseCombobox
+          value={selectedWarehouseId}
+          onChange={setSelectedWarehouseId}
+        />
+      </SkeletonWrapper>
+
       {loading ? (
         <StockMovementSkeleton />
-      ) : (
-        <StockMovementTable
-          stockMovements={mockStockMovements}
-          onCreateMovement={handleCreateMovement}
+      ) : stockMovements.length === 0 ? (
+        <EmptyState
+          icon={Warehouse}
+          title={t('noStockTitle')}
+          description={t('noStockDescription')}
+          buttonText={t('createStock')}
+          buttonIcon={Plus}
+          onButtonClick={handleCreateStock}
         />
+      ) : (
+        <StockMovementTable stockMovements={stockMovements} />
       )}
     </div>
   );
