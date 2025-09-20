@@ -28,6 +28,12 @@ query findAllMovements(
       deltaQty
       reason
       occurredAt
+      productName
+      variantSku
+      variantFirstAttribute {
+        key
+        value
+      }
     }
     total
     hasMore
