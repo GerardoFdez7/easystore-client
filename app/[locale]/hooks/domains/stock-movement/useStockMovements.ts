@@ -32,11 +32,11 @@ export const useStockMovements = (
   const stockMovements: StockMovementItem[] =
     data?.getAllStockMovements?.stockMovements?.map((movement) => ({
       id: movement.id,
-      productName: 'Product Name', // TODO: Get from variant/product data
-      variantSku: 'SKU-123', // TODO: Get from variant data
+      productName: movement.productName || 'Unknown Product',
+      variantSku: movement.variantSku || '',
       deltaQuantity: movement.deltaQty,
       reason: movement.reason,
-      createdBy: 'User', // TODO: Get from user data
+      createdBy: '',
       date: movement.occurredAt,
     })) || [];
 
