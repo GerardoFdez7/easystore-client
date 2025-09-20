@@ -853,17 +853,13 @@
       "name": "Nome",
       "updatedAt": "Aggiornamento",
       "placeholder": "Ordina per"
-    },
-    "sortOrder": {
-      "placeholder": "Ordine",
-      "ascending": "Crescente",
-      "descending": "Decrescente"
     }
   },
   "Inventory": {
     "noWarehousesTitle": "Nessun magazzino ancora",
     "noWarehousesDescription": "Crea il tuo primo magazzino per iniziare a gestire il tuo inventario",
     "createWarehouse": "Crea magazzino",
+
     "noProductVariantsFound": "Nessuna variante di prodotto trovata",
     "emptyStateDescription": "Sembra che tu non abbia ancora aggiunto varianti di prodotto al tuo magazzino. Inizia creando il tuo primo stock per gestire efficacemente il tuo inventario.",
     "addStockButton": "Aggiungi Stock",
@@ -1034,30 +1030,32 @@
       "addressNamePlaceholder": "Indirizzo Principale"
     }
   },
-  "StockDetail": {
-    "color": "Colore",
-    "product": "Prodotto",
-    "warehouse": "Magazzino",
-    "available": "Disponibile",
-    "availablePlaceholder": "Inserisci quantità disponibile",
-    "reserved": "Riservato",
-    "reservedPlaceholder": "Inserisci quantità riservata",
-    "productLocation": "Posizione del Prodotto",
-    "productLocationPlaceholder": "Inserisci posizione del prodotto",
-    "replenishmentDate": "Data Stimata di Rifornimento",
-    "replenishmentDatePlaceholder": "Seleziona una data",
-    "lotNumber": "Numero di Lotto",
-    "lotNumberPlaceholder": "Inserisci numero di lotto",
-    "serialNumbers": "Numeri di Serie",
-    "cancel": "Annulla",
-    "saveChanges": "Salva Modifiche",
-    "deleteStock": "Elimina Stock",
-    "updateReasonTitle": "Motivo dell'Aggiornamento",
-    "updateReasonDescription": "Si prega di fornire un motivo per l'aggiornamento della quantità disponibile",
-    "updateReasonLabel": "Motivo",
-    "updateReasonPlaceholder": "Inserisci il motivo dell'aggiornamento",
-    "confirm": "Conferma",
-    "deleteStockTitle": "Elimina Stock",
-    "deleteStockDescription": "Sei sicuro di voler eliminare questo stock? Questa azione non può essere annullata."
+  "StockMovement": {
+    "noMovementsTitle": "Nessun movimento di stock ancora",
+    "noMovementsDescription": "Crea il tuo primo movimento di stock per iniziare a tracciare i cambiamenti dell'inventario",
+    "createMovement": "Crea movimento",
+    "noMovementsFound": "Nessun movimento di stock trovato",
+    "emptyStateDescription": "Sembra che tu non abbia ancora registrato movimenti di stock. Inizia creando il tuo primo movimento per tracciare efficacemente i cambiamenti dell'inventario.",
+    "addMovementButton": "Aggiungi Movimento",
+    "productTableHead": "Prodotto",
+    "skuTableHead": "SKU",
+    "deltaQuantityTableHead": "Quantità Delta",
+    "reasonTableHead": "Motivo",
+    "createdByTableHead": "Creato da",
+    "dateTableHead": "Data",
+    "previousButton": "Precedente",
+    "nextButton": "Successivo",
+    "loading": "Caricamento...",
+    "noWarehousesTitle": "Nessun magazzino disponibile",
+    "noWarehousesDescription": "Crea il tuo primo magazzino per iniziare a gestire i movimenti di stock",
+    "createWarehouse": "Crea magazzino",
+    "noStockTitle": "Nessun movimento di stock trovato",
+    "noStockDescription": "Nessun movimento di stock è stato registrato per il magazzino selezionato",
+    "createStock": "Crea movimento di stock",
+    "movementTypes": {
+      "IN": "Entrata di Stock",
+      "OUT": "Uscita di Stock",
+      "ADJUSTMENT": "Aggiustamento"
+    }
   }
 }

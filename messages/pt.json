@@ -852,11 +852,6 @@
       "name": "Nome",
       "updatedAt": "Atualização",
       "placeholder": "Ordenar por"
-    },
-    "sortOrder": {
-      "placeholder": "Ordem",
-      "ascending": "Crescente",
-      "descending": "Decrescente"
     }
   },
   "Inventory": {
@@ -1033,30 +1028,32 @@
       "addressNamePlaceholder": "Endereço Principal"
     }
   },
-  "StockDetail": {
-    "color": "Cor",
-    "product": "Produto",
-    "warehouse": "Armazém",
-    "available": "Disponível",
-    "availablePlaceholder": "Digite a quantidade disponível",
-    "reserved": "Reservado",
-    "reservedPlaceholder": "Digite a quantidade reservada",
-    "productLocation": "Localização do Produto",
-    "productLocationPlaceholder": "Digite a localização do produto",
-    "replenishmentDate": "Data Estimada de Reabastecimento",
-    "replenishmentDatePlaceholder": "Selecione uma data",
-    "lotNumber": "Número do Lote",
-    "lotNumberPlaceholder": "Digite o número do lote",
-    "serialNumbers": "Números de Série",
-    "cancel": "Cancelar",
-    "saveChanges": "Salvar Alterações",
-    "deleteStock": "Excluir Estoque",
-    "updateReasonTitle": "Motivo da Atualização",
-    "updateReasonDescription": "Por favor, forneça um motivo para atualizar a quantidade disponível",
-    "updateReasonLabel": "Motivo",
-    "updateReasonPlaceholder": "Digite o motivo da atualização",
-    "confirm": "Confirmar",
-    "deleteStockTitle": "Excluir Estoque",
-    "deleteStockDescription": "Tem certeza de que deseja excluir este estoque? Esta ação não pode ser desfeita."
+  "StockMovement": {
+    "noMovementsTitle": "Ainda não há movimentos de estoque",
+    "noMovementsDescription": "Crie seu primeiro movimento de estoque para começar a rastrear mudanças de inventário",
+    "createMovement": "Criar movimento",
+    "noMovementsFound": "Nenhum movimento de estoque encontrado",
+    "emptyStateDescription": "Parece que você ainda não registrou nenhum movimento de estoque. Comece criando seu primeiro movimento para rastrear mudanças de inventário de forma eficaz.",
+    "addMovementButton": "Adicionar Movimento",
+    "productTableHead": "Produto",
+    "skuTableHead": "SKU",
+    "deltaQuantityTableHead": "Quantidade Delta",
+    "reasonTableHead": "Razão",
+    "createdByTableHead": "Criado por",
+    "dateTableHead": "Data",
+    "previousButton": "Anterior",
+    "nextButton": "Próximo",
+    "loading": "Carregando...",
+    "noWarehousesTitle": "Nenhum armazém disponível",
+    "noWarehousesDescription": "Crie seu primeiro armazém para começar a gerenciar movimentos de estoque",
+    "createWarehouse": "Criar armazém",
+    "noStockTitle": "Nenhum movimento de estoque encontrado",
+    "noStockDescription": "Nenhum movimento de estoque foi registrado para o armazém selecionado",
+    "createStock": "Criar movimento de estoque",
+    "movementTypes": {
+      "IN": "Entrada de Estoque",
+      "OUT": "Saída de Estoque",
+      "ADJUSTMENT": "Ajuste"
+    }
   }
 }

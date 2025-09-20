@@ -851,11 +851,6 @@
       "name": "Nom",
       "updatedAt": "Mise à Jour",
       "placeholder": "Trier par"
-    },
-    "sortOrder": {
-      "placeholder": "Ordre",
-      "ascending": "Croissant",
-      "descending": "Décroissant"
     }
   },
   "Inventory": {
@@ -1032,30 +1027,32 @@
       "stateRequired": "État/Province requis"
     }
   },
-  "StockDetail": {
-    "color": "Couleur",
-    "product": "Produit",
-    "warehouse": "Entrepôt",
-    "available": "Disponible",
-    "availablePlaceholder": "Entrez la quantité disponible",
-    "reserved": "Réservé",
-    "reservedPlaceholder": "Entrez la quantité réservée",
-    "productLocation": "Emplacement du Produit",
-    "productLocationPlaceholder": "Entrez l'emplacement du produit",
-    "replenishmentDate": "Date de Réapprovisionnement Estimée",
-    "replenishmentDatePlaceholder": "Sélectionnez une date",
-    "lotNumber": "Numéro de Lot",
-    "lotNumberPlaceholder": "Entrez le numéro de lot",
-    "serialNumbers": "Numéros de Série",
-    "cancel": "Annuler",
-    "saveChanges": "Enregistrer les Modifications",
-    "deleteStock": "Supprimer le Stock",
-    "updateReasonTitle": "Raison de la Mise à Jour",
-    "updateReasonDescription": "Veuillez fournir une raison pour mettre à jour la quantité disponible",
-    "updateReasonLabel": "Raison",
-    "updateReasonPlaceholder": "Entrez la raison de la mise à jour",
-    "confirm": "Confirmer",
-    "deleteStockTitle": "Supprimer le Stock",
-    "deleteStockDescription": "Êtes-vous sûr de vouloir supprimer ce stock? Cette action ne peut pas être annulée."
+  "StockMovement": {
+    "noMovementsTitle": "Aucun mouvement de stock pour le moment",
+    "noMovementsDescription": "Créez votre premier mouvement de stock pour commencer à suivre les changements d'inventaire",
+    "createMovement": "Créer un mouvement",
+    "noMovementsFound": "Aucun mouvement de stock trouvé",
+    "emptyStateDescription": "Il semble que vous n'ayez pas encore enregistré de mouvements de stock. Commencez par créer votre premier mouvement pour suivre efficacement les changements d'inventaire.",
+    "addMovementButton": "Ajouter un mouvement",
+    "productTableHead": "Produit",
+    "skuTableHead": "SKU",
+    "deltaQuantityTableHead": "Quantité Delta",
+    "reasonTableHead": "Raison",
+    "createdByTableHead": "Créé par",
+    "dateTableHead": "Date",
+    "previousButton": "Précédent",
+    "nextButton": "Suivant",
+    "loading": "Chargement...",
+    "noWarehousesTitle": "Aucun entrepôt disponible",
+    "noWarehousesDescription": "Créez votre premier entrepôt pour commencer à gérer les mouvements de stock",
+    "createWarehouse": "Créer un entrepôt",
+    "noStockTitle": "Aucun mouvement de stock trouvé",
+    "noStockDescription": "Aucun mouvement de stock n'a été enregistré pour l'entrepôt sélectionné",
+    "createStock": "Créer un mouvement de stock",
+    "movementTypes": {
+      "IN": "Entrée de stock",
+      "OUT": "Sortie de stock",
+      "ADJUSTMENT": "Ajustement"
+    }
   }
 }
