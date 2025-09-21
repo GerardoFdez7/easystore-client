@@ -3,8 +3,23 @@
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Button } from '@shadcn/ui/button';
-import { categoryTree as DATA, type CategoryNode } from '@lib/data/categories';
 import { useTranslations } from 'next-intl';
+import { useCategories } from '@hooks/domains/category/useCategories';
+
+type CategoryNode = {
+  name: string;
+  children?: CategoryNode[];
+};
+
+type GqlCategoryLike = {
+  name: string;
+  subCategories?: GqlCategoryLike[] | null;
+};
+
+const toNode = (c: GqlCategoryLike): CategoryNode => ({
+  name: c.name,
+  children: (c.subCategories ?? []).map(toNode),
+});
 
 function TreeItem({
   node,
@@ -40,14 +55,14 @@ function TreeItem({
         ) : (
           <span className="inline-block h-4 w-4" />
         )}
-        <span className={level ? 'pl-1' : ''}>{node.label}</span>
+        <span className={level ? 'pl-1' : ''}>{node.name}</span>
       </Button>
 
-      {open && node.children && (
+      {open && hasChildren && (
         <div className="pl-5">
-          {node.children.map((child) => (
+          {(node.children ?? []).map((child) => (
             <TreeItem
-              key={child.label}
+              key={child.name}
               node={child}
               level={level + 1}
               forcedOpen={forcedOpen}
@@ -62,6 +77,15 @@ function TreeItem({
 export default function CategoryTree() {
   const [allOpen, setAllOpen] = useState(false);
   const t = useTranslations('Category');
+
+  const {
+    items: nodes,
+    loading,
+    error,
+  } = useCategories<CategoryNode>(
+    { limit: 1000 },
+    { select: (list) => list.map(toNode) },
+  );
 
   const handleToggleAll = () => setAllOpen((v) => !v);
 
@@ -78,9 +102,22 @@ export default function CategoryTree() {
         </Button>
       </div>
 
-      {DATA.map((n) => (
-        <TreeItem key={n.label} node={n} forcedOpen={allOpen} />
-      ))}
+      {loading && (
+        <div className="space-y-1">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div
+              key={`skeleton-${i}`}
+              className="bg-muted h-7 animate-pulse rounded"
+            />
+          ))}
+        </div>
+      )}
+
+      {!loading &&
+        !error &&
+        nodes.map((n) => (
+          <TreeItem key={n.name} node={n} forcedOpen={allOpen} />
+        ))}
     </div>
   );
 }
