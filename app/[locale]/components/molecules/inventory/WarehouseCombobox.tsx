@@ -12,6 +12,7 @@ interface WarehouseComboboxProps {
   onChange?: (warehouseId: string) => void;
   disabled?: boolean;
   width?: string | number;
+  placeholder?: string;
 }
 
 const WarehouseCombobox: FC<WarehouseComboboxProps> = ({
@@ -19,6 +20,7 @@ const WarehouseCombobox: FC<WarehouseComboboxProps> = ({
   onChange,
   disabled = false,
   width = 300,
+  placeholder,
 }) => {
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 500);
@@ -43,7 +45,7 @@ const WarehouseCombobox: FC<WarehouseComboboxProps> = ({
       value={value}
       onValueChange={onChange}
       disabled={disabled}
-      placeholder={t('filterByWarehouse')}
+      placeholder={placeholder || t('filterByWarehouse')}
       searchPlaceholder={t('searchWarehouses')}
       emptyMessage={loading ? t('loading') : t('noWarehousesFound')}
       width={width}

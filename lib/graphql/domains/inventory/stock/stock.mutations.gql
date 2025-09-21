@@ -12,7 +12,6 @@ mutation addStockToWarehouse(
   ) {
     id
     name
-    addressId
     createdAt
     updatedAt
     stockPerWarehouses {
@@ -24,6 +23,12 @@ mutation addStockToWarehouse(
       serialNumbers
       productLocation
       estimatedReplenishmentDate
+      variantFirstAttribute {
+          key
+          value
+        }
+        productName
+        variantSku
     }
   }
 }

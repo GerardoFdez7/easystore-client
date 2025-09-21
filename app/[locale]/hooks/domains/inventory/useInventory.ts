@@ -64,9 +64,13 @@ export const useInventory = (
     estimatedReplenishmentDate: item.estimatedReplenishmentDate ?? '',
   }));
 
+  // Get refetch functions from both queries
+  const refetch = warehouseId ? warehouseQuery.refetch : inventoryQuery.refetch;
+
   return {
     inventory: formattedInventory,
     loading,
     error,
+    refetch,
   };
 };

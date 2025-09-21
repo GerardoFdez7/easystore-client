@@ -758,6 +758,7 @@ export type QueryGetStatesByCountryIdArgs = {
 
 export type QueryGetWarehouseByIdArgs = {
   id: Scalars['ID']['input'];
+  isArchived?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type Response = {
@@ -789,7 +790,10 @@ export type StockMovement = {
   deltaQty: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
   occurredAt: Scalars['DateTime']['output'];
+  productName?: Maybe<Scalars['String']['output']>;
   reason: Scalars['String']['output'];
+  variantFirstAttribute?: Maybe<VariantAttribute>;
+  variantSku?: Maybe<Scalars['String']['output']>;
   warehouseId: Scalars['ID']['output'];
 };
 
@@ -1426,7 +1430,6 @@ export type AddStockToWarehouseMutation = {
     __typename?: 'Warehouse';
     id: string;
     name: string;
-    addressId: string;
     createdAt: any;
     updatedAt: any;
     stockPerWarehouses: Array<{
@@ -1439,6 +1442,13 @@ export type AddStockToWarehouseMutation = {
       serialNumbers?: Array<string> | null;
       productLocation?: string | null;
       estimatedReplenishmentDate?: any | null;
+      productName?: string | null;
+      variantSku?: string | null;
+      variantFirstAttribute?: {
+        __typename?: 'VariantAttribute';
+        key: string;
+        value: string;
+      } | null;
     }>;
   };
 };
@@ -1946,6 +1956,7 @@ export type FindAllProductsQuery = {
   getAllProducts: {
     __typename?: 'PaginatedProductsType';
     total: number;
+    hasMore: boolean;
     products: Array<{
       __typename?: 'Product';
       name: string;
@@ -2018,6 +2029,38 @@ export type FindAllProductsQuery = {
           instructions: string;
           months: number;
         }> | null;
+      }> | null;
+    }>;
+  };
+};
+
+export type FindAllVariantsToCreateStockQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Float']['input']>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  sortBy?: InputMaybe<SortBy>;
+  sortOrder?: InputMaybe<SortOrder>;
+  includeSoftDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type FindAllVariantsToCreateStockQuery = {
+  __typename?: 'Query';
+  getAllProducts: {
+    __typename?: 'PaginatedProductsType';
+    total: number;
+    hasMore: boolean;
+    products: Array<{
+      __typename?: 'Product';
+      name: string;
+      variants?: Array<{
+        __typename?: 'Variant';
+        id: string;
+        sku?: string | null;
+        attributes: Array<{
+          __typename?: 'Attribute';
+          key: string;
+          value: string;
+        }>;
       }> | null;
     }>;
   };
@@ -4264,7 +4307,6 @@ export const AddStockToWarehouseDocument = {
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'addressId' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
                 {
@@ -4304,6 +4346,31 @@ export const AddStockToWarehouseDocument = {
                           kind: 'Name',
                           value: 'estimatedReplenishmentDate',
                         },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variantFirstAttribute' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'key' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'value' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'productName' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variantSku' },
                       },
                     ],
                   },
@@ -6704,6 +6771,7 @@ export const FindAllProductsDocument = {
                   },
                 },
                 { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'hasMore' } },
               ],
             },
           },
@@ -6714,6 +6782,182 @@ export const FindAllProductsDocument = {
 } as unknown as DocumentNode<
   FindAllProductsQuery,
   FindAllProductsQueryVariables
+>;
+export const FindAllVariantsToCreateStockDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'findAllVariantsToCreateStock' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Float' } },
+          defaultValue: { kind: 'IntValue', value: '1' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'limit' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Float' } },
+          defaultValue: { kind: 'IntValue', value: '10' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'sortBy' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'SortBy' } },
+          defaultValue: { kind: 'EnumValue', value: 'NAME' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'sortOrder' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'SortOrder' },
+          },
+          defaultValue: { kind: 'EnumValue', value: 'ASC' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'includeSoftDeleted' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
+          defaultValue: { kind: 'BooleanValue', value: false },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'name' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+          defaultValue: { kind: 'StringValue', value: '', block: false },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getAllProducts' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'page' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'page' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'limit' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'limit' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'sortBy' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'sortBy' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'sortOrder' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'sortOrder' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'includeSoftDeleted' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'includeSoftDeleted' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'name' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'name' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'products' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variants' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'attributes' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'key' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'value' },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'sku' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'hasMore' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  FindAllVariantsToCreateStockQuery,
+  FindAllVariantsToCreateStockQueryVariables
 >;
 export const AddVariantToProductDocument = {
   kind: 'Document',

@@ -148,5 +148,38 @@ query findAllProducts(
       }
     }
     total
+    hasMore
+  }
+}
+
+query findAllVariantsToCreateStock(
+  $page: Float = 1
+  $limit: Float = 10
+  $sortBy: SortBy = NAME
+  $sortOrder: SortOrder = ASC
+  $includeSoftDeleted: Boolean = false
+  $name: String = ""
+) {
+  getAllProducts(
+    page: $page
+    limit: $limit
+    sortBy: $sortBy
+    sortOrder: $sortOrder
+    includeSoftDeleted: $includeSoftDeleted
+    name: $name
+  ) {
+    products {
+      name
+      variants {
+        id
+        attributes {
+          key
+          value
+        }
+        sku
+      }
+    }
+    total
+    hasMore
   }
 }
