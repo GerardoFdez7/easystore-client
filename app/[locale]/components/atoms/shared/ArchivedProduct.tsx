@@ -9,24 +9,66 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@shadcn/ui/alert-dialog';
-import { Archive } from 'lucide-react';
+import { Archive, RotateCcw } from 'lucide-react';
 import useMultipleSoftDeleteProducts from '@hooks/domains/products/useMultipleSoftDeleteProducts';
+import useSoftDeleteProduct from '@hooks/domains/products/useSoftDeleteProduct';
+import useRestoreProduct from '@hooks/domains/products/useRestoreProduct';
 import { useTranslations } from 'next-intl';
 
 interface ArchivedProductProps {
   productsIds: string[];
   isArchived?: boolean | boolean[];
   onSoftDeleteComplete?: () => void;
+  singleMode?: boolean;
 }
 export default function ArchivedProduct({
   productsIds,
   isArchived = false,
   onSoftDeleteComplete,
+  singleMode = false,
 }: ArchivedProductProps) {
-  const { handleMultipleSoftDelete, loading } = useMultipleSoftDeleteProducts({
-    onSuccess: onSoftDeleteComplete,
-  });
+  // Use single or multiple hooks based on mode
+  const { handleMultipleSoftDelete, loading: multipleLoading } =
+    useMultipleSoftDeleteProducts({
+      onSuccess: onSoftDeleteComplete,
+    });
+
+  const { handleSoftDelete, loading: singleLoading } = useSoftDeleteProduct();
+  const { handleRestore, loading: restoreLoading } = useRestoreProduct();
+
   const t = useTranslations('Products');
+
+  // Determine if product is archived in single mode
+  const isProductArchived = singleMode
+    ? Array.isArray(isArchived)
+      ? isArchived[0]
+      : isArchived
+    : false;
+
+  const loading = singleMode
+    ? isProductArchived
+      ? restoreLoading
+      : singleLoading
+    : multipleLoading;
+
+  const handleArchive = () => {
+    if (singleMode && productsIds.length > 0) {
+      if (isProductArchived) {
+        void handleRestore(productsIds[0]).then(() => {
+          // Call the callback after successful restore to update parent component
+          onSoftDeleteComplete?.();
+        });
+      } else {
+        void handleSoftDelete(productsIds[0]).then(() => {
+          // Call the callback after successful archive to update parent component
+          onSoftDeleteComplete?.();
+        });
+      }
+    } else {
+      void handleMultipleSoftDelete(productsIds, isArchived);
+    }
+  };
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -34,29 +76,52 @@ export default function ArchivedProduct({
           className="flex w-full cursor-pointer items-center gap-2 px-2 py-1.5 text-sm"
           onClick={(e) => e.stopPropagation()}
         >
-          <Archive className="text-title h-4 w-4" />
-          <span>{t('archiveProducts')}</span>
+          {singleMode && isProductArchived ? (
+            <>
+              <RotateCcw className="text-title h-4 w-4" />
+              <span>{t('restoreProduct')}</span>
+            </>
+          ) : (
+            <>
+              <Archive className="text-title h-4 w-4" />
+              <span>
+                {singleMode ? t('archiveProduct') : t('archiveProducts')}
+              </span>
+            </>
+          )}
         </div>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{t('archiveProducts')}</AlertDialogTitle>
+          <AlertDialogTitle>
+            {singleMode && isProductArchived
+              ? t('restoreProduct')
+              : singleMode
+                ? t('archiveProduct')
+                : t('archiveProducts')}
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            {t('archiveDescription')}
+            {singleMode && isProductArchived
+              ? t('restoreDescription')
+              : singleMode
+                ? t('archiveDescriptionSingle')
+                : t('archiveDescription')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
           <AlertDialogAction
-            onClick={() =>
-              void handleMultipleSoftDelete(productsIds, isArchived)
-            }
+            onClick={handleArchive}
             className="bg-title border border-black hover:bg-black/85 dark:hover:bg-gray-300"
             disabled={loading}
           >
             {loading
-              ? t('archiving')
-              : `${t('archive')}${productsIds.length > 1 ? ` (${productsIds.length})` : ''}`}
+              ? singleMode && isProductArchived
+                ? t('restoring')
+                : t('archiving')
+              : singleMode && isProductArchived
+                ? t('restore')
+                : `${t('archive')}${productsIds.length > 1 ? ` (${productsIds.length})` : ''}`}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

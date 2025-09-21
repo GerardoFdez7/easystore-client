@@ -80,7 +80,7 @@ export const useMultipleSoftDeleteProducts = ({
         ),
       );
 
-      toast.success(t('archiveSuccessful'), {
+      toast.success(t('archivingSuccessful'), {
         description: t('multipleArchiveSuccessfulDescription'),
       });
     } catch (error) {

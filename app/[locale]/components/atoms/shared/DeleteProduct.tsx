@@ -11,20 +11,38 @@ import {
 } from '@shadcn/ui/alert-dialog';
 import { Trash2 } from 'lucide-react';
 import useMultipleDeleteProducts from '@hooks/domains/products/useMultipleDeleteProducts';
+import useDeleteProduct from '@hooks/domains/products/useDeleteProduct';
 import { useTranslations } from 'next-intl';
 
 interface DeleteProductProps {
   productIds: string[];
   onDeleteComplete?: () => void;
+  singleMode?: boolean;
 }
 
 export default function DeleteProduct({
   productIds,
   onDeleteComplete,
+  singleMode = false,
 }: DeleteProductProps) {
   const t = useTranslations('Products');
-  const { handleMultipleDelete, loading } =
+
+  // Use single or multiple hooks based on mode
+  const { handleMultipleDelete, loading: multipleLoading } =
     useMultipleDeleteProducts(onDeleteComplete);
+
+  const { handleDelete, loading: singleLoading } = useDeleteProduct();
+
+  const loading = singleMode ? singleLoading : multipleLoading;
+
+  const handleDeleteAction = () => {
+    if (singleMode && productIds.length > 0) {
+      void handleDelete(productIds[0]);
+      onDeleteComplete?.();
+    } else {
+      void handleMultipleDelete(productIds);
+    }
+  };
 
   return (
     <AlertDialog>
@@ -34,20 +52,25 @@ export default function DeleteProduct({
           onClick={(e) => e.stopPropagation()}
         >
           <Trash2 className="h-4 w-4 text-red-700" />
-          <span className="text-red-700">{t('deleteProducts')}</span>
+          <span className="text-red-700">
+            {' '}
+            {singleMode ? t('deleteProduct') : t('deleteProducts')}
+          </span>
         </div>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{t('deleteProducts')}</AlertDialogTitle>
+          <AlertDialogTitle>
+            {singleMode ? t('deleteProduct') : t('deleteProducts')}
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            {t('deleteDescription')}
+            {singleMode ? t('deleteDescriptionSingle') : t('deleteDescription')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => void handleMultipleDelete(productIds)}
+            onClick={handleDeleteAction}
             className="bg-[#ed2727] text-white hover:bg-[#d12525]"
             disabled={loading}
           >

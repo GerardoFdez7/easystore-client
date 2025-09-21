@@ -13,17 +13,31 @@ import DeleteProduct from './DeleteProduct';
 import { useTranslations } from 'next-intl';
 
 interface ProductActionsProps {
-  selectedProductIds: string[];
+  selectedProductIds?: string[];
   isArchived?: boolean | boolean[];
   onDeleteComplete?: () => void;
+  singleMode?: boolean;
+  productId?: string;
+  productIsArchived?: boolean;
 }
 
 export default function ProductActions({
   selectedProductIds,
   isArchived = false,
   onDeleteComplete,
+  singleMode = false,
+  productId,
+  productIsArchived = false,
 }: ProductActionsProps) {
   const t = useTranslations('Products');
+
+  // Determine which product IDs to use
+  const productIds =
+    singleMode && productId ? [productId] : (selectedProductIds ?? []);
+
+  // Use productIsArchived for single mode, fallback to isArchived for multiple mode
+  const archivedState = singleMode ? productIsArchived : isArchived;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -37,9 +51,10 @@ export default function ProductActions({
         <DropdownMenuItem asChild className="p-0">
           <div>
             <ArchivedProduct
-              productsIds={selectedProductIds}
-              isArchived={isArchived}
+              productsIds={productIds}
+              isArchived={archivedState}
               onSoftDeleteComplete={onDeleteComplete}
+              singleMode={singleMode}
             />
           </div>
         </DropdownMenuItem>
@@ -47,8 +62,9 @@ export default function ProductActions({
         <DropdownMenuItem asChild className="p-0">
           <div>
             <DeleteProduct
-              productIds={selectedProductIds}
+              productIds={productIds}
               onDeleteComplete={onDeleteComplete}
+              singleMode={singleMode}
             />
           </div>
         </DropdownMenuItem>
