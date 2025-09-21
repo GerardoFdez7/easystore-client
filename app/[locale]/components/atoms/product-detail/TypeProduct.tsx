@@ -12,12 +12,15 @@ interface TypeProductProps {
 }
 
 export default function TypeProduct({ value, onChange }: TypeProductProps) {
+  // Ensure value is valid, fallback to empty string if not
+  const safeValue = value === 'PHYSICAL' || value === 'DIGITAL' ? value : '';
+
   return (
     <div>
       <label className="text-title mb-2 block text-sm font-medium">
         Type Product
       </label>
-      <Select value={value} onValueChange={onChange}>
+      <Select value={safeValue} onValueChange={onChange}>
         <SelectTrigger className="w-[240px] bg-[#ffffff] sm:w-[300px]">
           <SelectValue placeholder="Select type" />
         </SelectTrigger>

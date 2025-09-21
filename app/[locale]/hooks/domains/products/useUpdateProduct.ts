@@ -9,7 +9,6 @@ import {
   UpdateMutation,
   UpdateMutationVariables,
   UpdateProductInput,
-  FindProductByIdDocument,
   TypeEnum,
 } from '@lib/graphql/generated';
 
@@ -151,48 +150,12 @@ export function useUpdateProduct(productId: string) {
           id: productId,
           input: patch as UpdateProductInput,
         },
-        update(cache, { data: resp }) {
-          const updatedProduct = resp?.updateProduct;
-          if (updatedProduct) {
-            try {
-              // Check if the cache entry exists before writing
-              const existingData = cache.readQuery({
-                query: FindProductByIdDocument,
-                variables: { id: productId },
-              });
-
-              if (existingData) {
-                // Update the cache for the specific product query
-                cache.writeQuery({
-                  query: FindProductByIdDocument,
-                  variables: { id: productId },
-                  data: { getProductById: updatedProduct },
-                });
-              } else {
-                // If no existing data, use modify to update the cache
-                cache.modify({
-                  id: cache.identify(updatedProduct),
-                  fields: {
-                    name: () => updatedProduct.name,
-                    brand: () => updatedProduct.brand,
-                    manufacturer: () => updatedProduct.manufacturer,
-                    shortDescription: () => updatedProduct.shortDescription,
-                    longDescription: () => updatedProduct.longDescription,
-                    productType: () => updatedProduct.productType,
-                    tags: () => updatedProduct.tags,
-                    categories: () => updatedProduct.categories,
-                    sustainabilities: () => updatedProduct.sustainabilities,
-                  },
-                });
-              }
-            } catch (cacheError) {
-              console.warn(
-                'Cache update failed, but mutation succeeded:',
-                cacheError,
-              );
-              // Don't throw the error, just log it since the mutation was successful
-            }
-          }
+        update(cache) {
+          // Simple approach: just refetch the query data
+          cache.evict({
+            id: cache.identify({ __typename: 'Product', id: productId }),
+          });
+          cache.gc();
         },
       });
 
