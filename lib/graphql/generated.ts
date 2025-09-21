@@ -1871,6 +1871,7 @@ export type FindProductByIdQuery = {
   __typename?: 'Query';
   getProductById: {
     __typename?: 'Product';
+    id: string;
     name: string;
     shortDescription: string;
     longDescription?: string | null;

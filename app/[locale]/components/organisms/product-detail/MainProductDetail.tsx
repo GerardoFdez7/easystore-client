@@ -7,7 +7,7 @@ import TableVariants from '@molecules/product-detail/TableVariants';
 import SustainabilityFormField from '@molecules/product-detail/SustainabilityFormField';
 import { Form, FormField, FormItem, FormMessage } from '@shadcn/ui/form';
 import { useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useGetProductById } from '@hooks/domains/products/useGetProductById';
 import MediaUploader from '@organisms/shared/MediaUploader';
 import type {
@@ -50,6 +50,7 @@ export default function MainProductDetail({
   const { actions } = useUpdateProduct(param);
   const { product, refetch } = useGetProductById(param);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const lastResetProductRef = useRef<string | null>(null);
 
   // Callback to refresh product data after archive/restore operations
   const handleProductUpdate = () => {
@@ -76,6 +77,9 @@ export default function MainProductDetail({
 
   // Get dirty fields to determine if Save button should be enabled
   const { dirtyFields, isDirty } = form.formState;
+
+  // Watch productType specifically to ensure proper synchronization
+  const currentProductType = form.watch('productType');
 
   // Helper function to get only the changed fields
   const getChangedFields = (formData: ProductFormData) => {
@@ -120,41 +124,59 @@ export default function MainProductDetail({
 
   // Reset form when product data is loaded
   useEffect(() => {
-    if (!isNew && product) {
-      console.log('Loading product data:', product);
-      form.reset({
-        name: product.name || '',
-        brand: product.brand ?? '',
-        cover: product.cover || '',
-        manufacturer: product.manufacturer ?? '',
-        shortDescription: product.shortDescription || '',
-        longDescription: product.longDescription ?? '',
-        productType: product.productType || '',
-        tags: product.tags?.filter((tag): tag is string => Boolean(tag)) || [],
-        categories:
-          product.categories?.map((cat) => ({
-            categoryId: cat.categoryId,
-            categoryName: cat.categoryName ?? undefined,
-          })) || [],
-        variants:
-          product.variants?.map((variant) => ({
-            id: variant.id,
-            price: variant.price,
-            attributes: Array.isArray(variant.attributes)
-              ? variant.attributes.map(
-                  (attr: { key: string; value: string }) => ({
-                    key: attr.key,
-                    value: attr.value,
-                  }),
-                )
-              : [],
-            condition: variant.condition || '',
-          })) || [],
-        sustainabilities: product.sustainabilities || [],
-        media: product.media?.map((mediaItem: Media) => mediaItem.url) || [],
-      });
+    if (!isNew && product && product.id) {
+      // Only reset if we haven't reset for this specific product already
+      if (lastResetProductRef.current !== product.id) {
+        const formData = {
+          name: product.name || '',
+          brand: product.brand ?? '',
+          cover: product.cover || '',
+          manufacturer: product.manufacturer ?? '',
+          shortDescription: product.shortDescription || '',
+          longDescription: product.longDescription ?? '',
+          productType:
+            product.productType === null || product.productType === undefined
+              ? ''
+              : String(product.productType), // Ensure it's a string
+          tags:
+            product.tags?.filter((tag): tag is string => Boolean(tag)) || [],
+          categories:
+            product.categories?.map((cat) => ({
+              categoryId: cat.categoryId,
+              categoryName: cat.categoryName ?? undefined,
+            })) || [],
+          variants:
+            product.variants?.map((variant) => ({
+              id: variant.id,
+              price: variant.price,
+              attributes: Array.isArray(variant.attributes)
+                ? variant.attributes.map(
+                    (attr: { key: string; value: string }) => ({
+                      key: attr.key,
+                      value: attr.value,
+                    }),
+                  )
+                : [],
+              condition: variant.condition || '',
+            })) || [],
+          sustainabilities: product.sustainabilities || [],
+          media: product.media?.map((mediaItem: Media) => mediaItem.url) || [],
+        };
+
+        // Simple and effective reset
+        form.reset(formData);
+        lastResetProductRef.current = product.id;
+      }
     }
   }, [product, isNew, form]);
+
+  // Cleanup form state when component unmounts
+  useEffect(() => {
+    return () => {
+      form.reset();
+      lastResetProductRef.current = null;
+    };
+  }, [form]);
 
   return (
     <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
@@ -255,7 +277,10 @@ export default function MainProductDetail({
               name="productType"
               render={({ field }) => (
                 <FormItem>
-                  <TypeProduct value={field.value} onChange={field.onChange} />
+                  <TypeProduct
+                    value={currentProductType || field.value}
+                    onChange={field.onChange}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
