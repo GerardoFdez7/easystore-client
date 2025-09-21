@@ -839,6 +839,11 @@
       "name": "Name",
       "updatedAt": "Update",
       "placeholder": "Sort by"
+    },
+    "sortOrder": {
+      "placeholder": "Order",
+      "ascending": "Ascending",
+      "descending": "Descending"
     }
   },
   "Inventory": {
@@ -848,6 +853,7 @@
     "noProductVariantsFound": "No Product Variants Found",
     "emptyStateDescription": "It seems you haven't added any product variants to your warehouse yet. Start by creating your first stock to manage your inventory effectively.",
     "addStockButton": "Add Stock",
+    "manageWarehousesButton": "Manage Warehouses",
     "productTableHead": "Product",
     "skuTableHead": "SKU",
     "availableTableHead": "Available",
@@ -858,6 +864,47 @@
     "filterByWarehouse": "Filter by warehouse",
     "searchWarehouses": "Search warehouses...",
     "loading": "Loading...",
-    "noWarehousesFound": "No warehouses found."
+    "noWarehousesFound": "No warehouses found.",
+    "errorLoadingVariants": "Error Loading Variants",
+    "errorLoadingVariantsDescription": "There was an error loading product variants. Please try again.",
+    "sortBy": "Sort by",
+    "order": "Order",
+    "name": "Name",
+    "createdAt": "Created Date",
+    "ascending": "Ascending",
+    "descending": "Descending",
+    "pageInfo": "Page {current} of {total}",
+    "AddStock": {
+      "searchProducts": "Search products...",
+      "selectVariant": "Select Product Variant",
+      "includeArchived": "Include archived products",
+      "selectWarehouse": "Select Warehouse",
+      "confirmStockCreation": "Confirm Stock Creation",
+      "addStock": "Add Stock",
+      "addStockDialogDescription": "Dialog to add new stock to a product variant in a specific warehouse.",
+      "selectedVariant": "Selected variant",
+      "selectWarehouseLabel": "Choose a warehouse for this stock",
+      "confirmStockCreationMessage": "Please review your selection before creating the stock entry.",
+      "product": "Product",
+      "warehouse": "Warehouse",
+      "initialStockNote": "This will create an initial stock entry with 0 quantity. You can adjust quantities later.",
+      "back": "Back",
+      "cancel": "Cancel",
+      "next": "Next",
+      "createStock": "Create Stock",
+      "creatingStock": "Creating...",
+      "stockAddedSuccessfully": "Stock entry created successfully!",
+      "errorAddingStock": "Failed to create stock entry. Please try again.",
+      "pleaseSelectVariantAndWarehouse": "Please select both a variant and warehouse.",
+      "initialStockCreation": "Initial stock creation",
+      "selected": "Selected",
+      "select": "Select",
+      "variantCount": "{count, plural, =1 {1 variant} other {# variants}}",
+      "selectWarehousePlaceholder": "Select a warehouse",
+      "noVariantsFound": "No Variants Found",
+      "noVariantsFoundDescription": "No product variants match your search criteria. Try adjusting your filters. Or review all your products.",
+      "viewProducts": "View Products",
+      "loadMore": "Load More"
+    }
   }
 }

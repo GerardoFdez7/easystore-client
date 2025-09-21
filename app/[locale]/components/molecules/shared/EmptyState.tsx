@@ -5,8 +5,8 @@ interface EmptyStateProps {
   icon: LucideIcon;
   title: string;
   description: string;
-  buttonText: string;
-  onButtonClick: () => void;
+  buttonText?: string;
+  onButtonClick?: () => void;
   buttonVariant?:
     | 'default'
     | 'destructive'
@@ -37,14 +37,16 @@ export default function EmptyState({
           <h3 className="text-xl font-semibold">{title}</h3>
           <p className="text-muted-foreground max-w-md">{description}</p>
         </div>
-        <Button
-          className="text-md mt-4"
-          variant={buttonVariant}
-          onClick={onButtonClick}
-        >
-          {ButtonIcon && <ButtonIcon className="mr-2 h-4 w-4" />}
-          {buttonText}
-        </Button>
+        {buttonText && onButtonClick && (
+          <Button
+            className="text-md mt-4"
+            variant={buttonVariant}
+            onClick={onButtonClick}
+          >
+            {ButtonIcon && <ButtonIcon className="mr-2 h-4 w-4" />}
+            {buttonText}
+          </Button>
+        )}
       </div>
     </div>
   );
