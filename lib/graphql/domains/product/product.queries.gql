@@ -1,5 +1,6 @@
 query findProductById($id: String!) {
   getProductById(id: $id) {
+    id
     name
     shortDescription
     longDescription
