@@ -1,12 +1,14 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import CategoryCard from '@molecules/categories/CategoryCard';
-import { getCategoryList, type CategorySummary } from '@lib/data/categories';
 import { useRouter, useParams } from 'next/navigation';
+import { useCategories } from '@hooks/domains/category/useCategories';
 
 type Props = {
   query?: string;
+  page?: number;
+  limit?: number;
 };
 
 const normalize = (s: string) =>
@@ -16,28 +18,20 @@ const normalize = (s: string) =>
     .toLowerCase()
     .trim() ?? '';
 
-export default function CategoryGrid({ query = '' }: Props) {
-  const [items, setItems] = useState<CategorySummary[]>([]);
+export default function CategoryGrid({
+  query = '',
+  page = 1,
+  limit = 25,
+}: Props) {
   const router = useRouter();
   const params = useParams<{ locale?: string }>();
   const locale = params?.locale;
 
-  useEffect(() => {
-    let mounted = true;
-
-    void (async () => {
-      try {
-        const data = await getCategoryList();
-        if (mounted) setItems(data);
-      } catch (err) {
-        console.error(err);
-      }
-    })();
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
+  const { items, loading } = useCategories({
+    page,
+    limit,
+    name: query,
+  });
 
   const qn = normalize(query);
   const filtered = useMemo(() => {
@@ -51,18 +45,27 @@ export default function CategoryGrid({ query = '' }: Props) {
 
   return (
     <div className="grid w-full [grid-template-columns:repeat(auto-fill,minmax(180px,1fr))] gap-4">
-      {filtered.map((c) => (
-        <CategoryCard
-          key={c.id}
-          name={c.name}
-          imageUrl={c.cover}
-          count={c.count}
-          href={
-            locale ? `/${locale}/categories/${c.id}` : `/categories/${c.id}`
-          }
-          onEdit={() => goEdit(c.id)}
-        />
-      ))}
+      {loading && filtered.length === 0
+        ? Array.from({ length: limit }).map((_, i) => (
+            <div
+              key={`skeleton-${i}`}
+              className="bg-muted h-32 w-full animate-pulse rounded-md"
+            />
+          ))
+        : filtered.map((c) => (
+            <CategoryCard
+              key={c.name}
+              name={c.name}
+              cover={c.cover ?? '/laptop.webp'}
+              count={c.count}
+              href={
+                locale
+                  ? `/${locale}/categories/${c.name}`
+                  : `/categories/${c.name}`
+              }
+              onEdit={() => goEdit(c.name)}
+            />
+          ))}
     </div>
   );
 }

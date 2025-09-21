@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 type Props = {
   name: string;
-  imageUrl: string;
+  cover: string;
   count?: number;
   href: string;
   onEdit?: () => void;
@@ -16,7 +16,7 @@ type Props = {
 
 export default function CategoryCard({
   name,
-  imageUrl,
+  cover,
   count = 0,
   href,
   onEdit,
@@ -31,7 +31,7 @@ export default function CategoryCard({
         >
           <Image
             alt={name}
-            src={imageUrl}
+            src={cover}
             fill
             className="object-cover"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
