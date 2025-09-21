@@ -1,18 +1,18 @@
 import { FC } from 'react';
+import { SortBy } from '@graphql/generated';
 import { useTranslations } from 'next-intl';
-import { Input } from '@shadcn/ui/input';
+import { useRouter } from 'next/navigation';
 import { Button } from '@shadcn/ui/button';
 import { Switch } from '@shadcn/ui/switch';
 import { Label } from '@shadcn/ui/label';
-import { Search, Package, Loader2 } from 'lucide-react';
-import ProductVariantGroup from '@molecules/inventory/ProductVariantGroup';
+import { Skeleton } from '@shadcn/ui/skeleton';
+import { Package, Loader2 } from 'lucide-react';
 import { useVariantSelector } from '@hooks/domains/inventory';
-import EmptyState from '@molecules/shared/EmptyState';
+import SearchBar from '@atoms/shared/SearchBar';
 import SortBySelect from '@atoms/shared/SortBySelect';
 import SortOrderSelect from '@atoms/shared/SortOrderSelect';
-import { Skeleton } from '@shadcn/ui/skeleton';
-import { SortBy } from '@graphql/generated';
-import { useRouter } from 'next/navigation';
+import ProductVariantGroup from '@molecules/inventory/ProductVariantGroup';
+import EmptyState from '@molecules/shared/EmptyState';
 
 interface VariantSelectorProps {
   onVariantSelect: (
@@ -58,15 +58,11 @@ const VariantSelector: FC<VariantSelectorProps> = ({
       {/* Search and Filters */}
       <div className="space-y-4">
         {/* Search Input */}
-        <div className="relative">
-          <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
-          <Input
-            placeholder={t('searchProducts')}
-            value={searchTerm}
-            onChange={(e) => updateSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-        </div>
+        <SearchBar
+          placeholder={t('searchProducts')}
+          searchTerm={searchTerm}
+          onSearchChange={updateSearchTerm}
+        />
 
         {/* Filters Row */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

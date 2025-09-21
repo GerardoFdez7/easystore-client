@@ -17,7 +17,7 @@ import { Separator } from '@shadcn/ui/separator';
 import { Alert, AlertDescription } from '@shadcn/ui/alert';
 import { Badge } from '@shadcn/ui/badge';
 import { Package, Warehouse } from 'lucide-react';
-import VariantSelector from '@molecules/inventory/VariantSelector';
+import VariantSelector from '@organisms/inventory/VariantSelector';
 import WarehouseCombobox from '@molecules/inventory/WarehouseCombobox';
 
 interface AddStockDialogProps {
@@ -125,7 +125,7 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
 
       case 'warehouse':
         return (
-          <div className="space-y-4">
+          <section className="space-y-4">
             <Alert>
               <Package className="h-6 w-6" />
               <AlertDescription className="flex flex-col gap-1">
@@ -147,7 +147,11 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
             </Alert>
 
             <div className="space-y-2">
-              <Label htmlFor="warehouse-select" className="text-sm font-medium">
+              <Label
+                htmlFor="warehouse-combobox"
+                className="text-sm font-medium"
+                id="warehouse-label"
+              >
                 {t('selectWarehouseLabel')}
               </Label>
               <WarehouseCombobox
@@ -155,9 +159,10 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
                 onChange={setSelectedWarehouseId}
                 width="100%"
                 placeholder={t('selectWarehousePlaceholder')}
+                aria-labelledby="warehouse-label"
               />
             </div>
-          </div>
+          </section>
         );
 
       default:

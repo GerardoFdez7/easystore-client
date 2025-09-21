@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { MockedProvider } from '@apollo/client/testing/react';
-import VariantSelector from '@molecules/inventory/VariantSelector';
+import VariantSelector from '@organisms/inventory/VariantSelector';
 import {
   FindAllVariantsToCreateStockDocument,
   SortBy,
@@ -8,7 +8,7 @@ import {
 } from '@graphql/generated';
 
 const meta: Meta<typeof VariantSelector> = {
-  title: 'Molecules/Inventory/VariantSelector',
+  title: 'Organisms/Inventory/VariantSelector',
   component: VariantSelector,
   parameters: {
     layout: 'centered',
@@ -176,21 +176,6 @@ export const Default: Story = {
     ),
   ],
   args: {
-    onVariantSelect: (variantId, productName) =>
-      console.log('Selected variant:', variantId, 'from product:', productName),
-  },
-};
-
-export const WithSelectedVariant: Story = {
-  decorators: [
-    (Story) => (
-      <MockedProvider mocks={createMocks(mockVariantsData)}>
-        <Story />
-      </MockedProvider>
-    ),
-  ],
-  args: {
-    selectedVariantId: 'var-2',
     onVariantSelect: (variantId, productName) =>
       console.log('Selected variant:', variantId, 'from product:', productName),
   },
