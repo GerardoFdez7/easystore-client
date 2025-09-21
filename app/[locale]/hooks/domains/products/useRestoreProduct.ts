@@ -1,33 +1,33 @@
 import { toast } from 'sonner';
 import {
-  SoftDeleteDocument,
-  SoftDeleteMutation,
-  SoftDeleteMutationVariables,
+  RestoreDocument,
+  RestoreMutation,
+  RestoreMutationVariables,
 } from '@graphql/generated';
 import { useMutation } from '@apollo/client';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useApolloClient } from '@apollo/client';
 
-export const useSoftDeleteProduct = () => {
+export const useRestoreProduct = () => {
   const t = useTranslations('Products');
   const router = useRouter();
   const client = useApolloClient();
 
-  const [softDeleteProduct, { loading, error }] = useMutation<
-    SoftDeleteMutation,
-    SoftDeleteMutationVariables
-  >(SoftDeleteDocument, {
+  const [restoreProduct, { loading, error }] = useMutation<
+    RestoreMutation,
+    RestoreMutationVariables
+  >(RestoreDocument, {
     onCompleted: (data) => {
-      if (data?.softDeleteProduct) {
+      if (data?.restoreProduct) {
         // Invalidate the cache to ensure fresh data
         client.cache.evict({ fieldName: 'getAllProducts' });
 
         // Refetch active queries
         void client.refetchQueries({ include: ['active'] });
 
-        toast.success(t('archivingSuccessful'), {
-          description: t('archiveSuccessfulDescription'),
+        toast.success(t('restoreSuccessful'), {
+          description: t('restoreSuccessfulDescription'),
         });
         router.refresh(); // Refresh the current page to reflect changes
       }
@@ -35,7 +35,7 @@ export const useSoftDeleteProduct = () => {
     onError: (error) => {
       if (error.graphQLErrors?.length > 0) {
         const graphQLError = error.graphQLErrors[0];
-        toast.error(t('archiveFailed'), {
+        toast.error(t('restoreFailed'), {
           description: graphQLError.message,
         });
       } else if (error.networkError) {
@@ -50,20 +50,20 @@ export const useSoftDeleteProduct = () => {
     },
   });
 
-  const handleSoftDelete = async (id: string) => {
+  const handleRestore = async (id: string) => {
     try {
-      await softDeleteProduct({ variables: { id } });
+      await restoreProduct({ variables: { id } });
     } catch (error) {
       // Error is already handled by the onError callback
-      console.error('Error archiving product:', error);
+      console.error('Error restoring product:', error);
     }
   };
 
   return {
-    handleSoftDelete,
+    handleRestore,
     loading,
     error,
   };
 };
 
-export default useSoftDeleteProduct;
+export default useRestoreProduct;
