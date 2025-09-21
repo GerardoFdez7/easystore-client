@@ -2,7 +2,6 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { useQuery } from '@apollo/client/react';
-import { useDebounce } from '@hooks/utils/useDebounce';
 import {
   FindAllVariantsToCreateStockDocument,
   SortBy,
@@ -42,8 +41,6 @@ export const useVariantSelector = (options: UseVariantSelectorOptions = {}) => {
     }>
   >([]);
 
-  const debouncedSearch = useDebounce(searchTerm, 500);
-
   // GraphQL query
   const { data, loading, error, fetchMore } = useQuery(
     FindAllVariantsToCreateStockDocument,
@@ -54,7 +51,7 @@ export const useVariantSelector = (options: UseVariantSelectorOptions = {}) => {
         sortBy,
         sortOrder,
         includeSoftDeleted,
-        name: debouncedSearch || '',
+        name: searchTerm || '',
       },
       fetchPolicy: 'cache-and-network',
       notifyOnNetworkStatusChange: true,
@@ -106,7 +103,7 @@ export const useVariantSelector = (options: UseVariantSelectorOptions = {}) => {
             sortBy,
             sortOrder,
             includeSoftDeleted,
-            name: debouncedSearch || '',
+            name: searchTerm || '',
           },
         });
 
