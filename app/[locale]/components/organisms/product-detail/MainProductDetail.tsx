@@ -21,6 +21,7 @@ import CategoryFormField from '@molecules/product-detail/CategoryFormField';
 import SaveButton from '@atoms/shared/SaveButton';
 import { useUpdateProduct } from '@hooks/domains/products/useUpdateProduct';
 import { toast } from 'sonner';
+import ProductActions from '@atoms/shared/ProductActions';
 
 interface MainProductDetailProps {
   param: string;
@@ -47,8 +48,13 @@ export default function MainProductDetail({
   isNew,
 }: MainProductDetailProps) {
   const { actions } = useUpdateProduct(param);
-  const { product } = useGetProductById(param);
+  const { product, refetch } = useGetProductById(param);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Callback to refresh product data after archive/restore operations
+  const handleProductUpdate = () => {
+    void refetch();
+  };
 
   // Initialize form with default values
   const form = useForm<ProductFormData>({
@@ -161,6 +167,12 @@ export default function MainProductDetail({
         >
           {/* Main Content */}
           <div className="space-y-8">
+            <ProductActions
+              singleMode={true}
+              productId={param}
+              productIsArchived={product?.isArchived ?? false}
+              onDeleteComplete={handleProductUpdate}
+            />
             {/* Title */}
             <FormField
               control={form.control}
