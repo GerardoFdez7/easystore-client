@@ -7,7 +7,7 @@ import TableVariants from '@molecules/product-detail/TableVariants';
 import SustainabilityFormField from '@molecules/product-detail/SustainabilityFormField';
 import { Form, FormField, FormItem, FormMessage } from '@shadcn/ui/form';
 import { useForm } from 'react-hook-form';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { useGetProductById } from '@hooks/domains/products/useGetProductById';
 import MediaUploader from '@organisms/shared/MediaUploader';
 import type {
@@ -22,6 +22,7 @@ import SaveButton from '@atoms/shared/SaveButton';
 import { useUpdateProduct } from '@hooks/domains/products/useUpdateProduct';
 import { toast } from 'sonner';
 import ProductActions from '@atoms/shared/ProductActions';
+import type { ProcessedData } from '@lib/types/media';
 
 interface MainProductDetailProps {
   param: string;
@@ -55,6 +56,85 @@ export default function MainProductDetail({
   // Callback to refresh product data after archive/restore operations
   const handleProductUpdate = () => {
     void refetch();
+  };
+
+  // Prepare initial media for MediaUploader (cover + media array)
+  const initialMedia = useMemo(() => {
+    if (!product) return null;
+
+    console.log('Product data:', {
+      cover: product.cover,
+      media: product.media,
+      mediaLength: product.media?.length,
+    });
+
+    const mediaUrls: string[] = [];
+
+    // Always add cover as first item if it exists
+    if (product.cover) {
+      mediaUrls.push(product.cover);
+    }
+
+    // Add additional media items (gallery) if they exist
+    if (product.media && product.media.length > 0) {
+      const additionalMedia = [...product.media] // Create a mutable copy first
+        .sort((a, b) => a.position - b.position)
+        .map((mediaItem) => mediaItem.url)
+        .filter((url) => url !== product.cover); // Avoid duplicating cover
+
+      mediaUrls.push(...additionalMedia);
+    }
+
+    console.log('Final mediaUrls:', mediaUrls);
+    return mediaUrls.length > 0 ? mediaUrls : null;
+  }, [product]);
+
+  // Handle media updates from MediaUploader
+  const handleMediaProcessed = async (processedData?: ProcessedData | null) => {
+    if (!processedData) return;
+
+    try {
+      const updates: Record<string, unknown> = {};
+
+      // Update cover if provided (first element)
+      if (processedData.cover) {
+        updates.cover = processedData.cover;
+      }
+
+      // Update media array if provided - ONLY additional media (position 1+)
+      if (processedData.mediaItems && processedData.mediaItems.length > 0) {
+        // Convert MediaData to the format expected by useUpdateProduct
+        // Filter out position 0 items (those should go to cover field)
+        const additionalMedia = processedData.mediaItems
+          .filter((item) => item.position > 0)
+          .map((item) => ({
+            url: item.url,
+            position: item.position,
+            mediaType: item.mediaType,
+          }));
+
+        updates.media = additionalMedia;
+      } else {
+        // If no additional media, clear the media array
+        updates.media = [];
+      }
+
+      // Apply updates using existing update logic
+      const result = await actions.updateMultipleFields(updates);
+
+      if (result.success) {
+        // Refresh product data to show updated media
+        await refetch();
+        toast.success('Media updated successfully');
+      } else {
+        toast.error('Failed to update media', {
+          description: result.error,
+        });
+      }
+    } catch (error) {
+      console.error('Error updating media:', error);
+      toast.error('Error updating media');
+    }
   };
 
   // Initialize form with default values
@@ -248,12 +328,24 @@ export default function MainProductDetail({
               multiple={true}
               maxImageSize={10}
               maxVideoSize={50}
+              initialMedia={initialMedia}
+              onMediaProcessed={handleMediaProcessed}
               onUploadSuccess={(url) => {
                 console.log('Media uploaded successfully:', url);
               }}
               onUploadError={(error) => {
                 console.error('Media upload error:', error);
               }}
+              renderEditButton={(onEdit, isEditing, hasMedia) => (
+                <button
+                  type="button"
+                  onClick={onEdit}
+                  disabled={isEditing || !hasMedia || isSubmitting}
+                  className="mt-2 inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isEditing ? 'Editing...' : 'Edit Media'}
+                </button>
+              )}
             />
 
             {/* Category */}
