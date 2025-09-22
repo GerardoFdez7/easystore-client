@@ -73,8 +73,25 @@ const MultipleMediaUploader: React.FC<MultipleMediaUploaderProps> = ({
   useEffect(() => {
     if (initialMedia && initialMedia.length > 0 && !persistedMedia) {
       setPersistedMedia(initialMedia);
+
+      // Convert URLs to MediaItem objects for carousel display
+      const mediaItemsFromUrls = initialMedia.map((url, index) => ({
+        id: `existing-${index}-${Date.now()}`,
+        type:
+          url.includes('.mp4') ||
+          url.includes('.webm') ||
+          url.includes('.avi') ||
+          url.includes('.mov')
+            ? ('video' as const)
+            : ('image' as const),
+        src: url,
+        alt: `Media ${index + 1}`,
+        // No file property since these are existing URLs
+      }));
+
+      setMediaItems(mediaItemsFromUrls);
     }
-  }, [initialMedia, persistedMedia, setPersistedMedia]);
+  }, [initialMedia, persistedMedia, setPersistedMedia, setMediaItems]);
 
   const handleValidationError = (error: string) => {
     onUploadError?.(error);
@@ -96,31 +113,44 @@ const MultipleMediaUploader: React.FC<MultipleMediaUploaderProps> = ({
   };
 
   const handleRemoveFile = (index: number) => {
-    const newFiles = selectedFiles.filter((_, i) => i !== index);
-    setSelectedFiles(newFiles);
+    // Only update selectedFiles if we have them (new uploads)
+    if (selectedFiles.length > 0) {
+      const newFiles = selectedFiles.filter((_, i) => i !== index);
+      setSelectedFiles(newFiles);
+    }
 
     if (mediaItems.length > 0) {
       const newMediaItems = mediaItems.filter((_, i) => i !== index);
 
-      // Clean up object URLs
+      // Clean up object URLs only if this item has a file (new upload)
       if (mediaItems[index]?.file) {
         cleanupObjectUrls([mediaItems[index]]);
       }
 
       setMediaItems(newMediaItems);
 
-      if (newMediaItems.length === 0) {
+      // Only exit editing mode if we have no items left AND we were working with new files
+      if (newMediaItems.length === 0 && selectedFiles.length > 0) {
         setIsEditing(false);
       }
     }
   };
 
   const handleReorderItems = (fromIndex: number, toIndex: number) => {
-    const { reorderedArray1: newItems, reorderedArray2: newFiles } =
-      reorderArrays(mediaItems, selectedFiles, fromIndex, toIndex);
+    // For existing media (no selectedFiles), only reorder mediaItems
+    if (selectedFiles.length === 0) {
+      const newItems = [...mediaItems];
+      const [movedItem] = newItems.splice(fromIndex, 1);
+      newItems.splice(toIndex, 0, movedItem);
+      setMediaItems(newItems);
+    } else {
+      // For new files, reorder both arrays in sync
+      const { reorderedArray1: newItems, reorderedArray2: newFiles } =
+        reorderArrays(mediaItems, selectedFiles, fromIndex, toIndex);
 
-    setMediaItems(newItems);
-    setSelectedFiles(newFiles);
+      setMediaItems(newItems);
+      setSelectedFiles(newFiles);
+    }
   };
 
   const handleAddMore = () => {
@@ -150,22 +180,56 @@ const MultipleMediaUploader: React.FC<MultipleMediaUploaderProps> = ({
   };
 
   const handleDone = async () => {
-    if (selectedFiles.length === 0) return;
+    // Case 1: We have new files to upload
+    if (selectedFiles.length > 0) {
+      // Validate minimum files for multiple mode at Done button press
+      const validation = validateFileCountForSubmission(
+        selectedFiles,
+        true,
+        maxItems,
+        minItems,
+        t,
+      );
+      if (!validation.isValid) {
+        onUploadError?.(validation.error || '');
+        return;
+      }
 
-    // Validate minimum files for multiple mode at Done button press
-    const validation = validateFileCountForSubmission(
-      selectedFiles,
-      true,
-      maxItems,
-      minItems,
-      t,
-    );
-    if (!validation.isValid) {
-      onUploadError?.(validation.error || '');
+      await startUpload(selectedFiles);
       return;
     }
 
-    await startUpload(selectedFiles);
+    // Case 2: We have existing media that was modified (reordered/removed)
+    if (mediaItems.length > 0 && !selectedFiles.length) {
+      try {
+        // Extract just the URLs from mediaItems for backwards compatibility
+        const mediaUrls = mediaItems.map((item) => item.src);
+
+        // Create processed data from current mediaItems state
+        const processedData = {
+          cover: mediaUrls[0] || '',
+          mediaItems: mediaItems.map((item, index) => {
+            const mediaType: 'VIDEO' | 'IMAGE' =
+              item.type === 'video' ? 'VIDEO' : 'IMAGE';
+            return {
+              url: item.src,
+              position: index,
+              mediaType,
+            };
+          }),
+        };
+
+        // Call onMediaProcessed with the reordered/modified data
+        await onMediaProcessed?.(processedData);
+
+        // Update persisted media to reflect changes
+        setPersistedMedia(mediaUrls);
+        setIsEditing(false);
+      } catch (error) {
+        console.error('Error processing existing media:', error);
+        onUploadError?.('Failed to process media changes');
+      }
+    }
   };
 
   const handleDoneWrapper = () => {
@@ -175,6 +239,7 @@ const MultipleMediaUploader: React.FC<MultipleMediaUploaderProps> = ({
   return (
     <div className={cn('w-full space-y-4', className)}>
       {!isEditing && !persistedMedia ? (
+        // No media - show dropzone
         <FileDropZone
           onFileSelect={handleFileSelection}
           onValidationError={handleValidationError}
@@ -184,8 +249,8 @@ const MultipleMediaUploader: React.FC<MultipleMediaUploaderProps> = ({
           disabled={disabled || isUploading || isProcessing}
           multiple={true}
         />
-      ) : !isEditing && mediaItems.length > 0 ? (
-        // Multiple files view-only mode (after upload)
+      ) : !isEditing && (mediaItems.length > 0 || persistedMedia) ? (
+        // Has media - show view-only mode (existing or uploaded)
         <div className="space-y-4">
           <CarouselMedia
             items={mediaItems}
