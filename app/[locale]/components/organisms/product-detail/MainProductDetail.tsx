@@ -7,7 +7,7 @@ import TableVariants from '@molecules/product-detail/TableVariants';
 import SustainabilityFormField from '@molecules/product-detail/SustainabilityFormField';
 import { Form, FormField, FormItem, FormMessage } from '@shadcn/ui/form';
 import { useForm } from 'react-hook-form';
-import { useEffect, useState, useRef, useMemo } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useGetProductById } from '@hooks/domains/products/useGetProductById';
 import MediaUploader from '@organisms/shared/MediaUploader';
 import type {
@@ -22,7 +22,7 @@ import SaveButton from '@atoms/shared/SaveButton';
 import { useUpdateProduct } from '@hooks/domains/products/useUpdateProduct';
 import { toast } from 'sonner';
 import ProductActions from '@atoms/shared/ProductActions';
-import type { ProcessedData } from '@lib/types/media';
+import { useProductMedia } from '@hooks/useMultipleMediaPersistence';
 
 interface MainProductDetailProps {
   param: string;
@@ -58,84 +58,11 @@ export default function MainProductDetail({
     void refetch();
   };
 
-  // Prepare initial media for MediaUploader (cover + media array)
-  const initialMedia = useMemo(() => {
-    if (!product) return null;
-
-    console.log('Product data:', {
-      cover: product.cover,
-      media: product.media,
-      mediaLength: product.media?.length,
-    });
-
-    const mediaUrls: string[] = [];
-
-    // Always add cover as first item if it exists
-    if (product.cover) {
-      mediaUrls.push(product.cover);
-    }
-
-    // Add additional media items (gallery) if they exist
-    if (product.media && product.media.length > 0) {
-      const additionalMedia = [...product.media] // Create a mutable copy first
-        .sort((a, b) => a.position - b.position)
-        .map((mediaItem) => mediaItem.url)
-        .filter((url) => url !== product.cover); // Avoid duplicating cover
-
-      mediaUrls.push(...additionalMedia);
-    }
-
-    console.log('Final mediaUrls:', mediaUrls);
-    return mediaUrls.length > 0 ? mediaUrls : null;
-  }, [product]);
-
-  // Handle media updates from MediaUploader
-  const handleMediaProcessed = async (processedData?: ProcessedData | null) => {
-    if (!processedData) return;
-
-    try {
-      const updates: Record<string, unknown> = {};
-
-      // Update cover if provided (first element)
-      if (processedData.cover) {
-        updates.cover = processedData.cover;
-      }
-
-      // Update media array if provided - ONLY additional media (position 1+)
-      if (processedData.mediaItems && processedData.mediaItems.length > 0) {
-        // Convert MediaData to the format expected by useUpdateProduct
-        // Filter out position 0 items (those should go to cover field)
-        const additionalMedia = processedData.mediaItems
-          .filter((item) => item.position > 0)
-          .map((item) => ({
-            url: item.url,
-            position: item.position,
-            mediaType: item.mediaType,
-          }));
-
-        updates.media = additionalMedia;
-      } else {
-        // If no additional media, clear the media array
-        updates.media = [];
-      }
-
-      // Apply updates using existing update logic
-      const result = await actions.updateMultipleFields(updates);
-
-      if (result.success) {
-        // Refresh product data to show updated media
-        await refetch();
-        toast.success('Media updated successfully');
-      } else {
-        toast.error('Failed to update media', {
-          description: result.error,
-        });
-      }
-    } catch (error) {
-      console.error('Error updating media:', error);
-      toast.error('Error updating media');
-    }
-  };
+  // Use custom hook for media management
+  const { initialMedia, handleMediaProcessed } = useProductMedia({
+    product,
+    actions,
+  });
 
   // Initialize form with default values
   const form = useForm<ProductFormData>({
@@ -269,12 +196,14 @@ export default function MainProductDetail({
         >
           {/* Main Content */}
           <div className="space-y-8">
-            <ProductActions
-              singleMode={true}
-              productId={param}
-              productIsArchived={product?.isArchived ?? false}
-              onDeleteComplete={handleProductUpdate}
-            />
+            <div className="flex justify-end">
+              <ProductActions
+                singleMode={true}
+                productId={param}
+                productIsArchived={product?.isArchived ?? false}
+                onDeleteComplete={handleProductUpdate}
+              />
+            </div>
             {/* Title */}
             <FormField
               control={form.control}
@@ -330,11 +259,11 @@ export default function MainProductDetail({
               maxVideoSize={50}
               initialMedia={initialMedia}
               onMediaProcessed={handleMediaProcessed}
-              onUploadSuccess={(url) => {
-                console.log('Media uploaded successfully:', url);
+              onUploadSuccess={(_url) => {
+                // Upload success handled by the hook
               }}
-              onUploadError={(error) => {
-                console.error('Media upload error:', error);
+              onUploadError={(_error) => {
+                // Upload error handled by the hook
               }}
               renderEditButton={(onEdit, isEditing, hasMedia) => (
                 <button
