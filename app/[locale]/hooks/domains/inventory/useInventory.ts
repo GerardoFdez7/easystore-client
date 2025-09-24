@@ -70,6 +70,7 @@ export const useInventory = (
     estimatedReplenishmentDate: item.estimatedReplenishmentDate ?? '',
     productLocation: item.productLocation ? item.productLocation : '',
     serialNumbers: item.serialNumbers ? item.serialNumbers : [],
+    lotNumber: item.lotNumber ? item.lotNumber : '',
   }));
 
   // Get refetch functions from both queries

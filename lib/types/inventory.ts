@@ -11,4 +11,5 @@ export type InventoryItem = {
   estimatedReplenishmentDate: string;
   productLocation: string;
   serialNumbers: string[];
+  lotNumber: string;
 };

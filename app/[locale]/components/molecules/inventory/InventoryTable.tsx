@@ -50,6 +50,7 @@ export default function InventoryTable({
       estimatedReplenishmentDate: item.estimatedReplenishmentDate,
       productLocation: item.productLocation,
       serialNumbers: item.serialNumbers.toString(),
+      lotNumber: item.lotNumber,
     });
 
     router.push(`/stock-detail?${params.toString()}`);

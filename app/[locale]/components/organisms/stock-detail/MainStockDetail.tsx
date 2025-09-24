@@ -28,7 +28,7 @@ export default function MainStockDetail() {
   const [updateReason, setUpdateReason] = useState('');
   // We use the _ prefix to indicate that these variables might be used in the future
   const [_availableQty, _setAvailableQty] = useState(6);
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [_date, _setDate] = useState<Date | undefined>(new Date());
 
   // State for form fields populated from inventory data
   const [productName, setProductName] = useState('');
@@ -41,6 +41,7 @@ export default function MainStockDetail() {
   const [_estimatedReplenishmentDate, _setEstimatedReplenishmentDate] =
     useState<Date | undefined>();
   const [_serialNumbers, _setSerialNumbers] = useState(['']);
+  const [_lotNumber, _setLotNumber] = useState('');
 
   // Load data from URL parameters when component mounts
   useEffect(() => {
@@ -56,6 +57,7 @@ export default function MainStockDetail() {
     );
     const productLocation = searchParams.get('productLocation');
     const serialNumbers = searchParams.get('serialNumbers')?.split(',');
+    const lotNumber = searchParams.get('lotNumber');
 
     if (id && productNameParam) {
       setProductName(productNameParam);
@@ -66,10 +68,10 @@ export default function MainStockDetail() {
       setQtyReserved(parseInt(qtyReservedParam || '0', 10));
       setProductLocation(productLocation || '');
       _setSerialNumbers(serialNumbers || ['']);
+      _setLotNumber(lotNumber || '');
 
       if (replenishmentDateParam) {
         _setEstimatedReplenishmentDate(new Date(replenishmentDateParam));
-        setDate(new Date(replenishmentDateParam));
       }
     }
   }, [searchParams]);
@@ -176,19 +178,20 @@ export default function MainStockDetail() {
                         variant="outline"
                         className={cn(
                           'mt-2 w-full justify-start text-left font-normal',
-                          !date && 'text-muted-foreground',
+                          !_estimatedReplenishmentDate &&
+                            'text-muted-foreground',
                         )}
                       >
-                        {date
-                          ? format(date, 'PPP')
+                        {_estimatedReplenishmentDate
+                          ? format(_estimatedReplenishmentDate, 'PPP')
                           : t('replenishmentDatePlaceholder')}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-4" align="start">
                       <Calendar
                         mode="single"
-                        selected={date}
-                        onSelect={setDate}
+                        selected={_estimatedReplenishmentDate}
+                        onSelect={_setEstimatedReplenishmentDate}
                         initialFocus
                         className="rounded-md border"
                         classNames={{
@@ -230,7 +233,11 @@ export default function MainStockDetail() {
                   <Input
                     id="lot-number"
                     className="mt-2"
+                    value={_lotNumber}
                     placeholder={t('lotNumberPlaceholder')}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      _setLotNumber(e.target.value)
+                    }
                   />
                 </div>
               </div>

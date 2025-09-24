@@ -48,6 +48,7 @@ query findInventory(
         id
         productLocation
         qtyAvailable
+        lotNumber
         qtyReserved
         estimatedReplenishmentDate
         serialNumbers

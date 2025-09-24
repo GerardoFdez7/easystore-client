@@ -1363,7 +1363,7 @@ export type FindInventoryQueryVariables = Exact<{
 }>;
 
 
-export type FindInventoryQuery = { __typename?: 'Query', getAllWarehouses: { __typename?: 'PaginatedWarehousesType', total: number, hasMore: boolean, warehouses: Array<{ __typename?: 'Warehouse', id: string, name: string, stockPerWarehouses: Array<{ __typename?: 'StockPerWarehouse', id: string, productLocation?: string | null, qtyAvailable: number, qtyReserved: number, estimatedReplenishmentDate?: any | null, serialNumbers?: Array<string> | null, productName?: string | null, variantSku?: string | null, variantFirstAttribute?: { __typename?: 'VariantAttribute', key: string, value: string } | null }> }> } };
+export type FindInventoryQuery = { __typename?: 'Query', getAllWarehouses: { __typename?: 'PaginatedWarehousesType', total: number, hasMore: boolean, warehouses: Array<{ __typename?: 'Warehouse', id: string, name: string, stockPerWarehouses: Array<{ __typename?: 'StockPerWarehouse', id: string, productLocation?: string | null, qtyAvailable: number, lotNumber?: string | null, qtyReserved: number, estimatedReplenishmentDate?: any | null, serialNumbers?: Array<string> | null, productName?: string | null, variantSku?: string | null, variantFirstAttribute?: { __typename?: 'VariantAttribute', key: string, value: string } | null }> }> } };
 
 export type FindWarehousesQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
