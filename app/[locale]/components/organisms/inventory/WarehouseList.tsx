@@ -133,7 +133,7 @@ export default function WarehouseList({
       ) : warehouses.length === 0 ? (
         renderEmptyState()
       ) : (
-        <div className="space-y-4" role="list" aria-label={t('warehouses')}>
+        <div className="space-y-4" role="list" aria-label={'warehouses'}>
           {warehouses.map((warehouse) => (
             <WarehouseCard
               key={warehouse.id}
