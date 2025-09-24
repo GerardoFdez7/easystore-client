@@ -1,5 +1,3 @@
-import VariantTemplate from '@templates/Variant';
-
 export default function VariantPage() {
-  return <VariantTemplate />;
+  return <div>Please access variants through products page</div>;
 }
