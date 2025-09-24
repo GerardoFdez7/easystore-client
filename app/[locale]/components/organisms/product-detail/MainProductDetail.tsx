@@ -286,7 +286,7 @@ export default function MainProductDetail({
               name="variants"
               render={({ field: { value: variants = [] } }) => (
                 <FormItem>
-                  <TableVariants variants={variants} />
+                  <TableVariants variants={variants} productId={param} />
                   <FormMessage />
                 </FormItem>
               )}

@@ -14,7 +14,7 @@ import WarrantyFormField from '@molecules/variant/WarrantyFormField';
 import SaveButton from '@atoms/shared/SaveButton';
 
 // Mock useVariant hook for testing purposes
-function useVariant() {
+function useVariant(productId: string, variantId?: string, isNew?: boolean) {
   const form = useForm({
     defaultValues: {
       price: '',
@@ -37,6 +37,9 @@ function useVariant() {
 
   const handleSubmit = (data: unknown) => {
     console.log('Form submitted:', data);
+    console.log('Product ID:', productId);
+    console.log('Variant ID:', variantId);
+    console.log('Is New:', isNew);
   };
 
   const loading = false;
