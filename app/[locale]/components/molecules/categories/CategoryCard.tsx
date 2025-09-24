@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Pencil } from 'lucide-react';
+import { Pencil, Trash } from 'lucide-react';
 import { Button } from '@shadcn/ui/button';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
@@ -12,6 +12,7 @@ type Props = {
   count?: number;
   href: string;
   onEdit?: () => void;
+  onDelete?: () => void;
 };
 
 export default function CategoryCard({
@@ -20,6 +21,7 @@ export default function CategoryCard({
   count = 0,
   href,
   onEdit,
+  onDelete,
 }: Props) {
   const t = useTranslations('Category');
   return (
@@ -55,6 +57,15 @@ export default function CategoryCard({
           aria-label="Edit category"
         >
           <Pencil className="text-text h-4 w-4" />
+        </Button>
+        <Button
+          size="icon"
+          variant="ghost"
+          className="-ml-3 shrink-0 rounded-full"
+          onClick={onDelete}
+          aria-label="Delete category"
+        >
+          <Trash className="text-text h-4 w-4" />
         </Button>
       </div>
 

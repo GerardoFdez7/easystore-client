@@ -1121,7 +1121,12 @@
     "searchPlaceholder": "Search categories...",
     "categoryCount": "categories",
     "expandAll": "Expand all",
-    "collapseAll": "Collapse all"
+    "collapseAll": "Collapse all",
+    "title": "Delete category?",
+    "description": "This action cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleting": "Deleting…"
   },
   "CategoryDetail": {
     "welcomeDetailCategory": "Category detail",
@@ -1143,6 +1148,13 @@
     "addSubcategories": "Add subcategories",
     "noResults": "No results",
     "close": "Close",
-    "noCategories": "No categories yet."
+    "noCategories": "No categories yet.",
+
+    "titleRequired": "Title is required.",
+    "titleTooLong": "Title cannot exceed {max} characters.",
+    "descriptionTooLong": "Description cannot exceed {max} characters.",
+    "invalidUrl": "The URL is not valid.",
+    "saveSuccess": "Category updated successfully.",
+    "createSuccess": "Category created successfully."
   }
 }

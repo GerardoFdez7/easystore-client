@@ -35,15 +35,10 @@ export type CategoryItem = {
 };
 
 type Props = {
-  /** Catálogo completo de categorías candidatas */
   catalog: CategoryItem[];
-  /** IDs a excluir (ya añadidas o categoría actual) */
   excludeIds?: string[];
-  /** Deshabilitar interacciones */
   disabled?: boolean;
-  /** Callback para añadir categorías seleccionadas (agrega todas de una vez) */
   onAdd?: (ids: string[]) => void;
-  /** Clase opcional para el wrapper del trigger */
   className?: string;
 };
 
@@ -63,7 +58,7 @@ export default function AddSubcategoriesPicker({
 
   const exclude = useMemo(() => new Set(excludeIds), [excludeIds]);
 
-  // SearchBar (de este componente)
+  // SearchBar
   const usePickerSearch = () => useSearch((text) => setQ(text), 500);
 
   const list = useMemo(() => {

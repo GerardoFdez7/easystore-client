@@ -1080,7 +1080,12 @@
     "searchPlaceholder": "Rechercher des catégories...",
     "categoryCount": "catégories",
     "expandAll": "Tout développer",
-    "collapseAll": "Tout réduire"
+    "collapseAll": "Tout réduire",
+    "title": "Supprimer la catégorie ?",
+    "description": "Cette action est irréversible.",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "deleting": "Suppression…"
   },
   "CategoryDetail": {
     "welcomeDetailCategory": "Détail de la catégorie",
@@ -1102,6 +1107,12 @@
     "addSubcategories": "Ajouter des sous-catégories",
     "noResults": "Aucun résultat",
     "close": "Fermer",
-    "noCategories": "Aucune catégorie pour le moment."
+    "noCategories": "Aucune catégorie pour le moment.",
+    "titleRequired": "Le titre est obligatoire.",
+    "titleTooLong": "Le titre ne peut pas dépasser {max} caractères.",
+    "descriptionTooLong": "La description ne peut pas dépasser {max} caractères.",
+    "invalidUrl": "L’URL n’est pas valide.",
+    "saveSuccess": "Catégorie mise à jour avec succès.",
+    "createSuccess": "Catégorie créée avec succès."
   }
 }
