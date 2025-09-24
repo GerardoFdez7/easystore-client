@@ -129,6 +129,7 @@ export default function WarrantyFormField() {
                       </FormLabel>
                       <Textarea
                         id="warrantyCoverage"
+                        maxLength={1000}
                         placeholder={t('warrantyCoveragePlaceholder')}
                         value={newCoverage}
                         onChange={(e) => setNewCoverage(e.target.value)}
@@ -139,6 +140,7 @@ export default function WarrantyFormField() {
                         {t('warrantyInstructions')}
                       </FormLabel>
                       <Textarea
+                        maxLength={1000}
                         placeholder={t('warrantyInstructionsPlaceholder')}
                         value={newInstructions}
                         onChange={(e) => setNewInstructions(e.target.value)}
@@ -202,6 +204,7 @@ export default function WarrantyFormField() {
                                 {t('warrantyCoverage')}
                               </FormLabel>
                               <Textarea
+                                maxLength={1000}
                                 placeholder={t('warrantyCoveragePlaceholder')}
                                 value={warranty.coverage}
                                 onChange={(e) =>
@@ -218,6 +221,7 @@ export default function WarrantyFormField() {
                                 {t('warrantyInstructions')}
                               </FormLabel>
                               <Textarea
+                                maxLength={1000}
                                 placeholder={t(
                                   'warrantyInstructionsPlaceholder',
                                 )}

@@ -24,11 +24,11 @@ mutation addStockToWarehouse(
       productLocation
       estimatedReplenishmentDate
       variantFirstAttribute {
-          key
-          value
-        }
-        productName
-        variantSku
+        key
+        value
+      }
+      productName
+      variantSku
     }
   }
 }

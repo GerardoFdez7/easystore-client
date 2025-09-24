@@ -1,40 +1,38 @@
-mutation register($email: String!, $password: String!, $accountType: AccountTypeEnum!) {
-  register(input: {
-    email: $email,
-    password: $password,
-    accountType: $accountType
-  }) {
+mutation register(
+  $email: String!
+  $password: String!
+  $accountType: AccountTypeEnum!
+) {
+  register(
+    input: { email: $email, password: $password, accountType: $accountType }
+  ) {
     email
     accountType
   }
 }
 
-mutation login($email: String!, $password: String!, $accountType: AccountTypeEnum!) {
-  login(input: {
-    email: $email,
-    password: $password,
-    accountType: $accountType
-  }) {
+mutation login(
+  $email: String!
+  $password: String!
+  $accountType: AccountTypeEnum!
+) {
+  login(
+    input: { email: $email, password: $password, accountType: $accountType }
+  ) {
     success
     message
   }
 }
 
 mutation forgotPassword($email: String!, $accountType: AccountTypeEnum!) {
-  forgotPassword(input: {
-    email: $email,
-    accountType: $accountType
-  }) {
+  forgotPassword(input: { email: $email, accountType: $accountType }) {
     success
     message
   }
 }
 
 mutation updatePassword($token: String!, $password: String!) {
-  updatePassword(input: {    
-    token: $token
-    password: $password,
-  }) {
+  updatePassword(input: { token: $token, password: $password }) {
     success
     message
   }
@@ -57,16 +55,18 @@ mutation getInTouch(
   $annualRevenue: String!
   $isAgency: String!
 ) {
-  getInTouch(input: {
-    fullName: $fullName
-    businessEmail: $businessEmail
-    businessPhone: $businessPhone
-    company: $company
-    websiteUrl: $websiteUrl
-    country: $country
-    annualRevenue: $annualRevenue
-    isAgency: $isAgency
-  }) {
+  getInTouch(
+    input: {
+      fullName: $fullName
+      businessEmail: $businessEmail
+      businessPhone: $businessPhone
+      company: $company
+      websiteUrl: $websiteUrl
+      country: $country
+      annualRevenue: $annualRevenue
+      isAgency: $isAgency
+    }
+  ) {
     success
     message
   }

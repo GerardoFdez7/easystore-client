@@ -1,0 +1,15 @@
+query findAllCountries {
+  getAllCountries {
+    id
+    name
+    code
+  }
+}
+
+query findStatesByCountryId($countryId: ID!) {
+  getStatesByCountryId(countryId: $countryId) {
+    id
+    name
+    code
+  }
+}

@@ -30,7 +30,6 @@ query findCategoryById($id: ID!) {
 }
 
 query findAllCategories(
-
   $page: Int = 1
   $limit: Int = 25
   $name: String = ""

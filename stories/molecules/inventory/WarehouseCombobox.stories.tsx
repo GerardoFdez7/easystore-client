@@ -54,25 +54,132 @@ const mockWarehouses = {
   },
 };
 
-// Mock for loading state
-const loadingMock = {
+const emptyMock = {
   request: {
     query: FindWarehousesDocument,
-    variables: { name: undefined },
+    variables: {
+      page: 1,
+      limit: 10,
+      name: undefined,
+      sortBy: 'NAME',
+      sortOrder: 'ASC',
+    },
   },
-  result: undefined,
-  delay: 1000000, // Very long delay to simulate loading
-  disabled: false,
+  result: {
+    data: {
+      getAllWarehouses: {
+        warehouses: [],
+        total: 0,
+        hasMore: false,
+      },
+    },
+  },
 };
 
 // Mock for successful query
 const successMock = {
   request: {
     query: FindWarehousesDocument,
-    variables: { name: undefined },
+    variables: {
+      page: 1,
+      limit: 10,
+      name: undefined,
+      sortBy: 'NAME',
+      sortOrder: 'ASC',
+    },
   },
   result: {
     data: mockWarehouses,
+  },
+};
+
+const mockWarehousesHasMore = {
+  getAllWarehouses: {
+    warehouses: [
+      {
+        id: '1',
+        name: 'Main Warehouse',
+        city: 'New York',
+        addressLine1: '123 Main St',
+        countryCode: 'US',
+        postalCode: '10001',
+      },
+      {
+        id: '2',
+        name: 'West Coast Storage',
+        city: 'Los Angeles',
+        addressLine1: '456 West Blvd',
+        countryCode: 'US',
+        postalCode: '90001',
+      },
+    ],
+    total: 5,
+    hasMore: true,
+  },
+};
+
+const mockWarehousesLoadMore = {
+  getAllWarehouses: {
+    warehouses: [
+      {
+        id: '3',
+        name: 'Central Distribution',
+        city: 'Chicago',
+        addressLine1: '789 Central Ave',
+        countryCode: 'US',
+        postalCode: '60601',
+      },
+      {
+        id: '4',
+        name: 'Southern Hub',
+        city: 'Houston',
+        addressLine1: '321 South St',
+        countryCode: 'US',
+        postalCode: '77001',
+      },
+      {
+        id: '5',
+        name: 'Regional Storage',
+        city: 'Miami',
+        addressLine1: '654 Beach Dr',
+        countryCode: 'US',
+        postalCode: '33101',
+      },
+    ],
+    total: 5,
+    hasMore: false,
+  },
+};
+
+const hasMoreMock = {
+  request: {
+    query: FindWarehousesDocument,
+    variables: {
+      page: 1,
+      limit: 10,
+      name: undefined,
+      sortBy: 'NAME',
+      sortOrder: 'ASC',
+    },
+  },
+  result: {
+    data: mockWarehousesHasMore,
+  },
+};
+
+const loadMoreMock = {
+  request: {
+    query: FindWarehousesDocument,
+    variables: {
+      page: 2,
+      limit: 10,
+      name: undefined,
+      sortBy: 'NAME',
+      sortOrder: 'ASC',
+    },
+  },
+  result: {
+    data: mockWarehousesLoadMore,
   },
 };
 
@@ -120,7 +227,7 @@ export const Default: Story = {
 export const NotFound: Story = {
   args: {},
   parameters: {
-    mocks: [loadingMock],
+    mocks: [emptyMock],
   },
 };
 
@@ -139,6 +246,28 @@ export const Disabled: Story = {
   },
   parameters: {
     mocks: [successMock],
+  },
+};
+
+export const HasMore: Story = {
+  render: () => {
+    const [selectedWarehouse, setSelectedWarehouse] =
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      React.useState<string>('');
+
+    return (
+      <MockedProvider mocks={[hasMoreMock, loadMoreMock]}>
+        <div className="space-y-4">
+          <WarehouseCombobox
+            value={selectedWarehouse}
+            onChange={setSelectedWarehouse}
+          />
+          <div className="text-muted-foreground text-sm">
+            Selected Warehouse ID: {selectedWarehouse || 'None'}
+          </div>
+        </div>
+      </MockedProvider>
+    );
   },
 };
 

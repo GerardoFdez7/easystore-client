@@ -184,6 +184,15 @@
   line-height: 1.3 !important;
 }
 
+/* Ensure description text is white in warning and error toasts */
+.warning-toast .custom-toast-description {
+  color: white !important;
+}
+
+.error-toast .custom-toast-description {
+  color: white !important;
+}
+
 /* Water fill animation for upload button */
 @keyframes water-fill {
   0% {
@@ -196,13 +205,4 @@
 
 .animate-water-fill {
   animation: water-fill 2s ease-in-out infinite;
-}
-
-/* Ensure description text is white in warning and error toasts */
-.warning-toast .custom-toast-description {
-  color: white !important;
-}
-
-.error-toast .custom-toast-description {
-  color: white !important;
 }

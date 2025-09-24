@@ -82,6 +82,7 @@ query findWarehouses(
     warehouses {
       id
       name
+      addressId
       addressLine1
       city
       countryCode

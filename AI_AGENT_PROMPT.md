@@ -2,34 +2,6 @@
 
 You are an expert frontend developer specializing in the EasyStore e-commerce platform. You have deep contextual understanding of the project architecture, technology stack, and development standards.
 
-## Project Architecture
-
-### Atomic Design Structure
-
-- **Atoms**: Basic UI elements (buttons, inputs, labels) in `app/[locale]/components/atoms/`
-- **Molecules**: Simple component combinations in `app/[locale]/components/molecules/`
-- **Organisms**: Complex UI sections in `app/[locale]/components/organisms/`
-- **Templates**: Page layouts in `app/[locale]/components/templates/`
-- **Pages**: Complete pages in `app/[locale]/` directory structure
-
-### Path Aliases (tsconfig.json)
-
-```typescript
-"@atoms/*": ["./app/[locale]/components/atoms/*"]
-"@molecules/*": ["./app/[locale]/components/molecules/*"]
-"@organisms/*": ["./app/[locale]/components/organisms/*"]
-"@templates/*": ["./app/[locale]/components/templates/*"]
-"@shadcn/*": ["./app/[locale]/components/shadcn/*"]
-"@schemas/*": ["./app/[locale]/schemas/*"]
-"@hooks/*": ["app/[locale]/hooks/*"]
-"@types/*": ["lib/types/*"]
-"@lib/*": ["./lib/*"]
-"@contexts/*": ["lib/contexts/*"]
-"@graphql/*": ["./lib/graphql/*"]
-"@consts/*": ["./lib/consts/*"]
-"@i18n/*": ["./i18n/*"]
-```
-
 ## Technology Stack
 
 ### Core Framework
@@ -56,106 +28,103 @@ You are an expert frontend developer specializing in the EasyStore e-commerce pl
 
 - **next-intl**: i18n support for 5 languages (en, es, fr, it, pt)
 - **Locale routing**: `/[locale]/` structure for multilingual support
-- **Message files**: JSON-based translations in `/messages/` directory
-
-### Development Tools
-
-- **Storybook 9.1.2**: Component documentation and testing
-- **ESLint 9**: Code quality with TypeScript integration
-- **Prettier 3.5.3**: Code formatting with Tailwind plugin
-- **Husky**: Git hooks for code quality enforcement
+- **Message files**: JSON-based translations in `messages/` directory
 
 ## Development Standards
 
 ### ESLint Configuration
 
-```javascript
+```typescript
+// Base rules
+curly: 'error',
+eqeqeq: ['error', 'always'],
+
 // Strict TypeScript rules
-"@typescript-eslint/no-explicit-any": "error"
-"@typescript-eslint/no-non-null-assertion": "error"
-"@typescript-eslint/no-floating-promises": "error"
-"@typescript-eslint/await-thenable": "error"
+"@typescript-eslint/no-explicit-any": "error",
+"@typescript-eslint/no-non-null-assertion": "error",
+"@typescript-eslint/no-floating-promises": "error",
+"@typescript-eslint/await-thenable": "error",
+"@typescript-eslint/no-misused-promises": "error",
+"no-unused-vars": "off",
+"@typescript-eslint/no-unused-vars": [
+  "error",
+  {
+    argsIgnorePattern: "^_",
+    varsIgnorePattern: "^_",
+    caughtErrorsIgnorePattern: "^_",
+  },
+],
 
 // Naming conventions
 "@typescript-eslint/naming-convention": [
-  { selector: "variable", format: ["camelCase", "PascalCase"] },
+  "error",
+  { selector: "variable", format: ["camelCase", "PascalCase"], leadingUnderscore: "allow" },
   { selector: "typeLike", format: ["PascalCase"] },
+  { selector: "import", format: ["camelCase", "PascalCase"] },
   { selector: "function", format: ["camelCase", "PascalCase"] }
-]
+],
 
 // Code organization
 "padding-line-between-statements": [
+  "error",
+  // Variable declarations
+  { blankLine: "any", prev: ["const", "let", "var"], next: "*" },
+  { blankLine: "any", prev: "*", next: ["const", "let", "var"] },
+
+  // Functions
   { blankLine: "always", prev: "*", next: "function" },
-  { blankLine: "always", prev: "import", next: "*" }
-]
+  { blankLine: "always", prev: "function", next: "*" },
+
+  // Classes
+  { blankLine: "always", prev: "*", next: "class" },
+  { blankLine: "always", prev: "class", next: "*" },
+
+  // Imports/exports
+  { blankLine: "always", prev: "import", next: "*" },
+  { blankLine: "any", prev: "import", next: "import" },
+  { blankLine: "always", prev: "export", next: "*" },
+  { blankLine: "any", prev: "export", next: "export" },
+],
 ```
 
-### Prettier Configuration
+### Error Handling
 
-```json
-{
-  "printWidth": 80,
-  "tabWidth": 2,
-  "singleQuote": true,
-  "semi": true,
-  "trailingComma": "all",
-  "arrowParens": "always",
-  "plugins": ["prettier-plugin-tailwindcss"]
-}
-```
-
-### Component Patterns
-
-1. **Functional Components**: Use React function components with TypeScript
-2. **Custom Hooks**: Extract logic into reusable hooks in `@hooks/`
-3. **Props Interfaces**: Define TypeScript interfaces for all component props
-4. **Error Boundaries**: Implement error handling for robust UX
-5. **Lazy Loading**: Use dynamic imports for code splitting
+- Always resolve TypeScript errors. Ensure the codebase is free of TypeScript errors to maintain type safety and code quality.
+- The <mcfile name="error.handler.ts" path="lib/utils/error.handler.ts"></mcfile> file plays a crucial role in centralized error handling for Apollo Client. It acts as a middleware, integrated into <mcfile name="link.ts" path="lib/apollo/link.ts"></mcfile>, to process and display GraphQL and network errors consistently across the application.
 
 ### File Organization
 
-- Components follow Atomic Design hierarchy
-- GraphQL operations in `lib/graphql/domains/`
-- Schemas and validation in `@schemas/`
-- Utility functions in `@lib/`
-- Type definitions in `@types/`
+- Components follow Atomic Design hierarchy:
+  - `@atoms/`: Basic, standalone UI elements (buttons, inputs, icons)
+  - `@molecules/`: Simple combinations of atoms (form fields, search bars)
+  - `@organisms/`: Complex UI sections combining molecules (navigation, product cards)
+  - `@templates/`: Page-level component layouts and structures
+  - `@shadcn/`: Pre-built UI components from the Shadcn library
+- Hooks organized by functionality:
+  - `@hooks/domains/`: Business logic hooks specific to domains (e.g., products, cart, checkout)
+  - `@hooks/utils/`: Reusable utility hooks (e.g., useDebounce, useLocalStorage)
+- GraphQL operations in `@graphql/domains/`
+- GraphQL generated code in `@graphql/generated`
+- Utility functions in `@lib/utils/`
+- Type definitions in `@lib/types/`
+- Constants in `@lib/consts/`
+- Contexts in `@lib/contexts/`
+- Services in `@lib/services/`
+- Apollo Client configuration in `@lib/apollo/`
 
 ### Storybook Standards
 
-- Stories for all reusable components
-- Multiple variants and states documented
+- Stories for all reusable components, ensuring one Storybook file per component.
+- Each Storybook file must import from `@storybook/nextjs`.
+- Import the component to be documented in the Storybook file using the import aliases defined in `File Organization` before.
+- Components should be documented with comprehensive documentation and controls.
+- Meaningful stories should be created to showcase all the different states of a component, avoiding useless stories.
+- Mock data should be placed in a `mocks` folder at the same level as the story file.
+- Storybook files are exclusively for component documentation and should not include imports from Jest or other testing libraries.
 - Accessibility testing integration
 - Component props documentation
 
-### GraphQL Implementation
-
-- Type-safe operations with codegen
-- Apollo Client with Next.js integration
-- Query optimization and caching strategies
-- Error handling with custom error handler
-
 ## Workflow Requirements
-
-### Code Quality
-
-1. All code must pass ESLint and Prettier checks
-2. TypeScript strict mode compliance required
-3. Component props must be fully typed
-4. GraphQL operations must be type-safe
-
-### Testing Protocols
-
-1. Storybook stories for component documentation
-2. Visual regression testing capabilities
-3. Accessibility compliance testing
-4. Cross-browser compatibility verification
-
-### Internationalization Requirements
-
-1. All user-facing text must use i18n keys
-2. Support for RTL languages consideration
-3. Locale-specific formatting for dates/numbers
-4. Dynamic language switching capability
 
 ### Performance Standards
 
@@ -166,18 +135,32 @@ You are an expert frontend developer specializing in the EasyStore e-commerce pl
 
 ## Implementation Guidelines
 
+### Import Guidelines
+
+1. **Shadcn Components**: Always import using the full path, e.g., `@shadcn/ui/button` instead of `@shadcn/button`.
+2. **Apollo Hooks**: Import Apollo hooks from `@apollo/client/react`.
+3. **Import Organization**: Organize imports in the following order:
+   - React and Next.js specific imports
+   - Next-intl translations
+   - GraphQL generated types
+   - Custom hooks
+   - Lucide React icons
+   - Shadcn UI components
+   - Atomic Design components (Atoms, Molecules, Organisms, Templates)
+   - Other library imports
+
 ### Component Creation
 
 1. Start with Atomic Design classification
-2. Create TypeScript interface for props
-3. Implement component with proper error handling
-4. Add Storybook story with multiple variants
+2. Create TypeScript interface for props or type in `@lib/types/`
+3. Implement component with proper loading and error handling
+4. Add Storybook story with all the states of the component and some variants
 5. Ensure i18n compliance for all text
 
 ### GraphQL Integration
 
 1. Define operations in `.gql` files
-2. Generate types with codegen
+2. Generate types with `npm run gql`
 3. Use Apollo hooks for data fetching
 4. Implement proper loading and error states
 
