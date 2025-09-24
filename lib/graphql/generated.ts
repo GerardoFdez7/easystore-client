@@ -84,11 +84,6 @@ export enum AddressTypeEnum {
   Warehouse = 'WAREHOUSE',
 }
 
-export type AddressesType = {
-  __typename?: 'AddressesType';
-  addresses: Array<AddressType>;
-};
-
 export type Attribute = {
   __typename?: 'Attribute';
   key: Scalars['String']['output'];
@@ -617,6 +612,13 @@ export type MutationUpdateWarehouseArgs = {
   input: UpdateWarehouseInput;
 };
 
+export type PaginatedAddressesType = {
+  __typename?: 'PaginatedAddressesType';
+  addresses: Array<AddressType>;
+  hasMore: Scalars['Boolean']['output'];
+  total: Scalars['Int']['output'];
+};
+
 export type PaginatedCategoriesType = {
   __typename?: 'PaginatedCategoriesType';
   categories: Array<Category>;
@@ -674,7 +676,7 @@ export type ProductCategory = {
 export type Query = {
   __typename?: 'Query';
   getAddressById: AddressType;
-  getAllAddresses: AddressesType;
+  getAllAddresses: PaginatedAddressesType;
   getAllCategories: PaginatedCategoriesType;
   getAllCountries: Array<CountryType>;
   getAllProducts: PaginatedProductsType;
@@ -695,6 +697,9 @@ export type QueryGetAddressByIdArgs = {
 
 export type QueryGetAllAddressesArgs = {
   addressType?: InputMaybe<AddressTypeEnum>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryGetAllCategoriesArgs = {
@@ -1017,14 +1022,17 @@ export type CreateAddressMutation = {
   __typename?: 'Mutation';
   createAddress: {
     __typename?: 'AddressType';
+    id: string;
     addressLine1: string;
     addressLine2: string;
     addressType: AddressTypeEnum;
     city: string;
     countryId: string;
+    stateId: string;
     deliveryNum: string;
     name: string;
     postalCode: string;
+    deliveryInstructions?: string | null;
   };
 };
 
@@ -1037,14 +1045,17 @@ export type UpdateAddressMutation = {
   __typename?: 'Mutation';
   updateAddress: {
     __typename?: 'AddressType';
+    id: string;
     addressLine1: string;
     addressLine2: string;
     addressType: AddressTypeEnum;
     city: string;
     countryId: string;
+    stateId: string;
     deliveryNum: string;
     name: string;
     postalCode: string;
+    deliveryInstructions?: string | null;
   };
 };
 
@@ -1054,17 +1065,7 @@ export type DeleteAddressMutationVariables = Exact<{
 
 export type DeleteAddressMutation = {
   __typename?: 'Mutation';
-  deleteAddress: {
-    __typename?: 'AddressType';
-    addressLine1: string;
-    addressLine2: string;
-    addressType: AddressTypeEnum;
-    city: string;
-    countryId: string;
-    deliveryNum: string;
-    name: string;
-    postalCode: string;
-  };
+  deleteAddress: { __typename?: 'AddressType'; id: string; name: string };
 };
 
 export type FindAddressByIdQueryVariables = Exact<{
@@ -1075,35 +1076,46 @@ export type FindAddressByIdQuery = {
   __typename?: 'Query';
   getAddressById: {
     __typename?: 'AddressType';
+    id: string;
     addressLine1: string;
     addressLine2: string;
     addressType: AddressTypeEnum;
     city: string;
     countryId: string;
+    stateId: string;
     deliveryNum: string;
     name: string;
     postalCode: string;
+    deliveryInstructions?: string | null;
   };
 };
 
 export type FindAllAddressesQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
   addressType?: InputMaybe<AddressTypeEnum>;
 }>;
 
 export type FindAllAddressesQuery = {
   __typename?: 'Query';
   getAllAddresses: {
-    __typename?: 'AddressesType';
+    __typename?: 'PaginatedAddressesType';
+    total: number;
+    hasMore: boolean;
     addresses: Array<{
       __typename?: 'AddressType';
+      id: string;
       addressLine1: string;
       addressLine2: string;
       addressType: AddressTypeEnum;
       city: string;
       countryId: string;
+      stateId: string;
       deliveryNum: string;
       name: string;
       postalCode: string;
+      deliveryInstructions?: string | null;
     }>;
   };
 };
@@ -1128,6 +1140,7 @@ export type FindStatesByCountryIdQuery = {
   __typename?: 'Query';
   getStatesByCountryId: Array<{
     __typename?: 'StateType';
+    id: string;
     name: string;
     code: string;
   }>;
@@ -1542,17 +1555,6 @@ export type UpdateWarehouseMutation = {
     addressId: string;
     createdAt: any;
     updatedAt: any;
-    stockPerWarehouses: Array<{
-      __typename?: 'StockPerWarehouse';
-      id: string;
-      warehouseId: string;
-      qtyAvailable: number;
-      qtyReserved: number;
-      lotNumber?: string | null;
-      serialNumbers?: Array<string> | null;
-      productLocation?: string | null;
-      estimatedReplenishmentDate?: any | null;
-    }>;
   };
 };
 
@@ -1654,6 +1656,7 @@ export type FindWarehousesQuery = {
       __typename?: 'Warehouse';
       id: string;
       name: string;
+      addressId: string;
       addressLine1?: string | null;
       city?: string | null;
       countryCode?: string | null;
@@ -2264,6 +2267,7 @@ export const CreateAddressDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'addressLine1' },
@@ -2275,9 +2279,14 @@ export const CreateAddressDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'addressType' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'city' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'countryId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'stateId' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'deliveryNum' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'postalCode' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'deliveryInstructions' },
+                },
               ],
             },
           },
@@ -2347,6 +2356,7 @@ export const UpdateAddressDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'addressLine1' },
@@ -2358,9 +2368,14 @@ export const UpdateAddressDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'addressType' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'city' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'countryId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'stateId' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'deliveryNum' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'postalCode' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'deliveryInstructions' },
+                },
               ],
             },
           },
@@ -2408,20 +2423,8 @@ export const DeleteAddressDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'addressLine1' },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'addressLine2' },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'addressType' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'city' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'countryId' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'deliveryNum' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'postalCode' } },
               ],
             },
           },
@@ -2469,6 +2472,7 @@ export const FindAddressByIdDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'addressLine1' },
@@ -2480,9 +2484,14 @@ export const FindAddressByIdDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'addressType' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'city' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'countryId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'stateId' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'deliveryNum' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'postalCode' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'deliveryInstructions' },
+                },
               ],
             },
           },
@@ -2504,6 +2513,27 @@ export const FindAllAddressesDocument = {
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '1' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'limit' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '25' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'name' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+          defaultValue: { kind: 'StringValue', value: '', block: false },
+        },
+        {
+          kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
             name: { kind: 'Name', value: 'addressType' },
@@ -2523,6 +2553,30 @@ export const FindAllAddressesDocument = {
             arguments: [
               {
                 kind: 'Argument',
+                name: { kind: 'Name', value: 'page' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'page' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'limit' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'limit' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'name' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'name' },
+                },
+              },
+              {
+                kind: 'Argument',
                 name: { kind: 'Name', value: 'addressType' },
                 value: {
                   kind: 'Variable',
@@ -2539,6 +2593,7 @@ export const FindAllAddressesDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'addressLine1' },
@@ -2558,6 +2613,10 @@ export const FindAllAddressesDocument = {
                       },
                       {
                         kind: 'Field',
+                        name: { kind: 'Name', value: 'stateId' },
+                      },
+                      {
+                        kind: 'Field',
                         name: { kind: 'Name', value: 'deliveryNum' },
                       },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
@@ -2565,9 +2624,15 @@ export const FindAllAddressesDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'postalCode' },
                       },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'deliveryInstructions' },
+                      },
                     ],
                   },
                 },
+                { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'hasMore' } },
               ],
             },
           },
@@ -2648,6 +2713,7 @@ export const FindStatesByCountryIdDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'code' } },
               ],
@@ -4791,47 +4857,6 @@ export const UpdateWarehouseDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'addressId' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'stockPerWarehouses' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'warehouseId' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'qtyAvailable' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'qtyReserved' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'lotNumber' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'serialNumbers' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'productLocation' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: {
-                          kind: 'Name',
-                          value: 'estimatedReplenishmentDate',
-                        },
-                      },
-                    ],
-                  },
-                },
               ],
             },
           },
@@ -5361,6 +5386,10 @@ export const FindWarehousesDocument = {
                     selections: [
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'addressId' },
+                      },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'addressLine1' },

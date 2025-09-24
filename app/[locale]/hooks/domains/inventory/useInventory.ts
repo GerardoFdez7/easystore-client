@@ -26,12 +26,18 @@ export const useInventory = (
   const warehouseQuery = useQuery(FindWarehouseByIdDocument, {
     variables: { id: warehouseId } as FindWarehouseByIdQueryVariables,
     skip: !warehouseId,
+    fetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: false,
+    errorPolicy: 'all',
   });
 
   // Use general inventory query if no specific warehouse is selected
   const inventoryQuery = useQuery(FindInventoryDocument, {
     variables,
     skip: !!warehouseId,
+    fetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: false,
+    errorPolicy: 'all',
   });
 
   // Determine which query to use based on warehouseId

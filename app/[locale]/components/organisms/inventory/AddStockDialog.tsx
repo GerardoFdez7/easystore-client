@@ -65,19 +65,25 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
     setStep('warehouse');
   };
 
-  const handleClose = () => {
-    setSelectedVariantId('');
-    setSelectedProductName('');
-    setSelectedVariantAttributes([]);
+  const handleReset = () => {
+    // Explicit reset function for when we want to clear all state
+    setSelectedVariantId(initialSelectedVariantId || '');
+    setSelectedProductName(initialSelectedProductName || '');
+    setSelectedVariantAttributes(initialSelectedVariantAttributes || []);
     setSelectedWarehouseId('');
-    setStep('variant');
-    onOpenChange(false);
+    setStep(initialStep || 'variant');
   };
 
   const handleBack = () => {
     if (step === 'warehouse') {
       setStep('variant');
     }
+  };
+
+  const handleCancel = () => {
+    // Reset state and close dialog when user explicitly cancels
+    handleReset();
+    onOpenChange(false);
   };
 
   const canProceed = () => {
@@ -105,11 +111,11 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
   const getStepIcon = () => {
     switch (step) {
       case 'variant':
-        return <Package className="h-5 w-5" />;
+        return <Package className="h-5 w-5" aria-hidden="true" />;
       case 'warehouse':
-        return <Warehouse className="h-5 w-5" />;
+        return <Warehouse className="h-5 w-5" aria-hidden="true" />;
       default:
-        return <Package className="h-5 w-5" />;
+        return <Package className="h-5 w-5" aria-hidden="true" />;
     }
   };
 
@@ -127,7 +133,7 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
         return (
           <section className="space-y-4">
             <Alert>
-              <Package className="h-6 w-6" />
+              <Package className="h-6 w-6" aria-hidden="true" />
               <AlertDescription className="flex flex-col gap-1">
                 <div className="flex flex-wrap items-center gap-1">
                   {selectedVariantAttributes.length > 0 ? (
@@ -157,8 +163,8 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
               <WarehouseCombobox
                 value={selectedWarehouseId}
                 onChange={setSelectedWarehouseId}
-                width="100%"
                 placeholder={t('selectWarehousePlaceholder')}
+                className="flex w-full flex-1"
                 aria-labelledby="warehouse-label"
               />
             </div>
@@ -174,7 +180,7 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="flex max-h-[90vh] max-w-4xl flex-col overflow-hidden">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
+          <DialogTitle className="flex items-start gap-2 text-left">
             {getStepIcon()}
             {getStepTitle()}
           </DialogTitle>
@@ -194,7 +200,7 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
                 {t('back')}
               </Button>
             )}
-            <Button variant="outline" onClick={handleClose}>
+            <Button variant="outline" onClick={handleCancel}>
               {t('cancel')}
             </Button>
           </div>
@@ -211,6 +217,7 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
                 router.push(
                   `/inventory/stock-detail?variantId=${selectedVariantId}&warehouseId=${selectedWarehouseId}`,
                 );
+                handleReset(); // Reset state after successful navigation
                 onOpenChange(false);
               }
             }}

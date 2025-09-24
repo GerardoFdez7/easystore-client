@@ -47,7 +47,7 @@ type Story = StoryObj<typeof SkeletonWrapper>;
 
 export const WithComponent: Story = {
   args: {
-    children: <WarehouseCombobox width={200} />,
+    children: <WarehouseCombobox />,
   },
   render: (args) => (
     <>

@@ -43,7 +43,7 @@ export default function EmptyState({
             variant={buttonVariant}
             onClick={onButtonClick}
           >
-            {ButtonIcon && <ButtonIcon className="mr-2 h-4 w-4" />}
+            {ButtonIcon && <ButtonIcon className="h-4 w-4" />}
             {buttonText}
           </Button>
         )}

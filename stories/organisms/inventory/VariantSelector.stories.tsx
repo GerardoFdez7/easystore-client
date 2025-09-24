@@ -13,13 +13,7 @@ const meta: Meta<typeof VariantSelector> = {
   parameters: {
     layout: 'centered',
   },
-  decorators: [
-    (Story) => (
-      <div style={{ width: '100%', maxWidth: 1000, height: '600px' }}>
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [(Story) => <Story />],
   tags: ['autodocs'],
 };
 

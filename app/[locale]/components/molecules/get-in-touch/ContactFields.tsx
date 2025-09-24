@@ -140,6 +140,9 @@ export const ContactFields: React.FC = () => {
                     value={field.value}
                     onValueChange={field.onChange}
                     placeholder={t('selectCountry')}
+                    searchPlaceholder={t('searchCountry')}
+                    emptyMessage={t('noCountriesFound')}
+                    serverSide={true}
                     className="border-primary w-full font-light [&>svg]:hidden"
                     width="100%"
                   />

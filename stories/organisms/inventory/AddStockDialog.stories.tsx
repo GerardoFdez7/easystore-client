@@ -15,15 +15,16 @@ interface ProductVariant {
 }
 
 interface Product {
-  id: string;
   name: string;
   variants: ProductVariant[];
 }
 
 interface GetAllProductsData {
   getAllProducts: {
+    __typename?: 'PaginatedProductsType';
     products: Product[];
     total: number;
+    hasMore: boolean;
   };
 }
 
@@ -36,8 +37,10 @@ interface Warehouse {
 
 interface GetAllWarehousesData {
   getAllWarehouses: {
+    __typename?: 'PaginatedWarehousesType';
     warehouses: Warehouse[];
     total: number;
+    hasMore: boolean;
   };
 }
 
@@ -64,9 +67,9 @@ type Story = StoryObj<typeof AddStockDialog>;
 // Mock data for variants
 const mockVariantsData: GetAllProductsData = {
   getAllProducts: {
+    __typename: 'PaginatedProductsType',
     products: [
       {
-        id: '1',
         name: 'Classic T-Shirt',
         variants: [
           {
@@ -96,7 +99,6 @@ const mockVariantsData: GetAllProductsData = {
         ],
       },
       {
-        id: '2',
         name: 'Premium Hoodie',
         variants: [
           {
@@ -120,7 +122,6 @@ const mockVariantsData: GetAllProductsData = {
         ],
       },
       {
-        id: '3',
         name: 'Luxury Watch',
         variants: [
           {
@@ -143,12 +144,14 @@ const mockVariantsData: GetAllProductsData = {
       },
     ],
     total: 3,
+    hasMore: true,
   },
 };
 
 // Mock data for warehouses
 const mockWarehousesData: GetAllWarehousesData = {
   getAllWarehouses: {
+    __typename: 'PaginatedWarehousesType',
     warehouses: [
       {
         id: 'wh-1',
@@ -170,6 +173,7 @@ const mockWarehousesData: GetAllWarehousesData = {
       },
     ],
     total: 3,
+    hasMore: true,
   },
 };
 
@@ -184,7 +188,7 @@ const createMocks = (
       query: FindAllVariantsToCreateStockDocument,
       variables: {
         page: 1,
-        limit: 6,
+        limit: 10,
         sortBy: SortBy.Name,
         sortOrder: SortOrder.Asc,
         includeSoftDeleted: false,
@@ -192,7 +196,7 @@ const createMocks = (
       },
     },
     result: { data: variantsData },
-    delay: loading ? Infinity : 0,
+    delay: loading ? Infinity : 2000,
   },
   {
     request: {
@@ -214,6 +218,23 @@ export const Default: Story = {
   decorators: [
     (Story) => (
       <MockedProvider mocks={createMocks()}>
+        <Story />
+      </MockedProvider>
+    ),
+  ],
+  args: {
+    open: true,
+    onOpenChange: () => {},
+    onStockAdded: () => {},
+  },
+};
+
+export const Loading: Story = {
+  decorators: [
+    (Story) => (
+      <MockedProvider
+        mocks={createMocks(mockVariantsData, mockWarehousesData, true)}
+      >
         <Story />
       </MockedProvider>
     ),

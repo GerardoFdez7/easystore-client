@@ -25,7 +25,7 @@ const SaveButton: React.FC<SaveButtonProps> = ({
   size = 'default',
   ...props
 }) => {
-  const t = useTranslations('Profile');
+  const t = useTranslations('Shared');
 
   return (
     <Button
@@ -37,12 +37,12 @@ const SaveButton: React.FC<SaveButtonProps> = ({
       {loading ? (
         <>
           <SpinLoader size={loaderSize} />
-          <span className="text-lg font-medium">{t(translationKey)}</span>
+          <span className="font-medium">{t(translationKey)}</span>
         </>
       ) : (
         <>
           {showIcon && <Save className="h-4 w-4" />}
-          <span className="text-lg font-medium">{t(translationKey)}</span>
+          <span className="font-medium">{t(translationKey)}</span>
         </>
       )}
     </Button>

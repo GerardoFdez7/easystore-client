@@ -12,7 +12,7 @@ interface SearchBarProps {
 }
 
 const SearchBar: FC<SearchBarProps> = ({
-  placeholder = 'Search...',
+  placeholder,
   searchTerm,
   onSearchChange,
   className,
@@ -35,13 +35,17 @@ const SearchBar: FC<SearchBarProps> = ({
   };
 
   return (
-    <div className={cn('relative', className)}>
-      <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+    <div className={cn('relative w-full', className)}>
+      <Search
+        className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2"
+        aria-hidden="true"
+      />
       <Input
         placeholder={placeholder}
         value={inputValue}
         onChange={handleChange}
         className="pl-10"
+        aria-label={placeholder || 'Search'}
       />
     </div>
   );

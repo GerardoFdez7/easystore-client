@@ -1,18 +1,16 @@
-import { FC } from 'react';
-import { SortBy } from '@graphql/generated';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { Button } from '@shadcn/ui/button';
+import { useVariantSelector } from '@hooks/domains/inventory';
+import { Package } from 'lucide-react';
 import { Switch } from '@shadcn/ui/switch';
 import { Label } from '@shadcn/ui/label';
 import { Skeleton } from '@shadcn/ui/skeleton';
-import { Package, Loader2 } from 'lucide-react';
-import { useVariantSelector } from '@hooks/domains/inventory';
+import { Card, CardContent, CardHeader } from '@shadcn/ui/card';
 import SearchBar from '@atoms/shared/SearchBar';
-import SortBySelect from '@atoms/shared/SortBySelect';
-import SortOrderSelect from '@atoms/shared/SortOrderSelect';
 import ProductVariantGroup from '@molecules/inventory/ProductVariantGroup';
 import EmptyState from '@molecules/shared/EmptyState';
+import { SortControls } from '@molecules/shared/SortControls';
+import LoadMoreButton from '@atoms/shared/LoadMoreButton';
 
 interface VariantSelectorProps {
   onVariantSelect: (
@@ -23,7 +21,7 @@ interface VariantSelectorProps {
   selectedVariantId?: string;
 }
 
-const VariantSelector: FC<VariantSelectorProps> = ({
+const VariantSelector: React.FC<VariantSelectorProps> = ({
   onVariantSelect,
   selectedVariantId,
 }) => {
@@ -54,7 +52,11 @@ const VariantSelector: FC<VariantSelectorProps> = ({
   };
 
   return (
-    <div className="mx-4 space-y-4">
+    <section
+      className="mx-4 space-y-4"
+      role="region"
+      aria-label={t('variantSelection')}
+    >
       {/* Search and Filters */}
       <div className="space-y-4">
         {/* Search Input */}
@@ -66,42 +68,26 @@ const VariantSelector: FC<VariantSelectorProps> = ({
 
         {/* Filters Row */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          {/* Sort Controls */}
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-            <SortBySelect
-              value={sortBy}
-              onChange={(value) => {
-                if (value) {
-                  updateSortBy(value);
-                }
-              }}
-              className="w-32"
-              availableOptions={[
-                SortBy.Name,
-                SortBy.CreatedAt,
-                SortBy.UpdatedAt,
-              ]}
-            />
+          <SortControls
+            sortBy={sortBy}
+            updateSortBy={updateSortBy}
+            sortOrder={sortOrder}
+            updateSortOrder={updateSortOrder}
+          />
 
-            <SortOrderSelect
-              value={sortOrder}
-              onChange={(value) => {
-                if (value) {
-                  updateSortOrder(value);
-                }
-              }}
-              className="w-32"
-            />
-          </div>
-
-          {/* Include Archived Switch */}
+          {/* Archived Switch */}
           <div className="flex items-center gap-2">
             <Switch
               id="includeSoftDeleted"
               checked={includeSoftDeleted}
               onCheckedChange={updateIncludeSoftDeleted}
+              aria-describedby="includeSoftDeleted-description"
             />
-            <Label htmlFor="includeSoftDeleted" className="text-sm">
+            <Label
+              htmlFor="includeSoftDeleted"
+              className="text-sm"
+              id="includeSoftDeleted-description"
+            >
               {t('includeArchived')}
             </Label>
           </div>
@@ -109,11 +95,42 @@ const VariantSelector: FC<VariantSelectorProps> = ({
       </div>
 
       {/* Variants Grid */}
-      <div className="space-y-4">
+      <div className="space-y-4" role="list" aria-label={t('productVariants')}>
         {loading ? (
-          <div className="space-y-4">
+          <div
+            className="space-y-4"
+            aria-live="polite"
+            aria-label={t('loading')}
+          >
             {Array.from({ length: 3 }).map((_, index) => (
-              <Skeleton key={index} className="h-48 w-full" />
+              <Card key={index} className="w-full">
+                {/* Card Header Skeleton */}
+                <CardHeader className="w-full pb-3">
+                  <div className="flex items-center gap-2">
+                    <Skeleton className="h-5 w-5 rounded-sm" />
+                    <Skeleton className="h-5 w-48" />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Skeleton className="h-5 w-20 rounded-full" />
+                  </div>
+                </CardHeader>
+
+                {/* Card Content Skeleton - Multiple variants */}
+                <CardContent className="w-full space-y-2">
+                  {Array.from({ length: 3 }).map((_, variantIndex) => (
+                    <div
+                      key={variantIndex}
+                      className="flex flex-col rounded-lg border p-3 sm:flex-row sm:items-center sm:justify-between"
+                    >
+                      <div className="flex-1">
+                        <Skeleton className="mb-1 h-4 w-32" />
+                        <Skeleton className="h-3 w-24" />
+                      </div>
+                      <Skeleton className="mt-2 ml-auto h-8 w-20 rounded-md sm:mt-0 sm:ml-3" />
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
             ))}
           </div>
         ) : products.length === 0 ? (
@@ -140,30 +157,16 @@ const VariantSelector: FC<VariantSelectorProps> = ({
 
         {/* Load More Button */}
         {hasMore && !loading && products.length > 0 && (
-          <div className="flex justify-center pt-4">
-            <Button
-              variant="outline"
-              onClick={() => {
-                handleLoadMore().catch((err) => {
-                  console.error('Error loading more products:', err);
-                });
-              }}
-              disabled={loading}
-              className="min-w-32"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {t('loading')}
-                </>
-              ) : (
-                t('loadMore')
-              )}
-            </Button>
-          </div>
+          <LoadMoreButton
+            onClick={() => {
+              handleLoadMore().catch((_err) => {});
+            }}
+            isLoading={loading}
+            containerClassName="pt-4"
+          />
         )}
       </div>
-    </div>
+    </section>
   );
 };
 

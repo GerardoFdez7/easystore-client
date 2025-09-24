@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import React from 'react';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { cn } from 'utils';
 import { Button } from './button';
@@ -13,6 +13,7 @@ import {
   CommandList,
 } from './command';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
+import LoadMoreButton from '@atoms/shared/LoadMoreButton';
 
 export interface ComboboxOption {
   value: string;
@@ -37,6 +38,12 @@ export interface ComboboxProps {
   width?: string | number;
   serverSide?: boolean;
   onSearchChange?: (search: string) => void;
+  // Load More functionality
+  hasMore?: boolean;
+  isLoadingMore?: boolean;
+  onLoadMore?: () => void;
+  loadMoreText?: string;
+  loadingText?: string;
 }
 
 function Combobox({
@@ -53,9 +60,12 @@ function Combobox({
   side = 'bottom',
   align = 'start',
   sideOffset = 4,
-  width = 200,
+  width,
   serverSide = false,
   onSearchChange,
+  hasMore = false,
+  isLoadingMore = false,
+  onLoadMore,
 }: ComboboxProps) {
   const [internalOpen, setInternalOpen] = React.useState(false);
   const [search, setSearch] = React.useState('');
@@ -79,7 +89,11 @@ function Combobox({
     [value, onValueChange, setOpen, serverSide],
   );
 
-  const triggerWidth = typeof width === 'number' ? `${width}px` : width;
+  const triggerWidth = width
+    ? typeof width === 'number'
+      ? `${width}px`
+      : width
+    : undefined;
 
   return (
     <Popover open={open} onOpenChange={setOpen} modal={true}>
@@ -89,11 +103,11 @@ function Combobox({
           role="combobox"
           aria-expanded={open}
           className={cn(
-            'justify-between',
+            'w-fit justify-between',
             !selectedOption && 'text-muted-foreground',
             className,
           )}
-          style={{ width: triggerWidth }}
+          style={triggerWidth ? { width: triggerWidth } : undefined}
           disabled={disabled}
         >
           {selectedOption ? selectedOption.label : placeholder}
@@ -102,7 +116,7 @@ function Combobox({
       </PopoverTrigger>
       <PopoverContent
         className="p-0"
-        style={{ width: triggerWidth }}
+        style={triggerWidth ? { width: triggerWidth } : undefined}
         side={side}
         align={align}
         sideOffset={sideOffset}
@@ -132,7 +146,7 @@ function Combobox({
                 >
                   <Check
                     className={cn(
-                      'mr-2 h-4 w-4',
+                      'h-4 w-4',
                       value === option.value ? 'opacity-100' : 'opacity-0',
                     )}
                   />
@@ -140,6 +154,16 @@ function Combobox({
                 </CommandItem>
               ))}
             </CommandGroup>
+            {hasMore && onLoadMore && (
+              <LoadMoreButton
+                onClick={onLoadMore}
+                isLoading={isLoadingMore}
+                size="sm"
+                iconSize="sm"
+                containerClassName="p-2"
+                className="text-xs"
+              />
+            )}
           </CommandList>
         </Command>
       </PopoverContent>

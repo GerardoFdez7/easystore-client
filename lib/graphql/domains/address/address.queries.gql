@@ -1,42 +1,45 @@
 query findAddressById($id: ID!) {
   getAddressById(id: $id) {
+    id
     addressLine1
     addressLine2
     addressType
     city
     countryId
+    stateId
     deliveryNum
     name
     postalCode
+    deliveryInstructions
   }
 }
 
-query findAllAddresses($addressType: AddressTypeEnum) {
-  getAllAddresses(addressType: $addressType) {
+query findAllAddresses(
+  $page: Int = 1
+  $limit: Int = 25
+  $name: String = ""
+  $addressType: AddressTypeEnum
+) {
+  getAllAddresses(
+    page: $page
+    limit: $limit
+    name: $name
+    addressType: $addressType
+  ) {
     addresses {
+      id
       addressLine1
       addressLine2
       addressType
       city
       countryId
+      stateId
       deliveryNum
       name
       postalCode
+      deliveryInstructions
     }
-  }
-}
-
-query findAllCountries {
-  getAllCountries {
-    id
-    name
-    code
-  }
-}
-
-query findStatesByCountryId($countryId: ID!) {
-  getStatesByCountryId(countryId: $countryId) {
-    name
-    code
+    total
+    hasMore
   }
 }

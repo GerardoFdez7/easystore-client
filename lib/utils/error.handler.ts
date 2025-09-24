@@ -32,32 +32,82 @@ export function handleApolloError(
 
   const handleGqlError = () => {
     graphQLErrors?.forEach((err: GraphQLFormattedError) => {
-      if (err.message.includes('Invalid credentials')) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('GraphQL Error Debug:', {
+          message: err.message,
+          extensions: err.extensions,
+          locations: err.locations,
+          path: err.path,
+          fullError: err,
+        });
+      }
+
+      // Normalize error message for better matching
+      const errorMessage = err.message?.toLowerCase() || '';
+
+      // more specific errors should be checked first
+      if (
+        errorMessage.includes('address already exists') ||
+        (errorMessage.includes('address') && errorMessage.includes('exists'))
+      ) {
+        toast.warning(t('addressNameAlreadyExists'), {
+          description: t('addressNameAlreadyExistsDescription'),
+        });
+        return;
+      }
+
+      if (
+        errorMessage.includes('warehouse name already exists') ||
+        (errorMessage.includes('warehouse') &&
+          errorMessage.includes('name') &&
+          errorMessage.includes('exists'))
+      ) {
+        toast.warning(t('warehouseNameAlreadyExists'), {
+          description: t('warehouseNameAlreadyExistsDescription'),
+        });
+        return;
+      }
+
+      if (
+        errorMessage.includes('warehouse addressid already exists') ||
+        (errorMessage.includes('warehouse') &&
+          errorMessage.includes('address') &&
+          errorMessage.includes('exists'))
+      ) {
+        toast.warning(t('warehouseAddressAlreadyExists'), {
+          description: t('warehouseAddressAlreadyExistsDescription'),
+        });
+        return;
+      }
+
+      // Authentication and account errors
+      if (errorMessage.includes('invalid credentials')) {
         toast.error(t('invalidCredentials'), {
           description:
             t('invalidCredentialsDescription') +
             (process.env.NODE_ENV === 'development' ? ` (${err.message})` : ''),
         });
-        if (process.env.NODE_ENV === 'development')
-          console.error('Login error:', err.message);
         return;
-      } else if (err.message.includes('Account is temporarily locked')) {
+      }
+
+      if (errorMessage.includes('account is temporarily locked')) {
         toast.warning(t('accountLocked'), {
           description:
             t('accountLockedDescription') +
             (process.env.NODE_ENV === 'development' ? ` (${err.message})` : ''),
         });
-        if (process.env.NODE_ENV === 'development')
-          console.error('Login error:', err.message);
         return;
-      } else if (err.message.includes('already exists')) {
+      }
+
+      if (
+        errorMessage.includes('database create auth identity failed') &&
+        errorMessage.includes('email already exists')
+      ) {
         toast.warning(t('associatedAccount'), {
           description:
             t('associatedAccountDescription') +
             (process.env.NODE_ENV === 'development' ? ` (${err.message})` : ''),
         });
-        if (process.env.NODE_ENV === 'development')
-          console.error('Register error:', err.message);
         return;
       }
 
@@ -84,10 +134,10 @@ export function handleApolloError(
       toast.error(t('title'), {
         description:
           t(errorType()) +
-          (process.env.NODE_ENV === 'development' ? ` (${err.message})` : ''),
+          (process.env.NODE_ENV === 'development'
+            ? ` Backend message: ${err.message}`
+            : ''),
       });
-      if (process.env.NODE_ENV === 'development')
-        console.error(t('title') + ': ' + t(errorType()) + ` (${err.message})`);
     });
   };
 
@@ -99,13 +149,6 @@ export function handleApolloError(
           ? ` Backend message: "${networkError.message}"`
           : ''),
     });
-    if (process.env.NODE_ENV === 'development' && networkError)
-      console.error(
-        t('title') +
-          ': ' +
-          t('network-error') +
-          ` Backend message: "${networkError.message}"`,
-      );
   };
 
   if (graphQLErrors && graphQLErrors.length > 0) {
@@ -116,7 +159,5 @@ export function handleApolloError(
     toast.error(t('generic-error'), {
       description: t('generic-description'),
     });
-    if (process.env.NODE_ENV === 'development')
-      console.error(t('generic-error') + ': ' + t('generic-description'));
   }
 }

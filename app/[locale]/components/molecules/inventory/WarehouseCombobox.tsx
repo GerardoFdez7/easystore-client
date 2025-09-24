@@ -1,43 +1,38 @@
-'use client';
-
-import { FC, useState, useMemo } from 'react';
-import { useDebounce } from '@hooks/utils/useDebounce';
-import { Combobox, ComboboxOption } from '@shadcn/ui/combobox';
-import { FindWarehousesDocument } from '@graphql/generated';
-import { useQuery } from '@apollo/client/react';
+import { Combobox } from '@shadcn/ui/combobox';
 import { useTranslations } from 'next-intl';
+import { useWarehouseCombobox } from '@hooks/domains/inventory';
 
 interface WarehouseComboboxProps {
   value?: string;
   onChange?: (warehouseId: string) => void;
   disabled?: boolean;
-  width?: string | number;
   placeholder?: string;
+  className?: string;
 }
 
-const WarehouseCombobox: FC<WarehouseComboboxProps> = ({
+const WarehouseCombobox: React.FC<WarehouseComboboxProps> = ({
   value,
   onChange,
   disabled = false,
-  width = 300,
   placeholder,
+  className,
 }) => {
-  const [search, setSearch] = useState('');
-  const debouncedSearch = useDebounce(search, 500);
-  const { data, loading } = useQuery(FindWarehousesDocument, {
-    variables: { name: debouncedSearch || undefined },
-    fetchPolicy: 'cache-and-network',
-  });
   const t = useTranslations('Inventory');
 
-  const options: ComboboxOption[] = useMemo(
-    () =>
-      data?.getAllWarehouses?.warehouses?.map((w) => ({
-        value: w.id,
-        label: w.name + (w.city ? ` (${w.city})` : ''),
-      })) || [],
-    [data],
-  );
+  const {
+    options,
+    updateSearchTerm,
+    isInitialLoading,
+    isLoadingMore,
+    hasMore,
+    loadMore,
+  } = useWarehouseCombobox();
+
+  const handleLoadMore = () => {
+    if (hasMore && !isLoadingMore) {
+      void loadMore();
+    }
+  };
 
   return (
     <Combobox
@@ -47,10 +42,13 @@ const WarehouseCombobox: FC<WarehouseComboboxProps> = ({
       disabled={disabled}
       placeholder={placeholder || t('filterByWarehouse')}
       searchPlaceholder={t('searchWarehouses')}
-      emptyMessage={loading ? t('loading') : t('noWarehousesFound')}
-      width={width}
+      emptyMessage={isInitialLoading ? t('loading') : t('noWarehousesFound')}
       serverSide={true}
-      onSearchChange={setSearch}
+      onSearchChange={updateSearchTerm}
+      hasMore={hasMore}
+      isLoadingMore={isLoadingMore}
+      onLoadMore={handleLoadMore}
+      className={className}
     />
   );
 };
