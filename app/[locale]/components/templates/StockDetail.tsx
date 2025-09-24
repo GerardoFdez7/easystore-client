@@ -1,6 +1,6 @@
-import HeaderDashboard from '@organisms/dashboard/HeaderDashboard';
 import MainStockDetail from '@organisms/stock-detail/MainStockDetail';
 import SidebarLayout from '@organisms/shared/SidebarLayout';
+import HeaderDashboard from '@organisms/shared/HeaderDashboard';
 
 export default function StockDetailTemplate() {
   return (
