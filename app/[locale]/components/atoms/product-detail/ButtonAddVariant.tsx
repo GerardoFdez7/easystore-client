@@ -10,7 +10,15 @@ export default function ButtonAddVariant({ productId }: ButtonAddVariantProps) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/products/${productId}/variant/add`);
+    // Si productId es 'new' o la URL contiene '/products/new', ir a la ruta especial
+    if (
+      productId === 'new' ||
+      window.location.pathname.includes('/products/new')
+    ) {
+      router.push('/products/new/variant/add');
+    } else {
+      router.push(`/products/${productId}/variant/add`);
+    }
   };
 
   return (
