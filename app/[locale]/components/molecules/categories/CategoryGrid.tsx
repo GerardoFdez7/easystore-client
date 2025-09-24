@@ -1,9 +1,22 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import CategoryCard from '@molecules/categories/CategoryCard';
 import { useRouter, useParams } from 'next/navigation';
 import { useCategories } from '@hooks/domains/category/useCategories';
+import { useDeleteCategory } from '@hooks/domains/category/useDeleteCategory';
+import {
+  AlertDialog,
+  // AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from '@shadcn/ui/alert-dialog';
+import { useTranslations } from 'next-intl';
 
 type Props = {
   query?: string;
@@ -26,12 +39,30 @@ export default function CategoryGrid({
   const router = useRouter();
   const params = useParams<{ locale?: string }>();
   const locale = params?.locale;
+  const t = useTranslations('Category');
 
   const { items, loading } = useCategories({
     page,
     limit,
     name: query,
   });
+
+  const { remove, loading: deleting } = useDeleteCategory();
+
+  const [open, setOpen] = useState(false);
+  const [targetId, setTargetId] = useState<string | null>(null);
+
+  const askDelete = (id: string) => {
+    setTargetId(id);
+    setOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!targetId) return;
+    await remove(targetId);
+    setOpen(false);
+    setTargetId(null);
+  };
 
   const qn = normalize(query);
   const filtered = useMemo(() => {
@@ -54,18 +85,38 @@ export default function CategoryGrid({
           ))
         : filtered.map((c) => (
             <CategoryCard
-              key={c.name}
+              key={c.id}
               name={c.name}
               cover={c.cover ?? '/laptop.webp'}
               count={c.count}
               href={
-                locale
-                  ? `/${locale}/categories/${c.name}`
-                  : `/categories/${c.name}`
+                locale ? `/${locale}/categories/${c.id}` : `/categories/${c.id}`
               }
-              onEdit={() => goEdit(c.name)}
+              onEdit={() => goEdit(c.id)}
+              onDelete={() => askDelete(c.id)}
             />
           ))}
+
+      <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('title')}</AlertDialogTitle>
+            <AlertDialogDescription>{t('description')}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>
+              {t('cancel')}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => void confirmDelete()}
+              disabled={deleting}
+              className="text-accent bg-title hover:bg-accent-foreground"
+            >
+              {deleting ? t('deleting') : t('delete')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

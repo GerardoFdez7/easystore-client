@@ -1081,7 +1081,12 @@
     "searchPlaceholder": "Buscar categorias...",
     "categoryCount": "categorias",
     "expandAll": "Expandir tudo",
-    "collapseAll": "Recolher tudo"
+    "collapseAll": "Recolher tudo",
+    "title": "Eliminar a categoria?",
+    "description": "Esta ação não pode ser desfeita.",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "deleting": "A eliminar…"
   },
   "CategoryDetail": {
     "welcomeDetailCategory": "Detalhe da categoria",
@@ -1103,6 +1108,13 @@
     "addSubcategories": "Adicionar subcategorias",
     "noResults": "Nenhum resultado",
     "close": "Fechar",
-    "noCategories": "Ainda não há categorias."
+    "noCategories": "Ainda não há categorias.",
+
+    "titleRequired": "O título é obrigatório.",
+    "titleTooLong": "O título não pode exceder {max} caracteres.",
+    "descriptionTooLong": "A descrição não pode exceder {max} caracteres.",
+    "invalidUrl": "A URL não é válida.",
+    "saveSuccess": "Categoria atualizada com sucesso.",
+    "createSuccess": "Categoria criada com sucesso."
   }
 }

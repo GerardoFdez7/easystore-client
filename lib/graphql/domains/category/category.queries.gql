@@ -1,21 +1,25 @@
 query findCategoryById($id: ID!) {
   getCategoryById(id: $id) {
+    id
     name
     description
     cover
     updatedAt
     createdAt
     subCategories {
+      id
       name
       description
       cover
       createdAt
       subCategories {
+        id
         name
         description
         cover
         createdAt
         subCategories {
+          id
           cover
           createdAt
           description
@@ -46,6 +50,7 @@ query findAllCategories(
     sortOrder: $sortOrder
   ) {
     categories {
+      id
       name
       description
       cover
@@ -57,11 +62,13 @@ query findAllCategories(
         cover
         createdAt
         subCategories {
+          id
           name
           description
           cover
           createdAt
           subCategories {
+            id
             cover
             createdAt
             description

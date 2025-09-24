@@ -1318,6 +1318,7 @@ export type FindCategoryByIdQuery = {
   __typename?: 'Query';
   getCategoryById: {
     __typename?: 'Category';
+    id: string;
     name: string;
     description: string;
     cover: string;
@@ -1325,6 +1326,7 @@ export type FindCategoryByIdQuery = {
     createdAt: any;
     subCategories: Array<{
       __typename?: 'Category';
+      id: string;
       name: string;
       description: string;
       cover: string;
@@ -1332,6 +1334,7 @@ export type FindCategoryByIdQuery = {
       updatedAt: any;
       subCategories: Array<{
         __typename?: 'Category';
+        id: string;
         name: string;
         description: string;
         cover: string;
@@ -1339,6 +1342,7 @@ export type FindCategoryByIdQuery = {
         updatedAt: any;
         subCategories: Array<{
           __typename?: 'Category';
+          id: string;
           cover: string;
           createdAt: any;
           description: string;
@@ -1367,6 +1371,7 @@ export type FindAllCategoriesQuery = {
     hasMore: boolean;
     categories: Array<{
       __typename?: 'Category';
+      id: string;
       name: string;
       description: string;
       cover: string;
@@ -1381,6 +1386,7 @@ export type FindAllCategoriesQuery = {
         updatedAt: any;
         subCategories: Array<{
           __typename?: 'Category';
+          id: string;
           name: string;
           description: string;
           cover: string;
@@ -1388,6 +1394,7 @@ export type FindAllCategoriesQuery = {
           updatedAt: any;
           subCategories: Array<{
             __typename?: 'Category';
+            id: string;
             cover: string;
             createdAt: any;
             description: string;

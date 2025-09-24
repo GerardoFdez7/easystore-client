@@ -1,167 +1,228 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, UseFormReturn } from 'react-hook-form';
 import { Form } from '@shadcn/ui/form';
 import { Input } from '@shadcn/ui/input';
 import { Textarea } from '@shadcn/ui/textarea';
 import { Button } from '@shadcn/ui/button';
 import MediaUploader from '@organisms/shared/MediaUploader';
 
-import CategoryPicker, {
-  type CategoryItem,
-} from '@molecules/detail-category/CategoryPicker';
+import CategoryPicker from '@molecules/detail-category/CategoryPicker';
+import type { CategoryItem as PickerItem } from '@molecules/detail-category/CategoryPicker';
+import type { CategoryItem as CatalogItem } from '@molecules/detail-category/AddSubcategory';
 
-import {
-  getCategoryByName,
-  getCategoryList,
-  upsertCategory,
-} from '@lib/data/categories';
+import useCategory from '@hooks/domains/category/useCategory';
+import { useCategories } from '@hooks/domains/category/useCategories';
+import { useCreateCategory } from '@hooks/domains/category/useCreateCategory';
+import { useUpdateCategory } from '@hooks/domains/category/useUpdateCategory';
 
-type FormValues = {
-  title: string;
-  description: string;
-  subCategoryIds: string[];
+const EmptyIDS: string[] = [];
+
+type SubCatLite = {
+  id: string;
+  name?: string;
+  cover?: string;
+  subCategories?: unknown[];
 };
 
-export default function MainDetailCategory({ name }: { name: string }) {
+type CategoryFormShape = {
+  title: string;
+  description?: string;
+  cover?: string;
+  // UI keeps ids; hooks map to GraphQL `subCategories`
+  subCategoryIds?: string[];
+};
+
+export default function MainDetailCategory({ id }: { id: string }) {
+  return id === 'new' ? <CreateScreen /> : <EditScreen id={id} />;
+}
+
+function CreateScreen() {
   const t = useTranslations('CategoryDetail');
+  const { locale } = useParams<{ locale?: string }>() ?? {};
   const router = useRouter();
-  const params = useParams<{ locale?: string }>();
-  const locale = params?.locale;
 
-  const isNew = name === 'new';
+  const { form, handleSubmit, isSubmitting } = useCreateCategory();
 
-  const form = useForm<FormValues>({
-    defaultValues: {
-      title: '',
-      description: '',
-      subCategoryIds: [],
-    },
-  });
+  const { items: catalog, loading: loadingCatalog } =
+    useCategories<CatalogItem>(
+      { page: 1, limit: 200 },
+      {
+        select: (list) =>
+          list.map((c) => ({
+            id: c.id,
+            name: c.name,
+            cover: c.cover && c.cover.trim() ? c.cover : '/laptop.webp',
+            count: Array.isArray(c.subCategories) ? c.subCategories.length : 0,
+          })),
+      },
+    );
 
-  const { register, setValue, handleSubmit, watch } = form;
+  return (
+    <CategoryFormView
+      tKey={t}
+      locale={locale}
+      form={form}
+      onSubmit={(e) => {
+        e?.preventDefault();
+        void handleSubmit(e);
+      }}
+      isSubmitting={isSubmitting}
+      loadingCat={false}
+      isNew
+      catalog={catalog}
+      loadingCatalog={loadingCatalog}
+      childrenFallback={[]}
+      onCancel={() => router.back()}
+    />
+  );
+}
 
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [categoryId, setCategoryId] = useState<string | undefined>(undefined);
+function EditScreen({ id }: { id: string }) {
+  const t = useTranslations('CategoryDetail');
+  const { locale } = useParams<{ locale?: string }>() ?? {};
+  const router = useRouter();
 
-  // catálogo para elegir subcategorías y las actualmente seleccionadas
-  const [catalog, setCatalog] = useState<CategoryItem[]>([]);
-  const [selected, setSelected] = useState<CategoryItem[]>([]);
+  const { category, loading: loadingCat } = useCategory(id);
+  const { form, handleSubmit, isSubmitting } = useUpdateCategory({ id });
 
-  // helpers para navegación
-  const backToList = React.useCallback(() => {
-    router.push(locale ? `/${locale}/categories` : `/categories`);
-  }, [router, locale]);
-
-  // 1) Cargar la categoría (por slug/id)
   useEffect(() => {
-    let mounted = true;
-    const loadCategory = async () => {
-      try {
-        setLoading(true);
-
-        if (name !== 'new') {
-          const data = await getCategoryByName(name);
-          if (!mounted) return;
-
-          if (!data) {
-            backToList();
-            return;
-          }
-          setCategoryId(data.id);
-          setValue('title', data.name ?? '');
-          setValue('description', data.description ?? '');
-        } else {
-          setCategoryId(undefined);
-          setValue('title', '');
-          setValue('description', '');
-          setSelected([]);
-          setValue('subCategoryIds', []);
-        }
-      } catch (e) {
-        console.error(e);
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    };
-
-    void loadCategory();
-    return () => {
-      mounted = false;
-    };
-  }, [name, backToList, setValue]); // ← deps correctas
-
-  // 2) Cargar catálogo cuando cambia la categoría actual
-  useEffect(() => {
-    let mounted = true;
-    const loadCatalog = async () => {
-      const list = await getCategoryList();
-      if (!mounted) return;
-
-      const filtered = list.filter((c) => !categoryId || c.id !== categoryId);
-      setCatalog(
-        filtered.map((c) => ({
-          id: c.id,
-          name: c.name,
-          cover: c.cover,
-          count: c.count,
-          selected: false,
-        })),
-      );
-    };
-    void loadCatalog();
-    return () => {
-      mounted = false;
-    };
-  }, [categoryId]); // ← sólo depende de categoryId
-
-  // Acciones del picker
-  const onAddCategories = (ids: string[]) =>
-    setSelected((prev) => {
-      const already = new Set(prev.map((p) => p.id));
-      const toAdd = catalog.filter(
-        (c) => ids.includes(c.id) && !already.has(c.id),
-      );
-      return [...prev, ...toAdd];
-    });
-
-  const onRemoveCategory = (id: string) =>
-    setSelected((prev) => prev.filter((c) => c.id !== id));
-
-  const submit = async (data: FormValues) => {
-    setSaving(true);
-    try {
-      // En el mock solo persistimos name/description; subCategoryIds queda listo para cuando extiendas el backend
-      await upsertCategory({
-        id: isNew ? undefined : categoryId,
-        name: data.title.trim(),
-        description: data.description.trim(),
+    if (category) {
+      form.reset({
+        title: category.name ?? '',
+        description: category.description ?? '',
+        cover:
+          category.cover && category.cover.trim()
+            ? category.cover
+            : '/laptop.webp',
+        // Keep ids in form state; hooks will map to nested input
+        subCategoryIds: (category.subCategories ?? [])
+          .filter(Boolean)
+          .map((sc: unknown) => (sc as { id?: string })?.id)
+          .filter(Boolean) as string[],
       });
-      backToList();
-    } finally {
-      setSaving(false);
     }
-  };
+  }, [category, form]);
+
+  const { items: catalog, loading: loadingCatalog } =
+    useCategories<CatalogItem>(
+      { page: 1, limit: 200 },
+      {
+        select: (list) =>
+          list
+            .filter((c) => c.id !== id)
+            .map((c) => ({
+              id: c.id,
+              name: c.name,
+              cover: c.cover ?? '',
+              count: Array.isArray(c.subCategories)
+                ? c.subCategories.length
+                : 0,
+            })),
+      },
+    );
+
+  const children: ReadonlyArray<SubCatLite> =
+    (category?.subCategories as ReadonlyArray<SubCatLite> | undefined) ?? [];
+
+  return (
+    <CategoryFormView
+      tKey={t}
+      locale={locale}
+      form={form}
+      onSubmit={(e) => {
+        e?.preventDefault();
+        void handleSubmit(e);
+      }}
+      isSubmitting={isSubmitting}
+      loadingCat={loadingCat}
+      isNew={false}
+      catalog={catalog}
+      loadingCatalog={loadingCatalog}
+      childrenFallback={children}
+      onCancel={() => router.back()}
+    />
+  );
+}
+
+function CategoryFormView({
+  tKey,
+  // locale,
+  form,
+  onSubmit,
+  isSubmitting,
+  loadingCat,
+  isNew,
+  catalog,
+  loadingCatalog,
+  childrenFallback,
+  onCancel,
+}: {
+  tKey: ReturnType<typeof useTranslations>;
+  locale?: string;
+  form: UseFormReturn<CategoryFormShape>;
+  onSubmit: (e?: React.FormEvent<HTMLFormElement>) => void;
+  isSubmitting: boolean;
+  loadingCat: boolean;
+  isNew: boolean;
+  catalog: CatalogItem[];
+  loadingCatalog: boolean;
+  childrenFallback: ReadonlyArray<SubCatLite>;
+  onCancel: () => void;
+}) {
+  const t = tKey;
+  const { register, watch, setValue, getValues } = form;
+
+  // Ensure RHF tracks the virtual field
+  React.useEffect(() => {
+    form.register('subCategoryIds' as const, { shouldUnregister: false });
+  }, [form]);
+
+  const selectedIdsRaw = watch('subCategoryIds') as string[] | undefined;
+  const selectedIds = selectedIdsRaw ?? EmptyIDS;
+  // const selectedIdsKey = useMemo(() => selectedIds.join('|'), [selectedIds]);
+
+  const selectedItems: PickerItem[] = useMemo(() => {
+    const byId = new Map(catalog.map((c) => [c.id, c]));
+    const childById = new Map(childrenFallback.map((c) => [c.id, c]));
+
+    return selectedIds.map<PickerItem>((sid) => {
+      const base = byId.get(sid);
+      const fb = childById.get(sid);
+
+      const cover =
+        (base?.cover && base.cover.trim()) ||
+        (fb?.cover && fb.cover.trim()) ||
+        '/laptop.webp';
+
+      const sc = fb?.subCategories;
+      const countFromFallback = Array.isArray(sc) ? sc.length : undefined;
+
+      const countFromCatalog =
+        typeof base?.count === 'number' ? base.count : undefined;
+
+      return {
+        id: sid,
+        name: base?.name ?? fb?.name ?? '—',
+        cover,
+        count: countFromCatalog ?? countFromFallback ?? 0,
+      };
+    });
+  }, [catalog, childrenFallback, selectedIds]);
 
   const disableSave =
-    saving || loading || (watch('title')?.trim().length ?? 0) === 0;
+    isSubmitting || loadingCat || (watch('title')?.trim().length ?? 0) === 0;
 
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 md:py-6 lg:px-8 2xl:m-5">
       <FormProvider {...form}>
         <Form {...form}>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              void handleSubmit(submit)(e);
-            }}
-            className="mx-auto max-w-4xl space-y-6"
-          >
+          <form onSubmit={onSubmit} className="mx-auto max-w-4xl space-y-6">
             <MediaUploader />
+
             <div className="space-y-1">
               <label
                 htmlFor="title"
@@ -172,9 +233,9 @@ export default function MainDetailCategory({ name }: { name: string }) {
               <Input
                 id="title"
                 placeholder={t('titlePlaceholder')}
-                disabled={loading}
+                disabled={loadingCat}
                 className="h-12 bg-white"
-                {...register('title', { required: true })}
+                {...register('title')}
               />
             </div>
 
@@ -188,33 +249,53 @@ export default function MainDetailCategory({ name }: { name: string }) {
               <Textarea
                 id="description"
                 placeholder={t('descriptionPlaceholder')}
-                disabled={loading}
+                disabled={loadingCat}
                 className="min-h-[120px] bg-white"
                 {...register('description')}
               />
             </div>
 
-            {/* Subcategorías */}
             <section className="mt-2 rounded-lg p-3 shadow-sm sm:p-4">
               <h3 className="text-text mb-3 text-center text-sm font-medium">
                 {t('categories')}
               </h3>
               <CategoryPicker
-                items={selected}
+                items={selectedItems}
                 catalog={catalog}
-                onAdd={onAddCategories}
-                onRemove={onRemoveCategory}
-                disabled={loading}
+                onAdd={(ids) => {
+                  const current = new Set<string>(
+                    (getValues('subCategoryIds') ?? []) as string[],
+                  );
+                  ids.forEach((x) => current.add(x));
+                  setValue('subCategoryIds', Array.from(current), {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                    shouldTouch: true,
+                  });
+                }}
+                onRemove={(rid) =>
+                  setValue(
+                    'subCategoryIds',
+                    (getValues('subCategoryIds') ?? []).filter(
+                      (x: string) => x !== rid,
+                    ),
+                    {
+                      shouldDirty: true,
+                      shouldValidate: true,
+                      shouldTouch: true,
+                    },
+                  )
+                }
+                disabled={loadingCat || isSubmitting || loadingCatalog}
               />
             </section>
 
-            {/* Botones */}
             <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-end sm:gap-3">
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => router.back()}
-                disabled={saving}
+                onClick={onCancel}
+                disabled={isSubmitting}
                 className="w-full sm:w-auto"
               >
                 {t('cancel')}

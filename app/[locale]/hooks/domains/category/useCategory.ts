@@ -1,3 +1,4 @@
+// src/hooks/domains/category/useCategory.ts
 'use client';
 
 import { useQuery } from '@apollo/client';
@@ -24,3 +25,5 @@ export const useCategory = (id?: string) => {
     refetch,
   };
 };
+
+export default useCategory;

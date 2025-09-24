@@ -25,12 +25,14 @@ type GqlCategory = NonNullable<
 
 // Default Select
 export type CategorySummary = {
+  id: string;
   name: string;
   cover?: string;
   count: number;
 };
 
 const mapToSummary = (c: GqlCategory): CategorySummary => ({
+  id: c.id,
   name: c.name,
   cover: c.cover ?? undefined,
   count: Array.isArray(c.subCategories) ? c.subCategories.length : 0,
