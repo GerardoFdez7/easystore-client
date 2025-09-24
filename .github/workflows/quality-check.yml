@@ -30,6 +30,9 @@ jobs:
       - name: Lint code
         run: npm run lint
 
+      - name: Create .env file
+        run: cp .env.example .env
+        
       - name: Build project
         run: npm run build
 
