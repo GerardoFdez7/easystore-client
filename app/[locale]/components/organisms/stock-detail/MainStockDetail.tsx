@@ -42,6 +42,7 @@ export default function MainStockDetail() {
     useState<Date | undefined>();
   const [_serialNumbers, _setSerialNumbers] = useState(['']);
   const [_lotNumber, _setLotNumber] = useState('');
+  const [_warehouseName, _setWarehouseName] = useState('');
 
   // Load data from URL parameters when component mounts
   useEffect(() => {
@@ -58,6 +59,7 @@ export default function MainStockDetail() {
     const productLocation = searchParams.get('productLocation');
     const serialNumbers = searchParams.get('serialNumbers')?.split(',');
     const lotNumber = searchParams.get('lotNumber');
+    const warehouseName = searchParams.get('warehouseName');
 
     if (id && productNameParam) {
       setProductName(productNameParam);
@@ -69,6 +71,7 @@ export default function MainStockDetail() {
       setProductLocation(productLocation || '');
       _setSerialNumbers(serialNumbers || ['']);
       _setLotNumber(lotNumber || '');
+      _setWarehouseName(warehouseName || '');
 
       if (replenishmentDateParam) {
         _setEstimatedReplenishmentDate(new Date(replenishmentDateParam));
@@ -111,7 +114,7 @@ export default function MainStockDetail() {
                   <h3 className="text-lg">
                     {t('warehouse')}{' '}
                     <span className="border-primary border-b-2 px-1 font-bold text-gray-800">
-                      Jose Warehouse
+                      {_warehouseName}
                     </span>
                   </h3>
                 </div>

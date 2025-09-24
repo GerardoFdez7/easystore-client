@@ -51,6 +51,7 @@ export default function InventoryTable({
       productLocation: item.productLocation,
       serialNumbers: item.serialNumbers.toString(),
       lotNumber: item.lotNumber,
+      warehouseName: item.name,
     });
 
     router.push(`/stock-detail?${params.toString()}`);

@@ -43,17 +43,27 @@ export const useInventory = (
   // Determine which query to use based on warehouseId
   const { loading, error } = warehouseId ? warehouseQuery : inventoryQuery;
 
-  let inventoryData: StockData[] = [];
+  let inventoryData: (StockData & { warehouseName?: string })[] = [];
 
   if (warehouseId && warehouseQuery.data) {
     // Handle warehouse-specific data structure
+    const warehouseName = warehouseQuery.data.getWarehouseById?.name || '';
     inventoryData =
-      warehouseQuery.data.getWarehouseById?.stockPerWarehouses || [];
+      warehouseQuery.data.getWarehouseById?.stockPerWarehouses?.map(
+        (stock) => ({
+          ...stock,
+          warehouseName,
+        }),
+      ) || [];
   } else if (!warehouseId && inventoryQuery.data) {
     // Handle general inventory data structure
     inventoryData =
       inventoryQuery.data?.getAllWarehouses?.warehouses?.flatMap(
-        (warehouse) => warehouse.stockPerWarehouses || [],
+        (warehouse) =>
+          warehouse.stockPerWarehouses?.map((stock) => ({
+            ...stock,
+            warehouseName: warehouse.name,
+          })) || [],
       ) || [];
   }
 
@@ -71,6 +81,7 @@ export const useInventory = (
     productLocation: item.productLocation ? item.productLocation : '',
     serialNumbers: item.serialNumbers ? item.serialNumbers : [],
     lotNumber: item.lotNumber ? item.lotNumber : '',
+    name: item.warehouseName ? item.warehouseName : '',
   }));
 
   // Get refetch functions from both queries

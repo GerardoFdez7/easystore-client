@@ -12,4 +12,5 @@ export type InventoryItem = {
   productLocation: string;
   serialNumbers: string[];
   lotNumber: string;
+  name: string;
 };
