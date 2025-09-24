@@ -1,10 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Button } from '@shadcn/ui/button';
 import { Input } from '@shadcn/ui/input';
 import { Label } from '@shadcn/ui/label';
-import { Button } from '@shadcn/ui/button';
-import { useTranslations } from 'next-intl';
+import { Textarea } from '@shadcn/ui/textarea';
+import { Popover, PopoverContent, PopoverTrigger } from '@shadcn/ui/popover';
+import { Calendar } from '@shadcn/ui/calendar';
 import {
   Dialog,
   DialogContent,
@@ -13,20 +16,60 @@ import {
   DialogDescription,
   DialogFooter,
 } from '@shadcn/ui/dialog';
-import { Textarea } from '@shadcn/ui/textarea';
-import { Calendar } from '@shadcn/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@shadcn/ui/popover';
-import { cn } from 'utils';
+import { cn } from '@lib/utils';
 import { format } from 'date-fns';
+import { useTranslations } from 'next-intl';
 
 export default function MainStockDetail() {
   const t = useTranslations('StockDetail');
+  const searchParams = useSearchParams();
   const [showUpdateReasonDialog, setShowUpdateReasonDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [updateReason, setUpdateReason] = useState('');
   // We use the _ prefix to indicate that these variables might be used in the future
   const [_availableQty, _setAvailableQty] = useState(6);
   const [date, setDate] = useState<Date | undefined>(new Date());
+
+  // State for form fields populated from inventory data
+  const [productName, setProductName] = useState('');
+  const [_variantKey, setVariantKey] = useState('');
+  const [variantValue, setVariantValue] = useState('');
+  const [_variantSku, _setVariantSku] = useState('');
+  const [qtyAvailable, setQtyAvailable] = useState(0);
+  const [qtyReserved, setQtyReserved] = useState(0);
+  const [productLocation, setProductLocation] = useState('');
+  const [_estimatedReplenishmentDate, _setEstimatedReplenishmentDate] =
+    useState<Date | undefined>();
+
+  // Load data from URL parameters when component mounts
+  useEffect(() => {
+    const id = searchParams.get('id');
+    const productNameParam = searchParams.get('productName');
+    const variantKeyParam = searchParams.get('variantKey');
+    const variantValueParam = searchParams.get('variantValue');
+    const variantSkuParam = searchParams.get('variantSku');
+    const qtyAvailableParam = searchParams.get('qtyAvailable');
+    const qtyReservedParam = searchParams.get('qtyReserved');
+    const replenishmentDateParam = searchParams.get(
+      'estimatedReplenishmentDate',
+    );
+    const productLocation = searchParams.get('productLocation');
+
+    if (id && productNameParam) {
+      setProductName(productNameParam);
+      setVariantKey(variantKeyParam || '');
+      setVariantValue(variantValueParam || '');
+      _setVariantSku(variantSkuParam || '');
+      setQtyAvailable(parseInt(qtyAvailableParam || '0', 10));
+      setQtyReserved(parseInt(qtyReservedParam || '0', 10));
+      setProductLocation(productLocation || '');
+
+      if (replenishmentDateParam) {
+        _setEstimatedReplenishmentDate(new Date(replenishmentDateParam));
+        setDate(new Date(replenishmentDateParam));
+      }
+    }
+  }, [searchParams]);
 
   const handleUpdateAvailable = () => {
     if (updateReason.trim() === '') return;
@@ -50,12 +93,13 @@ export default function MainStockDetail() {
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                 <div>
                   <h2 className="text-2xl font-bold">
-                    {t('color')}: <span className="text-gray-800">red</span>
+                    {t('color')}:{' '}
+                    <span className="text-gray-800">{variantValue}</span>
                   </h2>
                   {/* Product - Reduced space */}
                   <h3 className="mt-1 text-lg">
                     {t('product')}{' '}
-                    <span className="text-gray-800">Nike t-shirts</span>
+                    <span className="text-gray-800">{productName}</span>
                   </h3>
                 </div>
                 <div>
@@ -76,12 +120,14 @@ export default function MainStockDetail() {
                     <Input
                       id="available"
                       type="number"
-                      defaultValue="0"
+                      value={qtyAvailable}
                       className="w-full"
                       placeholder={t('availablePlaceholder')}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        _setAvailableQty(parseInt(e.target.value))
-                      }
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const value = parseInt(e.target.value) || 0;
+                        setQtyAvailable(value);
+                        _setAvailableQty(value);
+                      }}
                       onBlur={() => setShowUpdateReasonDialog(true)}
                     />
                   </div>
@@ -91,8 +137,12 @@ export default function MainStockDetail() {
                   <Input
                     id="reserved"
                     type="number"
-                    className="mt-2"
+                    value={qtyReserved}
+                    className="w-full"
                     placeholder={t('reservedPlaceholder')}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setQtyReserved(parseInt(e.target.value) || 0)
+                    }
                   />
                 </div>
               </div>
@@ -103,6 +153,7 @@ export default function MainStockDetail() {
                 <Input
                   id="location"
                   className="mt-2"
+                  value={productLocation}
                   placeholder={t('productLocationPlaceholder')}
                 />
               </div>
@@ -184,12 +235,6 @@ export default function MainStockDetail() {
                 <div className="mt-2 flex flex-wrap gap-2">
                   <div className="rounded bg-gray-200 px-3 py-1">
                     SN-9FAK-23J7-LBO2
-                  </div>
-                  <div className="rounded bg-gray-200 px-3 py-1">
-                    SN-4M2B-7K91-H8D4
-                  </div>
-                  <div className="rounded bg-gray-200 px-3 py-1">
-                    SN-8W7Z-5G4N-217Y
                   </div>
                 </div>
               </div>

@@ -46,6 +46,7 @@ query findInventory(
       name
       stockPerWarehouses {
         id
+        productLocation
         qtyAvailable
         qtyReserved
         estimatedReplenishmentDate

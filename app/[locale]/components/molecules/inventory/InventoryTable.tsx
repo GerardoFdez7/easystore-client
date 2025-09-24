@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Checkbox } from '@shadcn/ui/checkbox';
 import { Button } from '@shadcn/ui/button';
 import {
@@ -34,6 +35,24 @@ export default function InventoryTable({
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 25;
   const t = useTranslations('Inventory');
+  const router = useRouter();
+
+  const handleRowClick = (item: InventoryItem) => {
+    // Navigate to stock-detail with the item data as query parameters
+    const params = new URLSearchParams({
+      id: item.id,
+      productName: item.productName,
+      variantKey: item.variantFirstAttribute.key,
+      variantValue: item.variantFirstAttribute.value,
+      variantSku: item.variantSku,
+      qtyAvailable: item.qtyAvailable.toString(),
+      qtyReserved: item.qtyReserved.toString(),
+      estimatedReplenishmentDate: item.estimatedReplenishmentDate,
+      productLocation: item.productLocation,
+    });
+
+    router.push(`/stock-detail?${params.toString()}`);
+  };
   const handleSelectAll = (checked: boolean) => {
     setSelectedRows(checked ? inventory.map((item) => item.id) : []);
   };
@@ -85,8 +104,12 @@ export default function InventoryTable({
         </TableHeader>
         <TableBody>
           {currentItems.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>
+            <TableRow
+              key={item.id}
+              className="hover:bg-muted/50 cursor-pointer"
+              onClick={() => handleRowClick(item)}
+            >
+              <TableCell onClick={(e) => e.stopPropagation()}>
                 <Checkbox
                   checked={selectedRows.includes(item.id)}
                   onCheckedChange={(checked) =>
