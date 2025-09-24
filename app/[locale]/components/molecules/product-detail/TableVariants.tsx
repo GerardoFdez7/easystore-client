@@ -11,18 +11,24 @@ import ButtonAddVariant from '@atoms/product-detail/ButtonAddVariant';
 import Image from 'next/image';
 import type { Variant } from '@lib/utils/types/product';
 
-export default function TableVariants({ variants }: { variants: Variant[] }) {
+export default function TableVariants({
+  variants,
+  productId,
+}: {
+  variants: Variant[];
+  productId: string;
+}) {
   const router = useRouter();
 
-  const handleRowClick = (id: string) => {
-    router.push(`/products/${id}`);
+  const handleRowClick = (variantId: string) => {
+    router.push(`/products/${productId}/variant/${variantId}`);
   };
 
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
         <label className="text-title text-sm font-medium">Variants</label>
-        <ButtonAddVariant />
+        <ButtonAddVariant productId={productId} />
       </div>
 
       <div className="overflow-hidden rounded-lg border shadow-lg">
