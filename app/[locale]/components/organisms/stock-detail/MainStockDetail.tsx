@@ -40,6 +40,7 @@ export default function MainStockDetail() {
   const [productLocation, setProductLocation] = useState('');
   const [_estimatedReplenishmentDate, _setEstimatedReplenishmentDate] =
     useState<Date | undefined>();
+  const [_serialNumbers, _setSerialNumbers] = useState(['']);
 
   // Load data from URL parameters when component mounts
   useEffect(() => {
@@ -54,6 +55,7 @@ export default function MainStockDetail() {
       'estimatedReplenishmentDate',
     );
     const productLocation = searchParams.get('productLocation');
+    const serialNumbers = searchParams.get('serialNumbers')?.split(',');
 
     if (id && productNameParam) {
       setProductName(productNameParam);
@@ -63,6 +65,7 @@ export default function MainStockDetail() {
       setQtyAvailable(parseInt(qtyAvailableParam || '0', 10));
       setQtyReserved(parseInt(qtyReservedParam || '0', 10));
       setProductLocation(productLocation || '');
+      _setSerialNumbers(serialNumbers || ['']);
 
       if (replenishmentDateParam) {
         _setEstimatedReplenishmentDate(new Date(replenishmentDateParam));
@@ -155,6 +158,9 @@ export default function MainStockDetail() {
                   className="mt-2"
                   value={productLocation}
                   placeholder={t('productLocationPlaceholder')}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setProductLocation(e.target.value)
+                  }
                 />
               </div>
 
@@ -233,9 +239,17 @@ export default function MainStockDetail() {
               <div>
                 <Label>{t('serialNumbers')}</Label>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  <div className="rounded bg-gray-200 px-3 py-1">
-                    SN-9FAK-23J7-LBO2
-                  </div>
+                  {_serialNumbers.map(
+                    (serialNumber, index) =>
+                      serialNumber && (
+                        <div
+                          key={index}
+                          className="rounded bg-gray-200 px-3 py-1"
+                        >
+                          {serialNumber}
+                        </div>
+                      ),
+                  )}
                 </div>
               </div>
 

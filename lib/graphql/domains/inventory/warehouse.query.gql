@@ -50,6 +50,7 @@ query findInventory(
         qtyAvailable
         qtyReserved
         estimatedReplenishmentDate
+        serialNumbers
         variantFirstAttribute {
           key
           value

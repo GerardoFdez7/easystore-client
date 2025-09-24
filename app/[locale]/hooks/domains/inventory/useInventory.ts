@@ -69,6 +69,7 @@ export const useInventory = (
     qtyReserved: item.qtyReserved ?? 0,
     estimatedReplenishmentDate: item.estimatedReplenishmentDate ?? '',
     productLocation: item.productLocation ? item.productLocation : '',
+    serialNumbers: item.serialNumbers ? item.serialNumbers : [],
   }));
 
   // Get refetch functions from both queries

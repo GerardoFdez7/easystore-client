@@ -10,4 +10,5 @@ export type InventoryItem = {
   qtyReserved: number;
   estimatedReplenishmentDate: string;
   productLocation: string;
+  serialNumbers: string[];
 };
