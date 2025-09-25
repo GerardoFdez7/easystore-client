@@ -9,7 +9,7 @@ const meta: Meta<typeof CategoryCard> = {
   component: CategoryCard,
   args: {
     name: 'Technology',
-    imageUrl: '/laptop.webp',
+    cover: '/laptop.webp',
     count: 12,
     href: '#',
   },
