@@ -1,25 +1,38 @@
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
-export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T,
+> = { [_ in K]?: never };
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never;
+    };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string; }
-  String: { input: string; output: string; }
-  Boolean: { input: boolean; output: boolean; }
-  Int: { input: number; output: number; }
-  Float: { input: number; output: number; }
-  DateTime: { input: any; output: any; }
+  ID: { input: string; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
+  DateTime: { input: any; output: any };
 };
 
 export enum AccountTypeEnum {
   Customer = 'CUSTOMER',
   Employee = 'EMPLOYEE',
-  Tenant = 'TENANT'
+  Tenant = 'TENANT',
 }
 
 export type AddStockToWarehouseInput = {
@@ -68,7 +81,7 @@ export type AddressType = {
 export enum AddressTypeEnum {
   Billing = 'BILLING',
   Shipping = 'SHIPPING',
-  Warehouse = 'WAREHOUSE'
+  Warehouse = 'WAREHOUSE',
 }
 
 export type Attribute = {
@@ -111,7 +124,7 @@ export type Category = {
 export enum ConditionEnum {
   New = 'NEW',
   Refurbished = 'REFURBISHED',
-  Used = 'USED'
+  Used = 'USED',
 }
 
 export type CountryType = {
@@ -384,7 +397,7 @@ export enum CurrencyCodes {
   Yer = 'YER',
   Zar = 'ZAR',
   Zmw = 'ZMW',
-  Zwl = 'ZWL'
+  Zwl = 'ZWL',
 }
 
 export type Dimension = {
@@ -435,7 +448,7 @@ export type MediaAuthResponse = {
 
 export enum MediaTypeEnum {
   Image = 'IMAGE',
-  Video = 'VIDEO'
+  Video = 'VIDEO',
 }
 
 export type Mutation = {
@@ -471,7 +484,6 @@ export type Mutation = {
   updateWarehouse: Warehouse;
 };
 
-
 export type MutationAddStockToWarehouseArgs = {
   input: AddStockToWarehouseInput;
   reason?: InputMaybe<Scalars['String']['input']>;
@@ -479,77 +491,62 @@ export type MutationAddStockToWarehouseArgs = {
   warehouseId: Scalars['ID']['input'];
 };
 
-
 export type MutationAddVariantArgs = {
   input: CreateVariantInput;
 };
-
 
 export type MutationArchiveVariantArgs = {
   id: Scalars['String']['input'];
   productId: Scalars['String']['input'];
 };
 
-
 export type MutationCreateAddressArgs = {
   input: CreateAddressInput;
 };
-
 
 export type MutationCreateCategoryArgs = {
   input: CreateCategoryInput;
 };
 
-
 export type MutationCreateProductArgs = {
   input: CreateProductInput;
 };
-
 
 export type MutationCreateWarehouseArgs = {
   input: CreateWarehouseInput;
 };
 
-
 export type MutationDeleteAddressArgs = {
   id: Scalars['ID']['input'];
 };
-
 
 export type MutationDeleteCategoryArgs = {
   id: Scalars['ID']['input'];
 };
 
-
 export type MutationDeleteWarehouseArgs = {
   id: Scalars['ID']['input'];
 };
-
 
 export type MutationForgotPasswordArgs = {
   input: ForgotPasswordInput;
 };
 
-
 export type MutationGetInTouchArgs = {
   input: GetInTouchInput;
 };
-
 
 export type MutationHardDeleteProductArgs = {
   id: Scalars['String']['input'];
 };
 
-
 export type MutationLoginArgs = {
   input: AuthenticationInput;
 };
 
-
 export type MutationRegisterArgs = {
   input: AuthenticationInput;
 };
-
 
 export type MutationRemoveStockFromWarehouseArgs = {
   reason?: InputMaybe<Scalars['String']['input']>;
@@ -557,51 +554,42 @@ export type MutationRemoveStockFromWarehouseArgs = {
   warehouseId: Scalars['ID']['input'];
 };
 
-
 export type MutationRemoveVariantArgs = {
   id: Scalars['String']['input'];
   productId: Scalars['String']['input'];
 };
 
-
 export type MutationRestoreProductArgs = {
   id: Scalars['String']['input'];
 };
-
 
 export type MutationRestoreVariantArgs = {
   id: Scalars['String']['input'];
   productId: Scalars['String']['input'];
 };
 
-
 export type MutationSoftDeleteProductArgs = {
   id: Scalars['String']['input'];
 };
-
 
 export type MutationUpdateAddressArgs = {
   id: Scalars['ID']['input'];
   input: UpdateAddressInput;
 };
 
-
 export type MutationUpdateCategoryArgs = {
   id: Scalars['ID']['input'];
   input: UpdateCategoryInput;
 };
 
-
 export type MutationUpdatePasswordArgs = {
   input: UpdatePasswordInput;
 };
-
 
 export type MutationUpdateProductArgs = {
   id: Scalars['String']['input'];
   input: UpdateProductInput;
 };
-
 
 export type MutationUpdateStockInWarehouseArgs = {
   input: UpdateStockInWarehouseInput;
@@ -610,18 +598,15 @@ export type MutationUpdateStockInWarehouseArgs = {
   warehouseId: Scalars['ID']['input'];
 };
 
-
 export type MutationUpdateTenantArgs = {
   input: UpdateTenantInput;
 };
-
 
 export type MutationUpdateVariantArgs = {
   id: Scalars['String']['input'];
   input: UpdateVariantInput;
   productId: Scalars['String']['input'];
 };
-
 
 export type MutationUpdateWarehouseArgs = {
   id: Scalars['ID']['input'];
@@ -707,11 +692,9 @@ export type Query = {
   validateToken: Response;
 };
 
-
 export type QueryGetAddressByIdArgs = {
   id: Scalars['ID']['input'];
 };
-
 
 export type QueryGetAllAddressesArgs = {
   addressType?: InputMaybe<AddressTypeEnum>;
@@ -719,7 +702,6 @@ export type QueryGetAllAddressesArgs = {
   name?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 export type QueryGetAllCategoriesArgs = {
   includeSubcategories?: InputMaybe<Scalars['Boolean']['input']>;
@@ -731,7 +713,6 @@ export type QueryGetAllCategoriesArgs = {
   sortOrder?: InputMaybe<SortOrder>;
 };
 
-
 export type QueryGetAllProductsArgs = {
   categoriesIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   includeSoftDeleted?: InputMaybe<Scalars['Boolean']['input']>;
@@ -742,7 +723,6 @@ export type QueryGetAllProductsArgs = {
   sortOrder?: InputMaybe<SortOrder>;
   type?: InputMaybe<TypeEnum>;
 };
-
 
 export type QueryGetAllStockMovementsArgs = {
   createdById?: InputMaybe<Scalars['ID']['input']>;
@@ -757,7 +737,6 @@ export type QueryGetAllStockMovementsArgs = {
   warehouseId: Scalars['ID']['input'];
 };
 
-
 export type QueryGetAllWarehousesArgs = {
   addressId?: InputMaybe<Scalars['ID']['input']>;
   includeAddresses?: InputMaybe<Scalars['Boolean']['input']>;
@@ -769,21 +748,17 @@ export type QueryGetAllWarehousesArgs = {
   stockFilters?: InputMaybe<StockPerWarehouseFilterInput>;
 };
 
-
 export type QueryGetCategoryByIdArgs = {
   id: Scalars['ID']['input'];
 };
-
 
 export type QueryGetProductByIdArgs = {
   id: Scalars['String']['input'];
 };
 
-
 export type QueryGetStatesByCountryIdArgs = {
   countryId: Scalars['ID']['input'];
 };
-
 
 export type QueryGetWarehouseByIdArgs = {
   id: Scalars['ID']['input'];
@@ -799,12 +774,12 @@ export type Response = {
 export enum SortBy {
   CreatedAt = 'CREATED_AT',
   Name = 'NAME',
-  UpdatedAt = 'UPDATED_AT'
+  UpdatedAt = 'UPDATED_AT',
 }
 
 export enum SortOrder {
   Asc = 'ASC',
-  Desc = 'DESC'
+  Desc = 'DESC',
 }
 
 export type StateType = {
@@ -881,7 +856,7 @@ export type Tenant = {
 
 export enum TypeEnum {
   Digital = 'DIGITAL',
-  Physical = 'PHYSICAL'
+  Physical = 'PHYSICAL',
 }
 
 export type UpdateAddressInput = {
@@ -1159,10 +1134,17 @@ export type FindAllAddressesQuery = {
   };
 };
 
-export type FindAllCountriesQueryVariables = Exact<{ [key: string]: never; }>;
+export type FindAllCountriesQueryVariables = Exact<{ [key: string]: never }>;
 
-
-export type FindAllCountriesQuery = { __typename?: 'Query', getAllCountries: Array<{ __typename?: 'CountryType', id: string, name: string, code: string }> };
+export type FindAllCountriesQuery = {
+  __typename?: 'Query';
+  getAllCountries: Array<{
+    __typename?: 'CountryType';
+    id: string;
+    name: string;
+    code: string;
+  }>;
+};
 
 export type FindStatesByCountryIdQueryVariables = Exact<{
   countryId: Scalars['ID']['input'];
@@ -1184,8 +1166,14 @@ export type RegisterMutationVariables = Exact<{
   accountType: AccountTypeEnum;
 }>;
 
-
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'AuthIdentity', email: string, accountType: AccountTypeEnum } };
+export type RegisterMutation = {
+  __typename?: 'Mutation';
+  register: {
+    __typename?: 'AuthIdentity';
+    email: string;
+    accountType: AccountTypeEnum;
+  };
+};
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -1193,29 +1181,45 @@ export type LoginMutationVariables = Exact<{
   accountType: AccountTypeEnum;
 }>;
 
-
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Response', success: boolean, message: string } };
+export type LoginMutation = {
+  __typename?: 'Mutation';
+  login: { __typename?: 'Response'; success: boolean; message: string };
+};
 
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String']['input'];
   accountType: AccountTypeEnum;
 }>;
 
-
-export type ForgotPasswordMutation = { __typename?: 'Mutation', forgotPassword: { __typename?: 'Response', success: boolean, message: string } };
+export type ForgotPasswordMutation = {
+  __typename?: 'Mutation';
+  forgotPassword: {
+    __typename?: 'Response';
+    success: boolean;
+    message: string;
+  };
+};
 
 export type UpdatePasswordMutationVariables = Exact<{
   token: Scalars['String']['input'];
   password: Scalars['String']['input'];
 }>;
 
+export type UpdatePasswordMutation = {
+  __typename?: 'Mutation';
+  updatePassword: {
+    __typename?: 'Response';
+    success: boolean;
+    message: string;
+  };
+};
 
-export type UpdatePasswordMutation = { __typename?: 'Mutation', updatePassword: { __typename?: 'Response', success: boolean, message: string } };
+export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
 
-export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type LogoutMutation = { __typename?: 'Mutation', logout: { __typename?: 'Response', success: boolean, message: string } };
+export type LogoutMutation = {
+  __typename?: 'Mutation';
+  logout: { __typename?: 'Response'; success: boolean; message: string };
+};
 
 export type GetInTouchMutationVariables = Exact<{
   fullName: Scalars['String']['input'];
@@ -1228,47 +1232,137 @@ export type GetInTouchMutationVariables = Exact<{
   isAgency: Scalars['String']['input'];
 }>;
 
+export type GetInTouchMutation = {
+  __typename?: 'Mutation';
+  getInTouch: { __typename?: 'Response'; success: boolean; message: string };
+};
 
-export type GetInTouchMutation = { __typename?: 'Mutation', getInTouch: { __typename?: 'Response', success: boolean, message: string } };
+export type ValidateTokenQueryVariables = Exact<{ [key: string]: never }>;
 
-export type ValidateTokenQueryVariables = Exact<{ [key: string]: never; }>;
+export type ValidateTokenQuery = {
+  __typename?: 'Query';
+  validateToken: { __typename?: 'Response'; success: boolean; message: string };
+};
 
+export type GetMediaTokenQueryVariables = Exact<{ [key: string]: never }>;
 
-export type ValidateTokenQuery = { __typename?: 'Query', validateToken: { __typename?: 'Response', success: boolean, message: string } };
-
-export type GetMediaTokenQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetMediaTokenQuery = { __typename?: 'Query', getMediaUploadToken: { __typename?: 'MediaAuthResponse', token: string, expire: number, signature: string, publicKey: string } };
+export type GetMediaTokenQuery = {
+  __typename?: 'Query';
+  getMediaUploadToken: {
+    __typename?: 'MediaAuthResponse';
+    token: string;
+    expire: number;
+    signature: string;
+    publicKey: string;
+  };
+};
 
 export type CreateCategoryMutationVariables = Exact<{
   input: CreateCategoryInput;
 }>;
 
-
-export type CreateCategoryMutation = { __typename?: 'Mutation', createCategory: { __typename?: 'Category', name: string, description: string, cover: string, updatedAt: any, createdAt: any, subCategories: Array<{ __typename?: 'Category', cover: string, createdAt: any, description: string, name: string, updatedAt: any, subCategories: Array<{ __typename?: 'Category', cover: string, createdAt: any, description: string, name: string, updatedAt: any }> }> } };
+export type CreateCategoryMutation = {
+  __typename?: 'Mutation';
+  createCategory: {
+    __typename?: 'Category';
+    name: string;
+    description: string;
+    cover: string;
+    updatedAt: any;
+    createdAt: any;
+    subCategories: Array<{
+      __typename?: 'Category';
+      cover: string;
+      createdAt: any;
+      description: string;
+      name: string;
+      updatedAt: any;
+      subCategories: Array<{
+        __typename?: 'Category';
+        cover: string;
+        createdAt: any;
+        description: string;
+        name: string;
+        updatedAt: any;
+      }>;
+    }>;
+  };
+};
 
 export type UpdateCategoryMutationVariables = Exact<{
   id: Scalars['ID']['input'];
   input: UpdateCategoryInput;
 }>;
 
-
-export type UpdateCategoryMutation = { __typename?: 'Mutation', updateCategory: { __typename?: 'Category', name: string, description: string, cover: string, createdAt: any, subCategories: Array<{ __typename?: 'Category', name: string, description: string, cover: string }> } };
+export type UpdateCategoryMutation = {
+  __typename?: 'Mutation';
+  updateCategory: {
+    __typename?: 'Category';
+    name: string;
+    description: string;
+    cover: string;
+    createdAt: any;
+    subCategories: Array<{
+      __typename?: 'Category';
+      name: string;
+      description: string;
+      cover: string;
+    }>;
+  };
+};
 
 export type DeleteMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
-
-export type DeleteMutation = { __typename?: 'Mutation', deleteCategory: { __typename?: 'Category', name: string, description: string } };
+export type DeleteMutation = {
+  __typename?: 'Mutation';
+  deleteCategory: {
+    __typename?: 'Category';
+    name: string;
+    description: string;
+  };
+};
 
 export type FindCategoryByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
-
-export type FindCategoryByIdQuery = { __typename?: 'Query', getCategoryById: { __typename?: 'Category', name: string, description: string, cover: string, updatedAt: any, createdAt: any, subCategories: Array<{ __typename?: 'Category', name: string, description: string, cover: string, createdAt: any, updatedAt: any, subCategories: Array<{ __typename?: 'Category', name: string, description: string, cover: string, createdAt: any, updatedAt: any, subCategories: Array<{ __typename?: 'Category', cover: string, createdAt: any, description: string, name: string, updatedAt: any }> }> }> } };
+export type FindCategoryByIdQuery = {
+  __typename?: 'Query';
+  getCategoryById: {
+    __typename?: 'Category';
+    name: string;
+    description: string;
+    cover: string;
+    updatedAt: any;
+    createdAt: any;
+    subCategories: Array<{
+      __typename?: 'Category';
+      name: string;
+      description: string;
+      cover: string;
+      createdAt: any;
+      updatedAt: any;
+      subCategories: Array<{
+        __typename?: 'Category';
+        name: string;
+        description: string;
+        cover: string;
+        createdAt: any;
+        updatedAt: any;
+        subCategories: Array<{
+          __typename?: 'Category';
+          cover: string;
+          createdAt: any;
+          description: string;
+          name: string;
+          updatedAt: any;
+        }>;
+      }>;
+    }>;
+  };
+};
 
 export type FindCategoriesForPickerQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -1280,8 +1374,46 @@ export type FindCategoriesForPickerQueryVariables = Exact<{
   includeSubcategories?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
-
-export type FindAllCategoriesQuery = { __typename?: 'Query', getAllCategories: { __typename?: 'PaginatedCategoriesType', total: number, hasMore: boolean, categories: Array<{ __typename?: 'Category', name: string, description: string, cover: string, updatedAt: any, createdAt: any, subCategories: Array<{ __typename?: 'Category', name: string, description: string, cover: string, createdAt: any, updatedAt: any, subCategories: Array<{ __typename?: 'Category', name: string, description: string, cover: string, createdAt: any, updatedAt: any, subCategories: Array<{ __typename?: 'Category', cover: string, createdAt: any, description: string, name: string, updatedAt: any }> }> }> }> } };
+export type FindAllCategoriesQuery = {
+  __typename?: 'Query';
+  getAllCategories: {
+    __typename?: 'PaginatedCategoriesType';
+    total: number;
+    hasMore: boolean;
+    categories: Array<{
+      __typename?: 'Category';
+      name: string;
+      description: string;
+      cover: string;
+      updatedAt: any;
+      createdAt: any;
+      subCategories: Array<{
+        __typename?: 'Category';
+        name: string;
+        description: string;
+        cover: string;
+        createdAt: any;
+        updatedAt: any;
+        subCategories: Array<{
+          __typename?: 'Category';
+          name: string;
+          description: string;
+          cover: string;
+          createdAt: any;
+          updatedAt: any;
+          subCategories: Array<{
+            __typename?: 'Category';
+            cover: string;
+            createdAt: any;
+            description: string;
+            name: string;
+            updatedAt: any;
+          }>;
+        }>;
+      }>;
+    }>;
+  };
+};
 
 export type FindAllMovementsQueryVariables = Exact<{
   warehouseId: Scalars['ID']['input'];
@@ -1296,8 +1428,29 @@ export type FindAllMovementsQueryVariables = Exact<{
   sortOrder?: InputMaybe<SortOrder>;
 }>;
 
-
-export type FindAllMovementsQuery = { __typename?: 'Query', getAllStockMovements: { __typename?: 'PaginatedStockMovementsType', total: number, hasMore: boolean, stockMovements: Array<{ __typename?: 'StockMovement', id: string, warehouseId: string, deltaQty: number, reason: string, occurredAt: any, productName?: string | null, variantSku?: string | null, variantFirstAttribute?: { __typename?: 'VariantAttribute', key: string, value: string } | null }> } };
+export type FindAllMovementsQuery = {
+  __typename?: 'Query';
+  getAllStockMovements: {
+    __typename?: 'PaginatedStockMovementsType';
+    total: number;
+    hasMore: boolean;
+    stockMovements: Array<{
+      __typename?: 'StockMovement';
+      id: string;
+      warehouseId: string;
+      deltaQty: number;
+      reason: string;
+      occurredAt: any;
+      productName?: string | null;
+      variantSku?: string | null;
+      variantFirstAttribute?: {
+        __typename?: 'VariantAttribute';
+        key: string;
+        value: string;
+      } | null;
+    }>;
+  };
+};
 
 export type AddStockToWarehouseMutationVariables = Exact<{
   warehouseId: Scalars['ID']['input'];
@@ -1342,8 +1495,28 @@ export type UpdateStockInWarehouseMutationVariables = Exact<{
   reason?: InputMaybe<Scalars['String']['input']>;
 }>;
 
-
-export type UpdateStockInWarehouseMutation = { __typename?: 'Mutation', updateStockInWarehouse: { __typename?: 'Warehouse', id: string, name: string, addressId: string, createdAt: any, updatedAt: any, stockPerWarehouses: Array<{ __typename?: 'StockPerWarehouse', id: string, warehouseId: string, qtyAvailable: number, qtyReserved: number, lotNumber?: string | null, serialNumbers?: Array<string> | null, productLocation?: string | null, estimatedReplenishmentDate?: any | null }> } };
+export type UpdateStockInWarehouseMutation = {
+  __typename?: 'Mutation';
+  updateStockInWarehouse: {
+    __typename?: 'Warehouse';
+    id: string;
+    name: string;
+    addressId: string;
+    createdAt: any;
+    updatedAt: any;
+    stockPerWarehouses: Array<{
+      __typename?: 'StockPerWarehouse';
+      id: string;
+      warehouseId: string;
+      qtyAvailable: number;
+      qtyReserved: number;
+      lotNumber?: string | null;
+      serialNumbers?: Array<string> | null;
+      productLocation?: string | null;
+      estimatedReplenishmentDate?: any | null;
+    }>;
+  };
+};
 
 export type RemoveStockFromWarehouseMutationVariables = Exact<{
   warehouseId: Scalars['ID']['input'];
@@ -1351,15 +1524,44 @@ export type RemoveStockFromWarehouseMutationVariables = Exact<{
   reason?: InputMaybe<Scalars['String']['input']>;
 }>;
 
-
-export type RemoveStockFromWarehouseMutation = { __typename?: 'Mutation', removeStockFromWarehouse: { __typename?: 'Warehouse', id: string, name: string, addressId: string, createdAt: any, updatedAt: any, stockPerWarehouses: Array<{ __typename?: 'StockPerWarehouse', id: string, warehouseId: string, qtyAvailable: number, qtyReserved: number, lotNumber?: string | null, serialNumbers?: Array<string> | null, productLocation?: string | null, estimatedReplenishmentDate?: any | null }> } };
+export type RemoveStockFromWarehouseMutation = {
+  __typename?: 'Mutation';
+  removeStockFromWarehouse: {
+    __typename?: 'Warehouse';
+    id: string;
+    name: string;
+    addressId: string;
+    createdAt: any;
+    updatedAt: any;
+    stockPerWarehouses: Array<{
+      __typename?: 'StockPerWarehouse';
+      id: string;
+      warehouseId: string;
+      qtyAvailable: number;
+      qtyReserved: number;
+      lotNumber?: string | null;
+      serialNumbers?: Array<string> | null;
+      productLocation?: string | null;
+      estimatedReplenishmentDate?: any | null;
+    }>;
+  };
+};
 
 export type CreateWarehouseMutationVariables = Exact<{
   input: CreateWarehouseInput;
 }>;
 
-
-export type CreateWarehouseMutation = { __typename?: 'Mutation', createWarehouse: { __typename?: 'Warehouse', id: string, name: string, addressId: string, createdAt: any, updatedAt: any } };
+export type CreateWarehouseMutation = {
+  __typename?: 'Mutation';
+  createWarehouse: {
+    __typename?: 'Warehouse';
+    id: string;
+    name: string;
+    addressId: string;
+    createdAt: any;
+    updatedAt: any;
+  };
+};
 
 export type UpdateWarehouseMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1382,15 +1584,41 @@ export type DeleteWarehouseMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
-
-export type DeleteWarehouseMutation = { __typename?: 'Mutation', deleteWarehouse: { __typename?: 'Warehouse', name: string } };
+export type DeleteWarehouseMutation = {
+  __typename?: 'Mutation';
+  deleteWarehouse: { __typename?: 'Warehouse'; name: string };
+};
 
 export type FindWarehouseByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
-
-export type FindWarehouseByIdQuery = { __typename?: 'Query', getWarehouseById: { __typename?: 'Warehouse', id: string, name: string, stockPerWarehouses: Array<{ __typename?: 'StockPerWarehouse', id: string, warehouseId: string, qtyAvailable: number, qtyReserved: number, lotNumber?: string | null, serialNumbers?: Array<string> | null, productLocation?: string | null, estimatedReplenishmentDate?: any | null, variantSku?: string | null, productName?: string | null, variantFirstAttribute?: { __typename?: 'VariantAttribute', key: string, value: string } | null }> } };
+export type FindWarehouseByIdQuery = {
+  __typename?: 'Query';
+  getWarehouseById: {
+    __typename?: 'Warehouse';
+    id: string;
+    name: string;
+    stockPerWarehouses: Array<{
+      __typename?: 'StockPerWarehouse';
+      id: string;
+      warehouseId: string;
+      qtyAvailable: number;
+      qtyReserved: number;
+      lotNumber?: string | null;
+      serialNumbers?: Array<string> | null;
+      productLocation?: string | null;
+      estimatedReplenishmentDate?: any | null;
+      variantSku?: string | null;
+      productName?: string | null;
+      variantFirstAttribute?: {
+        __typename?: 'VariantAttribute';
+        key: string;
+        value: string;
+      } | null;
+    }>;
+  };
+};
 
 export type FindInventoryQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -1401,8 +1629,33 @@ export type FindInventoryQueryVariables = Exact<{
   stockFilters?: InputMaybe<StockPerWarehouseFilterInput>;
 }>;
 
-
-export type FindInventoryQuery = { __typename?: 'Query', getAllWarehouses: { __typename?: 'PaginatedWarehousesType', total: number, hasMore: boolean, warehouses: Array<{ __typename?: 'Warehouse', id: string, name: string, stockPerWarehouses: Array<{ __typename?: 'StockPerWarehouse', id: string, qtyAvailable: number, qtyReserved: number, estimatedReplenishmentDate?: any | null, productName?: string | null, variantSku?: string | null, variantFirstAttribute?: { __typename?: 'VariantAttribute', key: string, value: string } | null }> }> } };
+export type FindInventoryQuery = {
+  __typename?: 'Query';
+  getAllWarehouses: {
+    __typename?: 'PaginatedWarehousesType';
+    total: number;
+    hasMore: boolean;
+    warehouses: Array<{
+      __typename?: 'Warehouse';
+      id: string;
+      name: string;
+      stockPerWarehouses: Array<{
+        __typename?: 'StockPerWarehouse';
+        id: string;
+        qtyAvailable: number;
+        qtyReserved: number;
+        estimatedReplenishmentDate?: any | null;
+        productName?: string | null;
+        variantSku?: string | null;
+        variantFirstAttribute?: {
+          __typename?: 'VariantAttribute';
+          key: string;
+          value: string;
+        } | null;
+      }>;
+    }>;
+  };
+};
 
 export type FindWarehousesQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -1436,49 +1689,284 @@ export type CreateProductMutationVariables = Exact<{
   input: CreateProductInput;
 }>;
 
-
-export type CreateProductMutation = { __typename?: 'Mutation', createProduct: { __typename?: 'Product', name: string, shortDescription: string, longDescription?: string | null, productType: TypeEnum, cover: string, tags?: Array<string> | null, brand?: string | null, manufacturer?: string | null, createdAt: any, updatedAt: any, isArchived: boolean, variants?: Array<{ __typename?: 'Variant', price: number, weight?: number | null, variantCover?: string | null, upc?: string | null, sku?: string | null, personalizationOptions?: Array<string> | null, isbn?: string | null, ean?: string | null, condition: ConditionEnum, barcode?: string | null, attributes: Array<{ __typename?: 'Attribute', key: string, value: string }>, installmentPayments?: Array<{ __typename?: 'Installment', months: number, interestRate: number }> | null, dimension?: { __typename?: 'Dimension', width: number, length: number, height: number } | null, warranties?: Array<{ __typename?: 'Warranty', instructions: string, months: number, coverage: string }> | null, variantMedia?: Array<{ __typename?: 'Media', variantId?: string | null, url: string, productId?: string | null, position: number, mediaType: MediaTypeEnum }> | null }> | null, sustainabilities?: Array<{ __typename?: 'Sustainability', recycledPercentage: number, certification: string }> | null, media?: Array<{ __typename?: 'Media', url: string, productId?: string | null, position: number, mediaType: MediaTypeEnum, variantId?: string | null }> | null, categories?: Array<{ __typename?: 'ProductCategory', categoryId: string }> | null } };
+export type CreateProductMutation = {
+  __typename?: 'Mutation';
+  createProduct: {
+    __typename?: 'Product';
+    name: string;
+    shortDescription: string;
+    longDescription?: string | null;
+    productType: TypeEnum;
+    cover: string;
+    tags?: Array<string> | null;
+    brand?: string | null;
+    manufacturer?: string | null;
+    createdAt: any;
+    updatedAt: any;
+    isArchived: boolean;
+    variants?: Array<{
+      __typename?: 'Variant';
+      price: number;
+      weight?: number | null;
+      variantCover?: string | null;
+      upc?: string | null;
+      sku?: string | null;
+      personalizationOptions?: Array<string> | null;
+      isbn?: string | null;
+      ean?: string | null;
+      condition: ConditionEnum;
+      barcode?: string | null;
+      attributes: Array<{
+        __typename?: 'Attribute';
+        key: string;
+        value: string;
+      }>;
+      installmentPayments?: Array<{
+        __typename?: 'Installment';
+        months: number;
+        interestRate: number;
+      }> | null;
+      dimension?: {
+        __typename?: 'Dimension';
+        width: number;
+        length: number;
+        height: number;
+      } | null;
+      warranties?: Array<{
+        __typename?: 'Warranty';
+        instructions: string;
+        months: number;
+        coverage: string;
+      }> | null;
+      variantMedia?: Array<{
+        __typename?: 'Media';
+        variantId?: string | null;
+        url: string;
+        productId?: string | null;
+        position: number;
+        mediaType: MediaTypeEnum;
+      }> | null;
+    }> | null;
+    sustainabilities?: Array<{
+      __typename?: 'Sustainability';
+      recycledPercentage: number;
+      certification: string;
+    }> | null;
+    media?: Array<{
+      __typename?: 'Media';
+      url: string;
+      productId?: string | null;
+      position: number;
+      mediaType: MediaTypeEnum;
+      variantId?: string | null;
+    }> | null;
+    categories?: Array<{
+      __typename?: 'ProductCategory';
+      categoryId: string;
+    }> | null;
+  };
+};
 
 export type UpdateMutationVariables = Exact<{
   id: Scalars['String']['input'];
   input: UpdateProductInput;
 }>;
 
-
-export type UpdateMutation = { __typename?: 'Mutation', updateProduct: { __typename?: 'Product', brand?: string | null, cover: string, createdAt: any, isArchived: boolean, longDescription?: string | null, manufacturer?: string | null, name: string, productType: TypeEnum, shortDescription: string, tags?: Array<string> | null, updatedAt: any, categories?: Array<{ __typename?: 'ProductCategory', categoryId: string }> | null, media?: Array<{ __typename?: 'Media', mediaType: MediaTypeEnum, position: number, productId?: string | null, url: string, variantId?: string | null }> | null, sustainabilities?: Array<{ __typename?: 'Sustainability', certification: string, recycledPercentage: number }> | null, variants?: Array<{ __typename?: 'Variant', barcode?: string | null, condition: ConditionEnum, ean?: string | null, isbn?: string | null, personalizationOptions?: Array<string> | null, price: number, sku?: string | null, upc?: string | null, variantCover?: string | null, weight?: number | null, attributes: Array<{ __typename?: 'Attribute', key: string, value: string }>, dimension?: { __typename?: 'Dimension', height: number, length: number, width: number } | null, installmentPayments?: Array<{ __typename?: 'Installment', interestRate: number, months: number }> | null, variantMedia?: Array<{ __typename?: 'Media', mediaType: MediaTypeEnum, position: number, productId?: string | null, url: string, variantId?: string | null }> | null, warranties?: Array<{ __typename?: 'Warranty', coverage: string, instructions: string, months: number }> | null }> | null } };
+export type UpdateMutation = {
+  __typename?: 'Mutation';
+  updateProduct: {
+    __typename?: 'Product';
+    brand?: string | null;
+    cover: string;
+    createdAt: any;
+    isArchived: boolean;
+    longDescription?: string | null;
+    manufacturer?: string | null;
+    name: string;
+    productType: TypeEnum;
+    shortDescription: string;
+    tags?: Array<string> | null;
+    updatedAt: any;
+    categories?: Array<{
+      __typename?: 'ProductCategory';
+      categoryId: string;
+    }> | null;
+    media?: Array<{
+      __typename?: 'Media';
+      mediaType: MediaTypeEnum;
+      position: number;
+      productId?: string | null;
+      url: string;
+      variantId?: string | null;
+    }> | null;
+    sustainabilities?: Array<{
+      __typename?: 'Sustainability';
+      certification: string;
+      recycledPercentage: number;
+    }> | null;
+    variants?: Array<{
+      __typename?: 'Variant';
+      barcode?: string | null;
+      condition: ConditionEnum;
+      ean?: string | null;
+      isbn?: string | null;
+      personalizationOptions?: Array<string> | null;
+      price: number;
+      sku?: string | null;
+      upc?: string | null;
+      variantCover?: string | null;
+      weight?: number | null;
+      attributes: Array<{
+        __typename?: 'Attribute';
+        key: string;
+        value: string;
+      }>;
+      dimension?: {
+        __typename?: 'Dimension';
+        height: number;
+        length: number;
+        width: number;
+      } | null;
+      installmentPayments?: Array<{
+        __typename?: 'Installment';
+        interestRate: number;
+        months: number;
+      }> | null;
+      variantMedia?: Array<{
+        __typename?: 'Media';
+        mediaType: MediaTypeEnum;
+        position: number;
+        productId?: string | null;
+        url: string;
+        variantId?: string | null;
+      }> | null;
+      warranties?: Array<{
+        __typename?: 'Warranty';
+        coverage: string;
+        instructions: string;
+        months: number;
+      }> | null;
+    }> | null;
+  };
+};
 
 export type SoftDeleteMutationVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
-
-export type SoftDeleteMutation = { __typename?: 'Mutation', softDeleteProduct: { __typename?: 'Product', name: string, isArchived: boolean } };
+export type SoftDeleteMutation = {
+  __typename?: 'Mutation';
+  softDeleteProduct: {
+    __typename?: 'Product';
+    name: string;
+    isArchived: boolean;
+  };
+};
 
 export type RestoreMutationVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
-
-export type RestoreMutation = { __typename?: 'Mutation', restoreProduct: { __typename?: 'Product', name: string, isArchived: boolean } };
+export type RestoreMutation = {
+  __typename?: 'Mutation';
+  restoreProduct: { __typename?: 'Product'; name: string; isArchived: boolean };
+};
 
 export type HardDeleteMutationVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
-
-export type HardDeleteMutation = { __typename?: 'Mutation', hardDeleteProduct: { __typename?: 'Product', name: string } };
+export type HardDeleteMutation = {
+  __typename?: 'Mutation';
+  hardDeleteProduct: { __typename?: 'Product'; name: string };
+};
 
 export type FindProductByIdQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
-
-export type FindProductByIdQuery = { __typename?: 'Query', getProductById: { __typename?: 'Product', name: string, shortDescription: string, longDescription?: string | null, cover: string, brand?: string | null, manufacturer?: string | null, tags?: Array<string> | null, updatedAt: any, createdAt: any, productType: TypeEnum, isArchived: boolean, media?: Array<{ __typename?: 'Media', mediaType: MediaTypeEnum, position: number, url: string }> | null, categories?: Array<{ __typename?: 'ProductCategory', categoryId: string }> | null, variants?: Array<{ __typename?: 'Variant', price: number, condition: ConditionEnum, weight?: number | null, sku?: string | null, ean?: string | null, upc?: string | null, isbn?: string | null, barcode?: string | null, variantCover?: string | null, personalizationOptions?: Array<string> | null, attributes: Array<{ __typename?: 'Attribute', key: string, value: string }>, dimension?: { __typename?: 'Dimension', height: number, width: number, length: number } | null, variantMedia?: Array<{ __typename?: 'Media', mediaType: MediaTypeEnum, url: string, position: number, variantId?: string | null, productId?: string | null }> | null, warranties?: Array<{ __typename?: 'Warranty', coverage: string, instructions: string, months: number }> | null, installmentPayments?: Array<{ __typename?: 'Installment', interestRate: number, months: number }> | null }> | null, sustainabilities?: Array<{ __typename?: 'Sustainability', certification: string, recycledPercentage: number }> | null } };
+export type FindProductByIdQuery = {
+  __typename?: 'Query';
+  getProductById: {
+    __typename?: 'Product';
+    name: string;
+    shortDescription: string;
+    longDescription?: string | null;
+    cover: string;
+    brand?: string | null;
+    manufacturer?: string | null;
+    tags?: Array<string> | null;
+    updatedAt: any;
+    createdAt: any;
+    productType: TypeEnum;
+    isArchived: boolean;
+    media?: Array<{
+      __typename?: 'Media';
+      mediaType: MediaTypeEnum;
+      position: number;
+      url: string;
+    }> | null;
+    categories?: Array<{
+      __typename?: 'ProductCategory';
+      categoryId: string;
+    }> | null;
+    variants?: Array<{
+      __typename?: 'Variant';
+      price: number;
+      condition: ConditionEnum;
+      weight?: number | null;
+      sku?: string | null;
+      ean?: string | null;
+      upc?: string | null;
+      isbn?: string | null;
+      barcode?: string | null;
+      variantCover?: string | null;
+      personalizationOptions?: Array<string> | null;
+      attributes: Array<{
+        __typename?: 'Attribute';
+        key: string;
+        value: string;
+      }>;
+      dimension?: {
+        __typename?: 'Dimension';
+        height: number;
+        width: number;
+        length: number;
+      } | null;
+      variantMedia?: Array<{
+        __typename?: 'Media';
+        mediaType: MediaTypeEnum;
+        url: string;
+        position: number;
+        variantId?: string | null;
+        productId?: string | null;
+      }> | null;
+      warranties?: Array<{
+        __typename?: 'Warranty';
+        coverage: string;
+        instructions: string;
+        months: number;
+      }> | null;
+      installmentPayments?: Array<{
+        __typename?: 'Installment';
+        interestRate: number;
+        months: number;
+      }> | null;
+    }> | null;
+    sustainabilities?: Array<{
+      __typename?: 'Sustainability';
+      certification: string;
+      recycledPercentage: number;
+    }> | null;
+  };
+};
 
 export type FindAllProductsQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Float']['input']>;
   limit?: InputMaybe<Scalars['Float']['input']>;
-  categoriesIds?: InputMaybe<Array<Scalars['ID']['input']> | Scalars['ID']['input']>;
+  categoriesIds?: InputMaybe<
+    Array<Scalars['ID']['input']> | Scalars['ID']['input']
+  >;
   type?: InputMaybe<TypeEnum>;
   sortBy?: InputMaybe<SortBy>;
   sortOrder?: InputMaybe<SortOrder>;
@@ -1607,8 +2095,22 @@ export type AddVariantToProductMutationVariables = Exact<{
   input: CreateVariantInput;
 }>;
 
-
-export type AddVariantToProductMutation = { __typename?: 'Mutation', addVariant: { __typename?: 'Product', variants?: Array<{ __typename?: 'Variant', price: number, condition: ConditionEnum, attributes: Array<{ __typename?: 'Attribute', key: string, value: string }> }> | null } };
+export type AddVariantToProductMutation = {
+  __typename?: 'Mutation';
+  addVariant: {
+    __typename?: 'Product';
+    variants?: Array<{
+      __typename?: 'Variant';
+      price: number;
+      condition: ConditionEnum;
+      attributes: Array<{
+        __typename?: 'Attribute';
+        key: string;
+        value: string;
+      }>;
+    }> | null;
+  };
+};
 
 export type UpdateVariantInProductMutationVariables = Exact<{
   id: Scalars['String']['input'];
@@ -1616,41 +2118,134 @@ export type UpdateVariantInProductMutationVariables = Exact<{
   input: UpdateVariantInput;
 }>;
 
-
-export type UpdateVariantInProductMutation = { __typename?: 'Mutation', updateVariant: { __typename?: 'Product', variants?: Array<{ __typename?: 'Variant', barcode?: string | null, condition: ConditionEnum, weight?: number | null, ean?: string | null, isbn?: string | null, personalizationOptions?: Array<string> | null, price: number, sku?: string | null, upc?: string | null, variantCover?: string | null, attributes: Array<{ __typename?: 'Attribute', key: string, value: string }>, dimension?: { __typename?: 'Dimension', height: number, length: number, width: number } | null, installmentPayments?: Array<{ __typename?: 'Installment', interestRate: number, months: number }> | null, variantMedia?: Array<{ __typename?: 'Media', mediaType: MediaTypeEnum, position: number, productId?: string | null, url: string, variantId?: string | null }> | null, warranties?: Array<{ __typename?: 'Warranty', coverage: string, instructions: string, months: number }> | null }> | null } };
+export type UpdateVariantInProductMutation = {
+  __typename?: 'Mutation';
+  updateVariant: {
+    __typename?: 'Product';
+    variants?: Array<{
+      __typename?: 'Variant';
+      barcode?: string | null;
+      condition: ConditionEnum;
+      weight?: number | null;
+      ean?: string | null;
+      isbn?: string | null;
+      personalizationOptions?: Array<string> | null;
+      price: number;
+      sku?: string | null;
+      upc?: string | null;
+      variantCover?: string | null;
+      attributes: Array<{
+        __typename?: 'Attribute';
+        key: string;
+        value: string;
+      }>;
+      dimension?: {
+        __typename?: 'Dimension';
+        height: number;
+        length: number;
+        width: number;
+      } | null;
+      installmentPayments?: Array<{
+        __typename?: 'Installment';
+        interestRate: number;
+        months: number;
+      }> | null;
+      variantMedia?: Array<{
+        __typename?: 'Media';
+        mediaType: MediaTypeEnum;
+        position: number;
+        productId?: string | null;
+        url: string;
+        variantId?: string | null;
+      }> | null;
+      warranties?: Array<{
+        __typename?: 'Warranty';
+        coverage: string;
+        instructions: string;
+        months: number;
+      }> | null;
+    }> | null;
+  };
+};
 
 export type ArchiveVariantOfProductMutationVariables = Exact<{
   id: Scalars['String']['input'];
   productId: Scalars['String']['input'];
 }>;
 
-
-export type ArchiveVariantOfProductMutation = { __typename?: 'Mutation', archiveVariant: { __typename?: 'Product', variants?: Array<{ __typename?: 'Variant', isArchived?: boolean | null }> | null } };
+export type ArchiveVariantOfProductMutation = {
+  __typename?: 'Mutation';
+  archiveVariant: {
+    __typename?: 'Product';
+    variants?: Array<{
+      __typename?: 'Variant';
+      isArchived?: boolean | null;
+    }> | null;
+  };
+};
 
 export type RestoreVariantOfProductMutationVariables = Exact<{
   id: Scalars['String']['input'];
   productId: Scalars['String']['input'];
 }>;
 
-
-export type RestoreVariantOfProductMutation = { __typename?: 'Mutation', restoreVariant: { __typename?: 'Product', variants?: Array<{ __typename?: 'Variant', isArchived?: boolean | null }> | null } };
+export type RestoreVariantOfProductMutation = {
+  __typename?: 'Mutation';
+  restoreVariant: {
+    __typename?: 'Product';
+    variants?: Array<{
+      __typename?: 'Variant';
+      isArchived?: boolean | null;
+    }> | null;
+  };
+};
 
 export type RemoveVariantfromProductMutationVariables = Exact<{
   id: Scalars['String']['input'];
   productId: Scalars['String']['input'];
 }>;
 
-
-export type RemoveVariantfromProductMutation = { __typename?: 'Mutation', removeVariant: { __typename?: 'Product', variants?: Array<{ __typename?: 'Variant', sku?: string | null }> | null } };
+export type RemoveVariantfromProductMutation = {
+  __typename?: 'Mutation';
+  removeVariant: {
+    __typename?: 'Product';
+    variants?: Array<{ __typename?: 'Variant'; sku?: string | null }> | null;
+  };
+};
 
 export type UpdateTenantProfileMutationVariables = Exact<{
   input: UpdateTenantInput;
 }>;
 
+export type UpdateTenantProfileMutation = {
+  __typename?: 'Mutation';
+  updateTenant: {
+    __typename?: 'Tenant';
+    ownerName: string;
+    email: string;
+    businessName?: string | null;
+    description?: string | null;
+    domain?: string | null;
+    logo?: string | null;
+    defaultPhoneNumberId?: string | null;
+  };
+};
 
-export type UpdateTenantProfileMutation = { __typename?: 'Mutation', updateTenant: { __typename?: 'Tenant', ownerName: string, email: string, businessName?: string | null, description?: string | null, domain?: string | null, logo?: string | null, defaultPhoneNumberId?: string | null } };
+export type FindTenantProfileQueryVariables = Exact<{ [key: string]: never }>;
 
-export type FindTenantProfileQueryVariables = Exact<{ [key: string]: never; }>;
+export type FindTenantProfileQuery = {
+  __typename?: 'Query';
+  getTenantById: {
+    __typename?: 'Tenant';
+    ownerName: string;
+    email: string;
+    businessName?: string | null;
+    description?: string | null;
+    domain?: string | null;
+    logo?: string | null;
+    defaultPhoneNumberId?: string | null;
+  };
+};
 
 export const CreateAddressDocument = {
   kind: 'Document',
@@ -4125,6 +4720,31 @@ export const FindAllMovementsDocument = {
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'occurredAt' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'productName' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variantSku' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variantFirstAttribute' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'key' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'value' },
+                            },
+                          ],
+                        },
                       },
                     ],
                   },
@@ -7555,6 +8175,7 @@ export const FindTenantProfileDocument = {
     },
   ],
 } as unknown as DocumentNode<
+  FindTenantProfileQuery,
   FindTenantProfileQueryVariables
 >;
 export const FindTenantAuthInfoDocument = {

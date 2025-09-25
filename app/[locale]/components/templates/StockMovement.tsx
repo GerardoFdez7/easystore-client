@@ -1,6 +1,6 @@
 import HeaderDashboard from '@organisms/shared/HeaderDashboard';
 import SidebarLayout from '@organisms/shared/SidebarLayout';
-import MainStockMovement from '@organisms/stock-movement/MainStockMovement';
+import MainStockMovement from '@organisms/inventory/stock-movement/MainStockMovement';
 
 export default function StockMovementTemplate() {
   return (
