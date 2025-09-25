@@ -4,12 +4,12 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Warehouse, Plus } from 'lucide-react';
 import WarehouseCombobox from '@molecules/inventory/WarehouseCombobox';
-import StockMovementTable from '@molecules/stock-movement/StockMovementTable';
-import StockMovementSkeleton from '@molecules/stock-movement/StockMovementSkeleton';
+import StockMovementTable from '@molecules/inventory/stock-movement/StockMovementTable';
+import StockMovementSkeleton from '@molecules/inventory/stock-movement/StockMovementSkeleton';
 import EmptyState from '@molecules/shared/EmptyState';
 import SkeletonWrapper from '@molecules/shared/SkeletonWrapper';
 import { FindAllMovementsQueryVariables } from '@graphql/generated';
-import { useStockMovements } from '@hooks/domains/stock-movement/useStockMovements';
+import { useStockMovements } from '@hooks/domains/inventory/stock-movement/useStockMovements';
 
 export default function MainStockMovement() {
   const t = useTranslations('StockMovement');
@@ -46,7 +46,7 @@ export default function MainStockMovement() {
   }
 
   return (
-    <div className="mx-4 flex w-full max-w-7xl flex-col gap-4 sm:mx-auto">
+    <div className="mx-4 flex w-full max-w-7xl flex-col gap-4 xl:mx-auto">
       <SkeletonWrapper loading={loading}>
         <WarehouseCombobox
           value={selectedWarehouseId}
