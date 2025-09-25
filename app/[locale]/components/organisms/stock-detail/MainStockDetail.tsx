@@ -296,6 +296,7 @@ export default function MainStockDetail() {
             <div className="grid gap-2">
               <Label htmlFor="reason">{t('updateReasonLabel')}</Label>
               <Textarea
+                maxLength={2000}
                 id="reason"
                 placeholder={t('updateReasonPlaceholder')}
                 value={updateReason}

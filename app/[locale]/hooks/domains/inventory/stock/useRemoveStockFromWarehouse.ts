@@ -8,7 +8,7 @@ import {
   RemoveStockFromWarehouseMutation,
   RemoveStockFromWarehouseMutationVariables,
 } from '@graphql/generated';
-import useMutation from '../../useMutation';
+import { useMutation } from '@apollo/client/react';
 
 export const useRemoveStockFromWarehouse = () => {
   const t = useTranslations('Inventory');
@@ -34,15 +34,10 @@ export const useRemoveStockFromWarehouse = () => {
   });
 
   // Use the GraphQL mutation hook
-  const {
-    mutate: removeStockFromWarehouseMutation,
-    data,
-    errors,
-    isLoading,
-  } = useMutation<
+  const { data, error, loading } = useMutation<
     RemoveStockFromWarehouseMutation,
     RemoveStockFromWarehouseMutationVariables
-  >(RemoveStockFromWarehouseDocument, undefined, {
+  >(RemoveStockFromWarehouseDocument, {
     onCompleted: (data) => {
       if (data?.removeStockFromWarehouse) {
         toast.success(t('stockRemovedSuccessfully'), {
@@ -52,39 +47,6 @@ export const useRemoveStockFromWarehouse = () => {
         });
         // Reset form after successful removal
         form.reset();
-      }
-    },
-    onError: (error) => {
-      // Handle GraphQL errors
-      if (error.graphQLErrors?.length > 0) {
-        const graphQLError = error.graphQLErrors[0];
-        if (
-          graphQLError.message.includes('not found') ||
-          graphQLError.message.includes('does not exist')
-        ) {
-          toast.warning(t('stockOrWarehouseNotFound'), {
-            description: t('stockOrWarehouseNotFoundDescription'),
-          });
-        } else if (
-          graphQLError.message.includes('insufficient') ||
-          graphQLError.message.includes('quantity')
-        ) {
-          toast.warning(t('insufficientStock'), {
-            description: t('insufficientStockDescription'),
-          });
-        } else {
-          toast.error(t('stockRemovalFailed'), {
-            description: graphQLError.message,
-          });
-        }
-      } else if (error.networkError) {
-        toast.error(t('networkError'), {
-          description: t('networkErrorDescription'),
-        });
-      } else {
-        toast.error(t('unexpectedError'), {
-          description: t('unexpectedErrorDescription'),
-        });
       }
     },
   });
@@ -110,18 +72,15 @@ export const useRemoveStockFromWarehouse = () => {
       };
 
       await removeStockFromWarehouseMutation({ variables });
-    } catch (error) {
-      // Error handling is done in the onError callback
-      console.error('Remove stock from warehouse error:', error);
-    }
+    } catch (_error) {}
   };
 
   return {
     form,
     handleSubmit,
-    isLoading,
+    loading,
     removeStockFromWarehouseFormSchema,
     data,
-    errors,
+    error,
   };
 };

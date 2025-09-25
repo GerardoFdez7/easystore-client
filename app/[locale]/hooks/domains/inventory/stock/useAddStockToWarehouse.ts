@@ -8,7 +8,7 @@ import {
   AddStockToWarehouseMutation,
   AddStockToWarehouseMutationVariables,
 } from '@graphql/generated';
-import useMutation from '../../useMutation';
+import { useMutation } from '@apollo/client/react';
 
 export const useAddStockToWarehouse = () => {
   const t = useTranslations();
@@ -49,15 +49,10 @@ export const useAddStockToWarehouse = () => {
   });
 
   // Use the GraphQL mutation hook
-  const {
-    mutate: addStockMutation,
-    data,
-    errors,
-    isLoading,
-  } = useMutation<
+  const { data, error, loading } = useMutation<
     AddStockToWarehouseMutation,
     AddStockToWarehouseMutationVariables
-  >(AddStockToWarehouseDocument, undefined, {
+  >(AddStockToWarehouseDocument, {
     onCompleted: (data) => {
       if (data?.addStockToWarehouse) {
         toast.success(t('Stock.stockAddedSuccessfully'), {
@@ -68,37 +63,6 @@ export const useAddStockToWarehouse = () => {
 
         // Reset form after successful submission
         form.reset();
-      }
-    },
-    onError: (error) => {
-      // Handle GraphQL errors
-      if (error.graphQLErrors?.length > 0) {
-        const graphQLError = error.graphQLErrors[0];
-        if (graphQLError.message.includes('warehouse not found')) {
-          toast.error(t('Stock.warehouseNotFound'), {
-            description: t('Stock.warehouseNotFoundDescription'),
-          });
-        } else if (graphQLError.message.includes('variant not found')) {
-          toast.error(t('Stock.variantNotFound'), {
-            description: t('Stock.variantNotFoundDescription'),
-          });
-        } else if (graphQLError.message.includes('insufficient permissions')) {
-          toast.error(t('Stock.insufficientPermissions'), {
-            description: t('Stock.insufficientPermissionsDescription'),
-          });
-        } else {
-          toast.error(t('Stock.addStockFailed'), {
-            description: graphQLError.message,
-          });
-        }
-      } else if (error.networkError) {
-        toast.error(t('Stock.networkError'), {
-          description: t('Stock.networkErrorDescription'),
-        });
-      } else {
-        toast.error(t('Stock.unexpectedError'), {
-          description: t('Stock.unexpectedErrorDescription'),
-        });
       }
     },
   });
@@ -129,19 +93,16 @@ export const useAddStockToWarehouse = () => {
       };
 
       await addStockMutation({ variables });
-    } catch (error) {
-      // Error handling is done in the onError callback
-      console.error('Add stock error:', error);
-    }
+    } catch (_error) {}
   };
 
   return {
     form,
     handleSubmit,
-    isLoading,
+    loading,
     addStockFormSchema,
     data,
-    errors,
+    error,
   };
 };
 

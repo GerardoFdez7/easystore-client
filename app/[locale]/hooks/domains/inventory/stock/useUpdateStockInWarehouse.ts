@@ -8,7 +8,7 @@ import {
   UpdateStockInWarehouseMutation,
   UpdateStockInWarehouseMutationVariables,
 } from '@graphql/generated';
-import useMutation from '../../useMutation';
+import { useMutation } from '@apollo/client/react';
 
 interface UseUpdateStockInWarehouseProps {
   stockId: string;
@@ -68,58 +68,16 @@ export const useUpdateStockInWarehouse = ({
   });
 
   // Use the GraphQL mutation hook
-  const {
-    mutate: updateStockInWarehouseMutation,
-    data,
-    errors,
-    isLoading,
-  } = useMutation<
+  const { data, error, loading } = useMutation<
     UpdateStockInWarehouseMutation,
     UpdateStockInWarehouseMutationVariables
-  >(UpdateStockInWarehouseDocument, undefined, {
+  >(UpdateStockInWarehouseDocument, {
     onCompleted: (data) => {
       if (data?.updateStockInWarehouse) {
         toast.success(t('stockUpdatedSuccessfully'), {
           description: t('stockUpdatedDescription', {
             warehouseName: data.updateStockInWarehouse.name,
           }),
-        });
-      }
-    },
-    onError: (error) => {
-      // Handle GraphQL errors
-      if (error.graphQLErrors?.length > 0) {
-        const graphQLError = error.graphQLErrors[0];
-        if (
-          graphQLError.message.includes('not found') ||
-          graphQLError.message.includes('does not exist')
-        ) {
-          toast.error(t('stockOrWarehouseNotFound'), {
-            description: t('stockOrWarehouseNotFoundDescription'),
-          });
-        } else if (
-          graphQLError.message.includes('insufficient') ||
-          graphQLError.message.includes('quantity')
-        ) {
-          toast.error(t('insufficientStock'), {
-            description: t('insufficientStockDescription'),
-          });
-        } else if (graphQLError.message.includes('permission')) {
-          toast.error(t('permissionDenied'), {
-            description: t('permissionDeniedDescription'),
-          });
-        } else {
-          toast.error(t('stockUpdateFailed'), {
-            description: graphQLError.message,
-          });
-        }
-      } else if (error.networkError) {
-        toast.error(t('networkError'), {
-          description: t('networkErrorDescription'),
-        });
-      } else {
-        toast.error(t('unexpectedError'), {
-          description: t('unexpectedErrorDescription'),
         });
       }
     },
@@ -160,19 +118,16 @@ export const useUpdateStockInWarehouse = ({
       };
 
       await updateStockInWarehouseMutation({ variables });
-    } catch (error) {
-      // Error handling is done in the onError callback
-      console.error('Stock update error:', error);
-    }
+    } catch (_error) {}
   };
 
   return {
     form,
     handleSubmit,
-    isLoading,
+    loading,
     updateStockInWarehouseFormSchema,
     data,
-    errors,
+    error,
   };
 };
 
