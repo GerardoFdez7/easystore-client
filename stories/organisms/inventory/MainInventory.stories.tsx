@@ -3,7 +3,7 @@ import { MockedProvider } from '@apollo/client/testing/react';
 import { GraphQLError } from 'graphql';
 import MainInventory from '@organisms/inventory/MainInventory';
 import { FindInventoryDocument } from '@graphql/generated';
-import { mockInventoryTableData } from '@lib/utils';
+import { mockInventoryTableData } from '../../molecules/inventory/mocks/inventory-table';
 
 const meta: Meta<typeof MainInventory> = {
   title: 'Organisms/Inventory/MainInventory',
