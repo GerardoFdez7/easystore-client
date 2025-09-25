@@ -1107,9 +1107,11 @@
     "close": "Cerrar",
     "noCategories": "No hay categorías.",
 
+    "coverRequired": "La imagen de portada es obligatoria.",
     "titleRequired": "El título es obligatorio.",
     "titleTooLong": "El título no puede exceder {max} caracteres.",
     "descriptionTooLong": "La descripción no puede exceder {max} caracteres.",
+    "descriptionTooShort": "La descripción debe tener al menos {min} caracteres.",
     "invalidUrl": "La URL no es válida.",
     "saveSuccess": "Categoría actualizada correctamente.",
     "createSuccess": "Categoría creada correctamente."

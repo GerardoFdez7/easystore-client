@@ -9,6 +9,7 @@ import { Input } from '@shadcn/ui/input';
 import { Textarea } from '@shadcn/ui/textarea';
 import { Button } from '@shadcn/ui/button';
 import MediaUploader from '@organisms/shared/MediaUploader';
+import { toast } from 'sonner';
 
 import CategoryPicker from '@molecules/detail-category/CategoryPicker';
 import type { CategoryItem as PickerItem } from '@molecules/detail-category/CategoryPicker';
@@ -30,9 +31,8 @@ type SubCatLite = {
 
 type CategoryFormShape = {
   title: string;
-  description?: string;
-  cover?: string;
-  // UI keeps ids; hooks map to GraphQL `subCategories`
+  description: string;
+  cover: string;
   subCategoryIds?: string[];
 };
 
@@ -98,12 +98,12 @@ function EditScreen({ id }: { id: string }) {
           category.cover && category.cover.trim()
             ? category.cover
             : '/laptop.webp',
-        // Keep ids in form state; hooks will map to nested input
         subCategoryIds: (category.subCategories ?? [])
           .filter(Boolean)
           .map((sc: unknown) => (sc as { id?: string })?.id)
           .filter(Boolean) as string[],
       });
+      void form.trigger();
     }
   }, [category, form]);
 
@@ -173,8 +173,40 @@ function CategoryFormView({
   childrenFallback: ReadonlyArray<SubCatLite>;
   onCancel: () => void;
 }) {
+  //Media
+  React.useEffect(() => {
+    form.register('cover' as const, { shouldUnregister: false });
+    form.register('subCategoryIds' as const, { shouldUnregister: false });
+  }, [form]);
+
+  type UnknownRecord = Record<PropertyKey, unknown>;
+
+  const isRecord = (v: unknown): v is UnknownRecord =>
+    typeof v === 'object' && v !== null;
+
+  const hasKey = <K extends PropertyKey>(
+    obj: UnknownRecord,
+    key: K,
+  ): obj is UnknownRecord & Record<K, unknown> => key in obj;
+
+  const hasUrl = (v: unknown): v is { url: string } =>
+    isRecord(v) && hasKey(v, 'url') && typeof v.url === 'string';
+
+  const hasUrls = (v: unknown): v is { urls: string[] } =>
+    isRecord(v) &&
+    hasKey(v, 'urls') &&
+    Array.isArray(v.urls) &&
+    v.urls.every((x): x is string => typeof x === 'string');
+
+  const isStringArray = (v: unknown): v is string[] =>
+    Array.isArray(v) && v.every((x): x is string => typeof x === 'string');
+
+  const hasCover = (v: unknown): v is { cover: string } =>
+    isRecord(v) && hasKey(v, 'cover') && typeof v.cover === 'string';
+
   const t = tKey;
-  const { register, watch, setValue, getValues } = form;
+  const { register, watch, setValue, getValues, formState } = form;
+  const disableSave = isSubmitting || loadingCat || !formState.isValid;
 
   // Ensure RHF tracks the virtual field
   React.useEffect(() => {
@@ -183,7 +215,6 @@ function CategoryFormView({
 
   const selectedIdsRaw = watch('subCategoryIds') as string[] | undefined;
   const selectedIds = selectedIdsRaw ?? EmptyIDS;
-  // const selectedIdsKey = useMemo(() => selectedIds.join('|'), [selectedIds]);
 
   const selectedItems: PickerItem[] = useMemo(() => {
     const byId = new Map(catalog.map((c) => [c.id, c]));
@@ -213,15 +244,44 @@ function CategoryFormView({
     });
   }, [catalog, childrenFallback, selectedIds]);
 
-  const disableSave =
-    isSubmitting || loadingCat || (watch('title')?.trim().length ?? 0) === 0;
-
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 md:py-6 lg:px-8 2xl:m-5">
       <FormProvider {...form}>
         <Form {...form}>
           <form onSubmit={onSubmit} className="mx-auto max-w-4xl space-y-6">
-            <MediaUploader />
+            <MediaUploader
+              multiple={false}
+              initialMedia={form.getValues('cover') || null}
+              onMediaProcessed={async (out) => {
+                let url = '';
+
+                if (!out) {
+                  form.setValue('cover', '', {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                    shouldTouch: true,
+                  });
+                  await form.trigger('cover');
+                  return;
+                }
+
+                if (typeof out === 'string') url = out;
+                else if (isStringArray(out)) url = out[0] ?? '';
+                else if (hasUrl(out)) url = out.url;
+                else if (hasUrls(out)) url = out.urls[0] ?? '';
+                else if (hasCover(out)) url = out.cover;
+
+                form.setValue('cover', url, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                  shouldTouch: true,
+                });
+                await form.trigger('cover');
+              }}
+              onUploadError={(msg) =>
+                toast.error(String(msg ?? 'Upload failed'))
+              }
+            />
 
             <div className="space-y-1">
               <label
@@ -237,6 +297,11 @@ function CategoryFormView({
                 className="h-12 bg-white"
                 {...register('title')}
               />
+              {formState.errors.title?.message && (
+                <p className="text-destructive mt-1 text-xs">
+                  {String(formState.errors.title.message)}
+                </p>
+              )}
             </div>
 
             <div className="space-y-1">
@@ -253,6 +318,11 @@ function CategoryFormView({
                 className="min-h-[120px] bg-white"
                 {...register('description')}
               />
+              {formState.errors.description?.message && (
+                <p className="text-destructive mt-1 text-xs">
+                  {String(formState.errors.description.message)}
+                </p>
+              )}
             </div>
 
             <section className="mt-2 rounded-lg p-3 shadow-sm sm:p-4">

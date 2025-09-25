@@ -1111,9 +1111,11 @@
     "close": "Chiudi",
     "noCategories": "Ancora nessuna categoria.",
 
+    "coverRequired": "L'immagine di copertina è obbligatoria.",
     "titleRequired": "Il titolo è obbligatorio.",
     "titleTooLong": "Il titolo non può superare {max} caratteri.",
     "descriptionTooLong": "La descrizione non può superare {max} caratteri.",
+    "descriptionTooShort": "La descrizione deve contenere almeno {min} caratteri.",
     "invalidUrl": "L'URL non è valido.",
     "saveSuccess": "Categoria aggiornata con successo.",
     "createSuccess": "Categoria creata con successo."
