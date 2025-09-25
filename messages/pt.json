@@ -1111,6 +1111,7 @@
     "noCategories": "Ainda não há categorias.",
 
     "coverRequired": "A imagem de capa é obrigatória.",
+    "replaceCover": "Alterar capa",
     "titleRequired": "O título é obrigatório.",
     "titleTooLong": "O título não pode exceder {max} caracteres.",
     "descriptionTooLong": "A descrição não pode exceder {max} caracteres.",

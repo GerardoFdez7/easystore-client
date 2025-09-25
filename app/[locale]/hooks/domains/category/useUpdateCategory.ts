@@ -116,13 +116,8 @@ export function useUpdateCategory({
     const toAttach = [...nextIds].filter((x) => !prevIds.has(x));
     const toDetach = [...prevIds].filter((x) => !nextIds.has(x));
 
-    try {
-      // 1) Update parent base fields
-      console.log({ initialChildIds, next: [...nextIds], toAttach, toDetach });
-
-      await mutateUpdate({ variables: { id, input: baseInput } });
-
-      // 2) Attach/detach children by toggling their parentId
+    const runUpdate = async () => {
+      await mutateUpdate({ variables: { id, input: baseInput } }); // base
       if (toAttach.length + toDetach.length > 0) {
         await Promise.all([
           ...toAttach.map((childId) =>
@@ -137,14 +132,9 @@ export function useUpdateCategory({
           ),
         ]);
       }
+    };
 
-      toast.success(t('saveSuccess'));
-      if (onSuccess) onSuccess({ id });
-      else
-        router.push(
-          redirectTo ?? (locale ? `/${locale}/categories` : '/categories'),
-        );
-    } catch (e) {
+    const handleGqlError = (e: unknown) => {
       const err = e as {
         graphQLErrors?: Array<{
           message?: string;
@@ -160,7 +150,28 @@ export function useUpdateCategory({
         form.setError('description', { type: 'server', message: msg });
       else if (path?.includes('cover') || /cover|url/i.test(msg))
         form.setError('cover', { type: 'server', message: msg });
-    }
+
+      return msg;
+    };
+
+    try {
+      const p = runUpdate();
+
+      toast.promise(p, {
+        success: t('saveSuccess'),
+        error: (e: unknown) => handleGqlError(e),
+      });
+
+      await p;
+
+      setTimeout(() => {
+        if (onSuccess) onSuccess({ id });
+        else
+          router.push(
+            redirectTo ?? (locale ? `/${locale}/categories` : '/categories'),
+          );
+      }, 0);
+    } catch {}
   });
 
   const handleSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
