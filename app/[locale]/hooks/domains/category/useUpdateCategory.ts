@@ -30,14 +30,14 @@ function buildSchema(t: ReturnType<typeof useTranslations>) {
       .string()
       .trim()
       .max(1000, { message: t('descriptionTooLong', { max: 1000 }) })
-      .optional()
-      .or(z.literal('')),
+      .min(10, { message: t('descriptionTooShort', { min: 10 }) }),
     cover: z
       .string()
-      .url({ message: t('invalidUrl') })
-      .optional()
-      .or(z.literal('')),
-    // Only for UI; we compute diff and update each child's parentId
+      .trim()
+      .min(1, { message: t('coverRequired') })
+      .refine((v) => v.startsWith('/') || /^https?:\/\//i.test(v), {
+        message: t('invalidUrl'),
+      }),
     subCategoryIds: z.array(z.string()).default([]).optional(),
   });
 }
@@ -80,7 +80,9 @@ export function useUpdateCategory({
       subCategoryIds: [],
       ...defaultValues,
     },
-    mode: 'onSubmit',
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+    criteriaMode: 'all',
   });
 
   const [mutateUpdate, updateState] = useMutation<
@@ -116,6 +118,8 @@ export function useUpdateCategory({
 
     try {
       // 1) Update parent base fields
+      console.log({ initialChildIds, next: [...nextIds], toAttach, toDetach });
+
       await mutateUpdate({ variables: { id, input: baseInput } });
 
       // 2) Attach/detach children by toggling their parentId

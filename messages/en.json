@@ -1150,9 +1150,11 @@
     "close": "Close",
     "noCategories": "No categories yet.",
 
+    "coverRequired": "Cover image is required.",
     "titleRequired": "Title is required.",
     "titleTooLong": "Title cannot exceed {max} characters.",
     "descriptionTooLong": "Description cannot exceed {max} characters.",
+    "descriptionTooShort": "Description must be at least {min} characters.",
     "invalidUrl": "The URL is not valid.",
     "saveSuccess": "Category updated successfully.",
     "createSuccess": "Category created successfully."

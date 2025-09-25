@@ -1,4 +1,3 @@
-// src/hooks/domains/category/useCategory.ts
 'use client';
 
 import { useQuery } from '@apollo/client';

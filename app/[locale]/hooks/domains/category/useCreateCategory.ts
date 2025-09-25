@@ -14,7 +14,7 @@ import {
   CreateCategoryDocument,
   CreateCategoryMutation,
   CreateCategoryMutationVariables,
-  UpdateCategoryDocument, // used to attach children by parentId after create
+  UpdateCategoryDocument,
   UpdateCategoryMutation,
   UpdateCategoryMutationVariables,
   FindAllCategoriesDocument,
@@ -34,14 +34,14 @@ function buildSchema(t: ReturnType<typeof useTranslations>) {
       .string()
       .trim()
       .max(1000, { message: t('descriptionTooLong', { max: 1000 }) })
-      .optional()
-      .or(z.literal('')),
+      .min(10, { message: t('descriptionTooShort', { min: 10 }) }),
     cover: z
       .string()
-      .url({ message: t('invalidUrl') })
-      .optional()
-      .or(z.literal('')),
-    // Only for UI; we map it to child updates (parentId) after create
+      .trim()
+      .min(1, { message: t('coverRequired') })
+      .refine((v) => v.startsWith('/') || /^https?:\/\//i.test(v), {
+        message: t('invalidUrl'),
+      }),
     subCategoryIds: z.array(z.string()).default([]).optional(),
   });
 }
@@ -79,7 +79,9 @@ export function useCreateCategory({
       subCategoryIds: [],
       ...defaultValues,
     },
-    mode: 'onSubmit',
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+    criteriaMode: 'all',
   });
 
   const [mutateCreate, createState] = useMutation<
@@ -101,8 +103,8 @@ export function useCreateCategory({
   const _submit = form.handleSubmit(async (values) => {
     const input = {
       name: values.title.trim(),
-      description: values.description?.trim() ?? '',
-      cover: values.cover?.trim() ?? '',
+      description: values.description.trim(),
+      cover: values.cover.trim(),
     } satisfies CreateCategoryMutationVariables['input'];
 
     try {

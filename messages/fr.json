@@ -1108,9 +1108,12 @@
     "noResults": "Aucun résultat",
     "close": "Fermer",
     "noCategories": "Aucune catégorie pour le moment.",
+
+    "coverRequired": "L’image de couverture est obligatoire.",
     "titleRequired": "Le titre est obligatoire.",
     "titleTooLong": "Le titre ne peut pas dépasser {max} caractères.",
     "descriptionTooLong": "La description ne peut pas dépasser {max} caractères.",
+    "descriptionTooShort": "La description doit contenir au moins {min} caractères.",
     "invalidUrl": "L’URL n’est pas valide.",
     "saveSuccess": "Catégorie mise à jour avec succès.",
     "createSuccess": "Catégorie créée avec succès."
