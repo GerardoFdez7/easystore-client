@@ -12,6 +12,7 @@ import {
   ClipboardList,
   Warehouse,
   Layers,
+  ChevronDown,
 } from 'lucide-react';
 import OwnerLogo from '@atoms/dashboard/OwnerLogo';
 import ButtonSidebar from '@atoms/dashboard/ButtonSidebar';
@@ -30,6 +31,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@shadcn/ui/collapsible';
+import { Button } from '@shadcn/ui/button';
 
 import { useTranslations } from 'next-intl';
 
@@ -37,6 +39,7 @@ export default function Sidebar(
   props: React.ComponentProps<typeof ShadcnSidebar>,
 ) {
   const t = useTranslations('Dashboard');
+  const [openProducts, setOpenProducts] = React.useState(false);
 
   return (
     <ShadcnSidebar className="mt-20 h-auto" collapsible="icon" {...props}>
@@ -59,25 +62,31 @@ export default function Sidebar(
             />
           </SidebarMenuItem>
 
-          <Collapsible defaultOpen className="group/collapsible">
+          <Collapsible
+            open={openProducts}
+            onOpenChange={setOpenProducts}
+            className="group/collapsible"
+          >
             <SidebarMenuItem>
-              <CollapsibleTrigger asChild>
+              <div className="flex items-center gap-2">
                 <ButtonSidebar
                   icon={<Package />}
                   label={t('products')}
                   route="products"
+                  className="flex-1"
                 />
-                {/* <SidebarMenuButton className="h-12">
-                  <Archive className="h-4 w-4" />
-                  <span className="font-medium">{t('products')}</span>
-                  <ChevronDown
-                    className={cn(
-                      'ml-auto h-4 w-4 transition-transform',
-                      'group-data-[state=open]/collapsible:rotate-180',
-                    )}
-                  />
-                </SidebarMenuButton> */}
-              </CollapsibleTrigger>
+                <CollapsibleTrigger asChild>
+                  <Button
+                    aria-label={
+                      openProducts ? 'Ocultar categorías' : 'Mostrar categorías'
+                    }
+                    variant={'ghost'}
+                    className="ml-auto group-data-[collapsible=icon]:hidden"
+                  >
+                    <ChevronDown className="h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                  </Button>
+                </CollapsibleTrigger>
+              </div>
 
               <CollapsibleContent>
                 <SidebarMenuSub>
