@@ -30,7 +30,7 @@ const meta: Meta<typeof MainDetailCategory> = {
   title: 'Organisms/DetailCategory/MainDetailCategory',
   component: MainDetailCategory,
   args: {
-    name: 'new',
+    id: 'new',
   },
   decorators: [
     (Story) => (
