@@ -122,6 +122,7 @@ export default function AddressForm({
                 <FormLabel>{t('deliveryNumber')}</FormLabel>
                 <FormControl>
                   <Input
+                    type="tel"
                     placeholder={t('deliveryNumberPlaceholder')}
                     {...field}
                   />

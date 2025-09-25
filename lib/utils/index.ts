@@ -21,5 +21,3 @@ export {
   handleDecimalInputChange,
   handleDecimalInputBlur,
 } from './input-formatters';
-export { handleApolloError } from './error.handler';
-export { mockInventoryTableData } from './mock-data/inventory-table';

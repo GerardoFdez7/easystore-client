@@ -160,9 +160,7 @@ export function useAddressCombobox(): UseAddressComboboxReturn {
     try {
       resetPagination();
       await apolloRefetch();
-    } catch (err) {
-      console.error('Error refetching addresses:', err);
-    }
+    } catch (_err) {}
   }, [apolloRefetch, resetPagination]);
 
   return {

@@ -3,7 +3,7 @@ import InventoryTable from '@molecules/inventory/InventoryTable';
 import { FindInventoryQueryVariables } from '@graphql/generated';
 import { useInventoryStorybook } from './hooks/useInventoryStorybook';
 import { ComponentProps } from 'react';
-import { mockInventoryTableData } from '@lib/utils';
+import { mockInventoryTableData } from './mocks/inventory-table';
 
 // Wrapper component for Storybook that uses the non-suspense hook
 const InventoryTableStorybook = (
