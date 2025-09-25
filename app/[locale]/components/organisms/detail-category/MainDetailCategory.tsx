@@ -180,32 +180,40 @@ function CategoryFormView({
   }, [form]);
 
   type UnknownRecord = Record<PropertyKey, unknown>;
-
   const isRecord = (v: unknown): v is UnknownRecord =>
     typeof v === 'object' && v !== null;
-
   const hasKey = <K extends PropertyKey>(
     obj: UnknownRecord,
     key: K,
   ): obj is UnknownRecord & Record<K, unknown> => key in obj;
-
   const hasUrl = (v: unknown): v is { url: string } =>
     isRecord(v) && hasKey(v, 'url') && typeof v.url === 'string';
-
   const hasUrls = (v: unknown): v is { urls: string[] } =>
     isRecord(v) &&
     hasKey(v, 'urls') &&
     Array.isArray(v.urls) &&
     v.urls.every((x): x is string => typeof x === 'string');
-
   const isStringArray = (v: unknown): v is string[] =>
     Array.isArray(v) && v.every((x): x is string => typeof x === 'string');
-
   const hasCover = (v: unknown): v is { cover: string } =>
     isRecord(v) && hasKey(v, 'cover') && typeof v.cover === 'string';
 
+  const handleClearCover = React.useCallback(() => {
+    // Encapsulamos la async y la “despromisificamos” con void
+    void (async () => {
+      form.setValue('cover', '', {
+        shouldDirty: true,
+        shouldValidate: true,
+        shouldTouch: true,
+      });
+      await form.trigger('cover');
+    })();
+  }, [form]);
+
   const t = tKey;
   const { register, watch, setValue, getValues, formState } = form;
+  const coverVal = (watch('cover') ?? '').trim();
+
   const disableSave = isSubmitting || loadingCat || !formState.isValid;
 
   // Ensure RHF tracks the virtual field
@@ -250,21 +258,16 @@ function CategoryFormView({
         <Form {...form}>
           <form onSubmit={onSubmit} className="mx-auto max-w-4xl space-y-6">
             <MediaUploader
+              key={`cover-${coverVal ? 'set' : 'empty'}`}
               multiple={false}
-              initialMedia={form.getValues('cover') || null}
+              initialMedia={coverVal || null}
               onMediaProcessed={async (out) => {
-                let url = '';
-
                 if (!out) {
-                  form.setValue('cover', '', {
-                    shouldDirty: true,
-                    shouldValidate: true,
-                    shouldTouch: true,
-                  });
-                  await form.trigger('cover');
+                  handleClearCover();
                   return;
                 }
 
+                let url = '';
                 if (typeof out === 'string') url = out;
                 else if (isStringArray(out)) url = out[0] ?? '';
                 else if (hasUrl(out)) url = out.url;
@@ -282,6 +285,19 @@ function CategoryFormView({
                 toast.error(String(msg ?? 'Upload failed'))
               }
             />
+
+            {coverVal && (
+              <div className="mt-2 flex justify-center">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleClearCover}
+                  className="h-9"
+                >
+                  {t('replaceCover')}
+                </Button>
+              </div>
+            )}
 
             <div className="space-y-1">
               <label

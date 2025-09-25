@@ -1110,6 +1110,7 @@
     "noCategories": "Aucune catégorie pour le moment.",
 
     "coverRequired": "L’image de couverture est obligatoire.",
+    "replaceCover": "Changer la couverture",
     "titleRequired": "Le titre est obligatoire.",
     "titleTooLong": "Le titre ne peut pas dépasser {max} caractères.",
     "descriptionTooLong": "La description ne peut pas dépasser {max} caractères.",

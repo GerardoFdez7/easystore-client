@@ -1151,6 +1151,7 @@
     "noCategories": "No categories yet.",
 
     "coverRequired": "Cover image is required.",
+    "replaceCover": "Change cover",
     "titleRequired": "Title is required.",
     "titleTooLong": "Title cannot exceed {max} characters.",
     "descriptionTooLong": "Description cannot exceed {max} characters.",
