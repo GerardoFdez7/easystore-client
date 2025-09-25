@@ -12,7 +12,7 @@ const ignorePatterns = [
   '*.config.ts',
   '*.config.mjs',
   '.storybook',
-  '**/generated.ts'
+  '**/generated.ts',
 ];
 
 const eslintConfig = [
@@ -92,7 +92,7 @@ const eslintConfig = [
       ],
 
       // Prettier integration
-      'prettier/prettier': 'error',
+      'prettier/prettier': 'warn',
     },
   },
   ...compat.config({

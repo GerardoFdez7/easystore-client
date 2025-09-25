@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import React from 'react';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { cn } from 'utils';
 import { Button } from './button';
@@ -13,6 +13,7 @@ import {
   CommandList,
 } from './command';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
+import LoadMoreButton from '@atoms/shared/LoadMoreButton';
 
 export interface ComboboxOption {
   value: string;
@@ -24,9 +25,9 @@ export interface ComboboxProps {
   options: ComboboxOption[];
   value?: string;
   onValueChange?: (value: string) => void;
-  placeholder?: string;
-  searchPlaceholder?: string;
-  emptyMessage?: string;
+  placeholder: string;
+  searchPlaceholder: string;
+  emptyMessage: string;
   className?: string;
   disabled?: boolean;
   open?: boolean;
@@ -35,15 +36,23 @@ export interface ComboboxProps {
   align?: 'start' | 'center' | 'end';
   sideOffset?: number;
   width?: string | number;
+  serverSide?: boolean;
+  onSearchChange?: (search: string) => void;
+  // Load More functionality
+  hasMore?: boolean;
+  isLoadingMore?: boolean;
+  onLoadMore?: () => void;
+  loadMoreText?: string;
+  loadingText?: string;
 }
 
 function Combobox({
   options = [],
   value,
   onValueChange,
-  placeholder = 'Select option...',
-  searchPlaceholder = 'Search...',
-  emptyMessage = 'No option found.',
+  placeholder,
+  searchPlaceholder,
+  emptyMessage,
   className,
   disabled = false,
   open: controlledOpen,
@@ -51,9 +60,15 @@ function Combobox({
   side = 'bottom',
   align = 'start',
   sideOffset = 4,
-  width = 200,
+  width,
+  serverSide = false,
+  onSearchChange,
+  hasMore = false,
+  isLoadingMore = false,
+  onLoadMore,
 }: ComboboxProps) {
   const [internalOpen, setInternalOpen] = React.useState(false);
+  const [search, setSearch] = React.useState('');
 
   // Use controlled state if provided, otherwise use internal state
   const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
@@ -69,25 +84,30 @@ function Combobox({
       const newValue = selectedValue === value ? '' : selectedValue;
       onValueChange?.(newValue);
       setOpen(false);
+      if (serverSide) setSearch('');
     },
-    [value, onValueChange, setOpen],
+    [value, onValueChange, setOpen, serverSide],
   );
 
-  const triggerWidth = typeof width === 'number' ? `${width}px` : width;
+  const triggerWidth = width
+    ? typeof width === 'number'
+      ? `${width}px`
+      : width
+    : undefined;
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={setOpen} modal={true}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
           role="combobox"
           aria-expanded={open}
           className={cn(
-            'justify-between',
+            'w-fit justify-between',
             !selectedOption && 'text-muted-foreground',
             className,
           )}
-          style={{ width: triggerWidth }}
+          style={triggerWidth ? { width: triggerWidth } : undefined}
           disabled={disabled}
         >
           {selectedOption ? selectedOption.label : placeholder}
@@ -96,13 +116,24 @@ function Combobox({
       </PopoverTrigger>
       <PopoverContent
         className="p-0"
-        style={{ width: triggerWidth }}
+        style={triggerWidth ? { width: triggerWidth } : undefined}
         side={side}
         align={align}
         sideOffset={sideOffset}
       >
-        <Command>
-          <CommandInput placeholder={searchPlaceholder} />
+        <Command shouldFilter={!serverSide}>
+          <CommandInput
+            placeholder={searchPlaceholder}
+            value={serverSide ? search : undefined}
+            onValueChange={
+              serverSide
+                ? (v) => {
+                    setSearch(v);
+                    onSearchChange?.(v);
+                  }
+                : undefined
+            }
+          />
           <CommandList>
             <CommandEmpty>{emptyMessage}</CommandEmpty>
             <CommandGroup>
@@ -115,7 +146,7 @@ function Combobox({
                 >
                   <Check
                     className={cn(
-                      'mr-2 h-4 w-4',
+                      'h-4 w-4',
                       value === option.value ? 'opacity-100' : 'opacity-0',
                     )}
                   />
@@ -123,6 +154,16 @@ function Combobox({
                 </CommandItem>
               ))}
             </CommandGroup>
+            {hasMore && onLoadMore && (
+              <LoadMoreButton
+                onClick={onLoadMore}
+                isLoading={isLoadingMore}
+                size="sm"
+                iconSize="sm"
+                containerClassName="p-2"
+                className="text-xs"
+              />
+            )}
           </CommandList>
         </Command>
       </PopoverContent>

@@ -17,7 +17,7 @@ export default function ResetPasswordForm() {
   const [token, setToken] = useState<string>('');
   const [isTokenInvalid, setIsTokenInvalid] = useState(false);
   const searchParams = useSearchParams();
-  const { handleUpdatePassword, isLoading, formSchema } = useUpdatePassword();
+  const { handleUpdatePassword, loading, formSchema } = useUpdatePassword();
 
   const form = useForm<ResetPasswordFormData>({
     resolver: zodResolver(formSchema),
@@ -53,7 +53,7 @@ export default function ResetPasswordForm() {
       data.password,
       data.confirmPassword,
     );
-    if (result.success) {
+    if (result?.success) {
       handleResetPasswordSuccess();
     } else {
       // If the request failed, it could be due to invalid/expired token
@@ -85,7 +85,7 @@ export default function ResetPasswordForm() {
       token={token}
       form={form}
       onSubmit={handleSubmit}
-      isLoading={isLoading}
+      loading={loading}
       isTokenInvalid={isTokenInvalid}
     />
   );

@@ -20,7 +20,7 @@ const VideoThumb = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [thumbnailSrc, setThumbnailSrc] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
@@ -126,7 +126,7 @@ const VideoThumb = ({
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gray-200">
-            {isLoading ? (
+            {loading ? (
               <div className="flex flex-col items-center">
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent"></div>
                 <span className="mt-1 text-xs text-gray-500">Loading...</span>

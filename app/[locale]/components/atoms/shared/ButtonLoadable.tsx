@@ -7,14 +7,14 @@ import { buttonVariants } from '@shadcn/ui/button';
 interface ButtonLoadableProps
   extends React.ComponentProps<'button'>,
     VariantProps<typeof buttonVariants> {
-  isLoading?: boolean;
+  loading?: boolean;
   loadingText?: string;
   children: React.ReactNode;
   loaderSize?: number;
 }
 
 const ButtonLoadable: React.FC<ButtonLoadableProps> = ({
-  isLoading = false,
+  loading = false,
   loadingText,
   children,
   loaderSize = 12,
@@ -22,8 +22,8 @@ const ButtonLoadable: React.FC<ButtonLoadableProps> = ({
   ...props
 }) => {
   return (
-    <Button disabled={isLoading || disabled} {...props}>
-      {isLoading ? (
+    <Button disabled={loading || disabled} {...props}>
+      {loading ? (
         <>
           <CartLoader size={loaderSize} />
           {loadingText && <span>{loadingText}</span>}

@@ -25,6 +25,6 @@ export const calculateTimeLeft = (targetDate: Date): TimeLeft => {
 
 export const createLaunchDate = (): Date => {
   return new Date(
-    process.env.NEXT_PUBLIC_LAUNCH_DATE || '2026-07-28T00:00:00Z',
+    process.env.NEXT_PUBLIC_LAUNCH_DATE || '2025-11-21T00:00:00Z',
   );
 };

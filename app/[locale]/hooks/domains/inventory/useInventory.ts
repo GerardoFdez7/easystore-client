@@ -1,0 +1,96 @@
+import {
+  FindInventoryQueryVariables,
+  FindInventoryDocument,
+  FindInventoryQuery,
+  FindWarehouseByIdDocument,
+  FindWarehouseByIdQueryVariables,
+  FindWarehouseByIdQuery,
+} from '@graphql/generated';
+import { InventoryItem } from '@lib/types/inventory';
+import { useQuery } from '@apollo/client/react';
+
+// Type for the stock data from both queries
+type StockData =
+  | NonNullable<
+      FindWarehouseByIdQuery['getWarehouseById']
+    >['stockPerWarehouses'][0]
+  | NonNullable<
+      FindInventoryQuery['getAllWarehouses']['warehouses'][0]
+    >['stockPerWarehouses'][0];
+
+export const useInventory = (
+  variables: FindInventoryQueryVariables,
+  warehouseId?: string,
+) => {
+  // Use warehouse-specific query if warehouseId is provided
+  const warehouseQuery = useQuery(FindWarehouseByIdDocument, {
+    variables: { id: warehouseId } as FindWarehouseByIdQueryVariables,
+    skip: !warehouseId,
+    fetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: false,
+    errorPolicy: 'all',
+  });
+
+  // Use general inventory query if no specific warehouse is selected
+  const inventoryQuery = useQuery(FindInventoryDocument, {
+    variables,
+    skip: !!warehouseId,
+    fetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: false,
+    errorPolicy: 'all',
+  });
+
+  // Determine which query to use based on warehouseId
+  const { loading, error } = warehouseId ? warehouseQuery : inventoryQuery;
+
+  let inventoryData: (StockData & { warehouseName?: string })[] = [];
+
+  if (warehouseId && warehouseQuery.data) {
+    // Handle warehouse-specific data structure
+    const warehouseName = warehouseQuery.data.getWarehouseById?.name || '';
+    inventoryData =
+      warehouseQuery.data.getWarehouseById?.stockPerWarehouses?.map(
+        (stock) => ({
+          ...stock,
+          warehouseName,
+        }),
+      ) || [];
+  } else if (!warehouseId && inventoryQuery.data) {
+    // Handle general inventory data structure
+    inventoryData =
+      inventoryQuery.data?.getAllWarehouses?.warehouses?.flatMap(
+        (warehouse) =>
+          warehouse.stockPerWarehouses?.map((stock) => ({
+            ...stock,
+            warehouseName: warehouse.name,
+          })) || [],
+      ) || [];
+  }
+
+  const formattedInventory: InventoryItem[] = inventoryData.map((item) => ({
+    id: item.id,
+    variantFirstAttribute: {
+      key: item.variantFirstAttribute?.key ?? '',
+      value: item.variantFirstAttribute?.value ?? '',
+    },
+    productName: item.productName ?? '',
+    variantSku: item.variantSku ?? '',
+    qtyAvailable: item.qtyAvailable ?? 0,
+    qtyReserved: item.qtyReserved ?? 0,
+    estimatedReplenishmentDate: item.estimatedReplenishmentDate ?? '',
+    productLocation: item.productLocation ? item.productLocation : '',
+    serialNumbers: item.serialNumbers ? item.serialNumbers : [],
+    lotNumber: item.lotNumber ? item.lotNumber : '',
+    name: item.warehouseName ? item.warehouseName : '',
+  }));
+
+  // Get refetch functions from both queries
+  const refetch = warehouseId ? warehouseQuery.refetch : inventoryQuery.refetch;
+
+  return {
+    inventory: formattedInventory,
+    loading,
+    error,
+    refetch,
+  };
+};

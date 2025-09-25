@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import { usePathname } from '@i18n/navigation';
 import { useAuth } from '@hooks/domains/authentication/useAuth';
 import { isProtectedRoute } from '@consts/routes';
-import SpinLoader from '@atoms/shared/SpinLoader';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -15,19 +14,19 @@ export default function ProtectedRoute({
   children,
   fallback,
 }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading, redirectToLogin } = useAuth();
+  const { isAuthenticated, loading, redirectToLogin } = useAuth();
   const pathname = usePathname();
 
   useEffect(() => {
     // Only check authentication for protected routes
-    if (isProtectedRoute(pathname) && !isLoading && !isAuthenticated) {
+    if (isProtectedRoute(pathname) && !loading && !isAuthenticated) {
       redirectToLogin();
     }
-  }, [isAuthenticated, isLoading, pathname, redirectToLogin]);
+  }, [isAuthenticated, loading, pathname, redirectToLogin]);
 
   // Show loading state while checking authentication
-  if (isLoading) {
-    return fallback || <SpinLoader />;
+  if (loading) {
+    return fallback;
   }
 
   // For protected routes, only render children if authenticated

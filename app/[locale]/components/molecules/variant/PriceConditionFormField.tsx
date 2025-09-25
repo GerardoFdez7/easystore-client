@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@shadcn/ui/select';
-import type { Condition } from '@lib/utils/types/variant';
+import type { Condition } from '@lib/types/variant';
 import { useTranslations } from 'next-intl';
 
 interface PriceConditionFormFieldProps {

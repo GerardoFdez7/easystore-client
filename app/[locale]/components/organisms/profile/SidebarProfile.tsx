@@ -22,7 +22,7 @@ type ProfileFormData = {
 
 export default function SidebarProfile() {
   const t = useTranslations('Profile');
-  const { profile, actions, isLoading, validators } = useProfile();
+  const { profile, actions, loading, validators } = useProfile();
 
   // Create form schema for sidebar fields
   const formSchema = z.object({
@@ -153,7 +153,7 @@ export default function SidebarProfile() {
                 <DescriptionEditor
                   value={field.value}
                   onSave={(v) => handleFieldSave('description', v)}
-                  loading={isLoading}
+                  loading={loading}
                 />
                 <FormMessage />
               </FormItem>

@@ -39,13 +39,13 @@ function useVariant() {
     console.log('Form submitted:', data);
   };
 
-  const isLoading = false;
+  const loading = false;
 
-  return { form, handleSubmit, isLoading };
+  return { form, handleSubmit, loading };
 }
 
 export default function MainVariant() {
-  const { form, handleSubmit, isLoading } = useVariant();
+  const { form, handleSubmit, loading } = useVariant();
   return (
     <main className="mx-4 sm:mx-auto">
       <FormProvider {...form}>
@@ -66,7 +66,7 @@ export default function MainVariant() {
             <InstallmentPaymentFormField />
             <WarrantyFormField />
             <div className="flex justify-end">
-              <SaveButton type="submit" isLoading={isLoading} size="lg" />
+              <SaveButton type="submit" loading={loading} size="lg" />
             </div>
           </form>
         </Form>

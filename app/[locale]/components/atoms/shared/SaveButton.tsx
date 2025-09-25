@@ -9,14 +9,14 @@ import { Save } from 'lucide-react';
 interface SaveButtonProps
   extends React.ComponentProps<'button'>,
     VariantProps<typeof buttonVariants> {
-  isLoading?: boolean;
+  loading?: boolean;
   showIcon?: boolean;
   loaderSize?: 'sm' | 'md' | 'lg' | 'xl';
   translationKey?: string;
 }
 
 const SaveButton: React.FC<SaveButtonProps> = ({
-  isLoading = false,
+  loading = false,
   showIcon = false,
   loaderSize = 'sm',
   translationKey = 'save',
@@ -25,24 +25,24 @@ const SaveButton: React.FC<SaveButtonProps> = ({
   size = 'default',
   ...props
 }) => {
-  const t = useTranslations('Profile');
+  const t = useTranslations('Shared');
 
   return (
     <Button
-      disabled={isLoading || disabled}
+      disabled={loading || disabled}
       variant={variant}
       size={size}
       {...props}
     >
-      {isLoading ? (
+      {loading ? (
         <>
           <SpinLoader size={loaderSize} />
-          <span className="text-lg font-medium">{t(translationKey)}</span>
+          <span className="font-medium">{t(translationKey)}</span>
         </>
       ) : (
         <>
           {showIcon && <Save className="h-4 w-4" />}
-          <span className="text-lg font-medium">{t(translationKey)}</span>
+          <span className="font-medium">{t(translationKey)}</span>
         </>
       )}
     </Button>

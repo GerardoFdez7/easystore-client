@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import MediaUploader from '@organisms/shared/MediaUploader';
-import { MockedProvider } from '@apollo/client/testing';
-import { GetMediaTokenDocument } from '@lib/graphql/generated';
+import { MockedProvider } from '@apollo/client/testing/react';
+import { GetMediaTokenDocument } from '@graphql/generated';
 
 // Mock data for the GraphQL query
 const mocks = [
@@ -31,7 +31,7 @@ const meta: Meta<typeof MediaUploader> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <div className="mx-auto max-w-md p-4">
           <Story />
         </div>
@@ -127,7 +127,7 @@ const errorMocks = [
 export const AuthenticationError: Story = {
   decorators: [
     (Story) => (
-      <MockedProvider mocks={errorMocks} addTypename={false}>
+      <MockedProvider mocks={errorMocks}>
         <div className="mx-auto max-w-md p-4">
           <Story />
         </div>
@@ -159,7 +159,7 @@ const loadingMocks = [
 export const LoadingState: Story = {
   decorators: [
     (Story) => (
-      <MockedProvider mocks={loadingMocks} addTypename={false}>
+      <MockedProvider mocks={loadingMocks}>
         <div className="mx-auto max-w-md p-4">
           <Story />
         </div>

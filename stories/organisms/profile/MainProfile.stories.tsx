@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import MainProfile from '@organisms/profile/MainProfile';
-import { MockedProvider } from '@apollo/client/testing';
-import { FindTenantProfileDocument } from '@lib/graphql/generated';
+import { MockedProvider } from '@apollo/client/testing/react';
+import { FindTenantProfileDocument } from '@graphql/generated';
 
 const meta: Meta<typeof MainProfile> = {
   component: MainProfile,
@@ -32,7 +32,6 @@ export const Loading: Story = {
             delay: Infinity, // This will keep the query in loading state
           },
         ]}
-        addTypename={false}
       >
         <Story />
       </MockedProvider>

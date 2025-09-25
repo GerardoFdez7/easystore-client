@@ -109,8 +109,9 @@ export const Disabled: Story = {
     options: frameworks,
     value: 'react',
     placeholder: 'Select framework...',
+    searchPlaceholder: 'Search frameworks...',
+    emptyMessage: 'No framework found.',
     disabled: true,
-    width: 200,
   },
 };
 
@@ -120,7 +121,6 @@ export const WithDisabledOptions: Story = {
     placeholder: 'Select status...',
     searchPlaceholder: 'Search status...',
     emptyMessage: 'No status found.',
-    width: 200,
   },
 };
 
@@ -148,6 +148,8 @@ export const PopoverPositioning: Story = {
   args: {
     options: frameworks,
     placeholder: 'Select framework...',
+    searchPlaceholder: 'Search frameworks...',
+    emptyMessage: 'No framework found.',
     side: 'top',
     align: 'center',
     width: 200,
@@ -247,6 +249,8 @@ const MultipleComponent = () => {
             value={framework}
             onValueChange={setFramework}
             placeholder="Select framework..."
+            searchPlaceholder="Search frameworks..."
+            emptyMessage="No framework found."
             width={200}
           />
         </div>
@@ -257,6 +261,8 @@ const MultipleComponent = () => {
             value={language}
             onValueChange={setLanguage}
             placeholder="Select language..."
+            searchPlaceholder="Search languages..."
+            emptyMessage="No language found."
             width={200}
           />
         </div>
@@ -267,6 +273,8 @@ const MultipleComponent = () => {
             value={status}
             onValueChange={setStatus}
             placeholder="Select status..."
+            searchPlaceholder="Search status..."
+            emptyMessage="No status found."
             width={200}
           />
         </div>
@@ -283,4 +291,68 @@ const MultipleComponent = () => {
 export const Multiple: Story = {
   render: () => <MultipleComponent />,
   args: {},
+};
+
+const LoadMoreComponent = (args: ComboboxProps) => {
+  const initialOptions: ComboboxOption[] = [
+    { value: 'apple', label: 'Apple' },
+    { value: 'banana', label: 'Banana' },
+    { value: 'cherry', label: 'Cherry' },
+    { value: 'date', label: 'Date' },
+    { value: 'elderberry', label: 'Elderberry' },
+  ];
+  const allFruits: ComboboxOption[] = [
+    ...initialOptions,
+    { value: 'fig', label: 'Fig' },
+    { value: 'grape', label: 'Grape' },
+    { value: 'honeydew', label: 'Honeydew' },
+    { value: 'kiwi', label: 'Kiwi' },
+    { value: 'lemon', label: 'Lemon' },
+  ];
+
+  const [options, setOptions] = useState<ComboboxOption[]>(initialOptions);
+  const [value, setValue] = useState<string>('');
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+
+  const handleLoadMore = () => {
+    setIsLoadingMore(true);
+    setTimeout(() => {
+      const currentLength = options.length;
+      const newOptions = allFruits.slice(0, currentLength + 3);
+      setOptions(newOptions);
+      setIsLoadingMore(false);
+      if (newOptions.length === allFruits.length) {
+        setHasMore(false);
+      }
+    }, 999999999999999);
+  };
+
+  return (
+    <div className="space-y-4">
+      <Combobox
+        {...args}
+        options={options}
+        value={value}
+        onValueChange={setValue}
+        hasMore={hasMore}
+        isLoadingMore={isLoadingMore}
+        onLoadMore={handleLoadMore}
+        loadMoreText="Load more fruits"
+        loadingText="Loading..."
+      />
+      <div className="text-muted-foreground text-sm">
+        Selected value: {value || 'None'}
+      </div>
+    </div>
+  );
+};
+
+export const WithLoadMore: Story = {
+  render: (args) => <LoadMoreComponent {...args} />,
+  args: {
+    placeholder: 'Select fruit...',
+    searchPlaceholder: 'Search fruits...',
+    emptyMessage: 'No fruit found.',
+  },
 };

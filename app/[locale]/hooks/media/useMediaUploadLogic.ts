@@ -39,7 +39,7 @@ export const useMediaUploadLogic = ({
     resetUploadTracking,
   } = useMediaState();
 
-  const { errors, authenticator, isLoading } = useMediaToken();
+  const { error, authenticator, loading } = useMediaToken();
 
   /**
    * Handles the completion of upload process and persistence
@@ -183,9 +183,9 @@ export const useMediaUploadLogic = ({
     isProcessing,
     persistedMedia,
     mediaItems,
-    isLoading,
+    loading,
     isUploading,
-    errors,
+    error,
 
     // State setters
     setIsEditing,

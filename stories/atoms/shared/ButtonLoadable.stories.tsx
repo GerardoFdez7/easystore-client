@@ -7,7 +7,7 @@ const meta: Meta<typeof ButtonLoadable> = {
     layout: 'centered',
   },
   component: ButtonLoadable,
-  args: { children: 'Submit', isLoading: false },
+  args: { children: 'Submit', loading: false },
 };
 
 export default meta;

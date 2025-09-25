@@ -23,7 +23,6 @@ mutation createCategory($input: CreateCategoryInput!) {
 }
 
 mutation updateCategory($id: ID!, $input: UpdateCategoryInput!) {
-
   updateCategory(id: $id, input: $input) {
     name
     description
