@@ -75,7 +75,7 @@ export default function WarehouseForm({
   const { refetchAddresses, createAddress, isCreatingAddress } =
     useAddressManagement();
 
-  const { form, handleSubmit, handleCancel } = useWarehouseForm({
+  const { form, handleSubmit, handleCancel, hasChanges } = useWarehouseForm({
     warehouse,
     onSuccess: onCancel,
     onCancel,
@@ -200,7 +200,11 @@ export default function WarehouseForm({
             )}
 
             {/* Cancel and Submit buttons */}
-            <FormActions onCancel={handleCancel} isSubmitting={isSubmitting} />
+            <FormActions
+              onCancel={handleCancel}
+              isSubmitting={isSubmitting}
+              disabled={warehouse && !hasChanges}
+            />
           </div>
         </form>
       </Form>

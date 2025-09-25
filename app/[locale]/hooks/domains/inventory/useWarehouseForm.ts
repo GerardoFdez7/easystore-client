@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
@@ -40,6 +40,10 @@ interface UseWarehouseFormReturn {
   // Loading states
   isSubmitting: boolean;
 
+  // Change detection
+  hasChanges: boolean;
+  changedFields: Partial<WarehouseFormData>;
+
   // Schema for external validation
   warehouseFormSchema: ReturnType<typeof createWarehouseFormSchema>;
 }
@@ -56,30 +60,76 @@ export function useWarehouseForm({
   // Create schema with translations
   const warehouseFormSchema = createWarehouseFormSchema(t);
 
+  // Store original values for comparison
+  const originalValues = useMemo(
+    () => ({
+      name: warehouse?.name || '',
+      addressId: warehouse?.addressId || '',
+    }),
+    [warehouse?.name, warehouse?.addressId],
+  );
+
   // Initialize form
   const form = useForm<WarehouseFormData>({
     resolver: zodResolver(warehouseFormSchema),
-    defaultValues: {
-      name: warehouse?.name || '',
-      addressId: warehouse?.addressId || '',
-    },
+    defaultValues: originalValues,
   });
+
+  // Watch form values for change detection
+  const watchedValues = form.watch();
+
+  // Calculate changed fields and hasChanges
+  const { hasChanges, changedFields } = useMemo(() => {
+    if (!warehouse) {
+      // In create mode, consider form dirty if any field has a value
+      const hasAnyValue = Object.values(watchedValues).some(
+        (value) => value !== null && value !== undefined && value !== '',
+      );
+      return {
+        hasChanges: hasAnyValue,
+        changedFields: hasAnyValue ? watchedValues : {},
+      };
+    }
+
+    // In update mode, compare with original values
+    const changes: Partial<WarehouseFormData> = {};
+    let hasAnyChanges = false;
+
+    (Object.keys(originalValues) as Array<keyof WarehouseFormData>).forEach(
+      (key) => {
+        if (watchedValues[key] !== originalValues[key]) {
+          changes[key] = watchedValues[key];
+          hasAnyChanges = true;
+        }
+      },
+    );
+
+    return {
+      hasChanges: hasAnyChanges,
+      changedFields: changes,
+    };
+  }, [watchedValues, originalValues, warehouse]);
 
   // Handle form submission
   const handleSubmit = useCallback(
     async (data: WarehouseFormData) => {
       try {
-        const warehouseInput = {
-          name: data.name,
-          addressId: data.addressId,
-        };
-
         let result;
         if (warehouse) {
-          // Update existing warehouse
-          result = await updateWarehouse(warehouse.id, warehouseInput);
+          // Update existing warehouse - only send changed fields
+          if (Object.keys(changedFields).length === 0) {
+            // No changes to submit
+            onSuccess?.();
+            return;
+          }
+
+          result = await updateWarehouse(warehouse.id, changedFields);
         } else {
-          // Create new warehouse
+          // Create new warehouse - send all data
+          const warehouseInput = {
+            name: data.name,
+            addressId: data.addressId,
+          };
           result = await createWarehouse(warehouseInput);
         }
 
@@ -87,11 +137,9 @@ export function useWarehouseForm({
           // Success toast is handled in the warehouse management hook
           onSuccess?.();
         }
-      } catch (error) {
-        console.error('Error submitting warehouse form:', error);
-      }
+      } catch (_error) {}
     },
-    [warehouse, createWarehouse, updateWarehouse, onSuccess],
+    [warehouse, createWarehouse, updateWarehouse, onSuccess, changedFields],
   );
 
   // Handle form cancellation
@@ -108,6 +156,8 @@ export function useWarehouseForm({
     handleSubmit,
     handleCancel,
     isSubmitting,
+    hasChanges,
+    changedFields,
     warehouseFormSchema,
   };
 }

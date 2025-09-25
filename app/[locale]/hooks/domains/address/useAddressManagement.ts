@@ -100,11 +100,8 @@ export function useAddressManagement(): UseAddressManagementReturn {
   const refetchAddresses = useCallback(async () => {
     try {
       await apolloRefetchAddresses();
-    } catch (err) {
-      console.error('Error refetching addresses:', err);
-      toast.error(t('errorLoadingAddresses'));
-    }
-  }, [apolloRefetchAddresses, t]);
+    } catch (_err) {}
+  }, [apolloRefetchAddresses]);
 
   const createAddress = useCallback(
     async (input: CreateAddressMutationVariables['input']) => {
@@ -115,8 +112,7 @@ export function useAddressManagement(): UseAddressManagementReturn {
           return result.data.createAddress;
         }
         return null;
-      } catch (err) {
-        console.error('Error creating address:', err);
+      } catch (_err) {
         return null;
       }
     },
@@ -130,9 +126,7 @@ export function useAddressManagement(): UseAddressManagementReturn {
         if (countryId) {
           await refetchStates({ countryId });
         }
-      } catch (err) {
-        console.error('Error loading states:', err);
-      }
+      } catch (_err) {}
     },
     [refetchStates],
   );
