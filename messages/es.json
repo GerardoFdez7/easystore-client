@@ -1361,5 +1361,23 @@
     "saveSuccess": "Categoría actualizada correctamente.",
     "createSuccess": "Categoría creada correctamente.",
     "addSubcategory": "Agregar subcategoría a"
+  },
+  "StockMovement": {
+    "noWarehousesTitle": "Aún no hay almacenes",
+    "noWarehousesDescription": "Crea tu primer almacén para comenzar a gestionar tu inventario",
+    "createWarehouse": "Crear almacén",
+    "noStockTitle": "No se encontraron movimientos de stock",
+    "noStockDescription": "Aún no hay movimientos de stock para el almacén seleccionado.",
+    "noStockMovementsFound": "No se encontraron movimientos de stock",
+    "emptyStateDescription": "No hay movimientos de stock para mostrar. Comienza creando tu primer movimiento de stock.",
+    "addMovementButton": "Agregar Movimiento",
+    "productTableHead": "Producto",
+    "skuTableHead": "SKU",
+    "deltaQuantityTableHead": "Cambio de Cantidad",
+    "reasonTableHead": "Razón",
+    "createdByTableHead": "Creado por",
+    "dateTableHead": "Fecha",
+    "previousButton": "Anterior",
+    "nextButton": "Siguiente"
   }
 }
