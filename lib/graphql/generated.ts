@@ -65,7 +65,7 @@ export type AddVariantToProductInput = {
 export type AddressType = {
   __typename?: 'AddressType';
   addressLine1: Scalars['String']['output'];
-  addressLine2: Scalars['String']['output'];
+  addressLine2?: Maybe<Scalars['String']['output']>;
   addressType: AddressTypeEnum;
   city: Scalars['String']['output'];
   countryId: Scalars['String']['output'];
@@ -1024,7 +1024,7 @@ export type CreateAddressMutation = {
     __typename?: 'AddressType';
     id: string;
     addressLine1: string;
-    addressLine2: string;
+    addressLine2?: string | null;
     addressType: AddressTypeEnum;
     city: string;
     countryId: string;
@@ -1047,7 +1047,7 @@ export type UpdateAddressMutation = {
     __typename?: 'AddressType';
     id: string;
     addressLine1: string;
-    addressLine2: string;
+    addressLine2?: string | null;
     addressType: AddressTypeEnum;
     city: string;
     countryId: string;
@@ -1078,7 +1078,7 @@ export type FindAddressByIdQuery = {
     __typename?: 'AddressType';
     id: string;
     addressLine1: string;
-    addressLine2: string;
+    addressLine2?: string | null;
     addressType: AddressTypeEnum;
     city: string;
     countryId: string;
@@ -1107,7 +1107,7 @@ export type FindAllAddressesQuery = {
       __typename?: 'AddressType';
       id: string;
       addressLine1: string;
-      addressLine2: string;
+      addressLine2?: string | null;
       addressType: AddressTypeEnum;
       city: string;
       countryId: string;
@@ -2195,40 +2195,6 @@ export type RemoveVariantfromProductMutation = {
   removeVariant: {
     __typename?: 'Product';
     variants?: Array<{ __typename?: 'Variant'; sku?: string | null }> | null;
-  };
-};
-
-export type UpdateTenantProfileMutationVariables = Exact<{
-  input: UpdateTenantInput;
-}>;
-
-export type UpdateTenantProfileMutation = {
-  __typename?: 'Mutation';
-  updateTenant: {
-    __typename?: 'Tenant';
-    ownerName: string;
-    email: string;
-    businessName?: string | null;
-    description?: string | null;
-    domain?: string | null;
-    logo?: string | null;
-    defaultPhoneNumberId?: string | null;
-  };
-};
-
-export type FindTenantProfileQueryVariables = Exact<{ [key: string]: never }>;
-
-export type FindTenantProfileQuery = {
-  __typename?: 'Query';
-  getTenantById: {
-    __typename?: 'Tenant';
-    ownerName: string;
-    email: string;
-    businessName?: string | null;
-    description?: string | null;
-    domain?: string | null;
-    logo?: string | null;
-    defaultPhoneNumberId?: string | null;
   };
 };
 
@@ -5797,6 +5763,10 @@ export const UpdateDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'categoryId' },
                       },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'categoryName' },
+                      },
                     ],
                   },
                 },
@@ -5868,6 +5838,7 @@ export const UpdateDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'attributes' },
@@ -6194,6 +6165,7 @@ export const FindProductByIdDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 {
                   kind: 'Field',
@@ -6238,6 +6210,10 @@ export const FindProductByIdDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'categoryId' },
                       },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'categoryName' },
+                      },
                     ],
                   },
                 },
@@ -6247,6 +6223,7 @@ export const FindProductByIdDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'price' } },
                       {
                         kind: 'Field',
@@ -6577,6 +6554,7 @@ export const FindAllProductsDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'brand' } },
                       {
@@ -6588,6 +6566,10 @@ export const FindAllProductsDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'categoryId' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'categoryName' },
                             },
                           ],
                         },
@@ -7598,44 +7580,109 @@ export const RemoveVariantfromProductDocument = {
   RemoveVariantfromProductMutation,
   RemoveVariantfromProductMutationVariables
 >;
-
-/**
- * __useRemoveVariantfromProductMutation__
- *
- * To run a mutation, you first call `useRemoveVariantfromProductMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveVariantfromProductMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [removeVariantfromProductMutation, { data, loading, error }] = useRemoveVariantfromProductMutation({
- *   variables: {
- *      id: // value for 'id'
- *      productId: // value for 'productId'
- *   },
- * });
- */
-export function useRemoveVariantfromProductMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RemoveVariantfromProductMutation,
-    RemoveVariantfromProductMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    RemoveVariantfromProductMutation,
-    RemoveVariantfromProductMutationVariables
-  >(RemoveVariantfromProductDocument, options);
-}
-export type RemoveVariantfromProductMutationHookResult = ReturnType<
-  typeof useRemoveVariantfromProductMutation
+export const UpdateTenantProfileDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'updateTenantProfile' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'UpdateTenantInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'updateTenant' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'ownerName' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'businessName' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'domain' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'logo' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'defaultPhoneNumberId' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  UpdateTenantProfileMutation,
+  UpdateTenantProfileMutationVariables
 >;
-export type RemoveVariantfromProductMutationResult =
-  Apollo.MutationResult<RemoveVariantfromProductMutation>;
-export type RemoveVariantfromProductMutationOptions =
-  Apollo.BaseMutationOptions<
-    RemoveVariantfromProductMutation,
-    RemoveVariantfromProductMutationVariables
-  >;
+export const FindTenantProfileDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'findTenantProfile' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getTenantById' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'ownerName' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'businessName' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'domain' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'logo' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'defaultPhoneNumberId' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  FindTenantProfileQuery,
+  FindTenantProfileQueryVariables
+>;

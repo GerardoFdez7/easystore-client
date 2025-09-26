@@ -37,7 +37,7 @@ export default function ComboboxType({
       value={value?.toString()}
       onValueChange={handleValueChange}
       placeholder={t('type')}
-      placeholderInput={t('search')}
+      searchPlaceholder={t('search')}
       emptyMessage={t('noTypeFound')}
       className={className}
       disabled={disabled}

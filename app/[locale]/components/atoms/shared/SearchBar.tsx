@@ -1,40 +1,15 @@
-import { FC, useState, useEffect, ChangeEvent } from 'react';
-import { Input } from '@shadcn/ui/input';
 import { Search } from 'lucide-react';
-import { useDebounce } from '@hooks/utils/useDebounce';
-import { cn } from '@lib/utils';
+import { Input } from '@shadcn/ui/input';
+import { cn } from 'utils';
 
 interface SearchBarProps {
-  onSearch: (term: string) => void;
-  placeholder?: string;
-  searchTerm: string;
-  onSearchChange: (searchTerm: string) => void;
   className?: string;
+  searchTerm: string;
+  onSearchChange: (term: string) => void;
+  placeholder?: string;
 }
 
-const SearchBar: FC<SearchBarProps> = ({
-  placeholder,
-  searchTerm,
-  onSearchChange,
-  className,
-}) => {
-  const [inputValue, setInputValue] = useState(searchTerm);
-  const debouncedInputValue = useDebounce(inputValue, 500);
-
-  useEffect(() => {
-    if (debouncedInputValue !== searchTerm) {
-      onSearchChange(debouncedInputValue);
-    }
-  }, [debouncedInputValue, onSearchChange, searchTerm]);
-
-  useEffect(() => {
-    setInputValue(searchTerm);
-  }, [searchTerm]);
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
-
+export default function SearchBar({ className, placeholder }: SearchBarProps) {
   return (
     <div className={cn('relative w-full', className)}>
       <Search
@@ -43,15 +18,8 @@ const SearchBar: FC<SearchBarProps> = ({
       />
       <Input
         placeholder={placeholder}
-        value={inputValue}
-        onChange={handleChange}
-        className="pl-10"
-        aria-label={placeholder || 'Search'}
+        className="bg-card rounded-full pl-10 text-[13px] sm:text-[14px]"
       />
     </div>
   );
-};
-
-SearchBar.displayName = 'SearchBar';
-
-export default SearchBar;
+}

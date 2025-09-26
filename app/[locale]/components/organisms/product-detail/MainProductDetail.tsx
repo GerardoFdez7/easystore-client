@@ -227,6 +227,7 @@ export default function MainProductDetail({
               render={({ field }) => (
                 <FormItem>
                   <Description
+                    maxLength={200}
                     label="Short Description"
                     value={field.value}
                     onChange={field.onChange}
@@ -243,6 +244,7 @@ export default function MainProductDetail({
               render={({ field }) => (
                 <FormItem>
                   <Description
+                    maxLength={2000}
                     label="Long Description"
                     value={field.value ?? ''}
                     onChange={field.onChange}
@@ -348,7 +350,7 @@ export default function MainProductDetail({
             <div className="flex justify-end">
               <SaveButton
                 type="submit"
-                isLoading={isSubmitting}
+                loading={isSubmitting}
                 disabled={!isDirty || isSubmitting}
                 size="lg"
               />

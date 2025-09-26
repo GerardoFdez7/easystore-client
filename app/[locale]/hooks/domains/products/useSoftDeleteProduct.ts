@@ -4,10 +4,9 @@ import {
   SoftDeleteMutation,
   SoftDeleteMutationVariables,
 } from '@graphql/generated';
-import { useMutation } from '@apollo/client';
+import { useMutation, useApolloClient } from '@apollo/client/react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useApolloClient } from '@apollo/client';
 
 export const useSoftDeleteProduct = () => {
   const t = useTranslations('Products');
@@ -32,31 +31,12 @@ export const useSoftDeleteProduct = () => {
         router.refresh(); // Refresh the current page to reflect changes
       }
     },
-    onError: (error) => {
-      if (error.graphQLErrors?.length > 0) {
-        const graphQLError = error.graphQLErrors[0];
-        toast.error(t('archiveFailed'), {
-          description: graphQLError.message,
-        });
-      } else if (error.networkError) {
-        toast.error(t('networkError'), {
-          description: t('networkErrorDescription'),
-        });
-      } else {
-        toast.error(t('unexpectedError'), {
-          description: t('unexpectedErrorDescription'),
-        });
-      }
-    },
   });
 
   const handleSoftDelete = async (id: string) => {
     try {
       await softDeleteProduct({ variables: { id } });
-    } catch (error) {
-      // Error is already handled by the onError callback
-      console.error('Error archiving product:', error);
-    }
+    } catch (_error) {}
   };
 
   return {
