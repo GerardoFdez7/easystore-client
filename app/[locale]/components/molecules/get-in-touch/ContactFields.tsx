@@ -131,13 +131,17 @@ export const ContactFields: React.FC = () => {
               <FormLabel>{t('country')}</FormLabel>
               <FormControl>
                 <Combobox
-                  items={getTranslatedCountries(tRoot).map((c) => ({
+                  options={getTranslatedCountries(tRoot).map((c) => ({
                     value: c.code,
                     label: c.name,
                   }))}
                   value={field.value}
                   onValueChange={field.onChange}
                   placeholder={t('selectCountry')}
+                  searchPlaceholder={t('searchCountry')}
+                  emptyMessage={t('noCountriesFound')}
+                  className="border-primary [&>svg:hidden] w-full font-light"
+                  width="100%"
                 />
               </FormControl>
               <FormMessage />

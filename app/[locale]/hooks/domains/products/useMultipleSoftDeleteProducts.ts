@@ -5,9 +5,9 @@ import {
   SoftDeleteMutationVariables,
   FindAllProductsDocument,
 } from '@graphql/generated';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { useTranslations } from 'next-intl';
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient } from '@apollo/client/react';
 
 interface UseMultipleSoftDeleteProductsProps {
   onSuccess?: () => void;
@@ -33,32 +33,7 @@ export const useMultipleSoftDeleteProducts = ({
           .then(() => {
             onSuccess?.();
           })
-          .catch(console.error);
-      }
-    },
-    onError: (error) => {
-      // Skip error handling if the product is already archived
-      const isAlreadyArchived = error.graphQLErrors?.some((e) =>
-        e.message.includes('is already soft deleted'),
-      );
-
-      if (isAlreadyArchived) {
-        return; // Skip showing any error toast
-      }
-
-      if (error.graphQLErrors?.length > 0) {
-        const graphQLError = error.graphQLErrors[0];
-        toast.error(t('archiveFailed'), {
-          description: graphQLError.message,
-        });
-      } else if (error.networkError) {
-        toast.error(t('networkError'), {
-          description: t('networkErrorDescription'),
-        });
-      } else {
-        toast.error(t('unexpectedError'), {
-          description: t('unexpectedErrorDescription'),
-        });
+          .catch(() => {});
       }
     },
   });
@@ -83,10 +58,7 @@ export const useMultipleSoftDeleteProducts = ({
       toast.success(t('archivingSuccessful'), {
         description: t('multipleArchiveSuccessfulDescription'),
       });
-    } catch (error) {
-      // Error is already handled by the onError callback
-      console.error('Error archiving products:', error);
-    }
+    } catch (_error) {}
   };
 
   return {

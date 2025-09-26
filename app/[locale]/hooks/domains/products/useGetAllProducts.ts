@@ -4,7 +4,7 @@ import {
   FindAllProductsQuery,
   FindAllProductsQueryVariables,
 } from '@graphql/generated';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 
 export const useGetAllProducts = (
   variables?: FindAllProductsQueryVariables,

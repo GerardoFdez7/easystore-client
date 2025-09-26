@@ -6,12 +6,14 @@ type DescriptionProps = {
   value?: string;
   onChange?: (value: string) => void;
   className?: string;
+  maxLength: number;
 };
 
 export default function Description({
   label,
   className,
   value,
+  maxLength,
   onChange,
   ...props
 }: DescriptionProps) {
@@ -21,9 +23,10 @@ export default function Description({
         {label}
       </label>
       <Textarea
+        maxLength={maxLength}
         value={value || ''}
         onChange={(e) => onChange?.(e.target.value)}
-        className={cn('h-10 bg-white', className)}
+        className={cn('bg-background h-10', className)}
         {...props}
       />
     </div>

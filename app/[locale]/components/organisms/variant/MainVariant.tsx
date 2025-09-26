@@ -14,9 +14,12 @@ import WarrantyFormField from '@molecules/variant/WarrantyFormField';
 import SaveButton from '@atoms/shared/SaveButton';
 
 // Mock useVariant hook for testing purposes
-function useVariant(productId: string, variantId?: string, isNew?: boolean) {
+function useVariant(props: MainVariantProps) {
   const form = useForm({
     defaultValues: {
+      productId: props.productId,
+      variantId: props.variantId,
+      isNew: props.isNew,
       price: '',
       condition: '',
       attributes: [],
@@ -37,9 +40,6 @@ function useVariant(productId: string, variantId?: string, isNew?: boolean) {
 
   const handleSubmit = (data: unknown) => {
     console.log('Form submitted:', data);
-    console.log('Product ID:', productId);
-    console.log('Variant ID:', variantId);
-    console.log('Is New:', isNew);
   };
 
   const loading = false;
@@ -47,8 +47,22 @@ function useVariant(productId: string, variantId?: string, isNew?: boolean) {
   return { form, handleSubmit, loading };
 }
 
-export default function MainVariant() {
-  const { form, handleSubmit, loading } = useVariant();
+interface MainVariantProps {
+  productId: string;
+  variantId?: string;
+  isNew: boolean;
+}
+
+export default function MainVariant({
+  productId,
+  variantId,
+  isNew,
+}: MainVariantProps) {
+  const { form, handleSubmit, loading } = useVariant({
+    productId,
+    variantId,
+    isNew,
+  });
   return (
     <main className="mx-4 sm:mx-auto">
       <FormProvider {...form}>

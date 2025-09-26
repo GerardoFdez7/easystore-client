@@ -12,7 +12,7 @@ import { EditableField } from '@molecules/profile/EditableField';
 
 export default function SidebarProfile() {
   const t = useTranslations('Profile');
-  const { profile, actions, isLoading } = useProfile();
+  const { profile, actions, loading } = useProfile();
 
   return (
     <aside className="mt-6 flex w-full flex-col md:mt-0 md:min-h-full md:max-w-md md:shrink-0">
@@ -77,7 +77,7 @@ export default function SidebarProfile() {
         <DescriptionEditor
           value={profile?.description ?? ''}
           onSave={(v) => void actions.updateDescription(v)}
-          loading={isLoading}
+          loading={loading}
         />
 
         <div className="mt-4 mb-5 sm:mt-6">

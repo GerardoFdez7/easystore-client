@@ -5,9 +5,9 @@ import {
   HardDeleteMutationVariables,
   //FindAllProductsDocument,
 } from '@graphql/generated';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { useTranslations } from 'next-intl';
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient } from '@apollo/client/react';
 
 export const useMultipleDeleteProducts = (onSuccess?: () => void) => {
   const client = useApolloClient();
@@ -27,26 +27,7 @@ export const useMultipleDeleteProducts = (onSuccess?: () => void) => {
 
         //Call onSuccess if exists
         onSuccess?.();
-      } catch (error) {
-        console.error('Error refetching queries:', error);
-      }
-    },
-    onError: (error) => {
-      // Handle GraphQL errors
-      if (error.graphQLErrors?.length > 0) {
-        const graphQLError = error.graphQLErrors[0];
-        toast.error(t('deletionFailed'), {
-          description: graphQLError.message,
-        });
-      } else if (error.networkError) {
-        toast.error(t('networkError'), {
-          description: t('networkErrorDescription'),
-        });
-      } else {
-        toast.error(t('unexpectedError'), {
-          description: t('unexpectedErrorDescription'),
-        });
-      }
+      } catch (_error) {}
     },
   });
 

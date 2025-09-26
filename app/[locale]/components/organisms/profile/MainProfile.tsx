@@ -12,11 +12,11 @@ import ProfileSection from '@atoms/profile/ProfileSection';
 
 export default function MainProfile() {
   const t = useTranslations('Profile');
-  const { profile, isLoading, phoneDisplay, hasPhone, actions } = useProfile();
+  const { profile, loading, phoneDisplay, hasPhone, actions } = useProfile();
 
   return (
     <main className="relative mt-6 min-h-full w-full flex-1 md:mt-0">
-      {isLoading ? (
+      {loading ? (
         <>
           <FormFieldSkeleton />
           <FormFieldSkeleton />
