@@ -23,7 +23,7 @@ const MockMainVariant = () => {
             }}
             className="space-y-6"
           >
-            <MainVariant />
+            <MainVariant productId="123" isNew={true} />
           </form>
         </Form>
       </FormProvider>
