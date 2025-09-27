@@ -9,7 +9,12 @@ interface SearchBarProps {
   placeholder?: string;
 }
 
-export default function SearchBar({ className, placeholder }: SearchBarProps) {
+export default function SearchBar({
+  className,
+  searchTerm,
+  onSearchChange,
+  placeholder,
+}: SearchBarProps) {
   return (
     <div className={cn('relative w-full', className)}>
       <Search
@@ -17,6 +22,8 @@ export default function SearchBar({ className, placeholder }: SearchBarProps) {
         aria-hidden="true"
       />
       <Input
+        value={searchTerm}
+        onChange={(e) => onSearchChange(e.target.value)}
         placeholder={placeholder}
         className="bg-card rounded-full pl-10 text-[13px] sm:text-[14px]"
       />

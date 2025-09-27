@@ -1,34 +1,53 @@
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import {
   SoftDeleteDocument,
   SoftDeleteMutation,
   SoftDeleteMutationVariables,
+  FindProductByIdDocument,
+  FindProductByIdQuery,
 } from '@graphql/generated';
-import { useMutation, useApolloClient } from '@apollo/client/react';
-import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
+import { useMutation } from '@apollo/client/react';
 
 export const useSoftDeleteProduct = () => {
   const t = useTranslations('Products');
-  const router = useRouter();
-  const client = useApolloClient();
 
   const [softDeleteProduct, { loading, error }] = useMutation<
     SoftDeleteMutation,
     SoftDeleteMutationVariables
   >(SoftDeleteDocument, {
+    fetchPolicy: 'network-only',
+    errorPolicy: 'all',
+    update: (cache, { data }, { variables }) => {
+      if (data?.softDeleteProduct && variables?.id) {
+        // Update FindProductByIdDocument cache (for individual product detail)
+        cache.updateQuery<FindProductByIdQuery>(
+          {
+            query: FindProductByIdDocument,
+            variables: { id: variables.id },
+          },
+          (existingData) => {
+            if (!existingData?.getProductById) {
+              return existingData;
+            }
+
+            return {
+              ...existingData,
+              getProductById: {
+                ...existingData.getProductById,
+                isArchived: true,
+              },
+            };
+          },
+        );
+      }
+    },
     onCompleted: (data) => {
       if (data?.softDeleteProduct) {
-        // Invalidate the cache to ensure fresh data
-        client.cache.evict({ fieldName: 'getAllProducts' });
-
-        // Refetch active queries
-        void client.refetchQueries({ include: ['active'] });
-
         toast.success(t('archivingSuccessful'), {
           description: t('archiveSuccessfulDescription'),
         });
-        router.refresh(); // Refresh the current page to reflect changes
+        // Cache is updated automatically via the update function above
       }
     },
   });

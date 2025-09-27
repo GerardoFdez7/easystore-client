@@ -1,16 +1,18 @@
 'use client';
 
-import { useApolloClient } from '@apollo/client/react';
-import { z } from 'zod';
-import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
+import { z } from 'zod';
 import {
   UpdateDocument,
   UpdateMutation,
   UpdateMutationVariables,
   UpdateProductInput,
   TypeEnum,
+  FindAllProductsDocument,
+  FindProductByIdDocument,
 } from '@lib/graphql/generated';
+import { useMutation } from '@apollo/client/react';
 
 export type ProductUpdate = {
   name?: string;
@@ -53,7 +55,24 @@ function errorToMessage(e: unknown, fallback: string): string {
 
 export function useUpdateProduct(productId: string) {
   const t = useTranslations('Products');
-  const apollo = useApolloClient();
+
+  const [updateProductMutation] = useMutation<
+    UpdateMutation,
+    UpdateMutationVariables
+  >(UpdateDocument, {
+    fetchPolicy: 'network-only',
+    errorPolicy: 'all',
+    refetchQueries: [
+      {
+        query: FindAllProductsDocument,
+      },
+      {
+        query: FindProductByIdDocument,
+        variables: { id: productId },
+      },
+    ],
+    awaitRefetchQueries: false,
+  });
 
   /** Field validators */
   const validators = {
@@ -141,21 +160,10 @@ export function useUpdateProduct(productId: string) {
     }
 
     try {
-      const result = await apollo.mutate<
-        UpdateMutation,
-        UpdateMutationVariables
-      >({
-        mutation: UpdateDocument,
+      const result = await updateProductMutation({
         variables: {
           id: productId,
           input: patch as UpdateProductInput,
-        },
-        update(cache) {
-          // Simple approach: just refetch the query data
-          cache.evict({
-            id: cache.identify({ __typename: 'Product', id: productId }),
-          });
-          cache.gc();
         },
       });
 
