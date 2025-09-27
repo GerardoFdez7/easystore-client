@@ -27,9 +27,11 @@ export default function MainDashboard() {
   const selectedProductsAreArchived = selectedProducts.map(
     (id) => products?.find((p) => p.id === id)?.isArchived ?? false,
   );
-  const handleDeleteComplete = () => {
+
+  // Callback to clear selection after bulk operations
+  const handleClearSelection = useCallback(() => {
     setSelectedProducts([]);
-  };
+  }, []);
 
   //Search
   const handleSearch = useCallback((term: string) => {
@@ -79,7 +81,7 @@ export default function MainDashboard() {
           isArchived={selectedProductsAreArchived}
           onSelectProduct={handleProductSelect}
           onSelectAll={handleSelectAll}
-          onDeleteComplete={handleDeleteComplete}
+          onDeleteComplete={handleClearSelection}
         />
       ) : (
         <ProductGrid

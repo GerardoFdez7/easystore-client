@@ -22,6 +22,9 @@ export const useGetAllProducts = (
       ...defaultVariables,
       ...(variables || { type: null }),
     },
+    fetchPolicy: 'cache-and-network',
+    errorPolicy: 'all',
+    notifyOnNetworkStatusChange: true, // Changed to true to update loading states
   });
 
   const products = useMemo(() => {

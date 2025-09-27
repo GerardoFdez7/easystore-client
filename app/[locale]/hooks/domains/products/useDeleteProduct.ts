@@ -1,35 +1,41 @@
+import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import {
   HardDeleteDocument,
   HardDeleteMutation,
   HardDeleteMutationVariables,
+  FindAllProductsDocument,
 } from '@graphql/generated';
 import { useMutation } from '@apollo/client/react';
-import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
-import { useApolloClient } from '@apollo/client/react';
 
 export const useDeleteProduct = () => {
   const t = useTranslations('Products');
   const router = useRouter();
-  const client = useApolloClient();
+  const params = useParams();
+  const locale = params.locale as string;
 
   const [deleteProduct, { loading, error }] = useMutation<
     HardDeleteMutation,
     HardDeleteMutationVariables
   >(HardDeleteDocument, {
+    fetchPolicy: 'network-only',
+    errorPolicy: 'all',
+    // Use refetchQueries but ONLY for the products list, not the individual product
+    refetchQueries: [
+      {
+        query: FindAllProductsDocument,
+      },
+    ],
+    awaitRefetchQueries: true,
     onCompleted: (data) => {
       if (data?.hardDeleteProduct) {
-        // Invalidate the cache to ensure fresh data when navigating back
-        client.cache.evict({ fieldName: 'getAllProducts' });
-
-        // Refetch active queries
-        void client.refetchQueries({ include: ['active'] });
-
         toast.success(t('deletionSuccessful'), {
           description: t('deletionSuccessfulDescription'),
         });
-        router.push('/products');
+
+        // Redirect immediately - no need for delay with refetchQueries
+        router.push(`/${locale}/products`);
       }
     },
   });

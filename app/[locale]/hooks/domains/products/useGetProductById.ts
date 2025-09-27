@@ -13,6 +13,9 @@ export const useGetProductById = (id: string) => {
   >(FindProductByIdDocument, {
     variables: { id },
     skip: !id, // Skip the query if no ID is provided
+    fetchPolicy: 'cache-first',
+    errorPolicy: 'all',
+    notifyOnNetworkStatusChange: false,
   });
 
   const product = useMemo(() => {

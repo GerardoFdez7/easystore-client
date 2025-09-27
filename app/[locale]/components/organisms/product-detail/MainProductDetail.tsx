@@ -47,7 +47,7 @@ export default function MainProductDetail({
   isNew,
 }: MainProductDetailProps) {
   const { actions } = useUpdateProduct(param);
-  const { product, refetch } = useGetProductById(param);
+  const { product } = useGetProductById(param);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const lastResetProductRef = useRef<string | null>(null);
 

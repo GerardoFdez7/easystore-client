@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import {
   SoftDeleteDocument,
@@ -6,8 +7,6 @@ import {
   FindAllProductsDocument,
 } from '@graphql/generated';
 import { useMutation } from '@apollo/client/react';
-import { useTranslations } from 'next-intl';
-import { useApolloClient } from '@apollo/client/react';
 
 interface UseMultipleSoftDeleteProductsProps {
   onSuccess?: () => void;
@@ -16,26 +15,21 @@ interface UseMultipleSoftDeleteProductsProps {
 export const useMultipleSoftDeleteProducts = ({
   onSuccess,
 }: UseMultipleSoftDeleteProductsProps = {}) => {
-  const client = useApolloClient();
   const t = useTranslations('Products');
 
   const [softDeleteProduct, { loading, error }] = useMutation<
     SoftDeleteMutation,
     SoftDeleteMutationVariables
   >(SoftDeleteDocument, {
-    onCompleted: (data) => {
-      if (data?.softDeleteProduct) {
-        // Refetch the products query
-        client
-          .refetchQueries({
-            include: [FindAllProductsDocument],
-          })
-          .then(() => {
-            onSuccess?.();
-          })
-          .catch(() => {});
-      }
-    },
+    fetchPolicy: 'network-only',
+    errorPolicy: 'all',
+    refetchQueries: [
+      {
+        query: FindAllProductsDocument,
+      },
+    ],
+    awaitRefetchQueries: true,
+    // Don't use onCompleted here since it executes for each individual product
   });
 
   const handleMultipleSoftDelete = async (
@@ -55,10 +49,16 @@ export const useMultipleSoftDeleteProducts = ({
         ),
       );
 
+      // Show success message after all operations complete
       toast.success(t('archivingSuccessful'), {
         description: t('multipleArchiveSuccessfulDescription'),
       });
-    } catch (_error) {}
+
+      // Call success callback after all operations complete
+      onSuccess?.();
+    } catch (_error) {
+      // Error handling is managed by the Apollo error middleware
+    }
   };
 
   return {
