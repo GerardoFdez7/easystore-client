@@ -49,14 +49,9 @@ export default function MainProductDetail({
   isNew,
 }: MainProductDetailProps) {
   const { actions } = useUpdateProduct(param);
-  const { product, refetch } = useGetProductById(param);
+  const { product } = useGetProductById(param);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const lastResetProductRef = useRef<string | null>(null);
-
-  // Callback to refresh product data after archive/restore operations
-  const handleProductUpdate = () => {
-    void refetch();
-  };
 
   // Use custom hook for media management
   const { initialMedia, handleMediaProcessed } = useProductMedia({
@@ -201,7 +196,6 @@ export default function MainProductDetail({
                 singleMode={true}
                 productId={param}
                 productIsArchived={product?.isArchived ?? false}
-                onDeleteComplete={handleProductUpdate}
               />
             </div>
             {/* Title */}

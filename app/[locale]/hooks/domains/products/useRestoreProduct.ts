@@ -1,35 +1,53 @@
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import {
   RestoreDocument,
   RestoreMutation,
   RestoreMutationVariables,
+  FindProductByIdDocument,
+  FindProductByIdQuery,
 } from '@graphql/generated';
 import { useMutation } from '@apollo/client/react';
-import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
-import { useApolloClient } from '@apollo/client/react';
 
 export const useRestoreProduct = () => {
   const t = useTranslations('Products');
-  const router = useRouter();
-  const client = useApolloClient();
 
   const [restoreProduct, { loading, error }] = useMutation<
     RestoreMutation,
     RestoreMutationVariables
   >(RestoreDocument, {
+    fetchPolicy: 'network-only',
+    errorPolicy: 'all',
+    update: (cache, { data }, { variables }) => {
+      if (data?.restoreProduct && variables?.id) {
+        // Update FindProductByIdDocument cache (for individual product detail)
+        cache.updateQuery<FindProductByIdQuery>(
+          {
+            query: FindProductByIdDocument,
+            variables: { id: variables.id },
+          },
+          (existingData) => {
+            if (!existingData?.getProductById) {
+              return existingData;
+            }
+
+            return {
+              ...existingData,
+              getProductById: {
+                ...existingData.getProductById,
+                isArchived: false,
+              },
+            };
+          },
+        );
+      }
+    },
     onCompleted: (data) => {
       if (data?.restoreProduct) {
-        // Invalidate the cache to ensure fresh data
-        client.cache.evict({ fieldName: 'getAllProducts' });
-
-        // Refetch active queries
-        void client.refetchQueries({ include: ['active'] });
-
         toast.success(t('restoreSuccessful'), {
           description: t('restoreSuccessfulDescription'),
         });
-        router.refresh(); // Refresh the current page to reflect changes
+        // Cache is updated automatically via the update function above
       }
     },
   });
