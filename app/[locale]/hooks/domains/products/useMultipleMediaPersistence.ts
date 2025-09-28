@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo } from 'react';
-import { toast } from 'sonner';
 import type { ProcessedData } from '@lib/types/media';
 import type { Media } from '@lib/graphql/generated';
 
@@ -78,8 +77,8 @@ export const useMultipleMediaPersistence = ({
     try {
       const updates: Record<string, unknown> = {};
 
-      // Update cover if provided (first element)
-      if (processedData.cover) {
+      // Update cover if provided (first element) - handle empty string as valid value
+      if (processedData.cover !== undefined) {
         updates[config.coverField] = processedData.cover;
       }
 
@@ -101,19 +100,15 @@ export const useMultipleMediaPersistence = ({
         updates[config.mediaField] = [];
       }
 
-      // Apply updates using existing update logic
-      const result = await actions.updateMultipleFields(updates);
-
-      if (result.success) {
-        toast.success(config.successMessage || 'Media updated successfully');
-      } else {
-        toast.error(config.errorMessage || 'Failed to update media', {
-          description: result.error,
-        });
+      // Actually perform the update
+      if (Object.keys(updates).length > 0) {
+        const result = await actions.updateMultipleFields(updates);
+        if (!result.success) {
+          console.error('Failed to update media:', result.error);
+        }
       }
     } catch (error) {
-      console.error('Error updating media:', error);
-      toast.error(config.errorMessage || 'Error updating media');
+      console.error('Error processing media:', error);
     }
   };
 

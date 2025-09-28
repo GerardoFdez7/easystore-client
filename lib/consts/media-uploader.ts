@@ -45,4 +45,4 @@ export const DefaultMaxItems = 10;
 /**
  * Default minimum number of items
  */
-export const DefaultMinItems = 1;
+export const DefaultMinItems = 0;

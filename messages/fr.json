@@ -364,6 +364,8 @@
     "chooseFiles": "Choisir des Fichiers",
     "done": "Terminé",
     "maxFilesExceeded": "Impossible de télécharger plus de {maxItems} fichiers multimédias",
+    "imageLimitExceeded": "Limite d'images dépassée",
+    "imageLimitExceededDescription": "Vous ne pouvez télécharger que {maxItems} images maximum. Vous avez actuellement {currentCount} images et pouvez en ajouter {allowedCount} de plus.",
     "minFilesRequired": "Au moins {minItems} fichiers multimédias sont requis",
     "mediaUploaderConfigError": "Erreur de configuration du téléchargeur de médias",
     "uploadFailed": "Échec du téléchargement",

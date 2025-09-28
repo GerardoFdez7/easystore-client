@@ -23,6 +23,7 @@ export interface MediaUploaderCallbacks {
   onUploadSuccess?: (url: string, fileId: string) => void;
   onUploadError?: (error: string) => void;
   onMediaProcessed?: (processedData?: ProcessedData | null) => Promise<void>;
+  onMediaChange?: (hasChanges: boolean) => void;
 }
 
 export interface MediaUploaderConfig {

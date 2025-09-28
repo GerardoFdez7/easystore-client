@@ -10,11 +10,9 @@ import { useForm } from 'react-hook-form';
 import { useEffect, useState, useRef } from 'react';
 import { useGetProductById } from '@hooks/domains/products/useGetProductById';
 import MediaUploader from '@organisms/shared/MediaUploader';
-import type {
-  Sustainability,
-  Category,
-  Variant,
-} from '@lib/utils/types/product';
+import type { MultipleMediaUploaderRef } from '@molecules/shared/MultipleMediaUploader';
+import type { Sustainability, Category, Variant } from '@lib/types/product';
+import { ProcessedData } from '@lib/types/media';
 import type { Media } from '@lib/graphql/generated';
 import TagsFormField from '@molecules/product-detail/TagsFormField';
 import CategoryFormField from '@molecules/product-detail/CategoryFormField';
@@ -22,7 +20,7 @@ import SaveButton from '@atoms/shared/SaveButton';
 import { useUpdateProduct } from '@hooks/domains/products/useUpdateProduct';
 import { toast } from 'sonner';
 import ProductActions from '@atoms/shared/ProductActions';
-import { useProductMedia } from '@hooks/useMultipleMediaPersistence';
+import { useProductMedia } from '@hooks/domains/products/useMultipleMediaPersistence';
 
 interface MainProductDetailProps {
   param: string;
@@ -53,6 +51,12 @@ export default function MainProductDetail({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const lastResetProductRef = useRef<string | null>(null);
 
+  // Track media changes separately from form state
+  const [hasMediaChanges, setHasMediaChanges] = useState(false);
+
+  // Create ref for MediaUploader to access handleDoneWrapper directly
+  const mediaUploaderRef = useRef<MultipleMediaUploaderRef>(null);
+
   // Callback to refresh product data after archive/restore operations
   const handleProductUpdate = () => {
     void refetch();
@@ -63,6 +67,11 @@ export default function MainProductDetail({
     product,
     actions,
   });
+
+  // Handle media changes from MediaUploader
+  const handleMediaChange = (hasChanges: boolean) => {
+    setHasMediaChanges(hasChanges);
+  };
 
   // Initialize form with default values
   const form = useForm<ProductFormData>({
@@ -104,24 +113,56 @@ export default function MainProductDetail({
 
   // Form submission handler
   const onSubmit = async (formData: ProductFormData) => {
-    if (!isDirty) return; // Don't submit if no changes
+    if (!isDirty && !hasMediaChanges) return; // Don't submit if no changes
 
     setIsSubmitting(true);
     try {
-      const changedFields = getChangedFields(formData);
+      // First, trigger media upload if there are media changes
+      if (hasMediaChanges && mediaUploaderRef.current) {
+        await new Promise<void>((resolve) => {
+          // Set up a temporary callback to know when media processing is done
+          const originalHandleMediaProcessed = handleMediaProcessed;
+          const _tempHandleMediaProcessed = async (
+            processedData?: ProcessedData,
+          ) => {
+            await originalHandleMediaProcessed(processedData);
+            resolve();
+          };
 
-      // Use bulk update function - validates all fields first, then makes single API call
-      const result = await actions.updateMultipleFields(changedFields);
-
-      if (result.success) {
-        // Reset form dirty state after successful submission
-        form.reset(formData);
-      } else {
-        // Show validation errors
-        toast.error('Validation Error', {
-          description: result.error,
+          // Temporarily replace the callback
+          const mediaUploader = mediaUploaderRef.current;
+          if (mediaUploader) {
+            // Call handleDoneWrapper which will trigger the media processing
+            mediaUploader.handleDoneWrapper();
+            // Wait a bit for the async operation to complete
+            setTimeout(resolve, 1000);
+          } else {
+            resolve();
+          }
         });
       }
+
+      // Then update form fields if there are form changes
+      if (isDirty) {
+        const changedFields = getChangedFields(formData);
+
+        // Use bulk update function - validates all fields first, then makes single API call
+        const result = await actions.updateMultipleFields(changedFields);
+
+        if (result.success) {
+          // Reset form dirty state after successful submission
+          form.reset(formData);
+        } else {
+          // Show validation errors
+          toast.error('Validation Error', {
+            description: result.error,
+          });
+          return; // Don't reset media changes if form update failed
+        }
+      }
+
+      // Reset media changes state after successful operations
+      setHasMediaChanges(false);
     } catch (error) {
       console.error('Error updating product:', error);
     } finally {
@@ -186,7 +227,7 @@ export default function MainProductDetail({
   }, [form]);
 
   return (
-    <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <main className="mx-4 sm:mx-auto">
       <Form {...form}>
         <form
           onSubmit={(e) => {
@@ -255,27 +296,21 @@ export default function MainProductDetail({
             />
 
             {/* Multimedia */}
-            <MediaUploader
-              multiple={true}
-              maxImageSize={10}
-              maxVideoSize={50}
-              initialMedia={initialMedia}
-              onMediaProcessed={handleMediaProcessed}
-              onUploadSuccess={(_url) => {
-                // Upload success handled by the hook
-              }}
-              onUploadError={(_error) => {
-                // Upload error handled by the hook
-              }}
-              renderEditButton={(onEdit, isEditing, hasMedia) => (
-                <button
-                  type="button"
-                  onClick={onEdit}
-                  disabled={isEditing || !hasMedia || isSubmitting}
-                  className="mt-2 inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {isEditing ? 'Editing...' : 'Edit Media'}
-                </button>
+            <FormField
+              control={form.control}
+              name="media"
+              render={() => (
+                <FormItem>
+                  <MediaUploader
+                    ref={mediaUploaderRef}
+                    multiple={true}
+                    alwaysEditing={true}
+                    initialMedia={initialMedia}
+                    onMediaProcessed={handleMediaProcessed}
+                    onMediaChange={handleMediaChange}
+                  />
+                  <FormMessage />
+                </FormItem>
               )}
             />
 
@@ -351,7 +386,7 @@ export default function MainProductDetail({
               <SaveButton
                 type="submit"
                 loading={isSubmitting}
-                disabled={!isDirty || isSubmitting}
+                disabled={(!isDirty && !hasMediaChanges) || isSubmitting}
                 size="lg"
               />
             </div>

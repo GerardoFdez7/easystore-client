@@ -9,7 +9,8 @@ import {
 } from '@shadcn/ui/table';
 import ButtonAddVariant from '@atoms/product-detail/ButtonAddVariant';
 import Image from 'next/image';
-import type { Variant } from '@lib/utils/types/product';
+import type { Variant } from '@lib/types/product';
+import { cn } from 'utils';
 
 export default function TableVariants({
   variants,
@@ -25,29 +26,30 @@ export default function TableVariants({
   };
 
   return (
-    <div>
+    <div className={cn('w-full')}>
       <div className="mb-4 flex items-center justify-between">
         <label className="text-title text-sm font-medium">Variants</label>
         <ButtonAddVariant productId={productId} />
       </div>
 
-      <div className="overflow-hidden rounded-lg border shadow-lg">
-        <Table className="bg-card">
+      <div>
+        <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-title text-center">Variant</TableHead>
-              <TableHead className="text-title text-left">Price</TableHead>
-              <TableHead className="text-title text-left">Condition</TableHead>
+              <TableHead>Variant</TableHead>
+              <TableHead>Price</TableHead>
+              <TableHead>SKU</TableHead>
+              <TableHead>Condition</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {variants.map((variant) => (
               <TableRow
                 key={variant.id}
-                className="cursor-pointer transition-colors"
+                className="cursor-pointer"
                 onClick={() => handleRowClick(variant.id)}
               >
-                <TableCell className="pl-5">
+                <TableCell>
                   <div className="flex items-center gap-3">
                     <div className="h-10 w-10 overflow-hidden rounded-lg">
                       <Image
@@ -64,12 +66,9 @@ export default function TableVariants({
                     </span>
                   </div>
                 </TableCell>
-                <TableCell className="text-foreground text-sm">
-                  {variant.price}
-                </TableCell>
-                <TableCell className="text-foreground text-sm">
-                  {variant.condition}
-                </TableCell>
+                <TableCell>{variant.price}</TableCell>
+                <TableCell>{variant.sku || '-'}</TableCell>
+                <TableCell>{variant.condition}</TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -1,4 +1,5 @@
 import { Textarea } from '@shadcn/ui/textarea';
+import { Label } from '@shadcn/ui/label';
 import { cn } from 'utils';
 
 type DescriptionProps = {
@@ -19,14 +20,14 @@ export default function Description({
 }: DescriptionProps) {
   return (
     <div>
-      <label className="text-title mb-2 block text-sm font-medium">
+      <Label className="text-title mb-2 block text-sm font-medium">
         {label}
-      </label>
+      </Label>
       <Textarea
         maxLength={maxLength}
         value={value || ''}
         onChange={(e) => onChange?.(e.target.value)}
-        className={cn('bg-background h-10', className)}
+        className={cn(className)}
         {...props}
       />
     </div>

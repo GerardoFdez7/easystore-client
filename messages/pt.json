@@ -364,6 +364,8 @@
     "chooseFiles": "Escolher Arquivos",
     "done": "Concluído",
     "maxFilesExceeded": "Não é possível enviar mais de {maxItems} arquivos de mídia",
+    "imageLimitExceeded": "Limite de imagens excedido",
+    "imageLimitExceededDescription": "Você só pode enviar {maxItems} imagens no máximo. Atualmente você tem {currentCount} imagens e pode adicionar {allowedCount} mais.",
     "minFilesRequired": "Pelo menos {minItems} arquivos de mídia são necessários",
     "mediaUploaderConfigError": "Erro de configuração do carregador de mídia",
     "uploadFailed": "Falha no envio",

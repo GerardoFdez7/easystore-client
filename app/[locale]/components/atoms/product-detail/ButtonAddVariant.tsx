@@ -22,12 +22,7 @@ export default function ButtonAddVariant({ productId }: ButtonAddVariantProps) {
   };
 
   return (
-    <Button
-      variant="outline"
-      size="sm"
-      className="border-title text-title hover:bg-title hover:text-white dark:hover:bg-white dark:hover:text-black"
-      onClick={handleClick}
-    >
+    <Button variant="title" size="sm" onClick={handleClick}>
       <Plus className="mr-2 h-4 w-4" />
       Add variant
     </Button>

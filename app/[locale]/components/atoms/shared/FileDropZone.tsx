@@ -6,6 +6,7 @@ import { Card, CardContent } from '@shadcn/ui/card';
 import { Upload, AlertCircle } from 'lucide-react';
 import { cn } from 'utils';
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 
 interface FileDropZoneProps {
   onFileSelect: (files: File[]) => void;
@@ -17,6 +18,8 @@ interface FileDropZoneProps {
   disabled?: boolean;
   className?: string;
   error?: string;
+  maxItems?: number; // Maximum number of items allowed
+  currentItemCount?: number; // Current number of items already selected
 }
 
 const FileDropZone: React.FC<FileDropZoneProps> = ({
@@ -29,6 +32,8 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
   className,
   multiple,
   error: externalError,
+  maxItems,
+  currentItemCount = 0,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
@@ -88,6 +93,20 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
     if (!files || files.length === 0) return;
 
     const selectedFiles = Array.from(files);
+
+    // Check if adding these files would exceed the limit
+    if (maxItems && currentItemCount + selectedFiles.length > maxItems) {
+      const allowedCount = maxItems - currentItemCount;
+      toast.warning(t('imageLimitExceeded'), {
+        description: t('imageLimitExceededDescription', {
+          maxItems,
+          currentCount: currentItemCount,
+          allowedCount: allowedCount > 0 ? allowedCount : 0,
+        }),
+      });
+      return;
+    }
+
     const validFiles: File[] = [];
     let hasErrors = false;
 
@@ -132,6 +151,26 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
     const files = event.dataTransfer.files;
     if (files && files.length > 0) {
       const selectedFiles = Array.from(files);
+
+      // Check if adding these files would exceed the limit
+      if (maxItems && currentItemCount + selectedFiles.length > maxItems) {
+        const allowedCount = maxItems - currentItemCount;
+        console.log('Toast should show (drop):', {
+          maxItems,
+          currentItemCount,
+          selectedFilesLength: selectedFiles.length,
+          allowedCount,
+        });
+        toast.warning(t('imageLimitExceeded'), {
+          description: t('imageLimitExceededDescription', {
+            maxItems,
+            currentCount: currentItemCount,
+            allowedCount: allowedCount > 0 ? allowedCount : 0,
+          }),
+        });
+        return;
+      }
+
       const validFiles: File[] = [];
       let hasErrors = false;
 

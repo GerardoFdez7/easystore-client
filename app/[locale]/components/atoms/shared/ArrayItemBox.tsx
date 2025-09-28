@@ -29,7 +29,7 @@ export default function ArrayItemBox({
   return (
     <div
       className={cn(
-        'border-border bg-card relative rounded-lg border p-4 shadow-sm',
+        'border-border bg-background relative rounded-lg border p-4 shadow-sm',
         className,
       )}
     >
