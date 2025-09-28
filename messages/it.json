@@ -364,6 +364,8 @@
     "chooseFiles": "Scegli File",
     "done": "Fatto",
     "maxFilesExceeded": "Non è possibile caricare più di {maxItems} file multimediali",
+    "imageLimitExceeded": "Limite di immagini superato",
+    "imageLimitExceededDescription": "Puoi caricare solo {maxItems} immagini al massimo. Attualmente hai {currentCount} immagini e puoi aggiungerne {allowedCount} in più.",
     "minFilesRequired": "Sono richiesti almeno {minItems} file multimediali",
     "mediaUploaderConfigError": "Errore di configurazione del caricatore multimediale",
     "uploadFailed": "Caricamento fallito",

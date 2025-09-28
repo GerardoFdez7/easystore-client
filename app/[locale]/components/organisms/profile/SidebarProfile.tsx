@@ -34,9 +34,7 @@ export default function SidebarProfile() {
                   await actions.updateLogo(cover);
                 }
               }
-            } catch (error) {
-              console.error('Error persisting media:', error);
-            }
+            } catch (_error) {}
           }}
           renderDoneButton={(onDone, isProcessing) => (
             <Button

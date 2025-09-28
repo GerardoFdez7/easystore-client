@@ -7,9 +7,12 @@ import { MediaItem, ProcessedData } from '@lib/types/media';
 /**
  * Converts files to media items for carousel display
  */
-export const filesToMediaItems = (files: File[]): MediaItem[] => {
+export const filesToMediaItems = (
+  files: File[],
+  startIndex: number = 0,
+): MediaItem[] => {
   return files.map((file, index) => ({
-    id: `${file.name}-${file.size}-${file.lastModified}-${index}`,
+    id: `${file.name}-${file.size}-${file.lastModified}-${startIndex + index}`,
     type: file.type.startsWith('video/')
       ? ('video' as const)
       : ('image' as const),
@@ -100,15 +103,29 @@ export const prepareProcessedData = (
 
 /**
  * Updates media items with uploaded URLs
+ * Only updates items that have files (newly uploaded items)
  */
 export const updateMediaItemsWithUrls = (
   mediaItems: MediaItem[],
   urls: string[],
 ): MediaItem[] => {
-  return mediaItems.map((item, index) => ({
-    ...item,
-    src: urls[index] || item.src, // Use uploaded URL or keep original
-  }));
+  let urlIndex = 0;
+
+  return mediaItems.map((item) => {
+    // Only update items that have files (newly uploaded items)
+    if (item.file && urlIndex < urls.length) {
+      const updatedItem = {
+        ...item,
+        src: urls[urlIndex],
+        file: undefined, // Remove file reference after upload
+      };
+      urlIndex++;
+      return updatedItem;
+    }
+
+    // Keep existing items unchanged
+    return item;
+  });
 };
 
 /**

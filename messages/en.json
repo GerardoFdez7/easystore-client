@@ -368,7 +368,9 @@
     "mediaUploaderConfigError": "Media uploader configuration error",
     "uploadFailed": "Upload failed",
     "uploading": "Uploading...",
-    "cover": "Cover"
+    "cover": "Cover",
+    "imageLimitExceeded": "Image limit exceeded",
+    "imageLimitExceededDescription": "You can only upload {maxItems} images maximum. You currently have {currentCount} images and can add {allowedCount} more."
   },
   "ConfirmRegister": {
     "title": "Your Business Details",

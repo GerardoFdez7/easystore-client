@@ -68,7 +68,7 @@ export default function InventoryTable({
   return (
     <div className={cn('w-full', className)}>
       <Table>
-        <TableHeader className="text-lg">
+        <TableHeader>
           <TableRow>
             <TableHead className="pl-2">
               <Checkbox

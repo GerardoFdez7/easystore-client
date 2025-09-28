@@ -138,7 +138,7 @@ const CarouselMedia = ({
   onReorderItems,
   onAddMore,
   maxItems = 10,
-  minItems = 1,
+  minItems = 0,
 }: CarouselMediaProps) => {
   const orderedItems = items;
   const t = useTranslations('Media');
@@ -246,7 +246,7 @@ const CarouselMedia = ({
                       )}
                     </div>
                   </CarouselItem>
-                  {index === 0 && (
+                  {index === 0 && orderedItems.length >= 2 && (
                     <div className="flex items-start">
                       <Separator
                         orientation="vertical"

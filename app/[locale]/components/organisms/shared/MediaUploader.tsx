@@ -1,6 +1,8 @@
-import React from 'react';
-import SingleMediaUploader from '../../molecules/shared/SingleMediaUploader';
-import MultipleMediaUploader from '../../molecules/shared/MultipleMediaUploader';
+import React, { forwardRef } from 'react';
+import SingleMediaUploader from '@molecules/shared/SingleMediaUploader';
+import MultipleMediaUploader, {
+  MultipleMediaUploaderRef,
+} from '@molecules/shared/MultipleMediaUploader';
 import { MediaUploaderCallbacks, MediaUploaderConfig } from '@lib/types/media';
 import {
   DefaultAcceptedFileTypes,
@@ -18,6 +20,7 @@ interface MediaUploaderProps
   className?: string;
   multiple?: boolean;
   hideDoneButton?: boolean;
+  alwaysEditing?: boolean;
   initialMedia?: string | string[] | null;
   renderDoneButton?: (
     onDone: () => void,
@@ -30,60 +33,76 @@ interface MediaUploaderProps
   ) => React.ReactNode;
 }
 
-const MediaUploader: React.FC<MediaUploaderProps> = ({
-  onUploadSuccess,
-  onUploadError,
-  onMediaProcessed,
-  className,
-  multiple = DefaultMultipleUpload,
-  acceptedFileTypes = DefaultAcceptedFileTypes,
-  maxImageSize = DefaultMaxImageSize,
-  maxVideoSize = DefaultVideoSize,
-  disabled = DefaultDisabled,
-  maxItems = DefaultMaxItems,
-  minItems = DefaultMinItems,
-  hideDoneButton = false,
-  initialMedia,
-  renderDoneButton,
-  renderEditButton,
-}) => {
-  if (multiple) {
+const MediaUploader = forwardRef<
+  MultipleMediaUploaderRef | null,
+  MediaUploaderProps
+>(
+  (
+    {
+      onUploadSuccess,
+      onUploadError,
+      onMediaProcessed,
+      onMediaChange,
+      className,
+      multiple = DefaultMultipleUpload,
+      acceptedFileTypes = DefaultAcceptedFileTypes,
+      maxImageSize = DefaultMaxImageSize,
+      maxVideoSize = DefaultVideoSize,
+      disabled = DefaultDisabled,
+      maxItems = DefaultMaxItems,
+      minItems = DefaultMinItems,
+      hideDoneButton = false,
+      alwaysEditing = false,
+      initialMedia,
+      renderDoneButton,
+      renderEditButton,
+    },
+    ref,
+  ) => {
+    if (multiple) {
+      return (
+        <MultipleMediaUploader
+          ref={ref}
+          onUploadSuccess={onUploadSuccess}
+          onUploadError={onUploadError}
+          onMediaProcessed={onMediaProcessed}
+          onMediaChange={onMediaChange}
+          className={className}
+          hideDoneButton={hideDoneButton || alwaysEditing}
+          alwaysEditing={alwaysEditing}
+          initialMedia={Array.isArray(initialMedia) ? initialMedia : null}
+          renderDoneButton={alwaysEditing ? undefined : renderDoneButton}
+          renderEditButton={alwaysEditing ? undefined : renderEditButton}
+          acceptedFileTypes={acceptedFileTypes}
+          maxImageSize={maxImageSize}
+          maxVideoSize={maxVideoSize}
+          disabled={disabled}
+          maxItems={maxItems}
+          minItems={minItems}
+        />
+      );
+    }
+
     return (
-      <MultipleMediaUploader
+      <SingleMediaUploader
         onUploadSuccess={onUploadSuccess}
         onUploadError={onUploadError}
         onMediaProcessed={onMediaProcessed}
+        onMediaChange={onMediaChange}
         className={className}
         hideDoneButton={hideDoneButton}
-        initialMedia={Array.isArray(initialMedia) ? initialMedia : null}
+        initialMedia={typeof initialMedia === 'string' ? initialMedia : null}
         renderDoneButton={renderDoneButton}
         renderEditButton={renderEditButton}
         acceptedFileTypes={acceptedFileTypes}
         maxImageSize={maxImageSize}
         maxVideoSize={maxVideoSize}
         disabled={disabled}
-        maxItems={maxItems}
-        minItems={minItems}
       />
     );
-  }
+  },
+);
 
-  return (
-    <SingleMediaUploader
-      onUploadSuccess={onUploadSuccess}
-      onUploadError={onUploadError}
-      onMediaProcessed={onMediaProcessed}
-      className={className}
-      hideDoneButton={hideDoneButton}
-      initialMedia={typeof initialMedia === 'string' ? initialMedia : null}
-      renderDoneButton={renderDoneButton}
-      renderEditButton={renderEditButton}
-      acceptedFileTypes={acceptedFileTypes}
-      maxImageSize={maxImageSize}
-      maxVideoSize={maxVideoSize}
-      disabled={disabled}
-    />
-  );
-};
+MediaUploader.displayName = 'MediaUploader';
 
 export default MediaUploader;

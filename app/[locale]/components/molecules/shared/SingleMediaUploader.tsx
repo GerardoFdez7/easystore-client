@@ -6,8 +6,7 @@ import SingleImagePreview from '@atoms/shared/SingleImagePreview';
 import DoneButton from '@atoms/shared/DoneButton';
 import { MediaUploaderCallbacks, MediaUploaderConfig } from '@lib/types/media';
 import { useMediaUploadLogic } from '@hooks/media/useMediaUploadLogic';
-import { validateFileCount } from '@lib/utils/media';
-import { cn } from 'utils';
+import { validateFileCount, cn } from '@lib/utils';
 import { useTranslations } from 'next-intl';
 
 interface SingleMediaUploaderProps
@@ -31,6 +30,7 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
   onUploadSuccess,
   onUploadError,
   onMediaProcessed,
+  onMediaChange,
   className,
   hideDoneButton = false,
   initialMedia,
@@ -59,15 +59,60 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
     multiple: false,
   });
 
+  // Track initial state to detect changes
+  const [initialMediaState, setInitialMediaState] = React.useState<
+    string | null
+  >(null);
+  const [hasChanges, setHasChanges] = React.useState(false);
+
+  // Helper function to check if media has changed
+  const checkForChanges = React.useCallback(
+    (
+      currentSelectedFiles: File[],
+      currentPersistedMedia: { url: string } | string[] | null,
+    ) => {
+      // If we have new files selected, there are changes
+      if (currentSelectedFiles.length > 0) {
+        if (!hasChanges) {
+          setHasChanges(true);
+          onMediaChange?.(true);
+        }
+        return;
+      }
+
+      // Compare current persisted media with initial state
+      const currentUrl =
+        currentPersistedMedia &&
+        typeof currentPersistedMedia === 'object' &&
+        'url' in currentPersistedMedia
+          ? currentPersistedMedia.url
+          : null;
+      const hasMediaChanges = currentUrl !== initialMediaState;
+
+      if (hasMediaChanges !== hasChanges) {
+        setHasChanges(hasMediaChanges);
+        onMediaChange?.(hasMediaChanges);
+      }
+    },
+    [hasChanges, initialMediaState, onMediaChange],
+  );
+
   // Initialize persisted media with initial media if provided
   useEffect(() => {
     if (initialMedia && !persistedMedia) {
       setPersistedMedia({ url: initialMedia });
+      setInitialMediaState(initialMedia); // Set initial state for change detection
     } else if (!initialMedia && persistedMedia) {
       // Clear persisted media when initialMedia is removed
       setPersistedMedia(null);
+      setInitialMediaState(null);
     }
   }, [initialMedia, persistedMedia, setPersistedMedia]);
+
+  // Check for changes whenever selectedFiles or persistedMedia change
+  useEffect(() => {
+    checkForChanges(selectedFiles, persistedMedia);
+  }, [selectedFiles, persistedMedia, checkForChanges]);
 
   const handleValidationError = (error: string) => {
     onUploadError?.(error);
@@ -89,6 +134,11 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
     setPersistedMedia(null);
     setIsEditing(false);
 
+    // Reset change tracking when removing media
+    setInitialMediaState(null);
+    setHasChanges(false);
+    onMediaChange?.(false);
+
     // If we're removing persisted media (existing logo), notify parent
     if (persistedMedia) {
       void onMediaProcessed?.(null);
@@ -98,6 +148,10 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
   const handleDone = async () => {
     if (selectedFiles.length === 0) return;
     await startUpload(selectedFiles);
+
+    // Reset change tracking after successful upload
+    setHasChanges(false);
+    onMediaChange?.(false);
   };
 
   const handleDoneWrapper = () => {

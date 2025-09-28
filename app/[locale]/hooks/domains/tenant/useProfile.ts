@@ -24,24 +24,6 @@ export type Profile = {
   plan?: string | null;
 };
 
-/** Extract a human readable error message */
-function pickMessage(body: unknown): string | undefined {
-  if (typeof body === 'string') return body;
-  if (body && typeof body === 'object') {
-    const obj = body as Record<string, unknown>;
-    for (const key of ['message', 'error', 'detail']) {
-      const v = obj[key];
-      if (typeof v === 'string' && v.trim()) return v;
-    }
-  }
-  return undefined;
-}
-
-function errorToMessage(e: unknown, fallback: string): string {
-  if (e instanceof Error) return e.message || fallback;
-  return pickMessage(e) ?? (typeof e === 'string' ? e : fallback);
-}
-
 export function useProfile() {
   const t = useTranslations('Profile');
   const apollo = useApolloClient();
@@ -144,12 +126,7 @@ export function useProfile() {
           });
         },
       });
-    } catch (e: unknown) {
-      toast.error(t('submitErrorTitle'), {
-        description: errorToMessage(e, t('unknownError')),
-      });
-      throw e;
-    }
+    } catch (_e) {}
   };
 
   /** Actions */
@@ -167,12 +144,7 @@ export function useProfile() {
         description: t('domainUpdated'),
       });
       return { success: true };
-    } catch (e: unknown) {
-      return {
-        success: false,
-        error: errorToMessage(e, t('unknownError')),
-      };
-    }
+    } catch (_e) {}
   };
 
   const updatePhone = async (next: string) => {
@@ -188,12 +160,7 @@ export function useProfile() {
       await updateField({ defaultPhoneNumberId: value });
       toast.success(t('savedChangesTitle'), { description: t('phoneUpdated') });
       return { success: true };
-    } catch (e: unknown) {
-      return {
-        success: false,
-        error: errorToMessage(e, t('unknownError')),
-      };
-    }
+    } catch (_e) {}
   };
 
   const updateEmail = async (next: string) => {
@@ -208,12 +175,7 @@ export function useProfile() {
       await updateField({ email: parsed.data });
       toast.success(t('savedChangesTitle'), { description: t('emailUpdated') });
       return { success: true };
-    } catch (e: unknown) {
-      return {
-        success: false,
-        error: errorToMessage(e, t('unknownError')),
-      };
-    }
+    } catch (_e) {}
   };
 
   const updateDescription = async (next: string) => {
@@ -234,12 +196,7 @@ export function useProfile() {
         });
       }
       return { success: true };
-    } catch (e: unknown) {
-      return {
-        success: false,
-        error: errorToMessage(e, t('unknownError')),
-      };
-    }
+    } catch (_e) {}
   };
 
   const updateBusinessName = async (next: string) => {
@@ -256,12 +213,7 @@ export function useProfile() {
         description: t('businessNameUpdated'),
       });
       return { success: true };
-    } catch (e: unknown) {
-      return {
-        success: false,
-        error: errorToMessage(e, t('unknownError')),
-      };
-    }
+    } catch (_e) {}
   };
 
   const updateOwnerName = async (next: string) => {
@@ -278,12 +230,7 @@ export function useProfile() {
         description: t('ownerNameUpdated'),
       });
       return { success: true };
-    } catch (e: unknown) {
-      return {
-        success: false,
-        error: errorToMessage(e, t('unknownError')),
-      };
-    }
+    } catch (_e) {}
   };
 
   const updateLogo = async (url: string | null) => {
@@ -298,12 +245,7 @@ export function useProfile() {
       await updateField({ logo: parsed.data });
       toast.success(t('savedChangesTitle'), { description: t('logoUpdated') });
       return { success: true };
-    } catch (e: unknown) {
-      return {
-        success: false,
-        error: errorToMessage(e, t('unknownError')),
-      };
-    }
+    } catch (_e) {}
   };
 
   /** Phone derived values */

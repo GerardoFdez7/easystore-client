@@ -11,6 +11,7 @@ export type Category = {
 export type Variant = {
   id: string;
   price: number;
+  sku: string;
   attributes: Attribute[];
   condition: string;
   variantCover?: string;

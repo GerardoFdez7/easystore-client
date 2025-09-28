@@ -54,19 +54,76 @@ export const useMediaUploadLogic = ({
 
         // Call persistence callback if provided
         if (onMediaProcessed) {
-          const processedData = prepareProcessedData(
-            urls,
-            selectedFiles,
-            multiple,
-          );
-          await onMediaProcessed(processedData);
+          // For multiple mode, combine existing media URLs with new ones
+          if (multiple) {
+            // Get existing URLs from mediaItems, separating cover from additional media
+            const existingMediaItems = mediaItems.filter((item) => !item.file);
+
+            // The first item in mediaItems should be the cover (from initialMedia)
+            // Additional items are the gallery media
+            const existingCover =
+              existingMediaItems.length > 0 ? existingMediaItems[0].src : '';
+            const existingGalleryUrls = existingMediaItems
+              .slice(1)
+              .map((item) => item.src);
+
+            // Combine existing gallery URLs with new uploaded URLs
+            const allGalleryUrls = [...existingGalleryUrls, ...urls];
+
+            // Create processed data with proper cover and mediaItems structure
+            const processedData = {
+              cover: existingCover || urls[0] || '', // Preserve existing cover, fallback to first new URL if no existing cover
+              mediaItems: allGalleryUrls.map((url, index) => {
+                // Determine media type from existing mediaItems or default to IMAGE
+                const existingItem = mediaItems.find(
+                  (item) => item.src === url,
+                );
+                const mediaType: 'VIDEO' | 'IMAGE' =
+                  existingItem?.type === 'video' ? 'VIDEO' : 'IMAGE';
+
+                return {
+                  url,
+                  position: index + 1, // Position starts from 1 for additional media
+                  mediaType,
+                };
+              }),
+            };
+
+            await onMediaProcessed(processedData);
+          } else {
+            // Single mode - use original logic
+            const processedData = prepareProcessedData(
+              urls,
+              selectedFiles,
+              multiple,
+            );
+            await onMediaProcessed(processedData);
+          }
         }
 
         // Save for preview - update mediaItems with uploaded URLs
         if (multiple && urls.length >= 1) {
           const updatedMediaItems = updateMediaItemsWithUrls(mediaItems, urls);
           setMediaItems(updatedMediaItems);
-          setPersistedMedia(urls);
+
+          // Update persisted media to include all URLs (existing + new)
+          // Separate cover from gallery media
+          const existingMediaItems = mediaItems.filter((item) => !item.file);
+          const existingCover =
+            existingMediaItems.length > 0 ? existingMediaItems[0].src : '';
+          const existingGalleryUrls = existingMediaItems
+            .slice(1)
+            .map((item) => item.src);
+
+          // Combine existing gallery URLs with new uploaded URLs
+          const allGalleryUrls = [...existingGalleryUrls, ...urls];
+
+          // Create the complete media array: cover first, then gallery
+          const allUrls = existingCover
+            ? [existingCover, ...allGalleryUrls]
+            : allGalleryUrls;
+
+          setPersistedMedia(allUrls);
           setIsEditing(false);
         } else if (urls.length === 1) {
           setPersistedMedia({ url: urls[0] });
@@ -85,8 +142,8 @@ export const useMediaUploadLogic = ({
     [
       onUploadSuccess,
       onMediaProcessed,
-      selectedFiles,
       multiple,
+      selectedFiles,
       mediaItems,
       setMediaItems,
       setPersistedMedia,

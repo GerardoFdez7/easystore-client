@@ -13,7 +13,7 @@ import { Button } from '@shadcn/ui/button';
 import { Input } from '@shadcn/ui/input';
 import { Plus } from 'lucide-react';
 import ArrayItemBox from '@atoms/shared/ArrayItemBox';
-import type { Sustainability } from '@lib/utils/types/product';
+import type { Sustainability } from '@lib/types/product';
 import { useTranslations } from 'next-intl';
 
 export default function SustainabilityFormField() {
