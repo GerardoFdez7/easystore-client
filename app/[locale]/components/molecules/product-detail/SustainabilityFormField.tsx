@@ -20,7 +20,7 @@ export default function SustainabilityFormField() {
   const { control } = useFormContext();
   const [newCertification, setNewCertification] = useState('');
   const [newRecycledPercentage, setNewRecycledPercentage] = useState('');
-  const t = useTranslations('Variant');
+  const t = useTranslations('Products');
 
   return (
     <FormField
@@ -68,7 +68,7 @@ export default function SustainabilityFormField() {
         return (
           <FormItem>
             <FormLabel className="text-lg font-semibold">
-              Sustainability
+              {t('sustainabilities')}
             </FormLabel>
             <FormControl>
               <div className="space-y-4">
@@ -76,22 +76,23 @@ export default function SustainabilityFormField() {
                 <div className="border-border bg-muted/30 rounded-lg border p-4">
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <div>
-                      <FormLabel htmlFor="attributeKey" className="mb-1">
-                        Certification
+                      <FormLabel htmlFor="certification" className="mb-1">
+                        {t('certification')}
                       </FormLabel>
                       <Input
                         id="certification"
                         type="text"
-                        placeholder="certification"
+                        placeholder={t('certificationPlaceholder')}
                         value={newCertification}
                         onChange={(e) => setNewCertification(e.target.value)}
                       />
                     </div>
                     <div>
-                      <FormLabel className="mb-1">
-                        Recycled Percentage
+                      <FormLabel htmlFor="recycledPercentage" className="mb-1">
+                        {t('recycledPercentage')}
                       </FormLabel>
                       <Input
+                        id="recycledPercentage"
                         type="number"
                         placeholder="0-100"
                         value={newRecycledPercentage}
@@ -112,7 +113,7 @@ export default function SustainabilityFormField() {
                         !newRecycledPercentage.trim()
                       }
                     >
-                      <Plus className="h-4 w-4" /> Add Sustainability
+                      <Plus className="h-4 w-4" /> {t('addSustainability')}
                     </Button>
                   </div>
                 </div>
@@ -136,10 +137,10 @@ export default function SustainabilityFormField() {
                             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                               <div>
                                 <FormLabel className="text-xs">
-                                  Certification
+                                  {t('certification')}
                                 </FormLabel>
                                 <Input
-                                  placeholder="certification"
+                                  placeholder={t('certificationPlaceholder')}
                                   value={sustainability.certification}
                                   onChange={(e) =>
                                     updateAttribute(
@@ -152,7 +153,7 @@ export default function SustainabilityFormField() {
                               </div>
                               <div>
                                 <FormLabel className="text-xs">
-                                  Recycled Percentage
+                                  {t('recycledPercentage')}
                                 </FormLabel>
                                 <Input
                                   type="number"
@@ -177,7 +178,7 @@ export default function SustainabilityFormField() {
 
                 {sustainabilities.length === 0 && (
                   <p className="text-muted-foreground py-8 text-center text-sm">
-                    No Sustainability yet
+                    {t('noSustainabilityAdded')}
                   </p>
                 )}
               </div>
