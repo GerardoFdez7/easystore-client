@@ -1,5 +1,6 @@
 import { Button } from '@shadcn/ui/button';
 import { Plus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 
 interface ButtonAddVariantProps {
@@ -8,9 +9,10 @@ interface ButtonAddVariantProps {
 
 export default function ButtonAddVariant({ productId }: ButtonAddVariantProps) {
   const router = useRouter();
+  const t = useTranslations('Products');
 
   const handleClick = () => {
-    // Si productId es 'new' o la URL contiene '/products/new', ir a la ruta especial
+    // If the product is new (not yet saved), navigate to the new variant page without a product ID
     if (
       productId === 'new' ||
       window.location.pathname.includes('/products/new')
@@ -24,7 +26,7 @@ export default function ButtonAddVariant({ productId }: ButtonAddVariantProps) {
   return (
     <Button variant="title" size="sm" onClick={handleClick}>
       <Plus className="mr-2 h-4 w-4" />
-      Add variant
+      {t('addVariant')}
     </Button>
   );
 }

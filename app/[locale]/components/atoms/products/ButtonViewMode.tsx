@@ -1,6 +1,6 @@
 import { Button } from '@shadcn/ui/button';
-import { Grid3X3 } from 'lucide-react';
-import { AlignJustify } from 'lucide-react';
+import { LayoutGrid } from 'lucide-react';
+import { Table2 } from 'lucide-react';
 
 type ButtonViewProps = {
   onViewModeToggle: () => void;
@@ -19,9 +19,9 @@ export default function ButtonViewMode({
       className="h-16 w-16"
     >
       {viewMode === 'table' ? (
-        <AlignJustify className="text-foreground size-5 sm:size-6" />
+        <Table2 className="text-foreground size-5 sm:size-6" />
       ) : (
-        <Grid3X3 className="text-foreground size-5 sm:size-6" />
+        <LayoutGrid className="text-foreground size-5 sm:size-6" />
       )}
     </Button>
   );

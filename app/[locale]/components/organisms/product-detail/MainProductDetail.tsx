@@ -1,11 +1,12 @@
 'use client';
 
-import InputProduct from '@atoms/product-detail/InputProduct';
-import Description from '@atoms/product-detail/Description';
-import TypeProduct from '@atoms/product-detail/TypeProduct';
-import TableVariants from '@molecules/product-detail/TableVariants';
+import VariantsFormField from '@molecules/product-detail/VariantsFormField';
 import SustainabilityFormField from '@molecules/product-detail/SustainabilityFormField';
-import { Form, FormField, FormItem, FormMessage } from '@shadcn/ui/form';
+import NameFormField from '@molecules/product-detail/NameFormField';
+import BrandManufacturerFormField from '@molecules/product-detail/BrandManufacturerFormField';
+import ShortLongDescriptionFormField from '@molecules/product-detail/ShortLongDescriptionFormField';
+import TypeProductFormField from '@molecules/product-detail/TypeProductFormField';
+import { Form } from '@shadcn/ui/form';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState, useRef } from 'react';
 import { useGetProductById } from '@hooks/domains/products/useGetProductById';
@@ -93,9 +94,6 @@ export default function MainProductDetail({
 
   // Get dirty fields to determine if Save button should be enabled
   const { dirtyFields, isDirty } = form.formState;
-
-  // Watch productType specifically to ensure proper synchronization
-  const currentProductType = form.watch('productType');
 
   // Helper function to get only the changed fields
   const getChangedFields = (formData: ProductFormData) => {

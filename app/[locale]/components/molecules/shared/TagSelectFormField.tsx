@@ -107,7 +107,7 @@ export default function TagSelectFormField<T>({
 
                 {/* Empty State */}
                 {selectedItems.length === 0 && (
-                  <p className="text-muted-foreground text-xs">
+                  <p className="text-muted-foreground py-8 text-center text-sm">
                     {emptyStateText}
                   </p>
                 )}

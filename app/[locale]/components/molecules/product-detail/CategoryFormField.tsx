@@ -1,4 +1,5 @@
 import TagSelectFormField from '@molecules/shared/TagSelectFormField';
+import { useTranslations } from 'next-intl';
 
 interface Category {
   categoryId: string;
@@ -17,12 +18,13 @@ const categories: Category[] = [
 ];
 
 export default function CategoryFormField() {
+  const t = useTranslations('Products');
   return (
     <TagSelectFormField<Category>
       name="categories"
-      label="Categories"
-      placeholder="Select a category"
-      emptyStateText="No categories selected"
+      label={t('categories')}
+      placeholder={t('categoriesPlaceholder')}
+      emptyStateText={t('noCategoriesSelected')}
       availableOptions={categories}
       getOptionId={(cat) => cat.categoryId}
       getOptionLabel={(cat) => cat.categoryName}
