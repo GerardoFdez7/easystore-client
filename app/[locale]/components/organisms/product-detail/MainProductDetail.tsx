@@ -1,11 +1,12 @@
 'use client';
 
-import InputProduct from '@atoms/product-detail/InputProduct';
-import Description from '@atoms/product-detail/Description';
-import TypeProduct from '@atoms/product-detail/TypeProduct';
-import TableVariants from '@molecules/product-detail/TableVariants';
+import VariantsFormField from '@molecules/product-detail/VariantsFormField';
 import SustainabilityFormField from '@molecules/product-detail/SustainabilityFormField';
-import { Form, FormField, FormItem, FormMessage } from '@shadcn/ui/form';
+import NameFormField from '@molecules/product-detail/NameFormField';
+import BrandManufacturerFormField from '@molecules/product-detail/BrandManufacturerFormField';
+import ShortLongDescriptionFormField from '@molecules/product-detail/ShortLongDescriptionFormField';
+import TypeProductFormField from '@molecules/product-detail/TypeProductFormField';
+import { Form } from '@shadcn/ui/form';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState, useRef } from 'react';
 import { useGetProductById } from '@hooks/domains/products/useGetProductById';
@@ -79,9 +80,6 @@ export default function MainProductDetail({
 
   // Get dirty fields to determine if Save button should be enabled
   const { dirtyFields, isDirty } = form.formState;
-
-  // Watch productType specifically to ensure proper synchronization
-  const currentProductType = form.watch('productType');
 
   // Helper function to get only the changed fields
   const getChangedFields = (formData: ProductFormData) => {
@@ -198,56 +196,8 @@ export default function MainProductDetail({
                 productIsArchived={product?.isArchived ?? false}
               />
             </div>
-            {/* Title */}
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <InputProduct
-                    label="Name"
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Short Description */}
-            <FormField
-              control={form.control}
-              name="shortDescription"
-              render={({ field }) => (
-                <FormItem>
-                  <Description
-                    maxLength={200}
-                    label="Short Description"
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Long Description */}
-            <FormField
-              control={form.control}
-              name="longDescription"
-              render={({ field }) => (
-                <FormItem>
-                  <Description
-                    maxLength={2000}
-                    label="Long Description"
-                    value={field.value ?? ''}
-                    onChange={field.onChange}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
+            <NameFormField />
+            <ShortLongDescriptionFormField />
             {/* Multimedia */}
             <MediaUploader
               multiple={true}
@@ -272,73 +222,12 @@ export default function MainProductDetail({
                 </button>
               )}
             />
-
-            {/* Category */}
             <CategoryFormField />
-
             {/* Variants */}
-            <FormField
-              control={form.control}
-              name="variants"
-              render={({ field: { value: variants = [] } }) => (
-                <FormItem>
-                  <TableVariants variants={variants} productId={param} />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Type Product */}
-            <FormField
-              control={form.control}
-              name="productType"
-              render={({ field }) => (
-                <FormItem>
-                  <TypeProduct
-                    value={currentProductType || field.value}
-                    onChange={field.onChange}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Tags */}
+            <VariantsFormField productId={param} />
+            <TypeProductFormField />
             <TagsFormField />
-
-            {/* Brand & Manufacturer */}
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="brand"
-                render={({ field }) => (
-                  <FormItem>
-                    <InputProduct
-                      label="Brand"
-                      value={field.value ?? ''}
-                      onChange={field.onChange}
-                    />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="manufacturer"
-                render={({ field }) => (
-                  <FormItem>
-                    <InputProduct
-                      label="Manufacturer"
-                      value={field.value ?? ''}
-                      onChange={field.onChange}
-                    />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            {/* Sustainability */}
+            <BrandManufacturerFormField />
             <SustainabilityFormField />
 
             <div className="flex justify-end">

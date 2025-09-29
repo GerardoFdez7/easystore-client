@@ -39,10 +39,7 @@ export function ProductTableRow({
   };
 
   return (
-    <TableRow
-      className="bg-card hover:bg-hover cursor-pointer border-b transition-colors"
-      onClick={handleRowClick}
-    >
+    <TableRow className="cursor-pointer" onClick={handleRowClick}>
       <TableCell className="px-3">
         <Checkbox checked={isSelected} onCheckedChange={onSelect} />
       </TableCell>

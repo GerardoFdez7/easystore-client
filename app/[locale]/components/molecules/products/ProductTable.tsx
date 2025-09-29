@@ -39,7 +39,7 @@ export function ProductTable({
   const t = useTranslations('Products');
 
   return (
-    <div className="overflow-hidden rounded-lg border shadow-lg">
+    <div className="overflow-hidden rounded-md border">
       <TabFilterProducts
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
@@ -49,29 +49,29 @@ export function ProductTable({
         onDeleteComplete={onDeleteComplete}
       />
 
-      <Table className="bg-card">
+      <Table>
         <TableHeader className="text-[12px] sm:text-[14px]">
-          <TableRow className="hover:bg-transparent">
+          <TableRow>
             <TableHead className="w-9 px-3">
               <Checkbox
                 checked={selectedProducts.length === products.length}
                 onCheckedChange={onSelectAll}
               />
             </TableHead>
-            <TableHead className="text-foreground text-center font-medium">
+            <TableHead className="text-foreground text-center font-bold">
               {t('products')}
             </TableHead>
-            <TableHead className="text-foreground font-medium">SKU</TableHead>
-            <TableHead className="text-foreground font-medium">
+            <TableHead className="text-foreground font-bold">SKU</TableHead>
+            <TableHead className="text-foreground font-bold">
               {t('price')}
             </TableHead>
-            <TableHead className="text-foreground font-medium">
+            <TableHead className="text-foreground font-bold">
               {t('variants')}
             </TableHead>
-            <TableHead className="text-foreground font-medium">
+            <TableHead className="text-foreground font-bold">
               {t('category')}
             </TableHead>
-            <TableHead className="text-foreground font-medium">
+            <TableHead className="text-foreground font-bold">
               {t('status')}
             </TableHead>
           </TableRow>
