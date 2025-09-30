@@ -1,0 +1,31 @@
+import { useQuery } from '@apollo/client/react';
+import { useMemo } from 'react';
+import {
+  FindProductByIdDocument,
+  FindProductByIdQuery,
+  FindProductByIdQueryVariables,
+} from '@graphql/generated';
+
+export const useGetProductById = (id: string) => {
+  const { data, loading, error, refetch } = useQuery<
+    FindProductByIdQuery,
+    FindProductByIdQueryVariables
+  >(FindProductByIdDocument, {
+    variables: { id },
+    skip: !id, // Skip the query if no ID is provided
+    fetchPolicy: 'cache-first',
+    errorPolicy: 'all',
+    notifyOnNetworkStatusChange: false,
+  });
+
+  const product = useMemo(() => {
+    return data?.getProductById || null;
+  }, [data]);
+
+  return {
+    product,
+    loading,
+    error,
+    refetch: () => refetch({ id }), // Wrapper to ensure ID is always passed
+  };
+};

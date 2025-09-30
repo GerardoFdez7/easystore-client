@@ -21,7 +21,7 @@ interface DialogResetPasswordProps {
   token: string;
   form: UseFormReturn<ResetPasswordFormData>;
   onSubmit: (data: ResetPasswordFormData) => Promise<void>;
-  isLoading: boolean;
+  loading: boolean;
   isTokenInvalid?: boolean;
 }
 
@@ -32,7 +32,7 @@ export default function DialogResetPassword({
   token,
   form,
   onSubmit,
-  isLoading,
+  loading,
   isTokenInvalid = false,
 }: DialogResetPasswordProps) {
   const t = useTranslations('ResetPassword');
@@ -76,7 +76,7 @@ export default function DialogResetPassword({
               variant="auth"
               size="xl"
               className="w-full"
-              isLoading={isLoading}
+              loading={loading}
             >
               {t('updatePassword')}
             </ButtonLoadable>

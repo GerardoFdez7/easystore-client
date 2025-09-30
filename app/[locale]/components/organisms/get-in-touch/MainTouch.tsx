@@ -12,7 +12,7 @@ import { useTouch } from '@hooks/domains/authentication/useTouch';
 
 export default function MainTouch() {
   const t = useTranslations('GetInTouch');
-  const { form, handleSubmit, isLoading } = useTouch();
+  const { form, handleSubmit, loading } = useTouch();
 
   return (
     <main className="flex-1 bg-gray-100 pt-16">
@@ -42,7 +42,7 @@ export default function MainTouch() {
                     variant="auth"
                     size="xl"
                     className="w-full"
-                    isLoading={isLoading}
+                    loading={loading}
                   >
                     {t('submit')}
                   </ButtonLoadable>

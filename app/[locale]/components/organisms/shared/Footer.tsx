@@ -14,7 +14,10 @@ export default function Footer() {
         <div className="bg-foreground mx-auto mb-8 h-0.5 w-auto rounded-full"></div>
       </span>
       <div className="mb-9 flex flex-col items-center gap-3 text-center sm:flex-row sm:flex-wrap sm:justify-center">
-        <LinkFooter href="/discord" text={t('community')} />
+        <LinkFooter
+          href="https://discord.gg/35nBjqV4KC"
+          text={t('community')}
+        />
         <LinkFooter href="/terms" text={t('termsConditions')} />
         <LinkFooter href="/privacy" text={t('privacyPolicy')} />
       </div>

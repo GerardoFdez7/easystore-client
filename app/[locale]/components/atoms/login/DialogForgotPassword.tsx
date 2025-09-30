@@ -35,7 +35,7 @@ export default function DialogForgotPassword({
   children,
 }: DialogForgotPasswordProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const { handleForgotPassword, isLoading, forgotPasswordSchema } =
+  const { handleForgotPassword, loading, forgotPasswordSchema } =
     useForgotPassword();
   const t = useTranslations('ForgotPassword');
 
@@ -96,7 +96,7 @@ export default function DialogForgotPassword({
               variant="auth"
               size="xl"
               className="w-full"
-              isLoading={isLoading}
+              loading={loading}
               loadingText={t('sending')}
             >
               {t('sendResetLink')}

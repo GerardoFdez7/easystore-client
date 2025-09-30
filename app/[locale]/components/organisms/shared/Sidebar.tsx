@@ -2,12 +2,13 @@ import React from 'react';
 import {
   Package,
   Users,
-  BarChart3,
+  LayoutDashboard,
   Settings,
-  Eye,
+  MonitorPlay,
   // Gift,
-  // UserCheck,
-  Archive,
+  // BookUser,
+  ClipboardList,
+  Warehouse,
 } from 'lucide-react';
 import OwnerLogo from '@atoms/dashboard/OwnerLogo';
 import ButtonSidebar from '@atoms/dashboard/ButtonSidebar';
@@ -40,21 +41,28 @@ export default function Sidebar({
         <SidebarMenu className="gap-2 px-2">
           <SidebarMenuItem>
             <ButtonSidebar
-              icon={<BarChart3 />}
+              icon={<LayoutDashboard />}
               label={t('dashboard')}
               route="dashboard"
             />
           </SidebarMenuItem>
           <SidebarMenuItem>
             <ButtonSidebar
-              icon={<Archive />}
+              icon={<Package />}
               label={t('products')}
               route="products"
             />
           </SidebarMenuItem>
           <SidebarMenuItem>
             <ButtonSidebar
-              icon={<Package />}
+              icon={<Warehouse />}
+              label={t('inventory')}
+              route="inventory"
+            />
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <ButtonSidebar
+              icon={<ClipboardList />}
               label={t('orders')}
               route="orders"
             />
@@ -75,14 +83,14 @@ export default function Sidebar({
             </SidebarMenuItem>
             <SidebarMenuItem>
               <ButtonSidebar
-                icon={<UserCheck />}
+                icon={<BookUser />}
                 label={t('employees')}
                 route="employees"
               />
             </SidebarMenuItem> */}
           <SidebarMenuItem>
             <ButtonSidebar
-              icon={<Eye />}
+              icon={<MonitorPlay />}
               label={t('preview')}
               route="preview"
             />

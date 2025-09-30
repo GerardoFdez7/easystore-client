@@ -16,7 +16,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   accountType = AccountTypeEnum.Tenant,
 }) => {
   const t = useTranslations('Register');
-  const { form, handleSubmit, isLoading } = useRegister(accountType);
+  const { form, handleSubmit, loading } = useRegister(accountType);
 
   return (
     <Form {...form}>
@@ -33,7 +33,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           variant="auth"
           size="xl"
           className="w-full"
-          isLoading={isLoading}
+          loading={loading}
         >
           {t('buttonRegister')}
         </ButtonLoadable>

@@ -1,38 +1,38 @@
 mutation createAddress($input: CreateAddressInput!) {
   createAddress(input: $input) {
+    id
     addressLine1
     addressLine2
     addressType
     city
     countryId
+    stateId
     deliveryNum
     name
     postalCode
+    deliveryInstructions
   }
 }
 
 mutation updateAddress($id: ID!, $input: UpdateAddressInput!) {
   updateAddress(id: $id, input: $input) {
+    id
     addressLine1
     addressLine2
     addressType
     city
     countryId
+    stateId
     deliveryNum
     name
     postalCode
+    deliveryInstructions
   }
 }
 
 mutation deleteAddress($id: ID!) {
   deleteAddress(id: $id) {
-    addressLine1
-    addressLine2
-    addressType
-    city
-    countryId
-    deliveryNum
+    id
     name
-    postalCode
   }
 }

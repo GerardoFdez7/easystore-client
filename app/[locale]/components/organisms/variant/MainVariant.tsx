@@ -14,9 +14,12 @@ import WarrantyFormField from '@molecules/variant/WarrantyFormField';
 import SaveButton from '@atoms/shared/SaveButton';
 
 // Mock useVariant hook for testing purposes
-function useVariant() {
+function useVariant(props: MainVariantProps) {
   const form = useForm({
     defaultValues: {
+      productId: props.productId,
+      variantId: props.variantId,
+      isNew: props.isNew,
       price: '',
       condition: '',
       attributes: [],
@@ -39,13 +42,27 @@ function useVariant() {
     console.log('Form submitted:', data);
   };
 
-  const isLoading = false;
+  const loading = false;
 
-  return { form, handleSubmit, isLoading };
+  return { form, handleSubmit, loading };
 }
 
-export default function MainVariant() {
-  const { form, handleSubmit, isLoading } = useVariant();
+interface MainVariantProps {
+  productId: string;
+  variantId?: string;
+  isNew: boolean;
+}
+
+export default function MainVariant({
+  productId,
+  variantId,
+  isNew,
+}: MainVariantProps) {
+  const { form, handleSubmit, loading } = useVariant({
+    productId,
+    variantId,
+    isNew,
+  });
   return (
     <main className="mx-4 sm:mx-auto">
       <FormProvider {...form}>
@@ -66,7 +83,7 @@ export default function MainVariant() {
             <InstallmentPaymentFormField />
             <WarrantyFormField />
             <div className="flex justify-end">
-              <SaveButton type="submit" isLoading={isLoading} size="lg" />
+              <SaveButton type="submit" loading={loading} size="lg" />
             </div>
           </form>
         </Form>

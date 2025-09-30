@@ -21,7 +21,29 @@ const nextConfig: NextConfig = {
     removeConsole:
       process.env.NODE_ENV === 'production'
         ? {
-            exclude: ['error', 'warn'],
+            exclude: [
+              'error',
+              'warn',
+              'info',
+              'debug',
+              'log',
+              'table',
+              'trace',
+              'dir',
+              'dirxml',
+              'group',
+              'groupCollapsed',
+              'groupEnd',
+              'time',
+              'timeEnd',
+              'timeLog',
+              'count',
+              'countReset',
+              'assert',
+              'clear',
+              'profile',
+              'profileEnd',
+            ],
           }
         : false,
   },
