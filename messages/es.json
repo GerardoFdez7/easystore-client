@@ -869,6 +869,7 @@
     "unauthorized-error": "No estás autorizado para realizar esta acción.",
     "internal-server-error": "Ocurrió un error interno del servidor. Por favor, inténtalo de nuevo más tarde.",
     "bad-request-error": "La solicitud no es válida. Por favor, comprueba los datos e inténtalo de nuevo.",
+    "not-found-error": "El recurso solicitado no fue encontrado.",
     "invalidCredentials": "Credenciales inválidas",
     "invalidCredentialsDescription": "Por favor verifica tu correo electrónico y contraseña e intenta de nuevo.",
     "accountLocked": "Cuenta Bloqueada",

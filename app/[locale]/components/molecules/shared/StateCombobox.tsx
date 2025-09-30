@@ -3,7 +3,7 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { Combobox } from '@shadcn/ui/combobox';
-import { useStateCombobox } from '@hooks/domains/address/geo/useStateCombobox';
+import { useStateCombobox } from '@hooks/domains/address/geo';
 
 interface StateComboboxProps {
   countryId?: string;

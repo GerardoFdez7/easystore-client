@@ -13,12 +13,12 @@
  */
 
 import { GraphQLFormattedError } from 'graphql';
-import { errorRegistry, findErrorHandler } from './error-registry';
+import { errorRegistry, findErrorHandler } from '../error-registry';
 import {
   suggestErrorPriority,
   generateErrorHandlerTemplate,
   PRIORITY_RANGES,
-} from './priority-calculator';
+} from '../priority-calculator';
 
 // Test cases for common error scenarios
 const testCases = [
@@ -60,7 +60,15 @@ const testCases = [
       message: 'Resource not found',
       extensions: { originalError: { error: 'Not Found', statusCode: 404 } },
     },
-    expectedHandler: 'not-found-silent',
+    expectedHandler: 'not-found-unexpected',
+  },
+  {
+    name: 'Unexpected Not Found',
+    error: {
+      message: 'Resource not found',
+      extensions: { originalError: { error: 'Not Found', statusCode: 404 } },
+    },
+    expectedHandler: 'not-found-unexpected',
   },
   {
     name: 'Bad Request',

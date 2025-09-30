@@ -30,6 +30,7 @@ function getLocalizedMessage(locale: string, key: keyof typeof en.Errors) {
   const messages =
     messagesMap[locale as keyof typeof messagesMap] || messagesMap.en;
   return messages.Errors?.[key] || key;
+  // NOTE: If you see an any error message here, please add the missing translation key to the messages file.
 }
 
 /**
@@ -177,17 +178,74 @@ const authenticationHandlers: ErrorHandler[] = [
  */
 const httpStatusHandlers: ErrorHandler[] = [
   {
-    id: 'not-found-silent',
+    id: 'not-found-expected',
     priority: 300,
     matcher: (error: GraphQLFormattedError) => {
       const originalError = error.extensions?.originalError as {
         error?: string;
         statusCode?: number;
       };
+
+      // Only handle as silent if it's a known expected 404 scenario
+      const isNotFound = originalError?.error === 'Not Found';
+      if (!isNotFound) return false;
+
+      // List of GraphQL operations where 404 is expected and should be silent
+      // Add more operations here as needed
+      const expectedNotFoundOperations = [
+        'getAllWarehouses',
+        'getWarehouseById',
+        'findInventory',
+        'getAllAddresses',
+        'getAllProducts',
+      ];
+
+      // Check if this error comes from an expected operation
+      const operationName = error.path?.[0];
+      const isExpectedOperation =
+        typeof operationName === 'string' &&
+        expectedNotFoundOperations.includes(operationName);
+
+      return isExpectedOperation;
+    },
+    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
+      // Silent handler for expected 404 errors - don't show toast
+      // But still log in development for debugging context
+      if (context.isDevelopment) {
+        console.info('Expected 404 handled silently:', {
+          operation: error.path?.[0],
+          message: error.message,
+        });
+      }
+      return true;
+    },
+  },
+  {
+    id: 'not-found-unexpected',
+    priority: 310,
+    allowConsoleLog: true, // Allow console logging for unexpected 404s in development
+    matcher: (error: GraphQLFormattedError) => {
+      const originalError = error.extensions?.originalError as {
+        error?: string;
+        statusCode?: number;
+      };
+      // Handle any remaining 404 errors that weren't caught by the expected handler
       return originalError?.error === 'Not Found';
     },
-    handler: () => {
-      // Silent handler for 404 errors - don't show toast
+    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
+      const { locale, isDevelopment } = context;
+
+      // Show a developer-friendly warning for unexpected 404s
+      if (isDevelopment) {
+        toast.warning('Unexpected 404', {
+          description: `Operation "${error.path?.[0]}" returned Not Found. Please handle it at your component, showing a friendly message to the user and add it to the expected operations at \"lib/errors/error-registry.ts. line 195"\.`,
+        });
+      } else {
+        // In production, show a generic error to users
+        toast.error(getLocalizedMessage(locale, 'title'), {
+          description: getLocalizedMessage(locale, 'not-found-error'),
+        });
+      }
       return true;
     },
   },
@@ -338,7 +396,17 @@ export function processGraphQLError(
   error: GraphQLFormattedError,
   context: ErrorContext,
 ): boolean {
-  if (context.isDevelopment) {
+  const matchResult = findErrorHandler(error);
+
+  // Check if this error will be handled by any specific handler (not just silent ones)
+  const isHandledError = matchResult.matched;
+
+  // Only log to console if it's not handled by a specific handler or if we're in development
+  // and the handler explicitly allows logging
+  if (
+    !isHandledError ||
+    (context.isDevelopment && matchResult.handler?.allowConsoleLog)
+  ) {
     console.error('GraphQL Error Debug:', {
       message: error.message,
       extensions: error.extensions,
@@ -347,8 +415,6 @@ export function processGraphQLError(
       fullError: error,
     });
   }
-
-  const matchResult = findErrorHandler(error);
 
   if (matchResult.matched && matchResult.handler) {
     return matchResult.handler.handler(error, context);

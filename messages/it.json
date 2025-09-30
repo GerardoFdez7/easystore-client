@@ -871,6 +871,7 @@
     "unauthorized-error": "Non sei autorizzato a eseguire questa azione.",
     "internal-server-error": "Si è verificato un errore interno del server. Riprova più tardi.",
     "bad-request-error": "La richiesta non era valida. Controlla i dati e riprova.",
+    "not-found-error": "La risorsa richiesta non è stata trovata.",
     "invalidCredentials": "Credenziali non valide",
     "invalidCredentialsDescription": "Controlla la tua email e password e riprova.",
     "accountLocked": "Account Bloccato",
