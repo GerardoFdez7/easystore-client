@@ -14,7 +14,7 @@ import {
   useRestoreProduct,
   useSoftDeleteProduct,
   useMultipleSoftDeleteProducts,
-} from '@hooks/domains/products/index';
+} from '@hooks/domains/products';
 import { useTranslations } from 'next-intl';
 
 interface ArchivedProductProps {

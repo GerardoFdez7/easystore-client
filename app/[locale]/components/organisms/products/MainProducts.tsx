@@ -5,7 +5,7 @@ import { ProductGrid } from '@molecules/products/ProductGrid';
 import { useState, useCallback } from 'react';
 import { ProductsToolbar } from '@molecules/products/Toolbar';
 import { FilterType } from '@atoms/products/TabFilterProducts';
-import { useGetAllProducts } from '@hooks/domains/products/index';
+import { useGetAllProducts } from '@hooks/domains/products';
 import { InputMaybe, TypeEnum } from '@graphql/generated';
 
 export default function MainDashboard() {

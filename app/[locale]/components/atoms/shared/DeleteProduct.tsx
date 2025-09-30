@@ -13,7 +13,7 @@ import { Trash2 } from 'lucide-react';
 import {
   useDeleteProduct,
   useMultipleDeleteProducts,
-} from '@hooks/domains/products/index';
+} from '@hooks/domains/products';
 import { useTranslations } from 'next-intl';
 
 interface DeleteProductProps {

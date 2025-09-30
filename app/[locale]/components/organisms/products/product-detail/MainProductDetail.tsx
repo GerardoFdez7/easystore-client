@@ -17,10 +17,7 @@ import type { Media } from '@lib/graphql/generated';
 import TagsFormField from '@molecules/products/product-detail/TagsFormField';
 import CategoryFormField from '@molecules/products/product-detail/CategoryFormField';
 import SaveButton from '@atoms/shared/SaveButton';
-import {
-  useUpdateProduct,
-  useGetProductById,
-} from '@hooks/domains/products/index';
+import { useUpdateProduct, useGetProductById } from '@hooks/domains/products';
 import ProductActions from '@atoms/shared/ProductActions';
 import { useProductMedia } from '@hooks/domains/products/useMultipleMediaPersistence';
 
