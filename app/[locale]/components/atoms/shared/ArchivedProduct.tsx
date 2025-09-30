@@ -10,9 +10,11 @@ import {
   AlertDialogTrigger,
 } from '@shadcn/ui/alert-dialog';
 import { Archive, RotateCcw } from 'lucide-react';
-import useMultipleSoftDeleteProducts from '@hooks/domains/products/useMultipleSoftDeleteProducts';
-import useSoftDeleteProduct from '@hooks/domains/products/useSoftDeleteProduct';
-import useRestoreProduct from '@hooks/domains/products/useRestoreProduct';
+import {
+  useRestoreProduct,
+  useSoftDeleteProduct,
+  useMultipleSoftDeleteProducts,
+} from '@hooks/domains/products/index';
 import { useTranslations } from 'next-intl';
 
 interface ArchivedProductProps {

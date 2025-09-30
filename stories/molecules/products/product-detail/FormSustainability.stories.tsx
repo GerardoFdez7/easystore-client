@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import FormSustainability from '@molecules/product-detail/FormSustainability';
+import FormSustainability from '@molecules/products/product-detail/FormSustainability';
 import { Dialog, DialogTrigger } from '@shadcn/ui/dialog';
 import { Button } from '@shadcn/ui/button';
 // import { fn } from '@storybook/test';

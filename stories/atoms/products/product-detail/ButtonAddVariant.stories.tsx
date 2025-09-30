@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import ButtonSave from '@atoms/product-detail/ButtonSave';
+import ButtonAddVariant from '@atoms/products/product-detail/ButtonAddVariant';
 
-const meta: Meta<typeof ButtonSave> = {
-  title: 'Atoms/Product Detail/ButtonSave',
-  component: ButtonSave,
+const meta: Meta<typeof ButtonAddVariant> = {
+  title: 'Atoms/Product Detail/ButtonAddVariant',
+  component: ButtonAddVariant,
   parameters: {
     layout: 'centered',
   },

@@ -34,8 +34,10 @@ export default function TypeProductFormField() {
             </FormLabel>
             <FormControl>
               <Select
-                value={field.value || 'PHYSICAL'}
-                onValueChange={(value) => field.onChange(value as ProductType)}
+                value={field.value || 'PHYSICAL'} // Use the form value directly
+                onValueChange={(value) => {
+                  field.onChange(value as ProductType);
+                }}
               >
                 <SelectTrigger
                   className="w-full sm:w-[300px]"

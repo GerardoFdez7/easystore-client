@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Sustainability from '@molecules/product-detail/SustainabilityFormField';
+import Sustainability from '@molecules/products/product-detail/SustainabilityFormField';
 
 const meta: Meta<typeof Sustainability> = {
   title: 'Molecules/Product Detail/Sustainability',
