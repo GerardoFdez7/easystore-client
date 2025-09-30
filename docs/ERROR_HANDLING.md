@@ -71,9 +71,9 @@ Reasoning: Contains business logic keywords (limit, exceeded)
 
 ### Core Components
 
-1. **Error Registry** (`lib/utils/errors/error-registry.ts`) - Centralized error matching and handling system
-2. **Error Handler** (`lib/utils/errors/error.handler.ts`) - Main entry point for Apollo Client errors
-3. **Priority Calculator** (`lib/utils/errors/priority-calculator.ts`) - Automated priority assignment and conflict detection
+1. **Error Registry** (`lib/errors/error-registry.ts`) - Centralized error matching and handling system with console logging control
+2. **Error Handler** (`lib/errors/error.handler.ts`) - Main entry point for Apollo Client errors
+3. **Priority Calculator** (`lib/errors/priority-calculator.ts`) - Automated priority assignment and conflict detection
 4. **Apollo Link** (`lib/apollo/link.ts`) - Error middleware integration
 5. **Type Definitions** (`lib/types/error.ts`) - TypeScript interfaces for type safety
 
@@ -126,7 +126,7 @@ Always check for conflicts before adding your handler to the registry.
 
 #### 4. Add to Registry
 
-Add your handler to the appropriate category in `lib/utils/errors/error-registry.ts`:
+Add your handler to the appropriate category in `lib/errors/error-registry.ts`:
 
 ```typescript
 const databaseConstraintHandlers: ErrorHandler[] = [
@@ -134,6 +134,7 @@ const databaseConstraintHandlers: ErrorHandler[] = [
   {
     id: 'your-handler-id',
     priority: 120, // From interactive analysis
+    allowConsoleLog: false, // Optional: control console logging (default: false)
     matcher: (error: GraphQLFormattedError) => {
       const message = error.message?.toLowerCase() || '';
       return message.includes('your specific pattern');
@@ -250,22 +251,33 @@ toast.error('Error occurred', {
 
 ## Development Environment Features
 
-### Centralized Error Logging
+### Console Logging Control
 
-In development mode, all GraphQL errors are automatically logged to the console with full details.
+The system intelligently controls console logging to prevent Next.js error overlays for handled errors:
+
+- **Handled Errors**: All errors with specific handlers are silenced from console logging by default
+- **Selective Debugging**: Handlers can opt-in to console logging using the `allowConsoleLog` property
+- **Development Mode**: Only unexpected errors or handlers with explicit logging permission show in console
+
+### Enhanced 404 Error Handling
+
+The system differentiates between expected and unexpected 404 errors:
+
+- **Expected 404s** (`not-found-expected`, priority 300): Silent handling for known operations like `getAllWarehouses`, `getWarehouseById`, `findInventory`
+- **Unexpected 404s** (`not-found-unexpected`, priority 310): Developer warnings for potential missing endpoints with console logging enabled
 
 ### Backend Message Display
 
-- **Development**: Shows `error.message` from backend
+- **Development**: Shows `error.message` from backend for debugging
 - **Production**: Shows localized messages from `messages/*.json`
 
-This helps developers quickly identify and debug backend issues during development.
+This helps developers quickly identify and debug backend issues during development while maintaining clean error overlays.
 
 ## Error Handler Types
 
 ### Silent Handlers
 
-For errors that shouldn't show toast notifications:
+For errors that shouldn't show toast notifications or console logs:
 
 ```typescript
 {
@@ -281,12 +293,13 @@ For errors that shouldn't show toast notifications:
 
 ### Development-Only Handlers
 
-For errors that should only appear in development:
+For errors that should only appear in development with optional console logging:
 
 ```typescript
 {
   id: 'dev-only-error',
   priority: 400,
+  allowConsoleLog: true, // Optional: enables console logging in development
   matcher: (error) => /* your condition */,
   handler: (error, context) => {
     if (context.isDevelopment) {
@@ -294,6 +307,23 @@ For errors that should only appear in development:
         description: error.message,
       });
     }
+    return true;
+  },
+}
+```
+
+### Console Logging Control
+
+Use the `allowConsoleLog` property to control development console output:
+
+```typescript
+{
+  id: 'debug-handler',
+  priority: 350,
+  allowConsoleLog: true, // This handler will log to console in development
+  matcher: (error) => /* your condition */,
+  handler: (error, context) => {
+    // Handler implementation
     return true;
   },
 }
@@ -347,12 +377,15 @@ return (
 6. **Documentation**: Self-documenting error categories
 7. **Automated Priority Assignment**: Intelligent priority suggestions
 8. **Conflict Detection**: Automatic conflict detection and resolution
+9. **Console Logging Control**: Selective debugging with `allowConsoleLog` property
+10. **Enhanced 404 Handling**: Differentiation between expected and unexpected 404 errors
 
 ## Performance Considerations
 
 - Error handlers are sorted once at module load
 - Matching stops at first successful match
-- Development logging is conditionally executed
+- Console logging is conditionally executed based on handler configuration
 - Toast notifications are debounced by the Sonner library
+- Next.js error overlays are prevented for handled errors in development mode
 
 This implementation follows industry best practices for error handling middleware with centralized error handling, strategy pattern, priority queue, context passing, separation of concerns, and graceful degradation.

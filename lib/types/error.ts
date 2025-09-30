@@ -10,6 +10,7 @@ export interface ErrorHandler {
   priority: number;
   matcher: (error: GraphQLFormattedError) => boolean;
   handler: (error: GraphQLFormattedError, context: ErrorContext) => boolean;
+  allowConsoleLog?: boolean;
 }
 
 export interface ErrorCategory {

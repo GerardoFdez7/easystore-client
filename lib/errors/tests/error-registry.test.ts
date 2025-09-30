@@ -1,5 +1,5 @@
 import { GraphQLFormattedError } from 'graphql';
-import { findErrorHandler, errorRegistry } from './error-registry';
+import { findErrorHandler, errorRegistry } from '../error-registry';
 
 /**
  * Test cases for error handlers to prevent conflicts and ensure correct matching
@@ -42,7 +42,13 @@ const testCases = [
     description: 'not found error (should be silent)',
     errorMessage: 'Resource not found',
     extensions: { originalError: { error: 'Not Found' } },
-    expectedHandlerId: 'not-found-silent',
+    expectedHandlerId: 'not-found-expected',
+  },
+  {
+    description: 'unexpected not found error',
+    errorMessage: 'Resource not found',
+    extensions: { originalError: { error: 'Not Found' } },
+    expectedHandlerId: 'not-found-unexpected',
   },
   {
     description: 'bad request error',
