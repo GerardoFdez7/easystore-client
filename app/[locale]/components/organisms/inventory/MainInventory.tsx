@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Warehouse, Plus } from 'lucide-react';
 import { FindInventoryQueryVariables } from '@graphql/generated';
-import { useInventory } from '@hooks/domains/inventory/useInventory';
+import { useInventory } from '@hooks/domains/inventory';
 import WarehouseCombobox from '@molecules/inventory/WarehouseCombobox';
 import InventoryTable from '@molecules/inventory/InventoryTable';
 import InventoryTableSkeleton from '@molecules/inventory/InventoryTableSkeleton';

@@ -828,6 +828,7 @@
     "unauthorized-error": "You are not authorized to perform this action.",
     "internal-server-error": "An internal server error occurred. Please try again later.",
     "bad-request-error": "The request was invalid. Please check the data and try again.",
+    "not-found-error": "The requested resource was not found.",
     "invalidCredentials": "Invalid credentials",
     "invalidCredentialsDescription": "Please check your email and password and try again.",
     "accountLocked": "Account Locked",

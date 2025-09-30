@@ -4,7 +4,7 @@ import {
   CreateAddressMutationVariables,
   AddressTypeEnum,
 } from '@graphql/generated';
-import { useAddressForm } from '@hooks/domains/address/useAddressForm';
+import { useAddressForm } from '@hooks/domains/address';
 import {
   Form,
   FormControl,

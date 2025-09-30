@@ -29,7 +29,7 @@ const FormActions: React.FC<FormActionsProps> = ({
       <CancelButton
         type="button"
         onClick={onCancel}
-        disabled={isSubmitting || disabled}
+        disabled={isSubmitting}
         translationKey={cancelText}
         showIcon={showIcons}
         {...cancelButtonProps}

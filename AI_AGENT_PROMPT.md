@@ -90,7 +90,32 @@ eqeqeq: ['error', 'always'],
 ### Error Handling
 
 - Always resolve TypeScript errors. Ensure the codebase is free of TypeScript errors to maintain type safety and code quality.
-- The <mcfile name="error.handler.ts" path="lib/utils/error.handler.ts"></mcfile> file plays a crucial role in centralized error handling for Apollo Client. It acts as a middleware, integrated into <mcfile name="link.ts" path="lib/apollo/link.ts"></mcfile>, to process and display GraphQL and network errors consistently across the application.
+- The <mcfile name="error.handler.ts" path="lib/utils/errors/error-registry.ts"></mcfile> file plays a crucial role in centralized error handling for Apollo Client. It acts as a middleware, integrated into <mcfile name="link.ts" path="lib/apollo/link.ts"></mcfile>, to process and display GraphQL and network errors consistently across the application.
+
+#### Error Handling Architecture
+
+- **Error Registry** (`lib/utils/errors/error-registry.ts`): Centralized error matching and handling system.
+- **Error Handler** (`lib/utils/errors/error.handler.ts`): Main entry point for Apollo Client errors.
+- **Priority Calculator** (`lib/utils/errors/priority-calculator.ts`): Automated priority assignment and conflict detection.
+- **Apollo Link** (`lib/apollo/link.ts`): Error middleware integration.
+- **Type Definitions** (`lib/types/error.ts`): TypeScript interfaces for type safety.
+
+#### Priority-Based Error Matching
+
+The system uses a priority-based approach to resolve error conflicts. Lower numbers indicate higher priority, ensuring specific errors are matched before generic ones.
+
+- `DATABASE_CONSTRAINTS`: 100 - 199 (e.g., Unique constraints, foreign keys).
+- `AUTHENTICATION`: 200 - 299 (e.g., Login, credentials, tokens, permissions).
+- `HTTP_STATUS`: 300 - 399 (e.g., Status code based errors like 404, 500).
+- `BUSINESS_LOGIC`: 400 - 499 (e.g., Domain-specific validation errors).
+- `GENERIC_FALLBACK`: 500 - 599 (e.g., Catch-all handlers).
+
+#### Best Practices for Error Handling
+
+- **Use Specific Matchers**: Avoid generic matchers; use multiple conditions for precise error identification.
+- **Handle Development vs. Production**: Display detailed error messages in development and localized, user-friendly messages in production.
+- **Always Use Localization**: Ensure all error messages are localized using `messages/*.json` files.
+- **Interactive Development Tool**: Utilize `npm run test-errors:interactive` for analysis, template generation, and conflict checking when adding new error handlers.
 
 ### File Organization
 
