@@ -10,8 +10,10 @@ import {
   AlertDialogTrigger,
 } from '@shadcn/ui/alert-dialog';
 import { Trash2 } from 'lucide-react';
-import useMultipleDeleteProducts from '@hooks/domains/products/useMultipleDeleteProducts';
-import useDeleteProduct from '@hooks/domains/products/useDeleteProduct';
+import {
+  useDeleteProduct,
+  useMultipleDeleteProducts,
+} from '@hooks/domains/products/index';
 import { useTranslations } from 'next-intl';
 
 interface DeleteProductProps {

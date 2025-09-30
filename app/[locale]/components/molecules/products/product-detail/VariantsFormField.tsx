@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from '@shadcn/ui/table';
-import ButtonAddVariant from '@atoms/product-detail/ButtonAddVariant';
+import ButtonAddVariant from '@atoms/products/product-detail/ButtonAddVariant';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import type { Variant } from '@lib/utils/types/product';

@@ -1,15 +1,14 @@
 'use client';
 
-import VariantsFormField from '@molecules/product-detail/VariantsFormField';
-import SustainabilityFormField from '@molecules/product-detail/SustainabilityFormField';
-import NameFormField from '@molecules/product-detail/NameFormField';
-import BrandManufacturerFormField from '@molecules/product-detail/BrandManufacturerFormField';
-import ShortLongDescriptionFormField from '@molecules/product-detail/ShortLongDescriptionFormField';
-import TypeProductFormField from '@molecules/product-detail/TypeProductFormField';
+import VariantsFormField from '@molecules/products/product-detail/VariantsFormField';
+import SustainabilityFormField from '@molecules/products/product-detail/SustainabilityFormField';
+import NameFormField from '@molecules/products/product-detail/NameFormField';
+import BrandManufacturerFormField from '@molecules/products/product-detail/BrandManufacturerFormField';
+import ShortLongDescriptionFormField from '@molecules/products/product-detail/ShortLongDescriptionFormField';
+import TypeProductFormField from '@molecules/products/product-detail/TypeProductFormField';
 import { Form } from '@shadcn/ui/form';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState, useRef } from 'react';
-import { useGetProductById } from '@hooks/domains/products/useGetProductById';
 import MediaUploader from '@organisms/shared/MediaUploader';
 import type {
   Sustainability,
@@ -17,11 +16,13 @@ import type {
   Variant,
 } from '@lib/utils/types/product';
 import type { Media } from '@lib/graphql/generated';
-import TagsFormField from '@molecules/product-detail/TagsFormField';
-import CategoryFormField from '@molecules/product-detail/CategoryFormField';
+import TagsFormField from '@molecules/products/product-detail/TagsFormField';
+import CategoryFormField from '@molecules/products/product-detail/CategoryFormField';
 import SaveButton from '@atoms/shared/SaveButton';
-import { useUpdateProduct } from '@hooks/domains/products/useUpdateProduct';
-import { toast } from 'sonner';
+import {
+  useUpdateProduct,
+  useGetProductById,
+} from '@hooks/domains/products/index';
 import ProductActions from '@atoms/shared/ProductActions';
 import { useProductMedia } from '@hooks/useMultipleMediaPersistence';
 
@@ -37,7 +38,7 @@ type ProductFormData = {
   longDescription: string | null;
   shortDescription: string;
   manufacturer: string | null;
-  productType: string;
+  productType: 'PHYSICAL' | 'DIGITAL';
   tags: string[];
   categories: Category[];
   variants: Variant[];
@@ -54,13 +55,11 @@ export default function MainProductDetail({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const lastResetProductRef = useRef<string | null>(null);
 
-  // Use custom hook for media management
   const { initialMedia, handleMediaProcessed } = useProductMedia({
     product,
     actions,
   });
 
-  // Initialize form with default values
   const form = useForm<ProductFormData>({
     defaultValues: {
       name: '',
@@ -69,7 +68,7 @@ export default function MainProductDetail({
       longDescription: '',
       shortDescription: '',
       manufacturer: '',
-      productType: '',
+      productType: 'PHYSICAL',
       tags: [],
       categories: [],
       variants: [],
@@ -81,7 +80,6 @@ export default function MainProductDetail({
   // Get dirty fields to determine if Save button should be enabled
   const { dirtyFields, isDirty } = form.formState;
 
-  // Helper function to get only the changed fields
   const getChangedFields = (formData: ProductFormData) => {
     const changedFields: Record<string, unknown> = {};
 
@@ -97,26 +95,24 @@ export default function MainProductDetail({
 
   // Form submission handler
   const onSubmit = async (formData: ProductFormData) => {
-    if (!isDirty) return; // Don't submit if no changes
-
+    if (!isDirty) return;
     setIsSubmitting(true);
     try {
+      form.clearErrors();
       const changedFields = getChangedFields(formData);
+      const setFieldError = (name: string, error: { message: string }) => {
+        form.setError(name as keyof ProductFormData, error);
+      };
 
-      // Use bulk update function - validates all fields first, then makes single API call
-      const result = await actions.updateMultipleFields(changedFields);
+      const result = await actions.updateMultipleFields(
+        changedFields,
+        setFieldError,
+      );
 
       if (result.success) {
-        // Reset form dirty state after successful submission
         form.reset(formData);
-      } else {
-        // Show validation errors
-        toast.error('Validation Error', {
-          description: result.error,
-        });
       }
-    } catch (error) {
-      console.error('Error updating product:', error);
+    } catch (_error) {
     } finally {
       setIsSubmitting(false);
     }
@@ -125,25 +121,25 @@ export default function MainProductDetail({
   // Reset form when product data is loaded
   useEffect(() => {
     if (!isNew && product && product.id) {
-      // Only reset if we haven't reset for this specific product already
       if (lastResetProductRef.current !== product.id) {
-        const formData = {
+        const resolvedProductType =
+          product.productType === null || product.productType === undefined
+            ? 'PHYSICAL'
+            : String(product.productType);
+        const formData: ProductFormData = {
           name: product.name || '',
           brand: product.brand ?? '',
           cover: product.cover || '',
           manufacturer: product.manufacturer ?? '',
           shortDescription: product.shortDescription || '',
           longDescription: product.longDescription ?? '',
-          productType:
-            product.productType === null || product.productType === undefined
-              ? ''
-              : String(product.productType), // Ensure it's a string
+          productType: resolvedProductType as 'PHYSICAL' | 'DIGITAL',
           tags:
             product.tags?.filter((tag): tag is string => Boolean(tag)) || [],
           categories:
             product.categories?.map((cat) => ({
               categoryId: cat.categoryId,
-              categoryName: cat.categoryName ?? undefined,
+              categoryName: cat.categoryName || '',
             })) || [],
           variants:
             product.variants?.map((variant) => ({
@@ -223,7 +219,6 @@ export default function MainProductDetail({
               )}
             />
             <CategoryFormField />
-            {/* Variants */}
             <VariantsFormField productId={param} />
             <TypeProductFormField />
             <TagsFormField />
