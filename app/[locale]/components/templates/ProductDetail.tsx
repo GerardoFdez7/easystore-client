@@ -1,4 +1,4 @@
-import MainProductDetail from '@organisms/product-detail/MainProductDetail';
+import MainProductDetail from '@organisms/products/product-detail/MainProductDetail';
 import HeaderDashboard from '@organisms/shared/HeaderDashboard';
 import SidebarLayout from '@organisms/shared/SidebarLayout';
 

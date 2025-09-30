@@ -9,8 +9,6 @@ import {
   UpdateMutationVariables,
   UpdateProductInput,
   TypeEnum,
-  FindAllProductsDocument,
-  FindProductByIdDocument,
 } from '@lib/graphql/generated';
 import { useMutation } from '@apollo/client/react';
 
@@ -62,95 +60,108 @@ export function useUpdateProduct(productId: string) {
   >(UpdateDocument, {
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
-    refetchQueries: [
-      {
-        query: FindAllProductsDocument,
-      },
-      {
-        query: FindProductByIdDocument,
-        variables: { id: productId },
-      },
-    ],
-    awaitRefetchQueries: false,
+    update: (cache, { data }) => {
+      if (data?.updateProduct) {
+        cache.evict({
+          fieldName: 'getAllProducts',
+        });
+        cache.gc();
+      }
+    },
   });
 
-  /** Field validators */
-  const validators = {
-    name: z
-      .string()
-      .trim()
-      .min(2, { message: t('nameTooShort') })
-      .max(100, { message: t('nameTooLong') }),
-    shortDescription: z
-      .string()
-      .trim()
-      .min(10, { message: t('shortDescriptionTooShort') })
-      .max(200, { message: t('shortDescriptionTooLong') }),
-    longDescription: z
-      .string()
-      .trim()
-      .optional()
-      .refine((val) => !val || val.length >= 20, {
-        message: t('longDescriptionTooShort'),
-      })
-      .refine((val) => !val || val.length <= 2000, {
-        message: t('longDescriptionTooLong'),
-      }),
-    brand: z
-      .string()
-      .trim()
-      .optional()
-      .refine((val) => !val || val.length >= 1, {
-        message: t('brandTooShort'),
-      })
-      .refine((val) => !val || val.length <= 100, {
-        message: t('brandTooLong'),
-      }),
-    manufacturer: z
-      .string()
-      .trim()
-      .optional()
-      .refine((val) => !val || val.length >= 1, {
-        message: t('manufacturerTooShort'),
-      })
-      .refine((val) => !val || val.length <= 100, {
-        message: t('manufacturerTooLong'),
-      }),
-    cover: z.union([z.string(), z.null()]).refine(
-      (val) => {
-        if (val === null || val === '') return false;
-        return z.string().url().safeParse(val).success;
-      },
-      {
-        message: t('coverRequired'),
-      },
-    ),
-    productType: z.enum(['PHYSICAL', 'DIGITAL'], {
-      errorMap: () => ({ message: t('productTypeRequired') }),
-    }),
-    tags: z
-      .array(
-        z
-          .string()
-          .min(1, { message: t('tagMustBeNonEmpty') })
-          .max(50, { message: t('tagTooLong') }),
-      )
-      .max(15, { message: t('tooManyTags') })
-      .nullable()
-      .optional(),
-    sustainabilities: z
-      .array(
-        z.object({
-          certification: z
-            .string()
-            .min(1, { message: t('certificationRequired') }),
-          recycledPercentage: z
-            .number()
-            .min(0, { message: t('recycledPercentageMin') })
-            .max(100, { message: t('recycledPercentageMax') }),
+  // Create Zod schema factory that uses translations (similar to useWarehouseForm)
+  const createProductFormSchema = (t: (key: string) => string) =>
+    z.object({
+      name: z
+        .string()
+        .trim()
+        .min(2, { message: t('nameTooShort') })
+        .max(100, { message: t('nameTooLong') }),
+      shortDescription: z
+        .string()
+        .trim()
+        .min(10, { message: t('shortDescriptionTooShort') })
+        .max(200, { message: t('shortDescriptionTooLong') }),
+      longDescription: z
+        .string()
+        .trim()
+        .optional()
+        .refine((val) => !val || val.length >= 20, {
+          message: t('longDescriptionTooShort'),
+        })
+        .refine((val) => !val || val.length <= 2000, {
+          message: t('longDescriptionTooLong'),
         }),
-      )
-      .optional(),
+      brand: z
+        .string()
+        .trim()
+        .optional()
+        .refine((val) => !val || val.length >= 1, {
+          message: t('brandTooShort'),
+        })
+        .refine((val) => !val || val.length <= 100, {
+          message: t('brandTooLong'),
+        }),
+      manufacturer: z
+        .string()
+        .trim()
+        .optional()
+        .refine((val) => !val || val.length >= 1, {
+          message: t('manufacturerTooShort'),
+        })
+        .refine((val) => !val || val.length <= 100, {
+          message: t('manufacturerTooLong'),
+        }),
+      cover: z.union([z.string(), z.null()]).refine(
+        (val) => {
+          if (val === null || val === '') return false;
+          return z.string().url().safeParse(val).success;
+        },
+        {
+          message: t('coverRequired'),
+        },
+      ),
+      productType: z.enum(['PHYSICAL', 'DIGITAL'], {
+        errorMap: () => ({ message: t('productTypeRequired') }),
+      }),
+      tags: z
+        .array(
+          z
+            .string()
+            .min(1, { message: t('tagMustBeNonEmpty') })
+            .max(50, { message: t('tagTooLong') }),
+        )
+        .max(15, { message: t('tooManyTags') })
+        .nullable()
+        .optional(),
+      sustainabilities: z
+        .array(
+          z.object({
+            certification: z
+              .string()
+              .min(1, { message: t('certificationRequired') }),
+            recycledPercentage: z
+              .number()
+              .min(0, { message: t('recycledPercentageMin') })
+              .max(100, { message: t('recycledPercentageMax') }),
+          }),
+        )
+        .optional(),
+    });
+
+  const productFormSchema = createProductFormSchema(t);
+
+  const validators = {
+    name: productFormSchema.shape.name,
+    shortDescription: productFormSchema.shape.shortDescription,
+    longDescription: productFormSchema.shape.longDescription,
+    brand: productFormSchema.shape.brand,
+    manufacturer: productFormSchema.shape.manufacturer,
+    cover: productFormSchema.shape.cover,
+    productType: productFormSchema.shape.productType,
+    tags: productFormSchema.shape.tags,
+    sustainabilities: productFormSchema.shape.sustainabilities,
   };
 
   /** Generic updater using Apollo mutate + optimistic update */
@@ -169,9 +180,6 @@ export function useUpdateProduct(productId: string) {
 
       return result.data?.updateProduct || null;
     } catch (e: unknown) {
-      toast.error(t('updateErrorTitle'), {
-        description: errorToMessage(e, t('unknownError')),
-      });
       throw e;
     }
   };
@@ -429,16 +437,17 @@ export function useUpdateProduct(productId: string) {
     }
   };
 
-  /** Update multiple fields with validation - all or nothing approach */
+  /** Update multiple fields with validation and form error setting */
   const updateMultipleFields = async (
     fieldsToUpdate: Record<string, unknown>,
+    formSetError?: (fieldName: string, error: { message: string }) => void,
   ) => {
     if (!productId) {
       throw new Error('Product ID is required');
     }
 
     const validatedFields: ProductUpdate = {};
-    const validationErrors: string[] = [];
+    const fieldErrors: Array<{ field: string; message: string }> = [];
 
     // Validate ALL fields first before making any update
     for (const [fieldName, fieldValue] of Object.entries(fieldsToUpdate)) {
@@ -448,9 +457,12 @@ export function useUpdateProduct(productId: string) {
             if (fieldValue !== undefined) {
               const parsed = validators.name.safeParse(fieldValue);
               if (!parsed.success) {
-                validationErrors.push(
-                  `Name: ${parsed.error.issues[0]?.message || 'Invalid'}`,
-                );
+                const errorMessage =
+                  parsed.error.issues[0]?.message || 'Invalid';
+                fieldErrors.push({ field: fieldName, message: errorMessage });
+                if (formSetError) {
+                  formSetError(fieldName, { message: errorMessage });
+                }
               } else {
                 validatedFields.name = parsed.data;
               }
@@ -461,9 +473,12 @@ export function useUpdateProduct(productId: string) {
             if (fieldValue !== undefined) {
               const parsed = validators.shortDescription.safeParse(fieldValue);
               if (!parsed.success) {
-                validationErrors.push(
-                  `Short Description: ${parsed.error.issues[0]?.message || 'Invalid'}`,
-                );
+                const errorMessage =
+                  parsed.error.issues[0]?.message || 'Invalid';
+                fieldErrors.push({ field: fieldName, message: errorMessage });
+                if (formSetError) {
+                  formSetError(fieldName, { message: errorMessage });
+                }
               } else {
                 validatedFields.shortDescription = parsed.data;
               }
@@ -474,9 +489,12 @@ export function useUpdateProduct(productId: string) {
             if (fieldValue !== undefined) {
               const parsed = validators.longDescription.safeParse(fieldValue);
               if (!parsed.success) {
-                validationErrors.push(
-                  `Long Description: ${parsed.error.issues[0]?.message || 'Invalid'}`,
-                );
+                const errorMessage =
+                  parsed.error.issues[0]?.message || 'Invalid';
+                fieldErrors.push({ field: fieldName, message: errorMessage });
+                if (formSetError) {
+                  formSetError(fieldName, { message: errorMessage });
+                }
               } else {
                 const value = parsed.data?.trim() === '' ? null : parsed.data;
                 validatedFields.longDescription = value === null ? null : value;
@@ -488,9 +506,12 @@ export function useUpdateProduct(productId: string) {
             if (fieldValue !== undefined) {
               const parsed = validators.brand.safeParse(fieldValue);
               if (!parsed.success) {
-                validationErrors.push(
-                  `Brand: ${parsed.error.issues[0]?.message || 'Invalid'}`,
-                );
+                const errorMessage =
+                  parsed.error.issues[0]?.message || 'Invalid';
+                fieldErrors.push({ field: fieldName, message: errorMessage });
+                if (formSetError) {
+                  formSetError(fieldName, { message: errorMessage });
+                }
               } else {
                 const value = parsed.data?.trim() === '' ? null : parsed.data;
                 validatedFields.brand = value === null ? null : value;
@@ -502,9 +523,12 @@ export function useUpdateProduct(productId: string) {
             if (fieldValue !== undefined) {
               const parsed = validators.manufacturer.safeParse(fieldValue);
               if (!parsed.success) {
-                validationErrors.push(
-                  `Manufacturer: ${parsed.error.issues[0]?.message || 'Invalid'}`,
-                );
+                const errorMessage =
+                  parsed.error.issues[0]?.message || 'Invalid';
+                fieldErrors.push({ field: fieldName, message: errorMessage });
+                if (formSetError) {
+                  formSetError(fieldName, { message: errorMessage });
+                }
               } else {
                 const value = parsed.data?.trim() === '' ? null : parsed.data;
                 validatedFields.manufacturer = value === null ? null : value;
@@ -516,9 +540,12 @@ export function useUpdateProduct(productId: string) {
             if (fieldValue !== undefined) {
               const parsed = validators.cover.safeParse(fieldValue);
               if (!parsed.success) {
-                validationErrors.push(
-                  `Cover: ${parsed.error.issues[0]?.message || 'Invalid'}`,
-                );
+                const errorMessage =
+                  parsed.error.issues[0]?.message || 'Invalid';
+                fieldErrors.push({ field: fieldName, message: errorMessage });
+                if (formSetError) {
+                  formSetError(fieldName, { message: errorMessage });
+                }
               } else {
                 validatedFields.cover = parsed.data || undefined;
               }
@@ -529,9 +556,12 @@ export function useUpdateProduct(productId: string) {
             if (fieldValue !== undefined) {
               const parsed = validators.tags.safeParse(fieldValue);
               if (!parsed.success) {
-                validationErrors.push(
-                  `Tags: ${parsed.error.issues[0]?.message || 'Invalid'}`,
-                );
+                const errorMessage =
+                  parsed.error.issues[0]?.message || 'Invalid';
+                fieldErrors.push({ field: fieldName, message: errorMessage });
+                if (formSetError) {
+                  formSetError(fieldName, { message: errorMessage });
+                }
               } else {
                 validatedFields.tags = parsed.data || undefined;
               }
@@ -542,9 +572,12 @@ export function useUpdateProduct(productId: string) {
             if (fieldValue !== undefined) {
               const parsed = validators.productType.safeParse(fieldValue);
               if (!parsed.success) {
-                validationErrors.push(
-                  `Product Type: ${parsed.error.issues[0]?.message || 'Invalid'}`,
-                );
+                const errorMessage =
+                  parsed.error.issues[0]?.message || 'Invalid';
+                fieldErrors.push({ field: fieldName, message: errorMessage });
+                if (formSetError) {
+                  formSetError(fieldName, { message: errorMessage });
+                }
               } else {
                 validatedFields.productType = parsed.data as TypeEnum;
               }
@@ -588,9 +621,12 @@ export function useUpdateProduct(productId: string) {
                 cleanedSustainabilities,
               );
               if (!parsed.success) {
-                validationErrors.push(
-                  `Sustainabilities: ${parsed.error.issues[0]?.message || 'Invalid'}`,
-                );
+                const errorMessage =
+                  parsed.error.issues[0]?.message || 'Invalid';
+                fieldErrors.push({ field: fieldName, message: errorMessage });
+                if (formSetError) {
+                  formSetError(fieldName, { message: errorMessage });
+                }
               } else {
                 validatedFields.sustainabilities = parsed.data;
               }
@@ -598,15 +634,20 @@ export function useUpdateProduct(productId: string) {
             break;
         }
       } catch (_error) {
-        validationErrors.push(`${fieldName}: Validation error`);
+        const errorMessage = 'Validation error';
+        fieldErrors.push({ field: fieldName, message: errorMessage });
+        if (formSetError) {
+          formSetError(fieldName, { message: errorMessage });
+        }
       }
     }
 
-    // If ANY validation failed, return all errors and don't update anything
-    if (validationErrors.length > 0) {
+    // If ANY validation failed, return field errors and don't update anything
+    if (fieldErrors.length > 0) {
       return {
         success: false,
-        error: validationErrors.join(', '),
+        fieldErrors,
+        error: fieldErrors.map((e) => `${e.field}: ${e.message}`).join(', '),
       };
     }
 
@@ -627,6 +668,7 @@ export function useUpdateProduct(productId: string) {
 
   return {
     validators,
+    productFormSchema, // Export schema for external use (like MainProductDetail)
     actions: {
       updateProduct, // Generic update function
       updateMultipleFields, // New bulk update function

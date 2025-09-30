@@ -5,7 +5,6 @@ import {
   HardDeleteDocument,
   HardDeleteMutation,
   HardDeleteMutationVariables,
-  FindAllProductsDocument,
 } from '@graphql/generated';
 import { useMutation } from '@apollo/client/react';
 
@@ -18,11 +17,7 @@ export const useMultipleDeleteProducts = (onSuccess?: () => void) => {
   >(HardDeleteDocument, {
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
-    refetchQueries: [
-      {
-        query: FindAllProductsDocument,
-      },
-    ],
+    refetchQueries: ['FindAllProducts'],
     awaitRefetchQueries: true,
   });
 
