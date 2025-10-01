@@ -21,6 +21,7 @@ interface ProductVariantGroupProps {
   variants: Variant[];
   onVariantSelect: (
     variantId: string,
+    sku: string,
     productName: string,
     attributes: Array<{ key: string; value: string }>,
   ) => void;
@@ -78,7 +79,12 @@ const ProductVariantGroup: FC<ProductVariantGroupProps> = ({
               variant={selectedVariantId === variant.id ? 'title' : 'outline'}
               size="sm"
               onClick={() =>
-                onVariantSelect(variant.id, productName, variant.attributes)
+                onVariantSelect(
+                  variant.id,
+                  variant.sku,
+                  productName,
+                  variant.attributes,
+                )
               }
               className="mt-2 ml-auto sm:mt-0 sm:ml-3"
             >
