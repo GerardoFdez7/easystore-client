@@ -30,6 +30,16 @@ interface AddStockDialogProps {
   selectedVariantAttributes?: Array<{ key: string; value: string }>;
 }
 
+const slug = (s: string) =>
+  s
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // quita acentos
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+
 const AddStockDialog: FC<AddStockDialogProps> = ({
   open,
   onOpenChange,
@@ -43,6 +53,8 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
   const [selectedVariantId, setSelectedVariantId] = useState<string>(
     initialSelectedVariantId || '',
   );
+  const [selectedVariantSku, setSelectedVariantSku] = useState<string>('');
+
   const [selectedProductName, setSelectedProductName] = useState<string>(
     initialSelectedProductName || '',
   );
@@ -50,16 +62,20 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
     Array<{ key: string; value: string }>
   >(initialSelectedVariantAttributes || []);
   const [selectedWarehouseId, setSelectedWarehouseId] = useState<string>('');
+  const [selectedWarehouseName, setSelectedWarehouseName] =
+    useState<string>('');
   const [step, setStep] = useState<'variant' | 'warehouse'>(
     initialStep || 'variant',
   );
 
   const handleVariantSelect = (
     variantId: string,
+    sku: string,
     productName: string,
     attributes: Array<{ key: string; value: string }> = [],
   ) => {
     setSelectedVariantId(variantId);
+    setSelectedVariantSku(sku);
     setSelectedProductName(productName);
     setSelectedVariantAttributes(attributes);
     setStep('warehouse');
@@ -68,9 +84,11 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
   const handleReset = () => {
     // Explicit reset function for when we want to clear all state
     setSelectedVariantId(initialSelectedVariantId || '');
+    setSelectedVariantSku('');
     setSelectedProductName(initialSelectedProductName || '');
     setSelectedVariantAttributes(initialSelectedVariantAttributes || []);
     setSelectedWarehouseId('');
+    setSelectedWarehouseName('');
     setStep(initialStep || 'variant');
   };
 
@@ -163,6 +181,7 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
               <WarehouseCombobox
                 value={selectedWarehouseId}
                 onChange={setSelectedWarehouseId}
+                onChangeDetailed={(w) => setSelectedWarehouseName(w.name)}
                 placeholder={t('selectWarehousePlaceholder')}
                 className="flex w-full flex-1"
                 aria-labelledby="warehouse-label"
@@ -215,7 +234,7 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
                 selectedWarehouseId
               ) {
                 router.push(
-                  `/inventory/stock-detail?variantId=${selectedVariantId}&warehouseId=${selectedWarehouseId}`,
+                  `/inventory/${slug(selectedWarehouseName)}-${slug(selectedVariantSku)}`,
                 );
                 handleReset(); // Reset state after successful navigation
                 onOpenChange(false);
