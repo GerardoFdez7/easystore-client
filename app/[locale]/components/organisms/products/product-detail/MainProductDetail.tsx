@@ -172,64 +172,62 @@ export default function MainProductDetail({
   }, [form]);
 
   return (
-    <main className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <main className="mx-4 max-w-3xl sm:mx-auto">
       <Form {...form}>
         <form
           onSubmit={(e) => {
             e.preventDefault();
             void form.handleSubmit(onSubmit)(e);
           }}
+          className="space-y-6"
         >
           {/* Main Content */}
-          <div className="space-y-8">
-            <div className="flex justify-end">
-              <ProductActions
-                singleMode={true}
-                productId={param}
-                productIsArchived={product?.isArchived ?? false}
-              />
-            </div>
-            <NameFormField />
-            <ShortLongDescriptionFormField />
-            {/* Multimedia */}
-            <MediaUploader
-              multiple={true}
-              maxImageSize={10}
-              maxVideoSize={50}
-              initialMedia={initialMedia}
-              onMediaProcessed={handleMediaProcessed}
-              onUploadSuccess={(_url) => {
-                // Upload success handled by the hook
-              }}
-              onUploadError={(_error) => {
-                // Upload error handled by the hook
-              }}
-              renderEditButton={(onEdit, isEditing, hasMedia) => (
-                <button
-                  type="button"
-                  onClick={onEdit}
-                  disabled={isEditing || !hasMedia || isSubmitting}
-                  className="mt-2 inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {isEditing ? 'Editing...' : 'Edit Media'}
-                </button>
-              )}
+          <div className="flex justify-end">
+            <ProductActions
+              singleMode={true}
+              productId={param}
+              productIsArchived={product?.isArchived ?? false}
             />
-            <CategoryFormField />
-            <VariantsFormField productId={param} />
-            <TypeProductFormField />
-            <TagsFormField />
-            <BrandManufacturerFormField />
-            <SustainabilityFormField />
+          </div>
+          <MediaUploader
+            multiple={true}
+            maxImageSize={10}
+            maxVideoSize={50}
+            initialMedia={initialMedia}
+            onMediaProcessed={handleMediaProcessed}
+            onUploadSuccess={(_url) => {
+              // Upload success handled by the hook
+            }}
+            onUploadError={(_error) => {
+              // Upload error handled by the hook
+            }}
+            renderEditButton={(onEdit, isEditing, hasMedia) => (
+              <button
+                type="button"
+                onClick={onEdit}
+                disabled={isEditing || !hasMedia || isSubmitting}
+                className="mt-2 inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isEditing ? 'Editing...' : 'Edit Media'}
+              </button>
+            )}
+          />
+          <NameFormField />
+          <ShortLongDescriptionFormField />
+          <CategoryFormField />
+          <VariantsFormField productId={param} />
+          <TypeProductFormField />
+          <TagsFormField />
+          <BrandManufacturerFormField />
+          <SustainabilityFormField />
 
-            <div className="flex justify-end">
-              <SaveButton
-                type="submit"
-                loading={isSubmitting}
-                disabled={!isDirty || isSubmitting}
-                size="lg"
-              />
-            </div>
+          <div className="flex justify-end">
+            <SaveButton
+              type="submit"
+              loading={isSubmitting}
+              disabled={!isDirty || isSubmitting}
+              size="lg"
+            />
           </div>
         </form>
       </Form>
