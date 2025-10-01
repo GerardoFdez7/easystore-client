@@ -1,31 +1,31 @@
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import {
-  SoftDeleteDocument,
-  SoftDeleteMutation,
-  SoftDeleteMutationVariables,
+  RestoreDocument,
+  RestoreMutation,
+  RestoreMutationVariables,
   FindAllProductsDocument,
   FindAllProductsQuery,
 } from '@graphql/generated';
 import { useMutation } from '@apollo/client/react';
 
-interface UseMultipleSoftDeleteProductsProps {
+interface UseMultipleRestoreProductsProps {
   onSuccess?: () => void;
 }
 
-export const useMultipleSoftDeleteProducts = ({
+export const useMultipleRestoreProducts = ({
   onSuccess,
-}: UseMultipleSoftDeleteProductsProps = {}) => {
+}: UseMultipleRestoreProductsProps = {}) => {
   const t = useTranslations('Products');
 
-  const [softDeleteProduct, { loading, error }] = useMutation<
-    SoftDeleteMutation,
-    SoftDeleteMutationVariables
-  >(SoftDeleteDocument, {
+  const [restoreProduct, { loading, error }] = useMutation<
+    RestoreMutation,
+    RestoreMutationVariables
+  >(RestoreDocument, {
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
     update: (cache, { data }, { variables }) => {
-      if (data?.softDeleteProduct && variables?.id) {
+      if (data?.restoreProduct && variables?.id) {
         const productId = variables.id;
 
         // Try to find and update the product in the cache
@@ -33,7 +33,7 @@ export const useMultipleSoftDeleteProducts = ({
           id: cache.identify({ __typename: 'Product', id: productId }),
           fields: {
             isArchived() {
-              return true;
+              return false; // Restore sets isArchived to false
             },
           },
         });
@@ -60,7 +60,7 @@ export const useMultipleSoftDeleteProducts = ({
                     products: existingData.getAllProducts.products.map(
                       (product) =>
                         product.id === variables.id
-                          ? { ...product, isArchived: true }
+                          ? { ...product, isArchived: false } // Restore sets isArchived to false
                           : product,
                     ),
                   },
@@ -79,26 +79,26 @@ export const useMultipleSoftDeleteProducts = ({
     },
   });
 
-  const handleMultipleSoftDelete = async (
+  const handleMultipleRestore = async (
     products: Array<{ id: string; isArchived?: boolean }>,
   ) => {
-    // Filter out already archived products
-    const productsToArchive = products.filter((product) => !product.isArchived);
+    // Filter out already active products (only restore archived ones)
+    const productsToRestore = products.filter((product) => product.isArchived);
 
-    if (productsToArchive.length === 0) {
+    if (productsToRestore.length === 0) {
       return;
     }
 
     try {
       await Promise.all(
-        productsToArchive.map(({ id }) =>
-          softDeleteProduct({ variables: { id } }),
+        productsToRestore.map(({ id }) =>
+          restoreProduct({ variables: { id } }),
         ),
       );
 
       // Show success message after all operations complete
-      toast.success(t('archivingSuccessful'), {
-        description: t('multipleArchiveSuccessfulDescription'),
+      toast.success(t('restoreSuccessful'), {
+        description: t('multipleRestoreSuccessfulDescription'),
       });
 
       // Call success callback after all operations complete
@@ -109,10 +109,7 @@ export const useMultipleSoftDeleteProducts = ({
   };
 
   return {
-    handleMultipleSoftDelete: (
-      ids: string[],
-      isArchived: boolean | boolean[],
-    ) => {
+    handleMultipleRestore: (ids: string[], isArchived: boolean | boolean[]) => {
       // Handle both single and multiple product cases
       const products = Array.isArray(isArchived)
         ? ids.map((id, index) => ({
@@ -124,11 +121,11 @@ export const useMultipleSoftDeleteProducts = ({
             isArchived,
           }));
 
-      return handleMultipleSoftDelete(products);
+      return handleMultipleRestore(products);
     },
     loading,
     error,
   };
 };
 
-export default useMultipleSoftDeleteProducts;
+export default useMultipleRestoreProducts;

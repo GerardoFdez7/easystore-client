@@ -9,6 +9,7 @@ import {
 import { Button } from '@shadcn/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import ArchivedProduct from './ArchivedProduct';
+import RestoreProduct from './RestoreProduct';
 import DeleteProduct from './DeleteProduct';
 import { useTranslations } from 'next-intl';
 
@@ -48,16 +49,44 @@ export default function ProductActions({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[250px]">
         <DropdownMenuLabel>{t('actions')}</DropdownMenuLabel>
-        <DropdownMenuItem asChild className="p-0">
-          <div>
-            <ArchivedProduct
-              productsIds={productIds}
-              isArchived={archivedState}
-              onSoftDeleteComplete={onDeleteComplete}
-              singleMode={singleMode}
-            />
-          </div>
-        </DropdownMenuItem>
+
+        {singleMode ? (
+          // Single mode: Show archive/restore based on product state
+          <DropdownMenuItem asChild className="p-0">
+            <div>
+              <ArchivedProduct
+                productsIds={productIds}
+                isArchived={archivedState}
+                onSoftDeleteComplete={onDeleteComplete}
+                singleMode={singleMode}
+              />
+            </div>
+          </DropdownMenuItem>
+        ) : (
+          // Multiple mode: Show both archive and restore options
+          <>
+            <DropdownMenuItem asChild className="p-0">
+              <div>
+                <ArchivedProduct
+                  productsIds={productIds}
+                  isArchived={archivedState}
+                  onSoftDeleteComplete={onDeleteComplete}
+                  singleMode={singleMode}
+                />
+              </div>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild className="p-0">
+              <div>
+                <RestoreProduct
+                  productsIds={productIds}
+                  isArchived={archivedState}
+                  onRestoreComplete={onDeleteComplete}
+                />
+              </div>
+            </DropdownMenuItem>
+          </>
+        )}
+
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild className="p-0">
           <div>

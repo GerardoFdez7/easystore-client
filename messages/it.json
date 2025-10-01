@@ -674,7 +674,11 @@
     "addVariant": "Aggiungi variante",
     "variant": "Variante",
     "condition": "Condizione",
-    "noVariants": "Nessuna variante ancora"
+    "noVariants": "Nessuna variante ancora",
+    "multipleRestoreSuccessfulDescription": "Prodotti ripristinati correttamente",
+    "multipleRestoreDescription": "Sei sicuro di voler ripristinare questi prodotti? I prodotti verranno spostati nella sezione attiva.",
+    "archivedSingle": "Archiviato",
+    "restoreProducts": "Ripristina prodotti"
   },
   "Privacy": {
     "tableOfContents": "Indice",

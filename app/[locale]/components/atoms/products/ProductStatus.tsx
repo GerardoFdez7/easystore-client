@@ -13,7 +13,7 @@ export default function ProductStatus({ product }: { product: Product }) {
           : 'border-green-200 bg-green-500/10 text-green-600 dark:border-green-800 dark:text-green-300'
       }`}
     >
-      {product.isArchived ? t('archived') : t('active')}
+      {product.isArchived ? t('archivedSingle') : t('active')}
     </Badge>
   );
 }

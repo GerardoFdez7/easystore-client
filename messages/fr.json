@@ -673,7 +673,11 @@
     "addVariant": "Ajouter une variante",
     "variant": "Variante",
     "condition": "État",
-    "noVariants": "Aucune variante pour l’instant"
+    "noVariants": "Aucune variante pour l’instant",
+    "multipleRestoreSuccessfulDescription": "Produits restaurés avec succès",
+    "multipleRestoreDescription": "Êtes-vous sûr de vouloir restaurer ces produits ? Les produits seront déplacés vers la section active.",
+    "archivedSingle": "Archivé",
+    "restoreProducts": "Restaurer les produits"
   },
   "Privacy": {
     "tableOfContents": "Table des matières",

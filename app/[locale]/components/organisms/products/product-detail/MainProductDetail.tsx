@@ -230,6 +230,7 @@ export default function MainProductDetail({
             e.preventDefault();
             void form.handleSubmit(onSubmit)(e);
           }}
+          className="space-y-6"
         >
           {/* Main Content */}
           <div className="flex justify-end">
@@ -237,144 +238,38 @@ export default function MainProductDetail({
               singleMode={true}
               productId={param}
               productIsArchived={product?.isArchived ?? false}
-              onDeleteComplete={handleProductUpdate}
             />
           </div>
-          {/* Title */}
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <InputProduct
-                  label="Name"
-                  value={field.value}
-                  onChange={field.onChange}
-                />
-                <FormMessage />
-              </FormItem>
+          <MediaUploader
+            multiple={true}
+            maxImageSize={10}
+            maxVideoSize={50}
+            initialMedia={initialMedia}
+            onMediaProcessed={handleMediaProcessed}
+            onUploadSuccess={(_url) => {
+              // Upload success handled by the hook
+            }}
+            onUploadError={(_error) => {
+              // Upload error handled by the hook
+            }}
+            renderEditButton={(onEdit, isEditing, hasMedia) => (
+              <button
+                type="button"
+                onClick={onEdit}
+                disabled={isEditing || !hasMedia || isSubmitting}
+                className="mt-2 inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isEditing ? 'Editing...' : 'Edit Media'}
+              </button>
             )}
           />
-
-          {/* Short Description */}
-          <FormField
-            control={form.control}
-            name="shortDescription"
-            render={({ field }) => (
-              <FormItem>
-                <Description
-                  maxLength={200}
-                  label="Short Description"
-                  value={field.value}
-                  onChange={field.onChange}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Long Description */}
-          <FormField
-            control={form.control}
-            name="longDescription"
-            render={({ field }) => (
-              <FormItem>
-                <Description
-                  maxLength={2000}
-                  label="Long Description"
-                  value={field.value ?? ''}
-                  onChange={field.onChange}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Multimedia */}
-          <FormField
-            control={form.control}
-            name="media"
-            render={() => (
-              <FormItem>
-                <MediaUploader
-                  ref={mediaUploaderRef}
-                  multiple={true}
-                  alwaysEditing={true}
-                  initialMedia={initialMedia}
-                  onMediaProcessed={handleMediaProcessed}
-                  onMediaChange={handleMediaChange}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Category */}
+          <NameFormField />
+          <ShortLongDescriptionFormField />
           <CategoryFormField />
-
-          {/* Variants */}
-          <FormField
-            control={form.control}
-            name="variants"
-            render={({ field: { value: variants = [] } }) => (
-              <FormItem>
-                <TableVariants variants={variants} productId={param} />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Type Product */}
-          <FormField
-            control={form.control}
-            name="productType"
-            render={({ field }) => (
-              <FormItem>
-                <TypeProduct
-                  value={currentProductType || field.value}
-                  onChange={field.onChange}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Tags */}
+          <VariantsFormField productId={param} />
+          <TypeProductFormField />
           <TagsFormField />
-
-          {/* Brand & Manufacturer */}
-          <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="brand"
-              render={({ field }) => (
-                <FormItem>
-                  <InputProduct
-                    label="Brand"
-                    value={field.value ?? ''}
-                    onChange={field.onChange}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="manufacturer"
-              render={({ field }) => (
-                <FormItem>
-                  <InputProduct
-                    label="Manufacturer"
-                    value={field.value ?? ''}
-                    onChange={field.onChange}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          {/* Sustainability */}
+          <BrandManufacturerFormField />
           <SustainabilityFormField />
 
           <div className="flex justify-end">

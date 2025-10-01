@@ -6,3 +6,4 @@ export { useSoftDeleteProduct } from './useSoftDeleteProduct';
 export { useMultipleSoftDeleteProducts } from './useMultipleSoftDeleteProducts';
 export { useGetAllProducts } from './useGetAllProducts';
 export { useRestoreProduct } from './useRestoreProduct';
+export { useMultipleRestoreProducts } from './useMultipleRestoreProducts';
