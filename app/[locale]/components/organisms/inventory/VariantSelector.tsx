@@ -15,6 +15,7 @@ import LoadMoreButton from '@atoms/shared/LoadMoreButton';
 interface VariantSelectorProps {
   onVariantSelect: (
     variantId: string,
+    sku: string,
     productName: string,
     attributes: Array<{ key: string; value: string }>,
   ) => void;
@@ -45,10 +46,11 @@ const VariantSelector: React.FC<VariantSelectorProps> = ({
 
   const handleVariantSelect = (
     variantId: string,
+    sku: string,
     productName: string,
     attributes: Array<{ key: string; value: string }>,
   ) => {
-    onVariantSelect(variantId, productName, attributes);
+    onVariantSelect(variantId, sku, productName, attributes);
   };
 
   return (

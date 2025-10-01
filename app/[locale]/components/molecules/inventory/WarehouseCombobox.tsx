@@ -5,6 +5,7 @@ import { useWarehouseCombobox } from '@hooks/domains/inventory';
 interface WarehouseComboboxProps {
   value?: string;
   onChange?: (warehouseId: string) => void;
+  onChangeDetailed?: (w: { id: string; name: string }) => void;
   disabled?: boolean;
   placeholder?: string;
   className?: string;
@@ -13,6 +14,7 @@ interface WarehouseComboboxProps {
 const WarehouseCombobox: React.FC<WarehouseComboboxProps> = ({
   value,
   onChange,
+  onChangeDetailed,
   disabled = false,
   placeholder,
   className,
@@ -21,6 +23,7 @@ const WarehouseCombobox: React.FC<WarehouseComboboxProps> = ({
 
   const {
     options,
+    warehouses,
     updateSearchTerm,
     isInitialLoading,
     isLoadingMore,
@@ -34,11 +37,22 @@ const WarehouseCombobox: React.FC<WarehouseComboboxProps> = ({
     }
   };
 
+  const handleValueChange = (val?: string) => {
+    onChange?.(val ?? '');
+    if (onChangeDetailed) {
+      const w = warehouses.find((wh) => wh.id === val);
+      onChangeDetailed({
+        id: val ?? '',
+        name: (w?.name ?? '').trim(),
+      });
+    }
+  };
+
   return (
     <Combobox
       options={options}
       value={value}
-      onValueChange={onChange}
+      onValueChange={handleValueChange}
       disabled={disabled}
       placeholder={placeholder || t('filterByWarehouse')}
       searchPlaceholder={t('searchWarehouses')}
