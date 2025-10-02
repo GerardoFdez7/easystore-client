@@ -1,10 +1,10 @@
 import StockDetailTemplate from '@templates/StockDetail';
 
 type PageProps = {
-  params: { warehouseSku: string };
+  params: { warehouseSKU: string };
 };
 
 export default function StockDetailPage({ params }: PageProps) {
-  const { warehouseSku } = params;
-  return <StockDetailTemplate warehouseSku={warehouseSku} />;
+  const { warehouseSKU } = params;
+  return <StockDetailTemplate warehouseSku={warehouseSKU} />;
 }
