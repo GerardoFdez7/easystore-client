@@ -1372,5 +1372,32 @@
     "dateTableHead": "Date",
     "previousButton": "Previous",
     "nextButton": "Next"
+  },
+  "StockDetail": {
+    "color": "Color",
+    "product": "Product",
+    "warehouse": "Warehouse",
+    "available": "Available",
+    "availablePlaceholder": "Enter available quantity",
+    "reserved": "Reserved",
+    "reservedPlaceholder": "Enter reserved quantity",
+    "productLocation": "Product Location",
+    "productLocationPlaceholder": "Enter product location",
+    "replenishmentDate": "Estimated Replenishment Date",
+    "replenishmentDatePlaceholder": "Select a date",
+    "lotNumber": "Lot Number",
+    "lotNumberPlaceholder": "Enter lot number",
+    "serialNumbers": "Serial Numbers",
+    "cancel": "Cancel",
+    "saveChanges": "Save Changes",
+    "deleteStock": "Delete Stock",
+    "updateReasonTitle": "Update Reason",
+    "updateReasonDescription": "Please provide a reason for updating the available quantity",
+    "updateReasonLabel": "Reason",
+    "updateReasonPlaceholder": "Enter reason for update",
+    "confirm": "Confirm",
+    "deleteStockTitle": "Delete Stock",
+    "deleteStockDescription": "Are you sure you want to delete this stock? This action cannot be undone.",
+    "stockDetail": "Stock Detail"
   }
 }

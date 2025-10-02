@@ -1382,5 +1382,32 @@
     "dateTableHead": "Date",
     "previousButton": "Précédent",
     "nextButton": "Suivant"
+  },
+  "StockDetail": {
+    "stockDetail": "Détail du stock",
+    "color": "Couleur",
+    "product": "Produit",
+    "warehouse": "Entrepôt",
+    "available": "Disponible",
+    "availablePlaceholder": "Saisissez la quantité disponible",
+    "reserved": "Réservés",
+    "reservedPlaceholder": "Saisissez la quantité réservée",
+    "productLocation": "Emplacement du produit",
+    "productLocationPlaceholder": "Saisissez l’emplacement du produit",
+    "replenishmentDate": "Date estimée de réapprovisionnement",
+    "replenishmentDatePlaceholder": "Sélectionnez une date",
+    "lotNumber": "Numéro de lot",
+    "lotNumberPlaceholder": "Saisissez le numéro de lot",
+    "serialNumbers": "Numéros de série",
+    "cancel": "Annuler",
+    "saveChanges": "Enregistrer les modifications",
+    "deleteStock": "Supprimer le stock",
+    "updateReasonTitle": "Motif de la mise à jour",
+    "updateReasonDescription": "Veuillez indiquer un motif pour la mise à jour de la quantité disponible",
+    "updateReasonLabel": "Motif",
+    "updateReasonPlaceholder": "Saisissez le motif de la mise à jour",
+    "confirm": "Confirmer",
+    "deleteStockTitle": "Supprimer le stock",
+    "deleteStockDescription": "Êtes-vous sûr de vouloir supprimer ce stock ? Cette action est irréversible."
   }
 }
