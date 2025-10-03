@@ -93,6 +93,8 @@ export default function MainInventory() {
           inventory={inventory}
           onCreateStock={() => setIsAddStockDialogOpen(true)}
           onSortChange={handleSortChange}
+          sortField={sortField}
+          sortDirection={sortDirection}
         />
       )}
       <AddStockDialog
