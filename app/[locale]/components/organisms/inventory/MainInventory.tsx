@@ -14,19 +14,41 @@ import SkeletonWrapper from '@molecules/shared/SkeletonWrapper';
 import AddStockDialog from '@organisms/inventory/AddStockDialog';
 import WarehouseManagementDialog from '@organisms/inventory/WarehouseManagementDialog';
 
+type SortField = 'available' | 'reserved' | 'date' | 'variantFirstAttribute';
+type SortDirection = 'ASC' | 'DESC';
+
 export default function MainInventory() {
   const t = useTranslations('Inventory');
   const [selectedWarehouseId, setSelectedWarehouseId] = useState<string>('');
   const [isAddStockDialogOpen, setIsAddStockDialogOpen] = useState(false);
   const [isWarehouseManagementOpen, setIsWarehouseManagementOpen] =
     useState(false);
+  const [sortField, setSortField] = useState<SortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<SortDirection>('ASC');
 
   // Variables for the general inventory query (when no warehouse is selected)
-  const variables: FindInventoryQueryVariables = {};
+  const variables: FindInventoryQueryVariables = {
+    filters: sortField
+      ? {
+          sortBy: {
+            [sortField]: sortDirection,
+          },
+        }
+      : undefined,
+  };
+
   const { inventory, loading, error, refetch } = useInventory(
     variables,
     selectedWarehouseId || undefined,
   );
+
+  const handleSortChange = (field: SortField, direction: SortDirection) => {
+    setSortField(field);
+    setSortDirection(direction);
+
+    // Refetch data with new sorting
+    void refetch().catch((_error) => {});
+  };
 
   if (error) {
     return (
@@ -68,6 +90,7 @@ export default function MainInventory() {
           variables={variables}
           inventory={inventory}
           onCreateStock={() => setIsAddStockDialogOpen(true)}
+          onSortChange={handleSortChange}
         />
       )}
       <AddStockDialog
