@@ -1,4 +1,4 @@
-import CategoryDetail from '@templates/CategoryDetail';
+import CategoryDetail from '@templates/categories/CategoryDetail';
 
 interface CategoryPageProps {
   params: Promise<{ locale: string; id: string }>;

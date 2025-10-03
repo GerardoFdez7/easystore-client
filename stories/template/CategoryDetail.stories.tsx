@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import CategoryDetail from '@templates/CategoryDetail';
+import CategoryDetail from '@templates/categories/CategoryDetail';
 
 const meta = {
   title: 'Templates/CategoryDetail',

@@ -1078,13 +1078,14 @@
     "welcomeCategory": "Catégories",
     "addCategory": "Ajouter une catégorie",
     "searchPlaceholder": "Rechercher des catégories...",
-    "categoryCount": "catégories",
+    "categoryCount": "sous-catégories",
     "expandAll": "Tout développer",
     "collapseAll": "Tout réduire",
     "title": "Supprimer la catégorie ?",
     "description": "Cette action est irréversible.",
     "cancel": "Annuler",
     "delete": "Supprimer",
+    "edit": "Modifier",
     "deleting": "Suppression…"
   },
   "CategoryDetail": {

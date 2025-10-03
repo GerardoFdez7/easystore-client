@@ -1075,13 +1075,14 @@
     "welcomeCategory": "Categorías",
     "addCategory": "Agregar categoría",
     "searchPlaceholder": "Buscar categorías...",
-    "categoryCount": "categorías",
+    "categoryCount": "subcategorías",
     "expandAll": "Expandir todo",
     "collapseAll": "Contraer todo",
     "title": "¿Eliminar esta categoría?",
     "description": "Esta acción no se puede deshacer.",
     "cancel": "Cancelar",
     "delete": "Eliminar",
+    "edit": "Editar",
     "deleting": "Eliminando…"
   },
   "CategoryDetail": {

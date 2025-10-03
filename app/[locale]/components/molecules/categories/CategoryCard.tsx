@@ -1,16 +1,19 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { Pencil, Trash } from 'lucide-react';
 import { Button } from '@shadcn/ui/button';
+import { Card, CardTitle, CardDescription } from '@shadcn/ui/card';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
+import { Tooltip, TooltipTrigger, TooltipContent } from '@shadcn/ui/tooltip';
 
 type Props = {
   name: string;
   cover: string;
   count?: number;
   href: string;
+  onClick?: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
 };
@@ -20,58 +23,62 @@ export default function CategoryCard({
   cover,
   count = 0,
   href,
+  onClick,
   onEdit,
   onDelete,
 }: Props) {
   const t = useTranslations('Category');
-  return (
-    <div className="bg-card w-full rounded-lg p-2 shadow-sm">
-      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-md bg-gray-100">
-        <Link
-          href={href}
-          className="group relative block aspect-[4/3] w-full overflow-hidden rounded-md focus-visible:ring-2 focus-visible:outline-none"
-        >
-          <Image
-            alt={name}
-            src={cover}
-            fill
-            className="object-cover"
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          />
-        </Link>
-      </div>
 
-      <div className="mt-2 flex items-center justify-between gap-2">
-        <Link
-          href={href}
-          className="text-text min-w-0 flex-1 truncate rounded text-sm font-medium hover:underline focus-visible:ring-2 focus-visible:ring-gray-300 focus-visible:outline-none"
-          title={name}
-        >
-          {name}
-        </Link>
+  const handleClick = (e: React.MouseEvent) => {
+    if (onClick) {
+      e.preventDefault();
+      onClick();
+    }
+  };
+
+  return (
+    <Card className="m-0 flex flex-col gap-0 p-0">
+      <Link
+        href={href}
+        onClick={handleClick}
+        className="group relative block aspect-square w-full overflow-hidden focus-visible:ring-2 focus-visible:outline-none"
+      >
+        <Image alt={name} src={cover} fill className="object-cover" />
+      </Link>
+      <Link
+        href={href}
+        onClick={handleClick}
+        className="mt-4 flex flex-col px-4"
+      >
+        <CardTitle>{name}</CardTitle>
+        <CardDescription className="mt-0.5">
+          {count} {t('categoryCount', { count })}
+        </CardDescription>
+      </Link>
+      <div className="flex items-center justify-between px-4 py-1">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={onDelete}
+              aria-label={t('delete')}
+            >
+              <Trash className="text-error h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">{t('delete')}</TooltipContent>
+        </Tooltip>
         <Button
-          size="icon"
           variant="ghost"
-          className="shrink-0 rounded-full"
           onClick={onEdit}
-          aria-label="Edit category"
+          aria-label={t('edit')}
+          className="text-text"
         >
           <Pencil className="text-text h-4 w-4" />
-        </Button>
-        <Button
-          size="icon"
-          variant="ghost"
-          className="-ml-3 shrink-0 rounded-full"
-          onClick={onDelete}
-          aria-label="Delete category"
-        >
-          <Trash className="text-text h-4 w-4" />
+          {t('edit')}
         </Button>
       </div>
-
-      <p className="text-text mt-0.5 text-xs">
-        {count} {t('categoryCount', { count })}
-      </p>
-    </div>
+    </Card>
   );
 }

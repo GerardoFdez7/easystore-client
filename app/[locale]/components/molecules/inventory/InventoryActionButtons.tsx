@@ -19,7 +19,7 @@ export default function InventoryActionButtons({
   const router = useRouter();
 
   return (
-    <section className="mr-8 flex flex-col gap-2 md:flex-row md:justify-between">
+    <section className="flex flex-col gap-2 md:flex-row md:justify-between">
       <SkeletonWrapper loading={loading}>
         <Button
           variant="outline"
@@ -45,7 +45,7 @@ export default function InventoryActionButtons({
           <Button
             variant="title"
             onClick={onManageWarehousesClick}
-            className="flex items-center gap-2 md:mr-2"
+            className="flex items-center gap-2"
           >
             <Warehouse className="h-4 w-4" aria-hidden="true" />
             {t('manageWarehousesButton')}

@@ -1,5 +1,6 @@
 // hooks/domains/category/useDeleteCategory.ts
 import * as Apollo from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { toast } from 'sonner';
 import {
   DeleteDocument,
@@ -9,7 +10,7 @@ import {
 
 /** Returns a mutation wrapper that deletes a category and keeps the cache consistent. */
 export function useDeleteCategory() {
-  const [mutate, { loading, error }] = Apollo.useMutation<
+  const [mutate, { loading, error }] = useMutation<
     DeleteMutation,
     DeleteMutationVariables
   >(DeleteDocument, {

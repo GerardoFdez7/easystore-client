@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import MainDetailCategory from '@organisms/detail-category/MainDetailCategory';
+import MainDetailCategory from '@organisms/categories/detail-category/MainDetailCategory';
 
 const meta = {
   title: 'Organisms/DetailCategory/MainDetailCategory',

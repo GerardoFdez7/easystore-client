@@ -48,7 +48,7 @@ export default function MainInventory() {
   }
 
   return (
-    <main className="mx-4 flex w-full max-w-7xl flex-col gap-4 xl:mx-auto">
+    <main className="flex w-full max-w-screen-2xl flex-col gap-4 overflow-x-hidden px-4 xl:mx-auto">
       <InventoryActionButtons
         loading={loading}
         onAddStockClick={() => setIsAddStockDialogOpen(true)}

@@ -1119,25 +1119,24 @@
     "welcomeCategory": "Categories",
     "addCategory": "Add Category",
     "searchPlaceholder": "Search categories...",
-    "categoryCount": "categories",
+    "categoryCount": "subcategories",
     "expandAll": "Expand all",
     "collapseAll": "Collapse all",
     "title": "Delete category?",
     "description": "This action cannot be undone.",
     "cancel": "Cancel",
     "delete": "Delete",
+    "edit": "Edit",
     "deleting": "Deleting…"
   },
   "CategoryDetail": {
     "welcomeDetailCategory": "Category detail",
     "addCategory": "Add Category",
     "editCategory": "Edit Category",
-
     "title": "Title",
     "titlePlaceholder": "Enter the category title",
     "description": "Description",
     "descriptionPlaceholder": "Write a short description for this category",
-
     "cancel": "Cancel",
     "create": "Create",
     "save": "Save",
@@ -1149,7 +1148,6 @@
     "noResults": "No results",
     "close": "Close",
     "noCategories": "No categories yet.",
-
     "coverRequired": "Cover image is required.",
     "replaceCover": "Change cover",
     "titleRequired": "Title is required.",

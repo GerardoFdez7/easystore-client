@@ -3,11 +3,9 @@
 import { useMemo, useState } from 'react';
 import CategoryCard from '@molecules/categories/CategoryCard';
 import { useRouter, useParams } from 'next/navigation';
-import { useCategories } from '@hooks/domains/category/useCategories';
-import { useDeleteCategory } from '@hooks/domains/category/useDeleteCategory';
+import { useDeleteCategory } from '@hooks/domains/category';
 import {
   AlertDialog,
-  // AlertDialogTrigger,
   AlertDialogContent,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -17,10 +15,13 @@ import {
   AlertDialogAction,
 } from '@shadcn/ui/alert-dialog';
 import { useTranslations } from 'next-intl';
+import { CategorySummary } from '@hooks/domains/category/useCategories';
 
 type Props = {
+  categories: CategorySummary[];
+  loading: boolean;
   query?: string;
-  page?: number;
+  parentPath?: string; // For nested navigation like "electronics/computers"
   limit?: number;
 };
 
@@ -32,20 +33,16 @@ const normalize = (s: string) =>
     .trim() ?? '';
 
 export default function CategoryGrid({
+  categories,
+  loading,
   query = '',
-  page = 1,
+  parentPath = '',
   limit = 25,
 }: Props) {
   const router = useRouter();
-  const params = useParams<{ locale?: string }>();
+  const params = useParams<{ locale?: string; path?: string[] }>();
   const locale = params?.locale;
   const t = useTranslations('Category');
-
-  const { items, loading } = useCategories({
-    page,
-    limit,
-    name: query,
-  });
 
   const { remove, loading: deleting } = useDeleteCategory();
 
@@ -66,12 +63,23 @@ export default function CategoryGrid({
 
   const qn = normalize(query);
   const filtered = useMemo(() => {
-    if (!qn) return items;
-    return items.filter((c) => normalize(c.name).includes(qn));
-  }, [items, qn]);
+    if (!qn) return categories;
+    return categories.filter((c) => normalize(c.name).includes(qn));
+  }, [categories, qn]);
 
   const goEdit = (id: string) => {
     router.push(locale ? `/${locale}/categories/${id}` : `/categories/${id}`);
+  };
+
+  const handleCategoryClick = (categoryName: string) => {
+    const categorySlug = categoryName.toLowerCase().replace(/\s+/g, '-');
+    const newPath = parentPath ? `${parentPath}/${categorySlug}` : categorySlug;
+
+    const href = locale
+      ? `/${locale}/categories/${newPath}`
+      : `/categories/${newPath}`;
+
+    router.push(href);
   };
 
   return (
@@ -87,11 +95,10 @@ export default function CategoryGrid({
             <CategoryCard
               key={c.id}
               name={c.name}
-              cover={c.cover ?? '/laptop.webp'}
+              cover={c.cover}
               count={c.count}
-              href={
-                locale ? `/${locale}/categories/${c.id}` : `/categories/${c.id}`
-              }
+              href="#"
+              onClick={() => handleCategoryClick(c.name)}
               onEdit={() => goEdit(c.id)}
               onDelete={() => askDelete(c.id)}
             />

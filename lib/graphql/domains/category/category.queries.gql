@@ -56,31 +56,84 @@ query findAllCategories(
       cover
       updatedAt
       createdAt
+      parentId
       subCategories {
+        id
+        parentId
         name
         description
         cover
         createdAt
-        subCategories {
-          id
-          name
-          description
-          cover
-          createdAt
-          subCategories {
-            id
-            cover
-            createdAt
-            description
-            name
-            updatedAt
-          }
-          updatedAt
-        }
         updatedAt
       }
     }
     total
     hasMore
+  }
+}
+
+query findCategoriesTree(
+  $sortBy: SortBy = NAME
+  $sortOrder: SortOrder = DESC
+) {
+  getAllCategories(
+    sortBy: $sortBy
+    sortOrder: $sortOrder
+  ) {
+    categories {
+      id
+      name
+      parentId
+      subCategories {
+        id
+        parentId
+        name
+        subCategories {
+          id
+          parentId
+          name
+          subCategories {
+            id
+            parentId
+            name
+            subCategories {
+              id
+              parentId
+              name
+              subCategories {
+                id
+                parentId
+                name
+              }
+              subCategories {
+                id
+                parentId
+                name
+                subCategories {
+                  id
+                  parentId
+                  name
+                  subCategories {
+                    id
+                    parentId
+                    name
+                    subCategories {
+                      id
+                      parentId
+                      name
+                      subCategories {
+                        id
+                        parentId
+                        name
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
