@@ -24,31 +24,48 @@ query findWarehouseById($id: ID!) {
 query findInventory(
   $page: Int = 1
   $limit: Int = 10
+  $name: String
   $addressId: ID
   $sortBy: SortBy
   $sortOrder: SortOrder
+  $includeAddresses: Boolean = true
+  $filters: StockPerWarehouseFilterInput
 ) {
   getAllWarehouses(
     page: $page
     limit: $limit
+    name: $name
     addressId: $addressId
     sortBy: $sortBy
     sortOrder: $sortOrder
+    includeAddresses: $includeAddresses
+    filters: $filters
   ) {
     warehouses {
       id
       name
+      createdAt
+      updatedAt
+      addressId
+      addressLine1
+      city
+      countryCode
+      postalCode
       stockPerWarehouses {
         id
         qtyAvailable
         qtyReserved
+        lotNumber
+        serialNumbers
+        productLocation
         estimatedReplenishmentDate
+        variantId
+        variantSku
+        productName
         variantFirstAttribute {
           key
           value
         }
-        productName
-        variantSku
       }
     }
     total
