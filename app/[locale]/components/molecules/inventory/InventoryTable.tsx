@@ -34,6 +34,8 @@ type InventoryTableProps = {
   inventory: InventoryItem[];
   onCreateStock?: () => void;
   onSortChange?: (field: SortField, direction: SortDirection) => void;
+  sortField?: SortField | null;
+  sortDirection?: SortDirection;
 };
 
 export default function InventoryTable({
@@ -41,13 +43,15 @@ export default function InventoryTable({
   inventory,
   onCreateStock,
   onSortChange,
+  sortField: externalSortField,
+  sortDirection: externalSortDirection,
 }: InventoryTableProps) {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortField, setSortField] = useState<SortField | null>(
-    'variantFirstAttribute',
-  );
-  const [sortDirection, setSortDirection] = useState<SortDirection>('ASC');
+
+  // Usar el estado externo si está disponible, sino usar el estado interno
+  const sortField = externalSortField ?? 'variantFirstAttribute';
+  const sortDirection = externalSortDirection ?? 'ASC';
   const itemsPerPage = 25;
   const t = useTranslations('Inventory');
 
@@ -58,9 +62,6 @@ export default function InventoryTable({
       // Si ya estamos ordenando por este campo, cambiar dirección
       newDirection = sortDirection === 'ASC' ? 'DESC' : 'ASC';
     }
-
-    setSortField(field);
-    setSortDirection(newDirection);
 
     // Llamar al callback para actualizar los filtros en el componente padre
     onSortChange?.(field, newDirection);
@@ -129,7 +130,7 @@ export default function InventoryTable({
               />
             </TableHead>
             <TableHead
-              className="cursor-pointer transition-colors duration-200 select-none hover:bg-gray-50 active:bg-gray-100"
+              className="cursor-pointer transition-colors duration-200 select-none"
               onClick={() => handleSort('variantFirstAttribute')}
             >
               <div className="flex items-center">
@@ -139,7 +140,7 @@ export default function InventoryTable({
             </TableHead>
             <TableHead>{t('skuTableHead')}</TableHead>
             <TableHead
-              className="cursor-pointer transition-colors duration-200 select-none hover:bg-gray-50 active:bg-gray-100"
+              className="cursor-pointer transition-colors duration-200 select-none"
               onClick={() => handleSort('available')}
             >
               <div className="flex items-center">
@@ -148,7 +149,7 @@ export default function InventoryTable({
               </div>
             </TableHead>
             <TableHead
-              className="cursor-pointer transition-colors duration-200 select-none hover:bg-gray-50 active:bg-gray-100"
+              className="cursor-pointer transition-colors duration-200 select-none"
               onClick={() => handleSort('reserved')}
             >
               <div className="flex items-center">
@@ -157,7 +158,7 @@ export default function InventoryTable({
               </div>
             </TableHead>
             <TableHead
-              className="cursor-pointer transition-colors duration-200 select-none hover:bg-gray-50 active:bg-gray-100"
+              className="cursor-pointer transition-colors duration-200 select-none"
               onClick={() => handleSort('date')}
             >
               <div className="flex items-center">
