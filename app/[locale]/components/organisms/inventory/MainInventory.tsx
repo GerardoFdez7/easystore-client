@@ -23,7 +23,9 @@ export default function MainInventory() {
   const [isAddStockDialogOpen, setIsAddStockDialogOpen] = useState(false);
   const [isWarehouseManagementOpen, setIsWarehouseManagementOpen] =
     useState(false);
-  const [sortField, setSortField] = useState<SortField | null>(null);
+  const [sortField, setSortField] = useState<SortField | null>(
+    'variantFirstAttribute',
+  );
   const [sortDirection, setSortDirection] = useState<SortDirection>('ASC');
 
   // Variables for the general inventory query (when no warehouse is selected)
