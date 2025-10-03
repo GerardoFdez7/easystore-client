@@ -20,6 +20,9 @@ import AddStockDialog from '@organisms/inventory/AddStockDialog';
 import WarehouseManagementDialog from '@organisms/inventory/WarehouseManagementDialog';
 import WarehouseForm from '@molecules/inventory/WarehouseForm';
 
+type SortField = 'available' | 'reserved' | 'date' | 'variantFirstAttribute';
+type SortDirection = 'ASC' | 'DESC';
+
 export default function MainInventory() {
   const t = useTranslations('Inventory');
   const [selectedWarehouseId, setSelectedWarehouseId] = useState<string>('');
@@ -27,9 +30,20 @@ export default function MainInventory() {
   const [isWarehouseManagementOpen, setIsWarehouseManagementOpen] =
     useState(false);
   const [isWarehouseFormOpen, setIsWarehouseFormOpen] = useState(false);
+  const [sortField, setSortField] = useState<SortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<SortDirection>('ASC');
 
   // Variables for the general inventory query
-  const variables: FindInventoryQueryVariables = {};
+  const variables: FindInventoryQueryVariables = {
+    filters: sortField
+      ? {
+          sortBy: {
+            [sortField]: sortDirection,
+          },
+        }
+      : undefined,
+  };
+
   const { inventory, loading, error, refetch } = useInventory(
     variables,
     selectedWarehouseId || undefined,
@@ -53,6 +67,14 @@ export default function MainInventory() {
   // Handle warehouse form cancellation
   const handleWarehouseCancel = () => {
     setIsWarehouseFormOpen(false);
+  };
+
+  const handleSortChange = (field: SortField, direction: SortDirection) => {
+    setSortField(field);
+    setSortDirection(direction);
+
+    // Refetch data with new sorting
+    void refetch().catch((_error) => {});
   };
 
   if (error) {
@@ -98,6 +120,7 @@ export default function MainInventory() {
           variables={variables}
           inventory={inventory}
           onCreateStock={() => setIsAddStockDialogOpen(true)}
+          onSortChange={handleSortChange}
         />
       )}
       <AddStockDialog

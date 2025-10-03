@@ -767,7 +767,7 @@ export type QueryGetAllWarehousesArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   sortBy?: InputMaybe<SortBy>;
   sortOrder?: InputMaybe<SortOrder>;
-  stockFilters?: InputMaybe<StockPerWarehouseFilterInput>;
+  variantId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
@@ -841,21 +841,6 @@ export type StockPerWarehouse = {
   variantId: Scalars['ID']['output'];
   variantSku?: Maybe<Scalars['String']['output']>;
   warehouseId: Scalars['ID']['output'];
-};
-
-export type StockPerWarehouseFilterInput = {
-  isArchived?: InputMaybe<Scalars['Boolean']['input']>;
-  lowStockThreshold?: InputMaybe<Scalars['Float']['input']>;
-  search?: InputMaybe<Scalars['String']['input']>;
-  sortBy?: InputMaybe<StockPerWarehouseSortBy>;
-  variantId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type StockPerWarehouseSortBy = {
-  available?: InputMaybe<SortOrder>;
-  replenishmentDate?: InputMaybe<SortOrder>;
-  reserved?: InputMaybe<SortOrder>;
-  variantFirstAttribute?: InputMaybe<SortOrder>;
 };
 
 export type Sustainability = {
@@ -1064,7 +1049,7 @@ export type CreateAddressMutation = {
     __typename?: 'AddressType';
     id: string;
     addressLine1: string;
-    addressLine2?: string | null;
+    addressLine2: string;
     addressType: AddressTypeEnum;
     city: string;
     countryId: string;
@@ -1087,7 +1072,7 @@ export type UpdateAddressMutation = {
     __typename?: 'AddressType';
     id: string;
     addressLine1: string;
-    addressLine2?: string | null;
+    addressLine2: string;
     addressType: AddressTypeEnum;
     city: string;
     countryId: string;
@@ -1116,7 +1101,7 @@ export type FindAddressByIdQuery = {
     __typename?: 'AddressType';
     id: string;
     addressLine1: string;
-    addressLine2?: string | null;
+    addressLine2: string;
     addressType: AddressTypeEnum;
     city: string;
     countryId: string;
@@ -1145,7 +1130,7 @@ export type FindAllAddressesQuery = {
       __typename?: 'AddressType';
       id: string;
       addressLine1: string;
-      addressLine2?: string | null;
+      addressLine2: string;
       addressType: AddressTypeEnum;
       city: string;
       countryId: string;
@@ -1157,8 +1142,6 @@ export type FindAllAddressesQuery = {
     }>;
   };
 };
-
-export type FindAllAddressesQuery = { __typename?: 'Query', getAllAddresses: { __typename?: 'PaginatedAddressesType', total: number, hasMore: boolean, addresses: Array<{ __typename?: 'AddressType', id: string, addressLine1: string, addressLine2?: string | null, addressType: AddressTypeEnum, city: string, countryId: string, stateId: string, deliveryNum: string, name: string, postalCode: string, deliveryInstructions?: string | null }> } };
 
 export type FindAllCountriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1243,16 +1226,26 @@ export type CreateCategoryMutation = {
   __typename?: 'Mutation';
   createCategory: {
     __typename?: 'Category';
-    id: string;
     name: string;
-    description?: string | null;
+    description: string;
     cover: string;
+    updatedAt: any;
+    createdAt: any;
     subCategories: Array<{
       __typename?: 'Category';
-      id: string;
       cover: string;
-      description?: string | null;
+      createdAt: any;
+      description: string;
       name: string;
+      updatedAt: any;
+      subCategories: Array<{
+        __typename?: 'Category';
+        cover: string;
+        createdAt: any;
+        description: string;
+        name: string;
+        updatedAt: any;
+      }>;
     }>;
   };
 };
@@ -1266,23 +1259,15 @@ export type UpdateCategoryMutation = {
   __typename?: 'Mutation';
   updateCategory: {
     __typename?: 'Category';
-    id: string;
     name: string;
-    description?: string | null;
+    description: string;
     cover: string;
+    createdAt: any;
     subCategories: Array<{
       __typename?: 'Category';
-      id: string;
       name: string;
-      description?: string | null;
+      description: string;
       cover: string;
-      subCategories: Array<{
-        __typename?: 'Category';
-        id: string;
-        name: string;
-        description?: string | null;
-        cover: string;
-      }>;
     }>;
   };
 };
@@ -1293,7 +1278,11 @@ export type DeleteMutationVariables = Exact<{
 
 export type DeleteMutation = {
   __typename?: 'Mutation';
-  deleteCategory: { __typename?: 'Category'; name: string };
+  deleteCategory: {
+    __typename?: 'Category';
+    name: string;
+    description: string;
+  };
 };
 
 export type FindCategoryByIdQueryVariables = Exact<{
@@ -1304,23 +1293,39 @@ export type FindCategoryByIdQuery = {
   __typename?: 'Query';
   getCategoryById: {
     __typename?: 'Category';
-    id: string;
     name: string;
-    description?: string | null;
+    description: string;
     cover: string;
     updatedAt: any;
     createdAt: any;
     subCategories: Array<{
       __typename?: 'Category';
-      id: string;
       name: string;
-      description?: string | null;
+      description: string;
       cover: string;
+      createdAt: any;
+      updatedAt: any;
+      subCategories: Array<{
+        __typename?: 'Category';
+        name: string;
+        description: string;
+        cover: string;
+        createdAt: any;
+        updatedAt: any;
+        subCategories: Array<{
+          __typename?: 'Category';
+          cover: string;
+          createdAt: any;
+          description: string;
+          name: string;
+          updatedAt: any;
+        }>;
+      }>;
     }>;
   };
 };
 
-export type FindAllCategoriesQueryVariables = Exact<{
+export type FindCategoriesForPickerQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -1338,123 +1343,32 @@ export type FindAllCategoriesQuery = {
     hasMore: boolean;
     categories: Array<{
       __typename?: 'Category';
-      id: string;
       name: string;
-      description?: string | null;
+      description: string;
       cover: string;
       updatedAt: any;
       createdAt: any;
-      parentId?: string | null;
       subCategories: Array<{
         __typename?: 'Category';
-        id: string;
-        parentId?: string | null;
         name: string;
-        description?: string | null;
+        description: string;
         cover: string;
         createdAt: any;
         updatedAt: any;
-      }>;
-    }>;
-  };
-};
-
-export type FindCategoriesForPickerQueryVariables = Exact<{
-  page?: InputMaybe<Scalars['Int']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  parentId?: InputMaybe<Scalars['ID']['input']>;
-  sortBy?: InputMaybe<SortBy>;
-  sortOrder?: InputMaybe<SortOrder>;
-  includeSubcategories?: InputMaybe<Scalars['Boolean']['input']>;
-}>;
-
-export type FindCategoriesForPickerQuery = {
-  __typename?: 'Query';
-  getAllCategories: {
-    __typename?: 'PaginatedCategoriesType';
-    total: number;
-    hasMore: boolean;
-    categories: Array<{
-      __typename?: 'Category';
-      id: string;
-      name: string;
-      cover: string;
-    }>;
-  };
-};
-
-export type FindCategoriesTreeQueryVariables = Exact<{
-  sortBy?: InputMaybe<SortBy>;
-  sortOrder?: InputMaybe<SortOrder>;
-}>;
-
-export type FindCategoriesTreeQuery = {
-  __typename?: 'Query';
-  getAllCategories: {
-    __typename?: 'PaginatedCategoriesType';
-    categories: Array<{
-      __typename?: 'Category';
-      id: string;
-      name: string;
-      parentId?: string | null;
-      subCategories: Array<{
-        __typename?: 'Category';
-        id: string;
-        parentId?: string | null;
-        name: string;
         subCategories: Array<{
           __typename?: 'Category';
-          id: string;
-          parentId?: string | null;
           name: string;
+          description: string;
+          cover: string;
+          createdAt: any;
+          updatedAt: any;
           subCategories: Array<{
             __typename?: 'Category';
-            id: string;
-            parentId?: string | null;
+            cover: string;
+            createdAt: any;
+            description: string;
             name: string;
-            subCategories: Array<{
-              __typename?: 'Category';
-              id: string;
-              parentId?: string | null;
-              name: string;
-              subCategories: Array<{
-                __typename?: 'Category';
-                id: string;
-                parentId?: string | null;
-                name: string;
-                subCategories: Array<{
-                  __typename?: 'Category';
-                  id: string;
-                  parentId?: string | null;
-                  name: string;
-                  subCategories: Array<{
-                    __typename?: 'Category';
-                    id: string;
-                    parentId?: string | null;
-                    name: string;
-                    subCategories: Array<{
-                      __typename?: 'Category';
-                      id: string;
-                      parentId?: string | null;
-                      name: string;
-                      subCategories: Array<{
-                        __typename?: 'Category';
-                        id: string;
-                        parentId?: string | null;
-                        name: string;
-                        subCategories: Array<{
-                          __typename?: 'Category';
-                          id: string;
-                          parentId?: string | null;
-                          name: string;
-                        }>;
-                      }>;
-                    }>;
-                  }>;
-                }>;
-              }>;
-            }>;
+            updatedAt: any;
           }>;
         }>;
       }>;
@@ -1587,7 +1501,7 @@ export type CreateProductMutation = {
       weight?: number | null;
       variantCover?: string | null;
       upc?: string | null;
-      sku: string;
+      sku?: string | null;
       personalizationOptions?: Array<string> | null;
       isbn?: string | null;
       ean?: string | null;
@@ -1667,7 +1581,6 @@ export type UpdateMutation = {
     categories?: Array<{
       __typename?: 'ProductCategory';
       categoryId: string;
-      categoryName?: string | null;
     }> | null;
     media?: Array<{
       __typename?: 'Media';
@@ -1684,14 +1597,13 @@ export type UpdateMutation = {
     }> | null;
     variants?: Array<{
       __typename?: 'Variant';
-      id: string;
       barcode?: string | null;
       condition: ConditionEnum;
       ean?: string | null;
       isbn?: string | null;
       personalizationOptions?: Array<string> | null;
       price: number;
-      sku: string;
+      sku?: string | null;
       upc?: string | null;
       variantCover?: string | null;
       weight?: number | null;
@@ -1758,7 +1670,6 @@ export type FindProductByIdQuery = {
   __typename?: 'Query';
   getProductById: {
     __typename?: 'Product';
-    id: string;
     name: string;
     shortDescription: string;
     longDescription?: string | null;
@@ -1779,15 +1690,13 @@ export type FindProductByIdQuery = {
     categories?: Array<{
       __typename?: 'ProductCategory';
       categoryId: string;
-      categoryName?: string | null;
     }> | null;
     variants?: Array<{
       __typename?: 'Variant';
-      id: string;
       price: number;
       condition: ConditionEnum;
       weight?: number | null;
-      sku: string;
+      sku?: string | null;
       ean?: string | null;
       upc?: string | null;
       isbn?: string | null;
@@ -1852,7 +1761,6 @@ export type FindAllProductsQuery = {
     hasMore: boolean;
     products: Array<{
       __typename?: 'Product';
-      id: string;
       name: string;
       brand?: string | null;
       cover: string;
@@ -1867,7 +1775,6 @@ export type FindAllProductsQuery = {
       categories?: Array<{
         __typename?: 'ProductCategory';
         categoryId: string;
-        categoryName?: string | null;
       }> | null;
       media?: Array<{
         __typename?: 'Media';
@@ -1890,7 +1797,7 @@ export type FindAllProductsQuery = {
         isbn?: string | null;
         personalizationOptions?: Array<string> | null;
         price: number;
-        sku: string;
+        sku?: string | null;
         upc?: string | null;
         variantCover?: string | null;
         weight?: number | null;
@@ -1950,7 +1857,7 @@ export type FindAllVariantsToCreateStockQuery = {
       variants?: Array<{
         __typename?: 'Variant';
         id: string;
-        sku: string;
+        sku?: string | null;
         attributes: Array<{
           __typename?: 'Attribute';
           key: string;
@@ -1987,7 +1894,7 @@ export type UpdateVariantInProductMutation = {
       isbn?: string | null;
       personalizationOptions?: Array<string> | null;
       price: number;
-      sku: string;
+      sku?: string | null;
       upc?: string | null;
       variantCover?: string | null;
       attributes: Array<{
@@ -2049,7 +1956,7 @@ export type RemoveVariantfromProductMutation = {
   __typename?: 'Mutation';
   removeVariant: {
     __typename?: 'Product';
-    variants?: Array<{ __typename?: 'Variant'; sku: string }> | null;
+    variants?: Array<{ __typename?: 'Variant'; sku?: string | null }> | null;
   };
 };
 
@@ -2062,15 +1969,18 @@ export type UpdateTenantProfileMutation = { __typename?: 'Mutation', updateTenan
 
 export type FindTenantProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type FindTenantAuthInfoQueryVariables = Exact<{ [key: string]: never }>;
 
-export type FindTenantAuthInfoQuery = {
+export type FindTenantProfileQuery = {
   __typename?: 'Query';
   getTenantById: {
     __typename?: 'Tenant';
     ownerName: string;
+    email: string;
     businessName?: string | null;
+    description?: string | null;
+    domain?: string | null;
     logo?: string | null;
+    defaultPhoneNumberId?: string | null;
   };
 };
 
@@ -3295,23 +3205,60 @@ export const CreateCategoryDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'description' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'cover' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'subCategories' },
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'cover' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'createdAt' },
+                      },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'description' },
                       },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'subCategories' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'cover' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'createdAt' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'description' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'updatedAt' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'updatedAt' },
+                      },
                     ],
                   },
                 },
@@ -3384,48 +3331,22 @@ export const UpdateCategoryDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'description' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'cover' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'subCategories' },
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'description' },
                       },
                       { kind: 'Field', name: { kind: 'Name', value: 'cover' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'subCategories' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'id' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'name' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'description' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'cover' },
-                            },
-                          ],
-                        },
-                      },
                     ],
                   },
                 },
@@ -3477,6 +3398,7 @@ export const DeleteDocument = {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
               ],
             },
           },
@@ -3521,7 +3443,6 @@ export const FindCategoryByIdDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'description' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'cover' } },
@@ -3533,13 +3454,81 @@ export const FindCategoryByIdDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'description' },
                       },
                       { kind: 'Field', name: { kind: 'Name', value: 'cover' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'createdAt' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'subCategories' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'description' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'cover' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'createdAt' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'subCategories' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'cover' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'createdAt' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'description',
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'name' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'updatedAt' },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'updatedAt' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'updatedAt' },
+                      },
                     ],
                   },
                 },
@@ -3590,7 +3579,7 @@ export const FindAllCategoriesDocument = {
             name: { kind: 'Name', value: 'parentId' },
           },
           type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
-          defaultValue: { kind: 'NullValue' },
+          defaultValue: { kind: 'StringValue', value: '', block: false },
         },
         {
           kind: 'VariableDefinition',
@@ -3599,7 +3588,7 @@ export const FindAllCategoriesDocument = {
             name: { kind: 'Name', value: 'sortBy' },
           },
           type: { kind: 'NamedType', name: { kind: 'Name', value: 'SortBy' } },
-          defaultValue: { kind: 'EnumValue', value: 'NAME' },
+          defaultValue: { kind: 'EnumValue', value: 'CREATED_AT' },
         },
         {
           kind: 'VariableDefinition',
@@ -3611,16 +3600,7 @@ export const FindAllCategoriesDocument = {
             kind: 'NamedType',
             name: { kind: 'Name', value: 'SortOrder' },
           },
-          defaultValue: { kind: 'EnumValue', value: 'ASC' },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'includeSubcategories' },
-          },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
-          defaultValue: { kind: 'BooleanValue', value: false },
+          defaultValue: { kind: 'EnumValue', value: 'DESC' },
         },
       ],
       selectionSet: {
@@ -3678,14 +3658,6 @@ export const FindAllCategoriesDocument = {
                   name: { kind: 'Name', value: 'sortOrder' },
                 },
               },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'includeSubcategories' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'includeSubcategories' },
-                },
-              },
             ],
             selectionSet: {
               kind: 'SelectionSet',
@@ -3696,7 +3668,6 @@ export const FindAllCategoriesDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                       {
                         kind: 'Field',
@@ -3713,22 +3684,10 @@ export const FindAllCategoriesDocument = {
                       },
                       {
                         kind: 'Field',
-                        name: { kind: 'Name', value: 'parentId' },
-                      },
-                      {
-                        kind: 'Field',
                         name: { kind: 'Name', value: 'subCategories' },
                         selectionSet: {
                           kind: 'SelectionSet',
                           selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'id' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'parentId' },
-                            },
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'name' },
@@ -3744,6 +3703,82 @@ export const FindAllCategoriesDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'createdAt' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'subCategories' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'name' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'description',
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'cover' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'createdAt' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: {
+                                      kind: 'Name',
+                                      value: 'subCategories',
+                                    },
+                                    selectionSet: {
+                                      kind: 'SelectionSet',
+                                      selections: [
+                                        {
+                                          kind: 'Field',
+                                          name: {
+                                            kind: 'Name',
+                                            value: 'cover',
+                                          },
+                                        },
+                                        {
+                                          kind: 'Field',
+                                          name: {
+                                            kind: 'Name',
+                                            value: 'createdAt',
+                                          },
+                                        },
+                                        {
+                                          kind: 'Field',
+                                          name: {
+                                            kind: 'Name',
+                                            value: 'description',
+                                          },
+                                        },
+                                        {
+                                          kind: 'Field',
+                                          name: { kind: 'Name', value: 'name' },
+                                        },
+                                        {
+                                          kind: 'Field',
+                                          name: {
+                                            kind: 'Name',
+                                            value: 'updatedAt',
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'updatedAt' },
+                                  },
+                                ],
+                              },
                             },
                             {
                               kind: 'Field',
@@ -3767,571 +3802,6 @@ export const FindAllCategoriesDocument = {
 } as unknown as DocumentNode<
   FindAllCategoriesQuery,
   FindAllCategoriesQueryVariables
->;
-export const FindCategoriesForPickerDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'findCategoriesForPicker' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-          defaultValue: { kind: 'IntValue', value: '1' },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'limit' },
-          },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-          defaultValue: { kind: 'IntValue', value: '25' },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'name' } },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
-          defaultValue: { kind: 'StringValue', value: '', block: false },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'parentId' },
-          },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
-          defaultValue: { kind: 'NullValue' },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'sortBy' },
-          },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'SortBy' } },
-          defaultValue: { kind: 'EnumValue', value: 'NAME' },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'sortOrder' },
-          },
-          type: {
-            kind: 'NamedType',
-            name: { kind: 'Name', value: 'SortOrder' },
-          },
-          defaultValue: { kind: 'EnumValue', value: 'ASC' },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'includeSubcategories' },
-          },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
-          defaultValue: { kind: 'BooleanValue', value: false },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'getAllCategories' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'page' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'page' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'limit' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'limit' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'name' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'name' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'parentId' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'parentId' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'sortBy' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'sortBy' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'sortOrder' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'sortOrder' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'includeSubcategories' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'includeSubcategories' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'categories' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'cover' } },
-                    ],
-                  },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'total' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'hasMore' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  FindCategoriesForPickerQuery,
-  FindCategoriesForPickerQueryVariables
->;
-export const FindCategoriesTreeDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'findCategoriesTree' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'sortBy' },
-          },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'SortBy' } },
-          defaultValue: { kind: 'EnumValue', value: 'NAME' },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'sortOrder' },
-          },
-          type: {
-            kind: 'NamedType',
-            name: { kind: 'Name', value: 'SortOrder' },
-          },
-          defaultValue: { kind: 'EnumValue', value: 'ASC' },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'getAllCategories' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'sortBy' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'sortBy' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'sortOrder' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'sortOrder' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'categories' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'parentId' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'subCategories' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'id' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'parentId' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'name' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'subCategories' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'id' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'parentId' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'name' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'subCategories',
-                                    },
-                                    selectionSet: {
-                                      kind: 'SelectionSet',
-                                      selections: [
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'id' },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'parentId',
-                                          },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'name' },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'subCategories',
-                                          },
-                                          selectionSet: {
-                                            kind: 'SelectionSet',
-                                            selections: [
-                                              {
-                                                kind: 'Field',
-                                                name: {
-                                                  kind: 'Name',
-                                                  value: 'id',
-                                                },
-                                              },
-                                              {
-                                                kind: 'Field',
-                                                name: {
-                                                  kind: 'Name',
-                                                  value: 'parentId',
-                                                },
-                                              },
-                                              {
-                                                kind: 'Field',
-                                                name: {
-                                                  kind: 'Name',
-                                                  value: 'name',
-                                                },
-                                              },
-                                              {
-                                                kind: 'Field',
-                                                name: {
-                                                  kind: 'Name',
-                                                  value: 'subCategories',
-                                                },
-                                                selectionSet: {
-                                                  kind: 'SelectionSet',
-                                                  selections: [
-                                                    {
-                                                      kind: 'Field',
-                                                      name: {
-                                                        kind: 'Name',
-                                                        value: 'id',
-                                                      },
-                                                    },
-                                                    {
-                                                      kind: 'Field',
-                                                      name: {
-                                                        kind: 'Name',
-                                                        value: 'parentId',
-                                                      },
-                                                    },
-                                                    {
-                                                      kind: 'Field',
-                                                      name: {
-                                                        kind: 'Name',
-                                                        value: 'name',
-                                                      },
-                                                    },
-                                                    {
-                                                      kind: 'Field',
-                                                      name: {
-                                                        kind: 'Name',
-                                                        value: 'subCategories',
-                                                      },
-                                                      selectionSet: {
-                                                        kind: 'SelectionSet',
-                                                        selections: [
-                                                          {
-                                                            kind: 'Field',
-                                                            name: {
-                                                              kind: 'Name',
-                                                              value: 'id',
-                                                            },
-                                                          },
-                                                          {
-                                                            kind: 'Field',
-                                                            name: {
-                                                              kind: 'Name',
-                                                              value: 'parentId',
-                                                            },
-                                                          },
-                                                          {
-                                                            kind: 'Field',
-                                                            name: {
-                                                              kind: 'Name',
-                                                              value: 'name',
-                                                            },
-                                                          },
-                                                          {
-                                                            kind: 'Field',
-                                                            name: {
-                                                              kind: 'Name',
-                                                              value:
-                                                                'subCategories',
-                                                            },
-                                                            selectionSet: {
-                                                              kind: 'SelectionSet',
-                                                              selections: [
-                                                                {
-                                                                  kind: 'Field',
-                                                                  name: {
-                                                                    kind: 'Name',
-                                                                    value: 'id',
-                                                                  },
-                                                                },
-                                                                {
-                                                                  kind: 'Field',
-                                                                  name: {
-                                                                    kind: 'Name',
-                                                                    value:
-                                                                      'parentId',
-                                                                  },
-                                                                },
-                                                                {
-                                                                  kind: 'Field',
-                                                                  name: {
-                                                                    kind: 'Name',
-                                                                    value:
-                                                                      'name',
-                                                                  },
-                                                                },
-                                                                {
-                                                                  kind: 'Field',
-                                                                  name: {
-                                                                    kind: 'Name',
-                                                                    value:
-                                                                      'subCategories',
-                                                                  },
-                                                                  selectionSet:
-                                                                    {
-                                                                      kind: 'SelectionSet',
-                                                                      selections:
-                                                                        [
-                                                                          {
-                                                                            kind: 'Field',
-                                                                            name: {
-                                                                              kind: 'Name',
-                                                                              value:
-                                                                                'id',
-                                                                            },
-                                                                          },
-                                                                          {
-                                                                            kind: 'Field',
-                                                                            name: {
-                                                                              kind: 'Name',
-                                                                              value:
-                                                                                'parentId',
-                                                                            },
-                                                                          },
-                                                                          {
-                                                                            kind: 'Field',
-                                                                            name: {
-                                                                              kind: 'Name',
-                                                                              value:
-                                                                                'name',
-                                                                            },
-                                                                          },
-                                                                          {
-                                                                            kind: 'Field',
-                                                                            name: {
-                                                                              kind: 'Name',
-                                                                              value:
-                                                                                'subCategories',
-                                                                            },
-                                                                            selectionSet:
-                                                                              {
-                                                                                kind: 'SelectionSet',
-                                                                                selections:
-                                                                                  [
-                                                                                    {
-                                                                                      kind: 'Field',
-                                                                                      name: {
-                                                                                        kind: 'Name',
-                                                                                        value:
-                                                                                          'id',
-                                                                                      },
-                                                                                    },
-                                                                                    {
-                                                                                      kind: 'Field',
-                                                                                      name: {
-                                                                                        kind: 'Name',
-                                                                                        value:
-                                                                                          'parentId',
-                                                                                      },
-                                                                                    },
-                                                                                    {
-                                                                                      kind: 'Field',
-                                                                                      name: {
-                                                                                        kind: 'Name',
-                                                                                        value:
-                                                                                          'name',
-                                                                                      },
-                                                                                    },
-                                                                                    {
-                                                                                      kind: 'Field',
-                                                                                      name: {
-                                                                                        kind: 'Name',
-                                                                                        value:
-                                                                                          'subCategories',
-                                                                                      },
-                                                                                      selectionSet:
-                                                                                        {
-                                                                                          kind: 'SelectionSet',
-                                                                                          selections:
-                                                                                            [
-                                                                                              {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                  kind: 'Name',
-                                                                                                  value:
-                                                                                                    'id',
-                                                                                                },
-                                                                                              },
-                                                                                              {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                  kind: 'Name',
-                                                                                                  value:
-                                                                                                    'parentId',
-                                                                                                },
-                                                                                              },
-                                                                                              {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                  kind: 'Name',
-                                                                                                  value:
-                                                                                                    'name',
-                                                                                                },
-                                                                                              },
-                                                                                            ],
-                                                                                        },
-                                                                                    },
-                                                                                  ],
-                                                                              },
-                                                                          },
-                                                                        ],
-                                                                    },
-                                                                },
-                                                              ],
-                                                            },
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  ],
-                                                },
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      ],
-                                    },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  FindCategoriesTreeQuery,
-  FindCategoriesTreeQueryVariables
 >;
 export const FindAllMovementsDocument = {
   kind: 'Document',
@@ -5355,6 +4825,30 @@ export const FindInventoryDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
+            name: { kind: 'Name', value: 'variantId' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'isArchived' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'lowStockThreshold' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
             name: { kind: 'Name', value: 'sortBy' },
           },
           type: { kind: 'NamedType', name: { kind: 'Name', value: 'SortBy' } },
@@ -5400,6 +4894,30 @@ export const FindInventoryDocument = {
                 value: {
                   kind: 'Variable',
                   name: { kind: 'Name', value: 'addressId' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'variantId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'variantId' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'isArchived' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'isArchived' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'lowStockThreshold' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'lowStockThreshold' },
                 },
               },
               {
@@ -5997,10 +5515,6 @@ export const UpdateDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'categoryId' },
                       },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'categoryName' },
-                      },
                     ],
                   },
                 },
@@ -6072,7 +5586,6 @@ export const UpdateDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'attributes' },
@@ -6399,7 +5912,6 @@ export const FindProductByIdDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 {
                   kind: 'Field',
@@ -6444,10 +5956,6 @@ export const FindProductByIdDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'categoryId' },
                       },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'categoryName' },
-                      },
                     ],
                   },
                 },
@@ -6457,7 +5965,6 @@ export const FindProductByIdDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'price' } },
                       {
                         kind: 'Field',
@@ -6788,7 +6295,6 @@ export const FindAllProductsDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'brand' } },
                       {
@@ -6800,10 +6306,6 @@ export const FindAllProductsDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'categoryId' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'categoryName' },
                             },
                           ],
                         },
@@ -7919,37 +7421,4 @@ export const FindTenantProfileDocument = {
 } as unknown as DocumentNode<
   FindTenantProfileQuery,
   FindTenantProfileQueryVariables
->;
-export const FindTenantAuthInfoDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'findTenantAuthInfo' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'getTenantById' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'ownerName' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'businessName' },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'logo' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  FindTenantAuthInfoQuery,
-  FindTenantAuthInfoQueryVariables
 >;
