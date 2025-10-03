@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import {
   FindAllCategoriesDocument,
   FindAllCategoriesQuery,
@@ -27,14 +27,14 @@ type GqlCategory = NonNullable<
 export type CategorySummary = {
   id: string;
   name: string;
-  cover?: string;
+  cover: string;
   count: number;
 };
 
 const mapToSummary = (c: GqlCategory): CategorySummary => ({
   id: c.id,
   name: c.name,
-  cover: c.cover ?? undefined,
+  cover: c.cover,
   count: Array.isArray(c.subCategories) ? c.subCategories.length : 0,
 });
 

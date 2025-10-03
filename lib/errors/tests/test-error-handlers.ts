@@ -23,8 +23,8 @@ import {
 // Test cases for common error scenarios
 const testCases = [
   {
-    name: 'Address Already Exists',
-    error: { message: 'address already exists' },
+    name: 'Address Name Already Exists',
+    error: { message: 'address name already exists' },
     expectedHandler: 'address-exists',
   },
   {

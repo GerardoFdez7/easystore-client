@@ -10,11 +10,9 @@ import { Textarea } from '@shadcn/ui/textarea';
 import { Button } from '@shadcn/ui/button';
 import MediaUploader from '@organisms/shared/MediaUploader';
 import { toast } from 'sonner';
-
-import CategoryPicker from '@molecules/detail-category/CategoryPicker';
-import type { CategoryItem as PickerItem } from '@molecules/detail-category/CategoryPicker';
-import type { CategoryItem as CatalogItem } from '@molecules/detail-category/AddSubcategory';
-
+import CategoryPicker from '@molecules/categories/detail-category/CategoryPicker';
+import type { CategoryItem as PickerItem } from '@molecules/categories/detail-category/CategoryPicker';
+import type { CategoryItem as CatalogItem } from '@molecules/categories/detail-category/AddSubcategory';
 import useCategory from '@hooks/domains/category/useCategory';
 import { useCategories } from '@hooks/domains/category/useCategories';
 import { useCreateCategory } from '@hooks/domains/category/useCreateCategory';
@@ -329,6 +327,7 @@ function CategoryFormView({
               </label>
               <Textarea
                 id="description"
+                maxLength={200}
                 placeholder={t('descriptionPlaceholder')}
                 disabled={loadingCat}
                 className="min-h-[120px] bg-white"

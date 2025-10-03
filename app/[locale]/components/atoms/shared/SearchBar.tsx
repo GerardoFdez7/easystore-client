@@ -9,7 +9,12 @@ interface SearchBarProps {
   placeholder?: string;
 }
 
-export default function SearchBar({ className, placeholder }: SearchBarProps) {
+export default function SearchBar({
+  className,
+  placeholder,
+  searchTerm,
+  onSearchChange,
+}: SearchBarProps) {
   return (
     <div className={cn('relative w-full', className)}>
       <Search
@@ -18,6 +23,8 @@ export default function SearchBar({ className, placeholder }: SearchBarProps) {
       />
       <Input
         placeholder={placeholder}
+        value={searchTerm}
+        onChange={(e) => onSearchChange(e.target.value)}
         className="bg-card rounded-full pl-10 text-[13px] sm:text-[14px]"
       />
     </div>

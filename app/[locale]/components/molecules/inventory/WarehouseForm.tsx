@@ -12,6 +12,7 @@ import { useAddressManagement } from '@hooks/domains/address';
 import { useWarehouseForm } from '@hooks/domains/inventory';
 import { Plus, Trash2 } from 'lucide-react';
 import { Separator } from '@shadcn/ui/separator';
+import { Tooltip, TooltipTrigger, TooltipContent } from '@shadcn/ui/tooltip';
 import { Button } from '@shadcn/ui/button';
 import {
   Form,
@@ -162,15 +163,21 @@ export default function WarehouseForm({
                 onOpenChange={setIsDeleteDialogOpen}
               >
                 <AlertDialogTrigger asChild>
-                  <Button
-                    type="button"
-                    variant="danger"
-                    size="icon"
-                    disabled={isSubmitting || isDeleting}
-                    title={t('deleteWarehouse')}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Button
+                        type="button"
+                        variant="danger"
+                        size="icon"
+                        disabled={isSubmitting || isDeleting}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      {t('deleteWarehouse')}
+                    </TooltipContent>
+                  </Tooltip>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>

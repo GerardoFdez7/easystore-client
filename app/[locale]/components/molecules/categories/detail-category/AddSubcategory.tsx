@@ -22,9 +22,8 @@ import {
 import { Checkbox } from '@shadcn/ui/checkbox';
 import { cn } from 'utils';
 import { useTranslations } from 'next-intl';
-import { useIsMobile } from '@hooks/useMobile';
+import { useIsMobile } from '@hooks/utils/useMobile';
 import SearchBar from '@atoms/shared/Search';
-import { useSearch } from '@hooks/useSearch';
 
 export type CategoryItem = {
   id: string;
@@ -55,11 +54,7 @@ export default function AddSubcategoriesPicker({
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
   const [selected, setSelected] = useState<Set<string>>(new Set());
-
   const exclude = useMemo(() => new Set(excludeIds), [excludeIds]);
-
-  // SearchBar
-  const usePickerSearch = () => useSearch((text) => setQ(text), 500);
 
   const list = useMemo(() => {
     const base = catalog.filter((c) => !exclude.has(c.id));
@@ -89,8 +84,12 @@ export default function AddSubcategoriesPicker({
     <div className="mx-auto w-full max-w-2xl space-y-3">
       <SearchBar
         placeholder={t('searchCategories')}
-        useSearch={usePickerSearch}
         disabled={disabled}
+        useSearch={() => ({
+          query: '',
+          onChange: () => {},
+          isDebouncing: false,
+        })}
       />
 
       <div className="max-h-[60vh] overflow-auto rounded-md border">

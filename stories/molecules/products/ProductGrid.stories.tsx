@@ -5,7 +5,7 @@ const meta: Meta<typeof ProductGrid> = {
   title: 'Molecules/Products/ProductGrid',
   component: ProductGrid,
   parameters: {
-    layout: 'fullscreen',
+    layout: 'centered',
   },
   argTypes: {
     products: { control: 'object' },

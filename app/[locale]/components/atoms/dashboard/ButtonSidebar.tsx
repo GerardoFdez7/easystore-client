@@ -11,6 +11,8 @@ type SidebarButtonProps = {
   variant?: 'default' | 'outline';
   className?: string;
   route: string;
+  expandOnClick?: boolean;
+  onExpandClick?: () => void;
 };
 
 export default function ButtonSidebar({
@@ -19,6 +21,8 @@ export default function ButtonSidebar({
   route,
   variant = 'default',
   className = '',
+  expandOnClick = false,
+  onExpandClick,
 }: SidebarButtonProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -28,6 +32,14 @@ export default function ButtonSidebar({
   // Create the full path by combining the locale with the route
   const fullPath = `/${locale}${route.startsWith('/') ? '' : '/'}${route}`;
 
+  const handleClick = () => {
+    if (expandOnClick && onExpandClick) {
+      onExpandClick();
+    } else {
+      router.push(fullPath);
+    }
+  };
+
   const isSelected = pathname === fullPath;
 
   return (
@@ -35,7 +47,7 @@ export default function ButtonSidebar({
       variant={variant}
       isActive={isSelected}
       tooltip={label}
-      onClick={() => router.push(fullPath)}
+      onClick={handleClick}
       className={cn(
         'text-text h-12 w-full cursor-pointer justify-start',
         isSelected

@@ -70,12 +70,7 @@ const databaseConstraintHandlers: ErrorHandler[] = [
     priority: 110,
     matcher: (error: GraphQLFormattedError) => {
       const message = error.message?.toLowerCase() || '';
-      return (
-        (message.includes('address already exists') ||
-          (message.includes('address') && message.includes('exists'))) &&
-        !message.includes('warehouse') &&
-        !message.includes('addressid')
-      );
+      return message.includes('address name already exists');
     },
     handler: (error: GraphQLFormattedError, context: ErrorContext) => {
       const { locale, isDevelopment } = context;

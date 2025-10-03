@@ -1,18 +1,18 @@
 'use client';
 
-import React from 'react';
+import { useState, ComponentProps } from 'react';
 import {
   Package,
   Users,
   LayoutDashboard,
   Settings,
-  MonitorPlay,
+  Wallpaper,
   // Gift,
   // BookUser,
   ClipboardList,
   Warehouse,
-  Layers,
-  ChevronDown,
+  Dices,
+  ChevronLeft,
 } from 'lucide-react';
 import OwnerLogo from '@atoms/dashboard/OwnerLogo';
 import ButtonSidebar from '@atoms/dashboard/ButtonSidebar';
@@ -25,6 +25,7 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
+  useSidebar,
 } from '@shadcn/ui/sidebar';
 import {
   Collapsible,
@@ -32,14 +33,21 @@ import {
   CollapsibleTrigger,
 } from '@shadcn/ui/collapsible';
 import { Button } from '@shadcn/ui/button';
-
 import { useTranslations } from 'next-intl';
 
-export default function Sidebar(
-  props: React.ComponentProps<typeof ShadcnSidebar>,
-) {
+export default function Sidebar(props: ComponentProps<typeof ShadcnSidebar>) {
   const t = useTranslations('Dashboard');
-  const [openProducts, setOpenProducts] = React.useState(false);
+  const [openProducts, setOpenProducts] = useState(false);
+  const { state, setOpen } = useSidebar();
+
+  const handleExpand = () => {
+    if (state === 'collapsed') {
+      setOpen(true);
+      setOpenProducts(true);
+      return true;
+    }
+    return false;
+  };
 
   return (
     <ShadcnSidebar className="mt-20 h-auto" collapsible="icon" {...props}>
@@ -56,7 +64,7 @@ export default function Sidebar(
         <SidebarMenu className="gap-2 px-2">
           <SidebarMenuItem>
             <ButtonSidebar
-              icon={<LayoutDashboard />}
+              icon={<LayoutDashboard className="text-title" />}
               label={t('dashboard')}
               route="dashboard"
             />
@@ -70,20 +78,21 @@ export default function Sidebar(
             <SidebarMenuItem>
               <div className="flex items-center gap-2">
                 <ButtonSidebar
-                  icon={<Package />}
+                  icon={<Package className="text-title" />}
                   label={t('products')}
                   route="products"
-                  className="flex-1"
+                  expandOnClick={true}
+                  onExpandClick={handleExpand}
                 />
                 <CollapsibleTrigger asChild>
                   <Button
                     aria-label={
-                      openProducts ? 'Ocultar categorías' : 'Mostrar categorías'
+                      openProducts ? 'hide categories' : 'show categories'
                     }
                     variant={'ghost'}
                     className="ml-auto group-data-[collapsible=icon]:hidden"
                   >
-                    <ChevronDown className="h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                    <ChevronLeft className="h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:-rotate-90" />
                   </Button>
                 </CollapsibleTrigger>
               </div>
@@ -92,7 +101,7 @@ export default function Sidebar(
                 <SidebarMenuSub>
                   <SidebarMenuSubItem>
                     <ButtonSidebar
-                      icon={<Layers />}
+                      icon={<Dices className="text-title" />}
                       label={t('categories')}
                       route="categories"
                     />
@@ -104,7 +113,7 @@ export default function Sidebar(
 
           <SidebarMenuItem>
             <ButtonSidebar
-              icon={<Warehouse />}
+              icon={<Warehouse className="text-title" />}
               label={t('inventory')}
               route="inventory"
             />
@@ -119,7 +128,7 @@ export default function Sidebar(
 
           <SidebarMenuItem>
             <ButtonSidebar
-              icon={<Users />}
+              icon={<Users className="text-title" />}
               label={t('customers')}
               route="customers"
             />
@@ -140,7 +149,7 @@ export default function Sidebar(
             </SidebarMenuItem> */}
           <SidebarMenuItem>
             <ButtonSidebar
-              icon={<MonitorPlay />}
+              icon={<Wallpaper className="text-title" />}
               label={t('preview')}
               route="preview"
             />
@@ -152,7 +161,7 @@ export default function Sidebar(
         <SidebarMenu>
           <SidebarMenuItem>
             <ButtonSidebar
-              icon={<Settings />}
+              icon={<Settings className="text-title" />}
               label={t('settings')}
               route="settings"
             />

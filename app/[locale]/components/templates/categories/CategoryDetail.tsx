@@ -1,7 +1,7 @@
 'use client';
 import HeaderDashboard from '@organisms/shared/HeaderDashboard';
 import SidebarLayout from '@organisms/shared/SidebarLayout';
-import MainDetailCategory from '@organisms/detail-category/MainDetailCategory';
+import MainDetailCategory from '@organisms/categories/detail-category/MainDetailCategory';
 import { useTranslations } from 'next-intl';
 import useCategory from '@hooks/domains/category/useCategory';
 

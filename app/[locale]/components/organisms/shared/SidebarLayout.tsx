@@ -15,7 +15,6 @@ export default function SidebarLayout({ children, title }: SidebarLayoutProps) {
         defaultOpen={false}
         style={
           {
-            '--sidebar-width': 'calc(var(--spacing) * 71)',
             '--header-height': 'calc(var(--spacing) * 12)',
           } as React.CSSProperties
         }

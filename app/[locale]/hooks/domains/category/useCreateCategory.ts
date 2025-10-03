@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { toast } from 'sonner';
 import type { DocumentNode } from 'graphql';
 

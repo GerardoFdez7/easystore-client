@@ -1,12 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import CategoryCard from '@molecules/categories/CategoryCard';
-import { NextIntlClientProvider } from 'next-intl';
-
-const messages = { Category: { categoryCount: 'categories' } };
 
 const meta: Meta<typeof CategoryCard> = {
   title: 'Molecules/Category/CategoryCard',
   component: CategoryCard,
+  parameters: {
+    layout: 'centered',
+  },
   args: {
     name: 'Technology',
     cover: '/laptop.webp',
@@ -15,11 +15,9 @@ const meta: Meta<typeof CategoryCard> = {
   },
   decorators: [
     (Story) => (
-      <NextIntlClientProvider locale="en" messages={messages}>
-        <div style={{ padding: 16, background: '#f3f4f6', width: 220 }}>
-          <Story />
-        </div>
-      </NextIntlClientProvider>
+      <div className="w-80">
+        <Story />
+      </div>
     ),
   ],
 };

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import CategoryTemplate from '@templates/Categories';
+import CategoryTemplate from '@templates/categories/Categories';
 import { NextIntlClientProvider } from 'next-intl';
 
 const messages = {
