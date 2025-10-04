@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Warehouse, Plus } from 'lucide-react';
 import {
@@ -16,6 +16,7 @@ import InventoryTableSkeleton from '@molecules/inventory/InventoryTableSkeleton'
 import InventoryActionButtons from '@molecules/inventory/InventoryActionButtons';
 import EmptyState from '@molecules/shared/EmptyState';
 import SkeletonWrapper from '@molecules/shared/SkeletonWrapper';
+import SearchBar from '@atoms/shared/SearchBar';
 import AddStockDialog from '@organisms/inventory/AddStockDialog';
 import WarehouseManagementDialog from '@organisms/inventory/WarehouseManagementDialog';
 import WarehouseForm from '@molecules/inventory/WarehouseForm';
@@ -26,6 +27,7 @@ type SortDirection = 'ASC' | 'DESC';
 export default function MainInventory() {
   const t = useTranslations('Inventory');
   const [selectedWarehouseId, setSelectedWarehouseId] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [isAddStockDialogOpen, setIsAddStockDialogOpen] = useState(false);
   const [isWarehouseManagementOpen, setIsWarehouseManagementOpen] =
     useState(false);
@@ -35,6 +37,7 @@ export default function MainInventory() {
 
   // Variables for the general inventory query
   const variables: FindInventoryQueryVariables = {
+    name: searchTerm || undefined,
     filters: sortField
       ? {
           sortBy: {
@@ -68,6 +71,21 @@ export default function MainInventory() {
   const handleWarehouseCancel = () => {
     setIsWarehouseFormOpen(false);
   };
+
+  // Refetch data when searchTerm or sortField changes (automatic search)
+  useEffect(() => {
+    const updatedVariables: FindInventoryQueryVariables = {
+      name: searchTerm || undefined,
+      filters: sortField
+        ? {
+            sortBy: {
+              [sortField]: sortDirection,
+            },
+          }
+        : undefined,
+    };
+    void refetch(updatedVariables).catch((_error) => {});
+  }, [searchTerm, sortField, sortDirection, refetch]);
 
   const handleSortChange = (field: SortField, direction: SortDirection) => {
     setSortField(field);
@@ -105,6 +123,12 @@ export default function MainInventory() {
         loading={loading}
         onAddStockClick={() => setIsAddStockDialogOpen(true)}
         onManageWarehousesClick={() => setIsWarehouseManagementOpen(true)}
+      />
+      <SearchBar
+        placeholder={t('searchPlaceholder')}
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        className="mb-2"
       />
       <SkeletonWrapper loading={loading} fallbackWidth="sm:w-70 w-40">
         <WarehouseCombobox
