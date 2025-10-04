@@ -3,8 +3,13 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Warehouse, Plus } from 'lucide-react';
-import { FindInventoryQueryVariables } from '@graphql/generated';
+import {
+  FindInventoryQueryVariables,
+  CreateWarehouseMutationVariables,
+  UpdateWarehouseMutationVariables,
+} from '@graphql/generated';
 import { useInventory } from '@hooks/domains/inventory';
+import { useWarehouseManagement } from '@hooks/domains/inventory';
 import WarehouseCombobox from '@molecules/inventory/WarehouseCombobox';
 import InventoryTable from '@molecules/inventory/InventoryTable';
 import InventoryTableSkeleton from '@molecules/inventory/InventoryTableSkeleton';
@@ -13,6 +18,7 @@ import EmptyState from '@molecules/shared/EmptyState';
 import SkeletonWrapper from '@molecules/shared/SkeletonWrapper';
 import AddStockDialog from '@organisms/inventory/AddStockDialog';
 import WarehouseManagementDialog from '@organisms/inventory/WarehouseManagementDialog';
+import WarehouseForm from '@molecules/inventory/WarehouseForm';
 
 export default function MainInventory() {
   const t = useTranslations('Inventory');
@@ -20,13 +26,34 @@ export default function MainInventory() {
   const [isAddStockDialogOpen, setIsAddStockDialogOpen] = useState(false);
   const [isWarehouseManagementOpen, setIsWarehouseManagementOpen] =
     useState(false);
+  const [isWarehouseFormOpen, setIsWarehouseFormOpen] = useState(false);
 
-  // Variables for the general inventory query (when no warehouse is selected)
+  // Variables for the general inventory query
   const variables: FindInventoryQueryVariables = {};
   const { inventory, loading, error, refetch } = useInventory(
     variables,
     selectedWarehouseId || undefined,
   );
+
+  // Warehouse management for creating the first warehouse
+  const { createWarehouse, isCreating } = useWarehouseManagement();
+  const handleWarehouseSubmit = async (
+    data:
+      | CreateWarehouseMutationVariables['input']
+      | UpdateWarehouseMutationVariables['input'],
+  ) => {
+    const result = await createWarehouse(
+      data as CreateWarehouseMutationVariables['input'],
+    );
+    if (result) {
+      setIsWarehouseFormOpen(false);
+      void refetch().catch((_error) => {});
+    }
+  };
+  // Handle warehouse form cancellation
+  const handleWarehouseCancel = () => {
+    setIsWarehouseFormOpen(false);
+  };
 
   if (error) {
     return (
@@ -37,11 +64,14 @@ export default function MainInventory() {
           description={t('noWarehousesDescription')}
           buttonText={t('createWarehouse')}
           buttonIcon={Plus}
-          onButtonClick={() => setIsWarehouseManagementOpen(true)}
+          onButtonClick={() => setIsWarehouseFormOpen(true)}
         />
-        <WarehouseManagementDialog
-          open={isWarehouseManagementOpen}
-          onOpenChange={setIsWarehouseManagementOpen}
+        <WarehouseForm
+          open={isWarehouseFormOpen}
+          onOpenChange={setIsWarehouseFormOpen}
+          onSubmit={handleWarehouseSubmit}
+          onCancel={handleWarehouseCancel}
+          isSubmitting={isCreating}
         />
       </>
     );

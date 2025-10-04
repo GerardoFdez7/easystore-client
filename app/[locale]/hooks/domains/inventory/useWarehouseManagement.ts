@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useInfiniteScroll } from '@hooks/utils/useInfiniteScroll';
 import {
   FindWarehousesDocument,
+  FindInventoryDocument,
   CreateWarehouseDocument,
   UpdateWarehouseDocument,
   DeleteWarehouseDocument,
@@ -155,7 +156,10 @@ export function useWarehouseManagement(): UseWarehouseManagementReturn {
   const [deleteWarehouseMutation, { loading: isDeleting }] = useMutation(
     DeleteWarehouseDocument,
     {
-      refetchQueries: [{ query: FindWarehousesDocument, variables }],
+      refetchQueries: [
+        { query: FindWarehousesDocument, variables },
+        { query: FindInventoryDocument, variables },
+      ],
       awaitRefetchQueries: true,
     },
   );

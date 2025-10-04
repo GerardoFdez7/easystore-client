@@ -178,6 +178,8 @@ export default function WarehouseManagementDialog({
               onDelete={handleDeleteWarehouse}
               isSubmitting={isCreating || isUpdating}
               isDeleting={isDeleting}
+              open={false}
+              standalone={true}
             />
           )}
         </div>

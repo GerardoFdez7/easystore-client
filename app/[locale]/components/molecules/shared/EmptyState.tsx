@@ -28,7 +28,7 @@ export default function EmptyState({
   buttonIcon: ButtonIcon,
 }: EmptyStateProps) {
   return (
-    <div className="mx-4 mt-8 flex w-full max-w-7xl flex-col items-center justify-center gap-6 sm:mx-auto">
+    <div className="mt-8 flex w-full flex-col items-center justify-center gap-6 sm:mx-auto">
       <div className="flex flex-col items-center gap-4 text-center">
         <div className="dark:bg-muted rounded-full bg-gray-200 p-6">
           <Icon className="text-muted-foreground h-12 w-12" />

@@ -52,16 +52,14 @@ export default function InventoryTable({
   // Show empty state if no inventory items
   if (inventory.length === 0) {
     return (
-      <div className={cn('w-full', className)}>
-        <EmptyState
-          icon={Package}
-          title={t('noProductVariantsFound')}
-          description={t('emptyStateDescription')}
-          buttonText={t('addStockButton')}
-          buttonIcon={Plus}
-          onButtonClick={() => onCreateStock?.()}
-        />
-      </div>
+      <EmptyState
+        icon={Package}
+        title={t('noProductVariantsFound')}
+        description={t('emptyStateDescription')}
+        buttonText={t('addStockButton')}
+        buttonIcon={Plus}
+        onButtonClick={() => onCreateStock?.()}
+      />
     );
   }
 
