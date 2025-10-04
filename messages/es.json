@@ -916,6 +916,7 @@
     }
   },
   "Inventory": {
+    "searchPlaceholder": "Buscar por nombre de producto, variante o SKU...",
     "noWarehousesTitle": "Aún no hay almacenes",
     "noWarehousesDescription": "Crea tu primer almacén para comenzar a gestionar tu inventario",
     "createWarehouse": "Crear almacén",

@@ -965,6 +965,7 @@
     }
   },
   "Inventory": {
+    "searchPlaceholder": "Search by product name, variant, or SKU...",
     "noWarehousesTitle": "No warehouses yet",
     "noWarehousesDescription": "Create your first warehouse to start managing your inventory",
     "createWarehouse": "Create warehouse",
