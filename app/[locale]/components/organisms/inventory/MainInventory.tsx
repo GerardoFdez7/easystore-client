@@ -46,9 +46,19 @@ export default function MainInventory() {
       : undefined,
   };
 
+  // Debounce the search term for server-side querying
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>('');
+  useEffect(() => {
+    const id = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm.trim());
+    }, 300);
+    return () => clearTimeout(id);
+  }, [searchTerm]);
+
   const { inventory, loading, error, refetch } = useInventory(
     variables,
     selectedWarehouseId || undefined,
+    debouncedSearchTerm,
   );
 
   // Warehouse management for creating the first warehouse
