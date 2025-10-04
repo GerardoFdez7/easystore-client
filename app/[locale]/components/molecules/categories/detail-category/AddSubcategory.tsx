@@ -23,7 +23,7 @@ import { Checkbox } from '@shadcn/ui/checkbox';
 import { cn } from 'utils';
 import { useTranslations } from 'next-intl';
 import { useIsMobile } from '@hooks/utils/useMobile';
-import SearchBar from '@atoms/shared/Search';
+import SearchBar from '@atoms/shared/SearchBar';
 
 export type CategoryItem = {
   id: string;
@@ -84,12 +84,8 @@ export default function AddSubcategoriesPicker({
     <div className="mx-auto w-full max-w-2xl space-y-3">
       <SearchBar
         placeholder={t('searchCategories')}
-        disabled={disabled}
-        useSearch={() => ({
-          query: '',
-          onChange: () => {},
-          isDebouncing: false,
-        })}
+        searchTerm={q}
+        onSearchChange={setQ}
       />
 
       <div className="max-h-[60vh] overflow-auto rounded-md border">

@@ -33,7 +33,7 @@ export default function CategoryControls({
   return (
     <div className="flex flex-col gap-4">
       {/* Mobile Layout: Add button, SearchBar, and SortControls in column */}
-      <div className="flex flex-col gap-4 lg:hidden">
+      <div className="flex w-full flex-col items-center gap-4 sm:hidden">
         {showAddButton && addButtonHref && addButtonText && (
           <Button
             asChild
@@ -55,11 +55,12 @@ export default function CategoryControls({
           updateSortBy={updateSortBy}
           sortOrder={sortOrder}
           updateSortOrder={updateSortOrder}
+          className="w-full"
         />
       </div>
 
       {/* Desktop Layout: Add button on top right, SearchBar and SortControls on same row */}
-      <div className="hidden lg:flex lg:flex-col lg:gap-4">
+      <div className="hidden sm:flex sm:flex-col sm:gap-4">
         {showAddButton && addButtonHref && addButtonText && (
           <div className="flex justify-end">
             <Button
@@ -76,9 +77,11 @@ export default function CategoryControls({
         <div className="flex flex-row items-center gap-4">
           <div className="flex-1">
             <SearchBar
+              className="mt-5"
               placeholder={searchPlaceholder}
               searchTerm={searchTerm}
               onSearchChange={onSearchChange}
+              inputClassName="h-9"
             />
           </div>
           <SortControls

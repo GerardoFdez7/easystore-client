@@ -1,8 +1,11 @@
 import SortBySelect from '@atoms/shared/SortBySelect';
 import SortOrderSelect from '@atoms/shared/SortOrderSelect';
 import { SortOrder, SortBy } from '@graphql/generated';
+import { cn } from 'utils';
 
 export interface SortControlsProps {
+  sortsClassName?: string;
+  className?: string;
   sortBy: SortBy;
   updateSortBy: (value: SortBy) => void;
   sortOrder: SortOrder;
@@ -10,13 +13,20 @@ export interface SortControlsProps {
 }
 
 export const SortControls: React.FC<SortControlsProps> = ({
+  sortsClassName,
+  className,
   sortBy,
   updateSortBy,
   sortOrder,
   updateSortOrder,
 }) => {
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+    <div
+      className={cn(
+        'flex flex-col gap-4 sm:flex-row sm:items-center',
+        className,
+      )}
+    >
       <SortBySelect
         value={sortBy}
         onChange={(value) => {
@@ -24,7 +34,7 @@ export const SortControls: React.FC<SortControlsProps> = ({
             updateSortBy(value);
           }
         }}
-        className="w-32"
+        className={sortsClassName ?? 'w-full sm:w-40'}
         availableOptions={[SortBy.Name, SortBy.CreatedAt, SortBy.UpdatedAt]}
       />
 
@@ -35,7 +45,7 @@ export const SortControls: React.FC<SortControlsProps> = ({
             updateSortOrder(value);
           }
         }}
-        className="w-32"
+        className={sortsClassName ?? 'w-full sm:w-40'}
       />
     </div>
   );

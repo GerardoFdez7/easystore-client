@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl';
 import { Warehouse, MapPin } from 'lucide-react';
 import { Card, CardContent } from '@shadcn/ui/card';
+import { Label } from '@shadcn/ui/label';
 
 import type { FindWarehousesQuery } from '@graphql/generated';
 
@@ -35,37 +36,39 @@ export default function WarehouseCard({
   };
 
   return (
-    <Card className="group relative overflow-hidden transition-all duration-200 hover:shadow-md">
+    <Card
+      className="group relative cursor-pointer overflow-hidden transition-all duration-200 hover:shadow-md"
+      onClick={handleEdit}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleEdit();
+        }
+      }}
+      tabIndex={0}
+      role="button"
+      aria-label={t('editWarehouse', { name: warehouse.name })}
+    >
       <CardContent>
         <div className="flex items-start justify-between">
           <div className="flex flex-1 items-start space-x-4">
             {/* Warehouse Information */}
             <div className="min-w-0 flex-1">
-              <div
-                className="mb-1 flex cursor-pointer items-center space-x-2"
-                onClick={handleEdit}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleEdit();
-                  }
-                }}
-                tabIndex={0}
-                role="button"
-                aria-label={t('editWarehouse', { name: warehouse.name })}
-              >
+              <div className="mb-1 flex items-center space-x-2">
                 <Warehouse className="h-6 w-6" aria-hidden="true" />
                 <h3 className="text-title truncate text-lg font-semibold">
                   {warehouse.name}
                 </h3>
               </div>
 
-              <div className="flex items-start space-x-1 text-sm text-gray-600 dark:text-gray-400">
+              <div className="text-text flex items-start space-x-1 text-sm">
                 <MapPin
                   className="mt-0.5 h-4 w-4 flex-shrink-0"
                   aria-hidden="true"
                 />
-                <p className="line-clamp-2">{formatAddress(warehouse)}</p>
+                <Label className="line-clamp-2" aria-label="Warehouse address">
+                  {formatAddress(warehouse)}
+                </Label>
               </div>
             </div>
           </div>
