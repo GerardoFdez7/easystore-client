@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Warehouse, Plus } from 'lucide-react';
 import {
@@ -141,7 +141,7 @@ export default function MainInventory() {
       ) : (
         <InventoryTable
           variables={variables}
-          inventory={filteredInventory}
+          inventory={inventory}
           onCreateStock={() => setIsAddStockDialogOpen(true)}
           onSortChange={handleSortChange}
           sortField={sortField}
