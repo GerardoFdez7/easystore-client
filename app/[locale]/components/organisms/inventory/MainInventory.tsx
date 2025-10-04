@@ -108,7 +108,7 @@ export default function MainInventory() {
         onSearchChange={setSearchTerm}
         className="mb-2"
       />
-      <div className="flex justify-end">
+      <div>
         <SkeletonWrapper loading={loading} fallbackWidth="w-50">
           <WarehouseCombobox
             value={selectedWarehouseId}
