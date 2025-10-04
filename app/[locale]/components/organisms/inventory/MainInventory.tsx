@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Warehouse, Plus } from 'lucide-react';
 import { FindInventoryQueryVariables } from '@graphql/generated';
@@ -41,12 +41,22 @@ export default function MainInventory() {
       : undefined,
   };
 
+  // Debounce the search term for server-side querying
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>('');
+  useEffect(() => {
+    const id = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm.trim());
+    }, 300);
+    return () => clearTimeout(id);
+  }, [searchTerm]);
+
   const { inventory, loading, error, refetch } = useInventory(
     variables,
     selectedWarehouseId || undefined,
+    debouncedSearchTerm,
   );
 
-  // Client-side filtering for productName, variant attribute, and SKU
+  // Client-side filtering for responsive, real-time typing feedback
   const filteredInventory = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
     if (!term) return inventory;
