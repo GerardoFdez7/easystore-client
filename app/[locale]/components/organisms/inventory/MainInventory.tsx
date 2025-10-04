@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { Warehouse, Plus } from 'lucide-react';
 import { FindInventoryQueryVariables } from '@graphql/generated';
@@ -30,9 +30,8 @@ export default function MainInventory() {
   );
   const [sortDirection, setSortDirection] = useState<SortDirection>('ASC');
 
-  // Variables for the general inventory query (when no warehouse is selected)
+  // Variables for the general inventory query (sorting only)
   const variables: FindInventoryQueryVariables = {
-    name: searchTerm || undefined,
     filters: sortField
       ? {
           sortBy: {
@@ -47,20 +46,27 @@ export default function MainInventory() {
     selectedWarehouseId || undefined,
   );
 
-  // Refetch data when searchTerm or sortField changes (automatic search)
-  useEffect(() => {
-    const updatedVariables: FindInventoryQueryVariables = {
-      name: searchTerm || undefined,
-      filters: sortField
-        ? {
-            sortBy: {
-              [sortField]: sortDirection,
-            },
-          }
-        : undefined,
-    };
-    void refetch(updatedVariables).catch((_error) => {});
-  }, [searchTerm, sortField, sortDirection, refetch]);
+  // Client-side filtering for productName, variant attribute, and SKU
+  const filteredInventory = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase();
+    if (!term) return inventory;
+
+    return inventory.filter((item) => {
+      const productName = (item.productName ?? '').toLowerCase();
+      const sku = (item.variantSku ?? '').toLowerCase();
+      const attrKey = (item.variantFirstAttribute?.key ?? '').toLowerCase();
+      const attrValue = (item.variantFirstAttribute?.value ?? '').toLowerCase();
+      const attrCombined = `${attrKey} ${attrValue}`.trim();
+
+      return (
+        productName.includes(term) ||
+        sku.includes(term) ||
+        attrKey.includes(term) ||
+        attrValue.includes(term) ||
+        attrCombined.includes(term)
+      );
+    });
+  }, [inventory, searchTerm]);
 
   const handleSortChange = (field: SortField, direction: SortDirection) => {
     setSortField(field);
@@ -114,7 +120,7 @@ export default function MainInventory() {
       ) : (
         <InventoryTable
           variables={variables}
-          inventory={inventory}
+          inventory={filteredInventory}
           onCreateStock={() => setIsAddStockDialogOpen(true)}
           onSortChange={handleSortChange}
           sortField={sortField}
