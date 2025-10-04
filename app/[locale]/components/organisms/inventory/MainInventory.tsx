@@ -108,12 +108,14 @@ export default function MainInventory() {
         onSearchChange={setSearchTerm}
         className="mb-2"
       />
-      <SkeletonWrapper loading={loading} fallbackWidth="w-50">
-        <WarehouseCombobox
-          value={selectedWarehouseId}
-          onChange={setSelectedWarehouseId}
-        />
-      </SkeletonWrapper>
+      <div className="flex justify-end">
+        <SkeletonWrapper loading={loading} fallbackWidth="w-50">
+          <WarehouseCombobox
+            value={selectedWarehouseId}
+            onChange={setSelectedWarehouseId}
+          />
+        </SkeletonWrapper>
+      </div>
 
       {loading ? (
         <InventoryTableSkeleton />
