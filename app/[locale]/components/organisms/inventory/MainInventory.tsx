@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { Warehouse, Plus } from 'lucide-react';
 import {
@@ -37,7 +37,6 @@ export default function MainInventory() {
 
   // Variables for the general inventory query
   const variables: FindInventoryQueryVariables = {
-    name: searchTerm || undefined,
     filters: sortField
       ? {
           sortBy: {
@@ -142,7 +141,7 @@ export default function MainInventory() {
       ) : (
         <InventoryTable
           variables={variables}
-          inventory={inventory}
+          inventory={filteredInventory}
           onCreateStock={() => setIsAddStockDialogOpen(true)}
           onSortChange={handleSortChange}
           sortField={sortField}
