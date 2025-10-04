@@ -30,6 +30,7 @@ query findInventory(
   $sortOrder: SortOrder
   $includeAddresses: Boolean = true
   $filters: StockPerWarehouseFilterInput
+  $search: String
 ) {
   getAllWarehouses(
     page: $page
@@ -40,6 +41,7 @@ query findInventory(
     sortOrder: $sortOrder
     includeAddresses: $includeAddresses
     filters: $filters
+    search: $search
   ) {
     warehouses {
       id
