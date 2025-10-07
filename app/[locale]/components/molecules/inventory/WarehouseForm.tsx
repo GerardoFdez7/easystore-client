@@ -57,7 +57,7 @@ interface WarehouseFormProps {
       | UpdateWarehouseMutationVariables['input'],
   ) => Promise<void>;
   onCancel?: () => void;
-  onDelete?: (warehouseId: string) => Promise<void>;
+  onDelete?: (warehouseId: string) => Promise<boolean>;
   isSubmitting?: boolean;
   isDeleting?: boolean;
   open?: boolean;
@@ -104,12 +104,11 @@ export default function WarehouseForm({
   };
 
   const handleDelete = async () => {
-    if (warehouse && onDelete) {
-      await onDelete(warehouse.id);
-      setIsDeleteDialogOpen(false);
-      if (onCancel) {
-        onCancel();
-      }
+    if (!warehouse?.id || !onDelete) return;
+
+    const result = await onDelete(warehouse.id);
+    if (result) {
+      onCancel?.();
     }
   };
 

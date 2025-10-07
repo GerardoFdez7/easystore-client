@@ -1,61 +1,53 @@
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@shadcn/ui/select';
-import { Label } from '@shadcn/ui/label';
 import { useTranslations } from 'next-intl';
+import { ArrowUpWideNarrow } from 'lucide-react';
 import { SortOrder } from '@graphql/generated';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@shadcn/ui/tooltip';
 
 type SortOrderSelectProps = {
   value?: SortOrder | null;
   onChange: (value: SortOrder | null) => void;
   className?: string;
-  availableOptions?: SortOrder[];
 };
 
 export default function SortOrderSelect({
   value,
   onChange,
   className,
-  availableOptions,
 }: SortOrderSelectProps) {
   const t = useTranslations('Shared');
 
-  const allOptions = [
-    { value: SortOrder.Asc, label: t('sortOrder.ascending') },
-    { value: SortOrder.Desc, label: t('sortOrder.descending') },
-  ];
+  const handleClick = () => {
+    const newValue = value === SortOrder.Asc ? SortOrder.Desc : SortOrder.Asc;
+    onChange(newValue);
+  };
 
-  const options = availableOptions
-    ? allOptions.filter((option) => availableOptions.includes(option.value))
-    : allOptions;
+  const currentOrder = value ?? SortOrder.Asc;
+  const tooltipText = t('sortOrder.placeholder');
+  const ariaLabel =
+    currentOrder === SortOrder.Asc
+      ? t('sortOrder.ascending')
+      : t('sortOrder.descending');
 
   return (
-    <>
-      <div className="flex flex-col gap-1">
-        <Label htmlFor="sort-order-select">{t('sortOrder.placeholder')}</Label>
-        <Select
-          defaultValue={SortOrder.Asc}
-          value={value ?? undefined}
-          onValueChange={(selectedValue) => {
-            onChange(selectedValue as SortOrder);
-          }}
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          type="button"
+          onClick={handleClick}
+          className={`text-title hover:text-title/80 focus-visible:ring-ring flex h-auto w-auto cursor-pointer items-center justify-center border-none bg-transparent p-1 text-sm font-medium shadow-none transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none dark:bg-transparent dark:hover:bg-transparent ${className || ''}`}
+          aria-label={ariaLabel}
         >
-          <SelectTrigger id="sort-order-select" className={className}>
-            <SelectValue placeholder={t('sortOrder.placeholder')} />
-          </SelectTrigger>
-          <SelectContent>
-            {options.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-    </>
+          <ArrowUpWideNarrow
+            className={`h-4 w-4 transition-transform duration-200 ${
+              currentOrder === SortOrder.Desc ? 'rotate-180' : 'rotate-0'
+            }`}
+            aria-hidden="true"
+          />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>{tooltipText}</p>
+      </TooltipContent>
+    </Tooltip>
   );
 }

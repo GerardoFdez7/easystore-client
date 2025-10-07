@@ -10,6 +10,7 @@ interface SearchBarProps {
   onSearchChange: (searchTerm: string) => void;
   className?: string;
   inputClassName?: string;
+  disabled?: boolean;
 }
 
 const SearchBar: FC<SearchBarProps> = ({
@@ -18,6 +19,7 @@ const SearchBar: FC<SearchBarProps> = ({
   onSearchChange,
   className,
   inputClassName,
+  disabled = false,
 }) => {
   const [inputValue, setInputValue] = useState(searchTerm);
   const debouncedInputValue = useDebounce(inputValue, 500);
@@ -37,7 +39,12 @@ const SearchBar: FC<SearchBarProps> = ({
   };
 
   return (
-    <div className={cn('relative w-full', className)}>
+    <div
+      className={cn(
+        'relative w-full disabled:pointer-events-none disabled:opacity-50',
+        className,
+      )}
+    >
       <Search
         className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2"
         aria-hidden="true"
@@ -46,6 +53,7 @@ const SearchBar: FC<SearchBarProps> = ({
         placeholder={placeholder}
         value={inputValue}
         onChange={handleChange}
+        disabled={disabled}
         className={cn('pl-10', inputClassName)}
         aria-label={placeholder || 'Search'}
       />

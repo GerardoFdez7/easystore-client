@@ -1,6 +1,7 @@
 import { Combobox } from '@shadcn/ui/combobox';
 import { useTranslations } from 'next-intl';
 import { useWarehouseCombobox } from '@hooks/domains/inventory';
+import { cn } from 'utils';
 
 interface WarehouseComboboxProps {
   value?: string;
@@ -48,7 +49,7 @@ const WarehouseCombobox: React.FC<WarehouseComboboxProps> = ({
       hasMore={hasMore}
       isLoadingMore={isLoadingMore}
       onLoadMore={handleLoadMore}
-      className={className}
+      className={cn('sm:w-70', className)}
     />
   );
 };

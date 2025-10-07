@@ -78,13 +78,13 @@ export default function MainInventory() {
   }
 
   return (
-    <main className="flex w-full max-w-screen-2xl flex-col gap-4 overflow-x-hidden px-4 xl:mx-auto">
+    <main className="flex w-full flex-col gap-4 px-4 xl:mx-auto">
       <InventoryActionButtons
         loading={loading}
         onAddStockClick={() => setIsAddStockDialogOpen(true)}
         onManageWarehousesClick={() => setIsWarehouseManagementOpen(true)}
       />
-      <SkeletonWrapper loading={loading} fallbackWidth="w-50">
+      <SkeletonWrapper loading={loading} fallbackWidth="sm:w-70 w-40">
         <WarehouseCombobox
           value={selectedWarehouseId}
           onChange={setSelectedWarehouseId}
@@ -110,6 +110,9 @@ export default function MainInventory() {
       <WarehouseManagementDialog
         open={isWarehouseManagementOpen}
         onOpenChange={setIsWarehouseManagementOpen}
+        onLastWarehouseDeleted={() => {
+          void refetch().catch((_error) => {});
+        }}
       />
     </main>
   );

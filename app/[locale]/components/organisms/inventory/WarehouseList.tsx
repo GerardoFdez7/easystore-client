@@ -61,11 +61,11 @@ export default function WarehouseList({
           <CardContent className="min-w-0 flex-1">
             <div className="mb-1 flex items-center space-x-2">
               <Skeleton className="h-7 w-7 rounded-sm" />
-              <Skeleton className="h-6 w-48" />
+              <Skeleton className="h-6 w-34 sm:w-48" />
             </div>
             <div className="ml-1 flex items-center space-x-1">
               <Skeleton className="h-4 w-4" />
-              <Skeleton className="h-4 w-70" />
+              <Skeleton className="h-4 w-30 sm:w-70" />
             </div>
           </CardContent>
         </Card>
@@ -124,6 +124,7 @@ export default function WarehouseList({
           updateSortBy={onSortByChange}
           sortOrder={sortOrder}
           updateSortOrder={onSortOrderChange}
+          className="justify-between"
         />
       )}
 

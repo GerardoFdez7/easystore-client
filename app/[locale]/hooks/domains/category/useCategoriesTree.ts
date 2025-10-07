@@ -10,30 +10,36 @@ import {
   SortOrder,
 } from '@graphql/generated';
 
-export type UseCategoriesTreeOptions = {
+export interface UseCategoriesTreeOptions {
   sortBy?: SortBy;
   sortOrder?: SortOrder;
-};
+}
 
 type GqlCategoryTree = NonNullable<
   FindCategoriesTreeQuery['getAllCategories']
 >['categories'][number];
 
-export type CategoryTreeNode = {
+export interface CategoryTreeNode {
   id: string;
   name: string;
   parentId?: string | null;
   count?: number;
   subCategories?: CategoryTreeNode[];
-};
+}
 
 const mapToTreeNode = (c: GqlCategoryTree): CategoryTreeNode => ({
   id: c.id,
   name: c.name,
   parentId: c.parentId,
+  count: Array.isArray(c.subCategories) ? c.subCategories.length : 0,
   subCategories: c.subCategories?.map(mapToTreeNode) || [],
 });
 
+/**
+ * Hook to fetch and manage hierarchical category tree data
+ * @param opts - Options for sorting and filtering categories
+ * @returns Category tree data with loading and error states
+ */
 export function useCategoriesTree(opts: UseCategoriesTreeOptions = {}) {
   const variables: FindCategoriesTreeQueryVariables = {
     sortBy: opts.sortBy ?? SortBy.Name,
@@ -47,6 +53,7 @@ export function useCategoriesTree(opts: UseCategoriesTreeOptions = {}) {
     variables,
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',
+    errorPolicy: 'all',
   });
 
   const categories = useMemo(() => {

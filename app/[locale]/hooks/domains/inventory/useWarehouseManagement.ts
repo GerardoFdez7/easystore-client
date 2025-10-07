@@ -250,7 +250,28 @@ export function useWarehouseManagement(): UseWarehouseManagementReturn {
   const deleteWarehouse = useCallback(
     async (id: string) => {
       try {
-        const result = await deleteWarehouseMutation({ variables: { id } });
+        // Check if this is the last warehouse to avoid refetch errors
+        const isLastWarehouse = warehouses.length === 1;
+
+        // Use different mutation options based on whether it's the last warehouse
+        const mutationOptions = isLastWarehouse
+          ? {
+              variables: { id },
+              // Don't refetch when deleting the last warehouse to avoid 404 errors
+              refetchQueries: [],
+              awaitRefetchQueries: false,
+            }
+          : {
+              variables: { id },
+              refetchQueries: [
+                { query: FindWarehousesDocument, variables },
+                { query: FindInventoryDocument, variables },
+              ],
+              awaitRefetchQueries: true,
+            };
+
+        const result = await deleteWarehouseMutation(mutationOptions);
+
         if (result.data?.deleteWarehouse) {
           toast.success(t('warehouseDeletedSuccessfully'));
           return true;
@@ -260,7 +281,7 @@ export function useWarehouseManagement(): UseWarehouseManagementReturn {
         return false;
       }
     },
-    [deleteWarehouseMutation, t],
+    [deleteWarehouseMutation, t, warehouses.length, variables],
   );
 
   return {

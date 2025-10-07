@@ -893,7 +893,7 @@
       "createdAt": "Criação",
       "name": "Nome",
       "updatedAt": "Atualização",
-      "placeholder": "Ordenar por"
+      "placeholder": "Ordenar"
     },
     "sortOrder": {
       "placeholder": "Ordem",
@@ -935,7 +935,7 @@
     "showingResults": "Mostrando {start} a {end} de {total} resultados",
     "AddStock": {
       "searchProducts": "Pesquisar produtos...",
-      "includeArchived": "Incluir produtos arquivados",
+      "includeArchived": "Arquivados",
       "variantCount": "{count, plural, =1 {1 variante} other {# variantes}}",
       "select": "Selecionar",
       "selected": "Selecionado",
@@ -1078,8 +1078,11 @@
   "Category": {
     "welcomeCategory": "Categorias",
     "addCategory": "Adicionar categoria",
-    "searchPlaceholder": "Buscar categorias...",
+    "searchPlaceholder": "Pesquisar categorias...",
     "categoryCount": "subcategorias",
+    "categoryTree": "Árvore  de Categorias",
+    "categoryTreeButton": "Árvore",
+    "categoryTreeDescription": "Navegue e explore todas as suas categorias de produtos organizadas em uma estrutura de árvore",
     "expandAll": "Expandir tudo",
     "collapseAll": "Recolher tudo",
     "title": "Eliminar a categoria?",
@@ -1087,7 +1090,17 @@
     "cancel": "Cancelar",
     "delete": "Eliminar",
     "edit": "Editar",
-    "deleting": "A eliminar…"
+    "deleting": "A eliminar…",
+    "showSiblingCategories": "Mostrar categorias irmãs",
+    "allCategories": "Categorias pai",
+    "errorTitle": "Erro ao carregar categorias",
+    "errorDescription": "Ocorreu um erro ao carregar as categorias. Tente novamente.",
+    "noCategoriesTitle": "Ainda não há categorias",
+    "noCategoriesDescription": "Comece a organizar a sua loja criando a sua primeira categoria.",
+    "noSubcategoriesTitle": "Sem subcategorias",
+    "noSubcategoriesDescription": "Esta categoria ainda não tem subcategorias.",
+    "noSearchResultsTitle": "Nenhum resultado encontrado",
+    "noSearchResultsDescription": "Tente ajustar os termos de pesquisa ou navegue por todas as categorias."
   },
   "CategoryDetail": {
     "welcomeDetailCategory": "Detalhe da categoria",

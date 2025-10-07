@@ -892,7 +892,7 @@
       "createdAt": "Création",
       "name": "Nom",
       "updatedAt": "Mise à Jour",
-      "placeholder": "Trier par"
+      "placeholder": "Trier"
     },
     "sortOrder": {
       "placeholder": "Ordre",
@@ -934,7 +934,7 @@
     "showingResults": "Affichage de {start} à {end} sur {total} résultats",
     "AddStock": {
       "searchProducts": "Rechercher des produits...",
-      "includeArchived": "Inclure les produits archivés",
+      "includeArchived": "Archivés",
       "variantCount": "{count, plural, =1 {1 variante} other {# variantes}}",
       "select": "Sélectionner",
       "selected": "Sélectionné",
@@ -1079,6 +1079,9 @@
     "addCategory": "Ajouter une catégorie",
     "searchPlaceholder": "Rechercher des catégories...",
     "categoryCount": "sous-catégories",
+    "categoryTree": "Arbre des Catégories",
+    "categoryTreeButton": "Arbre",
+    "categoryTreeDescription": "Navegue e explore rapidamente todas as suas categorias e subcategorias de produtos.",
     "expandAll": "Tout développer",
     "collapseAll": "Tout réduire",
     "title": "Supprimer la catégorie ?",
@@ -1086,7 +1089,17 @@
     "cancel": "Annuler",
     "delete": "Supprimer",
     "edit": "Modifier",
-    "deleting": "Suppression…"
+    "deleting": "Suppression…",
+    "showSiblingCategories": "Afficher les catégories sœurs",
+    "allCategories": "Catégories parents",
+    "errorTitle": "Erreur lors du chargement des catégories",
+    "errorDescription": "Une erreur s'est produite lors du chargement des catégories. Veuillez réessayer.",
+    "noCategoriesTitle": "Aucune catégorie pour le moment",
+    "noCategoriesDescription": "Commencez à organiser votre boutique en créant votre première catégorie.",
+    "noSubcategoriesTitle": "Aucune sous-catégorie",
+    "noSubcategoriesDescription": "Cette catégorie n'a pas encore de sous-catégories.",
+    "noSearchResultsTitle": "Aucun résultat trouvé",
+    "noSearchResultsDescription": "Essayez d'ajuster vos termes de recherche ou parcourez toutes les catégories."
   },
   "CategoryDetail": {
     "welcomeDetailCategory": "Détail de la catégorie",

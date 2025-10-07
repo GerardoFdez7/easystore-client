@@ -21,12 +21,7 @@ export const SortControls: React.FC<SortControlsProps> = ({
   updateSortOrder,
 }) => {
   return (
-    <div
-      className={cn(
-        'flex flex-col gap-4 sm:flex-row sm:items-center',
-        className,
-      )}
-    >
+    <div className={cn('flex flex-row items-center gap-2', className)}>
       <SortBySelect
         value={sortBy}
         onChange={(value) => {
@@ -34,7 +29,7 @@ export const SortControls: React.FC<SortControlsProps> = ({
             updateSortBy(value);
           }
         }}
-        className={sortsClassName ?? 'w-full sm:w-40'}
+        className={sortsClassName}
         availableOptions={[SortBy.Name, SortBy.CreatedAt, SortBy.UpdatedAt]}
       />
 
@@ -45,7 +40,7 @@ export const SortControls: React.FC<SortControlsProps> = ({
             updateSortOrder(value);
           }
         }}
-        className={sortsClassName ?? 'w-full sm:w-40'}
+        className={sortsClassName}
       />
     </div>
   );
