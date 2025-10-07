@@ -12,7 +12,7 @@ export default function StockDetailTemplate({
   warehouseSku,
 }: InventoryTemplateProps) {
   const t = useTranslations('StockDetail');
-  const [warehouseName, sku] = warehouseSku.split('-');
+  const [warehouseName, sku] = warehouseSku.split('_');
   return (
     <>
       <HeaderDashboard />

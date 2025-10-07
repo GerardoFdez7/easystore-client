@@ -234,7 +234,7 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
                 selectedWarehouseId
               ) {
                 router.push(
-                  `/inventory/${slug(selectedWarehouseName)}-${slug(selectedVariantSku)}`,
+                  `/inventory/${slug(selectedWarehouseName)}_${slug(selectedVariantSku)}`,
                 );
                 handleReset(); // Reset state after successful navigation
                 onOpenChange(false);

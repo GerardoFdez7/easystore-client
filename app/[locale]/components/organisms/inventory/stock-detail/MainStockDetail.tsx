@@ -1,12 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { useForm } from 'react-hook-form';
-
-import { Button } from '@shadcn/ui/button';
-import { Input } from '@shadcn/ui/input';
-import { Label } from '@shadcn/ui/label';
 import {
   Form,
   FormField,
@@ -14,99 +9,64 @@ import {
   FormMessage,
   FormLabel,
 } from '@shadcn/ui/form';
+import { Button } from '@shadcn/ui/button';
+import { Input } from '@shadcn/ui/input';
+import { Label } from '@shadcn/ui/label';
 
 import StockHeader from '@molecules/stock-detail/StockHeader';
 import SerialChips from '@molecules/stock-detail/SerialChips';
 import UpdateReasonDialog from '@molecules/stock-detail/UpdateReasonDialog';
 import CalendarPicker from '@molecules/stock-detail/CalendarPicker';
 
-type Props = { warehouseName?: string; sku?: string };
+// ⬇️ usa el hook “todo en uno” (resuelve IDs por nombre/SKU y crea)
+import { useCreateWarehouseStockByLookup } from '@hooks/domains/inventory/stock-detail/useCreateStock';
 
-type StockDetailForm = {
-  available: number;
-  reserved: number;
-  productLocation: string;
-  lotNumber: string;
-  replenishmentDate: Date | null;
-};
+type Props = { warehouseName?: string; sku?: string };
 
 export default function MainStockDetail({ warehouseName, sku }: Props) {
   const t = useTranslations('StockDetail');
+  warehouseName = warehouseName?.split('-').join(' ').trim().toLowerCase();
 
-  // ---------------- form (sin zod) ----------------
-  const form = useForm<StockDetailForm>({
-    mode: 'onChange',
-    defaultValues: {
-      available: 0,
-      reserved: 0,
-      productLocation: '',
-      lotNumber: '',
-      replenishmentDate: null,
-    },
-  });
-
-  // ---------------- mock data (remplaza con fetch real) -------------
-  const [productName, setProductName] = useState('');
-  const [_variantKey, setVariantKey] = useState('');
-  const [variantValue, setVariantValue] = useState('');
+  // seriales controlados por esta vista
   const [serialNumbers, setSerialNumbers] = useState<string[]>([]);
 
-  useEffect(() => {
-    if (!warehouseName || !sku) return;
-    setProductName('Nike t-shirts');
-    setVariantKey('color');
-    setVariantValue('red');
-    setSerialNumbers([
-      'SN-9FKZ-23J7-BUQ2',
-      'SN-4NZB-7FST-H6R5',
-      'SN-8YZL-50AN-ZT7Y',
-    ]);
-    form.reset({
-      available: 6,
-      reserved: 2,
-      productLocation: 'A 12-3',
-      lotNumber: 'LOT ABC-99',
-      replenishmentDate: new Date(),
-    });
-  }, [warehouseName, sku, form]);
-
-  // ---------------- update reason dialog ----------------
+  // dialog de razón
   const [showUpdateReason, setShowUpdateReason] = useState(false);
   const [updateReason, setUpdateReason] = useState('');
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    void (async () => {
-      const isValid = await form.trigger();
-      if (!isValid) return;
-
-      const values = form.getValues();
-      console.log(values);
-      // TODO: persist(values)
-    })();
-  };
-
-  const handleConfirmUpdateAvailable = () => {
-    if (!updateReason.trim()) return;
-    // TODO: patch con razón
-    setShowUpdateReason(false);
-    setUpdateReason('');
-  };
-
-  // ---------------- helpers ----------------
+  // helper int
   const toInt = (v: string) => {
-    // Permite vacío -> 0, y evita NaN
     const n = Number(v);
     return Number.isFinite(n) ? Math.max(0, Math.trunc(n)) : 0;
   };
 
+  const { form, handleSubmit, isSubmitting, selectedVariant } =
+    useCreateWarehouseStockByLookup({
+      warehouseName,
+      variantSku: sku,
+      getSerialNumbers: () => serialNumbers,
+      reason: updateReason || undefined,
+      onSuccess: () => {
+        setUpdateReason('');
+        setShowUpdateReason(false);
+      },
+    });
+
+  const disabled = isSubmitting;
+  const hasFormErrors = Boolean(
+    form.formState.errors.reason || form.formState.errors.productLocation,
+  );
+
   return (
     <Form {...form}>
-      <form onSubmit={onSubmit} className="flex-1">
+      <form onSubmit={(e) => handleSubmit(e)} className="flex-1">
+        {/* Campo oculto para que reason forme parte del form (sincronizado con el diálogo) */}
+        <input type="hidden" {...form.register('reason')} />
         <div className="mx-auto max-w-5xl px-6 py-6">
           <StockHeader
-            colorValue={variantValue}
-            productName={productName}
+            productName={selectedVariant?.productName ?? ''}
+            sku={selectedVariant?.sku ?? ''}
+            attributes={selectedVariant?.attributes ?? []}
             warehouseName={warehouseName}
           />
 
@@ -128,6 +88,7 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
                       type="number"
                       className="mt-2 max-w-xs"
                       value={field.value ?? 0}
+                      disabled={disabled}
                       onChange={(e) => field.onChange(toInt(e.target.value))}
                       onBlur={() => setShowUpdateReason(true)}
                       placeholder={t('availablePlaceholder')}
@@ -142,9 +103,7 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
               <FormField
                 control={form.control}
                 name="reserved"
-                rules={{
-                  min: { value: 0, message: t('reservedPlaceholder') },
-                }}
+                rules={{ min: { value: 0, message: t('reservedPlaceholder') } }}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-sm font-medium">
@@ -154,6 +113,7 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
                       type="number"
                       className="mt-2 max-w-xs"
                       value={field.value ?? 0}
+                      disabled={disabled}
                       onChange={(e) => field.onChange(toInt(e.target.value))}
                       placeholder={t('reservedPlaceholder')}
                       inputMode="numeric"
@@ -174,6 +134,10 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
                   value: 100,
                   message: t('productLocationPlaceholder'),
                 },
+                minLength: {
+                  value: 10,
+                  message: t('productLocationTooShort'),
+                },
               }}
               render={({ field }) => (
                 <FormItem>
@@ -183,6 +147,7 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
                   <Input
                     className="mt-2 max-w-xl"
                     value={field.value ?? ''}
+                    disabled={disabled}
                     onChange={field.onChange}
                     placeholder={t('productLocationPlaceholder')}
                   />
@@ -205,6 +170,7 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
                       id="replenishment-date"
                       className="mt-2 max-w-xs"
                       value={field.value ?? null}
+                      disabled={disabled}
                       onChange={field.onChange}
                       placeholder={t('replenishmentDatePlaceholder')}
                     />
@@ -227,6 +193,7 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
                     <Input
                       className="mt-2 max-w-xs"
                       value={field.value ?? ''}
+                      disabled={disabled}
                       onChange={field.onChange}
                       placeholder={t('lotNumberPlaceholder')}
                     />
@@ -241,7 +208,10 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
               <Label className="text-sm font-medium">
                 {t('serialNumbers')}
               </Label>
-              <SerialChips serials={serialNumbers} />
+              <SerialChips
+                serials={serialNumbers}
+                onChange={setSerialNumbers}
+              />
             </div>
 
             {/* Acciones */}
@@ -250,17 +220,25 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
                 type="button"
                 variant="outline"
                 onClick={() => form.reset()}
+                disabled={isSubmitting}
                 className="w-full sm:w-auto"
               >
                 {t('cancel')}
               </Button>
               <Button
                 type="submit"
+                disabled={disabled || hasFormErrors}
                 className="text-accent bg-title hover:bg-accent-foreground w-full sm:w-auto"
               >
                 {t('saveChanges')}
               </Button>
             </div>
+            {/* Mostrar error del form (zod) para reason si existe */}
+            {form.formState.errors.reason?.message ? (
+              <div className="text-destructive mt-2 text-sm">
+                {String(form.formState.errors.reason.message)}
+              </div>
+            ) : null}
           </div>
         </div>
       </form>
@@ -269,8 +247,16 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
         open={showUpdateReason}
         onOpenChange={setShowUpdateReason}
         value={updateReason}
-        onChange={setUpdateReason}
-        onConfirm={handleConfirmUpdateAvailable}
+        onChange={(v) => {
+          setUpdateReason(v);
+          form.setValue('reason', v, { shouldValidate: true });
+        }}
+        onConfirm={() => {
+          // trigger validation when the dialog is confirmed/closed
+          void form.trigger('reason');
+          setShowUpdateReason(false);
+        }}
+        minLength={10}
       />
     </Form>
   );
