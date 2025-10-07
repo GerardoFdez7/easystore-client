@@ -892,7 +892,7 @@
       "createdAt": "Creación",
       "name": "Nombre",
       "updatedAt": "Actualización",
-      "placeholder": "Ordenar por"
+      "placeholder": "Ordenar"
     },
     "sortOrder": {
       "placeholder": "Orden",
@@ -933,7 +933,7 @@
     "viewProducts": "Ver Productos",
     "AddStock": {
       "searchProducts": "Buscar productos...",
-      "includeArchived": "Incluir productos archivados",
+      "includeArchived": "Archivados",
       "variantCount": "{count, plural, =1 {1 variante} other {# variantes}}",
       "select": "Seleccionar",
       "selected": "Seleccionado",
@@ -1076,6 +1076,9 @@
     "addCategory": "Agregar categoría",
     "searchPlaceholder": "Buscar categorías...",
     "categoryCount": "subcategorías",
+    "categoryTree": "Árbol de Categorías",
+    "categoryTreeButton": "Árbol",
+    "categoryTreeDescription": "Explora rápidamente todas tus categorías y subcategorías de productos.",
     "expandAll": "Expandir todo",
     "collapseAll": "Contraer todo",
     "title": "¿Eliminar esta categoría?",
@@ -1083,7 +1086,17 @@
     "cancel": "Cancelar",
     "delete": "Eliminar",
     "edit": "Editar",
-    "deleting": "Eliminando…"
+    "deleting": "Eliminando…",
+    "showSiblingCategories": "Mostrar categorías hermanas",
+    "allCategories": "Categorías padres",
+    "errorTitle": "Error al cargar categorías",
+    "errorDescription": "Hubo un error al cargar las categorías. Por favor, inténtalo de nuevo.",
+    "noCategoriesTitle": "Aún no hay categorías",
+    "noCategoriesDescription": "Comienza a organizar tu tienda creando tu primera categoría.",
+    "noSubcategoriesTitle": "Sin subcategorías",
+    "noSubcategoriesDescription": "Esta categoría aún no tiene subcategorías.",
+    "noSearchResultsTitle": "No se encontraron resultados",
+    "noSearchResultsDescription": "Intenta ajustar tus términos de búsqueda o navega por todas las categorías."
   },
   "CategoryDetail": {
     "welcomeDetailCategory": "Detalle de categoría",

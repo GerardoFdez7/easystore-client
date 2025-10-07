@@ -69,6 +69,10 @@ function Combobox({
 }: ComboboxProps) {
   const [internalOpen, setInternalOpen] = React.useState(false);
   const [search, setSearch] = React.useState('');
+  const [triggerWidth, setTriggerWidth] = React.useState<string | undefined>(
+    undefined,
+  );
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
 
   // Use controlled state if provided, otherwise use internal state
   const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
@@ -89,16 +93,33 @@ function Combobox({
     [value, onValueChange, setOpen, serverSide],
   );
 
-  const triggerWidth = width
-    ? typeof width === 'number'
-      ? `${width}px`
-      : width
-    : undefined;
+  // Calculate trigger width based on custom width prop or actual trigger element width
+  const calculatedTriggerWidth = React.useMemo(() => {
+    if (width) {
+      return typeof width === 'number' ? `${width}px` : width;
+    }
+    return triggerWidth;
+  }, [width, triggerWidth]);
+
+  // Measure trigger width when component mounts or opens (only for sm+ devices)
+  React.useEffect(() => {
+    if (open && triggerRef.current && !width) {
+      // Check if screen width is sm+ (640px or more)
+      const isSmallScreen = window.innerWidth < 640;
+      if (!isSmallScreen) {
+        const rect = triggerRef.current.getBoundingClientRect();
+        setTriggerWidth(`${rect.width}px`);
+      } else {
+        setTriggerWidth(undefined);
+      }
+    }
+  }, [open, width]);
 
   return (
     <Popover open={open} onOpenChange={setOpen} modal={true}>
       <PopoverTrigger asChild>
         <Button
+          ref={triggerRef}
           variant="outline"
           role="combobox"
           aria-expanded={open}
@@ -107,7 +128,11 @@ function Combobox({
             !selectedOption && 'text-muted-foreground',
             className,
           )}
-          style={triggerWidth ? { width: triggerWidth } : undefined}
+          style={
+            calculatedTriggerWidth
+              ? { width: calculatedTriggerWidth }
+              : undefined
+          }
           disabled={disabled}
         >
           {selectedOption ? selectedOption.label : placeholder}
@@ -116,7 +141,9 @@ function Combobox({
       </PopoverTrigger>
       <PopoverContent
         className="p-0"
-        style={triggerWidth ? { width: triggerWidth } : undefined}
+        style={
+          calculatedTriggerWidth ? { width: calculatedTriggerWidth } : undefined
+        }
         side={side}
         align={align}
         sideOffset={sideOffset}

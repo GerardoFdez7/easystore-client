@@ -1,9 +1,10 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import CategoryCard from '@molecules/categories/CategoryCard';
-import { useRouter, useParams } from 'next/navigation';
-import { useDeleteCategory } from '@hooks/domains/category';
+import { useMemo, useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useDeleteCategory, CategorySummary } from '@hooks/domains/category';
+import { nameToSlug } from '@lib/utils/path-utils';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -14,16 +15,17 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from '@shadcn/ui/alert-dialog';
-import { useTranslations } from 'next-intl';
-import { CategorySummary } from '@hooks/domains/category/useCategories';
+import CategoryCard from '@molecules/categories/CategoryCard';
+import CategoryCardSkeleton from '@molecules/categories/CategoryCardSkeleton';
 
-type Props = {
+interface CategoryGridProps {
   categories: CategorySummary[];
   loading: boolean;
   query?: string;
-  parentPath?: string; // For nested navigation like "electronics/computers"
+  parentPath?: string; // For nested navigation
   limit?: number;
-};
+  hideCount?: boolean;
+}
 
 const normalize = (s: string) =>
   s
@@ -38,10 +40,9 @@ export default function CategoryGrid({
   query = '',
   parentPath = '',
   limit = 25,
-}: Props) {
+  hideCount = false,
+}: CategoryGridProps) {
   const router = useRouter();
-  const params = useParams<{ locale?: string; path?: string[] }>();
-  const locale = params?.locale;
   const t = useTranslations('Category');
 
   const { remove, loading: deleting } = useDeleteCategory();
@@ -49,17 +50,28 @@ export default function CategoryGrid({
   const [open, setOpen] = useState(false);
   const [targetId, setTargetId] = useState<string | null>(null);
 
-  const askDelete = (id: string) => {
+  const askDelete = useCallback((id: string) => {
     setTargetId(id);
     setOpen(true);
-  };
+  }, []);
 
-  const confirmDelete = async () => {
+  const confirmDelete = useCallback(async () => {
     if (!targetId) return;
-    await remove(targetId);
-    setOpen(false);
-    setTargetId(null);
-  };
+
+    try {
+      await remove(targetId);
+    } finally {
+      setOpen(false);
+      setTargetId(null);
+    }
+  }, [targetId, remove]);
+
+  const handleDialogClose = useCallback((isOpen: boolean) => {
+    setOpen(isOpen);
+    if (!isOpen) {
+      setTargetId(null);
+    }
+  }, []);
 
   const qn = normalize(query);
   const filtered = useMemo(() => {
@@ -67,63 +79,96 @@ export default function CategoryGrid({
     return categories.filter((c) => normalize(c.name).includes(qn));
   }, [categories, qn]);
 
-  const goEdit = (id: string) => {
-    router.push(locale ? `/${locale}/categories/${id}` : `/categories/${id}`);
-  };
+  const goEdit = useCallback(
+    (id: string) => {
+      router.push(`/categories/${id}`);
+    },
+    [router],
+  );
 
-  const handleCategoryClick = (categoryName: string) => {
-    const categorySlug = categoryName.toLowerCase().replace(/\s+/g, '-');
-    const newPath = parentPath ? `${parentPath}/${categorySlug}` : categorySlug;
+  const handleCategoryClick = useCallback(
+    (categoryName: string) => {
+      const categorySlug = nameToSlug(categoryName);
+      const newPath = parentPath
+        ? `${parentPath}/${categorySlug}`
+        : categorySlug;
+      const href = `/categories/${newPath}`;
+      router.push(href);
+    },
+    [parentPath, router],
+  );
 
-    const href = locale
-      ? `/${locale}/categories/${newPath}`
-      : `/categories/${newPath}`;
+  const getCategoryHref = useCallback(
+    (categoryName: string) => {
+      const categorySlug = nameToSlug(categoryName);
+      const newPath = parentPath
+        ? `${parentPath}/${categorySlug}`
+        : categorySlug;
+      return `/categories/${newPath}`;
+    },
+    [parentPath],
+  );
 
-    router.push(href);
-  };
+  const skeletonItems = useMemo(
+    () =>
+      Array.from({ length: limit }, (_, i) => (
+        <CategoryCardSkeleton key={`skeleton-${i}`} />
+      )),
+    [limit],
+  );
 
   return (
-    <div className="grid w-full [grid-template-columns:repeat(auto-fill,minmax(180px,1fr))] gap-4">
-      {loading && filtered.length === 0
-        ? Array.from({ length: limit }).map((_, i) => (
-            <div
-              key={`skeleton-${i}`}
-              className="bg-muted h-32 w-full animate-pulse rounded-md"
-            />
-          ))
-        : filtered.map((c) => (
-            <CategoryCard
-              key={c.id}
-              name={c.name}
-              cover={c.cover}
-              count={c.count}
-              href="#"
-              onClick={() => handleCategoryClick(c.name)}
-              onEdit={() => goEdit(c.id)}
-              onDelete={() => askDelete(c.id)}
-            />
-          ))}
+    <>
+      <section
+        className="3xl:grid-cols-6 grid w-full grid-cols-1 justify-items-center gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+        role="grid"
+        aria-label="categories Grid"
+        aria-busy={loading}
+      >
+        {loading
+          ? skeletonItems
+          : filtered.map((category) => (
+              <CategoryCard
+                key={category.id}
+                name={category.name}
+                cover={category.cover}
+                count={category.count}
+                href={getCategoryHref(category.name)}
+                onClick={() => handleCategoryClick(category.name)}
+                onEdit={() => goEdit(category.id)}
+                onDelete={() => askDelete(category.id)}
+                hideCount={hideCount}
+              />
+            ))}
+      </section>
 
-      <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogContent>
+      <AlertDialog open={open} onOpenChange={handleDialogClose}>
+        <AlertDialogContent
+          role="alertdialog"
+          aria-labelledby="delete-title"
+          aria-describedby="delete-description"
+        >
           <AlertDialogHeader>
-            <AlertDialogTitle>{t('title')}</AlertDialogTitle>
-            <AlertDialogDescription>{t('description')}</AlertDialogDescription>
+            <AlertDialogTitle id="delete-title">{t('title')}</AlertDialogTitle>
+            <AlertDialogDescription id="delete-description">
+              {t('description')}
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleting}>
+            <AlertDialogCancel disabled={deleting} aria-label="cancel Delete">
               {t('cancel')}
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={() => void confirmDelete()}
               disabled={deleting}
-              className="text-accent bg-title hover:bg-accent-foreground"
+              className="text-accent bg-error hover:bg-destructive/90"
+              aria-label={deleting ? 'deleting Category' : 'confirm Delete'}
             >
               {deleting ? t('deleting') : t('delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+    </>
   );
 }

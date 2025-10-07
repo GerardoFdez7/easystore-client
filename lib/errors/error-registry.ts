@@ -193,6 +193,7 @@ const httpStatusHandlers: ErrorHandler[] = [
         'findInventory',
         'getAllAddresses',
         'getAllProducts',
+        'getAllCategories',
       ];
 
       // Check if this error comes from an expected operation

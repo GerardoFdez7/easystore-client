@@ -37,9 +37,10 @@ query findAllCategories(
   $page: Int = 1
   $limit: Int = 25
   $name: String = ""
-  $parentId: ID = ""
-  $sortBy: SortBy = CREATED_AT
-  $sortOrder: SortOrder = DESC
+  $parentId: ID = null
+  $sortBy: SortBy = NAME
+  $sortOrder: SortOrder = ASC
+  $includeSubcategories: Boolean = false
 ) {
   getAllCategories(
     page: $page
@@ -48,6 +49,7 @@ query findAllCategories(
     parentId: $parentId
     sortBy: $sortBy
     sortOrder: $sortOrder
+    includeSubcategories: $includeSubcategories
   ) {
     categories {
       id
@@ -72,14 +74,8 @@ query findAllCategories(
   }
 }
 
-query findCategoriesTree(
-  $sortBy: SortBy = NAME
-  $sortOrder: SortOrder = DESC
-) {
-  getAllCategories(
-    sortBy: $sortBy
-    sortOrder: $sortOrder
-  ) {
+query findCategoriesTree($sortBy: SortBy = NAME, $sortOrder: SortOrder = ASC) {
+  getAllCategories(sortBy: $sortBy, sortOrder: $sortOrder) {
     categories {
       id
       name
@@ -104,11 +100,6 @@ query findCategoriesTree(
                 id
                 parentId
                 name
-              }
-              subCategories {
-                id
-                parentId
-                name
                 subCategories {
                   id
                   parentId
@@ -125,6 +116,11 @@ query findCategoriesTree(
                         id
                         parentId
                         name
+                        subCategories {
+                          id
+                          parentId
+                          name
+                        }
                       }
                     }
                   }

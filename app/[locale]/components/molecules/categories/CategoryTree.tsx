@@ -1,48 +1,105 @@
 'use client';
 
-import { ChevronRight } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, memo, useMemo } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Button } from '@shadcn/ui/button';
+import { ChevronRight } from 'lucide-react';
 import { useCategoriesTree, CategoryTreeNode } from '@hooks/domains/category';
+import { nameToSlug } from '@lib/utils/path-utils';
+import { Button } from '@shadcn/ui/button';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from '@shadcn/ui/sheet';
 
-function TreeItem({
-  node,
-  level = 0,
-  forcedOpen,
-}: {
+interface TreeItemProps {
   node: CategoryTreeNode;
   level?: number;
   forcedOpen?: boolean;
-}) {
-  const [open, setOpen] = useState(false);
+}
+
+const TreeItem = memo(function TreeItem({
+  node,
+  level = 0,
+  forcedOpen,
+}: TreeItemProps) {
+  const [open, setOpen] = useState(true);
   const hasChildren = !!node.subCategories?.length;
+  const router = useRouter();
+  const params = useParams<{ locale?: string }>();
+  const locale = params?.locale;
 
   useEffect(() => {
     if (forcedOpen !== undefined) setOpen(forcedOpen);
   }, [forcedOpen]);
 
+  const handleToggleExpand = useCallback(() => {
+    if (hasChildren) {
+      setOpen((v) => !v);
+    }
+  }, [hasChildren]);
+
+  const handleCategoryClick = useCallback(() => {
+    const categorySlug = nameToSlug(node.name);
+    const href = locale
+      ? `/${locale}/categories/${categorySlug}`
+      : `/categories/${categorySlug}`;
+    router.push(href);
+  }, [node.name, locale, router]);
+
+  const paddingLeft = useMemo(() => (level ? 'pl-1' : ''), [level]);
+
   return (
-    <div>
-      <Button
-        variant="ghost"
-        size="sm"
-        className="text-text hover:bg-hover w-full justify-start gap-2 py-1 text-left"
-        onClick={() => hasChildren && setOpen((v) => !v)}
-        aria-expanded={hasChildren ? open : undefined}
-      >
-        {hasChildren ? (
-          <ChevronRight
-            className={`h-4 w-4 transition-transform duration-200 ${open ? 'rotate-90' : ''}`}
-          />
-        ) : (
-          <span className="inline-block h-4 w-4" />
-        )}
-        <span className={level ? 'pl-1' : ''}>{node.name}</span>
-      </Button>
+    <div
+      role="treeitem"
+      aria-expanded={hasChildren ? open : undefined}
+      aria-selected={false}
+    >
+      <div className="flex w-full items-center">
+        <Button
+          variant="ghost"
+          size="sm"
+          className={`text-text flex-shrink-0 justify-start gap-2 py-1 ${
+            hasChildren ? 'hover:bg-hover cursor-pointer' : 'cursor-default'
+          }`}
+          onClick={handleToggleExpand}
+          aria-expanded={hasChildren ? open : undefined}
+          aria-label={
+            hasChildren
+              ? open
+                ? 'Collapse category'
+                : 'Expand category'
+              : undefined
+          }
+          disabled={!hasChildren}
+          type="button"
+        >
+          {hasChildren ? (
+            <ChevronRight
+              className={`h-4 w-4 transition-transform duration-200 ${open ? 'rotate-90' : ''}`}
+              aria-hidden="true"
+            />
+          ) : (
+            <span className="inline-block h-4 w-4" aria-hidden="true" />
+          )}
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-text hover:bg-hover flex-1 justify-start py-1 text-left"
+          onClick={handleCategoryClick}
+          aria-label={`Navigate to ${node.name} category`}
+          type="button"
+        >
+          <span className={paddingLeft}>{node.name}</span>
+        </Button>
+      </div>
 
       {open && hasChildren && (
-        <div className="pl-5">
+        <div className="pl-5" role="group">
           {(node.subCategories ?? []).map((child) => (
             <TreeItem
               key={child.id}
@@ -55,42 +112,66 @@ function TreeItem({
       )}
     </div>
   );
+});
+
+interface CategoryTreeProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-export default function CategoryTree() {
-  const [allOpen, setAllOpen] = useState(false);
+export default function CategoryTree({
+  open,
+  onOpenChange,
+}: CategoryTreeProps) {
+  const [allOpen, setAllOpen] = useState(true);
   const t = useTranslations('Category');
 
   const { categories: nodes, loading, error } = useCategoriesTree();
 
-  const handleToggleAll = () => setAllOpen((v) => !v);
+  const handleToggleAll = useCallback(() => {
+    setAllOpen((v) => !v);
+  }, []);
 
   return (
-    <div className="rounded-lg p-4">
-      <div className="-mt-4 mb-2 flex items-center justify-items-start">
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={handleToggleAll}
-          aria-pressed={allOpen}
-        >
-          {allOpen ? t('collapseAll') : t('expandAll')}
-        </Button>
-      </div>
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent
+        className="flex h-full flex-col"
+        role="dialog"
+        aria-labelledby="category-tree-title"
+        aria-describedby="category-tree-description"
+      >
+        <SheetHeader className="flex-shrink-0">
+          <SheetTitle id="category-tree-title">{t('categoryTree')}</SheetTitle>
+          <SheetDescription id="category-tree-description">
+            {t('categoryTreeDescription')}
+          </SheetDescription>
+        </SheetHeader>
+        <div className="ml-4 flex-1 overflow-y-auto pb-4">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleToggleAll}
+            aria-pressed={allOpen}
+            aria-label={allOpen ? t('collapseAll') : t('expandAll')}
+            type="button"
+            className="mb-4"
+          >
+            {allOpen ? t('collapseAll') : t('expandAll')}
+          </Button>
 
-      {loading && (
-        <div className="space-y-1">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div
-              key={`skeleton-${i}`}
-              className="bg-muted h-7 animate-pulse rounded"
-            />
-          ))}
+          {!loading && !error && (
+            <nav
+              role="tree"
+              aria-label="category Navigation"
+              className="space-y-1"
+            >
+              {nodes.map((n) => (
+                <TreeItem key={n.id} node={n} forcedOpen={allOpen} />
+              ))}
+            </nav>
+          )}
         </div>
-      )}
-      {!loading &&
-        !error &&
-        nodes.map((n) => <TreeItem key={n.id} node={n} forcedOpen={allOpen} />)}
-    </div>
+      </SheetContent>
+    </Sheet>
   );
 }

@@ -941,7 +941,7 @@
       "createdAt": "Creation",
       "name": "Name",
       "updatedAt": "Update",
-      "placeholder": "Sort by"
+      "placeholder": "Sort"
     },
     "sortOrder": {
       "placeholder": "Order",
@@ -981,7 +981,7 @@
     "AddStock": {
       "searchProducts": "Search products...",
       "selectVariant": "Select Product Variant",
-      "includeArchived": "Include archived products",
+      "includeArchived": "Archived",
       "selectWarehouse": "Select Warehouse",
       "confirmStockCreation": "Confirm Stock Creation",
       "addStock": "Add Stock",
@@ -1120,6 +1120,9 @@
     "addCategory": "Add Category",
     "searchPlaceholder": "Search categories...",
     "categoryCount": "subcategories",
+    "categoryTree": "Category Tree",
+    "categoryTreeButton": "Tree",
+    "categoryTreeDescription": "Browse and navigate through all your product categories and subcategories.",
     "expandAll": "Expand all",
     "collapseAll": "Collapse all",
     "title": "Delete category?",
@@ -1127,7 +1130,19 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "edit": "Edit",
-    "deleting": "Deleting…"
+    "deleting": "Deleting…",
+    "showSiblingCategories": "Show sibling categories",
+    "allCategories": "Parent categories",
+    "errorTitle": "Error loading categories",
+    "errorDescription": "There was an error loading the categories. Please try again.",
+    "noCategoriesTitle": "No categories yet",
+    "noCategoriesDescription": "Start organizing your store by creating your first category.",
+    "noSubcategoriesTitle": "No subcategories",
+    "noSubcategoriesDescription": "This category doesn't have any subcategories yet.",
+    "noSearchResultsTitle": "No results found",
+    "noSearchResultsDescription": "Try adjusting your search terms or browse all categories.",
+    "categoryNotFoundTitle": "Category not found",
+    "categoryNotFoundDescription": "The category you're looking for doesn't exist or may have been removed."
   },
   "CategoryDetail": {
     "welcomeDetailCategory": "Category detail",

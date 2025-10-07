@@ -29,10 +29,10 @@ export const Descending: Story = {
   },
 };
 
-export const WithLimitedOptions: Story = {
+export const WithCustomClass: Story = {
   args: {
-    value: SortOrder.Asc,
+    value: SortOrder.Desc,
     onChange: (value) => console.log('Sort order changed:', value),
-    availableOptions: [SortOrder.Asc],
+    className: 'text-blue-500',
   },
 };

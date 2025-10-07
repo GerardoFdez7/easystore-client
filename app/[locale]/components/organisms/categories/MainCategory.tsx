@@ -1,103 +1,176 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { useState, useMemo } from 'react';
+import { Dices, Search } from 'lucide-react';
+import { SortBy, SortOrder } from '@graphql/generated';
+import { useCategories, useCategoryByPath } from '@hooks/domains/category';
+import EmptyState from '@molecules/shared/EmptyState';
 import CategoryGrid from '@molecules/categories/CategoryGrid';
 import CategoryTree from '@molecules/categories/CategoryTree';
 import CategoryControls from '@molecules/categories/CategoryControls';
-import { useCategories, useCategoriesTree } from '@hooks/domains/category';
-import { SortBy, SortOrder } from '@graphql/generated';
+import CategoryBreadcrumb from '@molecules/categories/CategoryBreadcrumb';
+import LoadMoreButton from '@atoms/shared/LoadMoreButton';
 
-const withLocale = (locale: string | undefined, path: string) =>
-  locale ? `/${locale}${path}` : path;
-
-type Props = {
+interface MainCategoryProps {
   categoryPath?: string[];
-};
+}
 
-export default function MainCategory({ categoryPath = [] }: Props) {
+export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.Name);
   const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.Asc);
-
+  const [treeOpen, setTreeOpen] = useState(false);
   const t = useTranslations('Category');
-  const params = useParams<{ locale?: string }>();
-  const locale = params?.locale;
-  const newHref = withLocale(locale, '/categories/new');
 
-  // Determine parent ID based on category path
-  const parentId = useMemo(() => {
-    // For now, we'll use undefined to show parent categories
-    // In a real implementation, you'd resolve the path to get the actual parent ID
-    return undefined;
-  }, [categoryPath]);
+  // Resolve parent ID from category path
+  const { parentId, loading: pathLoading } = useCategoryByPath(categoryPath);
 
   // Fetch categories for the grid
   const {
     items: categories,
     loading: categoriesLoading,
-    refetch: refetchCategories,
+    error,
+    hasMore,
+    handleLoadMore,
+    resetPage,
   } = useCategories({
-    page: 1,
     limit: 25,
     name: searchTerm,
-    parentId,
+    parentId: parentId || undefined,
     sortBy,
     sortOrder,
+    includeSubcategories: !searchTerm.trim(), // Disable subcategories when searching
   });
 
-  // Fetch tree data for the sidebar
-  const {
-    categories: treeData,
-    loading: treeLoading,
-    error: treeError,
-  } = useCategoriesTree({
-    sortBy,
-    sortOrder,
-  });
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      setSearchTerm(value);
+      resetPage(); // Reset page when search changes
+    },
+    [resetPage],
+  );
 
-  const handleSearchChange = (value: string) => {
-    setSearchTerm(value);
-  };
+  const handleSortByChange = useCallback(
+    (value: SortBy) => {
+      setSortBy(value);
+      resetPage(); // Reset page when sort changes
+    },
+    [resetPage],
+  );
 
-  const handleSortByChange = (value: SortBy) => {
-    setSortBy(value);
-  };
+  const handleSortOrderChange = useCallback(
+    (value: SortOrder) => {
+      setSortOrder(value);
+      resetPage(); // Reset page when sort order changes
+    },
+    [resetPage],
+  );
 
-  const handleSortOrderChange = (value: SortOrder) => {
-    setSortOrder(value);
-  };
+  const handleTreeToggle = useCallback(() => {
+    setTreeOpen((prev) => !prev);
+  }, []);
 
-  const parentPath = categoryPath.join('/');
+  const handleLoadMoreClick = useCallback(() => {
+    void handleLoadMore();
+  }, [handleLoadMore]);
+
+  // Reset page when parentId changes
+  useEffect(() => {
+    resetPage();
+  }, [parentId, resetPage]);
+
+  const parentPath = useMemo(() => categoryPath.join('/'), [categoryPath]);
+  const newHref = useMemo(() => '/categories/new', []);
+  const isLoading = useMemo(
+    () => categoriesLoading || pathLoading,
+    [categoriesLoading, pathLoading],
+  );
+  const controlsLoading = useMemo(
+    () => categoriesLoading || pathLoading || !!error,
+    [categoriesLoading, pathLoading, error],
+  );
+
+  if (
+    categoryPath.length === 0 &&
+    categories.length === 0 &&
+    !searchTerm.trim() &&
+    !controlsLoading
+  ) {
+    return (
+      <main
+        className="mx-auto w-full px-4"
+        role="main"
+        aria-labelledby="categories-title"
+      >
+        <EmptyState
+          icon={Dices}
+          title={t('noCategoriesTitle')}
+          description={t('noCategoriesDescription')}
+        />
+      </main>
+    );
+  }
 
   return (
-    <main className="2xl:m-5">
-      <section className="mx-auto grid w-full max-w-screen-2xl gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_18rem] lg:px-8">
-        <div className="flex flex-col gap-4">
-          <CategoryControls
-            searchTerm={searchTerm}
-            onSearchChange={handleSearchChange}
-            sortBy={sortBy}
-            updateSortBy={handleSortByChange}
-            sortOrder={sortOrder}
-            updateSortOrder={handleSortOrderChange}
-            searchPlaceholder={t('searchPlaceholder')}
-            addButtonHref={newHref}
-            addButtonText={t('addCategory')}
+    <main
+      className="mx-auto w-full px-4"
+      role="main"
+      aria-labelledby="main-categories-title"
+    >
+      <div className="flex flex-col gap-4">
+        {categoryPath.length > 0 && (
+          <CategoryBreadcrumb categoryPath={categoryPath} />
+        )}
+        <CategoryControls
+          searchTerm={searchTerm}
+          onSearchChange={handleSearchChange}
+          sortBy={sortBy}
+          updateSortBy={handleSortByChange}
+          sortOrder={sortOrder}
+          updateSortOrder={handleSortOrderChange}
+          searchPlaceholder={t('searchPlaceholder')}
+          addButtonHref={newHref}
+          addButtonText={t('addCategory')}
+          onTreeToggle={handleTreeToggle}
+          treeButtonText={t('categoryTreeButton')}
+          loading={controlsLoading}
+        />
+        {/* If there are categories but search returned no results */}
+        {searchTerm.trim() && categories.length === 0 && !isLoading ? (
+          <EmptyState
+            icon={Search}
+            title={t('noSearchResultsTitle')}
+            description={t('noSearchResultsDescription')}
           />
+        ) : categoryPath.length > 0 && categories.length === 0 && !isLoading ? (
+          <EmptyState
+            icon={Dices}
+            title={t('noSubcategoriesTitle')}
+            description={t('noSubcategoriesDescription')}
+          />
+        ) : (
           <CategoryGrid
             categories={categories}
-            loading={categoriesLoading}
+            loading={isLoading}
             query={searchTerm}
             parentPath={parentPath}
             limit={25}
+            hideCount={!!searchTerm.trim()}
           />
-        </div>
-        <div className="lg:pl-4">
-          <CategoryTree />
-        </div>
-      </section>
+        )}
+        {hasMore && (
+          <div className="flex justify-center">
+            <LoadMoreButton
+              onClick={handleLoadMoreClick}
+              isLoading={isLoading}
+              disabled={!hasMore}
+              aria-label={t('loadMoreCategories')}
+            />
+          </div>
+        )}
+      </div>
+      <CategoryTree open={treeOpen} onOpenChange={setTreeOpen} />
     </main>
   );
 }

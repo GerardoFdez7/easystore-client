@@ -30,6 +30,7 @@ interface WarehouseManagementDialogProps {
   warehouses?: WarehouseType[];
   loading?: boolean;
   hasMore?: boolean;
+  onLastWarehouseDeleted?: () => void;
 }
 
 type DialogMode = 'list' | 'create' | 'edit';
@@ -40,6 +41,7 @@ export default function WarehouseManagementDialog({
   warehouses: initialWarehouses,
   loading: externalLoading,
   hasMore: externalHasMore,
+  onLastWarehouseDeleted,
 }: WarehouseManagementDialogProps) {
   const t = useTranslations('Inventory.WarehouseManagement');
 
@@ -85,7 +87,22 @@ export default function WarehouseManagementDialog({
   };
 
   const handleDeleteWarehouse = async (warehouseId: string) => {
-    await deleteWarehouse(warehouseId);
+    // Check if this is the last warehouse BEFORE deleting
+    const currentWarehouseCount = warehouses.length;
+    const isLastWarehouse = currentWarehouseCount === 1;
+
+    const success = await deleteWarehouse(warehouseId);
+
+    if (success) {
+      handleReset();
+
+      // If this was the last warehouse, trigger the callback and refetch warehouses
+      if (isLastWarehouse) {
+        onLastWarehouseDeleted?.();
+        onOpenChange(false);
+      }
+    }
+    return success;
   };
 
   const handleWarehouseSubmit = async (

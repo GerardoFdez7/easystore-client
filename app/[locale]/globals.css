@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+@theme {
+  --breakpoint-3xl: 112.5rem; /* 1800px converted to rem (1800/16 = 112.5) */
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {

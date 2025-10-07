@@ -9,8 +9,10 @@ import { Card, CardContent, CardHeader } from '@shadcn/ui/card';
 import SearchBar from '@atoms/shared/SearchBar';
 import ProductVariantGroup from '@molecules/inventory/ProductVariantGroup';
 import EmptyState from '@molecules/shared/EmptyState';
-import { SortControls } from '@molecules/shared/SortControls';
+import SortBySelect from '@atoms/shared/SortBySelect';
+import SortOrderSelect from '@atoms/shared/SortOrderSelect';
 import LoadMoreButton from '@atoms/shared/LoadMoreButton';
+import { SortBy } from '@graphql/generated';
 
 interface VariantSelectorProps {
   onVariantSelect: (
@@ -67,30 +69,46 @@ const VariantSelector: React.FC<VariantSelectorProps> = ({
         />
 
         {/* Filters Row */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <SortControls
-            sortBy={sortBy}
-            updateSortBy={updateSortBy}
-            sortOrder={sortOrder}
-            updateSortOrder={updateSortOrder}
-          />
-
-          {/* Archived Switch */}
-          <div className="flex items-center gap-2">
-            <Switch
-              id="includeSoftDeleted"
-              checked={includeSoftDeleted}
-              onCheckedChange={updateIncludeSoftDeleted}
-              aria-describedby="includeSoftDeleted-description"
+        <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-row items-center gap-4">
+            {/* Archived Switch */}
+            <div className="flex flex-col gap-1">
+              <Label
+                htmlFor="includeSoftDeleted"
+                className="text-sm"
+                id="includeSoftDeleted-description"
+              >
+                {t('includeArchived')}
+              </Label>
+              <Switch
+                id="includeSoftDeleted"
+                checked={includeSoftDeleted}
+                onCheckedChange={updateIncludeSoftDeleted}
+                aria-describedby="includeSoftDeleted-description"
+              />
+            </div>
+            <SortBySelect
+              value={sortBy}
+              onChange={(value) => {
+                if (value) {
+                  updateSortBy(value);
+                }
+              }}
+              availableOptions={[
+                SortBy.Name,
+                SortBy.CreatedAt,
+                SortBy.UpdatedAt,
+              ]}
             />
-            <Label
-              htmlFor="includeSoftDeleted"
-              className="text-sm"
-              id="includeSoftDeleted-description"
-            >
-              {t('includeArchived')}
-            </Label>
           </div>
+          <SortOrderSelect
+            value={sortOrder}
+            onChange={(value) => {
+              if (value) {
+                updateSortOrder(value);
+              }
+            }}
+          />
         </div>
       </div>
 
@@ -104,7 +122,7 @@ const VariantSelector: React.FC<VariantSelectorProps> = ({
                 <CardHeader className="w-full pb-3">
                   <div className="flex items-center gap-2">
                     <Skeleton className="h-5 w-5 rounded-sm" />
-                    <Skeleton className="h-5 w-48" />
+                    <Skeleton className="h-5 w-32 sm:w-48" />
                   </div>
                   <div className="flex items-center gap-2">
                     <Skeleton className="h-5 w-20 rounded-full" />

@@ -29,11 +29,11 @@ function buildSchema(t: ReturnType<typeof useTranslations>) {
       .string()
       .trim()
       .min(1, { message: t('titleRequired') })
-      .max(120, { message: t('titleTooLong', { max: 120 }) }),
+      .max(100, { message: t('titleTooLong', { max: 100 }) }),
     description: z
       .string()
       .trim()
-      .max(1000, { message: t('descriptionTooLong', { max: 1000 }) })
+      .max(200, { message: t('descriptionTooLong', { max: 200 }) })
       .min(10, { message: t('descriptionTooShort', { min: 10 }) }),
     cover: z
       .string()

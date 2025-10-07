@@ -894,7 +894,7 @@
       "createdAt": "Creazione",
       "name": "Nome",
       "updatedAt": "Aggiornamento",
-      "placeholder": "Ordina per"
+      "placeholder": "Ordina"
     },
     "sortOrder": {
       "placeholder": "Ordine",
@@ -936,7 +936,7 @@
     "showingResults": "Mostrando {start} a {end} di {total} risultati",
     "AddStock": {
       "searchProducts": "Cerca prodotti...",
-      "includeArchived": "Includi prodotti archiviati",
+      "includeArchived": "Archivati",
       "variantCount": "{count, plural, =1 {1 variante} other {# varianti}}",
       "select": "Seleziona",
       "selected": "Selezionato",
@@ -1081,6 +1081,9 @@
     "addCategory": "Aggiungi categoria",
     "searchPlaceholder": "Cerca categorie...",
     "categoryCount": "sottocategorie",
+    "categoryTree": "Albero delle Categorie",
+    "categoryTreeButton": "Albero",
+    "categoryTreeDescription": "Sfoglia e naviga attraverso tutte le tue categorie di prodotti organizzate in una struttura ad albero",
     "expandAll": "Espandi tutto",
     "collapseAll": "Comprimi tutto",
     "title": "Eliminare la categoria?",
@@ -1088,7 +1091,17 @@
     "cancel": "Annulla",
     "delete": "Elimina",
     "edit": "Modifica",
-    "deleting": "Eliminazione in corso…"
+    "deleting": "Eliminazione…",
+    "showSiblingCategories": "Mostra categorie sorelle",
+    "allCategories": "Categorie padre",
+    "errorTitle": "Errore nel caricamento delle categorie",
+    "errorDescription": "Si è verificato un errore nel caricamento delle categorie. Riprova.",
+    "noCategoriesTitle": "Nessuna categoria ancora",
+    "noCategoriesDescription": "Inizia a organizzare la tua boutique creando la tua prima categoria.",
+    "noSubcategoriesTitle": "Nessuna sottocategoria",
+    "noSubcategoriesDescription": "Questa categoria non ha ancora sottocategorie.",
+    "noSearchResultsTitle": "Nessun risultato trovato",
+    "noSearchResultsDescription": "Prova ad aggiustare i termini di ricerca o sfoglia tutte le categorie."
   },
   "CategoryDetail": {
     "welcomeDetailCategory": "Dettaglio categoria",

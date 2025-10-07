@@ -1,5 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import CategoryDetail from '@templates/categories/CategoryDetail';
+import type { Meta, StoryObj } from '@storybook/nextjs';
+// import CategoryDetail from '@templates/categories/CategoryDetail';
+
+// Temporary placeholder component since CategoryDetail is commented out
+const CategoryDetail = ({ id }: { id: string }) => (
+  <div className="p-4">
+    <h2>Category Detail Template (Under Development)</h2>
+    <p>ID: {id}</p>
+  </div>
+);
 
 const meta = {
   title: 'Templates/CategoryDetail',

@@ -24,7 +24,7 @@ export default function InventoryActionButtons({
         <Button
           variant="outline"
           onClick={() => router.push('/inventory/history')}
-          className="flex items-center gap-2"
+          className="flex w-full items-center gap-2 md:w-auto"
         >
           <History className="h-4 w-4" aria-hidden="true" />
           {t('historyButton')}
@@ -35,7 +35,7 @@ export default function InventoryActionButtons({
           <Button
             variant="title"
             onClick={onAddStockClick}
-            className="flex items-center gap-2"
+            className="flex w-full items-center gap-2 md:w-auto"
           >
             <Plus className="h-4 w-4" aria-hidden="true" />
             {t('addStockButton')}
@@ -45,7 +45,7 @@ export default function InventoryActionButtons({
           <Button
             variant="title"
             onClick={onManageWarehousesClick}
-            className="flex items-center gap-2"
+            className="flex w-full items-center gap-2 md:w-auto"
           >
             <Warehouse className="h-4 w-4" aria-hidden="true" />
             {t('manageWarehousesButton')}

@@ -1,6 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import MainDetailCategory from '@organisms/categories/detail-category/MainDetailCategory';
+// import MainDetailCategory from '@organisms/categories/detail-category/MainDetailCategory';
 import { NextIntlClientProvider } from 'next-intl';
+
+// Temporary placeholder component since MainDetailCategory is commented out
+const MainDetailCategory = ({ id }: { id: string }) => (
+  <div className="p-4">
+    <h2>Category Detail Component (Under Development)</h2>
+    <p>ID: {id}</p>
+  </div>
+);
 
 const messages = {
   CategoryDetail: {
