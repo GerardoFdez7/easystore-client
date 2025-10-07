@@ -39,7 +39,7 @@ export function ProductTable({
   const t = useTranslations('Products');
 
   return (
-    <div className="overflow-hidden rounded-md border">
+    <>
       <TabFilterProducts
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
@@ -48,7 +48,6 @@ export function ProductTable({
         isArchived={isArchived}
         onDeleteComplete={onDeleteComplete}
       />
-
       <Table>
         <TableHeader className="text-[12px] sm:text-[14px]">
           <TableRow>
@@ -99,6 +98,6 @@ export function ProductTable({
           )}
         </TableBody>
       </Table>
-    </div>
+    </>
   );
 }

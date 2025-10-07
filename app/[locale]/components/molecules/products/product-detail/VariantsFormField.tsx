@@ -50,70 +50,68 @@ export default function VariantsFormField({
               <ButtonAddVariant productId={productId} />
             </div>
             <FormControl>
-              <div className="overflow-hidden rounded-lg border shadow-lg">
-                <Table className="bg-card">
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="text-title text-center">
-                        {t('variants')}
-                      </TableHead>
-                      <TableHead className="text-title text-left">
-                        {t('price')}
-                      </TableHead>
-                      <TableHead className="text-title text-left">
-                        {t('condition')}
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {variants.length > 0 ? (
-                      variants.map((variant: Variant) => (
-                        <TableRow
-                          key={variant.id}
-                          className="cursor-pointer transition-colors"
-                          onClick={() => handleRowClick(variant.id)}
-                        >
-                          <TableCell className="pl-5">
-                            <div className="flex items-center gap-3">
-                              <div className="h-10 w-10 overflow-hidden rounded-lg">
-                                <Image
-                                  src={variant.variantCover ?? '/default.webp'}
-                                  alt={
-                                    variant.attributes[0]?.value ||
-                                    'Variant Image'
-                                  }
-                                  width={40}
-                                  height={40}
-                                  className="h-full w-full object-cover"
-                                />
-                              </div>
-                              <span className="text-foreground text-sm">
-                                {variant.attributes[0]?.key}:{' '}
-                                {variant.attributes[0]?.value}
-                              </span>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-title text-center">
+                      {t('variants')}
+                    </TableHead>
+                    <TableHead className="text-title text-left">
+                      {t('price')}
+                    </TableHead>
+                    <TableHead className="text-title text-left">
+                      {t('condition')}
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {variants.length > 0 ? (
+                    variants.map((variant: Variant) => (
+                      <TableRow
+                        key={variant.id}
+                        className="cursor-pointer transition-colors"
+                        onClick={() => handleRowClick(variant.id)}
+                      >
+                        <TableCell className="pl-5">
+                          <div className="flex items-center gap-3">
+                            <div className="h-10 w-10 overflow-hidden rounded-lg">
+                              <Image
+                                src={variant.variantCover ?? '/default.webp'}
+                                alt={
+                                  variant.attributes[0]?.value ||
+                                  'Variant Image'
+                                }
+                                width={40}
+                                height={40}
+                                className="h-full w-full object-cover"
+                              />
                             </div>
-                          </TableCell>
-                          <TableCell className="text-foreground text-sm">
-                            {variant.price}
-                          </TableCell>
-                          <TableCell className="text-foreground text-sm">
-                            {variant.condition}
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell
-                          colSpan={3}
-                          className="text-muted-foreground py-8 text-center"
-                        >
-                          {t('noVariants')}
+                            <span className="text-foreground text-sm">
+                              {variant.attributes[0]?.key}:{' '}
+                              {variant.attributes[0]?.value}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-foreground text-sm">
+                          {variant.price}
+                        </TableCell>
+                        <TableCell className="text-foreground text-sm">
+                          {variant.condition}
                         </TableCell>
                       </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={3}
+                        className="text-muted-foreground py-8 text-center"
+                      >
+                        {t('noVariants')}
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
             </FormControl>
             <FormMessage />
           </FormItem>
