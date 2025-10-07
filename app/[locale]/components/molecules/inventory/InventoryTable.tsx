@@ -18,9 +18,11 @@ import {
   Package,
   Plus,
   ArrowDown01,
-  ArrowUp01,
+  ArrowDown10,
   ArrowDownAZ,
-  ArrowUpAZ,
+  ArrowDownZA,
+  ClockArrowUp,
+  ClockArrowDown,
 } from 'lucide-react';
 import EmptyState from '@molecules/shared/EmptyState';
 import { useTranslations } from 'next-intl';
@@ -72,19 +74,27 @@ export default function InventoryTable({
       return null;
     }
 
-    // Determine if field is numeric or text-based
+    // Determine if field is numeric, text-based, or date-based
     const isNumericField = field === 'available' || field === 'reserved';
-    if (isNumericField) {
+    const isDateField = field === 'date';
+
+    if (isDateField) {
       return sortDirection === 'ASC' ? (
-        <ArrowUp01 className="ml-1 h-4 w-4" />
+        <ClockArrowDown className="ml-1 h-4 w-4" />
       ) : (
+        <ClockArrowUp className="ml-1 h-4 w-4" />
+      );
+    } else if (isNumericField) {
+      return sortDirection === 'ASC' ? (
         <ArrowDown01 className="ml-1 h-4 w-4" />
+      ) : (
+        <ArrowDown10 className="ml-1 h-4 w-4" />
       );
     } else {
       return sortDirection === 'ASC' ? (
-        <ArrowUpAZ className="ml-1 h-4 w-4" />
-      ) : (
         <ArrowDownAZ className="ml-1 h-4 w-4" />
+      ) : (
+        <ArrowDownZA className="ml-1 h-4 w-4" />
       );
     }
   };
@@ -130,38 +140,38 @@ export default function InventoryTable({
               />
             </TableHead>
             <TableHead
-              className="cursor-pointer transition-colors duration-200 select-none"
+              className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
               onClick={() => handleSort('variantFirstAttribute')}
             >
-              <div className="flex items-center">
+              <div className="flex items-center justify-center">
                 {t('productTableHead')}
                 {getSortIcon('variantFirstAttribute')}
               </div>
             </TableHead>
             <TableHead>{t('skuTableHead')}</TableHead>
             <TableHead
-              className="cursor-pointer transition-colors duration-200 select-none"
+              className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
               onClick={() => handleSort('available')}
             >
-              <div className="flex items-center">
+              <div className="flex items-center justify-center">
                 {t('availableTableHead')}
                 {getSortIcon('available')}
               </div>
             </TableHead>
             <TableHead
-              className="cursor-pointer transition-colors duration-200 select-none"
+              className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
               onClick={() => handleSort('reserved')}
             >
-              <div className="flex items-center">
+              <div className="flex items-center justify-center">
                 {t('reservedTableHead')}
                 {getSortIcon('reserved')}
               </div>
             </TableHead>
             <TableHead
-              className="cursor-pointer transition-colors duration-200 select-none"
+              className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
               onClick={() => handleSort('date')}
             >
-              <div className="flex items-center">
+              <div className="flex items-center justify-center">
                 {t('replenishmentDateTableHead')}
                 {getSortIcon('date')}
               </div>
