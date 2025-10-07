@@ -1395,6 +1395,7 @@
     "reservedPlaceholder": "Insira a quantidade reservada",
     "productLocation": "Localização do produto",
     "productLocationPlaceholder": "Insira a localização do produto",
+    "productLocationTooShort": "A localização do produto deve ter pelo menos 10 caracteres",
     "replenishmentDate": "Data estimada de reabastecimento",
     "replenishmentDatePlaceholder": "Selecione uma data",
     "lotNumber": "Número do lote",
@@ -1407,6 +1408,8 @@
     "updateReasonDescription": "Forneça um motivo para atualizar a quantidade disponível",
     "updateReasonLabel": "Motivo",
     "updateReasonPlaceholder": "Insira o motivo da atualização",
+    "createSuccess": "Estoque criado com sucesso",
+    "updateReasonTooShort": "A descrição deve ter pelo menos 10 caracteres",
     "confirm": "Confirmar",
     "deleteStockTitle": "Excluir estoque",
     "deleteStockDescription": "Tem certeza de que deseja excluir este estoque? Esta ação não pode ser desfeita."

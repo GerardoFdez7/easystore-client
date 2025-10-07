@@ -1396,6 +1396,7 @@
     "reservedPlaceholder": "Inserisci la quantità riservata",
     "productLocation": "Posizione del prodotto",
     "productLocationPlaceholder": "Inserisci la posizione del prodotto",
+    "productLocationTooShort": "La posizione del prodotto deve contenere almeno 10 caratteri",
     "replenishmentDate": "Data stimata di riapprovvigionamento",
     "replenishmentDatePlaceholder": "Seleziona una data",
     "lotNumber": "Numero di lotto",
@@ -1408,6 +1409,8 @@
     "updateReasonDescription": "Fornisci un motivo per l’aggiornamento della quantità disponibile",
     "updateReasonLabel": "Motivo",
     "updateReasonPlaceholder": "Inserisci il motivo dell’aggiornamento",
+    "createSuccess": "Stock creato con successo",
+    "updateReasonTooShort": "La descrizione deve contenere almeno 10 caratteri",
     "confirm": "Conferma",
     "deleteStockTitle": "Elimina scorte",
     "deleteStockDescription": "Sei sicuro di voler eliminare queste scorte? Questa azione non può essere annullata."

@@ -19,6 +19,8 @@ type Props = {
   value: string;
   onChange: (v: string) => void;
   onConfirm: () => void;
+  /** Longitud mínima permitida para la razón */
+  minLength?: number;
 };
 
 export default function UpdateReasonDialog({
@@ -27,8 +29,12 @@ export default function UpdateReasonDialog({
   value,
   onChange,
   onConfirm,
+  minLength = 10,
 }: Props) {
   const t = useTranslations('StockDetail');
+
+  const trimmed = (value ?? '').trim();
+  const isValid = trimmed.length >= (minLength ?? 10);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -47,13 +53,26 @@ export default function UpdateReasonDialog({
               value={value}
               onChange={(e) => onChange(e.target.value)}
             />
+            {/* Validación mínima: mostramos mensaje si es demasiado corta */}
+            {!isValid && (
+              <p className="text-destructive mt-2 text-sm">
+                {t('updateReasonTooShort') ||
+                  `Short description must be at least ${minLength} characters`}
+              </p>
+            )}
           </div>
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             {t('cancel')}
           </Button>
-          <Button onClick={onConfirm}>{t('confirm')}</Button>
+          <Button
+            className="text-accent bg-title hover:bg-accent-foreground"
+            onClick={onConfirm}
+            disabled={!isValid}
+          >
+            {t('confirm')}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
