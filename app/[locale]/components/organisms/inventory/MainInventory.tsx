@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { Warehouse, Plus } from 'lucide-react';
 import { FindInventoryQueryVariables } from '@graphql/generated';
@@ -78,13 +78,22 @@ export default function MainInventory() {
     });
   }, [inventory, searchTerm]);
 
-  const handleSortChange = (field: SortField, direction: SortDirection) => {
-    setSortField(field);
-    setSortDirection(direction);
+  const handleSortChange = useCallback(
+    (field: SortField, direction: SortDirection) => {
+      setSortField(field);
+      setSortDirection(direction);
+      void refetch().catch((_error) => {});
+    },
+    [refetch],
+  );
 
-    // Refetch data with new sorting
+  const handleCreateStock = useCallback(() => {
+    setIsAddStockDialogOpen(true);
+  }, []);
+
+  const handleStockAdded = useCallback(() => {
     void refetch().catch((_error) => {});
-  };
+  }, [refetch]);
 
   if (error) {
     return (
@@ -133,7 +142,7 @@ export default function MainInventory() {
         <InventoryTable
           variables={variables}
           inventory={filteredInventory}
-          onCreateStock={() => setIsAddStockDialogOpen(true)}
+          onCreateStock={handleCreateStock}
           onSortChange={handleSortChange}
           sortField={sortField}
           sortDirection={sortDirection}
@@ -142,9 +151,7 @@ export default function MainInventory() {
       <AddStockDialog
         open={isAddStockDialogOpen}
         onOpenChange={setIsAddStockDialogOpen}
-        onStockAdded={() => {
-          void refetch().catch((_error) => {});
-        }}
+        onStockAdded={handleStockAdded}
       />
       <WarehouseManagementDialog
         open={isWarehouseManagementOpen}
