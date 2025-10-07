@@ -12,9 +12,7 @@ import {
 } from '@shadcn/ui/dialog';
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -83,7 +81,7 @@ export default function AddSubcategoriesPicker({
   const Body = (
     <div className="mx-auto w-full max-w-2xl space-y-3">
       <SearchBar
-        placeholder={t('searchCategories')}
+        placeholder={t('searchSubcategories')}
         searchTerm={q}
         onSearchChange={setQ}
       />
@@ -159,11 +157,6 @@ export default function AddSubcategoriesPicker({
               <DrawerTitle>{t('addSubcategories')}</DrawerTitle>
             </DrawerHeader>
             <div className="flex-1 overflow-y-auto px-4">{Body}</div>
-            <DrawerFooter className="pt-2">
-              <DrawerClose asChild>
-                <Button variant="outline">{t('close')}</Button>
-              </DrawerClose>
-            </DrawerFooter>
           </DrawerContent>
         </Drawer>
       ) : (

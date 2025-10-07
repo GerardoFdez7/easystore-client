@@ -9,7 +9,7 @@ import { useTranslations } from 'next-intl';
 
 import AddSubcategoriesPicker, {
   type CategoryItem as CatalogItem,
-} from '@molecules/categories/detail-category/AddSubcategory';
+} from '@molecules/categories/detail/AddSubcategory';
 
 export type CategoryItem = {
   id: string;
