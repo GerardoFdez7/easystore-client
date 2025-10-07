@@ -7,8 +7,6 @@ import BrandManufacturerFormField from '@molecules/products/product-detail/Brand
 import ShortLongDescriptionFormField from '@molecules/products/product-detail/ShortLongDescriptionFormField';
 import TypeProductFormField from '@molecules/products/product-detail/TypeProductFormField';
 import { Form } from '@shadcn/ui/form';
-import { useForm } from 'react-hook-form';
-import { useEffect, useState, useRef } from 'react';
 import MediaUploader from '@organisms/shared/MediaUploader';
 import type { MultipleMediaUploaderRef } from '@molecules/shared/MultipleMediaUploader';
 import type { Sustainability, Category, Variant } from '@lib/types/product';
@@ -17,7 +15,6 @@ import type { Media } from '@lib/graphql/generated';
 import TagsFormField from '@molecules/products/product-detail/TagsFormField';
 import CategoryFormField from '@molecules/products/product-detail/CategoryFormField';
 import SaveButton from '@atoms/shared/SaveButton';
-import { useUpdateProduct, useGetProductById } from '@hooks/domains/products';
 import ProductActions from '@atoms/shared/ProductActions';
 import { useProductMedia } from '@hooks/domains/products/useMultipleMediaPersistence';
 
@@ -25,21 +22,6 @@ interface MainProductDetailProps {
   param: string;
   isNew: boolean;
 }
-
-type ProductFormData = {
-  name: string;
-  brand: string | null;
-  cover: string;
-  longDescription: string | null;
-  shortDescription: string;
-  manufacturer: string | null;
-  productType: 'PHYSICAL' | 'DIGITAL';
-  tags: string[];
-  categories: Category[];
-  variants: Variant[];
-  sustainabilities: Sustainability[];
-  media: string[];
-};
 
 export default function MainProductDetail({
   param,
@@ -228,7 +210,7 @@ export default function MainProductDetail({
           className="w-full space-y-8"
           onSubmit={(e) => {
             e.preventDefault();
-            void form.handleSubmit(onSubmit)(e);
+            void form.handleSubmit(handleSubmit)(e);
           }}
           className="space-y-6"
         >
@@ -236,7 +218,7 @@ export default function MainProductDetail({
           <div className="flex justify-end">
             <ProductActions
               singleMode={true}
-              productId={param}
+              productId={productId}
               productIsArchived={product?.isArchived ?? false}
             />
           </div>
@@ -266,7 +248,7 @@ export default function MainProductDetail({
           <NameFormField />
           <ShortLongDescriptionFormField />
           <CategoryFormField />
-          <VariantsFormField productId={param} />
+          <VariantsFormField productId={productId} />
           <TypeProductFormField />
           <TagsFormField />
           <BrandManufacturerFormField />

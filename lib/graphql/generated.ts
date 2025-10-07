@@ -2092,6 +2092,7 @@ export type FindAllProductsQuery = {
       }> | null;
       variants?: Array<{
         __typename?: 'Variant';
+        id: string;
         barcode?: string | null;
         condition: ConditionEnum;
         ean?: string | null;
@@ -2102,6 +2103,7 @@ export type FindAllProductsQuery = {
         upc?: string | null;
         variantCover?: string | null;
         weight?: number | null;
+        isArchived?: boolean | null;
         attributes: Array<{
           __typename?: 'Attribute';
           key: string;
@@ -7218,6 +7220,10 @@ export const FindAllProductsDocument = {
                           selections: [
                             {
                               kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
                               name: { kind: 'Name', value: 'attributes' },
                               selectionSet: {
                                 kind: 'SelectionSet',
@@ -7372,6 +7378,10 @@ export const FindAllProductsDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'weight' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'isArchived' },
                             },
                           ],
                         },

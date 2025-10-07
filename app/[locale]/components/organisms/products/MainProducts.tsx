@@ -5,7 +5,7 @@ import { ProductGrid } from '@molecules/products/ProductGrid';
 import { useState, useCallback } from 'react';
 import { ProductsToolbar } from '@molecules/products/Toolbar';
 import { FilterType } from '@atoms/products/TabFilterProducts';
-import { useGetAllProducts } from '@hooks/domains/products';
+import { useProductsContext } from '@lib/contexts/ProductsContext';
 import { InputMaybe, TypeEnum } from '@graphql/generated';
 
 export default function MainDashboard() {
@@ -15,13 +15,9 @@ export default function MainDashboard() {
   const [categoryFilter, setCategoryFilter] = useState('');
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('All');
   const [searchTerm, setSearchTerm] = useState('');
-  const { products } = useGetAllProducts({
-    page: 1,
-    limit: 10,
-    includeSoftDeleted: true,
-    name: searchTerm || null,
-    type: typeFilter || null,
-  });
+
+  // Use the products context instead of the hook directly
+  const { products, refreshProducts } = useProductsContext();
 
   // Get the archived status of selected products
   const selectedProductsAreArchived = selectedProducts.map(
@@ -34,9 +30,20 @@ export default function MainDashboard() {
   }, []);
 
   //Search
-  const handleSearch = useCallback((term: string) => {
-    setSearchTerm(term);
-  }, []);
+  const handleSearch = useCallback(
+    (term: string) => {
+      setSearchTerm(term);
+      // Refresh products with new search term
+      void refreshProducts({
+        page: 1,
+        limit: 100,
+        includeSoftDeleted: true,
+        name: term || null,
+        type: typeFilter || null,
+      });
+    },
+    [refreshProducts, typeFilter],
+  );
 
   const handleProductSelect = (productId: string, checked: boolean) => {
     if (checked) {

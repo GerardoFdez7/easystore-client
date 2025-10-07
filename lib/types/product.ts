@@ -28,3 +28,5 @@ export type UploadResult = {
   status: 'success' | 'error';
   message?: string;
 };
+
+export type ProductType = 'PHYSICAL' | 'DIGITAL';

@@ -38,7 +38,6 @@ export default function ShortLongDescriptionFormField() {
                 onChange={(e) => field.onChange(e.target.value)}
                 onBlur={field.onBlur}
                 aria-invalid={!!fieldState.error}
-                className="bg-card w-full"
               />
             </FormControl>
             <FormMessage />
@@ -68,7 +67,6 @@ export default function ShortLongDescriptionFormField() {
                 onChange={(e) => field.onChange(e.target.value)}
                 onBlur={field.onBlur}
                 aria-invalid={!!fieldState.error}
-                className="bg-card w-full"
               />
             </FormControl>
             <FormMessage />

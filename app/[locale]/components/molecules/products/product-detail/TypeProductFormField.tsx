@@ -15,8 +15,7 @@ import {
   SelectValue,
 } from '@shadcn/ui/select';
 import { useTranslations } from 'next-intl';
-
-type ProductType = 'PHYSICAL' | 'DIGITAL';
+import { ProductType } from '@lib/utils/types/product';
 
 export default function TypeProductFormField() {
   const { control } = useFormContext();
@@ -34,7 +33,8 @@ export default function TypeProductFormField() {
             </FormLabel>
             <FormControl>
               <Select
-                value={field.value || 'PHYSICAL'} // Use the form value directly
+                value={field.value || 'PHYSICAL'}
+                required={true}
                 onValueChange={(value) => {
                   field.onChange(value as ProductType);
                 }}

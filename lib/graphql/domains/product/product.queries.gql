@@ -115,6 +115,7 @@ query findAllProducts(
       tags
       updatedAt
       variants {
+        id
         attributes {
           key
           value
@@ -150,6 +151,7 @@ query findAllProducts(
           months
         }
         weight
+        isArchived
       }
     }
     total

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 import { Form } from '@shadcn/ui/form';
 import MediaUploader from '@organisms/shared/MediaUploader';
 import PriceConditionFormField from '@molecules/variant/PriceConditionFormField';
@@ -12,40 +12,7 @@ import PersonalizationOptionsFormField from '@molecules/variant/PersonalizationO
 import InstallmentPaymentFormField from '@molecules/variant/InstallmentPaymentFormField';
 import WarrantyFormField from '@molecules/variant/WarrantyFormField';
 import SaveButton from '@atoms/shared/SaveButton';
-
-// Mock useVariant hook for testing purposes
-function useVariant(props: MainVariantProps) {
-  const form = useForm({
-    defaultValues: {
-      productId: props.productId,
-      variantId: props.variantId,
-      isNew: props.isNew,
-      price: '',
-      condition: '',
-      attributes: [],
-      height: '',
-      width: '',
-      length: '',
-      sku: '',
-      upc: '',
-      ean: '',
-      isbn: '',
-      barcode: '',
-      personalizationOptions: [],
-      installmentPayments: [],
-      warranties: [],
-      isArchived: false,
-    },
-  });
-
-  const handleSubmit = (data: unknown) => {
-    console.log('Form submitted:', data);
-  };
-
-  const loading = false;
-
-  return { form, handleSubmit, loading };
-}
+import { useVariant } from '@hooks/domains/products/variant';
 
 interface MainVariantProps {
   productId: string;
@@ -58,11 +25,12 @@ export default function MainVariant({
   variantId,
   isNew,
 }: MainVariantProps) {
-  const { form, handleSubmit, loading } = useVariant({
+  const { form, handleSubmit, loading, variant } = useVariant({
     productId,
     variantId,
     isNew,
   });
+
   return (
     <main className="mx-4 flex max-w-screen-md justify-center lg:mx-auto lg:w-full">
       <FormProvider {...form}>
@@ -74,7 +42,12 @@ export default function MainVariant({
             }}
             className="space-y-6"
           >
-            <MediaUploader multiple={true} />
+            <MediaUploader
+              multiple={true}
+              initialMedia={
+                variant?.variantMedia?.map((media) => media.url) || []
+              }
+            />
             <PriceConditionFormField />
             <AttributesFormField />
             <DimensionsRow />
