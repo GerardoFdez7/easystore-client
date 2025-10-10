@@ -613,6 +613,7 @@
     "updateErrorTitle": "Échec de la mise à jour",
     "unknownError": "Une erreur inconnue est survenue",
     "savedChangesTitle": "Modifications enregistrées",
+    "productCreated": "Produit créé avec succès",
     "productUpdated": "Produit mis à jour avec succès",
     "nameUpdated": "Nom du produit mis à jour avec succès",
     "shortDescriptionUpdated": "Description courte mise à jour avec succès",

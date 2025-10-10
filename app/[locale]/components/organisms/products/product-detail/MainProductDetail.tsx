@@ -218,7 +218,7 @@ export default function MainProductDetail({
           <div className="flex justify-end">
             <ProductActions
               singleMode={true}
-              productId={productId}
+              productId={param}
               productIsArchived={product?.isArchived ?? false}
             />
           </div>
@@ -248,7 +248,7 @@ export default function MainProductDetail({
           <NameFormField />
           <ShortLongDescriptionFormField />
           <CategoryFormField />
-          <VariantsFormField productId={productId} />
+          <VariantsFormField productId={param} />
           <TypeProductFormField />
           <TagsFormField />
           <BrandManufacturerFormField />

@@ -165,7 +165,6 @@ export function useVariantManagement(): UseVariantManagementReturn {
           variables: {
             input,
           },
-          // Cache is updated automatically via the update function above
         });
 
         if (result.data?.addVariant) {
@@ -201,7 +200,6 @@ export function useVariantManagement(): UseVariantManagementReturn {
             productId,
             input,
           },
-          // Cache is updated automatically via the update function above
         });
 
         if (result.data?.updateVariant) {

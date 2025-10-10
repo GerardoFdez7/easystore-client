@@ -8,3 +8,5 @@ export { useGetAllProducts } from './useGetAllProducts';
 export { useRestoreProduct } from './useRestoreProduct';
 export { useMultipleRestoreProducts } from './useMultipleRestoreProducts';
 export { useProduct } from './useProduct';
+export { useProductManagement } from './useProductManagement';
+export { useProductForm } from './useProductForm';

@@ -612,6 +612,7 @@
     "updateErrorTitle": "Update Failed",
     "unknownError": "An unknown error occurred",
     "savedChangesTitle": "Changes Saved",
+    "productCreated": "Product created successfully",
     "productUpdated": "Product updated successfully",
     "nameUpdated": "Product name updated successfully",
     "shortDescriptionUpdated": "Short description updated successfully",
