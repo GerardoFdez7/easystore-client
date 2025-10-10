@@ -1131,6 +1131,11 @@
     "showArchivedProducts": "Mostra prodotti archiviati",
     "hideArchivedProducts": "Nascondi prodotti archiviati",
     "viewProducts": "Visualizza Prodotti",
+    "actions": "Azioni",
+    "deleteStockTitle": "Eliminare stock?",
+    "deleteStockDescription": "Sei sicuro di voler eliminare lo stock per {product} (SKU {sku})? Questa azione non può essere annullata.",
+    "stockDeletedSuccessfully": "Stock eliminato con successo!",
+    "errorDeletingStock": "Impossibile eliminare lo stock.",
     "showingResults": "Mostrando {start} a {end} di {total} risultati",
     "pageInfo": "Pagina {current} di {total}",
     "AddStock": {
@@ -1386,6 +1391,8 @@
     "nextButton": "Successivo"
   },
   "StockDetail": {
+    "updateSuccess": "Stock aggiornato con successo",
+    "updateError": "Errore durante l'aggiornamento dello stock",
     "stockDetail": "Dettaglio scorte",
     "color": "Colore",
     "product": "Prodotto",
