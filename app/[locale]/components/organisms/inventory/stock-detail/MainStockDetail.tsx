@@ -12,6 +12,7 @@ import {
 import { Button } from '@shadcn/ui/button';
 import { Input } from '@shadcn/ui/input';
 import { Label } from '@shadcn/ui/label';
+import { useRouter } from 'next/navigation';
 
 import StockHeader from '@molecules/stock-detail/StockHeader';
 import SerialChips from '@molecules/stock-detail/SerialChips';
@@ -19,13 +20,14 @@ import UpdateReasonDialog from '@molecules/stock-detail/UpdateReasonDialog';
 import CalendarPicker from '@molecules/stock-detail/CalendarPicker';
 
 // ⬇️ usa el hook “todo en uno” (resuelve IDs por nombre/SKU y crea)
-import { useCreateWarehouseStockByLookup } from '@hooks/domains/inventory/stock-detail/useCreateStock';
+import { useCreateWarehouseStock as useCreateWarehouseStockByLookup } from '@hooks/domains/inventory/stock-detail/useCreateWarehouseStock';
 
 type Props = { warehouseName?: string; sku?: string };
 
 export default function MainStockDetail({ warehouseName, sku }: Props) {
   const t = useTranslations('StockDetail');
   warehouseName = warehouseName?.split('-').join(' ').trim().toLowerCase();
+  const router = useRouter();
 
   // seriales controlados por esta vista
   const [serialNumbers, setSerialNumbers] = useState<string[]>([]);
@@ -219,7 +221,7 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => form.reset()}
+                onClick={() => router.back()}
                 disabled={isSubmitting}
                 className="w-full sm:w-auto"
               >
