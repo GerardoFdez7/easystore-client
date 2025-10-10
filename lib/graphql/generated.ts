@@ -1252,26 +1252,16 @@ export type CreateCategoryMutation = {
   __typename?: 'Mutation';
   createCategory: {
     __typename?: 'Category';
+    id: string;
     name: string;
     description?: string | null;
     cover: string;
-    updatedAt: any;
-    createdAt: any;
     subCategories: Array<{
       __typename?: 'Category';
+      id: string;
       cover: string;
-      createdAt: any;
       description?: string | null;
       name: string;
-      updatedAt: any;
-      subCategories: Array<{
-        __typename?: 'Category';
-        cover: string;
-        createdAt: any;
-        description?: string | null;
-        name: string;
-        updatedAt: any;
-      }>;
     }>;
   };
 };
@@ -1285,15 +1275,23 @@ export type UpdateCategoryMutation = {
   __typename?: 'Mutation';
   updateCategory: {
     __typename?: 'Category';
+    id: string;
     name: string;
     description?: string | null;
     cover: string;
-    createdAt: any;
     subCategories: Array<{
       __typename?: 'Category';
+      id: string;
       name: string;
       description?: string | null;
       cover: string;
+      subCategories: Array<{
+        __typename?: 'Category';
+        id: string;
+        name: string;
+        description?: string | null;
+        cover: string;
+      }>;
     }>;
   };
 };
@@ -1304,11 +1302,7 @@ export type DeleteMutationVariables = Exact<{
 
 export type DeleteMutation = {
   __typename?: 'Mutation';
-  deleteCategory: {
-    __typename?: 'Category';
-    name: string;
-    description?: string | null;
-  };
+  deleteCategory: { __typename?: 'Category'; name: string };
 };
 
 export type FindCategoryByIdQueryVariables = Exact<{
@@ -1331,26 +1325,6 @@ export type FindCategoryByIdQuery = {
       name: string;
       description?: string | null;
       cover: string;
-      createdAt: any;
-      updatedAt: any;
-      subCategories: Array<{
-        __typename?: 'Category';
-        id: string;
-        name: string;
-        description?: string | null;
-        cover: string;
-        createdAt: any;
-        updatedAt: any;
-        subCategories: Array<{
-          __typename?: 'Category';
-          id: string;
-          cover: string;
-          createdAt: any;
-          description?: string | null;
-          name: string;
-          updatedAt: any;
-        }>;
-      }>;
     }>;
   };
 };
@@ -3525,60 +3499,23 @@ export const CreateCategoryDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'description' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'cover' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'subCategories' },
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'cover' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'createdAt' },
-                      },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'description' },
                       },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'subCategories' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'cover' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'createdAt' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'description' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'name' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'updatedAt' },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'updatedAt' },
-                      },
                     ],
                   },
                 },
@@ -3651,22 +3588,48 @@ export const UpdateCategoryDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'description' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'cover' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'subCategories' },
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'description' },
                       },
                       { kind: 'Field', name: { kind: 'Name', value: 'cover' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'subCategories' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'description' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'cover' },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
@@ -3718,7 +3681,6 @@ export const DeleteDocument = {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
               ],
             },
           },
@@ -3782,83 +3744,6 @@ export const FindCategoryByIdDocument = {
                         name: { kind: 'Name', value: 'description' },
                       },
                       { kind: 'Field', name: { kind: 'Name', value: 'cover' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'createdAt' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'subCategories' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'id' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'name' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'description' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'cover' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'createdAt' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'subCategories' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'id' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'cover' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'createdAt' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'description',
-                                    },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'name' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'updatedAt' },
-                                  },
-                                ],
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'updatedAt' },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'updatedAt' },
-                      },
                     ],
                   },
                 },

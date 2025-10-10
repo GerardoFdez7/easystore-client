@@ -59,22 +59,6 @@ export const Default: Story = {
   },
 };
 
-export const WithExcludedItems: Story = {
-  name: 'With Excluded Items',
-  args: {
-    catalog: mockCatalogItems,
-    excludeIds: ['1', '3', '5'],
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Shows the picker with some categories excluded from selection (Electronics, Home & Garden, Books & Media).',
-      },
-    },
-  },
-};
-
 export const EmptyCatalog: Story = {
   name: 'Empty Catalog',
   args: {
@@ -119,22 +103,6 @@ export const Disabled: Story = {
       description: {
         story:
           'Shows the picker in a disabled state where no interactions are allowed.',
-      },
-    },
-  },
-};
-
-export const MostlyExcluded: Story = {
-  name: 'Mostly Excluded',
-  args: {
-    catalog: mockCatalogItems,
-    excludeIds: ['1', '2', '3', '4', '5', '6', '7', '8'],
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Shows the picker when most categories are excluded, leaving only a few options.',
       },
     },
   },

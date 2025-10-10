@@ -10,7 +10,7 @@ import {
 import {
   mockCategories,
   mockEmptyCategories,
-} from '../molecules/categories/mocks/categoryMocks';
+} from '../../molecules/categories/mocks/categoryMocks';
 
 // Enhanced mock categories with proper GraphQL structure
 const mockCategoriesWithSubcategories = mockCategories.map((cat) => ({

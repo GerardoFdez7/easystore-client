@@ -1,37 +1,35 @@
 mutation createCategory($input: CreateCategoryInput!) {
   createCategory(input: $input) {
+    id
     name
     description
     cover
-    updatedAt
-    createdAt
     subCategories {
+      id
       cover
-      createdAt
       description
       name
-      subCategories {
-        cover
-        createdAt
-        description
-        name
-        updatedAt
-      }
-      updatedAt
     }
   }
 }
 
 mutation updateCategory($id: ID!, $input: UpdateCategoryInput!) {
   updateCategory(id: $id, input: $input) {
+    id
     name
     description
     cover
-    createdAt
     subCategories {
+      id
       name
       description
       cover
+      subCategories {
+        id
+        name
+        description
+        cover
+      }
     }
   }
 }
@@ -39,6 +37,5 @@ mutation updateCategory($id: ID!, $input: UpdateCategoryInput!) {
 mutation delete($id: ID!) {
   deleteCategory(id: $id) {
     name
-    description
   }
 }

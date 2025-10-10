@@ -1,15 +1,24 @@
 'use client';
 
+import React, { useCallback, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@shadcn/ui/button';
-import { Badge } from '@shadcn/ui/badge';
-import { Trash2 } from 'lucide-react';
+import { Unlink, Dices, Plus } from 'lucide-react';
 import { cn } from 'utils';
 import { useTranslations } from 'next-intl';
-
-import AddSubcategoriesPicker, {
-  type CategoryItem as CatalogItem,
-} from '@molecules/categories/detail/AddSubcategory';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@shadcn/ui/tooltip';
+import { Label } from '@shadcn/ui/label';
+import { useMutation } from '@apollo/client/react';
+import EmptyState from '@molecules/shared/EmptyState';
+import AddSubcategoriesPicker from '@molecules/categories/detail/AddSubcategory';
+import AddCategoryDialog, {
+  type NewCategoryData,
+} from '@molecules/categories/detail/AddCategoryDialog';
+import {
+  UpdateCategoryDocument,
+  UpdateCategoryMutation,
+  UpdateCategoryMutationVariables,
+} from '@graphql/generated';
 
 export type CategoryItem = {
   id: string;
@@ -18,131 +27,236 @@ export type CategoryItem = {
   description?: string;
   tags?: string[];
   selected?: boolean;
-  count?: number;
+};
+
+export type NewCategoryItem = {
+  id: string;
+  name: string;
+  cover: string;
+  description?: string;
+  isNew?: boolean;
 };
 
 type Props = {
   items: CategoryItem[];
-  catalog?: CatalogItem[];
+  currentCategoryId?: string; // Add current category ID to prevent self-selection
   disabled?: boolean;
   onAdd?: (ids: string[]) => void;
   onRemove: (id: string) => void;
   onOrderChange?: (order: 'asc' | 'desc') => void;
   onSearch?: (query: string) => void;
   onToggleSelect?: (id: string, value: boolean) => void;
+  newCategories?: NewCategoryItem[];
+  onNewCategoryAdd?: (category: NewCategoryItem) => void;
 };
 
-export default function CategoryPicker({
-  items,
-  catalog = [],
+const CategoryPicker = React.memo<Props>(function CategoryPicker({
+  items = [],
+  currentCategoryId,
   disabled,
   onAdd,
   onRemove,
+  newCategories = [],
+  onNewCategoryAdd,
 }: Props) {
   const t = useTranslations('CategoryDetail');
-  const excludeIds = items.map((i) => i.id);
+  const tCategory = useTranslations('Category');
+
+  const [updateCategoryMutation] = useMutation<
+    UpdateCategoryMutation,
+    UpdateCategoryMutationVariables
+  >(UpdateCategoryDocument, {});
+
+  const excludeIds = useMemo(() => {
+    const existingIds = items.map((i) => i.id);
+    const newIds = newCategories.map((n) => n.id);
+    return [...existingIds, ...newIds];
+  }, [items, newCategories]);
+
+  const handleRemove = useCallback(
+    async (id: string) => {
+      // Check if it's a new category first
+      const isNewCategory = newCategories.some((cat) => cat.id === id);
+      if (isNewCategory) {
+        // Handle removal of new category (this would need to be implemented in parent)
+        // For now, we'll still call onRemove as the parent should handle it
+        onRemove(id);
+      } else {
+        // Handle removal of existing category by unlinking (setting parentId to null)
+        try {
+          await updateCategoryMutation({
+            variables: {
+              id,
+              input: {
+                parentId: null,
+              },
+            },
+          });
+          // Call onRemove to update the local state
+          onRemove(id);
+        } catch (_error) {}
+      }
+    },
+    [onRemove, newCategories, updateCategoryMutation],
+  );
+
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+
+  const handleAdd = useCallback(
+    (ids: string[]) => {
+      if (onAdd) {
+        onAdd(ids);
+      }
+    },
+    [onAdd],
+  );
+
+  const handleNewCategoryAdd = useCallback(
+    (categoryData: NewCategoryData) => {
+      if (onNewCategoryAdd) {
+        const newCategory: NewCategoryItem = {
+          id: `temp-${Date.now()}`, // Temporary ID for new categories
+          name: categoryData.name,
+          cover: categoryData.cover || '',
+          description: categoryData.description,
+          isNew: true,
+        };
+        onNewCategoryAdd(newCategory);
+      }
+      setIsAddDialogOpen(false);
+    },
+    [onNewCategoryAdd],
+  );
+
+  // Combine existing items and new categories for display
+  const allItems = useMemo(() => {
+    const newCategoryItems: CategoryItem[] = newCategories.map((newCat) => ({
+      id: newCat.id,
+      name: newCat.name,
+      cover: newCat.cover,
+      description: newCat.description,
+    }));
+    return [...items, ...newCategoryItems];
+  }, [items, newCategories]);
 
   return (
-    <div className="space-y-3">
-      <div className="flex w-full items-center justify-end">
+    <div className="space-y-4">
+      <div className="flex w-full flex-col items-center justify-end gap-2 sm:flex-row">
+        {allItems.length > 0 && (
+          <AddCategoryDialog onAdd={handleNewCategoryAdd}>
+            <Button variant="outline" className="w-full sm:w-auto">
+              <Plus className="h-4 w-4" />
+              {t('createSubcategory')}
+            </Button>
+          </AddCategoryDialog>
+        )}
         <AddSubcategoriesPicker
           className="w-full sm:w-auto"
-          catalog={catalog}
           excludeIds={excludeIds}
+          currentCategoryId={currentCategoryId}
           disabled={disabled}
-          onAdd={onAdd}
+          onAdd={handleAdd}
         />
       </div>
 
-      {items.length === 0 ? (
-        <div
-          role="status"
-          className="text-text/60 bg-muted/30 w-full rounded-md border py-6 text-center"
+      {allItems.length === 0 ? (
+        <AddCategoryDialog
+          open={isAddDialogOpen}
+          onOpenChange={setIsAddDialogOpen}
+          onAdd={handleNewCategoryAdd}
         >
-          {t('noCategories')}
-        </div>
+          <EmptyState
+            icon={Dices}
+            title={tCategory('noSubcategoriesTitle')}
+            description={tCategory('noSubcategoriesDescription')}
+            buttonText={t('createSubcategory')}
+            onButtonClick={() => setIsAddDialogOpen(true)}
+            buttonIcon={Plus}
+          />
+        </AddCategoryDialog>
       ) : (
-        <div className="overflow-hidden rounded-md">
-          {items.map((c) => {
-            const count = typeof c.count === 'number' ? c.count : 0;
+        <div className="overflow-hidden rounded-lg border bg-transparent">
+          {allItems.map((c) => {
+            const isNewCategory = newCategories.some(
+              (newCat) => newCat.id === c.id,
+            );
             return (
               <div
                 key={c.id}
                 className={cn(
-                  'bg-muted grid grid-cols-[40px_1fr] items-center gap-2 border-b px-3 py-2 last:border-none',
-                  'sm:grid-cols-[40px_1fr_auto_40px]',
-                  'hover:bg-muted/80 transition',
+                  'border-border/30 grid grid-cols-[48px_1fr_auto] items-center gap-3 border-b px-4 py-3 last:border-none',
+                  'sm:grid-cols-[48px_1fr_auto_auto_48px]',
+                  'hover:bg-muted/50 transition-colors duration-200',
+                  'focus-within:bg-muted/50 focus-within:ring-ring/20 focus-within:ring-2',
+                  isNewCategory && 'bg-muted/50', // Visual indicator for new categories
                 )}
+                role="listitem"
+                aria-label={`Subcategory: ${c.name}${isNewCategory ? ' (new)' : ''}`}
               >
-                <div className="flex items-center sm:justify-center">
-                  <div className="relative h-8 w-8 overflow-hidden rounded-full">
-                    <Image
-                      src={c.cover}
-                      alt={c.name}
-                      fill
-                      className="object-cover"
-                    />
+                <div className="flex items-center justify-center">
+                  <div className="border-border/20 bg-muted/30 relative h-10 w-10 overflow-hidden rounded-lg border">
+                    {c.cover ? (
+                      <Image
+                        src={c.cover}
+                        alt={`${c.name} category cover`}
+                        fill
+                        className="object-cover transition-transform duration-200 hover:scale-105"
+                        sizes="40px"
+                      />
+                    ) : (
+                      <div className="bg-muted flex h-full w-full items-center justify-center">
+                        <Dices className="text-muted-foreground h-4 w-4" />
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 <div className="flex min-w-0 flex-col gap-1">
-                  <span className="text-text truncate text-sm">{c.name}</span>
+                  <Label className="text-text font-medium">{c.name}</Label>
 
-                  {c.description ? (
-                    <span className="text-text/70 line-clamp-1 text-xs">
-                      {c.description}
-                    </span>
-                  ) : null}
-
-                  {c.tags?.length ? (
-                    <div className="flex flex-wrap gap-1">
-                      {c.tags.slice(0, 3).map((tag) => (
-                        <span
-                          key={tag}
-                          className="bg-foreground/10 text-text rounded-full px-2 py-0.5 text-[10px]"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  ) : null}
-                </div>
-
-                <div className="hidden sm:flex sm:justify-end">
-                  <Badge
-                    className="rounded-full px-3 py-1 text-[11px]"
-                    variant="outline"
-                  >
-                    {t('itemsCount', { count })}
-                  </Badge>
+                  {c.description && (
+                    <Label className="text-text text-xs">{c.description}</Label>
+                  )}
                 </div>
 
                 <div className="hidden items-center justify-end sm:flex">
-                  <Button
-                    variant="ghost"
-                    onClick={() => onRemove(c.id)}
-                    disabled={disabled}
-                    className="hover:bg-destructive/10 gap-2 rounded-full px-3 py-1"
-                  >
-                    <Trash2 className="text-destructive h-4 w-4" />
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => void handleRemove(c.id)}
+                        disabled={disabled}
+                        className="hover:bg-destructive/10 hover:text-destructive h-8 w-8 rounded-full p-0 transition-colors"
+                        aria-label={`Remove ${c.name} subcategory`}
+                      >
+                        <Unlink className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{t('removeRelation')}</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
 
-                <div className="col-span-2 flex items-center justify-between sm:hidden">
-                  <Badge
-                    className="rounded-full px-3 py-1 text-[11px]"
-                    variant="outline"
-                  >
-                    {t('itemsCount', { count })}
-                  </Badge>
-                  <Button
-                    variant="ghost"
-                    onClick={() => onRemove(c.id)}
-                    disabled={disabled}
-                    className="hover:bg-destructive/10 gap-2 rounded-full px-3 py-1"
-                  >
-                    <Trash2 className="text-destructive h-4 w-4" />
-                  </Button>
+                <div className="col-span-3 flex items-center justify-end sm:hidden">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => void handleRemove(c.id)}
+                        disabled={disabled}
+                        className="hover:bg-destructive/10 hover:text-destructive h-8 w-8 rounded-full p-0 transition-colors"
+                        aria-label={`Remove ${c.name} subcategory`}
+                      >
+                        <Unlink className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{t('removeRelation')}</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
               </div>
             );
@@ -151,4 +265,8 @@ export default function CategoryPicker({
       )}
     </div>
   );
-}
+});
+
+CategoryPicker.displayName = 'CategoryPicker';
+
+export default CategoryPicker;

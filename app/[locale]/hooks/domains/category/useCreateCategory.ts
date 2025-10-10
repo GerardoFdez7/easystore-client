@@ -3,64 +3,33 @@
 import { useMemo } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@apollo/client/react';
 import { toast } from 'sonner';
-import type { DocumentNode } from 'graphql';
-
 import {
   CreateCategoryDocument,
   CreateCategoryMutation,
   CreateCategoryMutationVariables,
-  UpdateCategoryDocument,
-  UpdateCategoryMutation,
-  UpdateCategoryMutationVariables,
   FindAllCategoriesDocument,
 } from '@graphql/generated';
-
-// Form schema
-export type CategoryFormValues = z.infer<ReturnType<typeof buildSchema>>;
-
-function buildSchema(t: ReturnType<typeof useTranslations>) {
-  return z.object({
-    title: z
-      .string()
-      .trim()
-      .min(1, { message: t('titleRequired') })
-      .max(100, { message: t('titleTooLong', { max: 100 }) }),
-    description: z
-      .string()
-      .trim()
-      .max(200, { message: t('descriptionTooLong', { max: 200 }) })
-      .min(10, { message: t('descriptionTooShort', { min: 10 }) }),
-    cover: z
-      .string()
-      .trim()
-      .min(1, { message: t('coverRequired') })
-      .refine((v) => v.startsWith('/') || /^https?:\/\//i.test(v), {
-        message: t('invalidUrl'),
-      }),
-    subCategoryIds: z.array(z.string()).default([]).optional(),
-  });
-}
+import {
+  buildCategorySchema,
+  CategoryFormValues,
+  defaultFormConfig,
+  defaultCategoryFormValues,
+} from './categoryValidation';
 
 type CreateHookOptions = {
   defaultValues?: Partial<CategoryFormValues>;
-  redirectTo?: string;
-  onSuccess?: (opts: { id?: string }) => void;
-  extraRefetchQueries?: ReadonlyArray<{
-    query: DocumentNode;
-    variables?: Record<string, unknown>;
-  }>;
+  parentId?: string;
+  onSuccess?: () => void;
 };
 
 export function useCreateCategory({
   defaultValues,
-  redirectTo,
+  parentId,
   onSuccess,
-  extraRefetchQueries = [],
 }: CreateHookOptions = {}) {
   const t = useTranslations('CategoryDetail');
   const router = useRouter();
@@ -68,87 +37,48 @@ export function useCreateCategory({
     locale?: string;
   };
 
-  const schema = useMemo(() => buildSchema(t), [t]);
+  // Use schema for creation (not update)
+  const schema = useMemo(() => buildCategorySchema(t, false), [t]);
 
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      title: '',
-      description: '',
-      cover: '',
-      subCategoryIds: [],
+      ...defaultCategoryFormValues,
       ...defaultValues,
     },
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-    criteriaMode: 'all',
+    ...defaultFormConfig,
   });
 
   const [mutateCreate, createState] = useMutation<
     CreateCategoryMutation,
     CreateCategoryMutationVariables
   >(CreateCategoryDocument, {
-    refetchQueries: [
-      { query: FindAllCategoriesDocument },
-      ...extraRefetchQueries,
-    ],
+    refetchQueries: [{ query: FindAllCategoriesDocument }],
     awaitRefetchQueries: true,
   });
 
-  const [mutateUpdateChild] = useMutation<
-    UpdateCategoryMutation,
-    UpdateCategoryMutationVariables
-  >(UpdateCategoryDocument);
-
   const _submit = form.handleSubmit(async (values) => {
     const input = {
-      name: values.title.trim(),
-      description: values.description.trim(),
-      cover: values.cover.trim(),
+      name: values.name?.trim() || '',
+      description: values.description?.trim() || '',
+      cover: values.cover?.trim() || '',
+      ...(parentId ? { parentId } : {}),
     } satisfies CreateCategoryMutationVariables['input'];
 
     try {
-      const res = await mutateCreate({ variables: { input } });
-      // @ts-expect-error: depends on your schema
-      const newId: string | undefined = res.data?.createCategory?.id;
-
-      // Attach children by setting their parentId to newId
-      const ids = Array.isArray(values.subCategoryIds)
-        ? values.subCategoryIds
-        : [];
-      if (newId && ids.length > 0) {
-        await Promise.all(
-          ids.map((childId) =>
-            mutateUpdateChild({
-              variables: { id: childId, input: { parentId: newId } },
-            }),
-          ),
-        );
-      }
+      await mutateCreate({ variables: { input } });
 
       toast.success(t('createSuccess'));
-      if (onSuccess) onSuccess({ id: newId });
-      else
-        router.push(
-          redirectTo ?? (locale ? `/${locale}/categories` : '/categories'),
-        );
-    } catch (e) {
-      const err = e as {
-        graphQLErrors?: Array<{
-          message?: string;
-          path?: ReadonlyArray<string | number>;
-        }>;
-      };
-      const msg = err?.graphQLErrors?.[0]?.message ?? 'Error';
-      const path = err?.graphQLErrors?.[0]?.path as string[] | undefined;
 
-      if (path?.includes('name') || /name|title/i.test(msg))
-        form.setError('title', { type: 'server', message: msg });
-      else if (path?.includes('description') || /description/i.test(msg))
-        form.setError('description', { type: 'server', message: msg });
-      else if (path?.includes('cover') || /cover|url/i.test(msg))
-        form.setError('cover', { type: 'server', message: msg });
-    }
+      // Call onSuccess callback if provided
+      if (onSuccess) {
+        onSuccess();
+      }
+
+      // Always redirect to categories page after successful creation
+      const categoriesPath = locale ? `/${locale}/categories` : '/categories';
+      router.push(categoriesPath);
+    } catch (_error) {}
   });
 
   const handleSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
@@ -156,5 +86,9 @@ export function useCreateCategory({
     void _submit();
   };
 
-  return { form, handleSubmit, isSubmitting: createState.loading };
+  return {
+    form,
+    handleSubmit,
+    isSubmitting: createState.loading,
+  };
 }

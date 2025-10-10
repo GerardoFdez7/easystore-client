@@ -81,9 +81,15 @@ export default function CategoryGrid({
 
   const goEdit = useCallback(
     (id: string) => {
-      router.push(`/categories/${id}`);
+      const categorySlug = nameToSlug(
+        categories.find((c) => c.id === id)?.name || '',
+      );
+      const newPath = parentPath
+        ? `${parentPath}/${categorySlug}`
+        : categorySlug;
+      router.push(`/categories/${newPath}?edit=true`);
     },
-    [router],
+    [router, categories, parentPath],
   );
 
   const handleCategoryClick = useCallback(
@@ -143,16 +149,10 @@ export default function CategoryGrid({
       </section>
 
       <AlertDialog open={open} onOpenChange={handleDialogClose}>
-        <AlertDialogContent
-          role="alertdialog"
-          aria-labelledby="delete-title"
-          aria-describedby="delete-description"
-        >
+        <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle id="delete-title">{t('title')}</AlertDialogTitle>
-            <AlertDialogDescription id="delete-description">
-              {t('description')}
-            </AlertDialogDescription>
+            <AlertDialogTitle>{t('title')}</AlertDialogTitle>
+            <AlertDialogDescription>{t('description')}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={deleting} aria-label="cancel Delete">
@@ -161,7 +161,7 @@ export default function CategoryGrid({
             <AlertDialogAction
               onClick={() => void confirmDelete()}
               disabled={deleting}
-              className="text-accent bg-error hover:bg-destructive/90"
+              className="bg-error hover:bg-error/90 text-white"
               aria-label={deleting ? 'deleting Category' : 'confirm Delete'}
             >
               {deleting ? t('deleting') : t('delete')}

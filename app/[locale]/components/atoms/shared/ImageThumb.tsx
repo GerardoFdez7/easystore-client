@@ -22,7 +22,13 @@ const ImageThumb = ({
       onClick={onClick}
     >
       <div className="relative aspect-square">
-        <Image src={imageSrc} alt={altText} fill />
+        {imageSrc ? (
+          <Image src={imageSrc} alt={altText} fill />
+        ) : (
+          <div className="bg-muted flex h-full w-full items-center justify-center">
+            <div className="bg-muted-foreground/30 h-8 w-8 rounded" />
+          </div>
+        )}
         <div
           className={`absolute inset-0 bg-black/50 transition-opacity duration-300 hover:opacity-0 ${
             selected ? 'opacity-0' : 'opacity-100'

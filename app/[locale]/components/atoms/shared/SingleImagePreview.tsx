@@ -6,7 +6,7 @@ import { cn } from 'utils';
 
 interface SingleImagePreviewProps {
   file?: File;
-  imageUrl?: string;
+  imageUrl?: string | null;
   onRemove?: () => void;
   isProcessing?: boolean;
   className?: string;
@@ -38,6 +38,11 @@ const SingleImagePreview: React.FC<SingleImagePreviewProps> = ({
     ? `${file.name}-${file.size}-${file.lastModified}`
     : 'persisted-image';
 
+  // Don't render anything if there's no valid image URL
+  if (!displayImageUrl) {
+    return null;
+  }
+
   return (
     <div className={cn('mx-auto w-full max-w-lg space-y-4', className)}>
       {/* Preview Card */}
@@ -45,7 +50,7 @@ const SingleImagePreview: React.FC<SingleImagePreviewProps> = ({
         <div className="relative aspect-square w-full">
           <Image
             key={fileKey}
-            src={displayImageUrl || ''}
+            src={displayImageUrl}
             alt="Preview"
             fill
             className="object-cover"

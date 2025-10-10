@@ -90,10 +90,11 @@ const MediaUploader = forwardRef<
         onMediaProcessed={onMediaProcessed}
         onMediaChange={onMediaChange}
         className={className}
-        hideDoneButton={hideDoneButton}
+        hideDoneButton={hideDoneButton || alwaysEditing}
+        alwaysEditing={alwaysEditing}
         initialMedia={typeof initialMedia === 'string' ? initialMedia : null}
-        renderDoneButton={renderDoneButton}
-        renderEditButton={renderEditButton}
+        renderDoneButton={alwaysEditing ? undefined : renderDoneButton}
+        renderEditButton={alwaysEditing ? undefined : renderEditButton}
         acceptedFileTypes={acceptedFileTypes}
         maxImageSize={maxImageSize}
         maxVideoSize={maxVideoSize}

@@ -14,6 +14,7 @@ interface SingleMediaUploaderProps
     MediaUploaderConfig {
   className?: string;
   hideDoneButton?: boolean;
+  alwaysEditing?: boolean;
   initialMedia?: string | null;
   renderDoneButton?: (
     onDone: () => void,
@@ -33,6 +34,7 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
   onMediaChange,
   className,
   hideDoneButton = false,
+  alwaysEditing = false,
   initialMedia,
   renderDoneButton,
   renderEditButton,
@@ -64,6 +66,8 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
     string | null
   >(null);
   const [hasChanges, setHasChanges] = React.useState(false);
+  const [wasRemovedIntentionally, setWasRemovedIntentionally] =
+    React.useState(false);
 
   // Helper function to check if media has changed
   const checkForChanges = React.useCallback(
@@ -99,7 +103,7 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
 
   // Initialize persisted media with initial media if provided
   useEffect(() => {
-    if (initialMedia && !persistedMedia) {
+    if (initialMedia && !persistedMedia && !wasRemovedIntentionally) {
       setPersistedMedia({ url: initialMedia });
       setInitialMediaState(initialMedia); // Set initial state for change detection
     } else if (!initialMedia && persistedMedia) {
@@ -107,7 +111,12 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
       setPersistedMedia(null);
       setInitialMediaState(null);
     }
-  }, [initialMedia, persistedMedia, setPersistedMedia]);
+  }, [
+    initialMedia,
+    persistedMedia,
+    setPersistedMedia,
+    wasRemovedIntentionally,
+  ]);
 
   // Check for changes whenever selectedFiles or persistedMedia change
   useEffect(() => {
@@ -127,20 +136,32 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
 
     setSelectedFiles(files);
     setIsEditing(true);
+    setWasRemovedIntentionally(false); // Reset flag when new files are selected
+
+    // In alwaysEditing mode, upload immediately when file is selected
+    if (alwaysEditing && files.length > 0) {
+      void startUpload(files);
+    }
   };
 
   const handleRemoveFile = () => {
     setSelectedFiles([]);
     setPersistedMedia(null);
-    setIsEditing(false);
+    setWasRemovedIntentionally(true);
+
+    // Only set isEditing to false if not in alwaysEditing mode
+    if (!alwaysEditing) {
+      setIsEditing(false);
+    }
 
     // Reset change tracking when removing media
     setInitialMediaState(null);
     setHasChanges(false);
     onMediaChange?.(false);
 
-    // If we're removing persisted media (existing logo), notify parent
-    if (persistedMedia) {
+    // Only notify parent about removal if NOT in alwaysEditing mode
+    // In alwaysEditing mode, changes should only be persisted on form submission
+    if (persistedMedia && !alwaysEditing) {
       void onMediaProcessed?.(null);
     }
   };
@@ -158,9 +179,17 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
     void handleDone();
   };
 
+  // Set editing mode based on alwaysEditing prop
+  useEffect(() => {
+    if (alwaysEditing) {
+      setIsEditing(true);
+    }
+  }, [alwaysEditing, setIsEditing]);
+
   return (
     <div className={cn('w-full space-y-4', className)}>
-      {!isEditing && !persistedMedia ? (
+      {!isEditing && !persistedMedia && !alwaysEditing ? (
+        // No media - show dropzone (only when not in alwaysEditing mode)
         <FileDropZone
           onFileSelect={handleFileSelection}
           onValidationError={handleValidationError}
@@ -170,13 +199,14 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
           disabled={disabled || isUploading || isProcessing}
           multiple={false}
         />
-      ) : !isEditing && persistedMedia ? (
+      ) : !isEditing && persistedMedia && !alwaysEditing ? (
+        // Has media - show view-only mode (existing or uploaded) - only when not in alwaysEditing mode
         <div className="space-y-4">
           <SingleImagePreview
             imageUrl={
               typeof persistedMedia === 'object' && 'url' in persistedMedia
                 ? persistedMedia.url
-                : ''
+                : null
             }
             viewOnly={true}
             className="mx-auto"
@@ -193,22 +223,36 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
           )}
         </div>
       ) : (
+        // Editing mode - show FileDropZone if no media, otherwise show SingleImagePreview
         <div className="space-y-4">
-          <SingleImagePreview
-            file={selectedFiles[0]}
-            imageUrl={
-              !selectedFiles[0] &&
-              persistedMedia &&
-              typeof persistedMedia === 'object' &&
-              'url' in persistedMedia
-                ? persistedMedia.url
-                : undefined
-            }
-            onRemove={handleRemoveFile}
-            isProcessing={isProcessing}
-          />
-          {/* Done Button */}
-          {!hideDoneButton && (
+          {!persistedMedia && selectedFiles.length === 0 ? (
+            <FileDropZone
+              onFileSelect={handleFileSelection}
+              onValidationError={handleValidationError}
+              acceptedFileTypes={acceptedFileTypes}
+              maxImageSize={maxImageSize}
+              maxVideoSize={maxVideoSize}
+              disabled={disabled || isUploading || isProcessing}
+              multiple={false}
+            />
+          ) : (
+            <SingleImagePreview
+              file={selectedFiles[0]}
+              imageUrl={
+                !selectedFiles[0] &&
+                persistedMedia &&
+                typeof persistedMedia === 'object' &&
+                'url' in persistedMedia
+                  ? persistedMedia.url
+                  : undefined
+              }
+              onRemove={handleRemoveFile}
+              isProcessing={isProcessing}
+            />
+          )}
+
+          {/* Done Button - hidden when alwaysEditing is true */}
+          {!hideDoneButton && !alwaysEditing && (
             <div className="flex justify-end">
               {renderDoneButton ? (
                 renderDoneButton(handleDoneWrapper, isProcessing)

@@ -103,15 +103,17 @@ const VideoThumb = ({
     >
       <div className="relative aspect-square">
         {/* Hidden video element for thumbnail generation */}
-        <video
-          ref={videoRef}
-          src={videoSrc}
-          className="hidden"
-          preload="metadata"
-          muted
-          crossOrigin="anonymous"
-          playsInline
-        />
+        {videoSrc && (
+          <video
+            ref={videoRef}
+            src={videoSrc}
+            className="hidden"
+            preload="metadata"
+            muted
+            crossOrigin="anonymous"
+            playsInline
+          />
+        )}
 
         {/* Hidden canvas for thumbnail generation */}
         <canvas ref={canvasRef} className="hidden" />

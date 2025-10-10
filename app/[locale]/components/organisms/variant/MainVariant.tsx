@@ -64,7 +64,7 @@ export default function MainVariant({
     isNew,
   });
   return (
-    <main className="mx-4 sm:mx-auto">
+    <main className="mx-4 flex max-w-screen-md justify-center lg:mx-auto lg:w-full">
       <FormProvider {...form}>
         <Form {...form}>
           <form

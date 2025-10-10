@@ -9,3 +9,5 @@ export {
 export { useCreateCategory } from './useCreateCategory';
 export { useUpdateCategory } from './useUpdateCategory';
 export { useDeleteCategory } from './useDeleteCategory';
+export { useCategoryMedia } from './useCategoryMedia';
+export { type CategoryFormValues } from './categoryValidation';

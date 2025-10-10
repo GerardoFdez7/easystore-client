@@ -103,22 +103,7 @@ export const EditCategory: Story = {
       description:
         'The latest gadgets and accessories for tech enthusiasts. Discover cutting-edge technology that enhances your digital lifestyle.',
       cover: '/default.webp',
-      subcategories: [
-        {
-          id: '1',
-          name: 'Smartphones',
-          cover: '/phone.webp',
-          description: 'Latest mobile devices and accessories',
-          count: 25,
-        },
-        {
-          id: '2',
-          name: 'Laptops',
-          cover: '/laptop.webp',
-          description: 'High-performance computing devices',
-          count: 18,
-        },
-      ],
+      subCategoryIds: ['1', '2'],
     },
     onSave: async (data) => {
       console.log('Updating category:', data);
@@ -146,7 +131,7 @@ export const CategoryWithManySubcategories: Story = {
       description:
         'Comprehensive technology category covering all digital devices and accessories.',
       cover: '/default.webp',
-      subcategories: mockCatalog,
+      subCategoryIds: mockCatalog.map((item) => item.id),
     },
     onSave: async (data) => {
       console.log('Updating category with many subcategories:', data);
@@ -220,7 +205,7 @@ export const LoadingState: Story = {
       name: 'Sample Category',
       description: 'This category is being saved...',
       cover: '/default.webp',
-      subcategories: [],
+      subCategoryIds: [],
     },
     onSave: async (data) => {
       console.log('Simulating long save operation:', data);
