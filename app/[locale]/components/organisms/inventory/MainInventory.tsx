@@ -13,9 +13,19 @@ import EmptyState from '@molecules/shared/EmptyState';
 import SkeletonWrapper from '@molecules/shared/SkeletonWrapper';
 import AddStockDialog from '@organisms/inventory/AddStockDialog';
 import WarehouseManagementDialog from '@organisms/inventory/WarehouseManagementDialog';
+import { useRouter } from 'next/navigation';
+import { useMutation } from '@apollo/client/react';
+import {
+  RemoveStockFromWarehouseDocument,
+  type RemoveStockFromWarehouseMutation,
+  type RemoveStockFromWarehouseMutationVariables,
+  FindWarehouseByIdDocument,
+} from '@graphql/generated';
+import { toast } from 'sonner';
 
 export default function MainInventory() {
   const t = useTranslations('Inventory');
+  const router = useRouter();
   const [selectedWarehouseId, setSelectedWarehouseId] = useState<string>('');
   const [isAddStockDialogOpen, setIsAddStockDialogOpen] = useState(false);
   const [isWarehouseManagementOpen, setIsWarehouseManagementOpen] =
@@ -27,6 +37,66 @@ export default function MainInventory() {
     variables,
     selectedWarehouseId || undefined,
   );
+
+  const [removeStock] = useMutation<
+    RemoveStockFromWarehouseMutation,
+    RemoveStockFromWarehouseMutationVariables
+  >(RemoveStockFromWarehouseDocument, {
+    awaitRefetchQueries: true,
+    errorPolicy: 'all',
+  });
+
+  const handleEdit = (row: {
+    warehouseName?: string;
+    warehouseId: string;
+    variantSku: string;
+  }) => {
+    const whSlug = (row.warehouseName || '')
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '-');
+    const sku = row.variantSku;
+    router.push(`/inventory/${whSlug}_${sku}`);
+  };
+
+  const handleDelete = async (row: { id: string; warehouseId: string }) => {
+    try {
+      const v7 =
+        /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-7[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$/;
+      if (!v7.test(row.id) || !v7.test(row.warehouseId)) {
+        toast.error(
+          t('errorDeletingStock', {
+            default: 'Failed to delete stock',
+          } as Record<string, string | number | Date>),
+        );
+        return;
+      }
+      await removeStock({
+        variables: { warehouseId: row.warehouseId, stockId: row.id },
+        refetchQueries: selectedWarehouseId
+          ? [
+              {
+                query: FindWarehouseByIdDocument,
+                variables: { id: selectedWarehouseId },
+              },
+            ]
+          : undefined,
+      });
+      toast.success(
+        t('stockDeletedSuccessfully', {
+          default: 'Stock deleted',
+        } as Record<string, string | number | Date>) || 'Stock deleted',
+      );
+      await refetch();
+    } catch (_e) {
+      toast.error(
+        t('errorDeletingStock', {
+          default: 'Failed to delete stock',
+        } as Record<string, string | number | Date>) ||
+          'Failed to delete stock',
+      );
+    }
+  };
 
   if (error) {
     return (
@@ -68,6 +138,10 @@ export default function MainInventory() {
           variables={variables}
           inventory={inventory}
           onCreateStock={() => setIsAddStockDialogOpen(true)}
+          onEditRow={handleEdit}
+          onDeleteRow={(row) => {
+            void handleDelete(row);
+          }}
         />
       )}
       <AddStockDialog
