@@ -1124,6 +1124,11 @@
     "ascending": "Ascending",
     "descending": "Descending",
     "pageInfo": "Page {current} of {total}",
+    "actions": "Actions",
+    "deleteStockTitle": "Delete stock?",
+    "deleteStockDescription": "Are you sure you want to delete stock for {product} (SKU {sku})? This action cannot be undone.",
+    "stockDeletedSuccessfully": "Stock deleted successfully!",
+    "errorDeletingStock": "Failed to delete stock.",
     "AddStock": {
       "searchProducts": "Search products...",
       "selectVariant": "Select Product Variant",
@@ -1374,6 +1379,8 @@
     "nextButton": "Next"
   },
   "StockDetail": {
+    "updateSuccess": "Stock updated successfully",
+    "updateError": "Error updating stock",
     "color": "Color",
     "product": "Product",
     "warehouse": "Warehouse",

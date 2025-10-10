@@ -22,6 +22,17 @@ import EmptyState from '@molecules/shared/EmptyState';
 import { useTranslations } from 'next-intl';
 import TablePagination from '@molecules/shared/TablePagination';
 import SortableHeader from '@atoms/shared/SortableHeader';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@shadcn/ui/alert-dialog';
 
 type InventoryTableProps = {
   variables: FindInventoryQueryVariables;
@@ -39,15 +50,11 @@ type InventoryTableProps = {
 export default function InventoryTable({
   inventory,
   onCreateStock,
-  onSortChange,
-  sortField: externalSortField,
-  sortDirection: externalSortDirection,
+  onEditRow,
+  onDeleteRow,
 }: InventoryTableProps) {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-
-  const sortField = externalSortField ?? 'variantFirstAttribute';
-  const sortDirection = externalSortDirection ?? 'ASC';
   const itemsPerPage = 25;
   const t = useTranslations('Inventory');
 
@@ -83,22 +90,24 @@ export default function InventoryTable({
   // Show empty state if no inventory items
   if (inventory.length === 0) {
     return (
-      <EmptyState
-        icon={Package}
-        title={t('noProductVariantsFound')}
-        description={t('emptyStateDescription')}
-        buttonText={t('addStockButton')}
-        buttonIcon={Plus}
-        onButtonClick={() => onCreateStock?.()}
-      />
+      <div className={cn('w-full', className)}>
+        <EmptyState
+          icon={Package}
+          title={t('noProductVariantsFound')}
+          description={t('emptyStateDescription')}
+          buttonText={t('addStockButton')}
+          buttonIcon={Plus}
+          onButtonClick={() => onCreateStock?.()}
+        />
+      </div>
     );
   }
 
   return (
     <>
       <Table>
-        <TableHeader>
-          <TableRow className="hover:bg-background">
+        <TableHeader className="text-lg">
+          <TableRow>
             <TableHead className="pl-2">
               <Checkbox
                 checked={
@@ -180,6 +189,53 @@ export default function InventoryTable({
               <TableCell>{item.qtyReserved}</TableCell>
               <TableCell>
                 {formatDate(item.estimatedReplenishmentDate)}
+              </TableCell>
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    title={t('WarehouseManagement.edit')}
+                    onClick={() => onEditRow?.(item)}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="danger"
+                        size="icon"
+                        title={t('WarehouseManagement.delete')}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          {t('deleteStockTitle') || 'Delete stock?'}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          {t('deleteStockDescription', {
+                            product: item.productName,
+                            sku: item.variantSku,
+                          }) || 'This action cannot be undone.'}
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>
+                          {t('WarehouseManagement.cancel')}
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => onDeleteRow?.(item)}
+                          variant="danger"
+                        >
+                          {t('WarehouseManagement.delete')}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
               </TableCell>
             </TableRow>
           ))}
