@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useFieldArray } from 'react-hook-form';
 import {
   FormField,
   FormItem,
@@ -16,15 +16,12 @@ import { Plus } from 'lucide-react';
 import ArrayItemBox from '@atoms/shared/ArrayItemBox';
 import { useTranslations } from 'next-intl';
 
-interface Warranty {
-  months: string;
-  coverage: string;
-  instructions: string;
-}
-
 export default function WarrantyFormField() {
-  const { control, watch, setValue } = useFormContext();
-  const warranties: Warranty[] = watch('warranties') || [];
+  const { control } = useFormContext();
+  const { fields, append, remove, move } = useFieldArray({
+    control,
+    name: 'warranties',
+  });
   const t = useTranslations('Variant');
   const [newMonths, setNewMonths] = useState('');
   const [newCoverage, setNewCoverage] = useState('');
@@ -32,40 +29,21 @@ export default function WarrantyFormField() {
 
   const addWarranty = () => {
     if (newMonths.trim() && newCoverage.trim() && newInstructions.trim()) {
-      const newWarranty: Warranty = {
-        months: newMonths.trim(),
+      append({
+        months: parseFloat(newMonths.trim()),
         coverage: newCoverage.trim(),
         instructions: newInstructions.trim(),
-      };
-      setValue('warranties', [...warranties, newWarranty]);
+      });
       setNewMonths('');
       setNewCoverage('');
       setNewInstructions('');
     }
   };
 
-  const updateWarranty = (
-    index: number,
-    field: 'months' | 'coverage' | 'instructions',
-    val: string,
-  ) => {
-    const updatedWarranties = warranties.map((w, i) =>
-      i === index ? { ...w, [field]: val } : w,
-    );
-    setValue('warranties', updatedWarranties);
-  };
-
-  const deleteWarranty = (index: number) => {
-    const filteredWarranties = warranties.filter((_, i) => i !== index);
-    setValue('warranties', filteredWarranties);
-  };
-
   const moveWarranty = (index: number, dir: 'up' | 'down') => {
     const target = dir === 'up' ? index - 1 : index + 1;
-    if (target < 0 || target >= warranties.length) return;
-    const copy = [...warranties];
-    [copy[index], copy[target]] = [copy[target], copy[index]];
-    setValue('warranties', copy);
+    if (target < 0 || target >= fields.length) return;
+    move(index, target);
   };
 
   return (
@@ -168,18 +146,18 @@ export default function WarrantyFormField() {
               </div>
 
               {/* Display existing warranties */}
-              {warranties.length > 0 && (
+              {fields.length > 0 && (
                 <div className="border-border bg-muted/10 rounded-lg border p-8">
                   <div className="space-y-3">
-                    {warranties.map((warranty, index) => (
+                    {fields.map((field, index) => (
                       <ArrayItemBox
-                        key={index}
+                        key={field.id}
                         index={index}
                         canMoveUp={index > 0}
-                        canMoveDown={index < warranties.length - 1}
+                        canMoveDown={index < fields.length - 1}
                         onMoveUp={() => moveWarranty(index, 'up')}
                         onMoveDown={() => moveWarranty(index, 'down')}
-                        onDelete={() => deleteWarranty(index)}
+                        onDelete={() => remove(index)}
                         t={t}
                       >
                         <div className="space-y-3">
@@ -187,15 +165,31 @@ export default function WarrantyFormField() {
                             <FormLabel className="text-xs">
                               {t('warrantyMonths')}
                             </FormLabel>
-                            <Input
-                              inputMode="numeric"
-                              type="number"
-                              placeholder={t('warrantyMonthsPlaceholder')}
-                              value={warranty.months}
-                              onChange={(e) => {
-                                const value = e.target.value.replace(/\D/g, '');
-                                updateWarranty(index, 'months', value);
-                              }}
+                            <FormField
+                              control={control}
+                              name={`warranties.${index}.months`}
+                              render={({ field: fieldProps }) => (
+                                <FormItem>
+                                  <FormControl>
+                                    <Input
+                                      {...fieldProps}
+                                      inputMode="numeric"
+                                      type="number"
+                                      placeholder={t(
+                                        'warrantyMonthsPlaceholder',
+                                      )}
+                                      onChange={(e) => {
+                                        const value = e.target.value.replace(
+                                          /\D/g,
+                                          '',
+                                        );
+                                        fieldProps.onChange(value);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
                             />
                           </div>
                           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -203,36 +197,46 @@ export default function WarrantyFormField() {
                               <FormLabel className="text-xs">
                                 {t('warrantyCoverage')}
                               </FormLabel>
-                              <Textarea
-                                maxLength={1000}
-                                placeholder={t('warrantyCoveragePlaceholder')}
-                                value={warranty.coverage}
-                                onChange={(e) =>
-                                  updateWarranty(
-                                    index,
-                                    'coverage',
-                                    e.target.value,
-                                  )
-                                }
+                              <FormField
+                                control={control}
+                                name={`warranties.${index}.coverage`}
+                                render={({ field: fieldProps }) => (
+                                  <FormItem>
+                                    <FormControl>
+                                      <Textarea
+                                        {...fieldProps}
+                                        maxLength={1000}
+                                        placeholder={t(
+                                          'warrantyCoveragePlaceholder',
+                                        )}
+                                      />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
                               />
                             </div>
                             <div>
                               <FormLabel className="text-xs">
                                 {t('warrantyInstructions')}
                               </FormLabel>
-                              <Textarea
-                                maxLength={1000}
-                                placeholder={t(
-                                  'warrantyInstructionsPlaceholder',
+                              <FormField
+                                control={control}
+                                name={`warranties.${index}.instructions`}
+                                render={({ field: fieldProps }) => (
+                                  <FormItem>
+                                    <FormControl>
+                                      <Textarea
+                                        {...fieldProps}
+                                        maxLength={1000}
+                                        placeholder={t(
+                                          'warrantyInstructionsPlaceholder',
+                                        )}
+                                      />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
                                 )}
-                                value={warranty.instructions}
-                                onChange={(e) =>
-                                  updateWarranty(
-                                    index,
-                                    'instructions',
-                                    e.target.value,
-                                  )
-                                }
                               />
                             </div>
                           </div>
@@ -243,7 +247,7 @@ export default function WarrantyFormField() {
                 </div>
               )}
 
-              {warranties.length === 0 && (
+              {fields.length === 0 && (
                 <p className="text-muted-foreground py-8 text-center text-sm">
                   {t('noWarrantiesYet') ?? 'No warranties yet.'}
                 </p>

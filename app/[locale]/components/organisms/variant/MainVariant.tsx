@@ -12,7 +12,7 @@ import PersonalizationOptionsFormField from '@molecules/variant/PersonalizationO
 import InstallmentPaymentFormField from '@molecules/variant/InstallmentPaymentFormField';
 import WarrantyFormField from '@molecules/variant/WarrantyFormField';
 import SaveButton from '@atoms/shared/SaveButton';
-import { useVariant } from '@hooks/domains/products/variant';
+import { useVariantForm } from '@hooks/domains/products/variant';
 
 interface MainVariantProps {
   productId: string;
@@ -25,11 +25,12 @@ export default function MainVariant({
   variantId,
   isNew,
 }: MainVariantProps) {
-  const { form, handleSubmit, loading, variant } = useVariant({
-    productId,
-    variantId,
-    isNew,
-  });
+  const { form, handleSubmit, isSubmitting, hasChanges, variant } =
+    useVariantForm({
+      productId,
+      variantId,
+      isNew,
+    });
 
   return (
     <main className="mx-4 flex max-w-screen-md justify-center lg:mx-auto lg:w-full">
@@ -56,7 +57,13 @@ export default function MainVariant({
             <InstallmentPaymentFormField />
             <WarrantyFormField />
             <div className="flex justify-end">
-              <SaveButton type="submit" loading={loading} size="lg" />
+              <SaveButton
+                type="submit"
+                loading={isSubmitting}
+                disabled={isNew ? isSubmitting : !hasChanges || isSubmitting}
+                size="lg"
+                translationKey={isNew ? 'add' : 'save'}
+              />
             </div>
           </form>
         </Form>

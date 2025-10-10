@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useFieldArray } from 'react-hook-form';
 import {
   FormField,
   FormItem,
@@ -13,49 +13,33 @@ import { Button } from '@shadcn/ui/button';
 import { Input } from '@shadcn/ui/input';
 import { Plus } from 'lucide-react';
 import ArrayItemBox from '@atoms/shared/ArrayItemBox';
-import type { Attribute } from '@lib/types/variant';
 import { useTranslations } from 'next-intl';
 
 export default function AttributesCard() {
-  const { control, watch, setValue } = useFormContext();
-  const attributes: Attribute[] = watch('attributes') || [];
+  const { control } = useFormContext();
+  const { fields, append, remove, move } = useFieldArray({
+    control,
+    name: 'attributes',
+  });
   const t = useTranslations('Variant');
   const [newKey, setNewKey] = useState('');
   const [newValue, setNewValue] = useState('');
+
   const addAttribute = () => {
     if (newKey.trim() && newValue.trim()) {
-      const newAttribute: Attribute = {
+      append({
         key: newKey.trim(),
         value: newValue.trim(),
-      };
-      setValue('attributes', [...attributes, newAttribute]);
+      });
       setNewKey('');
       setNewValue('');
     }
   };
 
-  const updateAttribute = (
-    index: number,
-    field: 'key' | 'value',
-    val: string,
-  ) => {
-    const updatedAttributes = attributes.map((a, i) =>
-      i === index ? { ...a, [field]: val } : a,
-    );
-    setValue('attributes', updatedAttributes);
-  };
-
-  const deleteAttribute = (index: number) => {
-    const filteredAttributes = attributes.filter((_, i) => i !== index);
-    setValue('attributes', filteredAttributes);
-  };
-
   const moveAttribute = (index: number, dir: 'up' | 'down') => {
     const target = dir === 'up' ? index - 1 : index + 1;
-    if (target < 0 || target >= attributes.length) return;
-    const copy = [...attributes];
-    [copy[index], copy[target]] = [copy[target], copy[index]];
-    setValue('attributes', copy);
+    if (target < 0 || target >= fields.length) return;
+    move(index, target);
   };
 
   return (
@@ -79,7 +63,7 @@ export default function AttributesCard() {
                     <Input
                       id="attributeKey"
                       type="text"
-                      required={true}
+                      required={false}
                       placeholder={t('attributeKeyPlaceholder')}
                       value={newKey}
                       onChange={(e) => setNewKey(e.target.value)}
@@ -90,7 +74,7 @@ export default function AttributesCard() {
                       {t('attributeValue')}
                     </FormLabel>
                     <Input
-                      required={true}
+                      required={false}
                       placeholder={t('attributeValuePlaceholder')}
                       value={newValue}
                       onChange={(e) => setNewValue(e.target.value)}
@@ -111,18 +95,18 @@ export default function AttributesCard() {
               </div>
 
               {/* Display existing attributes */}
-              {attributes.length > 0 && (
+              {fields.length > 0 && (
                 <div className="border-border bg-muted/10 rounded-lg border p-8">
                   <div className="space-y-3">
-                    {attributes.map((attribute, index) => (
+                    {fields.map((field, index) => (
                       <ArrayItemBox
-                        key={index}
+                        key={field.id}
                         index={index}
                         canMoveUp={index > 0}
-                        canMoveDown={index < attributes.length - 1}
+                        canMoveDown={index < fields.length - 1}
                         onMoveUp={() => moveAttribute(index, 'up')}
                         onMoveDown={() => moveAttribute(index, 'down')}
-                        onDelete={() => deleteAttribute(index)}
+                        onDelete={() => remove(index)}
                         t={t}
                       >
                         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -130,24 +114,42 @@ export default function AttributesCard() {
                             <FormLabel className="text-xs">
                               {t('attributeKey')}
                             </FormLabel>
-                            <Input
-                              placeholder={t('attributeKeyPlaceholder')}
-                              value={attribute.key}
-                              onChange={(e) =>
-                                updateAttribute(index, 'key', e.target.value)
-                              }
+                            <FormField
+                              control={control}
+                              name={`attributes.${index}.key`}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormControl>
+                                    <Input
+                                      {...field}
+                                      placeholder={t('attributeKeyPlaceholder')}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
                             />
                           </div>
                           <div>
                             <FormLabel className="text-xs">
                               {t('attributeValue')}
                             </FormLabel>
-                            <Input
-                              placeholder={t('attributeValuePlaceholder')}
-                              value={attribute.value}
-                              onChange={(e) =>
-                                updateAttribute(index, 'value', e.target.value)
-                              }
+                            <FormField
+                              control={control}
+                              name={`attributes.${index}.value`}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormControl>
+                                    <Input
+                                      {...field}
+                                      placeholder={t(
+                                        'attributeValuePlaceholder',
+                                      )}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
                             />
                           </div>
                         </div>
@@ -157,7 +159,7 @@ export default function AttributesCard() {
                 </div>
               )}
 
-              {attributes.length === 0 && (
+              {fields.length === 0 && (
                 <p className="text-muted-foreground py-8 text-center text-sm">
                   {t('noAttributesYet') ?? 'No attributes yet.'}
                 </p>
