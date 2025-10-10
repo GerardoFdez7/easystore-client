@@ -12,7 +12,8 @@ import TagsFormField from '@molecules/products/product-detail/TagsFormField';
 import CategoryFormField from '@molecules/products/product-detail/CategoryFormField';
 import SaveButton from '@atoms/shared/SaveButton';
 import ProductActions from '@atoms/shared/ProductActions';
-import { useProduct } from '@hooks/domains/products';
+import { useProductForm } from '@hooks/domains/products';
+import { useMultipleMediaPersistence } from '@hooks/useMultipleMediaPersistence';
 
 interface MainProductDetailProps {
   param: string;
@@ -23,18 +24,41 @@ export default function MainProductDetail({
   param,
   isNew,
 }: MainProductDetailProps) {
-  const {
-    form,
-    handleSubmit,
-    isSubmitting,
-    isDirty,
-    product,
-    initialMedia,
-    handleMediaProcessed,
-    productId,
-  } = useProduct({
-    productId: param,
-    isNew,
+  const { form, handleSubmit, isSubmitting, hasChanges, product } =
+    useProductForm({
+      productId: param,
+      isNew,
+    });
+
+  // Media handling with the universal media hook
+  const { initialMedia, handleMediaProcessed } = useMultipleMediaPersistence({
+    entity: product,
+    config: {
+      coverField: 'cover',
+      mediaField: 'media',
+    },
+    actions: {
+      updateMultipleFields: async (fields: Record<string, unknown>) => {
+        // Update form fields directly through React Hook Form
+        Object.entries(fields).forEach(([key, value]) => {
+          if (key === 'cover') {
+            form.setValue('cover', value as string, { shouldDirty: true });
+          } else if (key === 'media') {
+            const mediaArray = value as Array<{
+              url: string;
+              position: number;
+              mediaType: string;
+            }>;
+            form.setValue(
+              'media',
+              mediaArray.map((m) => m.url),
+              { shouldDirty: true },
+            );
+          }
+        });
+        return { success: true };
+      },
+    },
   });
 
   return (
@@ -51,7 +75,7 @@ export default function MainProductDetail({
           <div className="flex justify-end">
             <ProductActions
               singleMode={true}
-              productId={productId}
+              productId={param}
               productIsArchived={product?.isArchived ?? false}
             />
           </div>
@@ -81,7 +105,7 @@ export default function MainProductDetail({
           <NameFormField />
           <ShortLongDescriptionFormField />
           <CategoryFormField />
-          <VariantsFormField productId={productId} />
+          <VariantsFormField productId={param} />
           <TypeProductFormField />
           <TagsFormField />
           <BrandManufacturerFormField />
@@ -91,7 +115,7 @@ export default function MainProductDetail({
             <SaveButton
               type="submit"
               loading={isSubmitting}
-              disabled={!isDirty || isSubmitting}
+              disabled={!hasChanges || isSubmitting}
               size="lg"
             />
           </div>
