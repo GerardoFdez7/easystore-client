@@ -21,6 +21,9 @@ import CalendarPicker from '@molecules/stock-detail/CalendarPicker';
 
 // ⬇️ usa el hook “todo en uno” (resuelve IDs por nombre/SKU y crea)
 import { useCreateWarehouseStock as useCreateWarehouseStockByLookup } from '@hooks/domains/inventory/stock-detail/useCreateWarehouseStock';
+import { usePrefillExistingStock } from '@hooks/domains/inventory/stock-detail/usePrefillExistingStock';
+import { useResolveWarehouseId } from '@hooks/domains/inventory/stock-detail/useResolveWarehouseId';
+import { useUpdateWarehouseStock } from '@hooks/domains/inventory/stock-detail/useUpdateWarehouseStock';
 
 type Props = { warehouseName?: string; sku?: string };
 
@@ -42,26 +45,70 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
     return Number.isFinite(n) ? Math.max(0, Math.trunc(n)) : 0;
   };
 
-  const { form, handleSubmit, isSubmitting, selectedVariant } =
-    useCreateWarehouseStockByLookup({
-      warehouseName,
-      variantSku: sku,
-      getSerialNumbers: () => serialNumbers,
-      reason: updateReason || undefined,
-      onSuccess: () => {
-        setUpdateReason('');
-        setShowUpdateReason(false);
-      },
-    });
+  const {
+    form,
+    handleSubmit: handleCreateSubmit,
+    isSubmitting: isCreating,
+    selectedVariant,
+  } = useCreateWarehouseStockByLookup({
+    warehouseName,
+    variantSku: sku,
+    getSerialNumbers: () => serialNumbers,
+    reason: updateReason || undefined,
+    onSuccess: () => {
+      setUpdateReason('');
+      setShowUpdateReason(false);
+    },
+  });
 
-  const disabled = isSubmitting;
+  const { update, state: updateState } = useUpdateWarehouseStock();
+  const [editingIds, setEditingIds] = useState<{
+    warehouseId: string;
+    stockId: string;
+  } | null>(null);
+
+  // Prefill when editing an existing stock (warehouse + sku already exist)
+  const resolveWarehouseId = useResolveWarehouseId(warehouseName);
+  usePrefillExistingStock({
+    form,
+    warehouseName,
+    variantSku: sku,
+    setSerialNumbers: setSerialNumbers,
+    resolveWarehouseId,
+    onFound: (ctx) => setEditingIds(ctx),
+  });
+
+  const disabled = isCreating || updateState.loading;
   const hasFormErrors = Boolean(
     form.formState.errors.reason || form.formState.errors.productLocation,
   );
 
+  const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
+    e?.preventDefault();
+    const v = form.getValues();
+    if (editingIds) {
+      const ok = await update(
+        editingIds.warehouseId,
+        editingIds.stockId,
+        v,
+        updateReason || undefined,
+      );
+      if (ok) {
+        setUpdateReason('');
+        setShowUpdateReason(false);
+      }
+      return;
+    }
+    handleCreateSubmit(e);
+  };
+
+  const onFormSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    void handleSubmit(e);
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={(e) => handleSubmit(e)} className="flex-1">
+      <form onSubmit={onFormSubmit} className="flex-1">
         {/* Campo oculto para que reason forme parte del form (sincronizado con el diálogo) */}
         <input type="hidden" {...form.register('reason')} />
         <div className="mx-auto max-w-5xl px-6 py-6">
@@ -222,7 +269,7 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
                 type="button"
                 variant="outline"
                 onClick={() => router.back()}
-                disabled={isSubmitting}
+                disabled={disabled}
                 className="w-full sm:w-auto"
               >
                 {t('cancel')}

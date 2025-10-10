@@ -14,91 +14,41 @@ import {
 import { cn, formatDate } from '@lib/utils';
 import { FindInventoryQueryVariables } from '@graphql/generated';
 import { InventoryItem } from '@lib/types/inventory';
-import type { SortDirection } from '@lib/types/sort';
-import type { SortField } from '@lib/types/inventory';
-import {
-  Package,
-  Plus,
-  ClockArrowUp,
-  ClockArrowDown,
-  MoveUp,
-} from 'lucide-react';
+import { Package, Plus, Pencil, Trash2 } from 'lucide-react';
 import EmptyState from '@molecules/shared/EmptyState';
 import { useTranslations } from 'next-intl';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@shadcn/ui/alert-dialog';
 
 type InventoryTableProps = {
   variables: FindInventoryQueryVariables;
   className?: string;
   inventory: InventoryItem[];
   onCreateStock?: () => void;
-  onSortChange?: (field: SortField, direction: SortDirection) => void;
-  sortField?: SortField | null;
-  sortDirection?: SortDirection;
+  onEditRow?: (row: InventoryItem) => void;
+  onDeleteRow?: (row: InventoryItem) => void;
 };
 
 export default function InventoryTable({
   className,
   inventory,
   onCreateStock,
-  onSortChange,
-  sortField: externalSortField,
-  sortDirection: externalSortDirection,
+  onEditRow,
+  onDeleteRow,
 }: InventoryTableProps) {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-
-  const sortField = externalSortField ?? 'variantFirstAttribute';
-  const sortDirection = externalSortDirection ?? 'ASC';
   const itemsPerPage = 25;
   const t = useTranslations('Inventory');
-
-  const handleSort = (field: SortField) => {
-    let newDirection: SortDirection = 'ASC';
-
-    if (sortField === field) {
-      newDirection = sortDirection === 'ASC' ? 'DESC' : 'ASC';
-    }
-
-    onSortChange?.(field, newDirection);
-  };
-
-  const getSortIcon = (field: SortField) => {
-    if (sortField !== field) {
-      return null;
-    }
-
-    // Determine if field is date-based or another
-    const isDateField = field === 'replenishmentDate';
-
-    if (isDateField) {
-      return sortDirection === 'ASC' ? (
-        <>
-          <ClockArrowUp aria-hidden="true" className="ml-1 h-4 w-4" />
-          <span className="sr-only">{t('ascending')}</span>
-        </>
-      ) : (
-        <>
-          <ClockArrowDown aria-hidden="true" className="ml-1 h-4 w-4" />
-          <span className="sr-only">{t('descending')}</span>
-        </>
-      );
-    } else {
-      return (
-        <>
-          <MoveUp
-            aria-hidden="true"
-            className={cn('ml-1 h-4 w-4 transition-transform', {
-              'rotate-180': sortDirection === 'DESC',
-            })}
-          />
-          <span className="sr-only">
-            {sortDirection === 'ASC' ? t('ascending') : t('descending')}
-          </span>
-        </>
-      );
-    }
-  };
-
   const handleSelectAll = (checked: boolean) => {
     setSelectedRows(checked ? inventory.map((item) => item.id) : []);
   };
@@ -117,110 +67,37 @@ export default function InventoryTable({
   // Show empty state if no inventory items
   if (inventory.length === 0) {
     return (
-      <EmptyState
-        icon={Package}
-        title={t('noProductVariantsFound')}
-        description={t('emptyStateDescription')}
-        buttonText={t('addStockButton')}
-        buttonIcon={Plus}
-        onButtonClick={() => onCreateStock?.()}
-      />
+      <div className={cn('w-full', className)}>
+        <EmptyState
+          icon={Package}
+          title={t('noProductVariantsFound')}
+          description={t('emptyStateDescription')}
+          buttonText={t('addStockButton')}
+          buttonIcon={Plus}
+          onButtonClick={() => onCreateStock?.()}
+        />
+      </div>
     );
   }
 
   return (
     <div className={cn('w-full', className)}>
       <Table>
-        <TableHeader>
-          <TableRow className="hover:bg-background">
+        <TableHeader className="text-lg">
+          <TableRow>
             <TableHead className="pl-2">
               <Checkbox
                 checked={selectedRows.length === inventory.length}
                 onCheckedChange={handleSelectAll}
               />
             </TableHead>
-            <TableHead
-              className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
-              onClick={() => handleSort('variantFirstAttribute')}
-              aria-sort={
-                sortField === 'variantFirstAttribute'
-                  ? sortDirection === 'ASC'
-                    ? 'ascending'
-                    : 'descending'
-                  : 'none'
-              }
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ')
-                  handleSort('variantFirstAttribute');
-              }}
-            >
-              <div className="flex items-center justify-center">
-                {t('productTableHead')}
-                {getSortIcon('variantFirstAttribute')}
-              </div>
-            </TableHead>
+            <TableHead>{t('productTableHead')}</TableHead>
             <TableHead>{t('skuTableHead')}</TableHead>
-            <TableHead
-              className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
-              onClick={() => handleSort('available')}
-              aria-sort={
-                sortField === 'available'
-                  ? sortDirection === 'ASC'
-                    ? 'ascending'
-                    : 'descending'
-                  : 'none'
-              }
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') handleSort('available');
-              }}
-            >
-              <div className="flex items-center justify-center">
-                {t('availableTableHead')}
-                {getSortIcon('available')}
-              </div>
-            </TableHead>
-            <TableHead
-              className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
-              onClick={() => handleSort('reserved')}
-              aria-sort={
-                sortField === 'reserved'
-                  ? sortDirection === 'ASC'
-                    ? 'ascending'
-                    : 'descending'
-                  : 'none'
-              }
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') handleSort('reserved');
-              }}
-            >
-              <div className="flex items-center justify-center">
-                {t('reservedTableHead')}
-                {getSortIcon('reserved')}
-              </div>
-            </TableHead>
-            <TableHead
-              className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
-              onClick={() => handleSort('replenishmentDate')}
-              aria-sort={
-                sortField === 'replenishmentDate'
-                  ? sortDirection === 'ASC'
-                    ? 'ascending'
-                    : 'descending'
-                  : 'none'
-              }
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ')
-                  handleSort('replenishmentDate');
-              }}
-            >
-              <div className="flex items-center justify-center">
-                {t('replenishmentDateTableHead')}
-                {getSortIcon('replenishmentDate')}
-              </div>
+            <TableHead>{t('availableTableHead')}</TableHead>
+            <TableHead>{t('reservedTableHead')}</TableHead>
+            <TableHead>{t('replenishmentDateTableHead')}</TableHead>
+            <TableHead className="w-[140px]">
+              {t('actions') || 'Actions'}
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -249,6 +126,53 @@ export default function InventoryTable({
               <TableCell>{item.qtyReserved}</TableCell>
               <TableCell>
                 {formatDate(item.estimatedReplenishmentDate)}
+              </TableCell>
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    title={t('WarehouseManagement.edit')}
+                    onClick={() => onEditRow?.(item)}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="danger"
+                        size="icon"
+                        title={t('WarehouseManagement.delete')}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          {t('deleteStockTitle') || 'Delete stock?'}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          {t('deleteStockDescription', {
+                            product: item.productName,
+                            sku: item.variantSku,
+                          }) || 'This action cannot be undone.'}
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>
+                          {t('WarehouseManagement.cancel')}
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => onDeleteRow?.(item)}
+                          variant="danger"
+                        >
+                          {t('WarehouseManagement.delete')}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
               </TableCell>
             </TableRow>
           ))}
