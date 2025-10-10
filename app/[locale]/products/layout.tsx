@@ -12,7 +12,7 @@ export default function ProductsLayout({ children }: ProductsLayoutProps) {
     <ProductsProvider
       initialVariables={{
         page: 1,
-        limit: 100,
+        limit: 10,
         includeSoftDeleted: true,
         type: null,
       }}

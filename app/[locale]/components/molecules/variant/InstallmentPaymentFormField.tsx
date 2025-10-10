@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useFieldArray } from 'react-hook-form';
 import {
   FormField,
   FormItem,
@@ -20,55 +20,31 @@ import {
   sanitizeNumericInput,
 } from '@lib/utils/input-formatters';
 
-interface InstallmentPayment {
-  months: string;
-  interestRate: string;
-}
-
 export default function InstallmentPaymentFormField() {
-  const { control, watch, setValue } = useFormContext();
-  const installmentPayments: InstallmentPayment[] =
-    watch('installmentPayments') || [];
+  const { control } = useFormContext();
+  const { fields, append, remove, move } = useFieldArray({
+    control,
+    name: 'installmentPayments',
+  });
   const t = useTranslations('Variant');
   const [newMonths, setNewMonths] = useState('');
   const [newInterestRate, setNewInterestRate] = useState('');
 
   const addInstallmentPayment = () => {
     if (newMonths.trim() && newInterestRate.trim()) {
-      const newInstallment: InstallmentPayment = {
-        months: newMonths.trim(),
-        interestRate: newInterestRate.trim(),
-      };
-      setValue('installmentPayments', [...installmentPayments, newInstallment]);
+      append({
+        months: parseFloat(newMonths.trim()),
+        interestRate: parseFloat(newInterestRate.trim()),
+      });
       setNewMonths('');
       setNewInterestRate('');
     }
   };
 
-  const updateInstallmentPayment = (
-    index: number,
-    field: 'months' | 'interestRate',
-    val: string,
-  ) => {
-    const updatedInstallments = installmentPayments.map((ip, i) =>
-      i === index ? { ...ip, [field]: val } : ip,
-    );
-    setValue('installmentPayments', updatedInstallments);
-  };
-
-  const deleteInstallmentPayment = (index: number) => {
-    const filteredInstallments = installmentPayments.filter(
-      (_, i) => i !== index,
-    );
-    setValue('installmentPayments', filteredInstallments);
-  };
-
   const moveInstallmentPayment = (index: number, dir: 'up' | 'down') => {
     const target = dir === 'up' ? index - 1 : index + 1;
-    if (target < 0 || target >= installmentPayments.length) return;
-    const copy = [...installmentPayments];
-    [copy[index], copy[target]] = [copy[target], copy[index]];
-    setValue('installmentPayments', copy);
+    if (target < 0 || target >= fields.length) return;
+    move(index, target);
   };
 
   return (
@@ -150,18 +126,18 @@ export default function InstallmentPaymentFormField() {
               </div>
 
               {/* Display existing installment payments */}
-              {installmentPayments.length > 0 && (
+              {fields.length > 0 && (
                 <div className="border-border bg-muted/10 rounded-lg border p-8">
                   <div className="space-y-3">
-                    {installmentPayments.map((installment, index) => (
+                    {fields.map((field, index) => (
                       <ArrayItemBox
-                        key={index}
+                        key={field.id}
                         index={index}
                         canMoveUp={index > 0}
-                        canMoveDown={index < installmentPayments.length - 1}
+                        canMoveDown={index < fields.length - 1}
                         onMoveUp={() => moveInstallmentPayment(index, 'up')}
                         onMoveDown={() => moveInstallmentPayment(index, 'down')}
-                        onDelete={() => deleteInstallmentPayment(index)}
+                        onDelete={() => remove(index)}
                         t={t}
                       >
                         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -169,21 +145,28 @@ export default function InstallmentPaymentFormField() {
                             <FormLabel className="text-md">
                               {t('months')}
                             </FormLabel>
-                            <Input
-                              inputMode="numeric"
-                              type="number"
-                              placeholder={t('monthsPlaceholder')}
-                              value={installment.months}
-                              onChange={(e) => {
-                                const value = sanitizeNumericInput(
-                                  e.target.value,
-                                );
-                                updateInstallmentPayment(
-                                  index,
-                                  'months',
-                                  value,
-                                );
-                              }}
+                            <FormField
+                              control={control}
+                              name={`installmentPayments.${index}.months`}
+                              render={({ field: fieldProps }) => (
+                                <FormItem>
+                                  <FormControl>
+                                    <Input
+                                      {...fieldProps}
+                                      inputMode="numeric"
+                                      type="number"
+                                      placeholder={t('monthsPlaceholder')}
+                                      onChange={(e) => {
+                                        const value = sanitizeNumericInput(
+                                          e.target.value,
+                                        );
+                                        fieldProps.onChange(value);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
                             />
                           </div>
                           <div>
@@ -194,33 +177,38 @@ export default function InstallmentPaymentFormField() {
                               <span className="pointer-events-none absolute inset-y-0 right-3 my-1.5 flex items-center rounded-md border px-2 font-medium">
                                 %
                               </span>
-                              <Input
-                                inputMode="decimal"
-                                type="decimal"
-                                placeholder={t('interestRatePlaceholder')}
-                                value={installment.interestRate}
-                                onChange={(e) => {
-                                  handleDecimalInputChange(
-                                    e.target.value,
-                                    (value) =>
-                                      updateInstallmentPayment(
-                                        index,
-                                        'interestRate',
-                                        value,
-                                      ),
-                                  );
-                                }}
-                                onBlur={(e) => {
-                                  handleDecimalInputBlur(
-                                    e.target.value,
-                                    (value) =>
-                                      updateInstallmentPayment(
-                                        index,
-                                        'interestRate',
-                                        value,
-                                      ),
-                                  );
-                                }}
+                              <FormField
+                                control={control}
+                                name={`installmentPayments.${index}.interestRate`}
+                                render={({ field: fieldProps }) => (
+                                  <FormItem>
+                                    <FormControl>
+                                      <Input
+                                        {...fieldProps}
+                                        inputMode="decimal"
+                                        type="decimal"
+                                        placeholder={t(
+                                          'interestRatePlaceholder',
+                                        )}
+                                        onChange={(e) => {
+                                          handleDecimalInputChange(
+                                            e.target.value,
+                                            (value) =>
+                                              fieldProps.onChange(value),
+                                          );
+                                        }}
+                                        onBlur={(e) => {
+                                          handleDecimalInputBlur(
+                                            e.target.value,
+                                            (value) =>
+                                              fieldProps.onChange(value),
+                                          );
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
                               />
                             </div>
                           </div>
@@ -231,7 +219,7 @@ export default function InstallmentPaymentFormField() {
                 </div>
               )}
 
-              {installmentPayments.length === 0 && (
+              {fields.length === 0 && (
                 <p className="text-muted-foreground py-8 text-center text-sm">
                   {t('noInstallmentPaymentsYet') ??
                     'No installment payments yet.'}

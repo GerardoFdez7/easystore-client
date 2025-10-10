@@ -89,7 +89,7 @@ export function ProductTable({
             <TableRow>
               <TableCell colSpan={7} className="h-24 text-center">
                 <div className="flex flex-col items-center justify-center gap-2">
-                  <p className="text-muted-foreground">
+                  <p className="text-muted-foreground text-sm sm:text-lg">
                     {t('noProductsFound')}
                   </p>
                 </div>
