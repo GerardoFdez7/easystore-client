@@ -25,36 +25,45 @@ query findInventory(
   $page: Int = 1
   $limit: Int = 10
   $addressId: ID
-  $variantId: ID
-  $isArchived: Boolean
-  $lowStockThreshold: Int
   $sortBy: SortBy
   $sortOrder: SortOrder
+  $filters: StockPerWarehouseFilterInput
+  $search: String
 ) {
   getAllWarehouses(
     page: $page
     limit: $limit
     addressId: $addressId
-    variantId: $variantId
-    isArchived: $isArchived
-    lowStockThreshold: $lowStockThreshold
     sortBy: $sortBy
     sortOrder: $sortOrder
+    filters: $filters
+    search: $search
   ) {
     warehouses {
       id
       name
+      createdAt
+      updatedAt
+      addressId
+      addressLine1
+      city
+      countryCode
+      postalCode
       stockPerWarehouses {
         id
         qtyAvailable
         qtyReserved
+        lotNumber
+        serialNumbers
+        productLocation
         estimatedReplenishmentDate
+        variantId
+        variantSku
+        productName
         variantFirstAttribute {
           key
           value
         }
-        productName
-        variantSku
       }
     }
     total

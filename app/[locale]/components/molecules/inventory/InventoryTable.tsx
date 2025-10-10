@@ -14,26 +14,88 @@ import {
 import { cn, formatDate } from '@lib/utils';
 import { FindInventoryQueryVariables } from '@graphql/generated';
 import { InventoryItem } from '@lib/types/inventory';
-import { Package, Plus } from 'lucide-react';
+import {
+  Package,
+  Plus,
+  ArrowDown01,
+  ArrowDown10,
+  ArrowDownAZ,
+  ArrowDownZA,
+  ClockArrowUp,
+  ClockArrowDown,
+} from 'lucide-react';
 import EmptyState from '@molecules/shared/EmptyState';
 import { useTranslations } from 'next-intl';
+
+type SortField = 'available' | 'reserved' | 'date' | 'variantFirstAttribute';
+type SortDirection = 'ASC' | 'DESC';
 
 type InventoryTableProps = {
   variables: FindInventoryQueryVariables;
   className?: string;
   inventory: InventoryItem[];
   onCreateStock?: () => void;
+  onSortChange?: (field: SortField, direction: SortDirection) => void;
+  sortField?: SortField | null;
+  sortDirection?: SortDirection;
 };
 
 export default function InventoryTable({
   className,
   inventory,
   onCreateStock,
+  onSortChange,
+  sortField: externalSortField,
+  sortDirection: externalSortDirection,
 }: InventoryTableProps) {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const sortField = externalSortField ?? 'variantFirstAttribute';
+  const sortDirection = externalSortDirection ?? 'ASC';
   const itemsPerPage = 25;
   const t = useTranslations('Inventory');
+
+  const handleSort = (field: SortField) => {
+    let newDirection: SortDirection = 'ASC';
+
+    if (sortField === field) {
+      newDirection = sortDirection === 'ASC' ? 'DESC' : 'ASC';
+    }
+
+    onSortChange?.(field, newDirection);
+  };
+
+  const getSortIcon = (field: SortField) => {
+    if (sortField !== field) {
+      return null;
+    }
+
+    // Determine if field is numeric, text-based, or date-based
+    const isNumericField = field === 'available' || field === 'reserved';
+    const isDateField = field === 'date';
+
+    if (isDateField) {
+      return sortDirection === 'ASC' ? (
+        <ClockArrowDown className="ml-1 h-4 w-4" />
+      ) : (
+        <ClockArrowUp className="ml-1 h-4 w-4" />
+      );
+    } else if (isNumericField) {
+      return sortDirection === 'ASC' ? (
+        <ArrowDown01 className="ml-1 h-4 w-4" />
+      ) : (
+        <ArrowDown10 className="ml-1 h-4 w-4" />
+      );
+    } else {
+      return sortDirection === 'ASC' ? (
+        <ArrowDownAZ className="ml-1 h-4 w-4" />
+      ) : (
+        <ArrowDownZA className="ml-1 h-4 w-4" />
+      );
+    }
+  };
+
   const handleSelectAll = (checked: boolean) => {
     setSelectedRows(checked ? inventory.map((item) => item.id) : []);
   };
@@ -69,18 +131,50 @@ export default function InventoryTable({
     <div className={cn('w-full', className)}>
       <Table>
         <TableHeader className="text-lg">
-          <TableRow>
+          <TableRow className="hover:bg-background">
             <TableHead className="pl-2">
               <Checkbox
                 checked={selectedRows.length === inventory.length}
                 onCheckedChange={handleSelectAll}
               />
             </TableHead>
-            <TableHead>{t('productTableHead')}</TableHead>
+            <TableHead
+              className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
+              onClick={() => handleSort('variantFirstAttribute')}
+            >
+              <div className="flex items-center justify-center">
+                {t('productTableHead')}
+                {getSortIcon('variantFirstAttribute')}
+              </div>
+            </TableHead>
             <TableHead>{t('skuTableHead')}</TableHead>
-            <TableHead>{t('availableTableHead')}</TableHead>
-            <TableHead>{t('reservedTableHead')}</TableHead>
-            <TableHead>{t('replenishmentDateTableHead')}</TableHead>
+            <TableHead
+              className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
+              onClick={() => handleSort('available')}
+            >
+              <div className="flex items-center justify-center">
+                {t('availableTableHead')}
+                {getSortIcon('available')}
+              </div>
+            </TableHead>
+            <TableHead
+              className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
+              onClick={() => handleSort('reserved')}
+            >
+              <div className="flex items-center justify-center">
+                {t('reservedTableHead')}
+                {getSortIcon('reserved')}
+              </div>
+            </TableHead>
+            <TableHead
+              className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
+              onClick={() => handleSort('date')}
+            >
+              <div className="flex items-center justify-center">
+                {t('replenishmentDateTableHead')}
+                {getSortIcon('date')}
+              </div>
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

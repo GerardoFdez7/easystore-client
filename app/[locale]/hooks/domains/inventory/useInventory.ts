@@ -21,6 +21,7 @@ type StockData =
 export const useInventory = (
   variables: FindInventoryQueryVariables,
   warehouseId?: string,
+  searchTerm?: string,
 ) => {
   // Use warehouse-specific query if warehouseId is provided
   const warehouseQuery = useQuery(FindWarehouseByIdDocument, {
@@ -31,9 +32,15 @@ export const useInventory = (
     errorPolicy: 'all',
   });
 
+  // Add search parameter to variables for general inventory query
+  const inventoryVariables = {
+    ...variables,
+    ...(searchTerm && { search: searchTerm }),
+  };
+
   // Use general inventory query if no specific warehouse is selected
   const inventoryQuery = useQuery(FindInventoryDocument, {
-    variables,
+    variables: inventoryVariables,
     skip: !!warehouseId,
     fetchPolicy: 'cache-first',
     notifyOnNetworkStatusChange: false,
