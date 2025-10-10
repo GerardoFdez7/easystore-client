@@ -51,7 +51,6 @@ export default function InventoryTable({
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Usar el estado externo si está disponible, sino usar el estado interno
   const sortField = externalSortField ?? 'variantFirstAttribute';
   const sortDirection = externalSortDirection ?? 'ASC';
   const itemsPerPage = 25;
@@ -61,11 +60,9 @@ export default function InventoryTable({
     let newDirection: SortDirection = 'ASC';
 
     if (sortField === field) {
-      // Si ya estamos ordenando por este campo, cambiar dirección
       newDirection = sortDirection === 'ASC' ? 'DESC' : 'ASC';
     }
 
-    // Llamar al callback para actualizar los filtros en el componente padre
     onSortChange?.(field, newDirection);
   };
 
