@@ -11,24 +11,6 @@ query findCategoryById($id: ID!) {
       name
       description
       cover
-      createdAt
-      subCategories {
-        id
-        name
-        description
-        cover
-        createdAt
-        subCategories {
-          id
-          cover
-          createdAt
-          description
-          name
-          updatedAt
-        }
-        updatedAt
-      }
-      updatedAt
     }
   }
 }

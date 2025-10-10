@@ -3,44 +3,22 @@
 import { useMemo } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@apollo/client/react';
 import { toast } from 'sonner';
 import type { DocumentNode } from 'graphql';
-
 import {
   UpdateCategoryDocument,
   UpdateCategoryMutation,
   UpdateCategoryMutationVariables,
-  FindAllCategoriesDocument,
 } from '@graphql/generated';
-
-export type CategoryFormValues = z.infer<ReturnType<typeof buildSchema>>;
-
-function buildSchema(t: ReturnType<typeof useTranslations>) {
-  return z.object({
-    title: z
-      .string()
-      .trim()
-      .min(1, { message: t('titleRequired') })
-      .max(120, { message: t('titleTooLong', { max: 120 }) }),
-    description: z
-      .string()
-      .trim()
-      .max(1000, { message: t('descriptionTooLong', { max: 1000 }) })
-      .min(10, { message: t('descriptionTooShort', { min: 10 }) }),
-    cover: z
-      .string()
-      .trim()
-      .min(1, { message: t('coverRequired') })
-      .refine((v) => v.startsWith('/') || /^https?:\/\//i.test(v), {
-        message: t('invalidUrl'),
-      }),
-    subCategoryIds: z.array(z.string()).default([]).optional(),
-  });
-}
+import {
+  buildCategorySchema,
+  CategoryFormValues,
+  defaultFormConfig,
+  defaultCategoryFormValues,
+} from './categoryValidation';
 
 type UpdateHookOptions = {
   id: string;
@@ -61,7 +39,6 @@ export function useUpdateCategory({
   defaultValues,
   redirectTo,
   onSuccess,
-  extraRefetchQueries = [],
 }: UpdateHookOptions) {
   const t = useTranslations('CategoryDetail');
   const router = useRouter();
@@ -69,37 +46,26 @@ export function useUpdateCategory({
     locale?: string;
   };
 
-  const schema = useMemo(() => buildSchema(t), [t]);
+  const schema = useMemo(() => buildCategorySchema(t, true), [t]);
 
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      title: '',
-      description: '',
-      cover: '',
-      subCategoryIds: [],
+      ...defaultCategoryFormValues,
       ...defaultValues,
     },
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-    criteriaMode: 'all',
+    ...defaultFormConfig,
   });
 
   const [mutateUpdate, updateState] = useMutation<
     UpdateCategoryMutation,
     UpdateCategoryMutationVariables
-  >(UpdateCategoryDocument, {
-    refetchQueries: [
-      { query: FindAllCategoriesDocument },
-      ...extraRefetchQueries,
-    ],
-    awaitRefetchQueries: true,
-  });
+  >(UpdateCategoryDocument, {});
 
   const _submit = form.handleSubmit(async (values) => {
     // Normalize base updates for the parent category
     const baseInput = {
-      name: values.title.trim(),
+      name: values.name?.trim(),
       ...(values.description?.trim() !== undefined
         ? { description: values.description?.trim() }
         : {}),
@@ -134,32 +100,11 @@ export function useUpdateCategory({
       }
     };
 
-    const handleGqlError = (e: unknown) => {
-      const err = e as {
-        graphQLErrors?: Array<{
-          message?: string;
-          path?: ReadonlyArray<string | number>;
-        }>;
-      };
-      const msg = err?.graphQLErrors?.[0]?.message ?? 'Error';
-      const path = err?.graphQLErrors?.[0]?.path as string[] | undefined;
-
-      if (path?.includes('name') || /name|title/i.test(msg))
-        form.setError('title', { type: 'server', message: msg });
-      else if (path?.includes('description') || /description/i.test(msg))
-        form.setError('description', { type: 'server', message: msg });
-      else if (path?.includes('cover') || /cover|url/i.test(msg))
-        form.setError('cover', { type: 'server', message: msg });
-
-      return msg;
-    };
-
     try {
       const p = runUpdate();
 
       toast.promise(p, {
         success: t('saveSuccess'),
-        error: (e: unknown) => handleGqlError(e),
       });
 
       await p;
@@ -179,5 +124,104 @@ export function useUpdateCategory({
     void _submit();
   };
 
-  return { form, handleSubmit, isSubmitting: updateState.loading };
+  /** Update multiple fields with validation - for media hook compatibility */
+  const updateMultipleFields = async (
+    fieldsToUpdate: Record<string, unknown>,
+  ) => {
+    if (!id) {
+      throw new Error('Category ID is required');
+    }
+
+    const validatedFields: Record<string, unknown> = {};
+    const validationErrors: string[] = [];
+
+    // Validate ALL fields first before making any update
+    for (const [fieldName, fieldValue] of Object.entries(fieldsToUpdate)) {
+      try {
+        switch (fieldName) {
+          case 'name':
+            if (fieldValue !== undefined) {
+              const parsed = schema.shape.name.safeParse(fieldValue);
+              if (!parsed.success) {
+                validationErrors.push(
+                  `Name: ${parsed.error.issues[0]?.message || 'Invalid'}`,
+                );
+              } else {
+                validatedFields.name = parsed.data;
+              }
+            }
+            break;
+
+          case 'description':
+            if (fieldValue !== undefined) {
+              const parsed = schema.shape.description.safeParse(fieldValue);
+              if (!parsed.success) {
+                validationErrors.push(
+                  `Description: ${parsed.error.issues[0]?.message || 'Invalid'}`,
+                );
+              } else {
+                validatedFields.description = parsed.data;
+              }
+            }
+            break;
+
+          case 'cover':
+            if (fieldValue !== undefined) {
+              const parsed = schema.shape.cover.safeParse(fieldValue);
+              if (!parsed.success) {
+                validationErrors.push(
+                  `Cover: ${parsed.error.issues[0]?.message || 'Invalid'}`,
+                );
+              } else {
+                validatedFields.cover = parsed.data;
+              }
+            }
+            break;
+
+          default:
+            // For unknown fields, just pass them through
+            validatedFields[fieldName] = fieldValue;
+            break;
+        }
+      } catch (_error) {
+        validationErrors.push(`${fieldName}: Validation error`);
+      }
+    }
+
+    // If ANY validation failed, return all errors and don't update anything
+    if (validationErrors.length > 0) {
+      return {
+        success: false,
+        error: validationErrors.join(', '),
+      };
+    }
+
+    // All validations passed - make API call
+    try {
+      const input = {
+        ...(validatedFields.name !== undefined
+          ? { name: String(validatedFields.name).trim() }
+          : {}),
+        ...(validatedFields.description !== undefined
+          ? { description: String(validatedFields.description).trim() }
+          : {}),
+        ...(validatedFields.cover !== undefined
+          ? { cover: String(validatedFields.cover).trim() }
+          : {}),
+      };
+
+      await mutateUpdate({ variables: { id, input } });
+
+      toast.success(t('saveSuccess'));
+    } catch (_e) {}
+  };
+
+  return {
+    form,
+    handleSubmit,
+    isSubmitting: updateState.loading,
+    actions: {
+      updateMultipleFields,
+    },
+  };
 }

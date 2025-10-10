@@ -184,11 +184,9 @@ export function ProductCard({
                 className="text-xs"
               />
             )}
-            {product.tags
-              ?.slice(0, 3)
-              .map((tag) => (
-                <BadgeTag key={tag} tag={tag} className="text-xs" />
-              ))}
+            {product.tags?.slice(0, 3).map((tag) => (
+              <BadgeTag key={tag} tag={tag} className="text-xs" />
+            ))}
           </div>
         </div>
       </div>

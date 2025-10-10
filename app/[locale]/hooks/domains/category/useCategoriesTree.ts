@@ -32,7 +32,7 @@ const mapToTreeNode = (c: GqlCategoryTree): CategoryTreeNode => ({
   name: c.name,
   parentId: c.parentId,
   count: Array.isArray(c.subCategories) ? c.subCategories.length : 0,
-  subCategories: c.subCategories?.map(mapToTreeNode) || [],
+  subCategories: c.subCategories ? c.subCategories.map(mapToTreeNode) : [],
 });
 
 /**

@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react';
 import Link from 'next/link';
 import { SortBy, SortOrder } from '@graphql/generated';
-import { Plus, ListTree } from 'lucide-react';
+import { Plus, ListTree, Edit } from 'lucide-react';
 import { Button } from '@shadcn/ui/button';
 import SearchBar from '@atoms/shared/SearchBar';
 import SortBySelect from '@atoms/shared/SortBySelect';
@@ -14,6 +14,9 @@ interface CategoryControlsProps {
   addButtonHref?: string;
   addButtonText?: string;
   showAddButton?: boolean;
+  editButtonHref?: string;
+  editButtonText?: string;
+  showEditButton?: boolean;
   onTreeToggle?: () => void;
   treeButtonText?: string;
   sortBy: SortBy;
@@ -30,6 +33,9 @@ function CategoryControls({
   addButtonHref,
   addButtonText,
   showAddButton = true,
+  editButtonHref,
+  editButtonText,
+  showEditButton = false,
   onTreeToggle,
   treeButtonText,
   sortBy,
@@ -59,7 +65,20 @@ function CategoryControls({
       aria-label="Category controls"
     >
       <div className="flex w-full flex-col items-center gap-4">
-        <div className="flex w-full justify-end gap-2">
+        <div className="flex w-full flex-col justify-end gap-2 sm:flex-row">
+          {showEditButton && editButtonHref && editButtonText && (
+            <Button
+              asChild
+              variant="outline"
+              disabled={loading}
+              aria-label={editButtonText}
+            >
+              <Link href={editButtonHref}>
+                <Edit className="h-4 w-4" aria-hidden="true" />
+                <span>{editButtonText}</span>
+              </Link>
+            </Button>
+          )}
           {showAddButton && addButtonHref && addButtonText && (
             <Button
               asChild

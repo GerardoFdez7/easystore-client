@@ -192,7 +192,11 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
     }
   };
 
-  const openFileDialog = () => {
+  const openFileDialog = (event?: React.MouseEvent) => {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
     if (fileInputRef.current && !disabled) {
       fileInputRef.current.click();
     }
@@ -211,7 +215,7 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        onClick={openFileDialog}
+        onClick={(event) => openFileDialog(event)}
       >
         <CardContent className="p-6">
           <div className="flex flex-col items-center justify-center space-y-4">
@@ -257,6 +261,11 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
               variant="outline"
               className="border-none shadow-lg"
               disabled={disabled}
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                openFileDialog(event);
+              }}
             >
               {t('chooseFiles')}
             </Button>

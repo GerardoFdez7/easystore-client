@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Dices, Search } from 'lucide-react';
+import { Dices, Plus, Search } from 'lucide-react';
 import { SortBy, SortOrder } from '@graphql/generated';
 import { useCategories, useCategoryByPath } from '@hooks/domains/category';
 import EmptyState from '@molecules/shared/EmptyState';
@@ -21,7 +22,9 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.Name);
   const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.Asc);
   const [treeOpen, setTreeOpen] = useState(false);
+  const router = useRouter();
   const t = useTranslations('Category');
+  const tDetail = useTranslations('CategoryDetail');
 
   // Resolve parent ID from category path
   const { parentId, loading: pathLoading } = useCategoryByPath(categoryPath);
@@ -82,6 +85,19 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
 
   const parentPath = useMemo(() => categoryPath.join('/'), [categoryPath]);
   const newHref = useMemo(() => '/categories/new', []);
+  const addHref = useMemo(() => {
+    if (categoryPath.length > 0) {
+      return `/categories/${parentPath}?add=true`;
+    }
+    return newHref;
+  }, [categoryPath, parentPath, newHref]);
+  const editHref = useMemo(() => {
+    if (categoryPath.length > 0) {
+      return `/categories/${parentPath}?edit=true`;
+    }
+    return undefined;
+  }, [categoryPath, parentPath]);
+
   const isLoading = useMemo(
     () => categoriesLoading || pathLoading,
     [categoriesLoading, pathLoading],
@@ -90,6 +106,10 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
     () => categoriesLoading || pathLoading || !!error,
     [categoriesLoading, pathLoading, error],
   );
+
+  const handleCreateCategory = useCallback(() => {
+    router.push(newHref);
+  }, [router, newHref]);
 
   if (
     categoryPath.length === 0 &&
@@ -107,6 +127,8 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
           icon={Dices}
           title={t('noCategoriesTitle')}
           description={t('noCategoriesDescription')}
+          buttonText={t('createCategory')}
+          onButtonClick={handleCreateCategory}
         />
       </main>
     );
@@ -130,8 +152,15 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
           sortOrder={sortOrder}
           updateSortOrder={handleSortOrderChange}
           searchPlaceholder={t('searchPlaceholder')}
-          addButtonHref={newHref}
-          addButtonText={t('addCategory')}
+          addButtonHref={addHref}
+          addButtonText={
+            categoryPath.length === 0
+              ? t('createCategory')
+              : tDetail('addSubcategories')
+          }
+          editButtonHref={editHref}
+          editButtonText={tDetail('editCategory')}
+          showEditButton={!!editHref}
           onTreeToggle={handleTreeToggle}
           treeButtonText={t('categoryTreeButton')}
           loading={controlsLoading}
@@ -148,6 +177,9 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
             icon={Dices}
             title={t('noSubcategoriesTitle')}
             description={t('noSubcategoriesDescription')}
+            buttonText={tDetail('addSubcategories')}
+            onButtonClick={() => router.push(addHref)}
+            buttonIcon={Plus}
           />
         ) : (
           <CategoryGrid

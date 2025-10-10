@@ -18,10 +18,12 @@ import {
   DrawerTrigger,
 } from '@shadcn/ui/drawer';
 import { Checkbox } from '@shadcn/ui/checkbox';
+import { Search } from 'lucide-react';
 import { cn } from 'utils';
 import { useTranslations } from 'next-intl';
 import { useIsMobile } from '@hooks/utils/useMobile';
 import SearchBar from '@atoms/shared/SearchBar';
+import { useCategories } from '@hooks/domains/category/useCategories';
 
 export type CategoryItem = {
   id: string;
@@ -32,16 +34,16 @@ export type CategoryItem = {
 };
 
 type Props = {
-  catalog: CategoryItem[];
   excludeIds?: string[];
+  currentCategoryId?: string; // Add current category ID to prevent self-selection
   disabled?: boolean;
   onAdd?: (ids: string[]) => void;
   className?: string;
 };
 
 export default function AddSubcategoriesPicker({
-  catalog,
   excludeIds = [],
+  currentCategoryId,
   disabled,
   onAdd,
   className,
@@ -52,15 +54,27 @@ export default function AddSubcategoriesPicker({
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const exclude = useMemo(() => new Set(excludeIds), [excludeIds]);
+
+  // Combine excludeIds with currentCategoryId to prevent self-selection
+  const allExcludeIds = useMemo(() => {
+    const ids = [...excludeIds];
+    if (currentCategoryId) {
+      ids.push(currentCategoryId);
+    }
+    return ids;
+  }, [excludeIds, currentCategoryId]);
+
+  const exclude = useMemo(() => new Set(allExcludeIds), [allExcludeIds]);
+
+  // Fetch categories with includeSubcategories=false
+  const { items: categories, loading } = useCategories({
+    name: q.trim(),
+    includeSubcategories: false,
+  });
 
   const list = useMemo(() => {
-    const base = catalog.filter((c) => !exclude.has(c.id));
-    const query = q.trim().toLowerCase();
-    return query
-      ? base.filter((c) => c.name.toLowerCase().includes(query))
-      : base;
-  }, [catalog, exclude, q]);
+    return categories.filter((c) => !exclude.has(c.id));
+  }, [categories, exclude]);
 
   const toggle = (id: string, checked: boolean) => {
     setSelected((prev) => {
@@ -96,15 +110,14 @@ export default function AddSubcategoriesPicker({
             <label
               key={c.id}
               className={cn(
-                'bg-muted hover:bg-muted/80 flex cursor-pointer items-center justify-between gap-3 border-b px-3 py-2 transition last:border-none',
+                'flex cursor-pointer items-center justify-between gap-3 border-b bg-transparent px-3 py-2 transition last:border-none',
               )}
             >
               <div className="flex items-center gap-3">
                 <Checkbox
                   checked={selected.has(c.id)}
                   onCheckedChange={(v) => toggle(c.id, Boolean(v))}
-                  disabled={disabled}
-                  className="bg-white"
+                  disabled={disabled || loading}
                 />
                 <div className="ring-foreground/10 relative h-8 w-8 overflow-hidden rounded-full ring-1">
                   <Image
@@ -129,7 +142,7 @@ export default function AddSubcategoriesPicker({
         </span>
         <Button
           onClick={addSelected}
-          disabled={disabled || selected.size === 0}
+          disabled={disabled || selected.size === 0 || loading}
           className="text-accent bg-title hover:bg-accent-foreground w-full sm:w-auto"
         >
           {t('add')}
@@ -139,10 +152,8 @@ export default function AddSubcategoriesPicker({
   );
 
   const Trigger = (
-    <Button
-      className="text-accent bg-title hover:bg-accent-foreground h-9 w-full sm:w-auto"
-      disabled={disabled}
-    >
+    <Button variant={'title'} disabled={disabled || loading}>
+      <Search className="h-4 w-4" />
       {t('addSubcategories')}
     </Button>
   );

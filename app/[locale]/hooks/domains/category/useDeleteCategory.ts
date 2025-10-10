@@ -1,4 +1,3 @@
-// hooks/domains/category/useDeleteCategory.ts
 import * as Apollo from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import { toast } from 'sonner';
@@ -73,10 +72,7 @@ export function useDeleteCategory() {
     try {
       await mutate({ variables: { id } });
       toast.success('Category deleted');
-    } catch (e) {
-      toast.error('Could not delete category');
-      throw e;
-    }
+    } catch (_e) {}
   };
 
   return { remove, loading, error };

@@ -14,7 +14,8 @@ export const useCategory = (id?: string) => {
   >(FindCategoryByIdDocument, {
     variables: { id: id as string },
     skip: !id,
-    fetchPolicy: 'cache-first',
+    fetchPolicy: 'cache-and-network',
+    notifyOnNetworkStatusChange: true,
   });
 
   return {

@@ -104,6 +104,28 @@ const databaseConstraintHandlers: ErrorHandler[] = [
       return true;
     },
   },
+  {
+    id: 'category-name-exists',
+    priority: 130,
+    matcher: (error: GraphQLFormattedError) => {
+      const message = error.message?.toLowerCase() || '';
+      return (
+        message.includes('category name already exists') ||
+        (message.includes('category') &&
+          message.includes('name') &&
+          message.includes('exists'))
+      );
+    },
+    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
+      const { locale, isDevelopment } = context;
+      toast.warning(getLocalizedMessage(locale, 'categoryNameAlreadyExists'), {
+        description:
+          getLocalizedMessage(locale, 'categoryNameAlreadyExistsDescription') +
+          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+      });
+      return true;
+    },
+  },
 ];
 
 /**
@@ -194,6 +216,7 @@ const httpStatusHandlers: ErrorHandler[] = [
         'getAllAddresses',
         'getAllProducts',
         'getAllCategories',
+        'getCategoryById',
       ];
 
       // Check if this error comes from an expected operation
@@ -397,11 +420,11 @@ export function processGraphQLError(
   // Check if this error will be handled by any specific handler (not just silent ones)
   const isHandledError = matchResult.matched;
 
-  // Only log to console if it's not handled by a specific handler or if we're in development
-  // and the handler explicitly allows logging
+  // Only log to console if it's handled by a specific handler that explicitly allows logging
   if (
-    !isHandledError ||
-    (context.isDevelopment && matchResult.handler?.allowConsoleLog)
+    isHandledError &&
+    context.isDevelopment &&
+    matchResult.handler?.allowConsoleLog
   ) {
     console.error('GraphQL Error Debug:', {
       message: error.message,
@@ -416,7 +439,7 @@ export function processGraphQLError(
     return matchResult.handler.handler(error, context);
   }
 
-  // Use fallback handler
+  // Use fallback handler (which will log "Unhandled GraphQL Error" for unhandled errors)
   errorRegistry.fallbackHandler(error, context);
   return true;
 }

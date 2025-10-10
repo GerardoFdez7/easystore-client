@@ -176,13 +176,19 @@ const CarouselMedia = ({
             <CarouselItem key={item.id}>
               <div className="relative mx-auto mb-3 aspect-square max-w-lg">
                 {item.type === 'image' ? (
-                  <Image
-                    src={item.src}
-                    alt={item.alt}
-                    fill
-                    className="rounded-lg object-cover transition-opacity"
-                  />
-                ) : (
+                  item.src ? (
+                    <Image
+                      src={item.src}
+                      alt={item.alt}
+                      fill
+                      className="rounded-lg object-cover transition-opacity"
+                    />
+                  ) : (
+                    <div className="bg-muted flex h-full w-full items-center justify-center rounded-lg">
+                      <div className="bg-muted-foreground/20 h-16 w-16 rounded-lg" />
+                    </div>
+                  )
+                ) : item.src ? (
                   <video
                     className="h-full w-full rounded-lg object-cover transition-opacity"
                     controls
@@ -192,6 +198,10 @@ const CarouselMedia = ({
                     autoPlay
                     muted
                   />
+                ) : (
+                  <div className="bg-muted flex h-full w-full items-center justify-center rounded-lg">
+                    <div className="bg-muted-foreground/20 h-16 w-16 rounded-lg" />
+                  </div>
                 )}
               </div>
             </CarouselItem>

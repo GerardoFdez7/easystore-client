@@ -884,12 +884,25 @@
     "warehouseAddressAlreadyExists": "Indirizzo di magazzino già esistente",
     "warehouseAddressAlreadyExistsDescription": "Un magazzino con questo indirizzo esiste già. Per favore, scegli un altro indirizzo.",
     "addressNameAlreadyExists": "Nome indirizzo già esistente",
-    "addressNameAlreadyExistsDescription": "Esiste già un indirizzo con questo nome. Per favore, scegli un nome diverso."
+    "addressNameAlreadyExistsDescription": "Esiste già un indirizzo con questo nome. Per favore, scegli un nome diverso.",
+    "categoryNameAlreadyExists": "Nome categoria già esistente",
+    "categoryNameAlreadyExistsDescription": "Esiste già una categoria con questo nome. Per favore, scegli un nome diverso."
   },
   "Shared": {
     "loadMore": "Carica più",
     "cancel": "Cancellare",
     "save": "Mantenere",
+    "create": "Crea",
+    "add": "Aggiungi",
+    "options": {
+      "options": "Opzioni",
+      "delete": "Eliminare",
+      "confirmDelete": "Conferma Eliminazione",
+      "deleteDescription": "Sei sicuro di voler eliminare questo elemento? Questa azione non può essere annullata.",
+      "deleting": "Eliminazione...",
+      "archive": "Archiviare",
+      "cancel": "Annullare"
+    },
     "sortBy": {
       "createdAt": "Creazione",
       "name": "Nome",
@@ -1079,6 +1092,7 @@
   "Category": {
     "welcomeCategory": "Categorie",
     "addCategory": "Aggiungi categoria",
+    "createCategory": "Crea categoria",
     "searchPlaceholder": "Cerca categorie...",
     "categoryCount": "sottocategorie",
     "categoryTree": "Albero delle Categorie",
@@ -1087,7 +1101,7 @@
     "expandAll": "Espandi tutto",
     "collapseAll": "Comprimi tutto",
     "title": "Eliminare la categoria?",
-    "description": "Questa azione non può essere annullata.",
+    "description": "Se elimini questa categoria, tutte le sue sottocategorie dirette verranno eliminate anch'esse, e le sottocategorie di quelle diventeranno di livello superiore.",
     "cancel": "Annulla",
     "delete": "Elimina",
     "edit": "Modifica",
@@ -1104,8 +1118,10 @@
     "noSearchResultsDescription": "Prova ad aggiustare i termini di ricerca o sfoglia tutte le categorie."
   },
   "CategoryDetail": {
-    "welcomeDetailCategory": "Dettaglio categoria",
+    "welcomeDetailCategory": "Crea una nuova categoria",
     "addCategory": "Aggiungi categoria",
+    "addCategoryDescription": "Compila i dettagli per creare una nuova categoria",
+    "createSubcategory": "Crea sottocategoria",
     "editCategory": "Modifica categoria",
     "name": "Nome",
     "namePlaceholder": "Elettronica",
@@ -1119,6 +1135,7 @@
     "itemsCount": "{count, plural, one {# sottocategoria} other {# sottocategorie}}",
     "add": "Aggiungi",
     "addSubcategories": "Aggiungi sottocategorie",
+    "removeRelation": "Rimuovi relazione",
     "noResults": "Nessun risultato",
     "close": "Chiudi",
     "noCategories": "Ancora nessuna categoria.",
@@ -1130,6 +1147,7 @@
     "descriptionTooShort": "La descrizione deve contenere almeno {min} caratteri.",
     "invalidUrl": "L'URL non è valido.",
     "saveSuccess": "Categoria aggiornata con successo.",
-    "createSuccess": "Categoria creata con successo."
+    "createSuccess": "Categoria creata con successo.",
+    "addSubcategory": "Aggiungi sottocategoria a"
   }
 }
