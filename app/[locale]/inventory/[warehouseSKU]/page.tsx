@@ -1,10 +1,10 @@
 import StockDetailTemplate from '@templates/StockDetail';
 
 type PageProps = {
-  params: { warehouseSKU: string };
+  params: Promise<{ warehouseSKU: string }>;
 };
 
-export default function StockDetailPage({ params }: PageProps) {
-  const { warehouseSKU } = params;
+export default async function StockDetailPage({ params }: PageProps) {
+  const { warehouseSKU } = await params;
   return <StockDetailTemplate warehouseSku={warehouseSKU} />;
 }
