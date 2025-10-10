@@ -49,6 +49,7 @@ query findInventory(
       postalCode
       stockPerWarehouses {
         id
+        warehouseId
         qtyAvailable
         qtyReserved
         lotNumber
