@@ -217,9 +217,22 @@ const MultipleMediaUploader = forwardRef<
           cleanupObjectUrls([mediaItems[index]]);
         }
 
-        setMediaItems(newMediaItems);
+      setMediaItems(newMediaItems);
+
+      // If all items were removed, notify parent to clear form fields and trigger validation
+      if (newMediaItems.length === 0) {
+        // Call onMediaProcessed with null to signal all media was removed
+        void onMediaProcessed?.(null);
+        setIsEditing(false);
+        setPersistedMedia(null);
       }
-    };
+
+      // Only exit editing mode if we have no items left AND we were working with new files
+      if (newMediaItems.length === 0 && selectedFiles.length > 0) {
+        setIsEditing(false);
+      }
+    }
+  };
 
     const handleReorderItems = (fromIndex: number, toIndex: number) => {
       // For existing media (no selectedFiles), only reorder mediaItems
@@ -292,11 +305,24 @@ const MultipleMediaUploader = forwardRef<
         return;
       }
 
-      // Case 2: We have existing media that was modified (reordered/removed)
-      if (mediaItems.length > 0 && !selectedFiles.length) {
-        try {
-          // Extract just the URLs from mediaItems for backwards compatibility
-          const mediaUrls = mediaItems.map((item) => item.src);
+    // Case 2: We have existing media that was modified (reordered/removed)
+    if (mediaItems.length > 0 && !selectedFiles.length) {
+      // Validate that we still have at least minimum items
+      const validation = validateFileCountForSubmission(
+        Array(mediaItems.length).fill(null) as File[],
+        true,
+        maxItems,
+        minItems,
+        t,
+      );
+      if (!validation.isValid) {
+        onUploadError?.(validation.error || '');
+        return;
+      }
+
+      try {
+        // Extract just the URLs from mediaItems for backwards compatibility
+        const mediaUrls = mediaItems.map((item) => item.src);
 
           // Create processed data from current mediaItems state
           const processedData = {

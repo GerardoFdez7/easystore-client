@@ -6,6 +6,7 @@ import NameFormField from '@molecules/products/product-detail/NameFormField';
 import BrandManufacturerFormField from '@molecules/products/product-detail/BrandManufacturerFormField';
 import ShortLongDescriptionFormField from '@molecules/products/product-detail/ShortLongDescriptionFormField';
 import TypeProductFormField from '@molecules/products/product-detail/TypeProductFormField';
+import MediaFormField from '@molecules/products/product-detail/MediaFormField';
 import { Form } from '@shadcn/ui/form';
 import MediaUploader from '@organisms/shared/MediaUploader';
 import type { MultipleMediaUploaderRef } from '@molecules/shared/MultipleMediaUploader';
@@ -222,29 +223,7 @@ export default function MainProductDetail({
               productIsArchived={product?.isArchived ?? false}
             />
           </div>
-          <MediaUploader
-            multiple={true}
-            maxImageSize={10}
-            maxVideoSize={50}
-            initialMedia={initialMedia}
-            onMediaProcessed={handleMediaProcessed}
-            onUploadSuccess={(_url) => {
-              // Upload success handled by the hook
-            }}
-            onUploadError={(_error) => {
-              // Upload error handled by the hook
-            }}
-            renderEditButton={(onEdit, isEditing, hasMedia) => (
-              <button
-                type="button"
-                onClick={onEdit}
-                disabled={isEditing || !hasMedia || isSubmitting}
-                className="mt-2 inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {isEditing ? 'Editing...' : 'Edit Media'}
-              </button>
-            )}
-          />
+          <MediaFormField isSubmitting={isSubmitting} />
           <NameFormField />
           <ShortLongDescriptionFormField />
           <CategoryFormField />
