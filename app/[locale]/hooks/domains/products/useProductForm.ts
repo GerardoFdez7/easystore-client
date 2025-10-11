@@ -57,8 +57,8 @@ const createProductFormSchema = (t: (key: string) => string) =>
       }),
     cover: z
       .string()
-      .url({ message: t('mediaUrlInvalid') })
-      .or(z.literal('')),
+      .min(1, { message: t('coverRequired') })
+      .url({ message: t('mediaUrlInvalid') }),
     productType: z.enum(['PHYSICAL', 'DIGITAL'], {
       errorMap: () => ({ message: t('productTypeRequired') }),
     }),

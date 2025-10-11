@@ -129,6 +129,14 @@ const MultipleMediaUploader: React.FC<MultipleMediaUploaderProps> = ({
 
       setMediaItems(newMediaItems);
 
+      // If all items were removed, notify parent to clear form fields and trigger validation
+      if (newMediaItems.length === 0) {
+        // Call onMediaProcessed with null to signal all media was removed
+        void onMediaProcessed?.(null);
+        setIsEditing(false);
+        setPersistedMedia(null);
+      }
+
       // Only exit editing mode if we have no items left AND we were working with new files
       if (newMediaItems.length === 0 && selectedFiles.length > 0) {
         setIsEditing(false);
@@ -201,6 +209,19 @@ const MultipleMediaUploader: React.FC<MultipleMediaUploaderProps> = ({
 
     // Case 2: We have existing media that was modified (reordered/removed)
     if (mediaItems.length > 0 && !selectedFiles.length) {
+      // Validate that we still have at least minimum items
+      const validation = validateFileCountForSubmission(
+        Array(mediaItems.length).fill(null) as File[],
+        true,
+        maxItems,
+        minItems,
+        t,
+      );
+      if (!validation.isValid) {
+        onUploadError?.(validation.error || '');
+        return;
+      }
+
       try {
         // Extract just the URLs from mediaItems for backwards compatibility
         const mediaUrls = mediaItems.map((item) => item.src);
@@ -229,6 +250,20 @@ const MultipleMediaUploader: React.FC<MultipleMediaUploaderProps> = ({
         console.error('Error processing existing media:', error);
         onUploadError?.('Failed to process media changes');
       }
+      return;
+    }
+
+    // Case 3: No items at all - validate and show error
+    const validation = validateFileCountForSubmission(
+      [],
+      true,
+      maxItems,
+      minItems,
+      t,
+    );
+    if (!validation.isValid) {
+      onUploadError?.(validation.error || '');
+      return;
     }
   };
 
