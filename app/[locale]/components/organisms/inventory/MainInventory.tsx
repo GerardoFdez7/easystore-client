@@ -37,7 +37,7 @@ export default function MainInventory() {
 
   // Variables for the general inventory query
   const variables: FindInventoryQueryVariables = {
-    filters: sortField
+    stockFilters: sortField
       ? {
           sortBy: {
             [sortField]: sortDirection,
