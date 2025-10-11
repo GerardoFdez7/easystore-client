@@ -1,11 +1,41 @@
 mutation addVariantToProduct($input: CreateVariantInput!) {
   addVariant(input: $input) {
     variants {
+      id
       price
       condition
+      weight
+      sku
+      ean
+      upc
+      isbn
+      barcode
+      variantCover
+      personalizationOptions
       attributes {
         key
         value
+      }
+      dimension {
+        height
+        length
+        width
+      }
+      installmentPayments {
+        interestRate
+        months
+      }
+      variantMedia {
+        mediaType
+        position
+        productId
+        url
+        variantId
+      }
+      warranties {
+        coverage
+        instructions
+        months
       }
     }
   }
@@ -18,6 +48,7 @@ mutation updateVariantInProduct(
 ) {
   updateVariant(id: $id, productId: $productId, input: $input) {
     variants {
+      id
       attributes {
         key
         value

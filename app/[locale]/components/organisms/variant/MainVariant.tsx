@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 import { Form } from '@shadcn/ui/form';
 import MediaUploader from '@organisms/shared/MediaUploader';
 import PriceConditionFormField from '@molecules/variant/PriceConditionFormField';
@@ -12,40 +12,26 @@ import PersonalizationOptionsFormField from '@molecules/variant/PersonalizationO
 import InstallmentPaymentFormField from '@molecules/variant/InstallmentPaymentFormField';
 import WarrantyFormField from '@molecules/variant/WarrantyFormField';
 import SaveButton from '@atoms/shared/SaveButton';
+import { useVariantForm } from '@hooks/domains/products/variant';
 
-// Mock useVariant hook for testing purposes
-function useVariant() {
-  const form = useForm({
-    defaultValues: {
-      price: '',
-      condition: '',
-      attributes: [],
-      height: '',
-      width: '',
-      length: '',
-      sku: '',
-      upc: '',
-      ean: '',
-      isbn: '',
-      barcode: '',
-      personalizationOptions: [],
-      installmentPayments: [],
-      warranties: [],
-      isArchived: false,
-    },
-  });
-
-  const handleSubmit = (data: unknown) => {
-    console.log('Form submitted:', data);
-  };
-
-  const loading = false;
-
-  return { form, handleSubmit, loading };
+interface MainVariantProps {
+  productId: string;
+  variantId?: string;
+  isNew: boolean;
 }
 
-export default function MainVariant() {
-  const { form, handleSubmit, loading } = useVariant();
+export default function MainVariant({
+  productId,
+  variantId,
+  isNew,
+}: MainVariantProps) {
+  const { form, handleSubmit, isSubmitting, hasChanges, variant } =
+    useVariantForm({
+      productId,
+      variantId,
+      isNew,
+    });
+
   return (
     <main className="mx-4 sm:mx-auto">
       <FormProvider {...form}>
@@ -57,7 +43,12 @@ export default function MainVariant() {
             }}
             className="space-y-6"
           >
-            <MediaUploader multiple={true} />
+            <MediaUploader
+              multiple={true}
+              initialMedia={
+                variant?.variantMedia?.map((media) => media.url) || []
+              }
+            />
             <PriceConditionFormField />
             <AttributesFormField />
             <DimensionsRow />
@@ -66,7 +57,13 @@ export default function MainVariant() {
             <InstallmentPaymentFormField />
             <WarrantyFormField />
             <div className="flex justify-end">
-              <SaveButton type="submit" loading={loading} size="lg" />
+              <SaveButton
+                type="submit"
+                loading={isSubmitting}
+                disabled={isNew ? isSubmitting : !hasChanges || isSubmitting}
+                size="lg"
+                translationKey={isNew ? 'add' : 'save'}
+              />
             </div>
           </form>
         </Form>

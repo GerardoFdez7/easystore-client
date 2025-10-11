@@ -65,7 +65,7 @@ export type AddVariantToProductInput = {
 export type AddressType = {
   __typename?: 'AddressType';
   addressLine1: Scalars['String']['output'];
-  addressLine2: Scalars['String']['output'];
+  addressLine2?: Maybe<Scalars['String']['output']>;
   addressType: AddressTypeEnum;
   city: Scalars['String']['output'];
   countryId: Scalars['String']['output'];
@@ -1024,7 +1024,7 @@ export type CreateAddressMutation = {
     __typename?: 'AddressType';
     id: string;
     addressLine1: string;
-    addressLine2: string;
+    addressLine2?: string | null;
     addressType: AddressTypeEnum;
     city: string;
     countryId: string;
@@ -1047,7 +1047,7 @@ export type UpdateAddressMutation = {
     __typename?: 'AddressType';
     id: string;
     addressLine1: string;
-    addressLine2: string;
+    addressLine2?: string | null;
     addressType: AddressTypeEnum;
     city: string;
     countryId: string;
@@ -1078,7 +1078,7 @@ export type FindAddressByIdQuery = {
     __typename?: 'AddressType';
     id: string;
     addressLine1: string;
-    addressLine2: string;
+    addressLine2?: string | null;
     addressType: AddressTypeEnum;
     city: string;
     countryId: string;
@@ -1107,7 +1107,7 @@ export type FindAllAddressesQuery = {
       __typename?: 'AddressType';
       id: string;
       addressLine1: string;
-      addressLine2: string;
+      addressLine2?: string | null;
       addressType: AddressTypeEnum;
       city: string;
       countryId: string;
@@ -1770,6 +1770,7 @@ export type UpdateMutation = {
     categories?: Array<{
       __typename?: 'ProductCategory';
       categoryId: string;
+      categoryName?: string | null;
     }> | null;
     media?: Array<{
       __typename?: 'Media';
@@ -1786,6 +1787,7 @@ export type UpdateMutation = {
     }> | null;
     variants?: Array<{
       __typename?: 'Variant';
+      id: string;
       barcode?: string | null;
       condition: ConditionEnum;
       ean?: string | null;
@@ -1869,6 +1871,7 @@ export type FindProductByIdQuery = {
   __typename?: 'Query';
   getProductById: {
     __typename?: 'Product';
+    id: string;
     name: string;
     shortDescription: string;
     longDescription?: string | null;
@@ -1889,9 +1892,11 @@ export type FindProductByIdQuery = {
     categories?: Array<{
       __typename?: 'ProductCategory';
       categoryId: string;
+      categoryName?: string | null;
     }> | null;
     variants?: Array<{
       __typename?: 'Variant';
+      id: string;
       price: number;
       condition: ConditionEnum;
       weight?: number | null;
@@ -1962,6 +1967,7 @@ export type FindAllProductsQuery = {
     hasMore: boolean;
     products: Array<{
       __typename?: 'Product';
+      id: string;
       name: string;
       brand?: string | null;
       cover: string;
@@ -1976,6 +1982,7 @@ export type FindAllProductsQuery = {
       categories?: Array<{
         __typename?: 'ProductCategory';
         categoryId: string;
+        categoryName?: string | null;
       }> | null;
       media?: Array<{
         __typename?: 'Media';
@@ -1992,6 +1999,7 @@ export type FindAllProductsQuery = {
       }> | null;
       variants?: Array<{
         __typename?: 'Variant';
+        id: string;
         barcode?: string | null;
         condition: ConditionEnum;
         ean?: string | null;
@@ -2002,6 +2010,7 @@ export type FindAllProductsQuery = {
         upc?: string | null;
         variantCover?: string | null;
         weight?: number | null;
+        isArchived?: boolean | null;
         attributes: Array<{
           __typename?: 'Attribute';
           key: string;
@@ -2079,13 +2088,47 @@ export type AddVariantToProductMutation = {
     __typename?: 'Product';
     variants?: Array<{
       __typename?: 'Variant';
+      id: string;
       price: number;
       condition: ConditionEnum;
+      weight?: number | null;
+      sku?: string | null;
+      ean?: string | null;
+      upc?: string | null;
+      isbn?: string | null;
+      barcode?: string | null;
+      variantCover?: string | null;
+      personalizationOptions?: Array<string> | null;
       attributes: Array<{
         __typename?: 'Attribute';
         key: string;
         value: string;
       }>;
+      dimension?: {
+        __typename?: 'Dimension';
+        height: number;
+        length: number;
+        width: number;
+      } | null;
+      installmentPayments?: Array<{
+        __typename?: 'Installment';
+        interestRate: number;
+        months: number;
+      }> | null;
+      variantMedia?: Array<{
+        __typename?: 'Media';
+        mediaType: MediaTypeEnum;
+        position: number;
+        productId?: string | null;
+        url: string;
+        variantId?: string | null;
+      }> | null;
+      warranties?: Array<{
+        __typename?: 'Warranty';
+        coverage: string;
+        instructions: string;
+        months: number;
+      }> | null;
     }> | null;
   };
 };
@@ -2102,6 +2145,7 @@ export type UpdateVariantInProductMutation = {
     __typename?: 'Product';
     variants?: Array<{
       __typename?: 'Variant';
+      id: string;
       barcode?: string | null;
       condition: ConditionEnum;
       weight?: number | null;
@@ -5756,6 +5800,10 @@ export const UpdateDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'categoryId' },
                       },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'categoryName' },
+                      },
                     ],
                   },
                 },
@@ -5827,6 +5875,7 @@ export const UpdateDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'attributes' },
@@ -6153,6 +6202,7 @@ export const FindProductByIdDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 {
                   kind: 'Field',
@@ -6197,6 +6247,10 @@ export const FindProductByIdDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'categoryId' },
                       },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'categoryName' },
+                      },
                     ],
                   },
                 },
@@ -6206,6 +6260,7 @@ export const FindProductByIdDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'price' } },
                       {
                         kind: 'Field',
@@ -6536,6 +6591,7 @@ export const FindAllProductsDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'brand' } },
                       {
@@ -6547,6 +6603,10 @@ export const FindAllProductsDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'categoryId' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'categoryName' },
                             },
                           ],
                         },
@@ -6636,6 +6696,10 @@ export const FindAllProductsDocument = {
                         selectionSet: {
                           kind: 'SelectionSet',
                           selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'attributes' },
@@ -6792,6 +6856,10 @@ export const FindAllProductsDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'weight' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'isArchived' },
                             },
                           ],
                         },
@@ -7036,10 +7104,31 @@ export const AddVariantToProductDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'price' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'condition' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'weight' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'sku' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'ean' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'upc' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'isbn' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'barcode' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variantCover' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'personalizationOptions' },
                       },
                       {
                         kind: 'Field',
@@ -7054,6 +7143,94 @@ export const AddVariantToProductDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'value' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'dimension' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'height' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'length' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'width' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'installmentPayments' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'interestRate' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'months' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variantMedia' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'mediaType' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'position' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'productId' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'url' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'variantId' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'warranties' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'coverage' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'instructions' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'months' },
                             },
                           ],
                         },
@@ -7161,6 +7338,7 @@ export const UpdateVariantInProductDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'attributes' },

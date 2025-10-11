@@ -3,13 +3,27 @@ import HeaderDashboard from '@organisms/shared/HeaderDashboard';
 import SidebarLayout from '@organisms/shared/SidebarLayout';
 import { useTranslations } from 'next-intl';
 
-export default function VariantTemplate() {
+interface VariantTemplateProps {
+  productId: string;
+  variantId?: string;
+  isNew: boolean;
+}
+
+export default function VariantTemplate({
+  productId,
+  variantId,
+  isNew,
+}: VariantTemplateProps) {
   const t = useTranslations('Variant');
   return (
     <div className="bg-background flex min-h-screen flex-col">
       <HeaderDashboard />
       <SidebarLayout title={t('welcomeVariant')}>
-        <MainVariant />
+        <MainVariant
+          productId={productId}
+          variantId={variantId}
+          isNew={isNew}
+        />
       </SidebarLayout>
     </div>
   );
