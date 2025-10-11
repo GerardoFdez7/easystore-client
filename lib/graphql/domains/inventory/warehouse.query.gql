@@ -27,8 +27,7 @@ query findInventory(
   $addressId: ID
   $sortBy: SortBy
   $sortOrder: SortOrder
-  $filters: StockPerWarehouseFilterInput
-  $search: String
+  $stockFilters: StockPerWarehouseFilterInput
 ) {
   getAllWarehouses(
     page: $page
@@ -36,8 +35,7 @@ query findInventory(
     addressId: $addressId
     sortBy: $sortBy
     sortOrder: $sortOrder
-    filters: $filters
-    search: $search
+    stockFilters: $stockFilters
   ) {
     warehouses {
       id
