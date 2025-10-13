@@ -77,9 +77,9 @@ export default function InventoryTable({
 
     if (isDateField) {
       return sortDirection === 'ASC' ? (
-        <ClockArrowDown className="ml-1 h-4 w-4" />
-      ) : (
         <ClockArrowUp className="ml-1 h-4 w-4" />
+      ) : (
+        <ClockArrowDown className="ml-1 h-4 w-4" />
       );
     } else if (isNumericField) {
       return sortDirection === 'ASC' ? (
