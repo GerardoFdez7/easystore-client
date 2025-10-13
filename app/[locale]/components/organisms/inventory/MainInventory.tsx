@@ -136,39 +136,25 @@ export default function MainInventory() {
         onSearchChange={setSearchTerm}
         className="mb-2"
       />
-      <SkeletonWrapper loading={loading} fallbackWidth="sm:w-70 w-40">
+     <SkeletonWrapper loading={loading} fallbackWidth="w-50">
         <WarehouseCombobox
           value={selectedWarehouseId}
           onChange={setSelectedWarehouseId}
         />
       </SkeletonWrapper>
-
-      {/* State when no warehouse is selected */}
-      {!selectedWarehouseId && (
-        <EmptyState
-          icon={Warehouse}
-          title={t('noWarehouseSelected')}
-          description={t('selectWarehousePrompt')}
-          buttonText={t('manageWarehousesButton')}
-          buttonIcon={Plus}
-          onButtonClick={() => setIsWarehouseManagementOpen(true)}
+      {}
+      {loading ? (
+        <InventoryTableSkeleton />
+      ) : (
+        <InventoryTable
+          variables={variables}
+          inventory={inventory}
+          onCreateStock={handleCreateStock}
+          onSortChange={handleSortChange}
+          sortField={sortField}
+          sortDirection={sortDirection}
         />
       )}
-
-      {/* Mostrar inventario solo cuando se selecciona un almacén */}
-      {selectedWarehouseId &&
-        (loading ? (
-          <InventoryTableSkeleton />
-        ) : (
-          <InventoryTable
-            variables={variables}
-            inventory={inventory}
-            onCreateStock={handleCreateStock}
-            onSortChange={handleSortChange}
-            sortField={sortField}
-            sortDirection={sortDirection}
-          />
-        ))}
       <AddStockDialog
         open={isAddStockDialogOpen}
         onOpenChange={setIsAddStockDialogOpen}
