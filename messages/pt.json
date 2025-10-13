@@ -937,6 +937,8 @@
     "searchWarehouses": "Pesquisar armazéns...",
     "loading": "Carregando...",
     "noWarehousesFound": "Nenhum armazém encontrado.",
+    "noWarehouseSelected": "Nenhum armazém selecionado",
+    "selectWarehousePrompt": "Selecione um armazém para continuar",
     "searchVariants": "Pesquisar variantes...",
     "loadingVariants": "Carregando variantes...",
     "errorLoadingVariants": "Erro ao carregar variantes",

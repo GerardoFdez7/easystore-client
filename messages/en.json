@@ -985,6 +985,8 @@
     "searchWarehouses": "Search warehouses...",
     "loading": "Loading...",
     "noWarehousesFound": "No warehouses found.",
+    "noWarehouseSelected": "No warehouse selected",
+    "selectWarehousePrompt": "Select a warehouse to continue",
     "errorLoadingVariants": "Error Loading Variants",
     "errorLoadingVariantsDescription": "There was an error loading product variants. Please try again.",
     "sortBy": "Sort by",
