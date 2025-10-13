@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { Warehouse, Plus } from 'lucide-react';
 import {
@@ -35,30 +35,33 @@ export default function MainInventory() {
   const [sortField, setSortField] = useState<SortField | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>('ASC');
 
-  // Variables for the general inventory query
-  const variables: FindInventoryQueryVariables = {
-    stockFilters: sortField
-      ? {
-          sortBy: {
-            [sortField]: sortDirection,
-          },
-        }
-      : undefined,
+  // Mapeo de campos de UI -> backend StockPerWarehouseSortBy
+  const serverSortFieldMap: Record<
+    SortField,
+    'available' | 'reserved' | 'replenishmentDate' | 'variantFirstAttribute'
+  > = {
+    available: 'available',
+    reserved: 'reserved',
+    date: 'replenishmentDate',
+    variantFirstAttribute: 'variantFirstAttribute',
   };
 
-  // Debounce the search term for server-side querying
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>('');
-  useEffect(() => {
-    const id = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm.trim());
-    }, 300);
-    return () => clearTimeout(id);
-  }, [searchTerm]);
+  // Construir variables para query general: sorting + search en servidor
+  const trimmedSearch = searchTerm.trim();
+  const sortKey = sortField ? serverSortFieldMap[sortField] : undefined;
+  const variables: FindInventoryQueryVariables = {
+    stockFilters:
+      sortKey || trimmedSearch
+        ? {
+            ...(trimmedSearch ? { search: trimmedSearch } : {}),
+            ...(sortKey ? { sortBy: { [sortKey]: sortDirection } } : {}),
+          }
+        : undefined,
+  };
 
   const { inventory, loading, error, refetch } = useInventory(
     variables,
     selectedWarehouseId || undefined,
-    debouncedSearchTerm,
   );
 
   // Warehouse management for creating the first warehouse
@@ -81,28 +84,12 @@ export default function MainInventory() {
     setIsWarehouseFormOpen(false);
   };
 
-  // Refetch data when searchTerm or sortField changes (automatic search)
-  useEffect(() => {
-    const updatedVariables: FindInventoryQueryVariables = {
-      name: searchTerm || undefined,
-      filters: sortField
-        ? {
-            sortBy: {
-              [sortField]: sortDirection,
-            },
-          }
-        : undefined,
-    };
-    void refetch(updatedVariables).catch((_error) => {});
-  }, [searchTerm, sortField, sortDirection, refetch]);
-
   const handleSortChange = useCallback(
     (field: SortField, direction: SortDirection) => {
       setSortField(field);
       setSortDirection(direction);
-      void refetch().catch((_error) => {});
     },
-    [refetch],
+    [],
   );
 
   const handleCreateStock = useCallback(() => {
