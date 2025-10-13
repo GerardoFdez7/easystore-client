@@ -142,18 +142,21 @@ export default function MainInventory() {
         />
       </SkeletonWrapper>
 
-      {loading ? (
-        <InventoryTableSkeleton />
-      ) : (
-        <InventoryTable
-          variables={variables}
-          inventory={inventory}
-          onCreateStock={handleCreateStock}
-          onSortChange={handleSortChange}
-          sortField={sortField}
-          sortDirection={sortDirection}
-        />
-      )}
+      {/* No mostrar inventario hasta que se seleccione un almacén */}
+      {selectedWarehouseId ? (
+        loading ? (
+          <InventoryTableSkeleton />
+        ) : (
+          <InventoryTable
+            variables={variables}
+            inventory={inventory}
+            onCreateStock={handleCreateStock}
+            onSortChange={handleSortChange}
+            sortField={sortField}
+            sortDirection={sortDirection}
+          />
+        )
+      ) : null}
       <AddStockDialog
         open={isAddStockDialogOpen}
         onOpenChange={setIsAddStockDialogOpen}
