@@ -939,6 +939,8 @@
     "noWarehouseSelected": "Ningún almacén seleccionado",
     "selectWarehousePrompt": "Selecciona un almacén para continuar",
     "searchVariants": "Buscar variantes...",
+    "ascending": "Ascendente",
+    "descending": "Descendente",
     "loadingVariants": "Cargando variantes...",
     "errorLoadingVariants": "Error al cargar variantes",
     "sortByName": "Nombre",

@@ -14,6 +14,8 @@ import {
 import { cn, formatDate } from '@lib/utils';
 import { FindInventoryQueryVariables } from '@graphql/generated';
 import { InventoryItem } from '@lib/types/inventory';
+import type { SortDirection } from '@lib/types/sort';
+import type { SortField } from '@lib/types/inventory';
 import {
   Package,
   Plus,
@@ -26,9 +28,6 @@ import {
 } from 'lucide-react';
 import EmptyState from '@molecules/shared/EmptyState';
 import { useTranslations } from 'next-intl';
-
-type SortField = 'available' | 'reserved' | 'date' | 'variantFirstAttribute';
-type SortDirection = 'ASC' | 'DESC';
 
 type InventoryTableProps = {
   variables: FindInventoryQueryVariables;
@@ -73,25 +72,43 @@ export default function InventoryTable({
 
     // Determine if field is numeric, text-based, or date-based
     const isNumericField = field === 'available' || field === 'reserved';
-    const isDateField = field === 'date';
+    const isDateField = field === 'replenishmentDate';
 
     if (isDateField) {
       return sortDirection === 'ASC' ? (
-        <ClockArrowUp className="ml-1 h-4 w-4" />
+        <>
+          <ClockArrowUp aria-hidden="true" className="ml-1 h-4 w-4" />
+          <span className="sr-only">{t('ascending')}</span>
+        </>
       ) : (
-        <ClockArrowDown className="ml-1 h-4 w-4" />
+        <>
+          <ClockArrowDown aria-hidden="true" className="ml-1 h-4 w-4" />
+          <span className="sr-only">{t('descending')}</span>
+        </>
       );
     } else if (isNumericField) {
       return sortDirection === 'ASC' ? (
-        <ArrowDown01 className="ml-1 h-4 w-4" />
+        <>
+          <ArrowDown01 aria-hidden="true" className="ml-1 h-4 w-4" />
+          <span className="sr-only">{t('ascending')}</span>
+        </>
       ) : (
-        <ArrowDown10 className="ml-1 h-4 w-4" />
+        <>
+          <ArrowDown10 aria-hidden="true" className="ml-1 h-4 w-4" />
+          <span className="sr-only">{t('descending')}</span>
+        </>
       );
     } else {
       return sortDirection === 'ASC' ? (
-        <ArrowDownAZ className="ml-1 h-4 w-4" />
+        <>
+          <ArrowDownAZ aria-hidden="true" className="ml-1 h-4 w-4" />
+          <span className="sr-only">{t('ascending')}</span>
+        </>
       ) : (
-        <ArrowDownZA className="ml-1 h-4 w-4" />
+        <>
+          <ArrowDownZA aria-hidden="true" className="ml-1 h-4 w-4" />
+          <span className="sr-only">{t('descending')}</span>
+        </>
       );
     }
   };
@@ -139,6 +156,18 @@ export default function InventoryTable({
             <TableHead
               className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
               onClick={() => handleSort('variantFirstAttribute')}
+              aria-sort={
+                sortField === 'variantFirstAttribute'
+                  ? sortDirection === 'ASC'
+                    ? 'ascending'
+                    : 'descending'
+                  : 'none'
+              }
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ')
+                  handleSort('variantFirstAttribute');
+              }}
             >
               <div className="flex items-center justify-center">
                 {t('productTableHead')}
@@ -149,6 +178,17 @@ export default function InventoryTable({
             <TableHead
               className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
               onClick={() => handleSort('available')}
+              aria-sort={
+                sortField === 'available'
+                  ? sortDirection === 'ASC'
+                    ? 'ascending'
+                    : 'descending'
+                  : 'none'
+              }
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') handleSort('available');
+              }}
             >
               <div className="flex items-center justify-center">
                 {t('availableTableHead')}
@@ -158,6 +198,17 @@ export default function InventoryTable({
             <TableHead
               className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
               onClick={() => handleSort('reserved')}
+              aria-sort={
+                sortField === 'reserved'
+                  ? sortDirection === 'ASC'
+                    ? 'ascending'
+                    : 'descending'
+                  : 'none'
+              }
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') handleSort('reserved');
+              }}
             >
               <div className="flex items-center justify-center">
                 {t('reservedTableHead')}
@@ -166,11 +217,23 @@ export default function InventoryTable({
             </TableHead>
             <TableHead
               className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
-              onClick={() => handleSort('date')}
+              onClick={() => handleSort('replenishmentDate')}
+              aria-sort={
+                sortField === 'replenishmentDate'
+                  ? sortDirection === 'ASC'
+                    ? 'ascending'
+                    : 'descending'
+                  : 'none'
+              }
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ')
+                  handleSort('replenishmentDate');
+              }}
             >
               <div className="flex items-center justify-center">
                 {t('replenishmentDateTableHead')}
-                {getSortIcon('date')}
+                {getSortIcon('replenishmentDate')}
               </div>
             </TableHead>
           </TableRow>

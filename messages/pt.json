@@ -939,6 +939,8 @@
     "noWarehousesFound": "Nenhum armazém encontrado.",
     "noWarehouseSelected": "Nenhum armazém selecionado",
     "selectWarehousePrompt": "Selecione um armazém para continuar",
+    "ascending": "Crescente",
+    "descending": "Decrescente",
     "searchVariants": "Pesquisar variantes...",
     "loadingVariants": "Carregando variantes...",
     "errorLoadingVariants": "Erro ao carregar variantes",
