@@ -35,8 +35,8 @@ export const useInventory = (
   const inventoryQuery = useQuery(FindInventoryDocument, {
     variables,
     skip: !!warehouseId,
-    fetchPolicy: 'cache-first',
-    notifyOnNetworkStatusChange: false,
+    fetchPolicy: 'cache-and-network',
+    notifyOnNetworkStatusChange: true,
     errorPolicy: 'all',
   });
 
