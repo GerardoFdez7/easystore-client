@@ -33,13 +33,14 @@ export const useInventory = (
 
   const inventoryQuery = useQuery(FindInventoryDocument, {
     variables,
-    skip: true,
+    skip: !!warehouseId,
     fetchPolicy: 'cache-and-network',
     notifyOnNetworkStatusChange: true,
     errorPolicy: 'all',
   });
 
-  const { loading, error } = warehouseQuery;
+  const loading = warehouseId ? warehouseQuery.loading : inventoryQuery.loading;
+  const error = warehouseId ? warehouseQuery.error : inventoryQuery.error;
 
   let inventoryData: StockData[] = [];
 
@@ -47,6 +48,9 @@ export const useInventory = (
     // Handle warehouse-specific data structure
     inventoryData =
       warehouseQuery.data.getWarehouseById?.stockPerWarehouses || [];
+  } else if (!warehouseId && inventoryQuery.data) {
+    const warehouses = inventoryQuery.data.getAllWarehouses?.warehouses || [];
+    inventoryData = warehouses.flatMap((w) => w.stockPerWarehouses || []);
   }
 
   const formattedInventory: InventoryItem[] = inventoryData.map((item) => ({
