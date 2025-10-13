@@ -10,3 +10,9 @@ export type InventoryItem = {
   qtyReserved: number;
   estimatedReplenishmentDate: string;
 };
+
+export type SortField =
+  | 'available'
+  | 'reserved'
+  | 'replenishmentDate'
+  | 'variantFirstAttribute';

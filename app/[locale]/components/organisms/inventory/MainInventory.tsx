@@ -8,6 +8,8 @@ import {
   CreateWarehouseMutationVariables,
   UpdateWarehouseMutationVariables,
 } from '@graphql/generated';
+import type { SortDirection } from '@lib/types/sort';
+import type { SortField } from '@lib/types/inventory';
 import { useInventory } from '@hooks/domains/inventory';
 import { useWarehouseManagement } from '@hooks/domains/inventory';
 import WarehouseCombobox from '@molecules/inventory/WarehouseCombobox';
@@ -21,8 +23,7 @@ import AddStockDialog from '@organisms/inventory/AddStockDialog';
 import WarehouseManagementDialog from '@organisms/inventory/WarehouseManagementDialog';
 import WarehouseForm from '@molecules/inventory/WarehouseForm';
 
-type SortField = 'available' | 'reserved' | 'date' | 'variantFirstAttribute';
-type SortDirection = 'ASC' | 'DESC';
+// Tipos movidos a lib/types para reutilización y SoC
 
 export default function MainInventory() {
   const t = useTranslations('Inventory');
@@ -42,7 +43,7 @@ export default function MainInventory() {
   > = {
     available: 'available',
     reserved: 'reserved',
-    date: 'replenishmentDate',
+    replenishmentDate: 'replenishmentDate',
     variantFirstAttribute: 'variantFirstAttribute',
   };
 
