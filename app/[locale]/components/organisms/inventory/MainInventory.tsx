@@ -142,9 +142,21 @@ export default function MainInventory() {
         />
       </SkeletonWrapper>
 
-      {/* No mostrar inventario hasta que se seleccione un almacén */}
-      {selectedWarehouseId ? (
-        loading ? (
+      {/* State when no warehouse is selected */}
+      {!selectedWarehouseId && (
+        <EmptyState
+          icon={Warehouse}
+          title={t('noWarehouseSelected')}
+          description={t('selectWarehousePrompt')}
+          buttonText={t('manageWarehousesButton')}
+          buttonIcon={Plus}
+          onButtonClick={() => setIsWarehouseManagementOpen(true)}
+        />
+      )}
+
+      {/* Mostrar inventario solo cuando se selecciona un almacén */}
+      {selectedWarehouseId &&
+        (loading ? (
           <InventoryTableSkeleton />
         ) : (
           <InventoryTable
@@ -155,8 +167,7 @@ export default function MainInventory() {
             sortField={sortField}
             sortDirection={sortDirection}
           />
-        )
-      ) : null}
+        ))}
       <AddStockDialog
         open={isAddStockDialogOpen}
         onOpenChange={setIsAddStockDialogOpen}
