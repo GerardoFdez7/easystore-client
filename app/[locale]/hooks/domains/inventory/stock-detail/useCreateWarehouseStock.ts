@@ -47,7 +47,7 @@ export function useCreateWarehouseStock(opts: CreateStockByLookupOptions = {}) {
   // 1) form
   const { form, t } = useStockForm();
 
-  // 2) variante (UI selector / prefetch)
+  // 2) variant (UI selector / prefetch)
   const { selectedVariant, selectVariantFromSelector, setSelectedVariant } =
     useVariantPrefetch({
       initialVariantId,
@@ -55,7 +55,7 @@ export function useCreateWarehouseStock(opts: CreateStockByLookupOptions = {}) {
       productName,
     });
 
-  // 3) resolutores
+  // 3) resolvers
   const resolveWarehouseId = useResolveWarehouseId(warehouseName);
   const resolveVariantId = useResolveVariantId({
     initialVariantId,
@@ -66,7 +66,7 @@ export function useCreateWarehouseStock(opts: CreateStockByLookupOptions = {}) {
     setSelectedVariant: (v) => setSelectedVariant(v),
   });
 
-  // 4) mutación
+  // 4) mutation
   const { mutate, state, notifySuccess, notifyError } = useCreateStockMutation({
     initialWarehouseId,
     extraRefetchQueries,
@@ -100,7 +100,6 @@ export function useCreateWarehouseStock(opts: CreateStockByLookupOptions = {}) {
           input,
           reason: values.reason ?? reason ?? null,
         },
-        // ✅ construimos la lista tipada sin undefineds ni any
         refetchQueries: [
           { query: FindWarehouseByIdDocument, variables: { id: warehouseId } },
           ...extraRefetchQueries,

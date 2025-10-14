@@ -9,7 +9,6 @@ import { Calendar } from '@shadcn/ui/calendar';
 import { Input } from '@shadcn/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@shadcn/ui/popover';
 
-// locales de date-fns para react-day-picker
 import { es as dfEs, enUS as dfEnUS } from 'date-fns/locale';
 
 type Props = {
