@@ -61,8 +61,9 @@ export default function MainProductDetail({
             <SaveButton
               type="submit"
               loading={isSubmitting}
-              disabled={!hasChanges || isSubmitting}
+              disabled={isNew ? isSubmitting : !hasChanges || isSubmitting}
               size="lg"
+              translationKey={isNew ? 'add' : 'save'}
             />
           </div>
         </form>

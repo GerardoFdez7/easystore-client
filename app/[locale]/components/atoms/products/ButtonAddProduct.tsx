@@ -1,16 +1,26 @@
 import { Button } from '@shadcn/ui/button';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { useProductCreation } from '@lib/contexts/ProductCreationContext';
+import { Plus } from 'lucide-react';
 
 export default function ButtonAddProduct() {
   const t = useTranslations('Products');
   const router = useRouter();
+  const { clearAllDrafts } = useProductCreation();
+
+  const handleAddProduct = () => {
+    clearAllDrafts();
+    router.push('/products/new');
+  };
 
   return (
     <Button
-      className="text-title hover:bg-title border-title border-2 bg-transparent hover:text-white dark:hover:bg-white dark:hover:text-black"
-      onClick={() => router.push('/products/new')}
+      className="mt-4 text-sm sm:text-[16px]"
+      variant="title"
+      onClick={handleAddProduct}
     >
+      <Plus className="h-4 w-4" />
       {t('addProduct')}
     </Button>
   );

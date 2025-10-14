@@ -5,9 +5,16 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import { useProductManagement } from './useProductManagement';
 import { useGetProductById } from './useGetProductById';
-import type { Media, TypeEnum, MediaTypeEnum } from '@lib/graphql/generated';
+import { useProductCreation } from '@lib/contexts/ProductCreationContext';
+import type {
+  Media,
+  TypeEnum,
+  MediaTypeEnum,
+  ConditionEnum,
+} from '@lib/graphql/generated';
 
 // Create Zod schema factory that uses translations
 const createProductFormSchema = (t: (key: string) => string) =>
@@ -134,8 +141,13 @@ export function useProductForm({
   onCancel,
 }: UseProductFormProps): UseProductFormReturn {
   const t = useTranslations('Products');
+  const router = useRouter();
   const { createProduct, updateProduct, isCreating, isUpdating } =
     useProductManagement();
+
+  // Get product creation context for new products
+  const { productDraft, setProductDraft, variantsDraft, clearAllDrafts } =
+    useProductCreation();
 
   // Get product data from context only when editing (not creating new)
   const { product, loading: contextLoading } = useGetProductById(
@@ -145,8 +157,27 @@ export function useProductForm({
   const productFormSchema = createProductFormSchema(t);
 
   const originalValues = useMemo<ProductFormData>(() => {
-    // Mode is 'create' or product data is not yet available
-    if (isNew || !product) {
+    // Mode is 'create' - use draft data if available
+    if (isNew) {
+      return {
+        name: productDraft?.name || '',
+        shortDescription: productDraft?.shortDescription || '',
+        longDescription: productDraft?.longDescription || null,
+        brand: productDraft?.brand || null,
+        manufacturer: productDraft?.manufacturer || null,
+        cover: productDraft?.cover || '',
+        productType:
+          (productDraft?.productType as 'PHYSICAL' | 'DIGITAL') || 'PHYSICAL',
+        tags: productDraft?.tags || [],
+        categories: productDraft?.categories || [],
+        variants: productDraft?.variants || [],
+        sustainabilities: productDraft?.sustainabilities || [],
+        media: productDraft?.media || [],
+      };
+    }
+
+    // Mode is 'update' - product data not yet available
+    if (!product) {
       return {
         name: '',
         shortDescription: '',
@@ -183,7 +214,7 @@ export function useProductForm({
       sustainabilities: product.sustainabilities || [],
       media: product.media?.map((mediaItem: Media) => mediaItem.url) || [],
     };
-  }, [product, isNew]);
+  }, [product, isNew, productDraft]);
 
   // Initialize form
   const form = useForm<ProductFormData>({
@@ -199,20 +230,45 @@ export function useProductForm({
     }
   }, [product, isNew, originalValues, form]);
 
-  const watchedValues = form.watch();
+  // Save draft on form change (only in create mode) - without causing re-renders
+  useEffect(() => {
+    if (!isNew) {
+      return;
+    }
 
-  // Calculate changed fields and hasChanges
+    let timeoutId: NodeJS.Timeout;
+
+    // Subscribe to form changes without causing component re-renders
+    const subscription = form.watch((values) => {
+      // Clear previous timeout
+      clearTimeout(timeoutId);
+
+      // Debounce: save draft after 500ms of inactivity
+      timeoutId = setTimeout(() => {
+        setProductDraft(values as Partial<ProductFormData>);
+      }, 500);
+    });
+
+    return () => {
+      clearTimeout(timeoutId);
+      subscription.unsubscribe();
+    };
+  }, [isNew, form, setProductDraft]);
+
+  // Calculate changed fields and hasChanges - using getValues to avoid re-renders
   const { hasChanges, changedFields } = useMemo(() => {
+    // Get current form values without subscribing (no re-render)
+    const currentValues = form.getValues();
     if (isNew) {
       // In create mode - check if required fields are filled
       const hasRequiredValues =
-        watchedValues.name.trim().length >= 2 &&
-        watchedValues.shortDescription.trim().length >= 10 &&
-        watchedValues.cover.trim().length > 0;
+        currentValues.name.trim().length >= 2 &&
+        currentValues.shortDescription.trim().length >= 10 &&
+        currentValues.cover.trim().length > 0;
 
       return {
         hasChanges: hasRequiredValues,
-        changedFields: hasRequiredValues ? watchedValues : {},
+        changedFields: hasRequiredValues ? currentValues : {},
       };
     }
 
@@ -264,8 +320,8 @@ export function useProductForm({
         if (key === 'variants') {
           return;
         }
-        if (!isEqual(watchedValues[key], originalValues[key])) {
-          (changes as Record<string, unknown>)[key] = watchedValues[key];
+        if (!isEqual(currentValues[key], originalValues[key])) {
+          (changes as Record<string, unknown>)[key] = currentValues[key];
           hasAnyChanges = true;
         }
       },
@@ -275,7 +331,7 @@ export function useProductForm({
       hasChanges: hasAnyChanges,
       changedFields: changes,
     };
-  }, [watchedValues, originalValues, isNew]);
+  }, [form, originalValues, isNew]);
 
   // Handle form submission
   const handleSubmit = useCallback(
@@ -306,13 +362,58 @@ export function useProductForm({
                 ? 'VIDEO'
                 : 'IMAGE') as MediaTypeEnum,
             })),
-            variants: [], // Required field for product creation
+            variants: variantsDraft.map((variant) => ({
+              price: variant.price,
+              condition: variant.condition as ConditionEnum,
+              attributes: variant.attributes?.map((attr) => ({
+                key: attr.key,
+                value: attr.value,
+              })),
+              dimension:
+                variant.dimensions?.height &&
+                variant.dimensions?.width &&
+                variant.dimensions?.length
+                  ? {
+                      height: variant.dimensions.height,
+                      width: variant.dimensions.width,
+                      length: variant.dimensions.length,
+                    }
+                  : undefined,
+              weight: variant.weight || undefined,
+              sku: variant.codes.sku,
+              upc: variant.codes.upc,
+              ean: variant.codes.ean,
+              isbn: variant.codes.isbn,
+              barcode: variant.codes.barcode,
+              personalizationOptions: variant.personalizationOptions,
+              installmentPayments: variant.installmentPayments?.map(
+                (payment) => ({
+                  months: payment.months,
+                  interestRate: payment.interestRate,
+                }),
+              ),
+              warranties: variant.warranties?.map((warranty) => ({
+                months: warranty.months,
+                coverage: warranty.coverage,
+                instructions: warranty.instructions,
+              })),
+              variantCover: variant.variantCover || undefined,
+              variantMedia: variant.variantMedia?.map((url, index) => ({
+                url,
+                position: index,
+                mediaType: (url.includes('.mp4')
+                  ? 'VIDEO'
+                  : 'IMAGE') as MediaTypeEnum,
+              })),
+            })),
           };
 
           const result = await createProduct(input);
 
           if (result) {
             form.reset(data);
+            clearAllDrafts(); // Clear drafts after successful product creation
+            router.push('/products'); // Navigate to products list after creation
             onSuccess?.();
           }
           return;
@@ -407,6 +508,9 @@ export function useProductForm({
       onSuccess,
       changedFields,
       form,
+      variantsDraft,
+      clearAllDrafts,
+      router,
     ],
   );
 

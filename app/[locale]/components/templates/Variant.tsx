@@ -7,12 +7,14 @@ interface VariantTemplateProps {
   productId: string;
   variantId?: string;
   isNew: boolean;
+  isNewProduct?: boolean;
 }
 
 export default function VariantTemplate({
   productId,
   variantId,
   isNew,
+  isNewProduct = false,
 }: VariantTemplateProps) {
   const t = useTranslations('Variant');
   return (
@@ -23,6 +25,7 @@ export default function VariantTemplate({
           productId={productId}
           variantId={variantId}
           isNew={isNew}
+          isNewProduct={isNewProduct}
         />
       </SidebarLayout>
     </div>

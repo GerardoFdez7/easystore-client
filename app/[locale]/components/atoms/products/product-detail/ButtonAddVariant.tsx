@@ -25,6 +25,7 @@ export default function ButtonAddVariant({ productId }: ButtonAddVariantProps) {
 
   return (
     <Button
+      type="button"
       variant="outline"
       size="sm"
       className="border-title text-title hover:bg-title hover:text-white dark:hover:bg-white dark:hover:text-black"

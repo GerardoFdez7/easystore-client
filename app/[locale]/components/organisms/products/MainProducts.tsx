@@ -7,14 +7,12 @@ import { ProductsToolbar } from '@molecules/products/Toolbar';
 import { FilterType } from '@atoms/products/TabFilterProducts';
 import { useProductsContext } from '@lib/contexts/ProductsContext';
 import { InputMaybe, TypeEnum } from '@graphql/generated';
-import { PackageOpen, Plus } from 'lucide-react';
+import { PackageOpen } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import EmptyState from '@molecules/shared/EmptyState';
 
 export default function MainDashboard() {
   const t = useTranslations('Products');
-  const router = useRouter();
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
   const [typeFilter, setTypeFilter] = useState<InputMaybe<TypeEnum>>();
@@ -116,11 +114,6 @@ export default function MainDashboard() {
           icon={PackageOpen}
           title={t('noProductsFound')}
           description={t('noProductsDescription')}
-          buttonText={t('addProduct')}
-          buttonIcon={Plus}
-          onButtonClick={() => {
-            router.push('/products/new');
-          }}
         />
       ) : (
         <>

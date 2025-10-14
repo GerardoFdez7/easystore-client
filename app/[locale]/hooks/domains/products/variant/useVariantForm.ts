@@ -4,8 +4,10 @@ import { useCallback, useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { useVariantFromProducts } from '@lib/contexts/ProductsContext';
+import { useProductCreation } from '@lib/contexts/ProductCreationContext';
 import { useVariantManagement } from './useVariantManagement';
 import { ConditionEnum, MediaTypeEnum, type Variant } from '@graphql/generated';
 
@@ -47,30 +49,55 @@ const createVariantFormSchema = (t: (key: string) => string) =>
     codes: z.object({
       sku: z
         .string()
-        .min(1, { message: t('skuRequired') })
-        .nullable(),
+        .optional()
+        .nullable()
+        .refine(
+          (val) => !val || val.trim().length === 0 || val.trim().length >= 1,
+          {
+            message: t('skuRequired'),
+          },
+        ),
       upc: z
         .string()
-        .regex(/^\d{12}$/, { message: t('upcInvalid') })
+        .optional()
         .nullable()
-        .optional(),
+        .refine(
+          (val) => !val || val.trim().length === 0 || /^\d{12}$/.test(val),
+          {
+            message: t('upcInvalid'),
+          },
+        ),
       ean: z
         .string()
-        .regex(/^(\d{8}|\d{13})$/, { message: t('eanInvalid') })
+        .optional()
         .nullable()
-        .optional(),
+        .refine(
+          (val) =>
+            !val || val.trim().length === 0 || /^(\d{8}|\d{13})$/.test(val),
+          {
+            message: t('eanInvalid'),
+          },
+        ),
       isbn: z
         .string()
-        .regex(/^(97[89])?\d{9}[\dX]$/, { message: t('isbnInvalid') })
+        .optional()
         .nullable()
-        .optional(),
+        .refine(
+          (val) =>
+            !val ||
+            val.trim().length === 0 ||
+            /^(?:(?:\d{9}[\dX])|(?:(?:978|979)\d{10}))$/.test(val),
+          {
+            message: t('isbnInvalid'),
+          },
+        ),
       barcode: z
         .string()
-        .regex(/^(?:(?:\d{9}[\dX])|(?:(?:978|979)\d{10}))$/, {
-          message: t('barcodeInvalid'),
-        })
+        .optional()
         .nullable()
-        .optional(),
+        .refine((val) => !val || val.trim().length === 0 || val.length >= 1, {
+          message: t('barcodeInvalid'),
+        }),
     }),
     personalizationOptions: z.array(
       z.string().min(1, { message: t('personalizationOptionRequired') }),
@@ -116,6 +143,7 @@ interface UseVariantFormProps {
   productId: string;
   variantId?: string;
   isNew: boolean;
+  isNewProduct?: boolean; // Indicates if we're adding variant to a new (not yet created) product
   onSuccess?: () => void;
   onCancel?: () => void;
 }
@@ -147,12 +175,15 @@ export function useVariantForm({
   productId,
   variantId,
   isNew,
+  isNewProduct = false,
   onSuccess,
   onCancel,
 }: UseVariantFormProps): UseVariantFormReturn {
   const t = useTranslations('Products');
+  const router = useRouter();
   const { addVariant, updateVariant, isAdding, isUpdating } =
     useVariantManagement();
+  const { addVariantDraft } = useProductCreation();
 
   // Get variant data from context only when editing (not creating new)
   const { variant, loading: contextLoading } = useVariantFromProducts(
@@ -320,8 +351,16 @@ export function useVariantForm({
   const handleSubmit = useCallback(
     async (data: VariantFormData) => {
       try {
+        // If we're adding a variant to a new (not yet created) product, save to draft
+        if (isNew && isNewProduct) {
+          addVariantDraft(data);
+          router.back(); // Go back to product creation form
+          onSuccess?.();
+          return;
+        }
+
         if (isNew) {
-          // Create new variant
+          // Create new variant for existing product
           const hasDimensions =
             (data.dimensions.height !== '' &&
               data.dimensions.height !== null) ||
@@ -510,10 +549,13 @@ export function useVariantForm({
     },
     [
       isNew,
+      isNewProduct,
       variantId,
       productId,
       addVariant,
       updateVariant,
+      addVariantDraft,
+      router,
       onSuccess,
       changedFields,
     ],

@@ -83,8 +83,6 @@ export default function MediaFormField({
 
   // Handle errors from MediaUploader (including validation errors when no items)
   const handleUploadError = (_error: string) => {
-    // When there's a validation error, ensure form knows cover is empty
-    // This triggers React Hook Form validation and shows FormMessage
     if (!cover || cover === '') {
       setValue('cover', '', { shouldDirty: true, shouldValidate: true });
     }
@@ -122,7 +120,6 @@ export default function MediaFormField({
               />
             </div>
           </FormControl>
-          {/* FormMessage will show validation errors from Zod schema for cover field */}
           <FormMessage />
         </FormItem>
       )}
