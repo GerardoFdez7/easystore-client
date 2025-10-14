@@ -18,18 +18,21 @@ interface MainVariantProps {
   productId: string;
   variantId?: string;
   isNew: boolean;
+  isNewProduct?: boolean; // Indicates if we're adding variant to a new (not yet created) product
 }
 
 export default function MainVariant({
   productId,
   variantId,
   isNew,
+  isNewProduct = false,
 }: MainVariantProps) {
   const { form, handleSubmit, isSubmitting, hasChanges, variant } =
     useVariantForm({
       productId,
       variantId,
       isNew,
+      isNewProduct,
     });
 
   return (

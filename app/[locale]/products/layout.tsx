@@ -1,6 +1,7 @@
 'use client';
 
 import { ProductsProvider } from '@lib/contexts/ProductsContext';
+import { ProductCreationProvider } from '@lib/contexts/ProductCreationContext';
 import type { ReactNode } from 'react';
 
 interface ProductsLayoutProps {
@@ -17,7 +18,7 @@ export default function ProductsLayout({ children }: ProductsLayoutProps) {
         type: null,
       }}
     >
-      {children}
+      <ProductCreationProvider>{children}</ProductCreationProvider>
     </ProductsProvider>
   );
 }

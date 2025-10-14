@@ -239,6 +239,7 @@ export default function MainProductDetail({
               loading={isSubmitting}
               disabled={(!isDirty && !hasMediaChanges) || isSubmitting}
               size="lg"
+              translationKey={isNew ? 'add' : 'save'}
             />
           </div>
         </form>

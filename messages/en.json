@@ -703,7 +703,9 @@
     "mediaUrlInvalid": "Media URL must be valid",
     "variantCreated": "Variant created successfully",
     "variantUpdated": "Variant updated successfully",
-    "noProductsDescription": "Get started by creating your first product. Add product details, images, and pricing to begin selling."
+    "noProductsDescription": "Get started by creating your first product. Add product details, images, and pricing to begin selling.",
+    "draft": "draft",
+    "draftVariant": "Draft (not saved)"
   },
   "Privacy": {
     "tableOfContents": "Table of contents",
@@ -996,7 +998,23 @@
     "categoryNameAlreadyExists": "Category name already exists",
     "categoryNameAlreadyExistsDescription": "A category with this name already exists. Please choose a different name.",
     "categoryHierarchyDepthExceeded": "Category hierarchy depth exceeded",
-    "categoryHierarchyDepthExceededDescription": "You have reached the maximum limit of 10 subcategory levels. You cannot create more subcategories at this level."
+    "categoryHierarchyDepthExceededDescription": "You have reached the maximum limit of 10 subcategory levels. You cannot create more subcategories at this level.",
+    "productNameAlreadyExists": "Product name already exists",
+    "productNameAlreadyExistsDescription": "A product with this name already exists. Please choose a different name.",
+    "productSkuAlreadyExists": "Product SKU already exists",
+    "productSkuAlreadyExistsDescription": "A product variant with this SKU already exists. Please choose a different SKU.",
+    "productUpcAlreadyExists": "Product UPC already exists",
+    "productUpcAlreadyExistsDescription": "A product variant with this UPC already exists. Please choose a different UPC.",
+    "productEanAlreadyExists": "Product EAN already exists",
+    "productEanAlreadyExistsDescription": "A product variant with this EAN already exists. Please choose a different EAN.",
+    "productIsbnAlreadyExists": "Product ISBN already exists",
+    "productIsbnAlreadyExistsDescription": "A product variant with this ISBN already exists. Please choose a different ISBN.",
+    "productBarcodeAlreadyExists": "Product barcode already exists",
+    "productBarcodeAlreadyExistsDescription": "A product variant with this barcode already exists. Please choose a different barcode.",
+    "productNotFound": "Product not found",
+    "productNotFoundDescription": "The product you're looking for doesn't exist or has been deleted.",
+    "variantNotFound": "Product variant not found",
+    "variantNotFoundDescription": "The product variant you're looking for doesn't exist or has been deleted."
   },
   "Shared": {
     "loadMore": "Load More",

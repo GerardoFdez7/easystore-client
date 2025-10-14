@@ -704,7 +704,9 @@
     "mediaUrlInvalid": "La URL del medio debe ser válida",
     "variantCreated": "Variante creada con éxito",
     "variantUpdated": "Variante actualizada con éxito",
-    "noProductsDescription": "Comienza creando tu primer producto. Agrega detalles, imágenes y precios para empezar a vender."
+    "noProductsDescription": "Comienza creando tu primer producto. Agrega detalles, imágenes y precios para empezar a vender.",
+    "draft": "borrador",
+    "draftVariant": "Borrador (no guardado)"
   },
   "Privacy": {
     "tableOfContents": "Tabla de contenido",
@@ -997,7 +999,23 @@
     "categoryNameAlreadyExists": "El nombre de la categoría ya existe",
     "categoryNameAlreadyExistsDescription": "Ya existe una categoría con este nombre. Por favor, elige un nombre diferente.",
     "categoryHierarchyDepthExceeded": "Profundidad de jerarquía de categoría excedida",
-    "categoryHierarchyDepthExceededDescription": "Has alcanzado el límite máximo de 10 niveles de subcategorías. No puedes crear más subcategorías en este nivel."
+    "categoryHierarchyDepthExceededDescription": "Has alcanzado el límite máximo de 10 niveles de subcategorías. No puedes crear más subcategorías en este nivel.",
+    "productNameAlreadyExists": "El nombre del producto ya existe",
+    "productNameAlreadyExistsDescription": "Ya existe un producto con este nombre. Por favor, elige un nombre diferente.",
+    "productSkuAlreadyExists": "El SKU del producto ya existe",
+    "productSkuAlreadyExistsDescription": "Ya existe una variante de producto con este SKU. Por favor, elige un SKU diferente.",
+    "productUpcAlreadyExists": "El UPC del producto ya existe",
+    "productUpcAlreadyExistsDescription": "Ya existe una variante de producto con este UPC. Por favor, elige un UPC diferente.",
+    "productEanAlreadyExists": "El EAN del producto ya existe",
+    "productEanAlreadyExistsDescription": "Ya existe una variante de producto con este EAN. Por favor, elige un EAN diferente.",
+    "productIsbnAlreadyExists": "El ISBN del producto ya existe",
+    "productIsbnAlreadyExistsDescription": "Ya existe una variante de producto con este ISBN. Por favor, elige un ISBN diferente.",
+    "productBarcodeAlreadyExists": "El código de barras del producto ya existe",
+    "productBarcodeAlreadyExistsDescription": "Ya existe una variante de producto con este código de barras. Por favor, elige uno diferente.",
+    "productNotFound": "Producto no encontrado",
+    "productNotFoundDescription": "El producto que buscas no existe o ha sido eliminado.",
+    "variantNotFound": "Variante de producto no encontrada",
+    "variantNotFoundDescription": "La variante de producto que buscas no existe o ha sido eliminada."
   },
   "Shared": {
     "loadMore": "Cargar más",

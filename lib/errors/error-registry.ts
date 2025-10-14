@@ -153,6 +153,180 @@ const databaseConstraintHandlers: ErrorHandler[] = [
       return true;
     },
   },
+  {
+    id: 'product-name-exists',
+    priority: 130,
+    matcher: (error: GraphQLFormattedError) => {
+      const message = error.message?.toLowerCase() || '';
+      return (
+        message.includes('product name already exists') ||
+        (message.includes('product') &&
+          message.includes('name') &&
+          message.includes('exists'))
+      );
+    },
+    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
+      const { locale, isDevelopment } = context;
+      toast.warning(getLocalizedMessage(locale, 'productNameAlreadyExists'), {
+        description:
+          getLocalizedMessage(locale, 'productNameAlreadyExistsDescription') +
+          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+      });
+      return true;
+    },
+  },
+  {
+    id: 'product-sku-exists',
+    priority: 140,
+    matcher: (error: GraphQLFormattedError) => {
+      const message = error.message?.toLowerCase() || '';
+      return (
+        message.includes('product sku already exists') ||
+        (message.includes('sku') && message.includes('exists'))
+      );
+    },
+    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
+      const { locale, isDevelopment } = context;
+      toast.warning(getLocalizedMessage(locale, 'productSkuAlreadyExists'), {
+        description:
+          getLocalizedMessage(locale, 'productSkuAlreadyExistsDescription') +
+          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+      });
+      return true;
+    },
+  },
+  {
+    id: 'product-upc-exists',
+    priority: 141,
+    matcher: (error: GraphQLFormattedError) => {
+      const message = error.message?.toLowerCase() || '';
+      return (
+        message.includes('product upc already exists') ||
+        message.includes('upc already exists') ||
+        (message.includes('upc') && message.includes('exists'))
+      );
+    },
+    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
+      const { locale, isDevelopment } = context;
+      toast.warning(getLocalizedMessage(locale, 'productUpcAlreadyExists'), {
+        description:
+          getLocalizedMessage(locale, 'productUpcAlreadyExistsDescription') +
+          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+      });
+      return true;
+    },
+  },
+  {
+    id: 'product-ean-exists',
+    priority: 142,
+    matcher: (error: GraphQLFormattedError) => {
+      const message = error.message?.toLowerCase() || '';
+      return (
+        message.includes('product ean already exists') ||
+        message.includes('ean already exists') ||
+        (message.includes('ean') && message.includes('exists'))
+      );
+    },
+    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
+      const { locale, isDevelopment } = context;
+      toast.warning(getLocalizedMessage(locale, 'productEanAlreadyExists'), {
+        description:
+          getLocalizedMessage(locale, 'productEanAlreadyExistsDescription') +
+          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+      });
+      return true;
+    },
+  },
+  {
+    id: 'product-isbn-exists',
+    priority: 143,
+    matcher: (error: GraphQLFormattedError) => {
+      const message = error.message?.toLowerCase() || '';
+      return (
+        message.includes('product isbn already exists') ||
+        message.includes('isbn already exists') ||
+        (message.includes('isbn') && message.includes('exists'))
+      );
+    },
+    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
+      const { locale, isDevelopment } = context;
+      toast.warning(getLocalizedMessage(locale, 'productIsbnAlreadyExists'), {
+        description:
+          getLocalizedMessage(locale, 'productIsbnAlreadyExistsDescription') +
+          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+      });
+      return true;
+    },
+  },
+  {
+    id: 'product-barcode-exists',
+    priority: 144,
+    matcher: (error: GraphQLFormattedError) => {
+      const message = error.message?.toLowerCase() || '';
+      return (
+        message.includes('product barcode already exists') ||
+        message.includes('barcode already exists') ||
+        (message.includes('barcode') && message.includes('exists'))
+      );
+    },
+    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
+      const { locale, isDevelopment } = context;
+      toast.warning(
+        getLocalizedMessage(locale, 'productBarcodeAlreadyExists'),
+        {
+          description:
+            getLocalizedMessage(
+              locale,
+              'productBarcodeAlreadyExistsDescription',
+            ) + (isDevelopment ? ` Backend message: ${error.message}` : ''),
+        },
+      );
+      return true;
+    },
+  },
+  {
+    id: 'product-not-found',
+    priority: 150,
+    matcher: (error: GraphQLFormattedError) => {
+      const message = error.message?.toLowerCase() || '';
+      return (
+        (message.includes('database find product by id') ||
+          message.includes('product does not exist') ||
+          (message.includes('product') && message.includes('by id'))) &&
+        !message.includes('variant')
+      );
+    },
+    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
+      const { locale, isDevelopment } = context;
+      toast.error(getLocalizedMessage(locale, 'productNotFound'), {
+        description:
+          getLocalizedMessage(locale, 'productNotFoundDescription') +
+          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+      });
+      return true;
+    },
+  },
+  {
+    id: 'variant-not-found',
+    priority: 160,
+    matcher: (error: GraphQLFormattedError) => {
+      const message = error.message?.toLowerCase() || '';
+      return (
+        message.includes('variant with id') ||
+        message.includes('variant does not exist') ||
+        (message.includes('variant') && message.includes('not found'))
+      );
+    },
+    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
+      const { locale, isDevelopment } = context;
+      toast.error(getLocalizedMessage(locale, 'variantNotFound'), {
+        description:
+          getLocalizedMessage(locale, 'variantNotFoundDescription') +
+          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+      });
+      return true;
+    },
+  },
 ];
 
 /**
