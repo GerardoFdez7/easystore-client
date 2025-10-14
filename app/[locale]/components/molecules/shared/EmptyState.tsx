@@ -1,11 +1,12 @@
-import ButtonAddProduct from '@atoms/products/ButtonAddProduct';
+import { Button } from '@shadcn/ui/button';
 import { LucideIcon } from 'lucide-react';
 
 interface EmptyStateProps {
   icon: LucideIcon;
   title: string;
   description: string;
-
+  buttonText?: string;
+  onButtonClick?: () => void;
   buttonVariant?:
     | 'default'
     | 'destructive'
@@ -21,6 +22,10 @@ export default function EmptyState({
   icon: Icon,
   title,
   description,
+  buttonText,
+  onButtonClick,
+  buttonVariant = 'title',
+  buttonIcon: ButtonIcon,
 }: EmptyStateProps) {
   return (
     <div className="mt-8 flex w-full flex-col items-center justify-center gap-6 sm:mx-auto">
