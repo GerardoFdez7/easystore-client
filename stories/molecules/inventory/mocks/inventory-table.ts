@@ -5,6 +5,9 @@ export const generateMockInventoryData = (count: number): InventoryItem[] => {
   for (let i = 1; i <= count; i++) {
     mockInventoryTableData.push({
       id: String(i),
+      warehouseId: `wh-${(i % 5) + 1}`,
+      warehouseName:
+        ['Main', 'East', 'West', 'North', 'South'][i % 5] + ' Warehouse',
       variantFirstAttribute: {
         key: i % 2 === 0 ? 'Color' : 'Size',
         value:

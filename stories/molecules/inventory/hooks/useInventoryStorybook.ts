@@ -21,24 +21,24 @@ export const useInventoryStorybook = (
     variables,
   });
 
-  // Map GraphQL data to InventoryItem format
-  const inventoryData =
-    data?.getAllWarehouses?.warehouses?.flatMap(
-      (warehouse) => warehouse.stockPerWarehouses || [],
-    ) || [];
-
-  const formattedInventory: InventoryItem[] = inventoryData.map((item) => ({
-    id: item.id,
-    variantFirstAttribute: {
-      key: item.variantFirstAttribute?.key ?? '',
-      value: item.variantFirstAttribute?.value ?? '',
-    },
-    productName: item.productName ?? '',
-    variantSku: item.variantSku ?? '',
-    qtyAvailable: item.qtyAvailable ?? 0,
-    qtyReserved: item.qtyReserved ?? 0,
-    estimatedReplenishmentDate: item.estimatedReplenishmentDate ?? '',
-  }));
+  // Map GraphQL data to InventoryItem format, injecting parent warehouse id/name
+  const warehouses = data?.getAllWarehouses?.warehouses ?? [];
+  const formattedInventory: InventoryItem[] = warehouses.flatMap((warehouse) =>
+    (warehouse.stockPerWarehouses ?? []).map((item) => ({
+      id: item.id,
+      warehouseId: warehouse.id ?? '',
+      warehouseName: warehouse.name ?? undefined,
+      variantFirstAttribute: {
+        key: item.variantFirstAttribute?.key ?? '',
+        value: item.variantFirstAttribute?.value ?? '',
+      },
+      productName: item.productName ?? '',
+      variantSku: item.variantSku ?? '',
+      qtyAvailable: item.qtyAvailable ?? 0,
+      qtyReserved: item.qtyReserved ?? 0,
+      estimatedReplenishmentDate: item.estimatedReplenishmentDate ?? '',
+    })),
+  );
 
   return {
     inventory: formattedInventory,
