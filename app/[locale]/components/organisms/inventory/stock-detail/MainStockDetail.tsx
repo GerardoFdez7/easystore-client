@@ -19,7 +19,6 @@ import SerialChips from '@molecules/stock-detail/SerialChips';
 import UpdateReasonDialog from '@molecules/stock-detail/UpdateReasonDialog';
 import CalendarPicker from '@molecules/stock-detail/CalendarPicker';
 
-// ⬇️ usa el hook “todo en uno” (resuelve IDs por nombre/SKU y crea)
 import { useCreateWarehouseStock as useCreateWarehouseStockByLookup } from '@hooks/domains/inventory/stock-detail/useCreateWarehouseStock';
 import { usePrefillExistingStock } from '@hooks/domains/inventory/stock-detail/usePrefillExistingStock';
 import { useResolveWarehouseId } from '@hooks/domains/inventory/stock-detail/useResolveWarehouseId';
@@ -32,10 +31,8 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
   warehouseName = warehouseName?.split('-').join(' ').trim().toLowerCase();
   const router = useRouter();
 
-  // seriales controlados por esta vista
   const [serialNumbers, setSerialNumbers] = useState<string[]>([]);
 
-  // dialog de razón
   const [showUpdateReason, setShowUpdateReason] = useState(false);
   const [updateReason, setUpdateReason] = useState('');
 
@@ -109,7 +106,6 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
   return (
     <Form {...form}>
       <form onSubmit={onFormSubmit} className="flex-1">
-        {/* Campo oculto para que reason forme parte del form (sincronizado con el diálogo) */}
         <input type="hidden" {...form.register('reason')} />
         <div className="mx-auto max-w-5xl px-6 py-6">
           <StockHeader

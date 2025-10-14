@@ -19,7 +19,6 @@ type Props = {
   value: string;
   onChange: (v: string) => void;
   onConfirm: () => void;
-  /** Longitud mínima permitida para la razón */
   minLength?: number;
 };
 
@@ -53,7 +52,6 @@ export default function UpdateReasonDialog({
               value={value}
               onChange={(e) => onChange(e.target.value)}
             />
-            {/* Validación mínima: mostramos mensaje si es demasiado corta */}
             {!isValid && (
               <p className="text-destructive mt-2 text-sm">
                 {t('updateReasonTooShort') ||
