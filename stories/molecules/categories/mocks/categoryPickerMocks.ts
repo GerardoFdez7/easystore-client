@@ -8,7 +8,6 @@ export const mockCategoryItems: CategoryItem[] = [
     cover: '/laptop.webp',
     description: 'All electronic devices and gadgets',
     tags: ['tech', 'gadgets', 'digital'],
-    count: 25,
     selected: false,
   },
   {
@@ -17,7 +16,6 @@ export const mockCategoryItems: CategoryItem[] = [
     cover: '/portrait_image.webp',
     description: 'Trendy clothing and fashion accessories',
     tags: ['fashion', 'style', 'apparel'],
-    count: 18,
     selected: true,
   },
   {
@@ -26,7 +24,6 @@ export const mockCategoryItems: CategoryItem[] = [
     cover: '/default.webp',
     description: 'Everything for your home and garden needs',
     tags: ['home', 'garden', 'decor'],
-    count: 12,
     selected: false,
   },
   {
@@ -35,7 +32,6 @@ export const mockCategoryItems: CategoryItem[] = [
     cover: '/phone.webp',
     description: 'Sports equipment and outdoor gear',
     tags: ['sports', 'outdoor', 'fitness'],
-    count: 8,
     selected: false,
   },
 ];
@@ -48,7 +44,6 @@ export const mockCategoryItemsWithLongNames: CategoryItem[] = [
     description:
       'This is a very long description that should also truncate properly when displayed in the component to test the layout behavior',
     tags: ['very-long-tag-name', 'another-extremely-long-tag', 'short'],
-    count: 999,
     selected: false,
   },
   {
@@ -57,7 +52,6 @@ export const mockCategoryItemsWithLongNames: CategoryItem[] = [
     cover: '/portrait_image.webp',
     description: 'Short desc',
     tags: ['a'],
-    count: 1,
     selected: true,
   },
 ];
@@ -67,14 +61,12 @@ export const mockCategoryItemsNoDescription: CategoryItem[] = [
     id: '1',
     name: 'Electronics',
     cover: '/laptop.webp',
-    count: 25,
     selected: false,
   },
   {
     id: '2',
     name: 'Clothing',
     cover: '/portrait_image.webp',
-    count: 18,
     selected: true,
   },
 ];
@@ -85,7 +77,6 @@ export const mockCategoryItemsNoTags: CategoryItem[] = [
     name: 'Electronics',
     cover: '/laptop.webp',
     description: 'All electronic devices and gadgets',
-    count: 25,
     selected: false,
   },
   {
@@ -93,7 +84,6 @@ export const mockCategoryItemsNoTags: CategoryItem[] = [
     name: 'Clothing',
     cover: '/portrait_image.webp',
     description: 'Trendy clothing and fashion accessories',
-    count: 18,
     selected: true,
   },
 ];

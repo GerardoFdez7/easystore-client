@@ -1,8 +1,11 @@
 'use client';
 
+import { useMemo, useState, useCallback } from 'react';
 import Image from 'next/image';
-import { useMemo, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { Search } from 'lucide-react';
 import { Button } from '@shadcn/ui/button';
+import { Checkbox } from '@shadcn/ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -17,13 +20,11 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@shadcn/ui/drawer';
-import { Checkbox } from '@shadcn/ui/checkbox';
-import { Search } from 'lucide-react';
-import { cn } from 'utils';
-import { useTranslations } from 'next-intl';
-import { useIsMobile } from '@hooks/utils/useMobile';
 import SearchBar from '@atoms/shared/SearchBar';
-import { useCategories } from '@hooks/domains/category/useCategories';
+import LoadMoreButton from '@atoms/shared/LoadMoreButton';
+import { useIsMobile } from '@hooks/utils/useMobile';
+import { useCategoriesForPicker } from '@hooks/domains/category';
+import { cn } from 'utils';
 
 export type CategoryItem = {
   id: string;
@@ -66,8 +67,13 @@ export default function AddSubcategoriesPicker({
 
   const exclude = useMemo(() => new Set(allExcludeIds), [allExcludeIds]);
 
-  // Fetch categories with includeSubcategories=false
-  const { items: categories, loading } = useCategories({
+  // Fetch categories with includeSubcategories=false using the new picker hook
+  const {
+    items: categories,
+    loading,
+    hasMore,
+    handleLoadMore,
+  } = useCategoriesForPicker({
     name: q.trim(),
     includeSubcategories: false,
   });
@@ -76,66 +82,101 @@ export default function AddSubcategoriesPicker({
     return categories.filter((c) => !exclude.has(c.id));
   }, [categories, exclude]);
 
-  const toggle = (id: string, checked: boolean) => {
+  const toggle = useCallback((id: string, checked: boolean) => {
     setSelected((prev) => {
       const next = new Set(prev);
-      if (checked) next.add(id);
-      else next.delete(id);
+      if (checked) {
+        next.add(id);
+      } else {
+        next.delete(id);
+      }
       return next;
     });
-  };
+  }, []);
 
-  const addSelected = () => {
-    if (selected.size === 0) return;
+  const addSelected = useCallback(() => {
+    if (selected.size === 0) {
+      return;
+    }
     onAdd?.(Array.from(selected));
     setSelected(new Set());
     setOpen(false);
-  };
+  }, [selected, onAdd]);
+
+  const handleSearchChange = useCallback((value: string) => {
+    setQ(value);
+  }, []);
+
+  const handleLoadMoreClick = useCallback(() => {
+    void handleLoadMore();
+  }, [handleLoadMore]);
 
   const Body = (
     <div className="mx-auto w-full max-w-2xl space-y-3">
       <SearchBar
         placeholder={t('searchSubcategories')}
         searchTerm={q}
-        onSearchChange={setQ}
+        onSearchChange={handleSearchChange}
+        aria-label={t('searchSubcategories')}
       />
 
-      <div className="max-h-[60vh] overflow-auto rounded-md border">
+      <div
+        className="max-h-[60vh] overflow-auto rounded-md border"
+        role="listbox"
+      >
         {list.length === 0 ? (
-          <div className="text-text p-6 text-center text-sm">
+          <div className="text-text p-6 text-center text-sm" role="status">
             {t('noResults')}
           </div>
         ) : (
-          list.map((c) => (
-            <label
-              key={c.id}
-              className={cn(
-                'flex cursor-pointer items-center justify-between gap-3 border-b bg-transparent px-3 py-2 transition last:border-none',
-              )}
-            >
-              <div className="flex items-center gap-3">
-                <Checkbox
-                  checked={selected.has(c.id)}
-                  onCheckedChange={(v) => toggle(c.id, Boolean(v))}
-                  disabled={disabled || loading}
-                />
-                <div className="ring-foreground/10 relative h-8 w-8 overflow-hidden rounded-full ring-1">
-                  <Image
-                    src={c.cover}
-                    alt={c.name}
-                    fill
-                    className="object-cover"
+          <>
+            {list.map((c) => (
+              <label
+                key={c.id}
+                className={cn(
+                  'flex cursor-pointer items-center justify-between gap-3 border-b bg-transparent px-3 py-2 transition last:border-none',
+                )}
+                htmlFor={`category-${c.id}`}
+              >
+                <div className="flex items-center gap-3">
+                  <Checkbox
+                    id={`category-${c.id}`}
+                    checked={selected.has(c.id)}
+                    onCheckedChange={(v) => toggle(c.id, Boolean(v))}
+                    disabled={disabled || loading}
+                    aria-describedby={`category-name-${c.id}`}
                   />
+                  <div className="ring-foreground/10 relative h-8 w-8 overflow-hidden rounded-full ring-1">
+                    <Image
+                      src={c.cover || ''}
+                      alt={`${c.name} category cover`}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <span
+                    id={`category-name-${c.name}`}
+                    className="text-text truncate text-sm"
+                  >
+                    {c.name}
+                  </span>
                 </div>
-                <span className="text-text truncate text-sm">{c.name}</span>
-              </div>
-            </label>
-          ))
+              </label>
+            ))}
+          </>
         )}
       </div>
+      {hasMore && (
+        <LoadMoreButton
+          onClick={handleLoadMoreClick}
+          isLoading={loading}
+          disabled={!hasMore}
+          size="sm"
+        />
+      )}
 
       <div className="flex flex-col items-center justify-between gap-2 sm:flex-row sm:gap-0">
-        <span className="text-text text-sm">
+        <span className="text-text text-sm" role="status" aria-live="polite">
           {selected.size > 0
             ? t('itemsCount', { count: selected.size })
             : '\u00A0'}
@@ -144,6 +185,7 @@ export default function AddSubcategoriesPicker({
           onClick={addSelected}
           disabled={disabled || selected.size === 0 || loading}
           className="text-accent bg-title hover:bg-accent-foreground w-full sm:w-auto"
+          aria-describedby="selected-count"
         >
           {t('add')}
         </Button>
@@ -152,8 +194,12 @@ export default function AddSubcategoriesPicker({
   );
 
   const Trigger = (
-    <Button variant={'title'} disabled={disabled || loading}>
-      <Search className="h-4 w-4" />
+    <Button
+      variant={'title'}
+      disabled={disabled || loading}
+      aria-label={t('addSubcategories')}
+    >
+      <Search className="h-4 w-4" aria-hidden="true" />
       {t('addSubcategories')}
     </Button>
   );

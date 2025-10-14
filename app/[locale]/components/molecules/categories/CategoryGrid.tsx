@@ -21,6 +21,7 @@ import CategoryCardSkeleton from '@molecules/categories/CategoryCardSkeleton';
 interface CategoryGridProps {
   categories: CategorySummary[];
   loading: boolean;
+  isLoadingMore?: boolean;
   query?: string;
   parentPath?: string; // For nested navigation
   limit?: number;
@@ -37,6 +38,7 @@ const normalize = (s: string) =>
 export default function CategoryGrid({
   categories,
   loading,
+  isLoadingMore = false,
   query = '',
   parentPath = '',
   limit = 25,
@@ -118,7 +120,7 @@ export default function CategoryGrid({
   const skeletonItems = useMemo(
     () =>
       Array.from({ length: limit }, (_, i) => (
-        <CategoryCardSkeleton key={`skeleton-${i}`} />
+        <CategoryCardSkeleton key={`skeleton-${Date.now()}-${i}`} />
       )),
     [limit],
   );
@@ -129,13 +131,15 @@ export default function CategoryGrid({
         className="3xl:grid-cols-6 grid w-full grid-cols-1 justify-items-center gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
         role="grid"
         aria-label="categories Grid"
-        aria-busy={loading}
+        aria-busy={loading || isLoadingMore}
       >
-        {loading
-          ? skeletonItems
-          : filtered.map((category) => (
+        {loading && !isLoadingMore ? (
+          skeletonItems
+        ) : (
+          <>
+            {filtered.map((category, index) => (
               <CategoryCard
-                key={category.id}
+                key={`${category.id}-${index}`}
                 name={category.name}
                 cover={category.cover}
                 count={category.count}
@@ -146,6 +150,9 @@ export default function CategoryGrid({
                 hideCount={hideCount}
               />
             ))}
+            {isLoadingMore && skeletonItems}
+          </>
+        )}
       </section>
 
       <AlertDialog open={open} onOpenChange={handleDialogClose}>

@@ -198,7 +198,6 @@ export default function AddressForm({
                       value={field.value}
                       onValueChange={field.onChange}
                       placeholder={t('selectState')}
-                      className="w-full max-w-md"
                       key={selectedCountryId} // Force re-render when country changes
                     />
                   </div>

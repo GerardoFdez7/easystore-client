@@ -15,11 +15,12 @@ export function buildCategorySchema(
     name: z
       .string()
       .trim()
-      .min(1, { message: t('nameRequired') })
+      .min(2, { message: t('nameTooShort', { min: 2 }) })
       .max(100, { message: t('nameTooLong', { max: 100 }) }),
     description: z
       .string()
       .trim()
+      .transform((val) => (val === '' ? undefined : val)) // Convert empty strings to undefined
       .optional()
       .refine(
         (value) => {

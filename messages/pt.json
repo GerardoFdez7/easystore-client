@@ -885,7 +885,9 @@
     "addressNameAlreadyExists": "Nome do endereço já existe",
     "addressNameAlreadyExistsDescription": "Um endereço com este nome já existe. Por favor, escolha um nome diferente.",
     "categoryNameAlreadyExists": "Nome da categoria já existe",
-    "categoryNameAlreadyExistsDescription": "Uma categoria com este nome já existe. Por favor, escolha um nome diferente."
+    "categoryNameAlreadyExistsDescription": "Uma categoria com este nome já existe. Por favor, escolha um nome diferente.",
+    "categoryHierarchyDepthExceeded": "Profundidade da hierarquia de categoria excedida",
+    "categoryHierarchyDepthExceededDescription": "Você atingiu o limite máximo de 10 níveis de subcategorias. Não é possível criar mais subcategorias neste nível."
   },
   "Shared": {
     "loadMore": "Carregar mais",
@@ -1113,7 +1115,9 @@
     "noSubcategoriesTitle": "Sem subcategorias",
     "noSubcategoriesDescription": "Esta categoria ainda não tem subcategorias.",
     "noSearchResultsTitle": "Nenhum resultado encontrado",
-    "noSearchResultsDescription": "Tente ajustar os termos de pesquisa ou navegue por todas as categorias."
+    "noSearchResultsDescription": "Tente ajustar os termos de pesquisa ou navegue por todas as categorias.",
+    "maxDepthReachedTitle": "Limite de aninhamento atingido",
+    "maxDepthReachedDescription": "Você atingiu o limite máximo de 10 níveis de subcategorias. Não é possível criar mais subcategorias neste nível."
   },
   "CategoryDetail": {
     "welcomeDetailCategory": "Criar uma nova categoria",
@@ -1141,6 +1145,7 @@
     "coverRequired": "A imagem de capa é obrigatória.",
     "cover": "Capa",
     "nameRequired": "O nome é obrigatório.",
+    "nameTooShort": "O nome deve ter pelo menos {min} caracteres.",
     "nameTooLong": "O nome não pode exceder {max} caracteres.",
     "descriptionTooLong": "A descrição não pode exceder {max} caracteres.",
     "descriptionTooShort": "A descrição deve ter pelo menos {min} caracteres.",

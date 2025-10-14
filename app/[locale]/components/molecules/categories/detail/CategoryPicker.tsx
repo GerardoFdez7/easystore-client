@@ -2,23 +2,17 @@
 
 import React, { useCallback, useMemo, useState } from 'react';
 import Image from 'next/image';
-import { Button } from '@shadcn/ui/button';
-import { Unlink, Dices, Plus } from 'lucide-react';
-import { cn } from 'utils';
 import { useTranslations } from 'next-intl';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@shadcn/ui/tooltip';
+import { Unlink, Dices, Plus } from 'lucide-react';
+import { Button } from '@shadcn/ui/button';
 import { Label } from '@shadcn/ui/label';
-import { useMutation } from '@apollo/client/react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@shadcn/ui/tooltip';
 import EmptyState from '@molecules/shared/EmptyState';
 import AddSubcategoriesPicker from '@molecules/categories/detail/AddSubcategory';
 import AddCategoryDialog, {
   type NewCategoryData,
 } from '@molecules/categories/detail/AddCategoryDialog';
-import {
-  UpdateCategoryDocument,
-  UpdateCategoryMutation,
-  UpdateCategoryMutationVariables,
-} from '@graphql/generated';
+import { cn } from 'utils';
 
 export type CategoryItem = {
   id: string;
@@ -62,10 +56,7 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
   const t = useTranslations('CategoryDetail');
   const tCategory = useTranslations('Category');
 
-  const [updateCategoryMutation] = useMutation<
-    UpdateCategoryMutation,
-    UpdateCategoryMutationVariables
-  >(UpdateCategoryDocument, {});
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   const excludeIds = useMemo(() => {
     const existingIds = items.map((i) => i.id);
@@ -73,34 +64,17 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
     return [...existingIds, ...newIds];
   }, [items, newCategories]);
 
-  const handleRemove = useCallback(
-    async (id: string) => {
-      // Check if it's a new category first
-      const isNewCategory = newCategories.some((cat) => cat.id === id);
-      if (isNewCategory) {
-        // Handle removal of new category (this would need to be implemented in parent)
-        // For now, we'll still call onRemove as the parent should handle it
-        onRemove(id);
-      } else {
-        // Handle removal of existing category by unlinking (setting parentId to null)
-        try {
-          await updateCategoryMutation({
-            variables: {
-              id,
-              input: {
-                parentId: null,
-              },
-            },
-          });
-          // Call onRemove to update the local state
-          onRemove(id);
-        } catch (_error) {}
-      }
-    },
-    [onRemove, newCategories, updateCategoryMutation],
-  );
+  const allItems = useMemo(() => {
+    return [...items, ...newCategories];
+  }, [items, newCategories]);
 
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const handleRemove = useCallback(
+    (id: string) => {
+      // Only update local state - persistence will be handled during form submission
+      onRemove(id);
+    },
+    [onRemove],
+  );
 
   const handleAdd = useCallback(
     (ids: string[]) => {
@@ -115,7 +89,7 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
     (categoryData: NewCategoryData) => {
       if (onNewCategoryAdd) {
         const newCategory: NewCategoryItem = {
-          id: `temp-${Date.now()}`, // Temporary ID for new categories
+          id: `temp-${crypto.randomUUID()}`, // Temporary ID for new categories
           name: categoryData.name,
           cover: categoryData.cover || '',
           description: categoryData.description,
@@ -128,24 +102,21 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
     [onNewCategoryAdd],
   );
 
-  // Combine existing items and new categories for display
-  const allItems = useMemo(() => {
-    const newCategoryItems: CategoryItem[] = newCategories.map((newCat) => ({
-      id: newCat.id,
-      name: newCat.name,
-      cover: newCat.cover,
-      description: newCat.description,
-    }));
-    return [...items, ...newCategoryItems];
-  }, [items, newCategories]);
+  const handleAddDialogOpen = useCallback(() => {
+    setIsAddDialogOpen(true);
+  }, []);
 
   return (
-    <div className="space-y-4">
-      <div className="flex w-full flex-col items-center justify-end gap-2 sm:flex-row">
+    <section className="space-y-4" aria-labelledby="subcategories-section">
+      <header className="flex w-full flex-col items-center justify-end gap-2 sm:flex-row">
         {allItems.length > 0 && (
           <AddCategoryDialog onAdd={handleNewCategoryAdd}>
-            <Button variant="outline" className="w-full sm:w-auto">
-              <Plus className="h-4 w-4" />
+            <Button
+              variant="outline"
+              className="w-full sm:w-auto"
+              aria-label={t('createSubcategory')}
+            >
+              <Plus className="h-4 w-4" aria-hidden="true" />
               {t('createSubcategory')}
             </Button>
           </AddCategoryDialog>
@@ -157,7 +128,7 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
           disabled={disabled}
           onAdd={handleAdd}
         />
-      </div>
+      </header>
 
       {allItems.length === 0 ? (
         <AddCategoryDialog
@@ -170,18 +141,21 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
             title={tCategory('noSubcategoriesTitle')}
             description={tCategory('noSubcategoriesDescription')}
             buttonText={t('createSubcategory')}
-            onButtonClick={() => setIsAddDialogOpen(true)}
+            onButtonClick={handleAddDialogOpen}
             buttonIcon={Plus}
           />
         </AddCategoryDialog>
       ) : (
-        <div className="overflow-hidden rounded-lg border bg-transparent">
+        <div
+          className="overflow-hidden rounded-lg border bg-transparent"
+          role="list"
+        >
           {allItems.map((c) => {
             const isNewCategory = newCategories.some(
               (newCat) => newCat.id === c.id,
             );
             return (
-              <div
+              <article
                 key={c.id}
                 className={cn(
                   'border-border/30 grid grid-cols-[48px_1fr_auto] items-center gap-3 border-b px-4 py-3 last:border-none',
@@ -204,18 +178,35 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
                         sizes="40px"
                       />
                     ) : (
-                      <div className="bg-muted flex h-full w-full items-center justify-center">
-                        <Dices className="text-muted-foreground h-4 w-4" />
+                      <div
+                        className="bg-muted flex h-full w-full items-center justify-center"
+                        role="img"
+                        aria-label={`Default icon for ${c.name}`}
+                      >
+                        <Dices
+                          className="text-muted-foreground h-4 w-4"
+                          aria-hidden="true"
+                        />
                       </div>
                     )}
                   </div>
                 </div>
 
                 <div className="flex min-w-0 flex-col gap-1">
-                  <Label className="text-text font-medium">{c.name}</Label>
+                  <Label
+                    className="text-text font-medium"
+                    id={`category-name-${c.name}`}
+                  >
+                    {c.name}
+                  </Label>
 
                   {c.description && (
-                    <Label className="text-text text-xs">{c.description}</Label>
+                    <Label
+                      className="text-text text-xs"
+                      id={`category-desc-${c.description}`}
+                    >
+                      {c.description}
+                    </Label>
                   )}
                 </div>
 
@@ -225,12 +216,13 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => void handleRemove(c.id)}
+                        onClick={() => handleRemove(c.id)}
                         disabled={disabled}
                         className="hover:bg-destructive/10 hover:text-destructive h-8 w-8 rounded-full p-0 transition-colors"
                         aria-label={`Remove ${c.name} subcategory`}
+                        aria-describedby={`category-name-${c.name}`}
                       >
-                        <Unlink className="h-4 w-4" />
+                        <Unlink className="h-4 w-4" aria-hidden="true" />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -245,12 +237,13 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => void handleRemove(c.id)}
+                        onClick={() => handleRemove(c.id)}
                         disabled={disabled}
                         className="hover:bg-destructive/10 hover:text-destructive h-8 w-8 rounded-full p-0 transition-colors"
                         aria-label={`Remove ${c.name} subcategory`}
+                        aria-describedby={`category-name-${c.name}`}
                       >
-                        <Unlink className="h-4 w-4" />
+                        <Unlink className="h-4 w-4" aria-hidden="true" />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -258,12 +251,12 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
                     </TooltipContent>
                   </Tooltip>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>
       )}
-    </div>
+    </section>
   );
 });
 

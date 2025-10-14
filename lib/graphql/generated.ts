@@ -740,14 +740,12 @@ export type QueryGetAllStockMovementsArgs = {
 export type QueryGetAllWarehousesArgs = {
   addressId?: InputMaybe<Scalars['ID']['input']>;
   includeAddresses?: InputMaybe<Scalars['Boolean']['input']>;
-  isArchived?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
-  lowStockThreshold?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['Int']['input']>;
   sortBy?: InputMaybe<SortBy>;
   sortOrder?: InputMaybe<SortOrder>;
-  variantId?: InputMaybe<Scalars['ID']['input']>;
+  stockFilters?: InputMaybe<StockPerWarehouseFilterInput>;
 };
 
 export type QueryGetCategoryByIdArgs = {
@@ -817,6 +815,21 @@ export type StockPerWarehouse = {
   variantId: Scalars['ID']['output'];
   variantSku?: Maybe<Scalars['String']['output']>;
   warehouseId: Scalars['ID']['output'];
+};
+
+export type StockPerWarehouseFilterInput = {
+  isArchived?: InputMaybe<Scalars['Boolean']['input']>;
+  lowStockThreshold?: InputMaybe<Scalars['Float']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  sortBy?: InputMaybe<StockPerWarehouseSortBy>;
+  variantId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type StockPerWarehouseSortBy = {
+  available?: InputMaybe<SortOrder>;
+  replenishmentDate?: InputMaybe<SortOrder>;
+  reserved?: InputMaybe<SortOrder>;
+  variantFirstAttribute?: InputMaybe<SortOrder>;
 };
 
 export type Sustainability = {
@@ -1368,6 +1381,31 @@ export type FindAllCategoriesQuery = {
   };
 };
 
+export type FindCategoriesForPickerQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  parentId?: InputMaybe<Scalars['ID']['input']>;
+  sortBy?: InputMaybe<SortBy>;
+  sortOrder?: InputMaybe<SortOrder>;
+  includeSubcategories?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+export type FindCategoriesForPickerQuery = {
+  __typename?: 'Query';
+  getAllCategories: {
+    __typename?: 'PaginatedCategoriesType';
+    total: number;
+    hasMore: boolean;
+    categories: Array<{
+      __typename?: 'Category';
+      id: string;
+      name: string;
+      cover: string;
+    }>;
+  };
+};
+
 export type FindCategoriesTreeQueryVariables = Exact<{
   sortBy?: InputMaybe<SortBy>;
   sortOrder?: InputMaybe<SortOrder>;
@@ -1648,9 +1686,6 @@ export type FindInventoryQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   addressId?: InputMaybe<Scalars['ID']['input']>;
-  variantId?: InputMaybe<Scalars['ID']['input']>;
-  isArchived?: InputMaybe<Scalars['Boolean']['input']>;
-  lowStockThreshold?: InputMaybe<Scalars['Int']['input']>;
   sortBy?: InputMaybe<SortBy>;
   sortOrder?: InputMaybe<SortOrder>;
 }>;
@@ -3972,6 +4007,167 @@ export const FindAllCategoriesDocument = {
   FindAllCategoriesQuery,
   FindAllCategoriesQueryVariables
 >;
+export const FindCategoriesForPickerDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'findCategoriesForPicker' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '1' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'limit' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '25' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'name' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+          defaultValue: { kind: 'StringValue', value: '', block: false },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'parentId' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          defaultValue: { kind: 'NullValue' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'sortBy' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'SortBy' } },
+          defaultValue: { kind: 'EnumValue', value: 'NAME' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'sortOrder' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'SortOrder' },
+          },
+          defaultValue: { kind: 'EnumValue', value: 'ASC' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'includeSubcategories' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
+          defaultValue: { kind: 'BooleanValue', value: false },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getAllCategories' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'page' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'page' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'limit' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'limit' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'name' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'name' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'parentId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'parentId' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'sortBy' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'sortBy' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'sortOrder' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'sortOrder' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'includeSubcategories' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'includeSubcategories' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'categories' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'cover' } },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'hasMore' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  FindCategoriesForPickerQuery,
+  FindCategoriesForPickerQueryVariables
+>;
 export const FindCategoriesTreeDocument = {
   kind: 'Document',
   definitions: [
@@ -5398,30 +5594,6 @@ export const FindInventoryDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'variantId' },
-          },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'isArchived' },
-          },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'lowStockThreshold' },
-          },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
             name: { kind: 'Name', value: 'sortBy' },
           },
           type: { kind: 'NamedType', name: { kind: 'Name', value: 'SortBy' } },
@@ -5467,30 +5639,6 @@ export const FindInventoryDocument = {
                 value: {
                   kind: 'Variable',
                   name: { kind: 'Name', value: 'addressId' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'variantId' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'variantId' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'isArchived' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'isArchived' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'lowStockThreshold' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'lowStockThreshold' },
                 },
               },
               {

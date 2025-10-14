@@ -3,7 +3,7 @@ import CategoryCard from '@molecules/categories/CategoryCard';
 import CategoryCardSkeleton from '@molecules/categories/CategoryCardSkeleton';
 
 const meta: Meta<typeof CategoryCard> = {
-  title: 'Molecules/Category/CategoryCard',
+  title: 'Molecules/Categories/CategoryCard',
   component: CategoryCard,
   parameters: {
     layout: 'centered',

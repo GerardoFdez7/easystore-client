@@ -4,7 +4,7 @@ import { MockedProvider } from '@apollo/client/testing/react';
 import { mockCategoryTreeSuccess } from './mocks/categoryTreeMocks';
 
 const meta: Meta<typeof CategoryTree> = {
-  title: 'Molecules/Category/CategoryTree',
+  title: 'Molecules/Categories/CategoryTree',
   component: CategoryTree,
   parameters: {
     layout: 'fullscreen',

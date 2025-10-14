@@ -126,6 +126,33 @@ const databaseConstraintHandlers: ErrorHandler[] = [
       return true;
     },
   },
+  {
+    id: 'category-hierarchy-depth-exceeded',
+    priority: 140,
+    matcher: (error: GraphQLFormattedError) => {
+      const message = error.message?.toLowerCase() || '';
+      return (
+        (message.includes('database update category failed') ||
+          message.includes('database create category failed')) &&
+        message.includes('category hierarchy cannot exceed') &&
+        message.includes('levels')
+      );
+    },
+    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
+      const { locale, isDevelopment } = context;
+      toast.warning(
+        getLocalizedMessage(locale, 'categoryHierarchyDepthExceeded'),
+        {
+          description:
+            getLocalizedMessage(
+              locale,
+              'categoryHierarchyDepthExceededDescription',
+            ) + (isDevelopment ? ` Backend message: ${error.message}` : ''),
+        },
+      );
+      return true;
+    },
+  },
 ];
 
 /**

@@ -884,7 +884,9 @@
     "addressNameAlreadyExists": "Le nom de l'adresse existe déjà",
     "addressNameAlreadyExistsDescription": "Une adresse avec ce nom existe déjà. Veuillez choisir un nom différent.",
     "categoryNameAlreadyExists": "Le nom de la catégorie existe déjà",
-    "categoryNameAlreadyExistsDescription": "Une catégorie avec ce nom existe déjà. Veuillez choisir un nom différent."
+    "categoryNameAlreadyExistsDescription": "Une catégorie avec ce nom existe déjà. Veuillez choisir un nom différent.",
+    "categoryHierarchyDepthExceeded": "Profondeur de hiérarchie de catégorie dépassée",
+    "categoryHierarchyDepthExceededDescription": "Vous avez atteint la limite maximale de 10 niveaux de sous-catégories. Vous ne pouvez pas créer plus de sous-catégories à ce niveau."
   },
   "Shared": {
     "loadMore": "Charger plus",
@@ -1113,7 +1115,9 @@
     "noSubcategoriesTitle": "Aucune sous-catégorie",
     "noSubcategoriesDescription": "Cette catégorie n'a pas encore de sous-catégories.",
     "noSearchResultsTitle": "Aucun résultat trouvé",
-    "noSearchResultsDescription": "Essayez d'ajuster vos termes de recherche ou parcourez toutes les catégories."
+    "noSearchResultsDescription": "Essayez d'ajuster vos termes de recherche ou parcourez toutes les catégories.",
+    "maxDepthReachedTitle": "Limite d'imbrication atteinte",
+    "maxDepthReachedDescription": "Vous avez atteint la limite maximale de 10 niveaux de sous-catégories. Vous ne pouvez pas créer plus de sous-catégories à ce niveau."
   },
   "CategoryDetail": {
     "welcomeDetailCategory": "Créer une nouvelle catégorie",
@@ -1140,6 +1144,7 @@
     "coverRequired": "L’image de couverture est obligatoire.",
     "cover": "Couverture",
     "nameRequired": "Le nom est obligatoire.",
+    "nameTooShort": "Le nom doit contenir au moins {min} caractères.",
     "nameTooLong": "Le nom ne peut pas dépasser {max} caractères.",
     "descriptionTooLong": "La description ne peut pas dépasser {max} caractères.",
     "descriptionTooShort": "La description doit contenir au moins {min} caractères.",

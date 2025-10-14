@@ -4,7 +4,7 @@ import { MockedProvider } from '@apollo/client/testing/react';
 import { mockCategoryBreadcrumbSuccess } from './mocks/categoryBreadcrumbMocks';
 
 const meta: Meta<typeof CategoryBreadcrumb> = {
-  title: 'Molecules/Category/CategoryBreadcrumb',
+  title: 'Molecules/Categories/CategoryBreadcrumb',
   component: CategoryBreadcrumb,
   parameters: {
     layout: 'padded',

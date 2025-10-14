@@ -1,9 +1,10 @@
 import CategoryDetailTemplate from '@templates/categories/CategoryDetail';
 
-export default function CategoryDetailPage({
-  params: { id },
+export default async function CategoryDetailPage({
+  params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await params;
   return <CategoryDetailTemplate id={id} />;
 }

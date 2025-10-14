@@ -39,6 +39,7 @@ export default function EmptyState({
         </div>
         {buttonText && onButtonClick && (
           <Button
+            type="button"
             className="text-md mt-4"
             variant={buttonVariant}
             onClick={onButtonClick}

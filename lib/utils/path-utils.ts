@@ -54,3 +54,14 @@ export function createHierarchicalPath(names: string[]): string {
 export function parseHierarchicalPath(path: string): string[] {
   return path.split('/').filter(Boolean);
 }
+
+// Calculate current category path depth from URL
+export const getCurrentPathDepth = (): number => {
+  if (typeof window === 'undefined') return 0;
+
+  const currentPath = window.location.pathname;
+  const pathSegments = currentPath.split('/').filter(Boolean);
+  const categoryPathSegments = pathSegments.slice(2); // Remove locale and 'categories'
+
+  return categoryPathSegments.length;
+};

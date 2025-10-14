@@ -11,3 +11,4 @@ export { useUpdateCategory } from './useUpdateCategory';
 export { useDeleteCategory } from './useDeleteCategory';
 export { useCategoryMedia } from './useCategoryMedia';
 export { type CategoryFormValues } from './categoryValidation';
+export { useCategoriesForPicker } from './useCategoriesForPicker';

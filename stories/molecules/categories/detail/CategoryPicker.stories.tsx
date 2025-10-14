@@ -6,27 +6,21 @@ import {
   mockCategoryItemsNoDescription,
   mockCategoryItemsNoTags,
   mockEmptyCategoryItems,
-  mockCatalogForPicker,
 } from '../mocks/categoryPickerMocks';
 
 const meta: Meta<typeof CategoryPicker> = {
-  title: 'Molecules/Category/Detail/CategoryPicker',
+  title: 'Molecules/Categories/Detail/CategoryPicker',
   component: CategoryPicker,
   parameters: {
     layout: 'centered',
   },
   args: {
     items: mockCategoryItems,
-    catalog: mockCatalogForPicker,
     disabled: false,
   },
   argTypes: {
     items: {
       description: 'Array of selected category items',
-      control: { type: 'object' },
-    },
-    catalog: {
-      description: 'Array of available categories for adding new items',
       control: { type: 'object' },
     },
     disabled: {
@@ -66,7 +60,6 @@ export const Default: Story = {
   name: 'Default State',
   args: {
     items: mockCategoryItems,
-    catalog: mockCatalogForPicker,
   },
 };
 
@@ -74,7 +67,6 @@ export const EmptyState: Story = {
   name: 'Empty State',
   args: {
     items: mockEmptyCategoryItems,
-    catalog: mockCatalogForPicker,
   },
   parameters: {
     docs: {
@@ -90,7 +82,6 @@ export const WithLongNames: Story = {
   name: 'With Long Names',
   args: {
     items: mockCategoryItemsWithLongNames,
-    catalog: mockCatalogForPicker,
   },
   parameters: {
     docs: {
@@ -106,7 +97,6 @@ export const NoDescriptions: Story = {
   name: 'Without Descriptions',
   args: {
     items: mockCategoryItemsNoDescription,
-    catalog: mockCatalogForPicker,
   },
   parameters: {
     docs: {
@@ -122,7 +112,6 @@ export const NoTags: Story = {
   name: 'Without Tags',
   args: {
     items: mockCategoryItemsNoTags,
-    catalog: mockCatalogForPicker,
   },
   parameters: {
     docs: {
@@ -138,7 +127,6 @@ export const Disabled: Story = {
   name: 'Disabled State',
   args: {
     items: mockCategoryItems,
-    catalog: mockCatalogForPicker,
     disabled: true,
   },
   parameters: {
@@ -155,7 +143,6 @@ export const NoCatalog: Story = {
   name: 'No Catalog Available',
   args: {
     items: mockCategoryItems,
-    catalog: [],
   },
   parameters: {
     docs: {
@@ -171,7 +158,6 @@ export const SingleItem: Story = {
   name: 'Single Item',
   args: {
     items: [mockCategoryItems[0]],
-    catalog: mockCatalogForPicker,
   },
   parameters: {
     docs: {
@@ -186,7 +172,6 @@ export const MobileLayout: Story = {
   name: 'Mobile Layout',
   args: {
     items: mockCategoryItems,
-    catalog: mockCatalogForPicker,
   },
   parameters: {
     viewport: {

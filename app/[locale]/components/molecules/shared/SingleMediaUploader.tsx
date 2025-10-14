@@ -59,6 +59,11 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
     onUploadError,
     onMediaProcessed,
     multiple: false,
+    onUploadCompleted: () => {
+      // Only signal changes after successful upload completion
+      setHasChanges(true);
+      onMediaChange?.(true);
+    },
   });
 
   // Track initial state to detect changes
@@ -75,16 +80,10 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
       currentSelectedFiles: File[],
       currentPersistedMedia: { url: string } | string[] | null,
     ) => {
-      // If we have new files selected, there are changes
-      if (currentSelectedFiles.length > 0) {
-        if (!hasChanges) {
-          setHasChanges(true);
-          onMediaChange?.(true);
-        }
-        return;
-      }
+      // Don't signal changes immediately when files are selected
+      // Changes will be signaled only after successful upload via onUploadCompleted
 
-      // Compare current persisted media with initial state
+      // Compare current persisted media with initial state for existing media changes
       const currentUrl =
         currentPersistedMedia &&
         typeof currentPersistedMedia === 'object' &&
@@ -93,7 +92,8 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
           : null;
       const hasMediaChanges = currentUrl !== initialMediaState;
 
-      if (hasMediaChanges !== hasChanges) {
+      // Only signal changes for existing media modifications (not new uploads)
+      if (hasMediaChanges !== hasChanges && currentSelectedFiles.length === 0) {
         setHasChanges(hasMediaChanges);
         onMediaChange?.(hasMediaChanges);
       }

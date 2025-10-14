@@ -884,7 +884,9 @@
     "addressNameAlreadyExists": "El nombre de la dirección ya existe",
     "addressNameAlreadyExistsDescription": "Ya existe una dirección con este nombre. Por favor, elige un nombre diferente.",
     "categoryNameAlreadyExists": "El nombre de la categoría ya existe",
-    "categoryNameAlreadyExistsDescription": "Ya existe una categoría con este nombre. Por favor, elige un nombre diferente."
+    "categoryNameAlreadyExistsDescription": "Ya existe una categoría con este nombre. Por favor, elige un nombre diferente.",
+    "categoryHierarchyDepthExceeded": "Profundidad de jerarquía de categoría excedida",
+    "categoryHierarchyDepthExceededDescription": "Has alcanzado el límite máximo de 10 niveles de subcategorías. No puedes crear más subcategorías en este nivel."
   },
   "Shared": {
     "loadMore": "Cargar más",
@@ -1110,7 +1112,9 @@
     "noSubcategoriesTitle": "Sin subcategorías",
     "noSubcategoriesDescription": "Esta categoría aún no tiene subcategorías.",
     "noSearchResultsTitle": "No se encontraron resultados",
-    "noSearchResultsDescription": "Intenta ajustar tus términos de búsqueda o navega por todas las categorías."
+    "noSearchResultsDescription": "Intenta ajustar tus términos de búsqueda o navega por todas las categorías.",
+    "maxDepthReachedTitle": "Límite de anidación alcanzado",
+    "maxDepthReachedDescription": "Has alcanzado el límite máximo de 10 niveles de subcategorías. No puedes crear más subcategorías en este nivel."
   },
   "CategoryDetail": {
     "welcomeDetailCategory": "Cree una nueva categoría",
@@ -1137,6 +1141,7 @@
     "coverRequired": "La imagen de portada es obligatoria.",
     "cover": "Portada",
     "nameRequired": "El nombre es obligatorio.",
+    "nameTooShort": "El nombre debe tener al menos {min} caracteres.",
     "nameTooLong": "El nombre no puede exceder {max} caracteres.",
     "descriptionTooLong": "La descripción no puede exceder {max} caracteres.",
     "descriptionTooShort": "La descripción debe tener al menos {min} caracteres.",

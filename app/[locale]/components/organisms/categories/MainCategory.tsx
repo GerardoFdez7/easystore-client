@@ -3,9 +3,10 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Dices, Plus, Search } from 'lucide-react';
+import { Dices, Plus, Search, AlertTriangle } from 'lucide-react';
 import { SortBy, SortOrder } from '@graphql/generated';
 import { useCategories, useCategoryByPath } from '@hooks/domains/category';
+import { getCurrentPathDepth } from '@lib/utils/path-utils';
 import EmptyState from '@molecules/shared/EmptyState';
 import CategoryGrid from '@molecules/categories/CategoryGrid';
 import CategoryTree from '@molecules/categories/CategoryTree';
@@ -25,6 +26,7 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
   const router = useRouter();
   const t = useTranslations('Category');
   const tDetail = useTranslations('CategoryDetail');
+  const categoryPathDepth = getCurrentPathDepth();
 
   // Resolve parent ID from category path
   const { parentId, loading: pathLoading } = useCategoryByPath(categoryPath);
@@ -33,6 +35,7 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
   const {
     items: categories,
     loading: categoriesLoading,
+    isLoadingMore,
     error,
     hasMore,
     handleLoadMore,
@@ -115,7 +118,7 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
     categoryPath.length === 0 &&
     categories.length === 0 &&
     !searchTerm.trim() &&
-    !controlsLoading
+    !isLoading
   ) {
     return (
       <main
@@ -158,6 +161,7 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
               ? t('createCategory')
               : tDetail('addSubcategories')
           }
+          showAddButton={categoryPathDepth < 10}
           editButtonHref={editHref}
           editButtonText={tDetail('editCategory')}
           showEditButton={!!editHref}
@@ -172,19 +176,32 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
             title={t('noSearchResultsTitle')}
             description={t('noSearchResultsDescription')}
           />
+        ) : categoryPath.length === 10 &&
+          categories.length === 0 &&
+          !isLoading ? (
+          <EmptyState
+            icon={AlertTriangle}
+            title={t('maxDepthReachedTitle')}
+            description={t('maxDepthReachedDescription')}
+          />
         ) : categoryPath.length > 0 && categories.length === 0 && !isLoading ? (
           <EmptyState
             icon={Dices}
             title={t('noSubcategoriesTitle')}
             description={t('noSubcategoriesDescription')}
-            buttonText={tDetail('addSubcategories')}
-            onButtonClick={() => router.push(addHref)}
-            buttonIcon={Plus}
+            buttonText={
+              categoryPathDepth < 10 ? tDetail('addSubcategories') : undefined
+            }
+            onButtonClick={
+              categoryPathDepth < 10 ? () => router.push(addHref) : undefined
+            }
+            buttonIcon={categoryPathDepth < 10 ? Plus : undefined}
           />
         ) : (
           <CategoryGrid
             categories={categories}
-            loading={isLoading}
+            loading={categoriesLoading}
+            isLoadingMore={isLoadingMore}
             query={searchTerm}
             parentPath={parentPath}
             limit={25}
@@ -195,9 +212,8 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
           <div className="flex justify-center">
             <LoadMoreButton
               onClick={handleLoadMoreClick}
-              isLoading={isLoading}
+              isLoading={isLoadingMore}
               disabled={!hasMore}
-              aria-label={t('loadMoreCategories')}
             />
           </div>
         )}

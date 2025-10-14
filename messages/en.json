@@ -933,7 +933,9 @@
     "addressNameAlreadyExists": "Address name already exists",
     "addressNameAlreadyExistsDescription": "An address with this name already exists. Please choose a different name.",
     "categoryNameAlreadyExists": "Category name already exists",
-    "categoryNameAlreadyExistsDescription": "A category with this name already exists. Please choose a different name."
+    "categoryNameAlreadyExistsDescription": "A category with this name already exists. Please choose a different name.",
+    "categoryHierarchyDepthExceeded": "Category hierarchy depth exceeded",
+    "categoryHierarchyDepthExceededDescription": "You have reached the maximum limit of 10 subcategory levels. You cannot create more subcategories at this level."
   },
   "Shared": {
     "loadMore": "Load More",
@@ -1155,6 +1157,8 @@
     "noSubcategoriesDescription": "This category doesn't have any subcategories yet.",
     "noSearchResultsTitle": "No results found",
     "noSearchResultsDescription": "Try adjusting your search terms or browse all categories.",
+    "maxDepthReachedTitle": "Nesting limit reached",
+    "maxDepthReachedDescription": "You have reached the maximum limit of 10 subcategory levels. You cannot create more subcategories at this level.",
     "categoryNotFoundTitle": "Category not found",
     "categoryNotFoundDescription": "The category you're looking for doesn't exist or may have been removed."
   },
@@ -1183,6 +1187,7 @@
     "coverRequired": "Cover image is required.",
     "cover": "Cover",
     "nameRequired": "Name is required.",
+    "nameTooShort": "Name must be at least {min} characters.",
     "nameTooLong": "Name cannot exceed {max} characters.",
     "descriptionTooLong": "Description cannot exceed {max} characters.",
     "descriptionTooShort": "Description must be at least {min} characters.",

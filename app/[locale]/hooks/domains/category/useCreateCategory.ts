@@ -1,7 +1,7 @@
 'use client';
 
-import { useMemo } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useMemo, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -33,19 +33,22 @@ export function useCreateCategory({
 }: CreateHookOptions = {}) {
   const t = useTranslations('CategoryDetail');
   const router = useRouter();
-  const { locale } = (useParams<{ locale?: string }>() ?? {}) as {
-    locale?: string;
-  };
 
-  // Use schema for creation (not update)
+  // Memoize schema for creation (not update)
   const schema = useMemo(() => buildCategorySchema(t, false), [t]);
+
+  // Memoize form default values
+  const formDefaultValues = useMemo(
+    () => ({
+      ...defaultCategoryFormValues,
+      ...defaultValues,
+    }),
+    [defaultValues],
+  );
 
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      ...defaultCategoryFormValues,
-      ...defaultValues,
-    },
+    defaultValues: formDefaultValues,
     ...defaultFormConfig,
   });
 
@@ -57,34 +60,44 @@ export function useCreateCategory({
     awaitRefetchQueries: true,
   });
 
-  const _submit = form.handleSubmit(async (values) => {
-    const input = {
-      name: values.name?.trim() || '',
-      description: values.description?.trim() || '',
-      cover: values.cover?.trim() || '',
-      ...(parentId ? { parentId } : {}),
-    } satisfies CreateCategoryMutationVariables['input'];
+  // Memoize submit handler to prevent unnecessary re-renders
+  const _submit = useCallback(
+    async (values: CategoryFormValues) => {
+      const input = {
+        name: values.name?.trim() || '',
+        description: values.description?.trim() || '',
+        cover: values.cover?.trim() || '',
+        ...(parentId ? { parentId } : {}),
+      } satisfies CreateCategoryMutationVariables['input'];
 
-    try {
-      await mutateCreate({ variables: { input } });
+      try {
+        await mutateCreate({ variables: { input } });
 
-      toast.success(t('createSuccess'));
+        toast.success(t('createSuccess'));
 
-      // Call onSuccess callback if provided
-      if (onSuccess) {
-        onSuccess();
+        // Call onSuccess callback if provided
+        if (onSuccess) {
+          onSuccess();
+        }
+
+        // Redirect to parent path (categories page)
+        router.back();
+      } catch (_error) {
+        // Error handling is managed globally by Apollo Client error handler
+        // No additional error handling needed here
       }
+    },
+    [mutateCreate, parentId, t, onSuccess, router],
+  );
 
-      // Always redirect to categories page after successful creation
-      const categoriesPath = locale ? `/${locale}/categories` : '/categories';
-      router.push(categoriesPath);
-    } catch (_error) {}
-  });
-
-  const handleSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
-    e?.preventDefault();
-    void _submit();
-  };
+  // Memoize form submit handler
+  const handleSubmit = useCallback(
+    (e?: React.FormEvent<HTMLFormElement>) => {
+      e?.preventDefault();
+      void form.handleSubmit(_submit)();
+    },
+    [form, _submit],
+  );
 
   return {
     form,

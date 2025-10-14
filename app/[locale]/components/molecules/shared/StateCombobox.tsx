@@ -4,6 +4,7 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 import { Combobox } from '@shadcn/ui/combobox';
 import { useStateCombobox } from '@hooks/domains/address/geo';
+import { cn } from 'utils';
 
 interface StateComboboxProps {
   countryId?: string;
@@ -64,7 +65,7 @@ export default function StateCombobox({
       placeholder={placeholderText}
       searchPlaceholder={t('searchState')}
       emptyMessage={emptyMessageText}
-      className={className}
+      className={cn('w-full sm:w-70', className)}
       disabled={isDisabled}
       serverSide={true}
       onSearchChange={enabled ? updateSearchTerm : () => {}}

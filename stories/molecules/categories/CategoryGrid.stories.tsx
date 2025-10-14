@@ -3,7 +3,7 @@ import CategoryGrid from '@molecules/categories/CategoryGrid';
 import { mockCategories } from './mocks/categoryMocks';
 
 const meta: Meta<typeof CategoryGrid> = {
-  title: 'Molecules/Category/CategoryGrid',
+  title: 'Molecules/Categories/CategoryGrid',
   component: CategoryGrid,
   decorators: [(Story) => <Story />],
 };

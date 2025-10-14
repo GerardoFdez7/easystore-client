@@ -1,16 +1,16 @@
 'use client';
 
-import { useMemo, useState, useCallback, useEffect } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { useQuery } from '@apollo/client/react';
 import {
-  FindAllCategoriesDocument,
-  FindAllCategoriesQuery,
-  FindAllCategoriesQueryVariables,
+  FindCategoriesForPickerDocument,
+  FindCategoriesForPickerQuery,
+  FindCategoriesForPickerQueryVariables,
   SortBy,
   SortOrder,
 } from '@graphql/generated';
 
-export interface UseCategoriesOptions {
+export interface UseCategoriesForPickerOptions {
   page?: number;
   limit?: number;
   name?: string;
@@ -21,42 +21,41 @@ export interface UseCategoriesOptions {
 }
 
 type GqlCategory = NonNullable<
-  FindAllCategoriesQuery['getAllCategories']
+  FindCategoriesForPickerQuery['getAllCategories']
 >['categories'][number];
 
-// Default Select
-export interface CategorySummary {
+// Minimal category summary for picker
+export interface CategoryPickerSummary {
   id: string;
   name: string;
-  cover: string;
-  count: number;
+  cover?: string | '';
+  count?: number;
 }
 
-interface UseCategoriesConfig<T> {
+interface UseCategoriesForPickerConfig<T> {
   select?: (list: GqlCategory[]) => T[];
 }
 
-const mapToSummary = (c: GqlCategory): CategorySummary => ({
+const mapToPickerSummary = (c: GqlCategory): CategoryPickerSummary => ({
   id: c.id,
   name: c.name,
   cover: c.cover || '',
-  count: Array.isArray(c.subCategories) ? c.subCategories.length : 0,
 });
 
 /**
- * Generic hook for fetching and managing categories with pagination
+ * Hook for fetching categories with minimal fields for picker components
  * @param opts - Options for filtering, sorting, and pagination
  * @param config - Configuration for data transformation
  * @returns Categories data with pagination and loading states
  */
-export function useCategories<T = CategorySummary>(
-  opts: UseCategoriesOptions = {},
-  config?: UseCategoriesConfig<T>,
+export function useCategoriesForPicker<T = CategoryPickerSummary>(
+  opts: UseCategoriesForPickerOptions = {},
+  config?: UseCategoriesForPickerConfig<T>,
 ) {
   const [page, setPage] = useState(opts.page ?? 1);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  const variables: FindAllCategoriesQueryVariables = useMemo(
+  const variables: FindCategoriesForPickerQueryVariables = useMemo(
     () => ({
       page,
       limit: opts.limit ?? 25,
@@ -78,13 +77,16 @@ export function useCategories<T = CategorySummary>(
   );
 
   const { data, loading, error, refetch, fetchMore, networkStatus } = useQuery<
-    FindAllCategoriesQuery,
-    FindAllCategoriesQueryVariables
-  >(FindAllCategoriesDocument, {
+    FindCategoriesForPickerQuery,
+    FindCategoriesForPickerQueryVariables
+  >(FindCategoriesForPickerDocument, {
     variables,
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',
     errorPolicy: 'all',
+    context: {
+      queryDeduplication: false,
+    },
   });
 
   const list = useMemo(() => {
@@ -98,7 +100,7 @@ export function useCategories<T = CategorySummary>(
 
   const items = useMemo<T[]>(() => {
     if (select) return select(list);
-    return list.map(mapToSummary) as unknown as T[];
+    return list.map(mapToPickerSummary) as unknown as T[];
   }, [list, select]);
 
   const handleLoadMore = useCallback(async () => {
@@ -106,7 +108,6 @@ export function useCategories<T = CategorySummary>(
     if (!hasMore || loading || isLoadingMore) return;
 
     setIsLoadingMore(true);
-
     try {
       await fetchMore({
         variables: {
@@ -160,14 +161,14 @@ export function useCategories<T = CategorySummary>(
     setPage(1);
   }, []);
 
-  // Track previous options to detect changes
+  // Reset page when options change
   const prevOptions = useMemo(
     () => ({
-      name: opts.name ?? '',
-      parentId: opts.parentId || null,
-      sortBy: opts.sortBy ?? SortBy.Name,
-      sortOrder: opts.sortOrder ?? SortOrder.Asc,
-      includeSubcategories: opts.includeSubcategories ?? true,
+      name: opts.name,
+      parentId: opts.parentId,
+      sortBy: opts.sortBy,
+      sortOrder: opts.sortOrder,
+      includeSubcategories: opts.includeSubcategories,
     }),
     [
       opts.name,
@@ -178,8 +179,8 @@ export function useCategories<T = CategorySummary>(
     ],
   );
 
-  // Reset page when options change (but not during load more)
-  useEffect(() => {
+  // Reset page when options change (but not during load more operations)
+  React.useEffect(() => {
     if (!isLoadingMore) {
       setPage(1);
     }
@@ -197,8 +198,7 @@ export function useCategories<T = CategorySummary>(
     raw: list,
     total: data?.getAllCategories?.total ?? 0,
     hasMore: data?.getAllCategories?.hasMore ?? false,
-    loading,
-    isLoadingMore,
+    loading: loading || isLoadingMore,
     error,
     refetch,
     fetchMore,

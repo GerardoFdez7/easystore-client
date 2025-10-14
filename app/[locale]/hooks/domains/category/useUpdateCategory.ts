@@ -1,13 +1,13 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@apollo/client/react';
 import { toast } from 'sonner';
 import type { DocumentNode } from 'graphql';
+import { useMutation } from '@apollo/client/react';
 import {
   UpdateCategoryDocument,
   UpdateCategoryMutation,
@@ -110,111 +110,121 @@ export function useUpdateCategory({
       await p;
 
       setTimeout(() => {
-        if (onSuccess) onSuccess({ id });
-        else
+        if (onSuccess) {
+          onSuccess({ id });
+        } else {
           router.push(
             redirectTo ?? (locale ? `/${locale}/categories` : '/categories'),
           );
+        }
       }, 0);
-    } catch {}
+    } catch (_error) {
+      // Error handling is managed by the global error handler
+    }
   });
 
-  const handleSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
-    e?.preventDefault();
-    void _submit();
-  };
+  const handleSubmit = useCallback(
+    (e?: React.FormEvent<HTMLFormElement>) => {
+      e?.preventDefault();
+      void _submit();
+    },
+    [_submit],
+  );
 
   /** Update multiple fields with validation - for media hook compatibility */
-  const updateMultipleFields = async (
-    fieldsToUpdate: Record<string, unknown>,
-  ) => {
-    if (!id) {
-      throw new Error('Category ID is required');
-    }
-
-    const validatedFields: Record<string, unknown> = {};
-    const validationErrors: string[] = [];
-
-    // Validate ALL fields first before making any update
-    for (const [fieldName, fieldValue] of Object.entries(fieldsToUpdate)) {
-      try {
-        switch (fieldName) {
-          case 'name':
-            if (fieldValue !== undefined) {
-              const parsed = schema.shape.name.safeParse(fieldValue);
-              if (!parsed.success) {
-                validationErrors.push(
-                  `Name: ${parsed.error.issues[0]?.message || 'Invalid'}`,
-                );
-              } else {
-                validatedFields.name = parsed.data;
-              }
-            }
-            break;
-
-          case 'description':
-            if (fieldValue !== undefined) {
-              const parsed = schema.shape.description.safeParse(fieldValue);
-              if (!parsed.success) {
-                validationErrors.push(
-                  `Description: ${parsed.error.issues[0]?.message || 'Invalid'}`,
-                );
-              } else {
-                validatedFields.description = parsed.data;
-              }
-            }
-            break;
-
-          case 'cover':
-            if (fieldValue !== undefined) {
-              const parsed = schema.shape.cover.safeParse(fieldValue);
-              if (!parsed.success) {
-                validationErrors.push(
-                  `Cover: ${parsed.error.issues[0]?.message || 'Invalid'}`,
-                );
-              } else {
-                validatedFields.cover = parsed.data;
-              }
-            }
-            break;
-
-          default:
-            // For unknown fields, just pass them through
-            validatedFields[fieldName] = fieldValue;
-            break;
-        }
-      } catch (_error) {
-        validationErrors.push(`${fieldName}: Validation error`);
+  const updateMultipleFields = useCallback(
+    async (fieldsToUpdate: Record<string, unknown>) => {
+      if (!id) {
+        throw new Error('Category ID is required');
       }
-    }
 
-    // If ANY validation failed, return all errors and don't update anything
-    if (validationErrors.length > 0) {
-      return {
-        success: false,
-        error: validationErrors.join(', '),
-      };
-    }
+      const validatedFields: Record<string, unknown> = {};
+      const validationErrors: string[] = [];
 
-    // All validations passed - make API call
-    try {
-      const input = {
-        ...(validatedFields.name !== undefined
-          ? { name: String(validatedFields.name).trim() }
-          : {}),
-        ...(validatedFields.description !== undefined
-          ? { description: String(validatedFields.description).trim() }
-          : {}),
-        ...(validatedFields.cover !== undefined
-          ? { cover: String(validatedFields.cover).trim() }
-          : {}),
-      };
+      // Validate ALL fields first before making any update
+      for (const [fieldName, fieldValue] of Object.entries(fieldsToUpdate)) {
+        try {
+          switch (fieldName) {
+            case 'name':
+              if (fieldValue !== undefined) {
+                const parsed = schema.shape.name.safeParse(fieldValue);
+                if (!parsed.success) {
+                  validationErrors.push(
+                    `Name: ${parsed.error.issues[0]?.message || 'Invalid'}`,
+                  );
+                } else {
+                  validatedFields.name = parsed.data;
+                }
+              }
+              break;
 
-      await mutateUpdate({ variables: { id, input } });
+            case 'description':
+              if (fieldValue !== undefined) {
+                const parsed = schema.shape.description.safeParse(fieldValue);
+                if (!parsed.success) {
+                  validationErrors.push(
+                    `Description: ${parsed.error.issues[0]?.message || 'Invalid'}`,
+                  );
+                } else {
+                  validatedFields.description = parsed.data;
+                }
+              }
+              break;
 
-      toast.success(t('saveSuccess'));
-    } catch (_e) {}
-  };
+            case 'cover':
+              if (fieldValue !== undefined) {
+                const parsed = schema.shape.cover.safeParse(fieldValue);
+                if (!parsed.success) {
+                  validationErrors.push(
+                    `Cover: ${parsed.error.issues[0]?.message || 'Invalid'}`,
+                  );
+                } else {
+                  validatedFields.cover = parsed.data;
+                }
+              }
+              break;
+
+            default:
+              // For unknown fields, just pass them through
+              validatedFields[fieldName] = fieldValue;
+              break;
+          }
+        } catch (_error) {
+          validationErrors.push(`${fieldName}: Validation error`);
+        }
+      }
+
+      // If ANY validation failed, return all errors and don't update anything
+      if (validationErrors.length > 0) {
+        return {
+          success: false,
+          error: validationErrors.join(', '),
+        };
+      }
+
+      // All validations passed - make API call
+      try {
+        const input = {
+          ...(validatedFields.name !== undefined
+            ? { name: String(validatedFields.name).trim() }
+            : {}),
+          ...(validatedFields.description !== undefined
+            ? { description: String(validatedFields.description).trim() }
+            : {}),
+          ...(validatedFields.cover !== undefined
+            ? { cover: String(validatedFields.cover).trim() }
+            : {}),
+        };
+
+        await mutateUpdate({ variables: { id, input } });
+
+        toast.success(t('saveSuccess'));
+      } catch (_e) {
+        // Error handling is managed by the global error handler
+      }
+    },
+    [id, schema, mutateUpdate, t],
+  );
 
   return {
     form,

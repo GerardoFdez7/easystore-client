@@ -3,7 +3,7 @@ import CategoryControls from '@molecules/categories/CategoryControls';
 import { SortBy, SortOrder } from '@graphql/generated';
 
 const meta: Meta<typeof CategoryControls> = {
-  title: 'Molecules/Category/CategoryControls',
+  title: 'Molecules/Categories/CategoryControls',
   component: CategoryControls,
   parameters: {
     layout: 'fullscreen',

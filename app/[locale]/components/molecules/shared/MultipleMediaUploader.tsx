@@ -82,6 +82,11 @@ const MultipleMediaUploader = forwardRef<
       onUploadError,
       onMediaProcessed,
       multiple: true,
+      onUploadCompleted: () => {
+        // Only signal changes after successful upload completion
+        setHasChanges(true);
+        onMediaChange?.(true);
+      },
     });
 
     // Track initial state to detect changes
@@ -93,16 +98,10 @@ const MultipleMediaUploader = forwardRef<
     // Helper function to check if media has changed
     const checkForChanges = React.useCallback(
       (currentMediaItems: typeof mediaItems, currentSelectedFiles: File[]) => {
-        // If we have new files selected, there are changes
-        if (currentSelectedFiles.length > 0) {
-          if (!hasChanges) {
-            setHasChanges(true);
-            onMediaChange?.(true);
-          }
-          return;
-        }
+        // Don't signal changes immediately when files are selected
+        // Changes will be signaled only after successful upload via onUploadCompleted
 
-        // Compare current media URLs with initial state
+        // Compare current media URLs with initial state for existing media changes
         const currentUrls = currentMediaItems.map((item) => item.src);
         const initialUrls = initialMediaState || [];
 
@@ -111,7 +110,11 @@ const MultipleMediaUploader = forwardRef<
           currentUrls.length !== initialUrls.length ||
           currentUrls.some((url, index) => url !== initialUrls[index]);
 
-        if (hasMediaChanges !== hasChanges) {
+        // Only signal changes for existing media modifications (not new uploads)
+        if (
+          hasMediaChanges !== hasChanges &&
+          currentSelectedFiles.length === 0
+        ) {
           setHasChanges(hasMediaChanges);
           onMediaChange?.(hasMediaChanges);
         }

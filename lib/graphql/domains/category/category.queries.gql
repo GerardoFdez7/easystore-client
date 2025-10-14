@@ -56,6 +56,34 @@ query findAllCategories(
   }
 }
 
+query findCategoriesForPicker(
+  $page: Int = 1
+  $limit: Int = 25
+  $name: String = ""
+  $parentId: ID = null
+  $sortBy: SortBy = NAME
+  $sortOrder: SortOrder = ASC
+  $includeSubcategories: Boolean = false
+) {
+  getAllCategories(
+    page: $page
+    limit: $limit
+    name: $name
+    parentId: $parentId
+    sortBy: $sortBy
+    sortOrder: $sortOrder
+    includeSubcategories: $includeSubcategories
+  ) {
+    categories {
+      id
+      name
+      cover
+    }
+    total
+    hasMore
+  }
+}
+
 query findCategoriesTree($sortBy: SortBy = NAME, $sortOrder: SortOrder = ASC) {
   getAllCategories(sortBy: $sortBy, sortOrder: $sortOrder) {
     categories {

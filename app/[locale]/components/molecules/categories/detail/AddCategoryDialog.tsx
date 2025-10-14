@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
+import { CategoryFormValues } from '@hooks/domains/category';
 import { Plus } from 'lucide-react';
 import { Input } from '@shadcn/ui/input';
 import { Textarea } from '@shadcn/ui/textarea';
@@ -27,7 +28,6 @@ import FormActions from '@molecules/shared/FormActions';
 import MediaUploader from '@organisms/shared/MediaUploader';
 import type { MultipleMediaUploaderRef } from '@molecules/shared/MultipleMediaUploader';
 import type { ProcessedData } from '@lib/types/media';
-import { CategoryFormValues } from '@hooks/domains/category';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -63,15 +63,24 @@ export default function AddCategoryDialog({
   onOpenChange: externalOnOpenChange,
 }: AddCategoryDialogProps) {
   const t = useTranslations('CategoryDetail');
+
+  // State management
   const [internalOpen, setInternalOpen] = useState(false);
   const [hasMediaChanges, setHasMediaChanges] = useState(false);
+
+  // Refs
   const mediaUploaderRef = useRef<MultipleMediaUploaderRef>(null);
 
-  // Use external open state if provided, otherwise use internal state
-  const open = externalOpen !== undefined ? externalOpen : internalOpen;
-  const setOpen = externalOnOpenChange || setInternalOpen;
+  // Computed values
+  const open = useMemo(() => {
+    return externalOpen !== undefined ? externalOpen : internalOpen;
+  }, [externalOpen, internalOpen]);
 
-  // Create local form for 'local' mode
+  const setOpen = useMemo(() => {
+    return externalOnOpenChange || setInternalOpen;
+  }, [externalOnOpenChange]);
+
+  // Form setup
   const schema = useMemo(() => buildCategorySchema(t, false), [t]);
   const localForm = useForm<CategoryFormValues>({
     resolver: zodResolver(schema),
@@ -81,26 +90,36 @@ export default function AddCategoryDialog({
     ...defaultFormConfig,
   });
 
-  // Media handling
-  const handleMediaProcessed = async (processedData?: ProcessedData | null) => {
-    if (processedData?.cover) {
-      localForm.setValue('cover', processedData.cover, { shouldDirty: true });
-      setHasMediaChanges(true);
-    }
-  };
+  const {
+    formState: { isDirty, errors },
+    watch,
+    setValue,
+    getValues,
+    reset,
+  } = localForm;
 
-  const handleMediaChange = () => {
+  // Watch values
+  const effectiveInitialMedia = watch('cover') || null;
+
+  // Event handlers
+  const handleMediaProcessed = useCallback(
+    async (processedData?: ProcessedData | null) => {
+      if (processedData?.cover) {
+        setValue('cover', processedData.cover, { shouldDirty: true });
+        setHasMediaChanges(true);
+      }
+    },
+    [setValue],
+  );
+
+  const handleMediaChange = useCallback(() => {
     setHasMediaChanges(true);
-  };
+  }, []);
 
-  const effectiveInitialMedia = localForm.watch('cover') || null;
-
-  const onSubmit = async () => {
+  const onSubmit = useCallback(async () => {
     try {
-      // Local mode - call onAdd with form values
-      const formValues = localForm.getValues();
+      const formValues = getValues();
       if (onAdd) {
-        // Transform CategoryFormValues to NewCategoryData
         const newCategoryData: NewCategoryData = {
           name: formValues.name || '',
           cover: formValues.cover,
@@ -109,36 +128,65 @@ export default function AddCategoryDialog({
         onAdd(newCategoryData);
       }
       setOpen(false);
-      localForm.reset();
+      reset();
       setHasMediaChanges(false);
-    } catch (_error) {}
-  };
-
-  const handleOpenChange = (newOpen: boolean) => {
-    setOpen(newOpen);
-    if (!newOpen) {
-      // Reset form when dialog closes
-      localForm.reset();
-      setHasMediaChanges(false);
+    } catch (_error) {
+      // Error handling is managed by the error registry
     }
-  };
+  }, [getValues, onAdd, setOpen, reset]);
+
+  const handleOpenChange = useCallback(
+    (newOpen: boolean) => {
+      setOpen(newOpen);
+      if (!newOpen) {
+        reset();
+        setHasMediaChanges(false);
+      }
+    },
+    [setOpen, reset],
+  );
+
+  const handleCancel = useCallback(() => {
+    setOpen(false);
+  }, [setOpen]);
+
+  const handleSave = useCallback(() => {
+    void onSubmit();
+  }, [onSubmit]);
+
+  // Computed values for accessibility and UI
+  const canSave = useMemo(() => {
+    return isDirty || hasMediaChanges;
+  }, [isDirty, hasMediaChanges]);
+
+  const defaultTrigger = useMemo(
+    () => (
+      <Button className={className} aria-label={t('addCategory')}>
+        <Plus className="h-4 w-4" aria-hidden="true" />
+        {t('addCategory')}
+      </Button>
+    ),
+    [className, t],
+  );
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        {children || trigger || (
-          <Button className={className}>
-            <Plus className="h-4 w-4" />
-            {t('addCategory')}
-          </Button>
-        )}
+        {children || trigger || defaultTrigger}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent
+        className="sm:max-w-[600px]"
+        aria-describedby="add-category-description"
+      >
         <DialogHeader>
-          <DialogTitle>{t('addCategory')}</DialogTitle>
-          <DialogDescription>{t('addCategoryDescription')}</DialogDescription>
+          <DialogTitle id="add-category-title">{t('addCategory')}</DialogTitle>
+          <DialogDescription id="add-category-description">
+            {t('addCategoryDescription')}
+          </DialogDescription>
         </DialogHeader>
-        <Separator />
+
+        <Separator role="separator" aria-hidden="true" />
+
         <Form {...localForm}>
           <form
             onSubmit={(e) => {
@@ -146,96 +194,126 @@ export default function AddCategoryDialog({
               void onSubmit();
             }}
             className="space-y-6"
+            role="form"
+            aria-labelledby="add-category-title"
+            aria-describedby="add-category-description"
           >
-            {/* Cover Image */}
-            <FormField
-              control={localForm.control}
-              name="cover"
-              render={() => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">
-                    {t('cover')}
-                  </FormLabel>
-                  <FormControl>
-                    <MediaUploader
-                      ref={mediaUploaderRef}
-                      alwaysEditing={true}
-                      initialMedia={effectiveInitialMedia}
-                      onMediaProcessed={handleMediaProcessed}
-                      onMediaChange={handleMediaChange}
-                      acceptedFileTypes={[
-                        'image/jpeg',
-                        'image/png',
-                        'image/webp',
-                      ]}
-                      aria-describedby="cover-error"
-                    />
-                  </FormControl>
-                  <FormMessage id="cover-error" />
-                </FormItem>
-              )}
-            />
+            {/* Cover Image Section */}
+            <section>
+              <FormField
+                control={localForm.control}
+                name="cover"
+                render={() => (
+                  <FormItem>
+                    <FormLabel
+                      htmlFor="cover-upload"
+                      className="text-sm font-medium"
+                    >
+                      {t('cover')}
+                    </FormLabel>
+                    <FormControl>
+                      <MediaUploader
+                        ref={mediaUploaderRef}
+                        alwaysEditing={true}
+                        initialMedia={effectiveInitialMedia}
+                        onMediaProcessed={handleMediaProcessed}
+                        onMediaChange={handleMediaChange}
+                        acceptedFileTypes={[
+                          'image/jpeg',
+                          'image/png',
+                          'image/webp',
+                        ]}
+                        aria-describedby="cover-error"
+                      />
+                    </FormControl>
+                    <FormMessage id="cover-error" />
+                  </FormItem>
+                )}
+              />
+            </section>
 
-            {/* Category Name */}
-            <FormField
-              control={localForm.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">
-                    {t('name')}
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={t('namePlaceholder')}
-                      {...field}
-                      aria-describedby="name-error"
-                    />
-                  </FormControl>
-                  <FormMessage id="name-error" />
-                </FormItem>
-              )}
-            />
+            {/* Category Name Section */}
+            <section>
+              <FormField
+                control={localForm.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel
+                      htmlFor="category-name"
+                      className="text-sm font-medium"
+                    >
+                      {t('name')}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        id="category-name"
+                        placeholder={t('namePlaceholder')}
+                        {...field}
+                        aria-invalid={errors.name ? 'true' : 'false'}
+                        aria-describedby="name-error"
+                      />
+                    </FormControl>
+                    <FormMessage id="name-error" />
+                  </FormItem>
+                )}
+              />
+            </section>
 
-            {/* Category Description */}
-            <FormField
-              control={localForm.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">
-                    {t('description')}
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder={t('descriptionPlaceholder')}
-                      maxLength={200}
-                      {...field}
-                      aria-describedby="description-error"
-                      className="h-53 sm:h-auto"
-                    />
-                  </FormControl>
-                  <FormMessage id="description-error" />
-                </FormItem>
-              )}
-            />
+            {/* Category Description Section */}
+            <section>
+              <FormField
+                control={localForm.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel
+                      htmlFor="category-description"
+                      className="text-sm font-medium"
+                    >
+                      {t('description')}
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        id="category-description"
+                        placeholder={t('descriptionPlaceholder')}
+                        maxLength={200}
+                        {...field}
+                        aria-describedby="description-error"
+                        className="h-53 sm:h-auto"
+                      />
+                    </FormControl>
+                    <FormMessage id="description-error" />
+                  </FormItem>
+                )}
+              />
+            </section>
           </form>
         </Form>
 
-        {/* Actions at the bottom-right */}
-        <div className="flex justify-end">
+        {/* Actions Section */}
+        <footer className="flex justify-end">
           <FormActions
-            onCancel={() => setOpen(false)}
-            disabled={!hasMediaChanges}
+            onCancel={handleCancel}
+            disabled={!canSave}
             cancelText="cancel"
-            saveText={'add'}
+            saveText="add"
             saveButtonProps={{
-              onClick: () => {
-                void onSubmit();
-              },
-              type: 'submit',
+              onClick: handleSave,
+              type: 'button',
+              'aria-describedby': 'save-button-status',
             }}
           />
+        </footer>
+
+        {/* Screen reader status */}
+        <div
+          id="save-button-status"
+          className="sr-only"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {!canSave}
         </div>
       </DialogContent>
     </Dialog>

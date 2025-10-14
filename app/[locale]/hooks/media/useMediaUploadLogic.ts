@@ -12,6 +12,7 @@ import useMediaToken from './useMediaToken';
 
 interface UseMediaUploadLogicProps extends MediaUploaderCallbacks {
   multiple?: boolean;
+  onUploadCompleted?: () => void;
 }
 
 /**
@@ -22,6 +23,7 @@ export const useMediaUploadLogic = ({
   onUploadError,
   onMediaProcessed,
   multiple = false,
+  onUploadCompleted,
 }: UseMediaUploadLogicProps) => {
   const {
     isEditing,
@@ -130,6 +132,9 @@ export const useMediaUploadLogic = ({
           setIsEditing(false);
           setSelectedFiles([]);
         }
+
+        // Notify that upload is completed successfully
+        onUploadCompleted?.();
       } catch (error) {
         console.error('Upload or persistence failed:', error);
         const errorMessage =
@@ -142,6 +147,7 @@ export const useMediaUploadLogic = ({
     [
       onUploadSuccess,
       onMediaProcessed,
+      onUploadCompleted,
       multiple,
       selectedFiles,
       mediaItems,

@@ -168,7 +168,7 @@ const errorMocks = [
 ];
 
 const meta: Meta<typeof MainCategory> = {
-  title: 'Organisms/Category/MainCategory',
+  title: 'Organisms/Categories/MainCategory',
   component: MainCategory,
   parameters: {
     layout: 'fullscreen',
