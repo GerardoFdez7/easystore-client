@@ -63,7 +63,6 @@ export default function ComboboxCategory({
 
   return (
     <Combobox
-      width={120}
       options={items}
       value={value}
       onValueChange={handleValueChange}
