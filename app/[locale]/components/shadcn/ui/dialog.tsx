@@ -5,6 +5,7 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { XIcon } from 'lucide-react';
 
 import { cn } from 'utils';
+import { VisuallyHidden } from './visually-hidden';
 
 function Dialog({
   ...props
@@ -54,6 +55,16 @@ function DialogContent({
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean;
 }) {
+  // Check if children contains a DialogTitle
+  const hasDialogTitle = React.Children.toArray(children).some(
+    (child) =>
+      React.isValidElement(child) &&
+      (child.type === DialogTitle ||
+        (typeof child.type === 'object' &&
+          child.type &&
+          'displayName' in child.type)),
+  );
+
   return (
     <DialogPortal data-slot="dialog-portal">
       <DialogOverlay />
@@ -65,6 +76,11 @@ function DialogContent({
         )}
         {...props}
       >
+        {!hasDialogTitle && (
+          <VisuallyHidden>
+            <DialogTitle>Dialog</DialogTitle>
+          </VisuallyHidden>
+        )}
         {children}
         {showCloseButton && (
           <DialogPrimitive.Close

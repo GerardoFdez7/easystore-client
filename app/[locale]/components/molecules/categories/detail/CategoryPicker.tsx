@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Unlink, Dices, Plus } from 'lucide-react';
@@ -58,6 +58,12 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
+  // Track pending IDs to prevent duplicates during rapid additions
+  const pendingIdsRef = useRef<Set<string>>(new Set());
+
+  // Counter for guaranteed unique IDs
+  const idCounterRef = useRef<number>(0);
+
   const excludeIds = useMemo(() => {
     const existingIds = items.map((i) => i.id);
     const newIds = newCategories.map((n) => n.id);
@@ -65,7 +71,28 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
   }, [items, newCategories]);
 
   const allItems = useMemo(() => {
-    return [...items, ...newCategories];
+    // Combine items and newCategories, ensuring no duplicates by ID
+    const combined = [...items, ...newCategories];
+    const uniqueItems = combined.filter(
+      (item, index, array) =>
+        array.findIndex((i) => i.id === item.id) === index,
+    );
+
+    // Debug logging to track duplicate IDs
+    if (combined.length !== uniqueItems.length) {
+      console.warn('Duplicate IDs detected in allItems:', {
+        original: combined.map((i) => i.id),
+        unique: uniqueItems.map((i) => i.id),
+        duplicates: combined
+          .filter(
+            (item, index, array) =>
+              array.findIndex((i) => i.id === item.id) !== index,
+          )
+          .map((i) => i.id),
+      });
+    }
+
+    return uniqueItems;
   }, [items, newCategories]);
 
   const handleRemove = useCallback(
@@ -88,18 +115,85 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
   const handleNewCategoryAdd = useCallback(
     (categoryData: NewCategoryData) => {
       if (onNewCategoryAdd) {
+        // Generate unique ID with enhanced real-time checking
+        const generateUniqueId = (): string => {
+          let attempts = 0;
+          const maxAttempts = 10;
+
+          while (attempts < maxAttempts) {
+            // Increment counter for guaranteed uniqueness
+            idCounterRef.current += 1;
+
+            // Use timestamp + counter + random for maximum uniqueness
+            const timestamp = Date.now();
+            const counter = idCounterRef.current;
+            const randomPart = crypto.randomUUID();
+
+            const id = `temp-${timestamp}-${counter}-${randomPart}`;
+
+            // Check uniqueness against all possible sources
+            const existsInItems = items.some((item) => item.id === id);
+            const existsInNewCategories = newCategories.some(
+              (cat) => cat.id === id,
+            );
+            const existsInPending = pendingIdsRef.current.has(id);
+
+            if (!existsInItems && !existsInNewCategories && !existsInPending) {
+              return id;
+            }
+
+            attempts++;
+            // Add small delay to ensure timestamp changes
+            if (attempts < maxAttempts) {
+              // Force timestamp to change by waiting 1ms
+              const start = Date.now();
+              while (Date.now() === start) {
+                // Busy wait for 1ms
+              }
+            }
+          }
+
+          // Fallback with additional randomness if all attempts fail
+          return `temp-${Date.now()}-${idCounterRef.current}-${Math.random().toString(36).substr(2, 9)}-${crypto.randomUUID()}`;
+        };
+
+        // Check if a category with the same name already exists
+        const existingCategory = allItems.find(
+          (item) => item.name.toLowerCase() === categoryData.name.toLowerCase(),
+        );
+
+        if (existingCategory) {
+          // If category already exists, don't add duplicate
+          console.warn(
+            `Category with name "${categoryData.name}" already exists`,
+          );
+          setIsAddDialogOpen(false);
+          return;
+        }
+
+        const newId = generateUniqueId();
+
+        // Add to pending IDs immediately
+        pendingIdsRef.current.add(newId);
+
         const newCategory: NewCategoryItem = {
-          id: `temp-${crypto.randomUUID()}`, // Temporary ID for new categories
+          id: newId,
           name: categoryData.name,
           cover: categoryData.cover || '',
           description: categoryData.description,
           isNew: true,
         };
+
         onNewCategoryAdd(newCategory);
+
+        // Remove from pending after a short delay to allow state updates
+        setTimeout(() => {
+          pendingIdsRef.current.delete(newId);
+        }, 200); // Increased timeout to ensure state propagation
       }
       setIsAddDialogOpen(false);
     },
-    [onNewCategoryAdd],
+    [onNewCategoryAdd, items, newCategories, allItems, setIsAddDialogOpen],
   );
 
   const handleAddDialogOpen = useCallback(() => {
