@@ -19,12 +19,9 @@ import type { SortField } from '@lib/types/inventory';
 import {
   Package,
   Plus,
-  ArrowDown01,
-  ArrowDown10,
-  ArrowDownAZ,
-  ArrowDownZA,
   ClockArrowUp,
   ClockArrowDown,
+  MoveUp,
 } from 'lucide-react';
 import EmptyState from '@molecules/shared/EmptyState';
 import { useTranslations } from 'next-intl';
@@ -70,8 +67,7 @@ export default function InventoryTable({
       return null;
     }
 
-    // Determine if field is numeric, text-based, or date-based
-    const isNumericField = field === 'available' || field === 'reserved';
+    // Determine if field is date-based or another
     const isDateField = field === 'replenishmentDate';
 
     if (isDateField) {
@@ -86,28 +82,18 @@ export default function InventoryTable({
           <span className="sr-only">{t('descending')}</span>
         </>
       );
-    } else if (isNumericField) {
-      return sortDirection === 'ASC' ? (
-        <>
-          <ArrowDown01 aria-hidden="true" className="ml-1 h-4 w-4" />
-          <span className="sr-only">{t('ascending')}</span>
-        </>
-      ) : (
-        <>
-          <ArrowDown10 aria-hidden="true" className="ml-1 h-4 w-4" />
-          <span className="sr-only">{t('descending')}</span>
-        </>
-      );
     } else {
-      return sortDirection === 'ASC' ? (
+      return (
         <>
-          <ArrowDownAZ aria-hidden="true" className="ml-1 h-4 w-4" />
-          <span className="sr-only">{t('ascending')}</span>
-        </>
-      ) : (
-        <>
-          <ArrowDownZA aria-hidden="true" className="ml-1 h-4 w-4" />
-          <span className="sr-only">{t('descending')}</span>
+          <MoveUp
+            aria-hidden="true"
+            className={cn('ml-1 h-4 w-4 transition-transform', {
+              'rotate-180': sortDirection === 'DESC',
+            })}
+          />
+          <span className="sr-only">
+            {sortDirection === 'ASC' ? t('ascending') : t('descending')}
+          </span>
         </>
       );
     }
@@ -146,7 +132,7 @@ export default function InventoryTable({
     <div className={cn('w-full', className)}>
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className="hover:bg-background">
             <TableHead className="pl-2">
               <Checkbox
                 checked={selectedRows.length === inventory.length}

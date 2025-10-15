@@ -23,8 +23,6 @@ import AddStockDialog from '@organisms/inventory/AddStockDialog';
 import WarehouseManagementDialog from '@organisms/inventory/WarehouseManagementDialog';
 import WarehouseForm from '@molecules/inventory/WarehouseForm';
 
-// Tipos movidos a lib/types para reutilización y SoC
-
 export default function MainInventory() {
   const t = useTranslations('Inventory');
   const [selectedWarehouseId, setSelectedWarehouseId] = useState<string>('');
@@ -36,7 +34,7 @@ export default function MainInventory() {
   const [sortField, setSortField] = useState<SortField | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>('ASC');
 
-  // Mapeo de campos de UI -> backend StockPerWarehouseSortBy
+  // Mapping of UI fields -> backend StockPerWarehouseSortBy
   const serverSortFieldMap: Record<
     SortField,
     'available' | 'reserved' | 'replenishmentDate' | 'variantFirstAttribute'
@@ -47,7 +45,7 @@ export default function MainInventory() {
     variantFirstAttribute: 'variantFirstAttribute',
   };
 
-  // Construir variables para query general: sorting + search en servidor
+  // Build variables for general query: sorting + search on server
   const trimmedSearch = searchTerm.trim();
   const sortKey = sortField ? serverSortFieldMap[sortField] : undefined;
   const variables: FindInventoryQueryVariables = {
@@ -101,7 +99,11 @@ export default function MainInventory() {
     void refetch().catch((_error) => {});
   }, [refetch]);
 
-  if (error) {
+  // Only show warehouse creation UI for actual "no warehouses" errors
+  const isNoWarehousesError =
+    error && !error.message?.toLowerCase().includes('no variants found');
+
+  if (isNoWarehousesError) {
     return (
       <>
         <EmptyState
@@ -130,13 +132,15 @@ export default function MainInventory() {
         onAddStockClick={() => setIsAddStockDialogOpen(true)}
         onManageWarehousesClick={() => setIsWarehouseManagementOpen(true)}
       />
-      <SearchBar
-        placeholder={t('searchPlaceholder')}
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        className="mb-2"
-      />
-     <SkeletonWrapper loading={loading} fallbackWidth="w-50">
+      <SkeletonWrapper loading={loading}>
+        <SearchBar
+          placeholder={t('searchPlaceholder')}
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          className="mb-2"
+        />
+      </SkeletonWrapper>
+      <SkeletonWrapper loading={loading} fallbackWidth="w-50">
         <WarehouseCombobox
           value={selectedWarehouseId}
           onChange={setSelectedWarehouseId}
