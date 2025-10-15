@@ -11,12 +11,12 @@ import {
   LoginMutationVariables,
 } from '@graphql/generated';
 import { useMutation } from '@apollo/client/react';
-import { useAuth } from '@hooks/domains/authentication/useAuth';
+import { useAuth } from '@contexts/AuthContext';
 
 export const useLogin = (accountType: AccountTypeEnum) => {
   const t = useTranslations('Login');
   const router = useRouter();
-  const { checkAuth } = useAuth();
+  const { checkAuth, refreshTenantData } = useAuth();
 
   // Schema validation based on backend value objects
   const loginFormSchema = z.object({
@@ -50,6 +50,8 @@ export const useLogin = (accountType: AccountTypeEnum) => {
 
         checkAuth()
           .then(() => {
+            // Trigger tenant data fetch after successful authentication
+            refreshTenantData();
             router.push('/dashboard');
           })
           .catch((error) => {

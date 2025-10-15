@@ -2313,6 +2313,18 @@ export type FindTenantProfileQuery = {
   };
 };
 
+export type FindTenantAuthInfoQueryVariables = Exact<{ [key: string]: never }>;
+
+export type FindTenantAuthInfoQuery = {
+  __typename?: 'Query';
+  getTenantById: {
+    __typename?: 'Tenant';
+    ownerName: string;
+    businessName?: string | null;
+    logo?: string | null;
+  };
+};
+
 export const CreateAddressDocument = {
   kind: 'Document',
   definitions: [
@@ -8158,4 +8170,37 @@ export const FindTenantProfileDocument = {
 } as unknown as DocumentNode<
   FindTenantProfileQuery,
   FindTenantProfileQueryVariables
+>;
+export const FindTenantAuthInfoDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'findTenantAuthInfo' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getTenantById' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'ownerName' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'businessName' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'logo' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  FindTenantAuthInfoQuery,
+  FindTenantAuthInfoQueryVariables
 >;

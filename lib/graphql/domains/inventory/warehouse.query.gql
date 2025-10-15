@@ -25,9 +25,6 @@ query findInventory(
   $page: Int = 1
   $limit: Int = 10
   $addressId: ID
-  $variantId: ID
-  $isArchived: Boolean
-  $lowStockThreshold: Int
   $sortBy: SortBy
   $sortOrder: SortOrder
 ) {
@@ -35,9 +32,6 @@ query findInventory(
     page: $page
     limit: $limit
     addressId: $addressId
-    variantId: $variantId
-    isArchived: $isArchived
-    lowStockThreshold: $lowStockThreshold
     sortBy: $sortBy
     sortOrder: $sortOrder
   ) {

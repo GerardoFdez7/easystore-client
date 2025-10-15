@@ -9,3 +9,11 @@ query findTenantProfile {
     defaultPhoneNumberId
   }
 }
+
+query findTenantAuthInfo {
+  getTenantById {
+    ownerName
+    businessName
+    logo
+  }
+}

@@ -4,9 +4,11 @@ import ButtonPrimary from '@atoms/landing/ButtonPrimary';
 import ButtonViewPlans from '@atoms/landing/ButtonViewPlans';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { useAuth } from '@contexts/AuthContext';
 
 export default function Portrait() {
   const t = useTranslations('Landing');
+  const { isAuthenticated } = useAuth();
   return (
     <section
       className="my-3 min-h-[770px] rounded-xl bg-cover bg-center text-white sm:min-h-[770px]"
@@ -23,7 +25,7 @@ export default function Portrait() {
             {t('slogan')}
           </p>
           <div className="flex gap-4">
-            <ButtonPrimary />
+            {!isAuthenticated && <ButtonPrimary />}
             <Link href="#plans">
               <ButtonViewPlans />
             </Link>

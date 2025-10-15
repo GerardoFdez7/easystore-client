@@ -34,11 +34,13 @@ import {
 } from '@shadcn/ui/collapsible';
 import { Button } from '@shadcn/ui/button';
 import { useTranslations } from 'next-intl';
+import { useAuth } from '@contexts/AuthContext';
 
 export default function Sidebar(props: ComponentProps<typeof ShadcnSidebar>) {
   const t = useTranslations('Dashboard');
   const [openProducts, setOpenProducts] = useState(false);
   const { state, setOpen } = useSidebar();
+  const { tenantData } = useAuth();
 
   const handleExpand = () => {
     if (state === 'collapsed') {
@@ -51,13 +53,11 @@ export default function Sidebar(props: ComponentProps<typeof ShadcnSidebar>) {
 
   return (
     <ShadcnSidebar className="mt-20 h-auto" collapsible="icon" {...props}>
-      <SidebarHeader>
-        <div className="mb-2">
-          <OwnerLogo />
-          <h3 className="text-title w-full text-center font-semibold group-data-[collapsible=icon]:hidden">
-            COMPANY NAME
-          </h3>
-        </div>
+      <SidebarHeader className="mt-2">
+        {tenantData?.logo && <OwnerLogo />}
+        <h3 className="text-title w-full text-center font-semibold group-data-[collapsible=icon]:hidden">
+          {tenantData?.businessName || ''}
+        </h3>
       </SidebarHeader>
 
       <SidebarContent>

@@ -10,9 +10,13 @@ import {
 import { LanguageButton } from '@atoms/shared/ButtonLanguage';
 import LinkLog from '@atoms/landing/LinkLogIn';
 import LinkPricing from '@atoms/landing/LinkPricing';
+import OwnerMenu from '@molecules/dashboard/OwnerMenu';
 import { Menu } from 'lucide-react';
+import { useAuth } from '@contexts/AuthContext';
 
 export default function MobileMenu() {
+  const { isAuthenticated } = useAuth();
+
   return (
     <Drawer direction="right">
       <DrawerTrigger asChild>
@@ -35,9 +39,10 @@ export default function MobileMenu() {
           site.
         </div>
         <div className="bg-background flex flex-col items-center space-y-4 p-4">
+          {isAuthenticated && <OwnerMenu />}
           <LanguageButton />
           <LinkPricing />
-          <LinkLog />
+          {!isAuthenticated && <LinkLog />}
         </div>
       </DrawerContent>
     </Drawer>

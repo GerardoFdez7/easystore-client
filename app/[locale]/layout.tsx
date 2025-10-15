@@ -7,7 +7,7 @@ import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { routing } from '@i18n/routing';
 import { Toaster } from '@shadcn/ui/sonner';
-import ProtectedRoute from '@atoms/shared/ProtectedRoute';
+import { AuthProvider } from '@contexts/AuthContext';
 import './globals.css';
 
 // Load Inter font with all weights
@@ -42,7 +42,7 @@ export default async function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <NextIntlClientProvider>
               <CountdownProvider>
-                <ProtectedRoute>{children}</ProtectedRoute>
+                <AuthProvider>{children}</AuthProvider>
               </CountdownProvider>
             </NextIntlClientProvider>
             <Toaster />

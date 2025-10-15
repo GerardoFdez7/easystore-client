@@ -4,42 +4,55 @@ This document describes the authentication system implemented in the EasyStore W
 
 ## Overview
 
-The authentication system provides global protection for the application with a whitelist approach for public routes. By default, all routes require authentication except those explicitly marked as public.
+The authentication system provides global protection for the application with a whitelist approach for public routes. By default, all routes require authentication except those explicitly marked as public. The system is built around a centralized `AuthContext` that manages authentication state and tenant data.
 
 ## Components
 
-### 1. useAuth Hook (`@hooks/authentication/useAuth`)
+### 1. AuthContext (`@contexts/AuthContext`)
 
-Provides authentication state and methods:
+The central authentication context that provides:
 
 ```typescript
-const { isAuthenticated, loading, redirectToLogin, refreshAuth } = useAuth();
+const {
+  isAuthenticated,
+  loading,
+  tenantData,
+  tenantLoading,
+  redirectToLogin,
+  checkAuth,
+  refreshTenantData,
+} = useAuth();
 ```
 
 **Features:**
 
 - Uses GraphQL `validateToken` query to check authentication with HttpOnly cookies
 - Performs server-side authentication validation for enhanced security
-- Handles redirects and logout
+- Automatically fetches tenant data when authenticated
+- Handles route protection internally
+- Provides tenant information (owner name, business name, logo)
 - Don't relies on client-side token storage
 
-### 2. ProtectedRoute Component (`@atoms/shared/ProtectedRoute`)
+**Tenant Data Structure:**
+
+```typescript
+interface TenantData {
+  ownerName: string;
+  businessName?: string;
+  logo?: string;
+}
+```
+
+### 2. AuthProvider Component
 
 Global authentication wrapper that:
 
 - Automatically redirects unauthenticated users from protected routes
 - Shows loading state during authentication checks
 - Allows public routes to render without authentication
+- Fetches and manages tenant data for authenticated users
 
-### 3. AuthGuard Component (`@atoms/shared/AuthGuard`)
-
-Optional component for fine-grained control:
-
-- Use when you need specific authentication behavior
-- Can show/hide content based on auth status
-- Provides custom fallback rendering
-
-### 4. Route Configuration (`@consts/routes`)
+### 3. Route Configuration (`@consts/routes`)
 
 Defines which routes are public vs protected:
 
@@ -63,7 +76,7 @@ export const isProtectedRoute = (pathname: string): boolean => { ... }
 The system is implemented at the layout level (`app/[locale]/layout.tsx`):
 
 ```tsx
-<ProtectedRoute>{children}</ProtectedRoute>
+<AuthProvider>{children}</AuthProvider>
 ```
 
 This provides automatic protection for all routes except those in `PublicRoutes`.
@@ -87,25 +100,45 @@ No action needed - all routes are protected by default.
 
 ### Component-Level Authentication
 
-For specific components that need authentication control:
+Components can access authentication state directly:
 
 ```tsx
-import AuthGuard from '@atoms/shared/AuthGuard';
+import { useAuth } from '@lib/contexts/AuthContext';
 
-// Show content only to authenticated users
-<AuthGuard>
-  <ProtectedContent />
-</AuthGuard>
+function MyComponent() {
+  const { isAuthenticated, tenantData } = useAuth();
 
-// Show content only to unauthenticated users
-<AuthGuard requireAuth={false}>
-  <PublicOnlyContent />
-</AuthGuard>
+  return (
+    <div>
+      {isAuthenticated ? (
+        <p>Welcome, {tenantData?.ownerName}!</p>
+      ) : (
+        <p>Please log in</p>
+      )}
+    </div>
+  );
+}
+```
 
-// With custom fallback
-<AuthGuard fallback={<LoginPrompt />}>
-  <ProtectedContent />
-</AuthGuard>
+### Conditional UI Rendering
+
+The system supports conditional rendering based on authentication status:
+
+```tsx
+// In HeaderLanding
+{
+  isAuthenticated ? <OwnerMenu /> : <ButtonPrimary />;
+}
+
+// In MobileMenu
+{
+  isAuthenticated ? <OwnerMenu /> : <LinkLog />;
+}
+
+// In NaviLinks
+{
+  !isAuthenticated && <LinkLog />;
+}
 ```
 
 ## Token Management
@@ -128,20 +161,47 @@ The system uses secure HttpOnly cookies for token storage:
 1. User submits credentials via `useLogin` hook
 2. GraphQL mutation sends credentials to backend
 3. Backend validates credentials and sets HttpOnly cookies
-4. User is redirected to dashboard after successful authentication
+4. `checkAuth()` and `refreshTenantData()` are called automatically
+5. User is redirected to dashboard after successful authentication
 
 ### Authentication Check
 
-1. `useAuth` hook calls GraphQL `validateToken` query
+1. `AuthContext` calls GraphQL `validateToken` query on initialization
 2. Query automatically includes HttpOnly cookies in request
 3. Backend validates token and returns authentication status
 4. Frontend updates `isAuthenticated` state accordingly
+5. If authenticated, tenant data is automatically fetched
+
+### Tenant Data Management
+
+1. When user is authenticated, `FindTenantAuthInfo` query is executed
+2. Tenant data (owner name, business name, logo) is stored in context
+3. Components can access this data through `useAuth()` hook
+4. Data is refreshed automatically when authentication state changes
 
 ### Logout Process
 
 1. `useLogout` hook calls GraphQL logout mutation
 2. Backend clears HttpOnly cookies
 3. Frontend redirects to login page
+4. Authentication and tenant data are cleared from context
+
+## UI Integration
+
+### Dynamic Content Display
+
+Components automatically adapt based on authentication and tenant data:
+
+- **OwnerMenu**: Shows owner initials and provides dashboard/profile navigation
+- **WelcomeDashboard**: Displays personalized welcome message with owner name
+- **Sidebar**: Shows company name and logo from tenant data
+- **OwnerLogo**: Conditionally renders company logo if available
+
+### Navigation Behavior
+
+- **HeaderLanding**: Shows `OwnerMenu` for authenticated users, `ButtonPrimary` for guests
+- **MobileMenu**: Shows `OwnerMenu` for authenticated users, login link for guests
+- **NaviLinks**: Hides login link when user is authenticated
 
 ## Future Enhancements
 
@@ -153,8 +213,9 @@ The system uses secure HttpOnly cookies for token storage:
 ## Testing Authentication
 
 1. **Unauthenticated Access**: Visit `/dashboard` without valid cookies → should redirect to `/login`
-2. **Authenticated Access**: Login and visit `/dashboard` → should show content
+2. **Authenticated Access**: Login and visit `/dashboard` → should show content with personalized data
 3. **Public Routes**: Visit `/`, `/login`, `/register` → should work without authentication
 4. **Cookie Security**: Check browser dev tools → `accessToken` should be HttpOnly and not accessible via JavaScript
 5. **Server Validation**: Authentication state is validated server-side through GraphQL queries
 6. **Cross-Tab Behavior**: Authentication state is consistent across browser tabs
+7. **Tenant Data**: Verify that owner name, business name, and logo display correctly when authenticated

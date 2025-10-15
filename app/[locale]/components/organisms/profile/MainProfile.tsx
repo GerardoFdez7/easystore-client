@@ -12,7 +12,7 @@ import ProfileSection from '@atoms/profile/ProfileSection';
 
 export default function MainProfile() {
   const t = useTranslations('Profile');
-  const { profile, loading, phoneDisplay, hasPhone, actions } = useProfile();
+  const { profile, loading, actions } = useProfile();
 
   return (
     <main className="relative mt-6 min-h-full w-full flex-1 md:mt-0">
@@ -40,14 +40,15 @@ export default function MainProfile() {
             onSave={(v) => void actions.updateDomain(v)}
           />
 
-          <EditableField
+          {/* <EditableField
             label={t('phone')}
             value={hasPhone ? phoneDisplay : ''}
             placeholder={t('noPhone')}
             {...(hasPhone ? { iconEditable: true } : { actionLabel: t('add') })}
             saveLabel={t('save')}
             onSave={(v) => void actions.updatePhone(v)}
-          />
+          /> */}
+
           <EditableField
             label={t('email')}
             value={profile?.email ?? ''}
