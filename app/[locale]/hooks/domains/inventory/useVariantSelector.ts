@@ -66,6 +66,21 @@ export const useVariantSelector = (options: UseVariantSelectorOptions = {}) => {
     [],
   );
 
+  const mergeItems = useCallback((existing: unknown[], incoming: unknown[]) => {
+    const existingVariants = existing as VariantWithProductName[];
+    const incomingVariants = incoming as VariantWithProductName[];
+
+    const existingMap = new Map(
+      existingVariants.map((item) => [item.id, item]),
+    );
+    incomingVariants.forEach((item) => {
+      if (!existingMap.has(item.id)) {
+        existingMap.set(item.id, item);
+      }
+    });
+    return Array.from(existingMap.values());
+  }, []);
+
   // Infinite scroll hook
   const {
     page,
@@ -83,6 +98,7 @@ export const useVariantSelector = (options: UseVariantSelectorOptions = {}) => {
     getItems,
     getHasMore,
     getTotal,
+    mergeItems,
   });
 
   // Query variables

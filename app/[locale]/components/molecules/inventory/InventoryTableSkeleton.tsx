@@ -34,19 +34,27 @@ export default function InventoryTableSkeleton({
               <Skeleton className="h-4 w-4 rounded-none" />
             </TableHead>
             <TableHead className="text-center">
-              <Skeleton className="h-4 w-20" />
+              <div className="flex items-center justify-center">
+                <Skeleton className="h-4 w-20" />
+              </div>
             </TableHead>
-            <TableHead className="text-center">
+            <TableHead>
               <Skeleton className="h-4 w-12" />
             </TableHead>
             <TableHead className="text-center">
-              <Skeleton className="h-4 w-24" />
+              <div className="flex items-center justify-center">
+                <Skeleton className="h-4 w-24" />
+              </div>
             </TableHead>
             <TableHead className="text-center">
-              <Skeleton className="h-4 w-24" />
+              <div className="flex items-center justify-center">
+                <Skeleton className="h-4 w-24" />
+              </div>
             </TableHead>
             <TableHead className="text-center">
-              <Skeleton className="h-4 w-32" />
+              <div className="flex items-center justify-center">
+                <Skeleton className="h-4 w-32" />
+              </div>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -56,23 +64,34 @@ export default function InventoryTableSkeleton({
               <TableCell>
                 <Skeleton className="h-4 w-4 rounded-none" />
               </TableCell>
+              {/* Product and variant */}
               <TableCell>
                 <div className="flex flex-col gap-1">
                   <Skeleton className="h-4 w-32" />
                   <Skeleton className="h-4 w-24" />
                 </div>
               </TableCell>
-              <TableCell className="text-center">
+              {/* SKU */}
+              <TableCell>
                 <Skeleton className="h-4 w-20" />
               </TableCell>
+              {/* Available */}
               <TableCell className="text-center">
-                <Skeleton className="h-4 w-12" />
+                <div className="flex justify-center">
+                  <Skeleton className="h-4 w-12" />
+                </div>
               </TableCell>
+              {/* Reserved */}
               <TableCell className="text-center">
-                <Skeleton className="h-4 w-12" />
+                <div className="flex justify-center">
+                  <Skeleton className="h-4 w-12" />
+                </div>
               </TableCell>
+              {/* Replenishment Date */}
               <TableCell className="text-center">
-                <Skeleton className="h-4 w-20" />
+                <div className="flex justify-center">
+                  <Skeleton className="h-4 w-20" />
+                </div>
               </TableCell>
             </TableRow>
           ))}
