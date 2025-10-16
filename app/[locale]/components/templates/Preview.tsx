@@ -1,16 +1,21 @@
+// components/templates/Preview.tsx
 import HeaderDashboard from '@organisms/shared/HeaderDashboard';
 import SidebarLayout from '@organisms/shared/SidebarLayout';
-import UnderConstructionTemplate from '@templates/UnderConstruction';
+import { RenderBuilderContent } from '../../../../components/builder';
+import type { BuilderContent } from '@builder.io/sdk';
 import { useTranslations } from 'next-intl';
 
-export default function PreviewTemplate() {
-  const t = useTranslations('Dashboard');
-
+export default function PreviewTemplate({
+  content,
+}: {
+  content: BuilderContent | undefined;
+}) {
+  const t = useTranslations('Preview');
   return (
     <>
       <HeaderDashboard />
       <SidebarLayout title={t('preview')}>
-        <UnderConstructionTemplate />
+        <RenderBuilderContent content={content} model="page" />
       </SidebarLayout>
     </>
   );

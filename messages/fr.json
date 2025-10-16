@@ -1157,5 +1157,8 @@
     "saveSuccess": "Catégorie mise à jour avec succès.",
     "createSuccess": "Catégorie créée avec succès.",
     "addSubcategory": "Ajouter une sous-catégorie à"
+  },
+  "Preview": {
+    "preview": "Aperçu"
   }
 }
