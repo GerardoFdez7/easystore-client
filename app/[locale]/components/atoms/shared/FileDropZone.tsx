@@ -215,6 +215,7 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
             </div>
 
             <Button
+              type="button"
               variant="outline"
               className="border-none shadow-lg"
               disabled={disabled}

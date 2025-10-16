@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useMemo, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useFormState } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
@@ -143,7 +143,7 @@ interface UseVariantFormProps {
   productId: string;
   variantId?: string;
   isNew: boolean;
-  isNewProduct?: boolean; // Indicates if we're adding variant to a new (not yet created) product
+  isNewProduct?: boolean;
   onSuccess?: () => void;
   onCancel?: () => void;
 }
@@ -265,6 +265,9 @@ export function useVariantForm({
     mode: 'onChange',
   });
 
+  // Use formState to track isDirty
+  const { isDirty } = useFormState({ control: form.control });
+
   // Reset form when variant data loads or changes (only in edit mode)
   useEffect(() => {
     if (variant && !isNew) {
@@ -272,80 +275,44 @@ export function useVariantForm({
     }
   }, [variant, isNew, originalValues, form]);
 
-  const watchedValues = form.watch();
-
-  // Calculate changed fields and hasChanges
-  const { hasChanges, changedFields } = useMemo(() => {
+  // Calculate hasChanges using isDirty from React Hook Form
+  const hasChanges = useMemo(() => {
     if (isNew) {
-      // In create mode
-      const hasRequiredValues =
-        typeof watchedValues.price === 'number' &&
-        watchedValues.price > 0 &&
-        watchedValues.codes.sku !== null &&
-        watchedValues.codes.sku !== '';
-      return {
-        hasChanges: hasRequiredValues,
-        changedFields: hasRequiredValues ? watchedValues : {},
-      };
+      // In create mode - check if required fields are filled
+      const currentValues = form.getValues();
+      return (
+        typeof currentValues.price === 'number' &&
+        currentValues.price > 0 &&
+        currentValues.codes.sku !== null &&
+        currentValues.codes.sku !== ''
+      );
     }
 
-    // In update mode, compare with original values
+    // In update mode, use React Hook Form's built-in isDirty flag
+    return isDirty;
+  }, [isNew, isDirty, form]);
+
+  // Calculate changed fields for update mutations
+  const changedFields = useMemo(() => {
+    if (isNew) {
+      // In create mode - return all current values if required fields are filled
+      return hasChanges ? form.getValues() : {};
+    }
+
+    // In update mode, use React Hook Form's dirtyFields to identify changes
+    const dirtyFields = form.formState.dirtyFields;
+    const currentValues = form.getValues();
     const changes: Partial<VariantFormData> = {};
-    let hasAnyChanges = false;
 
-    // Helper to deep compare values
-    const isEqual = (a: unknown, b: unknown): boolean => {
-      if (a === b) {
-        return true;
-      }
-      if (a === null || b === null) {
-        return false;
-      }
-      if (a === undefined || b === undefined) {
-        return false;
-      }
-      if (typeof a !== typeof b) {
-        return false;
-      }
-
-      if (Array.isArray(a) && Array.isArray(b)) {
-        if (a.length !== b.length) {
-          return false;
-        }
-        return a.every((item, index) => isEqual(item, b[index]));
-      }
-
-      if (typeof a === 'object' && typeof b === 'object') {
-        const keysA = Object.keys(a as object);
-        const keysB = Object.keys(b as object);
-        if (keysA.length !== keysB.length) {
-          return false;
-        }
-        return keysA.every((key) =>
-          isEqual(
-            (a as Record<string, unknown>)[key],
-            (b as Record<string, unknown>)[key],
-          ),
-        );
-      }
-
-      return false;
-    };
-
-    (Object.keys(originalValues) as Array<keyof VariantFormData>).forEach(
+    // Only include fields that are marked as dirty
+    (Object.keys(dirtyFields) as Array<keyof VariantFormData>).forEach(
       (key) => {
-        if (!isEqual(watchedValues[key], originalValues[key])) {
-          (changes as Record<string, unknown>)[key] = watchedValues[key];
-          hasAnyChanges = true;
-        }
+        (changes as Record<string, unknown>)[key] = currentValues[key];
       },
     );
 
-    return {
-      hasChanges: hasAnyChanges,
-      changedFields: changes,
-    };
-  }, [watchedValues, originalValues, isNew]);
+    return changes;
+  }, [isNew, hasChanges, form]);
 
   // Handle form submission
   const handleSubmit = useCallback(
@@ -354,7 +321,7 @@ export function useVariantForm({
         // If we're adding a variant to a new (not yet created) product, save to draft
         if (isNew && isNewProduct) {
           addVariantDraft(data);
-          router.back(); // Go back to product creation form
+          router.back();
           onSuccess?.();
           return;
         }
@@ -434,12 +401,13 @@ export function useVariantForm({
             variantMedia: data.variantMedia.map((url, index) => ({
               url,
               mediaType: MediaTypeEnum.Image,
-              position: index,
+              position: index + 1,
             })),
           };
 
           const result = await addVariant(input);
           if (result) {
+            router.push(`/products/${productId}`);
             onSuccess?.();
           }
           return;
@@ -529,6 +497,18 @@ export function useVariantForm({
           // Handle empty variantCover
           if (fieldKey === 'variantCover' && value === '') {
             fieldsToUpdate.variantCover = null;
+            return;
+          }
+
+          // Handle variantMedia transformation
+          if (fieldKey === 'variantMedia') {
+            fieldsToUpdate.variantMedia = (value as string[]).map(
+              (url, index) => ({
+                url,
+                mediaType: MediaTypeEnum.Image,
+                position: index + 1,
+              }),
+            );
             return;
           }
 

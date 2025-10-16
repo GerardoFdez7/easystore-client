@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useCallback } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useFormState } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTranslations } from 'next-intl';
@@ -85,7 +85,7 @@ const createProductFormSchema = (t: (key: string) => string) =>
         categoryName: z.string().optional(),
       }),
     ),
-    variants: z.array(z.any()).optional(), // Variants are managed separately, not validated here
+    variants: z.array(z.any()).optional(),
     sustainabilities: z
       .array(
         z.object({
@@ -223,6 +223,9 @@ export function useProductForm({
     mode: 'onChange',
   });
 
+  // Use formState to track isDirty - this causes re-renders when form changes
+  const { isDirty } = useFormState({ control: form.control });
+
   // Reset form when product data loads or changes (only in edit mode)
   useEffect(() => {
     if (product && !isNew) {
@@ -230,7 +233,7 @@ export function useProductForm({
     }
   }, [product, isNew, originalValues, form]);
 
-  // Save draft on form change (only in create mode) - without causing re-renders
+  // Save draft on form change (only in create mode)
   useEffect(() => {
     if (!isNew) {
       return;
@@ -255,83 +258,45 @@ export function useProductForm({
     };
   }, [isNew, form, setProductDraft]);
 
-  // Calculate changed fields and hasChanges - using getValues to avoid re-renders
-  const { hasChanges, changedFields } = useMemo(() => {
-    // Get current form values without subscribing (no re-render)
-    const currentValues = form.getValues();
+  // Calculate hasChanges using isDirty from React Hook Form
+  const hasChanges = useMemo(() => {
     if (isNew) {
       // In create mode - check if required fields are filled
-      const hasRequiredValues =
+      const currentValues = form.getValues();
+      return (
         currentValues.name.trim().length >= 2 &&
         currentValues.shortDescription.trim().length >= 10 &&
-        currentValues.cover.trim().length > 0;
-
-      return {
-        hasChanges: hasRequiredValues,
-        changedFields: hasRequiredValues ? currentValues : {},
-      };
+        currentValues.cover.trim().length > 0
+      );
     }
 
-    // In update mode, compare with original values
+    // isDirty automatically tracks if form values differ from defaultValues
+    return isDirty;
+  }, [isNew, isDirty, form]);
+
+  // Calculate changed fields for update mutations
+  const changedFields = useMemo(() => {
+    if (isNew) {
+      // In create mode - return all current values if required fields are filled
+      return hasChanges ? form.getValues() : {};
+    }
+
+    // In update mode, use React Hook Form's dirtyFields to identify changes
+    const dirtyFields = form.formState.dirtyFields;
+    const currentValues = form.getValues();
     const changes: Partial<ProductFormData> = {};
-    let hasAnyChanges = false;
 
-    // Helper to deep compare values
-    const isEqual = (a: unknown, b: unknown): boolean => {
-      if (a === b) {
-        return true;
-      }
-      if (a === null || b === null) {
-        return false;
-      }
-      if (a === undefined || b === undefined) {
-        return false;
-      }
-      if (typeof a !== typeof b) {
-        return false;
-      }
-
-      if (Array.isArray(a) && Array.isArray(b)) {
-        if (a.length !== b.length) {
-          return false;
-        }
-        return a.every((item, index) => isEqual(item, b[index]));
-      }
-
-      if (typeof a === 'object' && typeof b === 'object') {
-        const keysA = Object.keys(a as object);
-        const keysB = Object.keys(b as object);
-        if (keysA.length !== keysB.length) {
-          return false;
-        }
-        return keysA.every((key) =>
-          isEqual(
-            (a as Record<string, unknown>)[key],
-            (b as Record<string, unknown>)[key],
-          ),
-        );
-      }
-
-      return false;
-    };
-
-    (Object.keys(originalValues) as Array<keyof ProductFormData>).forEach(
+    // Only include fields that are marked as dirty and exclude variants
+    (Object.keys(dirtyFields) as Array<keyof ProductFormData>).forEach(
       (key) => {
-        if (key === 'variants') {
-          return;
-        }
-        if (!isEqual(currentValues[key], originalValues[key])) {
+        if (key !== 'variants') {
           (changes as Record<string, unknown>)[key] = currentValues[key];
-          hasAnyChanges = true;
         }
       },
     );
 
-    return {
-      hasChanges: hasAnyChanges,
-      changedFields: changes,
-    };
-  }, [form, originalValues, isNew]);
+    return changes;
+  }, [isNew, hasChanges, form]);
 
   // Handle form submission
   const handleSubmit = useCallback(
@@ -357,7 +322,7 @@ export function useProductForm({
             })),
             media: data.media?.map((url, index) => ({
               url,
-              position: index,
+              position: index + 1,
               mediaType: (url.includes('.mp4')
                 ? 'VIDEO'
                 : 'IMAGE') as MediaTypeEnum,
@@ -400,7 +365,7 @@ export function useProductForm({
               variantCover: variant.variantCover || undefined,
               variantMedia: variant.variantMedia?.map((url, index) => ({
                 url,
-                position: index,
+                position: index + 1,
                 mediaType: (url.includes('.mp4')
                   ? 'VIDEO'
                   : 'IMAGE') as MediaTypeEnum,
@@ -412,8 +377,8 @@ export function useProductForm({
 
           if (result) {
             form.reset(data);
-            clearAllDrafts(); // Clear drafts after successful product creation
-            router.push('/products'); // Navigate to products list after creation
+            clearAllDrafts();
+            router.push('/products');
             onSuccess?.();
           }
           return;
@@ -426,7 +391,6 @@ export function useProductForm({
 
         // Update existing product - only send changed fields
         if (Object.keys(changedFields).length === 0) {
-          // No changes to submit
           return;
         }
 
@@ -483,7 +447,7 @@ export function useProductForm({
             case 'media':
               fieldsToUpdate.media = (value as string[])?.map((url, index) => ({
                 url,
-                position: index,
+                position: index + 1,
                 mediaType: (url.includes('.mp4')
                   ? 'VIDEO'
                   : 'IMAGE') as MediaTypeEnum,
