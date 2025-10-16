@@ -15,17 +15,21 @@ import { useTranslations } from 'next-intl';
 
 interface MediaFormFieldProps {
   isSubmitting?: boolean;
+  coverFieldName?: string;
+  mediaFieldName?: string;
 }
 
 export default function MediaFormField({
   isSubmitting = false,
+  coverFieldName = 'cover',
+  mediaFieldName = 'media',
 }: MediaFormFieldProps) {
   const { control, setValue, watch } = useFormContext();
   const t = useTranslations('Products');
 
   // Watch both cover and media fields
-  const cover = watch('cover') as string | undefined;
-  const mediaArray = watch('media') as string[] | undefined;
+  const cover = watch(coverFieldName) as string | undefined;
+  const mediaArray = watch(mediaFieldName) as string[] | undefined;
 
   // Prepare initial media for MediaUploader (cover + media array)
   const initialMedia = useMemo(() => {
@@ -49,19 +53,25 @@ export default function MediaFormField({
   const handleMediaProcessed = async (processedData?: ProcessedData | null) => {
     if (!processedData) {
       // No data means all media was removed
-      setValue('cover', '', { shouldDirty: true, shouldValidate: true });
-      setValue('media', [], { shouldDirty: true, shouldValidate: true });
+      setValue(coverFieldName, '', { shouldDirty: true, shouldValidate: true });
+      setValue(mediaFieldName, [], {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
       return;
     }
 
     // Update cover if provided (first element)
     if (processedData.cover) {
-      setValue('cover', processedData.cover, {
+      setValue(coverFieldName, processedData.cover, {
         shouldDirty: true,
         shouldValidate: true,
       });
     } else {
-      setValue('cover', '', { shouldDirty: true, shouldValidate: true });
+      setValue(coverFieldName, '', {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
     }
 
     // Update media array if provided - ONLY additional media (position 1+)
@@ -71,27 +81,33 @@ export default function MediaFormField({
         .filter((item) => item.position > 0)
         .map((item) => item.url);
 
-      setValue('media', additionalMediaUrls, {
+      setValue(mediaFieldName, additionalMediaUrls, {
         shouldDirty: true,
         shouldValidate: true,
       });
     } else {
       // If no additional media, clear the media array
-      setValue('media', [], { shouldDirty: true, shouldValidate: true });
+      setValue(mediaFieldName, [], {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
     }
   };
 
   // Handle errors from MediaUploader (including validation errors when no items)
   const handleUploadError = (_error: string) => {
     if (!cover || cover === '') {
-      setValue('cover', '', { shouldDirty: true, shouldValidate: true });
+      setValue(coverFieldName, '', {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
     }
   };
 
   return (
     <FormField
       control={control}
-      name="cover"
+      name={coverFieldName}
       render={() => (
         <FormItem>
           <FormLabel className="text-lg font-semibold">{t('media')}</FormLabel>
