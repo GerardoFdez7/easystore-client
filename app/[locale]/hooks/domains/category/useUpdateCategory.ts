@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useCallback } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -37,14 +37,10 @@ export function useUpdateCategory({
   id,
   initialChildIds = [],
   defaultValues,
-  redirectTo,
   onSuccess,
 }: UpdateHookOptions) {
   const t = useTranslations('CategoryDetail');
   const router = useRouter();
-  const { locale } = (useParams<{ locale?: string }>() ?? {}) as {
-    locale?: string;
-  };
 
   const schema = useMemo(() => buildCategorySchema(t, true), [t]);
 
@@ -63,6 +59,9 @@ export function useUpdateCategory({
   >(UpdateCategoryDocument, {});
 
   const _submit = form.handleSubmit(async (values) => {
+    // Check if name was updated by comparing with initial values
+    const nameWasUpdated = values.name?.trim() !== defaultValues?.name?.trim();
+
     // Normalize base updates for the parent category
     const baseInput = {
       name: values.name?.trim(),
@@ -112,10 +111,8 @@ export function useUpdateCategory({
       setTimeout(() => {
         if (onSuccess) {
           onSuccess({ id });
-        } else {
-          router.push(
-            redirectTo ?? (locale ? `/${locale}/categories` : '/categories'),
-          );
+        } else if (nameWasUpdated) {
+          router.back();
         }
       }, 0);
     } catch (_error) {

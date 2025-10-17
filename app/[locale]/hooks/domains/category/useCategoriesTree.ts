@@ -15,9 +15,13 @@ export interface UseCategoriesTreeOptions {
   sortOrder?: SortOrder;
 }
 
-type GqlCategoryTree = NonNullable<
-  FindCategoriesTreeQuery['getAllCategories']
->['categories'][number];
+// Recursive type to handle deeply nested category structure
+type RecursiveCategoryNode = {
+  id: string;
+  name: string;
+  parentId?: string | null;
+  subCategories?: RecursiveCategoryNode[];
+};
 
 export interface CategoryTreeNode {
   id: string;
@@ -27,7 +31,7 @@ export interface CategoryTreeNode {
   subCategories?: CategoryTreeNode[];
 }
 
-const mapToTreeNode = (c: GqlCategoryTree): CategoryTreeNode => ({
+const mapToTreeNode = (c: RecursiveCategoryNode): CategoryTreeNode => ({
   id: c.id,
   name: c.name,
   parentId: c.parentId,

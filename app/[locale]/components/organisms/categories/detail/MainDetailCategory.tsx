@@ -128,7 +128,6 @@ export default function MainDetailCategory({
           subCategoryIds: category.subCategories?.map((sub) => sub.id) || [],
         }
       : undefined,
-    onSuccess: () => {},
   });
 
   const [createCategoryMutation] = useMutation<
