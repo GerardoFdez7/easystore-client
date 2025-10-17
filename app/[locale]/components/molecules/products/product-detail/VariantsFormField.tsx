@@ -72,11 +72,6 @@ export default function VariantsFormField({
               <div className="mb-4 flex items-center justify-between">
                 <FormLabel className="text-lg font-semibold">
                   {t('variants')}
-                  {isNewProduct && variantsDraft.length > 0 && (
-                    <span className="text-muted-foreground ml-2 text-sm font-normal">
-                      ({variantsDraft.length} {t('draft')})
-                    </span>
-                  )}
                 </FormLabel>
                 <ButtonAddVariant productId={productId} />
               </div>
@@ -133,9 +128,6 @@ export default function VariantsFormField({
                                     <span className="text-foreground text-sm">
                                       {variant.attributes?.[0]?.key}:{' '}
                                       {variant.attributes?.[0]?.value}
-                                    </span>
-                                    <span className="text-muted-foreground text-xs">
-                                      {t('draftVariant')}
                                     </span>
                                   </div>
                                 </div>

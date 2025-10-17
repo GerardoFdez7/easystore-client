@@ -7,6 +7,7 @@ import { Form } from '@shadcn/ui/form';
 import PriceConditionFormField from '@molecules/variant/PriceConditionFormField';
 import AttributesFormField from '@molecules/variant/AttributesFormField';
 import DimensionsRow from '@molecules/variant/DimensionRowFormField';
+import WeightFormField from '@molecules/variant/WeightFormField';
 import CodesListFormField from '@molecules/variant/CodesListFormField';
 import PersonalizationOptionsFormField from '@molecules/variant/PersonalizationOptionsFormField';
 import InstallmentPaymentFormField from '@molecules/variant/InstallmentPaymentFormField';
@@ -54,6 +55,7 @@ export default function MainVariant({
             <PriceConditionFormField />
             <AttributesFormField />
             <DimensionsRow />
+            <WeightFormField />
             <CodesListFormField />
             <PersonalizationOptionsFormField />
             <InstallmentPaymentFormField />
