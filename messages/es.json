@@ -705,8 +705,7 @@
     "variantCreated": "Variante creada con éxito",
     "variantUpdated": "Variante actualizada con éxito",
     "noProductsDescription": "Comienza creando tu primer producto. Agrega detalles, imágenes y precios para empezar a vender.",
-    "draft": "borrador",
-    "draftVariant": "Borrador (no guardado)"
+    "weight": "Peso"
   },
   "Privacy": {
     "tableOfContents": "Tabla de contenido",
@@ -1012,6 +1011,10 @@
     "productIsbnAlreadyExistsDescription": "Ya existe una variante de producto con este ISBN. Por favor, elige un ISBN diferente.",
     "productBarcodeAlreadyExists": "El código de barras del producto ya existe",
     "productBarcodeAlreadyExistsDescription": "Ya existe una variante de producto con este código de barras. Por favor, elige uno diferente.",
+    "dimensionRequiredForPhysical": "Dimensiones requeridas",
+    "dimensionRequiredForPhysicalDescription": "Los productos físicos deben incluir dimensiones (alto, ancho, largo). Por favor, agrega las dimensiones requeridas.",
+    "weightRequiredForPhysical": "Peso requerido",
+    "weightRequiredForPhysicalDescription": "Los productos físicos deben incluir información de peso. Por favor, agrega el peso del producto.",
     "productNotFound": "Producto no encontrado",
     "productNotFoundDescription": "El producto que buscas no existe o ha sido eliminado.",
     "variantNotFound": "Variante de producto no encontrada",

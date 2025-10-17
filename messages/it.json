@@ -705,7 +705,8 @@
     "mediaUrlInvalid": "L'URL del media deve essere valido",
     "variantCreated": "Variante creata con successo",
     "variantUpdated": "Variante aggiornata con successo",
-    "noProductsDescription": "Inizia creando il tuo primo prodotto. Aggiungi dettagli, immagini e prezzi per iniziare a vendere."
+    "noProductsDescription": "Inizia creando il tuo primo prodotto. Aggiungi dettagli, immagini e prezzi per iniziare a vendere.",
+    "weight": "Peso"
   },
   "Privacy": {
     "tableOfContents": "Indice",
@@ -1012,6 +1013,10 @@
     "productIsbnAlreadyExistsDescription": "Esiste già una variante di prodotto con questo ISBN. Per favore, scegli un ISBN diverso.",
     "productBarcodeAlreadyExists": "Codice a barre prodotto già esistente",
     "productBarcodeAlreadyExistsDescription": "Esiste già una variante di prodotto con questo codice a barre. Per favore, scegli un codice a barre diverso.",
+    "dimensionRequiredForPhysical": "Dimensioni richieste",
+    "dimensionRequiredForPhysicalDescription": "I prodotti fisici devono includere dimensioni (altezza, larghezza, lunghezza). Per favore, aggiungi le dimensioni richieste.",
+    "weightRequiredForPhysical": "Peso richiesto",
+    "weightRequiredForPhysicalDescription": "I prodotti fisici devono includere informazioni sul peso. Per favore, aggiungi il peso del prodotto.",
     "productNotFound": "Prodotto non trovato",
     "productNotFoundDescription": "Il prodotto che stai cercando non esiste o è stato eliminato.",
     "variantNotFound": "Variante di prodotto non trovata",

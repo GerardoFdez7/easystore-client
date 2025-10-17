@@ -704,8 +704,7 @@
     "variantCreated": "Variant created successfully",
     "variantUpdated": "Variant updated successfully",
     "noProductsDescription": "Get started by creating your first product. Add product details, images, and pricing to begin selling.",
-    "draft": "draft",
-    "draftVariant": "Draft (not saved)"
+    "weight": "Weight"
   },
   "Privacy": {
     "tableOfContents": "Table of contents",
@@ -1011,6 +1010,10 @@
     "productIsbnAlreadyExistsDescription": "A product variant with this ISBN already exists. Please choose a different ISBN.",
     "productBarcodeAlreadyExists": "Product barcode already exists",
     "productBarcodeAlreadyExistsDescription": "A product variant with this barcode already exists. Please choose a different barcode.",
+    "dimensionRequiredForPhysical": "Dimensions required",
+    "dimensionRequiredForPhysicalDescription": "Physical products must include dimensions (height, width, length). Please add the required dimensions.",
+    "weightRequiredForPhysical": "Weight required",
+    "weightRequiredForPhysicalDescription": "Physical products must include weight information. Please add the product weight.",
     "productNotFound": "Product not found",
     "productNotFoundDescription": "The product you're looking for doesn't exist or has been deleted.",
     "variantNotFound": "Product variant not found",

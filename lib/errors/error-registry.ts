@@ -285,6 +285,54 @@ const databaseConstraintHandlers: ErrorHandler[] = [
     },
   },
   {
+    id: 'dimension-required-physical',
+    priority: 145,
+    matcher: (error: GraphQLFormattedError) => {
+      const message = error.message?.toLowerCase() || '';
+      return (
+        message.includes(
+          'dimension property is required for physical products',
+        ) ||
+        (message.includes('dimension') &&
+          message.includes('required') &&
+          message.includes('physical'))
+      );
+    },
+    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
+      const { locale, isDevelopment } = context;
+      toast.error(getLocalizedMessage(locale, 'dimensionRequiredForPhysical'), {
+        description:
+          getLocalizedMessage(
+            locale,
+            'dimensionRequiredForPhysicalDescription',
+          ) + (isDevelopment ? ` Backend message: ${error.message}` : ''),
+      });
+      return true;
+    },
+  },
+  {
+    id: 'weight-required-physical',
+    priority: 146,
+    matcher: (error: GraphQLFormattedError) => {
+      const message = error.message?.toLowerCase() || '';
+      return (
+        message.includes('weight property is required for physical products') ||
+        (message.includes('weight') &&
+          message.includes('required') &&
+          message.includes('physical'))
+      );
+    },
+    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
+      const { locale, isDevelopment } = context;
+      toast.error(getLocalizedMessage(locale, 'weightRequiredForPhysical'), {
+        description:
+          getLocalizedMessage(locale, 'weightRequiredForPhysicalDescription') +
+          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+      });
+      return true;
+    },
+  },
+  {
     id: 'product-not-found',
     priority: 150,
     matcher: (error: GraphQLFormattedError) => {
