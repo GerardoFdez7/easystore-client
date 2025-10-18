@@ -17,6 +17,7 @@ type StockData =
   | NonNullable<
       FindInventoryQuery['getAllWarehouses']['warehouses'][0]
     >['stockPerWarehouses'][0];
+type StockDataMaybeWarehouse = StockData & { warehouseId?: string };
 
 export const useInventory = (
   variables: FindInventoryQueryVariables,
@@ -49,22 +50,41 @@ export const useInventory = (
     inventoryData =
       warehouseQuery.data.getWarehouseById?.stockPerWarehouses || [];
   } else if (!warehouseId && inventoryQuery.data) {
-    const warehouses = inventoryQuery.data.getAllWarehouses?.warehouses || [];
-    inventoryData = warehouses.flatMap((w) => w.stockPerWarehouses || []);
+    // Handle general inventory data structure
+    inventoryData =
+      inventoryQuery.data?.getAllWarehouses?.warehouses?.flatMap((warehouse) =>
+        (warehouse.stockPerWarehouses || []).map((s) => ({
+          ...s,
+          // si el backend no retorna warehouseId en el stock, usamos el id del padre
+          warehouseId:
+            (s as { warehouseId?: string }).warehouseId ?? warehouse.id,
+          __warehouseName: warehouse.name,
+        })),
+      ) || [];
   }
 
-  const formattedInventory: InventoryItem[] = inventoryData.map((item) => ({
-    id: item.id,
-    variantFirstAttribute: {
-      key: item.variantFirstAttribute?.key ?? '',
-      value: item.variantFirstAttribute?.value ?? '',
-    },
-    productName: item.productName ?? '',
-    variantSku: item.variantSku ?? '',
-    qtyAvailable: item.qtyAvailable ?? 0,
-    qtyReserved: item.qtyReserved ?? 0,
-    estimatedReplenishmentDate: item.estimatedReplenishmentDate ?? '',
-  }));
+  const formattedInventory: InventoryItem[] = inventoryData.map((item) => {
+    const m = item as StockDataMaybeWarehouse & {
+      __warehouseName?: string | null;
+    };
+    return {
+      id: item.id,
+      warehouseId: m.warehouseId ?? warehouseId ?? '',
+      warehouseName:
+        warehouseId && warehouseQuery.data?.getWarehouseById?.name
+          ? warehouseQuery.data?.getWarehouseById?.name
+          : (m.__warehouseName ?? undefined),
+      variantFirstAttribute: {
+        key: item.variantFirstAttribute?.key ?? '',
+        value: item.variantFirstAttribute?.value ?? '',
+      },
+      productName: item.productName ?? '',
+      variantSku: item.variantSku ?? '',
+      qtyAvailable: item.qtyAvailable ?? 0,
+      qtyReserved: item.qtyReserved ?? 0,
+      estimatedReplenishmentDate: item.estimatedReplenishmentDate ?? '',
+    };
+  });
 
   let processedInventory = formattedInventory;
 

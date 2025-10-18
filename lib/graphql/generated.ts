@@ -1510,6 +1510,13 @@ export type FindAllMovementsQuery = {
       deltaQty: number;
       reason: string;
       occurredAt: any;
+      productName?: string | null;
+      variantSku?: string | null;
+      variantFirstAttribute?: {
+        __typename?: 'VariantAttribute';
+        key: string;
+        value: string;
+      } | null;
     }>;
   };
 };
@@ -4810,6 +4817,31 @@ export const FindAllMovementsDocument = {
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'occurredAt' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'productName' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variantSku' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variantFirstAttribute' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'key' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'value' },
+                            },
+                          ],
+                        },
                       },
                     ],
                   },
