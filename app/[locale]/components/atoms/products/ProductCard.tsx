@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Checkbox } from '@shadcn/ui/checkbox';
 import {
   Carousel,
   CarouselContent,
@@ -9,36 +8,40 @@ import {
   type CarouselApi,
 } from '@shadcn/ui/carousel';
 import Image from 'next/image';
-//import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import { Product } from '@lib/consts/products';
 import ProductStatus from '@atoms/products/ProductStatus';
 import BadgeTag from '@atoms/shared/BadgeTag';
 
 interface ProductCardProps {
   product: Product;
-  isSelected?: boolean;
-  onSelect?: (checked: boolean) => void;
 }
 
-export function ProductCard({
-  product,
-  isSelected,
-  onSelect,
-}: ProductCardProps) {
+export function ProductCard({ product }: ProductCardProps) {
+  const router = useRouter();
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [previewIndex, setPreviewIndex] = React.useState<number | null>(null);
-  //const t = useTranslations('Products');
+  const [canScrollPrev, setCanScrollPrev] = React.useState(false);
+  const [canScrollNext, setCanScrollNext] = React.useState(false);
 
   React.useEffect(() => {
     if (!api) {
       return;
     }
 
+    // Update current slide
     setCurrent(api.selectedScrollSnap() + 1);
 
+    // Update scroll capabilities
+    setCanScrollPrev(api.canScrollPrev());
+    setCanScrollNext(api.canScrollNext());
+
+    // Listen for selection changes
     api.on('select', () => {
       setCurrent(api.selectedScrollSnap() + 1);
+      setCanScrollPrev(api.canScrollPrev());
+      setCanScrollNext(api.canScrollNext());
     });
   }, [api]);
 
@@ -65,6 +68,10 @@ export function ProductCard({
     if (api) {
       api.scrollTo(index);
     }
+  };
+
+  const handleNavigateToProduct = () => {
+    router.push(`/products/${product.id}`);
   };
 
   const renderMediaContent = (
@@ -104,14 +111,21 @@ export function ProductCard({
             <CarouselContent>
               {mediaItems.map((mediaItem, index) => (
                 <CarouselItem key={index}>
-                  <div className="h-48 w-full overflow-hidden">
+                  <div
+                    className="h-48 w-full cursor-pointer overflow-hidden"
+                    onClick={handleNavigateToProduct}
+                  >
                     {renderMediaContent(mediaItem)}
                   </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="absolute top-1/2 left-2 h-8 w-8 -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
-            <CarouselNext className="absolute top-1/2 right-2 h-8 w-8 -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+            {canScrollPrev && (
+              <CarouselPrevious className="absolute top-1/2 left-2 h-8 w-8 -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+            )}
+            {canScrollNext && (
+              <CarouselNext className="absolute top-1/2 right-2 h-8 w-8 -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+            )}
 
             {/* Preview overlay - shows when hovering over indicators */}
             {previewIndex !== null && (
@@ -143,23 +157,19 @@ export function ProductCard({
             </div>
           </Carousel>
         ) : (
-          <div className="h-48 w-full overflow-hidden">
+          <div
+            className="h-48 w-full cursor-pointer overflow-hidden"
+            onClick={handleNavigateToProduct}
+          >
             {renderMediaContent(mediaItems[0])}
-          </div>
-        )}
-
-        {isSelected && (
-          <div className="absolute top-3 left-3 z-30">
-            <Checkbox
-              checked={isSelected}
-              onCheckedChange={onSelect}
-              className="bg-white backdrop-blur-sm"
-            />
           </div>
         )}
       </div>
       <div className="p-4">
-        <h3 className="text-title mb-3 text-[16px] font-medium">
+        <h3
+          className="text-title mb-3 cursor-pointer text-center text-[16px] font-medium"
+          onClick={handleNavigateToProduct}
+        >
           {product.name}
         </h3>
         <div className="space-y-2">

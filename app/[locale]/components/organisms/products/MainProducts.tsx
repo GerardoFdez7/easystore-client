@@ -151,11 +151,7 @@ export default function MainDashboard() {
               onDeleteComplete={handleClearSelection}
             />
           ) : (
-            <ProductGrid
-              products={products}
-              selectedProducts={selectedProducts}
-              onSelectProduct={handleProductSelect}
-            />
+            <ProductGrid products={products} />
           )}
         </>
       )}
