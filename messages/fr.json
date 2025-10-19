@@ -560,7 +560,7 @@
   "Products": {
     "addProduct": "Ajouter un produit",
     "status": "Statut",
-    "category": "Categorie",
+    "category": "Catégorie",
     "searchProducts": "Rechercher des produits",
     "all": "Tous",
     "actives": "Actifs",
@@ -570,7 +570,7 @@
     "type": "Type",
     "products": "Produits",
     "noTypeFound": "Type non trouvé",
-    "noCategoryFound": "Categorie non trouvée",
+    "noCategoryFound": "Catégorie non trouvée",
     "search": "Rechercher...",
     "price": "Prix",
     "variants": "Variantes",

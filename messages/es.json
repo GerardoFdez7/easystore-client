@@ -599,7 +599,7 @@
     "shortDescriptionTooShort": "La descripción corta debe tener al menos 10 caracteres",
     "shortDescriptionTooLong": "La descripción corta debe tener 200 caracteres o menos",
     "longDescriptionTooShort": "La descripción larga debe tener al menos 20 caracteres",
-    "longDescriptionTooLong": "La descripción larga debe tener 5000 caracteres o menos",
+    "longDescriptionTooLong": "La descripción larga debe tener 2000 caracteres o menos",
     "brandTooShort": "La marca debe tener al menos 1 carácter",
     "brandTooLong": "La marca debe tener 100 caracteres o menos",
     "manufacturerTooShort": "El fabricante debe tener al menos 1 carácter",

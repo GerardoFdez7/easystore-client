@@ -691,7 +691,7 @@
     "upcInvalid": "UPC must be 12 digits.",
     "eanInvalid": "EAN must be a valid EAN-8 (8 digits) or EAN-13 (13 digits) code.",
     "isbnInvalid": "ISBN must be a valid ISBN-10 (e.g., 0321765723 or 032176572X) or ISBN-13 (e.g., 9780321765723) code. Do not include hyphens.",
-    "barcodeInvalid": "Barcode must be a non-empty string'",
+    "barcodeInvalid": "Barcode must be a non-empty string",
     "personalizationOptionRequired": "Personalization option cannot be empty",
     "monthsMinValue": "Months must be a non-negative integer",
     "interestRateMinValue": "Interest rate must be a non-negative number",

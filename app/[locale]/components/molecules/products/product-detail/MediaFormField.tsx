@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useMemo } from 'react';
-import { useFormContext } from 'react-hook-form';
+import React, { useMemo, useEffect, useState, useRef } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 import {
   FormField,
   FormItem,
@@ -24,14 +24,38 @@ export default function MediaFormField({
   coverFieldName = 'cover',
   mediaFieldName = 'media',
 }: MediaFormFieldProps) {
-  const { control, setValue, watch } = useFormContext();
+  const { control, setValue } = useFormContext();
   const t = useTranslations('Products');
 
-  // Watch both cover and media fields
-  const cover = watch(coverFieldName) as string | undefined;
-  const mediaArray = watch(mediaFieldName) as string[] | undefined;
+  const cover = useWatch({
+    control,
+    name: coverFieldName,
+    defaultValue: '',
+  }) as string;
 
-  // Prepare initial media for MediaUploader (cover + media array)
+  const mediaArray = useWatch({
+    control,
+    name: mediaFieldName,
+    defaultValue: [],
+  }) as string[];
+
+  const [uploaderKey, setUploaderKey] = useState(0);
+  const hasInitializedRef = useRef(false);
+
+  useEffect(() => {
+    if (
+      !hasInitializedRef.current &&
+      (cover || (mediaArray && mediaArray.length > 0))
+    ) {
+      hasInitializedRef.current = true;
+      setUploaderKey((prev) => prev + 1);
+    }
+
+    if (!cover && (!mediaArray || mediaArray.length === 0)) {
+      hasInitializedRef.current = false;
+    }
+  }, [cover, mediaArray]);
+
   const initialMedia = useMemo(() => {
     const mediaUrls: string[] = [];
 
@@ -40,9 +64,8 @@ export default function MediaFormField({
       mediaUrls.push(cover);
     }
 
-    // Add additional media items (gallery) if they exist
     if (mediaArray && mediaArray.length > 0) {
-      const additionalMedia = mediaArray.filter((url) => url !== cover); // Avoid duplicating cover
+      const additionalMedia = mediaArray.filter((url) => url !== cover);
       mediaUrls.push(...additionalMedia);
     }
 
@@ -52,7 +75,6 @@ export default function MediaFormField({
   // Handle media updates from MediaUploader
   const handleMediaProcessed = async (processedData?: ProcessedData | null) => {
     if (!processedData) {
-      // No data means all media was removed
       setValue(coverFieldName, '', { shouldDirty: true, shouldValidate: true });
       setValue(mediaFieldName, [], {
         shouldDirty: true,
@@ -114,9 +136,11 @@ export default function MediaFormField({
           <FormControl>
             <div className="space-y-2">
               <MediaUploader
+                key={uploaderKey}
                 multiple={true}
                 maxImageSize={10}
                 maxVideoSize={50}
+                minItems={1}
                 initialMedia={initialMedia}
                 onMediaProcessed={handleMediaProcessed}
                 onUploadSuccess={(_url) => {
