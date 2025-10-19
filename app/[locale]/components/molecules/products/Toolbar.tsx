@@ -3,7 +3,7 @@
 import ButtonAddProduct from '@atoms/products/ButtonAddProduct';
 import ButtonViewMode from '@atoms/products/ButtonViewMode';
 import ComboboxType from '@atoms/products/ComboboxType';
-import SearchBar from '@atoms/shared/SearchBar';
+import SearchProduct from '@atoms/products/SearchProduct';
 import ComboboxCategory from '@atoms/products/ComboboxCategory';
 import { useTranslations } from 'next-intl';
 import { memo } from 'react';
@@ -51,7 +51,7 @@ export const ProductsToolbar = memo(function ProductsToolbar({
               onValueChange={onCategoryFilterChange}
             />
           </div>
-          <SearchBar
+          <SearchProduct
             searchTerm={searchTerm}
             onSearchChange={onSearch}
             placeholder={t('searchProducts')}
