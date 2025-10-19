@@ -31,7 +31,7 @@ const mockProducts = [
     status: 'Active',
     inventory: 150,
     category: 'Electronics',
-    cover: '/phone.webp',
+    cover: '/default.webp',
     media: [
       {
         id: 'media_001',
@@ -54,7 +54,7 @@ const mockProducts = [
     media: [
       {
         id: 'media_002',
-        url: '/phone.webp',
+        url: '/default.webp',
         position: 1,
         mediaType: 'IMAGE' as const,
       },
@@ -69,7 +69,7 @@ const mockProducts = [
     status: 'Archived',
     inventory: 25,
     category: 'Electronics',
-    cover: '/phone.webp',
+    cover: '/default.webp',
     isArchived: true,
     productType: 'Physical',
     shortDescription: 'Noise-cancelling headphones.',

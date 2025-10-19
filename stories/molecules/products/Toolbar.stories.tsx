@@ -1,88 +1,152 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { ProductsToolbar } from '@molecules/products/Toolbar';
-import { TypeEnum } from '@lib/graphql/generated';
-
-// Mock functions for Storybook actions
-import type { InputMaybe } from '@lib/graphql/generated';
-
-const onTypeFilterChange = (value: InputMaybe<TypeEnum>) =>
-  console.log('Type filter changed:', value);
-const onCategoryFilterChange = (value: string) =>
-  console.log('Category filter changed:', value);
-const onViewModeToggle = () => console.log('View mode toggled');
+import { TypeEnum } from '@graphql/generated';
 
 const meta: Meta<typeof ProductsToolbar> = {
   title: 'Molecules/Products/Toolbar',
   component: ProductsToolbar,
   parameters: {
-    layout: 'fullscreen',
-    nextjs: {
-      appDirectory: true,
+    layout: 'padded',
+    docs: {
+      description: {
+        component:
+          'A comprehensive toolbar for product management with search, filters, view mode toggle, and add product button. Responsive design adapts to different screen sizes.',
+      },
     },
   },
   tags: ['autodocs'],
   argTypes: {
     typeFilter: {
-      control: 'select',
-      options: ['', 'physical', 'digital'],
-      description: 'The currently selected product type filter',
+      description: 'Current product type filter selection',
+      control: { type: 'select' },
+      options: [null, TypeEnum.Physical, TypeEnum.Digital],
     },
     onTypeFilterChange: {
+      description: 'Callback when type filter changes',
       action: 'typeFilterChanged',
-      description: 'Callback when the type filter changes',
     },
     categoryFilter: {
-      control: 'text',
-      description: 'The currently selected category ID',
+      description: 'Current category filter selection',
+      control: { type: 'text' },
     },
     onCategoryFilterChange: {
+      description: 'Callback when category filter changes',
       action: 'categoryFilterChanged',
-      description: 'Callback when the category filter changes',
     },
     viewMode: {
-      control: 'radio',
-      options: ['table', 'cards'],
-      description: 'The current view mode',
+      description: 'Current view mode (grid or table)',
+      control: { type: 'radio' },
+      options: ['grid', 'table'],
     },
     onViewModeToggle: {
+      description: 'Callback to toggle between grid and table view',
       action: 'viewModeToggled',
-      description: 'Callback when the view mode is toggled',
     },
-  },
-  args: {
-    typeFilter: undefined,
-    onTypeFilterChange,
-    categoryFilter: '',
-    onCategoryFilterChange,
-    viewMode: 'table',
-    onViewModeToggle,
+    searchTerm: {
+      description: 'Current search term',
+      control: { type: 'text' },
+    },
+    onSearch: {
+      description: 'Callback when search term changes',
+      action: 'searchChanged',
+    },
   },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof ProductsToolbar>;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    typeFilter: undefined,
+    typeFilter: null,
+    onTypeFilterChange: () => {},
     categoryFilter: '',
-    viewMode: 'table',
+    onCategoryFilterChange: () => {},
+    viewMode: 'grid',
+    onViewModeToggle: () => {},
+    searchTerm: '',
+    onSearch: () => {},
   },
 };
 
-export const WithTypeFilter: Story = {
+export const WithFilters: Story = {
   args: {
     typeFilter: TypeEnum.Physical,
-    categoryFilter: '',
-    viewMode: 'table',
+    onTypeFilterChange: () => {},
+    categoryFilter: 'electronics',
+    onCategoryFilterChange: () => {},
+    viewMode: 'grid',
+    onViewModeToggle: () => {},
+    searchTerm: '',
+    onSearch: () => {},
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Toolbar with active type and category filters applied.',
+      },
+    },
   },
 };
 
-export const WithAllFilters: Story = {
+export const WithSearch: Story = {
+  args: {
+    typeFilter: null,
+    onTypeFilterChange: () => {},
+    categoryFilter: '',
+    onCategoryFilterChange: () => {},
+    viewMode: 'grid',
+    onViewModeToggle: () => {},
+    searchTerm: 'wireless headphones',
+    onSearch: () => {},
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Toolbar with an active search query.',
+      },
+    },
+  },
+};
+
+export const TableView: Story = {
+  args: {
+    typeFilter: null,
+    onTypeFilterChange: () => {},
+    categoryFilter: '',
+    onCategoryFilterChange: () => {},
+    viewMode: 'table',
+    onViewModeToggle: () => {},
+    searchTerm: '',
+    onSearch: () => {},
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Toolbar configured for table view mode.',
+      },
+    },
+  },
+};
+
+export const FullyActive: Story = {
   args: {
     typeFilter: TypeEnum.Digital,
+    onTypeFilterChange: () => {},
     categoryFilter: 'software',
-    viewMode: 'cards',
+    onCategoryFilterChange: () => {},
+    viewMode: 'table',
+    onViewModeToggle: () => {},
+    searchTerm: 'premium',
+    onSearch: () => {},
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Toolbar with all features active: filters, search, and table view.',
+      },
+    },
   },
 };

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import ButtonAddSustainability from '@atoms/products/product-detail/ButtonAddSustainability';
 
 const meta: Meta<typeof ButtonAddSustainability> = {
-  title: 'Atoms/Product Detail/ButtonAddSustainability',
+  title: 'Atoms/Products/Product Detail/ButtonAddSustainability',
   component: ButtonAddSustainability,
   parameters: {
     layout: 'centered',
