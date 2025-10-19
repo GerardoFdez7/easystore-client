@@ -24,7 +24,7 @@ export default function ButtonAddVariant({ productId }: ButtonAddVariantProps) {
   };
 
   return (
-    <Button variant="title" size="sm" onClick={handleClick}>
+    <Button type="button" variant="title" size="sm" onClick={handleClick}>
       <Plus className="mr-2 h-4 w-4" />
       {t('addVariant')}
     </Button>

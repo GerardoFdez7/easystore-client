@@ -20,9 +20,9 @@ import ButtonAddVariant from '@atoms/products/product-detail/ButtonAddVariant';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useProductCreation } from '@lib/contexts/ProductCreationContext';
-import type { Variant } from '@lib/utils/types/product';
 import { Trash2 } from 'lucide-react';
 import { Button } from '@shadcn/ui/button';
+import type { Variant } from '@lib/types/product';
 
 interface VariantsFormFieldProps {
   productId: string;
@@ -79,17 +79,17 @@ export default function VariantsFormField({
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="text-title text-center">
+                      <TableHead className="text-title text-center text-sm sm:text-[16px]">
                         {t('variants')}
                       </TableHead>
-                      <TableHead className="text-title text-left">
+                      <TableHead className="text-title text-left text-sm sm:text-[16px]">
                         {t('price')}
                       </TableHead>
-                      <TableHead className="text-title text-left">
+                      <TableHead className="text-title text-left text-sm sm:text-[16px]">
                         {t('condition')}
                       </TableHead>
                       {isNewProduct && (
-                        <TableHead className="text-title text-center">
+                        <TableHead className="text-title text-center text-sm sm:text-[16px]">
                           {t('actions')}
                         </TableHead>
                       )}
