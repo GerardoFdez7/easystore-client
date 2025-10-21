@@ -1,7 +1,7 @@
 import { Button } from '@shadcn/ui/button';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useProductCreation } from '@lib/contexts/ProductCreationContext';
+import { useProductCreation } from '@contexts/ProductCreationContext';
 import { Plus } from 'lucide-react';
 
 export default function ButtonAddProduct() {

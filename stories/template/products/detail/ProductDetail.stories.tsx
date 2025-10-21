@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import ProductDetail from '@templates/ProductDetail';
+import ProductDetail from '@templates/products/ProductDetail';
 import { ProductCreationProvider } from '@lib/contexts/ProductCreationContext';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { GetMediaTokenDocument } from '@graphql/generated';
@@ -24,7 +24,7 @@ const mocks = [
 ];
 
 const meta: Meta<typeof ProductDetail> = {
-  title: 'Templates/Product Detail',
+  title: 'Templates/Products/Detail/ProductDetail',
   component: ProductDetail,
   tags: ['autodocs'],
   parameters: {

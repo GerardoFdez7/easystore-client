@@ -12,7 +12,7 @@ type SidebarButtonProps = {
   className?: string;
   route: string;
   expandOnClick?: boolean;
-  onExpandClick?: () => void;
+  onExpandClick?: () => boolean;
 };
 
 export default function ButtonSidebar({
@@ -34,7 +34,11 @@ export default function ButtonSidebar({
 
   const handleClick = () => {
     if (expandOnClick && onExpandClick) {
-      onExpandClick();
+      const expanded = onExpandClick();
+      // If expansion didn't occur (sidebar was already open), navigate to the route
+      if (!expanded) {
+        router.push(fullPath);
+      }
     } else {
       router.push(fullPath);
     }

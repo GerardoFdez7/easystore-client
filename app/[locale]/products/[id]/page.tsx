@@ -1,4 +1,4 @@
-import ProductDetailTemplate from '@templates/ProductDetail';
+import ProductDetailTemplate from '@templates/products/ProductDetail';
 
 export default async function ProductDetailPage({
   params,

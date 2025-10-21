@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import ComboboxType from '@atoms/products/ComboboxType';
+import SelectType from '@atoms/products/SelectType';
 import { TypeEnum } from '@lib/graphql/generated';
 
-const meta: Meta<typeof ComboboxType> = {
-  title: 'Atoms/Products/ComboboxType',
-  component: ComboboxType,
+const meta: Meta<typeof SelectType> = {
+  title: 'Atoms/Products/SelectType',
+  component: SelectType,
   parameters: {
     layout: 'centered',
     nextjs: {
@@ -24,7 +24,7 @@ const meta: Meta<typeof ComboboxType> = {
     },
     disabled: {
       control: 'boolean',
-      description: 'Whether the combobox is disabled',
+      description: 'Whether the select is disabled',
     },
   },
   args: {
@@ -36,7 +36,7 @@ const meta: Meta<typeof ComboboxType> = {
 
 export default meta;
 
-type Story = StoryObj<typeof ComboboxType>;
+type Story = StoryObj<typeof SelectType>;
 
 export const Default: Story = {
   args: {
@@ -53,5 +53,12 @@ export const WithPhysicalSelected: Story = {
 export const WithDigitalSelected: Story = {
   args: {
     value: TypeEnum.Digital,
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    value: TypeEnum.Physical,
+    disabled: true,
   },
 };

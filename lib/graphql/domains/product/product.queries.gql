@@ -68,9 +68,9 @@ query findProductById($id: String!) {
 
 query findAllProducts(
   $page: Float = 1
-  $limit: Float = 10
+  $limit: Float = 25
   $categoriesIds: [ID!] = []
-  $type: TypeEnum = PHYSICAL
+  $type: TypeEnum
   $sortBy: SortBy = NAME
   $sortOrder: SortOrder = ASC
   $includeSoftDeleted: Boolean = false

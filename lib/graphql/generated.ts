@@ -35,6 +35,11 @@ export enum AccountTypeEnum {
   Tenant = 'TENANT',
 }
 
+export type AddItemToCartInput = {
+  promotionId?: InputMaybe<Scalars['ID']['input']>;
+  variantId: Scalars['ID']['input'];
+};
+
 export type AddStockToWarehouseInput = {
   estimatedReplenishmentDate?: InputMaybe<Scalars['DateTime']['input']>;
   lotNumber?: InputMaybe<Scalars['String']['input']>;
@@ -107,6 +112,27 @@ export type AuthenticationInput = {
   accountType: AccountTypeEnum;
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+export type Cart = {
+  __typename?: 'Cart';
+  cartItems: Array<CartItem>;
+  customerId: Scalars['ID']['output'];
+  id: Scalars['ID']['output'];
+  totalCart: Scalars['Float']['output'];
+};
+
+export type CartItem = {
+  __typename?: 'CartItem';
+  firstAttribute?: Maybe<FirstAttribute>;
+  id: Scalars['ID']['output'];
+  productName?: Maybe<Scalars['String']['output']>;
+  promotionId?: Maybe<Scalars['ID']['output']>;
+  qty: Scalars['Int']['output'];
+  subTotal?: Maybe<Scalars['Float']['output']>;
+  unitPrice?: Maybe<Scalars['Float']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  variantId: Scalars['ID']['output'];
 };
 
 export type Category = {
@@ -407,9 +433,22 @@ export type Dimension = {
   width: Scalars['Float']['output'];
 };
 
+export type FirstAttribute = {
+  __typename?: 'FirstAttribute';
+  key: Scalars['String']['output'];
+  value: Scalars['String']['output'];
+};
+
 export type ForgotPasswordInput = {
   accountType: AccountTypeEnum;
   email: Scalars['String']['input'];
+};
+
+export type GetCartPaginatedInput = {
+  /** Number of items per page (max 50) */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /** Page number for pagination (starts from 1) */
+  page?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type GetInTouchInput = {
@@ -453,6 +492,7 @@ export enum MediaTypeEnum {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addItemToCart: Cart;
   addStockToWarehouse: Warehouse;
   addVariant: Product;
   archiveVariant: Product;
@@ -469,6 +509,8 @@ export type Mutation = {
   login: Response;
   logout: Response;
   register: AuthIdentity;
+  removeItemFromCart: Cart;
+  removeManyItemsFromCart: Cart;
   removeStockFromWarehouse: Warehouse;
   removeVariant: Product;
   restoreProduct: Product;
@@ -476,12 +518,17 @@ export type Mutation = {
   softDeleteProduct: Product;
   updateAddress: AddressType;
   updateCategory: Category;
+  updateItemQty: Cart;
   updatePassword: Response;
   updateProduct: Product;
   updateStockInWarehouse: Warehouse;
   updateTenant: Tenant;
   updateVariant: Product;
   updateWarehouse: Warehouse;
+};
+
+export type MutationAddItemToCartArgs = {
+  input: AddItemToCartInput;
 };
 
 export type MutationAddStockToWarehouseArgs = {
@@ -548,6 +595,14 @@ export type MutationRegisterArgs = {
   input: AuthenticationInput;
 };
 
+export type MutationRemoveItemFromCartArgs = {
+  input: RemoveItemFromCartInput;
+};
+
+export type MutationRemoveManyItemsFromCartArgs = {
+  input: RemoveManyItemFromCartInput;
+};
+
 export type MutationRemoveStockFromWarehouseArgs = {
   reason?: InputMaybe<Scalars['String']['input']>;
   stockId: Scalars['ID']['input'];
@@ -580,6 +635,10 @@ export type MutationUpdateAddressArgs = {
 export type MutationUpdateCategoryArgs = {
   id: Scalars['ID']['input'];
   input: UpdateCategoryInput;
+};
+
+export type MutationUpdateItemQtyArgs = {
+  input: UpdateItemQtyInput;
 };
 
 export type MutationUpdatePasswordArgs = {
@@ -618,6 +677,14 @@ export type PaginatedAddressesType = {
   addresses: Array<AddressType>;
   hasMore: Scalars['Boolean']['output'];
   total: Scalars['Int']['output'];
+};
+
+export type PaginatedCart = {
+  __typename?: 'PaginatedCart';
+  cartItems: Array<CartItem>;
+  hasMore: Scalars['Boolean']['output'];
+  total: Scalars['Int']['output'];
+  totalCart: Scalars['Float']['output'];
 };
 
 export type PaginatedCategoriesType = {
@@ -683,6 +750,7 @@ export type Query = {
   getAllProducts: PaginatedProductsType;
   getAllStockMovements: PaginatedStockMovementsType;
   getAllWarehouses: PaginatedWarehousesType;
+  getCart: PaginatedCart;
   getCategoryById: Category;
   getMediaUploadToken: MediaAuthResponse;
   getProductById: Product;
@@ -748,6 +816,10 @@ export type QueryGetAllWarehousesArgs = {
   stockFilters?: InputMaybe<StockPerWarehouseFilterInput>;
 };
 
+export type QueryGetCartArgs = {
+  input: GetCartPaginatedInput;
+};
+
 export type QueryGetCategoryByIdArgs = {
   id: Scalars['ID']['input'];
 };
@@ -763,6 +835,14 @@ export type QueryGetStatesByCountryIdArgs = {
 export type QueryGetWarehouseByIdArgs = {
   id: Scalars['ID']['input'];
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type RemoveItemFromCartInput = {
+  variantId: Scalars['ID']['input'];
+};
+
+export type RemoveManyItemFromCartInput = {
+  variantIds: Array<Scalars['ID']['input']>;
 };
 
 export type Response = {
@@ -894,6 +974,11 @@ export type UpdateDimensionInput = {
 export type UpdateInstallmentInput = {
   interestRate?: InputMaybe<Scalars['Float']['input']>;
   months?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UpdateItemQtyInput = {
+  quantity: Scalars['Int']['input'];
+  variantId: Scalars['ID']['input'];
 };
 
 export type UpdateMediaInput = {
@@ -2185,7 +2270,7 @@ export type AddVariantToProductMutation = {
       price: number;
       condition: ConditionEnum;
       weight?: number | null;
-      sku?: string | null;
+      sku: string;
       ean?: string | null;
       upc?: string | null;
       isbn?: string | null;
@@ -7004,7 +7089,7 @@ export const FindAllProductsDocument = {
             name: { kind: 'Name', value: 'limit' },
           },
           type: { kind: 'NamedType', name: { kind: 'Name', value: 'Float' } },
-          defaultValue: { kind: 'IntValue', value: '10' },
+          defaultValue: { kind: 'IntValue', value: '25' },
         },
         {
           kind: 'VariableDefinition',
@@ -7028,7 +7113,6 @@ export const FindAllProductsDocument = {
             kind: 'NamedType',
             name: { kind: 'Name', value: 'TypeEnum' },
           },
-          defaultValue: { kind: 'EnumValue', value: 'PHYSICAL' },
         },
         {
           kind: 'VariableDefinition',

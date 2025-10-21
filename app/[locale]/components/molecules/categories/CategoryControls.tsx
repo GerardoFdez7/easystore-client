@@ -111,6 +111,11 @@ function CategoryControls({
           </div>
 
           <div className="flex items-center gap-2">
+            <SortOrderSelect
+              value={sortOrder}
+              onChange={handleSortOrderChange}
+              aria-label="Sort order"
+            />
             {onTreeToggle && treeButtonText && (
               <Button
                 variant="outline"
@@ -124,12 +129,6 @@ function CategoryControls({
                 <span className="hidden sm:inline">{treeButtonText}</span>
               </Button>
             )}
-
-            <SortOrderSelect
-              value={sortOrder}
-              onChange={handleSortOrderChange}
-              aria-label="Sort order"
-            />
           </div>
         </div>
       </div>

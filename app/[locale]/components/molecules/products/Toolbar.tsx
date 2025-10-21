@@ -2,9 +2,11 @@
 
 import ButtonAddProduct from '@atoms/products/ButtonAddProduct';
 import ButtonViewMode from '@atoms/products/ButtonViewMode';
-import ComboboxType from '@atoms/products/ComboboxType';
-import SearchProduct from '@atoms/products/SearchProduct';
-import ComboboxCategory from '@atoms/products/ComboboxCategory';
+import SelectType from '@atoms/products/SelectType';
+import SearchBar from '@atoms/shared/SearchBar';
+import MultiSelectComboboxCategory from '@atoms/products/MultiSelectComboboxCategory';
+import TabFilterProducts from '@atoms/products/TabFilterProducts';
+import { FilterType } from '@atoms/products/TabFilterProducts';
 import { useTranslations } from 'next-intl';
 import { memo } from 'react';
 import { InputMaybe, TypeEnum } from '@graphql/generated';
@@ -12,12 +14,17 @@ import { InputMaybe, TypeEnum } from '@graphql/generated';
 interface ProductsToolbarProps {
   typeFilter?: InputMaybe<TypeEnum>;
   onTypeFilterChange?: (value: InputMaybe<TypeEnum>) => void;
-  categoryFilter?: string;
-  onCategoryFilterChange?: (value: string) => void;
+  categoryFilter?: string[];
+  onCategoryFilterChange?: (value: string[]) => void;
   viewMode: string;
   onViewModeToggle: () => void;
   searchTerm: string;
   onSearch: (term: string) => void;
+  selectedFilter: FilterType;
+  setSelectedFilter: (filter: FilterType) => void;
+  selectedProducts: string[];
+  isArchived?: boolean | boolean[];
+  onDeleteComplete?: () => void;
 }
 
 export const ProductsToolbar = memo(function ProductsToolbar({
@@ -29,57 +36,57 @@ export const ProductsToolbar = memo(function ProductsToolbar({
   onViewModeToggle,
   searchTerm,
   onSearch,
+  selectedFilter,
+  setSelectedFilter,
+  selectedProducts,
+  isArchived,
+  onDeleteComplete,
 }: ProductsToolbarProps) {
   const t = useTranslations('Products');
 
   return (
-    <div className="space-y-6">
+    <section className="flex w-full flex-col gap-4">
+      {/* Add Product Button */}
       <div className="flex w-full justify-end">
         <ButtonAddProduct />
       </div>
 
-      <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-        {/* SearchBar + Filters container (only visible on large screens) */}
-        <div className="flex flex-col gap-4 xl:flex-1 xl:flex-row xl:items-center">
-          <div className="hidden gap-4 xl:ml-4 xl:flex">
-            <ComboboxType
-              value={typeFilter}
-              onValueChange={onTypeFilterChange}
-            />
-            <ComboboxCategory
-              value={categoryFilter}
-              onValueChange={onCategoryFilterChange}
-            />
-          </div>
-          <SearchProduct
-            searchTerm={searchTerm}
-            onSearchChange={onSearch}
-            placeholder={t('searchProducts')}
-          />
-          {/* Filters only visible on large screens within this container */}
-        </div>
-
-        {/* Filters and button container for small/medium screens */}
-        <div className="flex flex-row items-center justify-between gap-1 xl:justify-end">
-          {/* Filters visible only on small/medium screens */}
-          <div className="flex gap-1 sm:gap-4 xl:hidden">
-            <ComboboxType
-              value={typeFilter}
-              onValueChange={onTypeFilterChange}
-            />
-            <ComboboxCategory
-              value={categoryFilter}
-              onValueChange={onCategoryFilterChange}
-            />
-          </div>
-          <div className="flex justify-end">
-            <ButtonViewMode
-              onViewModeToggle={onViewModeToggle}
-              viewMode={viewMode}
-            />
-          </div>
-        </div>
+      {/* Search and View Mode - responsive layout */}
+      <div className="flex w-full flex-row gap-2">
+        <SearchBar
+          searchTerm={searchTerm}
+          onSearchChange={onSearch}
+          placeholder={t('searchProducts')}
+          className="w-full"
+        />
+        <ButtonViewMode
+          onViewModeToggle={onViewModeToggle}
+          viewMode={viewMode}
+        />
       </div>
-    </div>
+
+      {/* Type and Category Filters - responsive layout */}
+      <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-center">
+        <div className="w-full">
+          <TabFilterProducts
+            selectedFilter={selectedFilter}
+            setSelectedFilter={setSelectedFilter}
+            selectedCount={selectedProducts.length}
+            selectedProductIds={selectedProducts}
+            isArchived={isArchived}
+            onDeleteComplete={onDeleteComplete}
+          />
+        </div>
+        <SelectType
+          value={typeFilter}
+          onValueChange={onTypeFilterChange}
+          className="w-full sm:w-auto"
+        />
+        <MultiSelectComboboxCategory
+          value={categoryFilter}
+          onValueChange={onCategoryFilterChange}
+        />
+      </div>
+    </section>
   );
 });

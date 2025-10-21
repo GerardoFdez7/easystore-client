@@ -5,7 +5,7 @@ import { Skeleton } from '@shadcn/ui/skeleton';
 function CategoryCardSkeleton() {
   return (
     <article className="group" aria-label="Loading category">
-      <Card className="m-0 flex h-70 w-70 flex-col gap-0 p-0">
+      <Card className="m-0 flex flex-col gap-0 p-0">
         {/* Image skeleton - matches the aspect-square image area */}
         <div className="relative block aspect-square w-full overflow-hidden rounded-t-lg">
           <Skeleton

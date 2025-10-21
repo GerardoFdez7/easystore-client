@@ -63,7 +63,7 @@ export function useCategoriesForPicker<T = CategoryPickerSummary>(
       parentId: opts.parentId || null,
       sortBy: opts.sortBy ?? SortBy.Name,
       sortOrder: opts.sortOrder ?? SortOrder.Asc,
-      includeSubcategories: opts.includeSubcategories ?? true,
+      includeSubcategories: opts.includeSubcategories,
     }),
     [
       page,

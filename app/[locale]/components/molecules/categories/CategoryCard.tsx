@@ -62,7 +62,7 @@ export default function CategoryCard({
 
   return (
     <article className="group">
-      <Card className="m-0 flex h-70 w-70 flex-col gap-0 p-0 transition-transform hover:scale-105">
+      <Card className="m-0 flex flex-col gap-0 p-0 transition-transform hover:scale-105">
         <Link
           href={href}
           onClick={handleClick}

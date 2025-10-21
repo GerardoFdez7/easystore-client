@@ -128,7 +128,7 @@ export default function CategoryGrid({
   return (
     <>
       <section
-        className="3xl:grid-cols-6 grid w-full grid-cols-1 justify-items-center gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+        className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
         role="grid"
         aria-label="categories Grid"
         aria-busy={loading || isLoadingMore}

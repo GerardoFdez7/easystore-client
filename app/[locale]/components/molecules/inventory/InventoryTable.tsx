@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Checkbox } from '@shadcn/ui/checkbox';
-import { Button } from '@shadcn/ui/button';
 import {
   Table,
   TableBody,
@@ -25,6 +24,7 @@ import {
 } from 'lucide-react';
 import EmptyState from '@molecules/shared/EmptyState';
 import { useTranslations } from 'next-intl';
+import TablePagination from '@molecules/shared/TablePagination';
 
 type InventoryTableProps = {
   variables: FindInventoryQueryVariables;
@@ -37,7 +37,6 @@ type InventoryTableProps = {
 };
 
 export default function InventoryTable({
-  className,
   inventory,
   onCreateStock,
   onSortChange,
@@ -100,13 +99,17 @@ export default function InventoryTable({
   };
 
   const handleSelectAll = (checked: boolean) => {
-    setSelectedRows(checked ? inventory.map((item) => item.id) : []);
+    setSelectedRows(checked ? currentItems.map((item) => item.id) : []);
   };
 
   const handleSelectRow = (id: string, checked: boolean) => {
     setSelectedRows((prev) =>
       checked ? [...prev, id] : prev.filter((rowId) => rowId !== id),
     );
+  };
+
+  const handleCheckboxClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
   };
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -129,13 +132,16 @@ export default function InventoryTable({
   }
 
   return (
-    <div className={cn('w-full', className)}>
+    <>
       <Table>
         <TableHeader>
           <TableRow className="hover:bg-background">
             <TableHead className="pl-2">
               <Checkbox
-                checked={selectedRows.length === inventory.length}
+                checked={
+                  selectedRows.length === currentItems.length &&
+                  currentItems.length > 0
+                }
                 onCheckedChange={handleSelectAll}
               />
             </TableHead>
@@ -227,7 +233,10 @@ export default function InventoryTable({
         <TableBody>
           {currentItems.map((item) => (
             <TableRow key={item.id}>
-              <TableCell>
+              <TableCell
+                className="hover:bg-background cursor-default"
+                onClick={handleCheckboxClick}
+              >
                 <Checkbox
                   checked={selectedRows.includes(item.id)}
                   onCheckedChange={(checked) =>
@@ -254,26 +263,38 @@ export default function InventoryTable({
           ))}
         </TableBody>
       </Table>
-      <div className="flex justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-        >
-          {t('previousButton')}
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+      <TablePagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        selectedCount={selectedRows.length}
+        totalRows={inventory.length}
+        onPageChange={(page) => {
+          setCurrentPage(page);
+          setSelectedRows([]); // Clear selection when changing pages
+        }}
+        onPreviousPage={() => {
+          if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+            setSelectedRows([]);
           }
-          disabled={currentPage === totalPages}
-        >
-          {t('nextButton')}
-        </Button>
-      </div>
-    </div>
+        }}
+        onNextPage={() => {
+          if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+            setSelectedRows([]);
+          }
+        }}
+        onFirstPage={() => {
+          setCurrentPage(1);
+          setSelectedRows([]);
+        }}
+        onLastPage={() => {
+          setCurrentPage(totalPages);
+          setSelectedRows([]);
+        }}
+        canPreviousPage={currentPage > 1}
+        canNextPage={currentPage < totalPages}
+      />
+    </>
   );
 }

@@ -4,7 +4,7 @@ import { Checkbox } from '@shadcn/ui/checkbox';
 import { TableCell, TableRow } from '@shadcn/ui/table';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Product } from '@consts/products';
+import { Product } from '@lib/graphql/generated';
 import ProductStatus from '@atoms/products/ProductStatus';
 
 interface ProductTableRowProps {
@@ -20,27 +20,20 @@ export function ProductTableRow({
 }: ProductTableRowProps) {
   const router = useRouter();
 
-  const handleRowClick = (e: React.MouseEvent) => {
-    // Prevent navigation when clicking on checkbox
-    if (
-      (e.target as HTMLElement).closest('input[type="checkbox"]') ||
-      (e.target as HTMLElement).closest('[role="checkbox"]')
-    ) {
-      return;
-    }
-
-    // Create URL-friendly product name
-    //const productSlug = product.name
-    //  .toLowerCase()
-    //  .replace(/\s+/g, '-')
-    //  .replace(/[^a-z0-9-]/g, '');
-    //router.push(`/products/${productSlug}`);
+  const handleRowClick = () => {
     router.push(`/products/${product.id}`);
+  };
+
+  const handleCheckboxClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
   };
 
   return (
     <TableRow className="cursor-pointer" onClick={handleRowClick}>
-      <TableCell className="px-3">
+      <TableCell
+        className="hover:bg-background cursor-default"
+        onClick={handleCheckboxClick}
+      >
         <Checkbox checked={isSelected} onCheckedChange={onSelect} />
       </TableCell>
       <TableCell>
@@ -54,21 +47,17 @@ export function ProductTableRow({
               className="h-full w-full object-cover"
             />
           </div>
-          <span className="text-foreground font-medium">{product.name}</span>
+          <span className="font-medium">{product.name}</span>
         </div>
       </TableCell>
-      <TableCell className="text-foreground">
-        {product.variants?.[0]?.sku || 'N/A'}
+      <TableCell>{product.variants?.[0]?.sku || '-'}</TableCell>
+      <TableCell>
+        {product.variants?.[0]?.price
+          ? `${process.env.NEXT_PUBLIC_DEFAULT_CURRENCY}${product.variants[0].price}`
+          : '-'}
       </TableCell>
-      <TableCell className="text-foreground">
-        {product.variants?.[0]?.price ? `$${product.variants[0].price}` : 'N/A'}
-      </TableCell>
-      <TableCell className="text-foreground">
-        {product.variants?.length || 0}
-      </TableCell>
-      <TableCell className="text-foreground">
-        {product.categories?.[0]?.categoryName || 'N/A'}
-      </TableCell>
+      <TableCell>{product.variants?.length || 0}</TableCell>
+      <TableCell>{product.categories?.[0]?.categoryName || '-'}</TableCell>
       <TableCell>
         <ProductStatus product={product} />
       </TableCell>

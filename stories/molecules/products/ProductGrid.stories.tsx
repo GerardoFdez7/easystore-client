@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { ProductGrid } from '@molecules/products/ProductGrid';
+import { TypeEnum, MediaTypeEnum, ConditionEnum } from '@graphql/generated';
 
 const meta: Meta<typeof ProductGrid> = {
   title: 'Molecules/Products/ProductGrid',
@@ -22,105 +23,121 @@ type Story = StoryObj<typeof meta>;
 const mockProducts = [
   {
     id: '1',
-    name: 'Wireless Headphones',
-    brand: 'AudioTech',
-    manufacturer: 'AudioTech Inc.',
+    name: 'Phone',
+    brand: 'TechCorp',
     cover: '/default.webp',
+    createdAt: '2024-01-15T10:30:00Z',
+    updatedAt: '2024-01-20T14:45:00Z',
+    isArchived: false,
+    longDescription: 'A modern smartphone with advanced features.',
+    manufacturer: 'TechCorp Manufacturing',
+    productType: TypeEnum.Physical,
+    shortDescription: 'A modern smartphone.',
+    tags: ['electronics', 'mobile', 'smartphone'],
+    categories: [
+      {
+        categoryId: '1',
+        categoryName: 'Electronics',
+      },
+    ],
     media: [
       {
         id: 'media_001',
         url: '/default.webp',
         position: 1,
-        mediaType: 'IMAGE' as const,
+        mediaType: MediaTypeEnum.Image,
       },
     ],
-    categories: [{ categoryId: 'electronics', categoryName: 'Electronics' }],
-    tags: ['wireless', 'audio', 'bluetooth'],
     variants: [
       {
-        id: 'variant_001',
-        sku: 'WH-001',
-        price: 199.99,
-        attributes: [{ key: 'Color', value: 'Black' }],
+        id: 'variant_1',
+        price: 699.99,
+        sku: 'PHN-001',
+        condition: ConditionEnum.New,
+        attributes: [
+          {
+            key: 'Color',
+            value: 'Black',
+          },
+        ],
       },
     ],
-    status: 'Active',
-    isArchived: false,
-    productType: 'Physical',
-    shortDescription: 'Premium wireless headphones with noise cancellation',
   },
   {
     id: '2',
-    name: 'Smart Watch',
-    brand: 'TechGear',
-    manufacturer: 'TechGear Ltd.',
+    name: 'Eco-Friendly Water Bottle',
+    brand: 'EcoLife',
     cover: '/default.webp',
+    createdAt: '2024-01-10T08:15:00Z',
+    updatedAt: '2024-01-18T16:20:00Z',
+    isArchived: false,
+    longDescription: 'A sustainable water bottle made from recycled materials.',
+    manufacturer: 'EcoLife Products',
+    productType: TypeEnum.Physical,
+    shortDescription: 'Reusable water bottle.',
+    tags: ['eco-friendly', 'sustainable', 'bottle'],
+    categories: [
+      {
+        categoryId: '2',
+        categoryName: 'Home & Kitchen',
+      },
+    ],
     media: [
       {
         id: 'media_002',
         url: '/default.webp',
         position: 1,
-        mediaType: 'IMAGE' as const,
+        mediaType: MediaTypeEnum.Image,
       },
     ],
-    categories: [{ categoryId: 'wearables', categoryName: 'Wearables' }],
-    tags: ['smartwatch', 'fitness', 'bluetooth'],
     variants: [
       {
-        id: 'variant_002',
-        sku: 'SW-001',
-        price: 299.99,
-        attributes: [{ key: 'Color', value: 'Silver' }],
+        id: 'variant_2',
+        price: 24.99,
+        sku: 'WTR-002',
+        condition: ConditionEnum.New,
+        attributes: [
+          {
+            key: 'Size',
+            value: '500ml',
+          },
+        ],
       },
     ],
-    status: 'Active',
-    isArchived: false,
-    productType: 'Physical',
-    shortDescription: 'Fitness tracker with heart rate monitor',
   },
   {
     id: '3',
-    name: 'Laptop Stand',
-    brand: 'ErgoDesk',
-    manufacturer: 'ErgoDesk Co.',
+    name: 'Wireless Headphones',
+    brand: 'AudioTech',
     cover: '/default.webp',
-    media: [],
-    categories: [{ categoryId: 'accessories', categoryName: 'Accessories' }],
-    tags: ['ergonomic', 'desk', 'aluminum'],
-    variants: [
+    createdAt: '2024-01-05T12:00:00Z',
+    updatedAt: '2024-01-25T09:30:00Z',
+    isArchived: true,
+    longDescription: 'Premium noise-cancelling wireless headphones.',
+    manufacturer: 'AudioTech Industries',
+    productType: TypeEnum.Physical,
+    shortDescription: 'Noise-cancelling headphones.',
+    tags: ['audio', 'wireless', 'headphones'],
+    categories: [
       {
-        id: 'variant_003',
-        sku: 'LS-001',
-        price: 49.99,
-        attributes: [{ key: 'Material', value: 'Aluminum' }],
+        categoryId: '1',
+        categoryName: 'Electronics',
       },
     ],
-    status: 'Active',
-    isArchived: false,
-    productType: 'Physical',
-    shortDescription: 'Adjustable aluminum laptop stand',
-  },
-  {
-    id: '4',
-    name: 'USB-C Hub',
-    brand: 'ConnectPro',
-    manufacturer: 'ConnectPro Inc.',
-    cover: '/default.webp',
-    media: [],
-    categories: [{ categoryId: 'accessories', categoryName: 'Accessories' }],
-    tags: ['usb-c', 'hub', 'multiport'],
     variants: [
       {
-        id: 'variant_004',
-        sku: 'UH-001',
-        price: 79.99,
-        attributes: [{ key: 'Ports', value: '7-in-1' }],
+        id: 'variant_3',
+        price: 199.99,
+        sku: 'HDN-003',
+        condition: ConditionEnum.Used,
+        attributes: [
+          {
+            key: 'Color',
+            value: 'White',
+          },
+        ],
       },
     ],
-    status: 'Active',
-    isArchived: false,
-    productType: 'Physical',
-    shortDescription: '7-in-1 USB-C hub with multiple ports',
   },
 ];
 
@@ -151,20 +168,6 @@ export const WithManyProducts: Story = {
   },
 };
 
-export const Empty: Story = {
-  args: {
-    products: [],
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Empty state displayed when no products are available. Shows a helpful message to the user.',
-      },
-    },
-  },
-};
-
 export const SingleProduct: Story = {
   args: {
     products: [mockProducts[0]],
@@ -174,6 +177,39 @@ export const SingleProduct: Story = {
       description: {
         story:
           'Grid with a single product, demonstrating the minimum viable display.',
+      },
+    },
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    products: [],
+    loading: true,
+    limit: 8,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Loading state displaying ProductCardSkeleton components while products are being fetched.',
+      },
+    },
+  },
+};
+
+export const LoadingMore: Story = {
+  args: {
+    products: [],
+    loading: false,
+    isLoadingMore: true,
+    limit: 4,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Loading more state showing existing products with additional skeleton cards for pagination loading.',
       },
     },
   },

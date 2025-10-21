@@ -1,7 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { Plus, Warehouse, History } from 'lucide-react';
 import { Button } from '@shadcn/ui/button';
-import SkeletonWrapper from '@molecules/shared/SkeletonWrapper';
 import { useRouter } from 'next/navigation';
 
 interface InventoryActionButtonsProps {
@@ -11,7 +10,6 @@ interface InventoryActionButtonsProps {
 }
 
 export default function InventoryActionButtons({
-  loading,
   onAddStockClick,
   onManageWarehousesClick,
 }: InventoryActionButtonsProps) {
@@ -20,37 +18,31 @@ export default function InventoryActionButtons({
 
   return (
     <section className="flex flex-col gap-2 md:flex-row md:justify-between">
-      <SkeletonWrapper loading={loading}>
+      <Button
+        variant="outline"
+        onClick={() => router.push('/inventory/history')}
+        className="flex w-full items-center gap-2 md:w-auto"
+      >
+        <History className="h-4 w-4" aria-hidden="true" />
+        {t('historyButton')}
+      </Button>
+      <div className="flex flex-col gap-2 md:flex-row">
         <Button
-          variant="outline"
-          onClick={() => router.push('/inventory/history')}
+          variant="title"
+          onClick={onAddStockClick}
           className="flex w-full items-center gap-2 md:w-auto"
         >
-          <History className="h-4 w-4" aria-hidden="true" />
-          {t('historyButton')}
+          <Plus className="h-4 w-4" aria-hidden="true" />
+          {t('addStockButton')}
         </Button>
-      </SkeletonWrapper>
-      <div className="flex flex-col gap-2 md:flex-row">
-        <SkeletonWrapper loading={loading}>
-          <Button
-            variant="title"
-            onClick={onAddStockClick}
-            className="flex w-full items-center gap-2 md:w-auto"
-          >
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            {t('addStockButton')}
-          </Button>
-        </SkeletonWrapper>
-        <SkeletonWrapper loading={loading}>
-          <Button
-            variant="title"
-            onClick={onManageWarehousesClick}
-            className="flex w-full items-center gap-2 md:w-auto"
-          >
-            <Warehouse className="h-4 w-4" aria-hidden="true" />
-            {t('manageWarehousesButton')}
-          </Button>
-        </SkeletonWrapper>
+        <Button
+          variant="title"
+          onClick={onManageWarehousesClick}
+          className="flex w-full items-center gap-2 md:w-auto"
+        >
+          <Warehouse className="h-4 w-4" aria-hidden="true" />
+          {t('manageWarehousesButton')}
+        </Button>
       </div>
     </section>
   );

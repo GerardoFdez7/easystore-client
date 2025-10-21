@@ -7,11 +7,13 @@ import { ProductsToolbar } from '@molecules/products/Toolbar';
 import { FilterType } from '@atoms/products/TabFilterProducts';
 import { useProductsContext } from '@lib/contexts/ProductsContext';
 import { InputMaybe, TypeEnum } from '@graphql/generated';
-import { PackageOpen, Plus } from 'lucide-react';
+import { PackageOpen, Plus, Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import EmptyState from '@molecules/shared/EmptyState';
 import { useProductCreation } from '@lib/contexts/ProductCreationContext';
+
+const itemsPerPage = 25;
 
 export default function MainDashboard() {
   const t = useTranslations('Products');
@@ -20,16 +22,74 @@ export default function MainDashboard() {
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
   const [typeFilter, setTypeFilter] = useState<InputMaybe<TypeEnum>>();
-  const [categoryFilter, setCategoryFilter] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('All');
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Use the products context instead of the hook directly
-  const { products, refreshProducts } = useProductsContext();
+  const {
+    products: allProducts,
+    refreshProducts,
+    total,
+  } = useProductsContext();
+
+  // Filter products based on selected filter
+  const filteredProducts =
+    allProducts?.filter((product) => {
+      if (selectedFilter === 'Actives') {
+        return !product.isArchived;
+      } else if (selectedFilter === 'Archived') {
+        return product.isArchived;
+      }
+      // 'All' shows both active and archived
+      return true;
+    }) || [];
+
+  const totalItems = total || 0;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const paginatedProducts = filteredProducts;
+
+  // Pagination handlers
+  const handlePageChange = useCallback(
+    (page: number) => {
+      setCurrentPage(page);
+      setSelectedProducts([]); // Clear selection when changing pages
+      void refreshProducts({
+        page,
+        limit: itemsPerPage,
+        includeSoftDeleted: true,
+        name: searchTerm || null,
+        type: typeFilter || null,
+        categoriesIds: categoryFilter.length > 0 ? categoryFilter : null,
+      });
+    },
+    [refreshProducts, searchTerm, typeFilter, categoryFilter],
+  );
+
+  const handlePreviousPage = useCallback(() => {
+    if (currentPage > 1) {
+      handlePageChange(currentPage - 1);
+    }
+  }, [currentPage, handlePageChange]);
+
+  const handleNextPage = useCallback(() => {
+    if (currentPage < totalPages) {
+      handlePageChange(currentPage + 1);
+    }
+  }, [currentPage, totalPages, handlePageChange]);
+
+  const handleFirstPage = useCallback(() => {
+    handlePageChange(1);
+  }, [handlePageChange]);
+
+  const handleLastPage = useCallback(() => {
+    handlePageChange(totalPages);
+  }, [totalPages, handlePageChange]);
 
   // Get the archived status of selected products
   const selectedProductsAreArchived = selectedProducts.map(
-    (id) => products?.find((p) => p.id === id)?.isArchived ?? false,
+    (id) => allProducts?.find((p) => p.id === id)?.isArchived ?? false,
   );
 
   // Callback to clear selection after bulk operations
@@ -37,50 +97,79 @@ export default function MainDashboard() {
     setSelectedProducts([]);
   }, []);
 
-  //Search
-  const handleSearch = useCallback(
+  // Handle search term change
+  const handleSearchChange = useCallback(
     (term: string) => {
       setSearchTerm(term);
+      setCurrentPage(1); // Reset to first page when searching
       void refreshProducts({
         page: 1,
-        limit: 10,
+        limit: itemsPerPage,
         includeSoftDeleted: true,
         name: term || null,
         type: typeFilter || null,
+        categoriesIds: categoryFilter.length > 0 ? categoryFilter : null,
       });
     },
-    [refreshProducts, typeFilter],
+    [refreshProducts, typeFilter, categoryFilter],
   );
 
   // Handle type filter change
   const handleTypeFilterChange = useCallback(
     (type: InputMaybe<TypeEnum>) => {
       setTypeFilter(type);
+      setCurrentPage(1); // Reset to first page when filtering
       void refreshProducts({
         page: 1,
-        limit: 10,
+        limit: itemsPerPage,
         includeSoftDeleted: true,
         name: searchTerm || null,
         type: type || null,
+        categoriesIds: categoryFilter.length > 0 ? categoryFilter : null,
       });
     },
-    [refreshProducts, searchTerm],
+    [refreshProducts, searchTerm, categoryFilter],
   );
 
   // Handle category filter change
   const handleCategoryFilterChange = useCallback(
-    (category: string) => {
-      setCategoryFilter(category);
-      // TODO: Add category filter to refreshProducts when backend supports it
+    (categories: string[]) => {
+      setCategoryFilter(categories);
+      setCurrentPage(1); // Reset to first page when filtering
       void refreshProducts({
         page: 1,
-        limit: 10,
+        limit: itemsPerPage,
         includeSoftDeleted: true,
         name: searchTerm || null,
         type: typeFilter || null,
+        categoriesIds: categories.length > 0 ? categories : null,
       });
     },
     [refreshProducts, searchTerm, typeFilter],
+  );
+
+  // Handle tab filter change (All, Actives, Archived)
+  const handleTabFilterChange = useCallback(
+    (filter: FilterType) => {
+      setSelectedFilter(filter);
+      setCurrentPage(1); // Reset to first page when filtering
+
+      // Determine includeSoftDeleted based on filter
+      // All: include both active and archived (true)
+      // Actives: only active products (false)
+      // Archived: only archived products (true, but we'll need to filter client-side)
+      const includeSoftDeleted = filter !== 'Actives';
+
+      void refreshProducts({
+        page: 1,
+        limit: itemsPerPage,
+        includeSoftDeleted,
+        name: searchTerm || null,
+        type: typeFilter || null,
+        categoriesIds: categoryFilter.length > 0 ? categoryFilter : null,
+      });
+    },
+    [refreshProducts, searchTerm, typeFilter, categoryFilter],
   );
 
   const handleProductSelect = (productId: string, checked: boolean) => {
@@ -92,8 +181,9 @@ export default function MainDashboard() {
   };
 
   const handleSelectAll = (checked: boolean) => {
-    if (checked && products) {
-      setSelectedProducts(products.map((p) => p.id));
+    if (checked && paginatedProducts) {
+      // Only select products on current page
+      setSelectedProducts(paginatedProducts.map((p) => p.id));
     } else {
       setSelectedProducts([]);
     }
@@ -107,12 +197,17 @@ export default function MainDashboard() {
   const hasActiveFilters =
     searchTerm.trim() !== '' ||
     typeFilter !== undefined ||
-    categoryFilter !== '';
+    categoryFilter.length > 0 ||
+    selectedFilter !== 'All';
   const hasNoProductsInDatabase =
-    (!products || products.length === 0) && !hasActiveFilters;
+    (!allProducts || allProducts.length === 0) && !hasActiveFilters;
+
+  // Show filtered empty state when filters are active but no products match
+  const hasFilteredEmptyState =
+    hasActiveFilters && (!filteredProducts || filteredProducts.length === 0);
 
   return (
-    <main className="m-2 2xl:m-5">
+    <main className="flex w-full flex-col gap-4 px-4 xl:mx-auto">
       {hasNoProductsInDatabase ? (
         <EmptyState
           icon={PackageOpen}
@@ -136,22 +231,59 @@ export default function MainDashboard() {
             viewMode={viewMode}
             onViewModeToggle={toggleViewMode}
             searchTerm={searchTerm}
-            onSearch={handleSearch}
+            onSearch={handleSearchChange}
+            selectedFilter={selectedFilter}
+            setSelectedFilter={handleTabFilterChange}
+            selectedProducts={selectedProducts}
+            isArchived={selectedProductsAreArchived}
+            onDeleteComplete={handleClearSelection}
           />
 
-          {viewMode === 'table' ? (
-            <ProductTable
-              selectedFilter={selectedFilter}
-              setSelectedFilter={setSelectedFilter}
-              products={products}
-              selectedProducts={selectedProducts}
-              isArchived={selectedProductsAreArchived}
-              onSelectProduct={handleProductSelect}
-              onSelectAll={handleSelectAll}
-              onDeleteComplete={handleClearSelection}
+          {hasFilteredEmptyState ? (
+            <EmptyState
+              icon={Search}
+              title={t('noProductsMatchFilters')}
+              description={t('noProductsMatchFiltersDescription')}
+              buttonText={t('clearFilters')}
+              onButtonClick={() => {
+                setSearchTerm('');
+                setTypeFilter(undefined);
+                setCategoryFilter([]);
+                setSelectedFilter('All');
+                setCurrentPage(1);
+                void refreshProducts({
+                  page: 1,
+                  limit: itemsPerPage,
+                  includeSoftDeleted: true,
+                  name: null,
+                  type: null,
+                  categoriesIds: null,
+                });
+              }}
             />
           ) : (
-            <ProductGrid products={products} />
+            <>
+              {viewMode === 'table' ? (
+                <ProductTable
+                  products={paginatedProducts}
+                  selectedProducts={selectedProducts}
+                  onSelectProduct={handleProductSelect}
+                  onSelectAll={handleSelectAll}
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalRows={totalItems}
+                  onPageChange={handlePageChange}
+                  onPreviousPage={handlePreviousPage}
+                  onNextPage={handleNextPage}
+                  onFirstPage={handleFirstPage}
+                  onLastPage={handleLastPage}
+                  canPreviousPage={currentPage > 1}
+                  canNextPage={currentPage < totalPages}
+                />
+              ) : (
+                <ProductGrid products={paginatedProducts} />
+              )}
+            </>
           )}
         </>
       )}

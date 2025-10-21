@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import ProductsPage from '@templates/Products';
+import ProductsPage from '@templates/products/Products';
 import { ProductsProvider } from '@lib/contexts/ProductsContext';
 import { ProductCreationProvider } from '@lib/contexts/ProductCreationContext';
 

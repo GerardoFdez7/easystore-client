@@ -3,6 +3,7 @@ import '../app/[locale]/globals.css';
 import { withNextIntl } from './decorators/withNextIntl';
 import { withNextThemes } from './decorators/withNextThemes';
 import { withApollo } from './decorators/withApollo';
+import { withAuth } from './decorators/withAuth';
 
 const preview: Preview = {
   parameters: {
@@ -16,7 +17,7 @@ const preview: Preview = {
       appDirectory: true,
     },
   },
-  decorators: [withApollo, withNextIntl, withNextThemes],
+  decorators: [withApollo, withAuth, withNextIntl, withNextThemes],
   globalTypes: {
     locale: {
       name: 'Locale',

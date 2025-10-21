@@ -7,9 +7,10 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from '@shadcn/ui/carousel';
+import { Card, CardContent, CardTitle } from '@shadcn/ui/card';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Product } from '@lib/consts/products';
+import { Product } from '@graphql/generated';
 import ProductStatus from '@atoms/products/ProductStatus';
 import BadgeTag from '@atoms/shared/BadgeTag';
 
@@ -104,19 +105,19 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <div className="bg-card overflow-hidden rounded-lg border transition-shadow hover:shadow-md">
-      <div className="group relative">
+    <article className="group">
+      <Card className="m-0 flex cursor-pointer gap-0 p-0 pb-1 transition-transform hover:scale-105">
         {mediaItems.length > 1 ? (
           <Carousel setApi={setApi} className="w-full">
             <CarouselContent>
               {mediaItems.map((mediaItem, index) => (
                 <CarouselItem key={index}>
-                  <div
-                    className="h-48 w-full cursor-pointer overflow-hidden"
-                    onClick={handleNavigateToProduct}
+                  <button
+                    className="group relative block aspect-square w-full overflow-hidden rounded-t-lg focus-visible:ring-2 focus-visible:outline-none"
+                    aria-label={`View ${product.name} details`}
                   >
                     {renderMediaContent(mediaItem)}
-                  </div>
+                  </button>
                 </CarouselItem>
               ))}
             </CarouselContent>
@@ -129,7 +130,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
             {/* Preview overlay - shows when hovering over indicators */}
             {previewIndex !== null && (
-              <div className="absolute inset-0 z-10 h-48 w-full overflow-hidden">
+              <div className="absolute inset-0 aspect-square w-full overflow-hidden">
                 {renderMediaContent(mediaItems[previewIndex], true)}
               </div>
             )}
@@ -157,51 +158,60 @@ export function ProductCard({ product }: ProductCardProps) {
             </div>
           </Carousel>
         ) : (
-          <div
-            className="h-48 w-full cursor-pointer overflow-hidden"
+          <button
+            className="group relative block aspect-square w-full overflow-hidden rounded-t-lg focus-visible:ring-2 focus-visible:outline-none"
             onClick={handleNavigateToProduct}
+            aria-label={`View ${product.name} details`}
           >
             {renderMediaContent(mediaItems[0])}
-          </div>
+          </button>
         )}
-      </div>
-      <div className="p-4">
-        <h3
-          className="text-title mb-3 cursor-pointer text-center text-[16px] font-medium"
-          onClick={handleNavigateToProduct}
-        >
-          {product.name}
-        </h3>
-        <div className="space-y-2">
-          <span className="text-foreground text-sm">
-            {product.variants?.[0]?.attributes?.[0]?.value || 'N/A'}
-          </span>
-          <div className="flex items-center justify-between">
-            <span className="text-foreground text-sm">
-              ${product.variants?.[0]?.price}
-            </span>
-          </div>
 
-          <div className="flex items-center justify-between">
-            <span className="text-foreground text-sm">{product.brand}</span>
-            <ProductStatus product={product} />
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {product.categories?.[0]?.categoryName && (
-              <BadgeTag
-                key={product.categories[0].categoryName}
-                tag={product.categories[0].categoryName}
-                className="text-xs"
-              />
-            )}
-            {product.tags
-              ?.slice(0, 3)
-              .map((tag) => (
-                <BadgeTag key={tag} tag={tag} className="text-xs" />
-              ))}
-          </div>
+        <div className="flex flex-1 flex-col justify-between">
+          <button
+            onClick={handleNavigateToProduct}
+            className="mt-4 flex cursor-pointer flex-col rounded px-4 focus-visible:ring-2 focus-visible:outline-none"
+            aria-label={`View ${product.name} details`}
+          >
+            <CardTitle className="line-clamp-2 text-sm sm:text-base">
+              {product.name}
+            </CardTitle>
+            <div className="text-muted-foreground mt-0.5 text-xs sm:text-sm">
+              {product.variants?.[0]?.attributes?.[0]?.key}:{' '}
+              {product.variants?.[0]?.attributes?.[0]?.value}
+            </div>
+          </button>
+
+          <CardContent className="mt-2 px-4 py-2">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-foreground text-sm">
+                  {process.env.NEXT_PUBLIC_DEFAULT_CURRENCY}
+                  {product.variants?.[0]?.price}
+                </span>
+                <ProductStatus product={product} />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <span className="text-foreground text-sm">{product.brand}</span>
+              </div>
+
+              <div className="flex flex-wrap gap-1.5">
+                {product.categories?.[0]?.categoryName && (
+                  <BadgeTag
+                    key={product.categories[0].categoryName}
+                    tag={product.categories[0].categoryName}
+                    className="text-xs"
+                  />
+                )}
+                {product.tags?.slice(0, 3).map((tag) => (
+                  <BadgeTag key={tag} tag={tag} className="text-xs" />
+                ))}
+              </div>
+            </div>
+          </CardContent>
         </div>
-      </div>
-    </div>
+      </Card>
+    </article>
   );
 }

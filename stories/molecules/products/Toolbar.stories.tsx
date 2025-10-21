@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { ProductsToolbar } from '@molecules/products/Toolbar';
 import { TypeEnum } from '@graphql/generated';
+import { FilterType } from '@atoms/products/TabFilterProducts';
+import { ProductCreationProvider } from '@lib/contexts/ProductCreationContext';
 
 const meta: Meta<typeof ProductsToolbar> = {
   title: 'Molecules/Products/Toolbar',
@@ -15,6 +17,13 @@ const meta: Meta<typeof ProductsToolbar> = {
     },
   },
   tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <ProductCreationProvider>
+        <Story />
+      </ProductCreationProvider>
+    ),
+  ],
   argTypes: {
     typeFilter: {
       description: 'Current product type filter selection',
@@ -26,8 +35,8 @@ const meta: Meta<typeof ProductsToolbar> = {
       action: 'typeFilterChanged',
     },
     categoryFilter: {
-      description: 'Current category filter selection',
-      control: { type: 'text' },
+      description: 'Current category filter selection (array of category IDs)',
+      control: { type: 'object' },
     },
     onCategoryFilterChange: {
       description: 'Callback when category filter changes',
@@ -50,6 +59,27 @@ const meta: Meta<typeof ProductsToolbar> = {
       description: 'Callback when search term changes',
       action: 'searchChanged',
     },
+    selectedFilter: {
+      description: 'Current tab filter selection',
+      control: { type: 'radio' },
+      options: ['All', 'Actives', 'Archived'],
+    },
+    setSelectedFilter: {
+      description: 'Callback when tab filter changes',
+      action: 'tabFilterChanged',
+    },
+    selectedProducts: {
+      description: 'Array of selected product IDs',
+      control: { type: 'object' },
+    },
+    isArchived: {
+      description: 'Whether selected products are archived',
+      control: { type: 'boolean' },
+    },
+    onDeleteComplete: {
+      description: 'Callback when delete operation completes',
+      action: 'deleteCompleted',
+    },
   },
 };
 
@@ -61,12 +91,17 @@ export const Default: Story = {
   args: {
     typeFilter: null,
     onTypeFilterChange: () => {},
-    categoryFilter: '',
+    categoryFilter: [],
     onCategoryFilterChange: () => {},
     viewMode: 'grid',
     onViewModeToggle: () => {},
     searchTerm: '',
     onSearch: () => {},
+    selectedFilter: 'All' as FilterType,
+    setSelectedFilter: () => {},
+    selectedProducts: [],
+    isArchived: false,
+    onDeleteComplete: () => {},
   },
 };
 
@@ -74,12 +109,17 @@ export const WithFilters: Story = {
   args: {
     typeFilter: TypeEnum.Physical,
     onTypeFilterChange: () => {},
-    categoryFilter: 'electronics',
+    categoryFilter: ['electronics'],
     onCategoryFilterChange: () => {},
-    viewMode: 'grid',
+    viewMode: 'table',
     onViewModeToggle: () => {},
-    searchTerm: '',
+    searchTerm: 'laptop',
     onSearch: () => {},
+    selectedFilter: 'Actives' as FilterType,
+    setSelectedFilter: () => {},
+    selectedProducts: [],
+    isArchived: false,
+    onDeleteComplete: () => {},
   },
   parameters: {
     docs: {
@@ -92,21 +132,19 @@ export const WithFilters: Story = {
 
 export const WithSearch: Story = {
   args: {
-    typeFilter: null,
+    typeFilter: undefined,
+    categoryFilter: [],
+    viewMode: 'table',
+    searchTerm: 'product name',
     onTypeFilterChange: () => {},
-    categoryFilter: '',
     onCategoryFilterChange: () => {},
-    viewMode: 'grid',
     onViewModeToggle: () => {},
-    searchTerm: 'wireless headphones',
     onSearch: () => {},
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Toolbar with an active search query.',
-      },
-    },
+    selectedFilter: 'All' as FilterType,
+    setSelectedFilter: () => {},
+    selectedProducts: [],
+    isArchived: false,
+    onDeleteComplete: () => {},
   },
 };
 
@@ -114,12 +152,17 @@ export const TableView: Story = {
   args: {
     typeFilter: null,
     onTypeFilterChange: () => {},
-    categoryFilter: '',
+    categoryFilter: [],
     onCategoryFilterChange: () => {},
     viewMode: 'table',
     onViewModeToggle: () => {},
     searchTerm: '',
     onSearch: () => {},
+    selectedFilter: 'All' as FilterType,
+    setSelectedFilter: () => {},
+    selectedProducts: [],
+    isArchived: false,
+    onDeleteComplete: () => {},
   },
   parameters: {
     docs: {
@@ -134,12 +177,17 @@ export const FullyActive: Story = {
   args: {
     typeFilter: TypeEnum.Digital,
     onTypeFilterChange: () => {},
-    categoryFilter: 'software',
+    categoryFilter: ['software'],
     onCategoryFilterChange: () => {},
     viewMode: 'table',
     onViewModeToggle: () => {},
     searchTerm: 'premium',
     onSearch: () => {},
+    selectedFilter: 'Archived' as FilterType,
+    setSelectedFilter: () => {},
+    selectedProducts: ['1', '2'],
+    isArchived: true,
+    onDeleteComplete: () => {},
   },
   parameters: {
     docs: {

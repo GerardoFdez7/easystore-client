@@ -17,7 +17,6 @@ import InventoryTable from '@molecules/inventory/InventoryTable';
 import InventoryTableSkeleton from '@molecules/inventory/InventoryTableSkeleton';
 import InventoryActionButtons from '@molecules/inventory/InventoryActionButtons';
 import EmptyState from '@molecules/shared/EmptyState';
-import SkeletonWrapper from '@molecules/shared/SkeletonWrapper';
 import SearchBar from '@atoms/shared/SearchBar';
 import AddStockDialog from '@organisms/inventory/AddStockDialog';
 import WarehouseManagementDialog from '@organisms/inventory/WarehouseManagementDialog';
@@ -25,6 +24,7 @@ import WarehouseForm from '@molecules/inventory/WarehouseForm';
 
 export default function MainInventory() {
   const t = useTranslations('Inventory');
+  const tProduct = useTranslations('Products');
   const [selectedWarehouseId, setSelectedWarehouseId] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isAddStockDialogOpen, setIsAddStockDialogOpen] = useState(false);
@@ -132,20 +132,16 @@ export default function MainInventory() {
         onAddStockClick={() => setIsAddStockDialogOpen(true)}
         onManageWarehousesClick={() => setIsWarehouseManagementOpen(true)}
       />
-      <SkeletonWrapper loading={loading}>
-        <SearchBar
-          placeholder={t('searchPlaceholder')}
-          searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
-          className="mb-2"
-        />
-      </SkeletonWrapper>
-      <SkeletonWrapper loading={loading} fallbackWidth="w-50">
-        <WarehouseCombobox
-          value={selectedWarehouseId}
-          onChange={setSelectedWarehouseId}
-        />
-      </SkeletonWrapper>
+      <SearchBar
+        placeholder={tProduct('searchProducts')}
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        className="mb-2"
+      />
+      <WarehouseCombobox
+        value={selectedWarehouseId}
+        onChange={setSelectedWarehouseId}
+      />
       {}
       {loading ? (
         <InventoryTableSkeleton />
