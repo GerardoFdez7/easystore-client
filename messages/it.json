@@ -1302,5 +1302,25 @@
     "saveSuccess": "Categoria aggiornata con successo.",
     "createSuccess": "Categoria creata con successo.",
     "addSubcategory": "Aggiungi sottocategoria a"
+  },
+
+  "Orders": {
+    "orders": "Ordini",
+    "order": "Ordine",
+    "status": "Stato",
+    "total": "Totale",
+    "currency": "Valuta",
+    "shippingMethod": "Metodo di spedizione",
+    "customer": "Cliente",
+    "date": "Data",
+    "noOrdersFound": "Nessun ordine trovato",
+    "noOrdersDescription": "Non hai ancora ordini. Gli ordini appariranno qui quando i clienti inizieranno ad acquistare.",
+    "createOrder": "Crea ordine",
+    "searchOrders": "Cerca ordini",
+    "processing": "In elaborazione",
+    "confirmed": "Confermato",
+    "shipped": "Spedito",
+    "completed": "Completato",
+    "cancelled": "Annullato"
   }
 }

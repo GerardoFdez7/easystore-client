@@ -1290,5 +1290,25 @@
     "saveSuccess": "Category updated successfully.",
     "createSuccess": "Category created successfully.",
     "addSubcategory": "Add subcategory to"
+  },
+
+  "Orders": {
+    "orders": "Orders",
+    "order": "Order",
+    "status": "Status",
+    "total": "Total",
+    "currency": "Currency",
+    "shippingMethod": "Shipping Method",
+    "customer": "Customer",
+    "date": "Date",
+    "noOrdersFound": "No orders found",
+    "noOrdersDescription": "You don't have any orders yet. Orders will appear here once customers start purchasing.",
+    "createOrder": "Create Order",
+    "searchOrders": "Search orders",
+    "processing": "Processing",
+    "confirmed": "Confirmed",
+    "shipped": "Shipped",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
   }
 }
