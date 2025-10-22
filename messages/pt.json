@@ -1374,6 +1374,26 @@
     "createSuccess": "Categoria criada com sucesso.",
     "addSubcategory": "Adicionar subcategoria a"
   },
+
+  "Orders": {
+    "orders": "Pedidos",
+    "order": "Pedido",
+    "status": "Status",
+    "total": "Total",
+    "currency": "Moeda",
+    "shippingMethod": "Método de envio",
+    "customer": "Cliente",
+    "date": "Data",
+    "noOrdersFound": "Nenhum pedido encontrado",
+    "noOrdersDescription": "Você ainda não tem pedidos. Eles aparecerão aqui quando os clientes começarem a comprar.",
+    "createOrder": "Criar pedido",
+    "searchOrders": "Buscar pedidos",
+    "processing": "Processando",
+    "confirmed": "Confirmado",
+    "shipped": "Enviado",
+    "completed": "Concluído",
+    "cancelled": "Cancelado"
+  },
   "StockMovement": {
     "noWarehousesTitle": "Ainda não há armazéns",
     "noWarehousesDescription": "Crie seu primeiro armazém para começar a gerenciar seu inventário",

@@ -1367,6 +1367,26 @@
     "createSuccess": "Categoría creada correctamente.",
     "addSubcategory": "Agregar subcategoría a"
   },
+
+  "Orders": {
+    "orders": "Pedidos",
+    "order": "Pedido",
+    "status": "Estado",
+    "total": "Total",
+    "currency": "Moneda",
+    "shippingMethod": "Método de envío",
+    "customer": "Cliente",
+    "date": "Fecha",
+    "noOrdersFound": "No se encontraron pedidos",
+    "noOrdersDescription": "Aún no tienes pedidos. Los pedidos aparecerán aquí una vez que los clientes comiencen a comprar.",
+    "createOrder": "Crear pedido",
+    "searchOrders": "Buscar pedidos",
+    "processing": "Procesando",
+    "confirmed": "Confirmado",
+    "shipped": "Enviado",
+    "completed": "Completado",
+    "cancelled": "Cancelado"
+  },
   "StockMovement": {
     "noWarehousesTitle": "Aún no hay almacenes",
     "noWarehousesDescription": "Crea tu primer almacén para comenzar a gestionar tu inventario",
