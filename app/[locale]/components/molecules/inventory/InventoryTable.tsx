@@ -10,29 +10,29 @@ import {
   TableHeader,
   TableRow,
 } from '@shadcn/ui/table';
-import { cn, formatDate } from '@lib/utils';
-import { FindInventoryQueryVariables } from '@graphql/generated';
+import { formatDate } from '@lib/utils';
+import {
+  FindInventoryQueryVariables,
+  StockPerWarehouseSortBy,
+} from '@graphql/generated';
 import { InventoryItem } from '@lib/types/inventory';
 import type { SortDirection } from '@lib/types/sort';
-import type { SortField } from '@lib/types/inventory';
-import {
-  Package,
-  Plus,
-  ClockArrowUp,
-  ClockArrowDown,
-  MoveUp,
-} from 'lucide-react';
+import { Package, Plus, ClockArrowUp, ClockArrowDown } from 'lucide-react';
 import EmptyState from '@molecules/shared/EmptyState';
 import { useTranslations } from 'next-intl';
 import TablePagination from '@molecules/shared/TablePagination';
+import SortableHeader from '@atoms/shared/SortableHeader';
 
 type InventoryTableProps = {
   variables: FindInventoryQueryVariables;
   className?: string;
   inventory: InventoryItem[];
   onCreateStock?: () => void;
-  onSortChange?: (field: SortField, direction: SortDirection) => void;
-  sortField?: SortField | null;
+  onSortChange?: (
+    field: keyof StockPerWarehouseSortBy,
+    direction: SortDirection,
+  ) => void;
+  sortField?: keyof StockPerWarehouseSortBy | null;
   sortDirection?: SortDirection;
 };
 
@@ -51,7 +51,7 @@ export default function InventoryTable({
   const itemsPerPage = 25;
   const t = useTranslations('Inventory');
 
-  const handleSort = (field: SortField) => {
+  const handleSort = (field: keyof StockPerWarehouseSortBy) => {
     let newDirection: SortDirection = 'ASC';
 
     if (sortField === field) {
@@ -59,43 +59,6 @@ export default function InventoryTable({
     }
 
     onSortChange?.(field, newDirection);
-  };
-
-  const getSortIcon = (field: SortField) => {
-    if (sortField !== field) {
-      return null;
-    }
-
-    // Determine if field is date-based or another
-    const isDateField = field === 'replenishmentDate';
-
-    if (isDateField) {
-      return sortDirection === 'ASC' ? (
-        <>
-          <ClockArrowUp aria-hidden="true" className="ml-1 h-4 w-4" />
-          <span className="sr-only">{t('ascending')}</span>
-        </>
-      ) : (
-        <>
-          <ClockArrowDown aria-hidden="true" className="ml-1 h-4 w-4" />
-          <span className="sr-only">{t('descending')}</span>
-        </>
-      );
-    } else {
-      return (
-        <>
-          <MoveUp
-            aria-hidden="true"
-            className={cn('ml-1 h-4 w-4 transition-transform', {
-              'rotate-180': sortDirection === 'DESC',
-            })}
-          />
-          <span className="sr-only">
-            {sortDirection === 'ASC' ? t('ascending') : t('descending')}
-          </span>
-        </>
-      );
-    }
   };
 
   const handleSelectAll = (checked: boolean) => {
@@ -145,96 +108,55 @@ export default function InventoryTable({
                 onCheckedChange={handleSelectAll}
               />
             </TableHead>
-            <TableHead
-              className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
-              onClick={() => handleSort('variantFirstAttribute')}
-              aria-sort={
-                sortField === 'variantFirstAttribute'
-                  ? sortDirection === 'ASC'
-                    ? 'ascending'
-                    : 'descending'
-                  : 'none'
-              }
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ')
-                  handleSort('variantFirstAttribute');
-              }}
+            <SortableHeader<keyof StockPerWarehouseSortBy>
+              sortKey="variantFirstAttribute"
+              currentSortBy={sortField}
+              currentSortOrder={sortDirection}
+              onSort={handleSort}
             >
-              <div className="flex items-center justify-center">
-                {t('productTableHead')}
-                {getSortIcon('variantFirstAttribute')}
-              </div>
-            </TableHead>
-            <TableHead>{t('skuTableHead')}</TableHead>
-            <TableHead
-              className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
-              onClick={() => handleSort('available')}
-              aria-sort={
-                sortField === 'available'
-                  ? sortDirection === 'ASC'
-                    ? 'ascending'
-                    : 'descending'
-                  : 'none'
-              }
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') handleSort('available');
-              }}
+              {t('productTableHead')}
+            </SortableHeader>
+            <SortableHeader<keyof StockPerWarehouseSortBy>
+              sortKey="sku"
+              currentSortBy={sortField}
+              currentSortOrder={sortDirection}
+              onSort={handleSort}
             >
-              <div className="flex items-center justify-center">
-                {t('availableTableHead')}
-                {getSortIcon('available')}
-              </div>
-            </TableHead>
-            <TableHead
-              className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
-              onClick={() => handleSort('reserved')}
-              aria-sort={
-                sortField === 'reserved'
-                  ? sortDirection === 'ASC'
-                    ? 'ascending'
-                    : 'descending'
-                  : 'none'
-              }
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') handleSort('reserved');
-              }}
+              {t('skuTableHead')}
+            </SortableHeader>
+            <SortableHeader<keyof StockPerWarehouseSortBy>
+              sortKey="available"
+              currentSortBy={sortField}
+              currentSortOrder={sortDirection}
+              onSort={handleSort}
             >
-              <div className="flex items-center justify-center">
-                {t('reservedTableHead')}
-                {getSortIcon('reserved')}
-              </div>
-            </TableHead>
-            <TableHead
-              className="hover:bg-hover cursor-pointer transition-colors duration-200 select-none"
-              onClick={() => handleSort('replenishmentDate')}
-              aria-sort={
-                sortField === 'replenishmentDate'
-                  ? sortDirection === 'ASC'
-                    ? 'ascending'
-                    : 'descending'
-                  : 'none'
-              }
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ')
-                  handleSort('replenishmentDate');
-              }}
+              {t('availableTableHead')}
+            </SortableHeader>
+            <SortableHeader<keyof StockPerWarehouseSortBy>
+              sortKey="reserved"
+              currentSortBy={sortField}
+              currentSortOrder={sortDirection}
+              onSort={handleSort}
             >
-              <div className="flex items-center justify-center">
-                {t('replenishmentDateTableHead')}
-                {getSortIcon('replenishmentDate')}
-              </div>
-            </TableHead>
+              {t('reservedTableHead')}
+            </SortableHeader>
+            <SortableHeader<keyof StockPerWarehouseSortBy>
+              sortKey="replenishmentDate"
+              currentSortBy={sortField}
+              currentSortOrder={sortDirection}
+              onSort={handleSort}
+              icon={sortDirection === 'ASC' ? ClockArrowUp : ClockArrowDown}
+              disableRotation
+            >
+              {t('replenishmentDateTableHead')}
+            </SortableHeader>
           </TableRow>
         </TableHeader>
         <TableBody>
           {currentItems.map((item) => (
-            <TableRow key={item.id}>
+            <TableRow key={item.id} className="group cursor-pointer">
               <TableCell
-                className="hover:bg-background cursor-default"
+                className="group-hover:bg-background cursor-default"
                 onClick={handleCheckboxClick}
               >
                 <Checkbox

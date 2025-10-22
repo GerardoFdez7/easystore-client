@@ -20,7 +20,7 @@ interface MainCategoryProps {
 
 export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState<SortBy>(SortBy.Name);
+  const [sortBy, setSortBy] = useState<SortBy>(SortBy.UpdatedAt);
   const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.Asc);
   const [treeOpen, setTreeOpen] = useState(false);
   const router = useRouter();

@@ -741,6 +741,15 @@ export type ProductCategory = {
   categoryName?: Maybe<Scalars['String']['output']>;
 };
 
+export enum ProductSortBy {
+  CreatedAt = 'CREATED_AT',
+  FirstVariantPrice = 'FIRST_VARIANT_PRICE',
+  Name = 'NAME',
+  Sku = 'SKU',
+  UpdatedAt = 'UPDATED_AT',
+  VariantCount = 'VARIANT_COUNT',
+}
+
 export type Query = {
   __typename?: 'Query';
   getAddressById: AddressType;
@@ -787,7 +796,7 @@ export type QueryGetAllProductsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['Float']['input']>;
-  sortBy?: InputMaybe<SortBy>;
+  sortBy?: InputMaybe<ProductSortBy>;
   sortOrder?: InputMaybe<SortOrder>;
   type?: InputMaybe<TypeEnum>;
 };
@@ -909,6 +918,7 @@ export type StockPerWarehouseSortBy = {
   available?: InputMaybe<SortOrder>;
   replenishmentDate?: InputMaybe<SortOrder>;
   reserved?: InputMaybe<SortOrder>;
+  sku?: InputMaybe<SortOrder>;
   variantFirstAttribute?: InputMaybe<SortOrder>;
 };
 
@@ -2131,7 +2141,7 @@ export type FindAllProductsQueryVariables = Exact<{
     Array<Scalars['ID']['input']> | Scalars['ID']['input']
   >;
   type?: InputMaybe<TypeEnum>;
-  sortBy?: InputMaybe<SortBy>;
+  sortBy?: InputMaybe<ProductSortBy>;
   sortOrder?: InputMaybe<SortOrder>;
   includeSoftDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -2227,7 +2237,7 @@ export type FindAllProductsQuery = {
 export type FindAllVariantsToCreateStockQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Float']['input']>;
   limit?: InputMaybe<Scalars['Float']['input']>;
-  sortBy?: InputMaybe<SortBy>;
+  sortBy?: InputMaybe<ProductSortBy>;
   sortOrder?: InputMaybe<SortOrder>;
   includeSoftDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -7120,7 +7130,10 @@ export const FindAllProductsDocument = {
             kind: 'Variable',
             name: { kind: 'Name', value: 'sortBy' },
           },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'SortBy' } },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'ProductSortBy' },
+          },
           defaultValue: { kind: 'EnumValue', value: 'NAME' },
         },
         {
@@ -7550,7 +7563,10 @@ export const FindAllVariantsToCreateStockDocument = {
             kind: 'Variable',
             name: { kind: 'Name', value: 'sortBy' },
           },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'SortBy' } },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'ProductSortBy' },
+          },
           defaultValue: { kind: 'EnumValue', value: 'NAME' },
         },
         {

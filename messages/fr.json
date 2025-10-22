@@ -1046,7 +1046,10 @@
       "createdAt": "Création",
       "name": "Nom",
       "updatedAt": "Mise à Jour",
-      "placeholder": "Trier"
+      "placeholder": "Trier",
+      "sku": "SKU",
+      "firstVariantPrice": "Prix de la Variante",
+      "variantCount": "Nombre de Variantes"
     },
     "sortOrder": {
       "placeholder": "Ordre",

@@ -3,7 +3,11 @@ import MainProducts from '@organisms/products/MainProducts';
 import { ProductsProvider } from '@lib/contexts/ProductsContext';
 import { ProductCreationProvider } from '@lib/contexts/ProductCreationContext';
 import { MockedProvider } from '@apollo/client/testing/react';
-import { FindAllProductsDocument, SortBy, SortOrder } from '@graphql/generated';
+import {
+  FindAllProductsDocument,
+  ProductSortBy,
+  SortOrder,
+} from '@graphql/generated';
 import { mockProducts } from './mocks/productsMocks';
 
 // Mock GraphQL responses
@@ -14,7 +18,7 @@ const mockEmptyResponse = {
       page: 1,
       limit: 25,
       categoriesIds: [],
-      sortBy: 'NAME',
+      sortBy: ProductSortBy.Name,
       sortOrder: 'ASC',
       includeSoftDeleted: false,
       name: '',
@@ -127,7 +131,7 @@ export const Default: Story = {
             page: 1,
             limit: 25,
             categoriesIds: [],
-            sortBy: SortBy.Name,
+            sortBy: ProductSortBy.Name,
             sortOrder: SortOrder.Asc,
             includeSoftDeleted: false,
             name: '',
@@ -163,7 +167,7 @@ export const ZeroProductsInDatabase: Story = {
             page: 1,
             limit: 25,
             categoriesIds: [],
-            sortBy: SortBy.Name,
+            sortBy: ProductSortBy.Name,
             sortOrder: SortOrder.Asc,
             includeSoftDeleted: false,
             name: '',
@@ -199,7 +203,7 @@ export const ZeroProductsWhenFiltering: Story = {
             page: 1,
             limit: 25,
             categoriesIds: [],
-            sortBy: SortBy.Name,
+            sortBy: ProductSortBy.Name,
             sortOrder: SortOrder.Asc,
             includeSoftDeleted: false,
             name: 'nonexistent',

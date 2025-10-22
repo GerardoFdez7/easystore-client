@@ -6,7 +6,7 @@ import {
   FindAllVariantsToCreateStockDocument,
   FindAllVariantsToCreateStockQuery,
   FindAllVariantsToCreateStockQueryVariables,
-  SortBy,
+  ProductSortBy,
   SortOrder,
 } from '@graphql/generated';
 import { useInfiniteScroll } from '@hooks/utils/useInfiniteScroll';
@@ -36,7 +36,7 @@ export const useVariantSelector = (options: UseVariantSelectorOptions = {}) => {
 
   // State management
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState<SortBy>(SortBy.Name);
+  const [sortBy, setSortBy] = useState<ProductSortBy>(ProductSortBy.UpdatedAt);
   const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.Asc);
   const [includeSoftDeleted, setIncludeSoftDeleted] = useState(false);
 
@@ -195,7 +195,7 @@ export const useVariantSelector = (options: UseVariantSelectorOptions = {}) => {
   );
 
   const updateSortBy = useCallback(
-    (newSortBy: SortBy) => {
+    (newSortBy: ProductSortBy) => {
       setSortBy(newSortBy);
       resetPagination();
     },

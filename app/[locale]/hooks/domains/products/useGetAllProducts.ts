@@ -3,6 +3,8 @@ import {
   FindAllProductsDocument,
   FindAllProductsQuery,
   FindAllProductsQueryVariables,
+  ProductSortBy,
+  SortOrder,
 } from '@graphql/generated';
 import { useQuery } from '@apollo/client/react';
 
@@ -10,7 +12,10 @@ export const useGetAllProducts = (
   variables?: FindAllProductsQueryVariables,
 ) => {
   const defaultVariables = useMemo<FindAllProductsQueryVariables>(
-    () => ({}),
+    () => ({
+      sortBy: ProductSortBy.UpdatedAt,
+      sortOrder: SortOrder.Desc,
+    }),
     [],
   );
 

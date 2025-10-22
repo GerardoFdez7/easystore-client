@@ -37,12 +37,17 @@ export default function MainInventory() {
   // Mapping of UI fields -> backend StockPerWarehouseSortBy
   const serverSortFieldMap: Record<
     SortField,
-    'available' | 'reserved' | 'replenishmentDate' | 'variantFirstAttribute'
+    | 'available'
+    | 'reserved'
+    | 'replenishmentDate'
+    | 'variantFirstAttribute'
+    | 'sku'
   > = {
     available: 'available',
     reserved: 'reserved',
     replenishmentDate: 'replenishmentDate',
     variantFirstAttribute: 'variantFirstAttribute',
+    sku: 'sku',
   };
 
   // Build variables for general query: sorting + search on server

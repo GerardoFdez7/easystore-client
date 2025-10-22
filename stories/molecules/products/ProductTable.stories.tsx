@@ -1,7 +1,13 @@
 import { ProductTable } from '@molecules/products/ProductTable';
 import ProductTableSkeleton from '@molecules/products/ProductTableSkeleton';
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { MediaTypeEnum, TypeEnum, ConditionEnum } from '@graphql/generated';
+import {
+  MediaTypeEnum,
+  TypeEnum,
+  ConditionEnum,
+  ProductSortBy,
+  SortOrder,
+} from '@graphql/generated';
 
 const meta: Meta<typeof ProductTable> = {
   title: 'Molecules/Products/ProductTable',
@@ -25,6 +31,9 @@ const meta: Meta<typeof ProductTable> = {
     onLastPage: { action: 'lastPage' },
     canPreviousPage: { control: 'boolean' },
     canNextPage: { control: 'boolean' },
+    sortBy: { control: 'select', options: Object.values(ProductSortBy) },
+    sortOrder: { control: 'select', options: Object.values(SortOrder) },
+    onSort: { action: 'sorted' },
   },
 };
 export default meta;
@@ -170,37 +179,22 @@ export const Default: Story = {
     onLastPage: () => console.log('Last page'),
     canPreviousPage: false,
     canNextPage: true,
+    sortBy: ProductSortBy.Name,
+    sortOrder: SortOrder.Asc,
+    onSort: (column: ProductSortBy) => console.log('Sort by:', column),
   },
 };
 
-export const WithSelection: Story = {
-  args: {
-    products: mockProducts,
-    selectedProducts: ['1', '3'],
-    onSelectProduct: (productId: string, checked: boolean) =>
-      console.log('Product selected:', productId, checked),
-    onSelectAll: (checked: boolean) => console.log('All selected:', checked),
-    onAddProduct: () => console.log('Add product clicked'),
-    currentPage: 1,
-    totalPages: 5,
-    totalRows: 125,
-    onPageChange: (page: number) => console.log('Page changed:', page),
-    onPreviousPage: () => console.log('Previous page'),
-    onNextPage: () => console.log('Next page'),
-    onFirstPage: () => console.log('First page'),
-    onLastPage: () => console.log('Last page'),
-    canPreviousPage: false,
-    canNextPage: true,
-  },
-};
-
-export const AllSelected: Story = {
+export const WithSelectedProducts: Story = {
   args: {
     products: mockProducts,
     selectedProducts: ['1', '2', '3'],
     onSelectProduct: (productId: string, checked: boolean) =>
       console.log('Product selected:', productId, checked),
     onSelectAll: (checked: boolean) => console.log('All selected:', checked),
+    sortBy: ProductSortBy.Name,
+    sortOrder: SortOrder.Asc,
+    onSort: (column: ProductSortBy) => console.log('Sort by:', column),
   },
 };
 
@@ -228,6 +222,9 @@ export const FirstPage: Story = {
     onLastPage: () => console.log('Last page'),
     canPreviousPage: false,
     canNextPage: true,
+    sortBy: ProductSortBy.Name,
+    sortOrder: SortOrder.Asc,
+    onSort: (column: ProductSortBy) => console.log('Sort by:', column),
   },
 };
 
@@ -249,6 +246,9 @@ export const MiddlePage: Story = {
     onLastPage: () => console.log('Last page'),
     canPreviousPage: true,
     canNextPage: true,
+    sortBy: ProductSortBy.Name,
+    sortOrder: SortOrder.Asc,
+    onSort: (column: ProductSortBy) => console.log('Sort by:', column),
   },
 };
 
@@ -270,5 +270,8 @@ export const LastPage: Story = {
     onLastPage: () => console.log('Last page'),
     canPreviousPage: true,
     canNextPage: false,
+    sortBy: ProductSortBy.Name,
+    sortOrder: SortOrder.Asc,
+    onSort: (column: ProductSortBy) => console.log('Sort by:', column),
   },
 };

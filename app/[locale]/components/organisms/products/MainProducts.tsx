@@ -1,8 +1,9 @@
 'use client';
 
 import { ProductTable } from '@molecules/products/ProductTable';
+import ProductTableSkeleton from '@molecules/products/ProductTableSkeleton';
 import { ProductGrid } from '@molecules/products/ProductGrid';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { ProductsToolbar } from '@molecules/products/Toolbar';
 import { FilterType } from '@atoms/products/TabFilterProducts';
 import { useProductsContext } from '@lib/contexts/ProductsContext';
@@ -30,8 +31,12 @@ export default function MainDashboard() {
   // Use the products context instead of the hook directly
   const {
     products: allProducts,
+    loading,
     refreshProducts,
     total,
+    sortBy,
+    sortOrder,
+    handleSort,
   } = useProductsContext();
 
   // Filter products based on selected filter
@@ -49,6 +54,27 @@ export default function MainDashboard() {
   const totalItems = total || 0;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const paginatedProducts = filteredProducts;
+
+  // Effect to refresh products when sort changes
+  useEffect(() => {
+    void refreshProducts({
+      page: currentPage,
+      limit: itemsPerPage,
+      includeSoftDeleted: selectedFilter !== 'Actives',
+      name: searchTerm || null,
+      type: typeFilter || null,
+      categoriesIds: categoryFilter.length > 0 ? categoryFilter : null,
+    });
+  }, [
+    sortBy,
+    sortOrder,
+    refreshProducts,
+    currentPage,
+    selectedFilter,
+    searchTerm,
+    typeFilter,
+    categoryFilter,
+  ]);
 
   // Pagination handlers
   const handlePageChange = useCallback(
@@ -264,24 +290,31 @@ export default function MainDashboard() {
           ) : (
             <>
               {viewMode === 'table' ? (
-                <ProductTable
-                  products={paginatedProducts}
-                  selectedProducts={selectedProducts}
-                  onSelectProduct={handleProductSelect}
-                  onSelectAll={handleSelectAll}
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  totalRows={totalItems}
-                  onPageChange={handlePageChange}
-                  onPreviousPage={handlePreviousPage}
-                  onNextPage={handleNextPage}
-                  onFirstPage={handleFirstPage}
-                  onLastPage={handleLastPage}
-                  canPreviousPage={currentPage > 1}
-                  canNextPage={currentPage < totalPages}
-                />
+                loading ? (
+                  <ProductTableSkeleton />
+                ) : (
+                  <ProductTable
+                    products={paginatedProducts}
+                    selectedProducts={selectedProducts}
+                    onSelectProduct={handleProductSelect}
+                    onSelectAll={handleSelectAll}
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    totalRows={totalItems}
+                    onPageChange={handlePageChange}
+                    onPreviousPage={handlePreviousPage}
+                    onNextPage={handleNextPage}
+                    onFirstPage={handleFirstPage}
+                    onLastPage={handleLastPage}
+                    canPreviousPage={currentPage > 1}
+                    canNextPage={currentPage < totalPages}
+                    sortBy={sortBy}
+                    sortOrder={sortOrder}
+                    onSort={handleSort}
+                  />
+                )
               ) : (
-                <ProductGrid products={paginatedProducts} />
+                <ProductGrid products={paginatedProducts} loading={loading} />
               )}
             </>
           )}

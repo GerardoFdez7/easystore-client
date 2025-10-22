@@ -5,7 +5,7 @@ const meta: Meta<typeof ProductTableSkeleton> = {
   title: 'Molecules/Products/ProductTableSkeleton',
   component: ProductTableSkeleton,
   parameters: {
-    layout: 'centered',
+    layout: 'fullscreen',
     docs: {
       description: {
         component:

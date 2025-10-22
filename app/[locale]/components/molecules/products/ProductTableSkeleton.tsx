@@ -33,15 +33,8 @@ export default function ProductTableSkeleton({
             <TableHead className="pl-2">
               <Skeleton className="h-4 w-4 rounded-none" />
             </TableHead>
-            <TableHead className="text-center">
-              <div className="flex items-center justify-center">
-                <Skeleton className="h-4 w-20" />
-              </div>
-            </TableHead>
-            <TableHead className="text-center">
-              <div className="flex items-center justify-center">
-                <Skeleton className="h-4 w-12" />
-              </div>
+            <TableHead>
+              <Skeleton className="h-4 w-28" />
             </TableHead>
             <TableHead className="text-center">
               <div className="flex items-center justify-center">
@@ -55,11 +48,18 @@ export default function ProductTableSkeleton({
             </TableHead>
             <TableHead className="text-center">
               <div className="flex items-center justify-center">
-                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-4 w-24" />
               </div>
             </TableHead>
             <TableHead className="text-center">
-              <Skeleton className="h-4 w-16" />
+              <div className="flex items-center justify-center">
+                <Skeleton className="h-4 w-24" />
+              </div>
+            </TableHead>
+            <TableHead className="text-center">
+              <div className="flex items-center justify-center">
+                <Skeleton className="h-4 w-20" />
+              </div>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -76,6 +76,7 @@ export default function ProductTableSkeleton({
                   <Skeleton className="h-10 w-10 rounded-md" />
                   <div className="flex flex-col gap-1">
                     <Skeleton className="h-4 w-32" />
+                    <Skeleton className="h-3 w-24" />
                   </div>
                 </div>
               </TableCell>

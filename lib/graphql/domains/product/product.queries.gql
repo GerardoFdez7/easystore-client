@@ -71,7 +71,7 @@ query findAllProducts(
   $limit: Float = 25
   $categoriesIds: [ID!] = []
   $type: TypeEnum
-  $sortBy: SortBy = NAME
+  $sortBy: ProductSortBy = NAME
   $sortOrder: SortOrder = ASC
   $includeSoftDeleted: Boolean = false
   $name: String = ""
@@ -162,7 +162,7 @@ query findAllProducts(
 query findAllVariantsToCreateStock(
   $page: Float = 1
   $limit: Float = 10
-  $sortBy: SortBy = NAME
+  $sortBy: ProductSortBy = NAME
   $sortOrder: SortOrder = ASC
   $includeSoftDeleted: Boolean = false
   $name: String = ""

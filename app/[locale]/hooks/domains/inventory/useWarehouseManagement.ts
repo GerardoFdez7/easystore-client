@@ -66,7 +66,7 @@ export function useWarehouseManagement(): UseWarehouseManagementReturn {
 
   // State
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState<SortBy>(SortBy.Name);
+  const [sortBy, setSortBy] = useState<SortBy>(SortBy.UpdatedAt);
   const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.Asc);
 
   // Stable callback functions for infinite scroll

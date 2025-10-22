@@ -382,7 +382,7 @@ export function useVariantForm({
                 : typeof data.weight === 'string'
                   ? parseFloat(data.weight)
                   : data.weight,
-            sku: data.codes.sku || null,
+            sku: data.codes.sku || '',
             upc: data.codes.upc || null,
             ean: data.codes.ean || null,
             isbn: data.codes.isbn || null,

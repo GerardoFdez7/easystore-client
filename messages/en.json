@@ -1045,7 +1045,10 @@
       "createdAt": "Creation",
       "name": "Name",
       "updatedAt": "Update",
-      "placeholder": "Sort"
+      "placeholder": "Sort",
+      "sku": "SKU",
+      "firstVariantPrice": "Variant Price",
+      "variantCount": "Ammount of Variants"
     },
     "sortOrder": {
       "placeholder": "Order",
@@ -1137,6 +1140,7 @@
       "deleteWarehouseDescription": "Are you sure you want to delete the warehouse \"{name}\" and all associated stocks? This action cannot be undone.",
       "address": "Address",
       "warehouseAddress": "Address",
+      "noAddressAvailable": "No address available",
       "actions": "Actions",
       "edit": "Edit",
       "delete": "Delete",

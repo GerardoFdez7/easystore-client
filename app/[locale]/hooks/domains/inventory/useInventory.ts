@@ -5,7 +5,8 @@ import {
   FindWarehouseByIdDocument,
   FindWarehouseByIdQueryVariables,
   FindWarehouseByIdQuery,
-} from '@graphql/generated';
+  StockPerWarehouseSortBy,
+} from '@lib/graphql/generated';
 import { InventoryItem } from '@lib/types/inventory';
 import { useQuery } from '@apollo/client/react';
 
@@ -85,11 +86,7 @@ export const useInventory = (
 
   const sortBy = variables.stockFilters?.sortBy;
   if (warehouseId && sortBy) {
-    const key = (Object.keys(sortBy)[0] ?? '') as
-      | 'available'
-      | 'reserved'
-      | 'replenishmentDate'
-      | 'variantFirstAttribute';
+    const key = (Object.keys(sortBy)[0] ?? '') as keyof StockPerWarehouseSortBy;
     const direction = (key && sortBy[key]) || undefined;
 
     if (key && direction) {
@@ -107,11 +104,16 @@ export const useInventory = (
           const bVal = (b.variantFirstAttribute.value || '').toLowerCase();
           return dir * aVal.localeCompare(bVal);
         }
+        if (key === 'sku') {
+          const aVal = (a.variantSku || '').toLowerCase();
+          const bVal = (b.variantSku || '').toLowerCase();
+          return dir * aVal.localeCompare(bVal);
+        }
         if (key === 'replenishmentDate') {
           const aHas = !!a.estimatedReplenishmentDate;
           const bHas = !!b.estimatedReplenishmentDate;
           if (!aHas && !bHas) return 0;
-          if (!aHas) return 1; // nulos al final
+          if (!aHas) return 1;
           if (!bHas) return -1;
           const aTime = new Date(a.estimatedReplenishmentDate).getTime();
           const bTime = new Date(b.estimatedReplenishmentDate).getTime();

@@ -1,5 +1,5 @@
 import { Badge } from '@shadcn/ui/badge';
-import { Product } from '@lib/consts/products';
+import { Product } from '@graphql/generated';
 import { useTranslations } from 'next-intl';
 
 export default function ProductStatus({ product }: { product: Product }) {

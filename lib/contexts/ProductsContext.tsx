@@ -1,11 +1,20 @@
 'use client';
 
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  ReactNode,
+  useState,
+  useCallback,
+  useEffect,
+} from 'react';
 import { useGetAllProducts } from '@hooks/domains/products';
-import type {
+import {
   FindAllProductsQueryVariables,
   Product,
   Variant,
+  ProductSortBy,
+  SortOrder,
 } from '@graphql/generated';
 
 interface ProductsContextType {
@@ -19,6 +28,12 @@ interface ProductsContextType {
   total: number;
   getVariantById: (variantId: string) => Variant | null;
   getProductByVariantId: (variantId: string) => Product | null;
+  // Sort state and handlers
+  sortBy: ProductSortBy;
+  sortOrder: SortOrder;
+  setSortBy: (sortBy: ProductSortBy) => void;
+  setSortOrder: (sortOrder: SortOrder) => void;
+  handleSort: (column: ProductSortBy) => void;
 }
 
 const ProductsContext = createContext<ProductsContextType | undefined>(
@@ -34,8 +49,19 @@ export function ProductsProvider({
   children,
   initialVariables,
 }: ProductsProviderProps) {
+  // Sort state - default to UPDATED_AT DESC as requested
+  const [sortBy, setSortBy] = useState<ProductSortBy>(ProductSortBy.UpdatedAt);
+  const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.Desc);
+
+  // Include sort parameters in the initial variables
+  const variablesWithSort = {
+    ...initialVariables,
+    sortBy,
+    sortOrder,
+  };
+
   const { products, loading, error, refetch, refreshProducts, total } =
-    useGetAllProducts(initialVariables);
+    useGetAllProducts(variablesWithSort);
 
   // Helper function to find a variant by ID across all products
   const getVariantById = (variantId: string): Variant | null => {
@@ -60,15 +86,54 @@ export function ProductsProvider({
     return null;
   };
 
+  // Handle sort column click - toggle order if same column, otherwise set new column with ASC
+  const handleSort = useCallback(
+    (column: ProductSortBy) => {
+      if (sortBy === column) {
+        // Same column, toggle order
+        setSortOrder(
+          sortOrder === SortOrder.Asc ? SortOrder.Desc : SortOrder.Asc,
+        );
+      } else {
+        // Different column, set to ASC
+        setSortBy(column);
+        setSortOrder(SortOrder.Asc);
+      }
+    },
+    [sortBy, sortOrder],
+  );
+
+  // Enhanced refreshProducts that includes current sort state
+  const refreshProductsWithSort = useCallback(
+    (variables?: FindAllProductsQueryVariables) => {
+      return refreshProducts({
+        ...variables,
+        sortBy,
+        sortOrder,
+      });
+    },
+    [refreshProducts, sortBy, sortOrder],
+  );
+
+  // Auto-refresh products when sort state changes
+  useEffect(() => {
+    void refreshProductsWithSort();
+  }, [sortBy, sortOrder, refreshProductsWithSort]);
+
   const contextValue: ProductsContextType = {
     products,
     loading,
     error,
     refetch,
-    refreshProducts,
+    refreshProducts: refreshProductsWithSort,
     total,
     getVariantById,
     getProductByVariantId,
+    sortBy,
+    sortOrder,
+    setSortBy,
+    setSortOrder,
+    handleSort,
   };
 
   return (

@@ -29,15 +29,15 @@ export function ProductTableRow({
   };
 
   return (
-    <TableRow className="cursor-pointer" onClick={handleRowClick}>
+    <TableRow className="group cursor-pointer" onClick={handleRowClick}>
       <TableCell
-        className="hover:bg-background cursor-default"
+        className="group-hover:bg-background cursor-default"
         onClick={handleCheckboxClick}
       >
         <Checkbox checked={isSelected} onCheckedChange={onSelect} />
       </TableCell>
-      <TableCell>
-        <div className="flex items-center gap-3">
+      <TableCell className="text-left">
+        <div className="flex items-start gap-3">
           <div className="h-10 w-10 overflow-hidden rounded-lg">
             <Image
               src={product.cover}
@@ -47,16 +47,23 @@ export function ProductTableRow({
               className="h-full w-full object-cover"
             />
           </div>
-          <span className="font-medium">{product.name}</span>
+          <div className="flex flex-col items-start">
+            <span className="font-medium">{product.name}</span>
+            {product.variants?.[0]?.attributes?.[0] && (
+              <span className="text-muted-foreground text-sm">
+                {product.variants[0].attributes[0].key}:{' '}
+                {product.variants[0].attributes[0].value}
+              </span>
+            )}
+          </div>
         </div>
       </TableCell>
-      <TableCell>{product.variants?.[0]?.sku || '-'}</TableCell>
+      <TableCell>{product.variants?.[0].sku}</TableCell>
       <TableCell>
-        {product.variants?.[0]?.price
-          ? `${process.env.NEXT_PUBLIC_DEFAULT_CURRENCY}${product.variants[0].price}`
-          : '-'}
+        {process.env.NEXT_PUBLIC_DEFAULT_CURRENCY}
+        {product.variants?.[0].price}
       </TableCell>
-      <TableCell>{product.variants?.length || 0}</TableCell>
+      <TableCell>{product.variants?.length}</TableCell>
       <TableCell>{product.categories?.[0]?.categoryName || '-'}</TableCell>
       <TableCell>
         <ProductStatus product={product} />

@@ -6,15 +6,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useProductManagement } from './useProductManagement';
-import { useGetProductById } from './useGetProductById';
-import { useProductCreation } from '@lib/contexts/ProductCreationContext';
-import type {
+import { useProductManagement, useGetProductById } from './';
+import { useProductCreation } from '@contexts/ProductCreationContext';
+import {
   Media,
   TypeEnum,
   MediaTypeEnum,
   ConditionEnum,
-} from '@lib/graphql/generated';
+} from '@graphql/generated';
 
 // Create Zod schema factory that uses translations
 const createProductFormSchema = (t: (key: string) => string) =>
@@ -345,7 +344,7 @@ export function useProductForm({
                     }
                   : undefined,
               weight: variant.weight || undefined,
-              sku: variant.codes.sku,
+              sku: variant.codes.sku || '',
               upc: variant.codes.upc,
               ean: variant.codes.ean,
               isbn: variant.codes.isbn,
@@ -366,9 +365,9 @@ export function useProductForm({
               variantMedia: variant.variantMedia?.map((url, index) => ({
                 url,
                 position: index + 1,
-                mediaType: (url.includes('.mp4')
-                  ? 'VIDEO'
-                  : 'IMAGE') as MediaTypeEnum,
+                mediaType: url.includes('.mp4')
+                  ? MediaTypeEnum.Video
+                  : MediaTypeEnum.Image,
               })),
             })),
           };

@@ -1,5 +1,6 @@
 import { ProductTableRow } from '@atoms/products/ProductTableRow';
 import type { Meta, StoryObj } from '@storybook/nextjs';
+import { MediaTypeEnum, TypeEnum } from '@graphql/generated';
 import { Table, TableBody } from '@shadcn/ui/table';
 
 const meta: Meta<typeof ProductTableRow> = {
@@ -39,12 +40,14 @@ const mockProduct = {
       id: 'media_001',
       url: '/default.webp',
       position: 1,
-      mediaType: 'IMAGE' as const,
+      mediaType: MediaTypeEnum.Image,
     },
   ],
   isArchived: false,
-  productType: 'physical',
+  productType: TypeEnum.Physical,
   shortDescription: 'A modern smartphone.',
+  createdAt: '2024-01-01T00:00:00Z',
+  updatedAt: '2024-01-15T12:30:00Z',
 };
 
 export const Default: Story = {
@@ -68,6 +71,8 @@ export const LongName: Story = {
     product: {
       ...mockProduct,
       name: 'Super Long Product Name That Might Wrap to Multiple Lines',
+      createdAt: '2024-01-01T00:00:00Z',
+      updatedAt: '2024-01-15T12:30:00Z',
     },
     isSelected: false,
     onSelect: (checked: boolean) => console.log('Selected:', checked),

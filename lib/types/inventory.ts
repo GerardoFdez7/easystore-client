@@ -15,4 +15,5 @@ export type SortField =
   | 'available'
   | 'reserved'
   | 'replenishmentDate'
-  | 'variantFirstAttribute';
+  | 'variantFirstAttribute'
+  | 'sku';

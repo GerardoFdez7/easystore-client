@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from '@shadcn/ui/select';
 import { useTranslations } from 'next-intl';
-import { ProductType } from '@lib/utils/types/product';
+import { TypeEnum } from '@graphql/generated';
 
 export default function TypeProductFormField() {
   const { control } = useFormContext();
@@ -33,10 +33,10 @@ export default function TypeProductFormField() {
             </FormLabel>
             <FormControl>
               <Select
-                value={field.value || 'PHYSICAL'}
+                value={field.value || TypeEnum.Physical}
                 required={true}
                 onValueChange={(value) => {
-                  field.onChange(value as ProductType);
+                  field.onChange(value as TypeEnum);
                 }}
               >
                 <SelectTrigger
@@ -46,8 +46,12 @@ export default function TypeProductFormField() {
                   <SelectValue placeholder={t('selectType')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="PHYSICAL">{t('physical')}</SelectItem>
-                  <SelectItem value="DIGITAL">{t('digital')}</SelectItem>
+                  <SelectItem value={TypeEnum.Physical}>
+                    {t('physical')}
+                  </SelectItem>
+                  <SelectItem value={TypeEnum.Digital}>
+                    {t('digital')}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </FormControl>

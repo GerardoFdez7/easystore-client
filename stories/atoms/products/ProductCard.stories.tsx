@@ -1,5 +1,6 @@
 import { ProductCard } from '@atoms/products/ProductCard';
 import type { Meta, StoryObj } from '@storybook/nextjs';
+import { MediaTypeEnum, TypeEnum } from '@graphql/generated';
 
 const meta: Meta<typeof ProductCard> = {
   title: 'Atoms/Products/ProductCard',
@@ -8,8 +9,6 @@ const meta: Meta<typeof ProductCard> = {
     layout: 'centered',
   },
   argTypes: {
-    isSelected: { control: 'boolean' },
-    onSelect: { action: 'selected' },
     product: { control: 'object' },
   },
 };
@@ -29,33 +28,31 @@ const mockProduct = {
       id: 'media_001',
       url: '/default.webp',
       position: 1,
-      mediaType: 'IMAGE' as const,
+      mediaType: MediaTypeEnum.Image,
     },
     {
       id: 'media_002',
       url: '/phone.webp',
       position: 2,
-      mediaType: 'IMAGE' as const,
+      mediaType: MediaTypeEnum.Image,
     },
   ],
   isArchived: false,
-  productType: 'Standard',
+  productType: TypeEnum.Physical,
   shortDescription: 'A reusable eco-friendly water bottle.',
+  createdAt: '2024-01-01T00:00:00Z',
+  updatedAt: '2024-01-15T12:30:00Z',
 };
 
 export const Default: Story = {
   args: {
     product: mockProduct,
-    isSelected: false,
-    onSelect: (checked: boolean) => console.log('Selected:', checked),
   },
 };
 
 export const Selected: Story = {
   args: {
     product: mockProduct,
-    isSelected: true,
-    onSelect: (checked: boolean) => console.log('Selected:', checked),
   },
 };
 
@@ -65,10 +62,8 @@ export const WithoutMedia: Story = {
       ...mockProduct,
       media: undefined,
       isArchived: false,
-      productType: 'Standard',
+      productType: TypeEnum.Physical,
       shortDescription: 'A reusable eco-friendly water bottle.',
     },
-    isSelected: false,
-    onSelect: (checked: boolean) => console.log('Selected:', checked),
   },
 };

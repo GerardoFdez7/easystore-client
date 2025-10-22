@@ -63,7 +63,7 @@ export default function MultiSelectComboboxCategory({
   }, [onValueChange]);
 
   return (
-    <div className={cn('flex items-center', className)}>
+    <div className={cn('flex items-center gap-1', className)}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -71,7 +71,9 @@ export default function MultiSelectComboboxCategory({
             role="combobox"
             aria-expanded={open}
             className={cn(
-              'w-full justify-between text-left font-normal sm:w-auto',
+              'justify-between text-left font-normal',
+              'w-full sm:w-auto',
+              value.length > 0 ? 'flex-1 sm:flex-initial' : 'w-full sm:w-auto',
               !value.length && 'text-muted-foreground',
             )}
             disabled={disabled}
@@ -134,7 +136,7 @@ export default function MultiSelectComboboxCategory({
                 type="button"
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8"
+                className="h-8 w-8 flex-shrink-0"
                 onClick={handleClear}
                 disabled={disabled}
               >

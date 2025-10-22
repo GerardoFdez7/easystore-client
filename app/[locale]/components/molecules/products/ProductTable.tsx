@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { Checkbox } from '@shadcn/ui/checkbox';
 import {
   Table,
@@ -8,10 +9,11 @@ import {
   TableHeader,
   TableRow,
 } from '@shadcn/ui/table';
+import { Product, ProductSortBy, SortOrder } from '@graphql/generated';
 import { ProductTableRow } from '@atoms/products/ProductTableRow';
-import { useTranslations } from 'next-intl';
-import { Product } from '@lib/graphql/generated';
 import TablePagination from '@molecules/shared/TablePagination';
+import SortableHeader from '@atoms/shared/SortableHeader';
+import { useTranslations } from 'next-intl';
 
 interface ProductTableProps {
   products: Product[];
@@ -29,6 +31,10 @@ interface ProductTableProps {
   onLastPage: () => void;
   canPreviousPage: boolean;
   canNextPage: boolean;
+  // Sort props
+  sortBy: ProductSortBy;
+  sortOrder: SortOrder;
+  onSort: (column: ProductSortBy) => void;
 }
 
 export function ProductTable({
@@ -46,6 +52,9 @@ export function ProductTable({
   onLastPage,
   canPreviousPage,
   canNextPage,
+  sortBy,
+  sortOrder,
+  onSort,
 }: ProductTableProps) {
   const t = useTranslations('Products');
 
@@ -60,10 +69,38 @@ export function ProductTable({
                 onCheckedChange={onSelectAll}
               />
             </TableHead>
-            <TableHead>{t('products')}</TableHead>
-            <TableHead>SKU</TableHead>
-            <TableHead>{t('price')}</TableHead>
-            <TableHead>{t('variants')}</TableHead>
+            <SortableHeader<ProductSortBy>
+              sortKey={ProductSortBy.Name}
+              currentSortBy={sortBy}
+              currentSortOrder={sortOrder}
+              onSort={onSort}
+            >
+              {t('products')}
+            </SortableHeader>
+            <SortableHeader<ProductSortBy>
+              sortKey={ProductSortBy.Sku}
+              currentSortBy={sortBy}
+              currentSortOrder={sortOrder}
+              onSort={onSort}
+            >
+              SKU
+            </SortableHeader>
+            <SortableHeader<ProductSortBy>
+              sortKey={ProductSortBy.FirstVariantPrice}
+              currentSortBy={sortBy}
+              currentSortOrder={sortOrder}
+              onSort={onSort}
+            >
+              {t('price')}
+            </SortableHeader>
+            <SortableHeader<ProductSortBy>
+              sortKey={ProductSortBy.VariantCount}
+              currentSortBy={sortBy}
+              currentSortOrder={sortOrder}
+              onSort={onSort}
+            >
+              {t('variants')}
+            </SortableHeader>
             <TableHead>{t('category')}</TableHead>
             <TableHead>{t('status')}</TableHead>
           </TableRow>

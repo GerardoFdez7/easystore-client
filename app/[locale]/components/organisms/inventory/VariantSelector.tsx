@@ -9,10 +9,10 @@ import { Card, CardContent, CardHeader } from '@shadcn/ui/card';
 import SearchBar from '@atoms/shared/SearchBar';
 import ProductVariantGroup from '@molecules/inventory/ProductVariantGroup';
 import EmptyState from '@molecules/shared/EmptyState';
-import SortBySelect from '@atoms/shared/SortBySelect';
+import ProductSortBySelect from '@atoms/shared/ProductSortBySelect';
 import SortOrderSelect from '@atoms/shared/SortOrderSelect';
 import LoadMoreButton from '@atoms/shared/LoadMoreButton';
-import { SortBy } from '@graphql/generated';
+import { ProductSortBy } from '@graphql/generated';
 
 interface VariantSelectorProps {
   onVariantSelect: (
@@ -87,7 +87,7 @@ const VariantSelector: React.FC<VariantSelectorProps> = ({
                 aria-describedby="includeSoftDeleted-description"
               />
             </div>
-            <SortBySelect
+            <ProductSortBySelect
               value={sortBy}
               onChange={(value) => {
                 if (value) {
@@ -95,9 +95,9 @@ const VariantSelector: React.FC<VariantSelectorProps> = ({
                 }
               }}
               availableOptions={[
-                SortBy.Name,
-                SortBy.CreatedAt,
-                SortBy.UpdatedAt,
+                ProductSortBy.Name,
+                ProductSortBy.CreatedAt,
+                ProductSortBy.UpdatedAt,
               ]}
             />
           </div>
