@@ -1050,7 +1050,7 @@
       "updatedAt": "Aggiornamento",
       "placeholder": "Ordina",
       "sku": "SKU",
-      "firstVariantPrice": "Prezzo della Variante",
+      "firstVariantPrice": "Prezzo",
       "variantCount": "Numero di Varianti"
     },
     "sortOrder": {

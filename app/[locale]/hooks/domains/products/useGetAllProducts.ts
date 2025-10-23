@@ -19,7 +19,7 @@ export const useGetAllProducts = (
     [],
   );
 
-  const { data, loading, error, refetch } = useQuery<
+  const { data, loading, error, refetch, fetchMore } = useQuery<
     FindAllProductsQuery,
     FindAllProductsQueryVariables
   >(FindAllProductsDocument, {
@@ -29,7 +29,7 @@ export const useGetAllProducts = (
     },
     fetchPolicy: 'cache-and-network',
     errorPolicy: 'all',
-    notifyOnNetworkStatusChange: true, // Changed to true to update loading states
+    notifyOnNetworkStatusChange: true,
   });
 
   const products = useMemo(() => {
@@ -50,12 +50,23 @@ export const useGetAllProducts = (
     [refetch, defaultVariables],
   );
 
+  // Calculate hasMore based on current page and total
+  const hasMore = useMemo(() => {
+    if (!data?.getAllProducts) return false;
+    const currentPage = variables?.page || defaultVariables.page || 1;
+    const limit = variables?.limit || defaultVariables.limit || 25;
+    const total = data.getAllProducts.total || 0;
+    return currentPage * limit < total;
+  }, [data, variables, defaultVariables]);
+
   return {
     products,
     loading,
     error,
     refetch,
     refreshProducts,
+    fetchMore,
     total: data?.getAllProducts?.total || 0,
+    hasMore,
   };
 };

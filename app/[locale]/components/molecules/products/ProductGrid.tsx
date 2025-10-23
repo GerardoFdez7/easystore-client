@@ -1,5 +1,6 @@
 import { ProductCard } from '@atoms/products/ProductCard';
 import ProductCardSkeleton from '@atoms/products/ProductCardSkeleton';
+import LoadMoreButton from '@atoms/shared/LoadMoreButton';
 import { Product } from '@graphql/generated';
 
 interface ProductGridProps {
@@ -7,6 +8,8 @@ interface ProductGridProps {
   loading?: boolean;
   isLoadingMore?: boolean;
   limit?: number;
+  hasMore?: boolean;
+  onLoadMore?: () => void;
 }
 
 export function ProductGrid({
@@ -14,6 +17,8 @@ export function ProductGrid({
   loading = false,
   isLoadingMore = false,
   limit = 25,
+  hasMore = false,
+  onLoadMore,
 }: ProductGridProps) {
   const skeletonItems = Array.from({ length: limit }, (_, i) => (
     <ProductCardSkeleton key={`skeleton-${Date.now()}-${i}`} />
@@ -28,11 +33,17 @@ export function ProductGrid({
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
-      ))}
-      {isLoadingMore && skeletonItems}
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+        {isLoadingMore && skeletonItems}
+      </div>
+
+      {hasMore && onLoadMore && (
+        <LoadMoreButton isLoading={isLoadingMore} onClick={onLoadMore} />
+      )}
     </div>
   );
 }

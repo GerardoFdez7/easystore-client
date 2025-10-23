@@ -21,7 +21,6 @@ export default function MainDashboard() {
   const router = useRouter();
   const { clearAllDrafts } = useProductCreation();
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
-  const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
   const [typeFilter, setTypeFilter] = useState<InputMaybe<TypeEnum>>();
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('All');
@@ -37,6 +36,13 @@ export default function MainDashboard() {
     sortBy,
     sortOrder,
     handleSort,
+    setSortOrder,
+    hasMore,
+    fetchMore,
+    isLoadingMore,
+    fetchPage,
+    viewMode,
+    setViewMode,
   } = useProductsContext();
 
   // Filter products based on selected filter
@@ -81,16 +87,36 @@ export default function MainDashboard() {
     (page: number) => {
       setCurrentPage(page);
       setSelectedProducts([]); // Clear selection when changing pages
-      void refreshProducts({
-        page,
-        limit: itemsPerPage,
-        includeSoftDeleted: true,
-        name: searchTerm || null,
-        type: typeFilter || null,
-        categoriesIds: categoryFilter.length > 0 ? categoryFilter : null,
-      });
+
+      if (viewMode === 'table') {
+        // Use fetchPage for table pagination
+        void fetchPage(page, {
+          includeSoftDeleted: selectedFilter !== 'Actives',
+          name: searchTerm || null,
+          type: typeFilter || null,
+          categoriesIds: categoryFilter.length > 0 ? categoryFilter : null,
+        });
+      } else {
+        // For cards view, use refreshProducts to reset and start from page 1
+        void refreshProducts({
+          page: 1, // Always start from page 1 for cards view
+          limit: itemsPerPage,
+          includeSoftDeleted: selectedFilter !== 'Actives',
+          name: searchTerm || null,
+          type: typeFilter || null,
+          categoriesIds: categoryFilter.length > 0 ? categoryFilter : null,
+        });
+      }
     },
-    [refreshProducts, searchTerm, typeFilter, categoryFilter],
+    [
+      viewMode,
+      fetchPage,
+      refreshProducts,
+      selectedFilter,
+      searchTerm,
+      typeFilter,
+      categoryFilter,
+    ],
   );
 
   const handlePreviousPage = useCallback(() => {
@@ -216,7 +242,21 @@ export default function MainDashboard() {
   };
 
   const toggleViewMode = () => {
-    setViewMode(viewMode === 'table' ? 'cards' : 'table');
+    const newViewMode = viewMode === 'table' ? 'cards' : 'table';
+    setViewMode(newViewMode);
+
+    // Reset pagination when switching view modes
+    setCurrentPage(1);
+
+    // Refresh products with current filters
+    void refreshProducts({
+      page: 1,
+      limit: itemsPerPage,
+      includeSoftDeleted: selectedFilter !== 'Actives',
+      name: searchTerm || null,
+      type: typeFilter || null,
+      categoriesIds: categoryFilter.length > 0 ? categoryFilter : null,
+    });
   };
 
   // Only show EmptyState when there are NO products in DB and NO active filters
@@ -263,6 +303,12 @@ export default function MainDashboard() {
             selectedProducts={selectedProducts}
             isArchived={selectedProductsAreArchived}
             onDeleteComplete={handleClearSelection}
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            onSortByChange={(newSortBy) => handleSort(newSortBy)}
+            onSortOrderChange={(newSortOrder) => {
+              setSortOrder(newSortOrder);
+            }}
           />
 
           {hasFilteredEmptyState ? (
@@ -314,7 +360,15 @@ export default function MainDashboard() {
                   />
                 )
               ) : (
-                <ProductGrid products={paginatedProducts} loading={loading} />
+                <ProductGrid
+                  products={paginatedProducts}
+                  loading={loading}
+                  hasMore={hasMore}
+                  onLoadMore={() => {
+                    void fetchMore();
+                  }}
+                  isLoadingMore={isLoadingMore}
+                />
               )}
             </>
           )}

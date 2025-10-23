@@ -163,17 +163,18 @@ export default function AddSubcategoriesPicker({
                 </div>
               </label>
             ))}
+            {hasMore && (
+              <LoadMoreButton
+                onClick={handleLoadMoreClick}
+                isLoading={loading}
+                disabled={!hasMore}
+                size="sm"
+                className="m-4"
+              />
+            )}
           </>
         )}
       </div>
-      {hasMore && (
-        <LoadMoreButton
-          onClick={handleLoadMoreClick}
-          isLoading={loading}
-          disabled={!hasMore}
-          size="sm"
-        />
-      )}
 
       <div className="flex flex-col items-center justify-between gap-2 sm:flex-row sm:gap-0">
         <span className="text-text text-sm" role="status" aria-live="polite">

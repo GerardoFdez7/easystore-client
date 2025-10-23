@@ -22,11 +22,17 @@ function ProductCardSkeleton() {
               className="h-5 w-3/4 sm:h-6"
               aria-label="Loading product name"
             />
-            {/* Product attributes skeleton */}
-            <Skeleton
-              className="mt-2 h-3 w-1/2 sm:h-4"
-              aria-label="Loading product attributes"
-            />
+            {/* Variant attributes and count skeleton - matches new layout */}
+            <div className="mt-2 flex w-full items-center justify-between">
+              <Skeleton
+                className="h-3 w-1/3 sm:h-4"
+                aria-label="Loading variant attributes"
+              />
+              <Skeleton
+                className="h-5 w-8 rounded-full"
+                aria-label="Loading variant count"
+              />
+            </div>
           </div>
 
           {/* Product details skeleton - matches price, brand, and tags */}

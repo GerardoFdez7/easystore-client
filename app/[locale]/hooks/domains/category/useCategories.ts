@@ -118,22 +118,6 @@ export function useCategories<T = CategorySummary>(
           sortOrder: opts.sortOrder ?? SortOrder.Asc,
           includeSubcategories: opts.includeSubcategories ?? true,
         },
-        updateQuery: (prev, { fetchMoreResult }) => {
-          if (!fetchMoreResult?.getAllCategories?.categories) return prev;
-
-          return {
-            ...prev,
-            getAllCategories: {
-              ...prev.getAllCategories,
-              categories: [
-                ...(prev.getAllCategories?.categories || []),
-                ...fetchMoreResult.getAllCategories.categories,
-              ],
-              hasMore: fetchMoreResult.getAllCategories.hasMore,
-              total: fetchMoreResult.getAllCategories.total,
-            },
-          };
-        },
       });
       setPage((prev) => prev + 1);
     } catch (_error) {

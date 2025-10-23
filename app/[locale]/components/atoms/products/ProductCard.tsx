@@ -176,9 +176,17 @@ export function ProductCard({ product }: ProductCardProps) {
             <CardTitle className="line-clamp-2 text-sm sm:text-base">
               {product.name}
             </CardTitle>
-            <div className="text-muted-foreground mt-0.5 text-xs sm:text-sm">
-              {product.variants?.[0]?.attributes?.[0]?.key}:{' '}
-              {product.variants?.[0]?.attributes?.[0]?.value}
+            {/* Variant attributes at the start with variant count at the end */}
+            <div className="flex items-center justify-between">
+              <div className="text-sm">
+                {product.variants?.[0]?.attributes?.[0]?.key}:{' '}
+                {product.variants?.[0]?.attributes?.[0]?.value}
+              </div>
+              {product.variants && product.variants.length > 1 && (
+                <div className="bg-muted flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs font-medium">
+                  +{product.variants.length - 1}
+                </div>
+              )}
             </div>
           </button>
 

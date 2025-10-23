@@ -1048,7 +1048,7 @@
       "updatedAt": "Mise à Jour",
       "placeholder": "Trier",
       "sku": "SKU",
-      "firstVariantPrice": "Prix de la Variante",
+      "firstVariantPrice": "Prix",
       "variantCount": "Nombre de Variantes"
     },
     "sortOrder": {

@@ -1047,7 +1047,7 @@
       "updatedAt": "Update",
       "placeholder": "Sort",
       "sku": "SKU",
-      "firstVariantPrice": "Variant Price",
+      "firstVariantPrice": "Price",
       "variantCount": "Ammount of Variants"
     },
     "sortOrder": {

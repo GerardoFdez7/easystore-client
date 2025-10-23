@@ -98,6 +98,8 @@ const VariantSelector: React.FC<VariantSelectorProps> = ({
                 ProductSortBy.Name,
                 ProductSortBy.CreatedAt,
                 ProductSortBy.UpdatedAt,
+                ProductSortBy.Sku,
+                ProductSortBy.VariantCount,
               ]}
             />
           </div>

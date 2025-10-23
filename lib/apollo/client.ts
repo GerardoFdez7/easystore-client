@@ -5,6 +5,29 @@ const getClient = () => {
   return new ApolloClient({
     cache: new InMemoryCache({
       typePolicies: {
+        Query: {
+          fields: {
+            getAllProducts: {
+              keyArgs: [
+                'sortBy',
+                'sortOrder',
+                'categoriesIds',
+                'type',
+                'includeSoftDeleted',
+                'name',
+              ],
+            },
+            getAllCategories: {
+              keyArgs: [
+                'sortBy',
+                'sortOrder',
+                'parentId',
+                'name',
+                'includeSubcategories',
+              ],
+            },
+          },
+        },
         Category: {
           fields: {
             subCategories: {
