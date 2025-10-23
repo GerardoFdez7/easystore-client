@@ -28,7 +28,7 @@
   --popover-foreground: oklch(0.145 0 0);
   --primary-foreground: oklch(0.985 0 0);
   --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
+  --muted: oklch(94.912% 0.00011 271.152);
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
@@ -155,6 +155,12 @@
   border: 1px solid var(--error) !important;
 }
 
+.success-toast {
+  background-color: var(--secondary) !important;
+  color: white !important;
+  border: 1px solid var(--secondary) !important;
+}
+
 /* Target the toast container to arrange icon and content */
 .custom-toast {
   display: flex !important;
@@ -165,6 +171,12 @@
 /* Style the icon specifically */
 .warning-toast > svg,
 .error-toast > svg {
+  width: 16px !important;
+  height: 16px !important;
+  flex-shrink: 0 !important;
+}
+
+.success-toast > svg {
   width: 16px !important;
   height: 16px !important;
   flex-shrink: 0 !important;
@@ -194,6 +206,10 @@
 }
 
 .error-toast .custom-toast-description {
+  color: white !important;
+}
+
+.success-toast .custom-toast-description {
   color: white !important;
 }
 

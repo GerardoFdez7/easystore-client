@@ -8,8 +8,17 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
 } from '@shadcn/ui/dropdown-menu';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '../../shadcn/ui/tooltip';
+import { Button } from '@shadcn/ui/button';
 
 export const LanguageButton = () => {
   const t = useTranslations('Languages');
@@ -41,28 +50,63 @@ export const LanguageButton = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className="text-title hover:text-gray-90 flex cursor-pointer items-center gap-1 text-2xl font-medium">
-          <Globe size={24} className="h-6 w-6 md:h-7 md:w-7" />
-          {languageAbbreviations[selectedLanguage]}
-        </button>
-      </DropdownMenuTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <DropdownMenuTrigger asChild>
+            <Button
+              className="text-title h-9 w-9 p-0 font-medium sm:h-10 sm:w-16 sm:gap-1 sm:text-2xl"
+              variant="ghost"
+              aria-label={t('Languages')}
+            >
+              <Globe className="size-6" />
+              <span className="hidden sm:inline">
+                {languageAbbreviations[selectedLanguage]}
+              </span>
+            </Button>
+          </DropdownMenuTrigger>
+        </TooltipTrigger>
+        <TooltipContent>{t('Languages')}</TooltipContent>
+      </Tooltip>
       <DropdownMenuContent className="w-48 font-medium">
-        <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
-          {t('English')}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleLanguageChange('es')}>
-          {t('Spanish')}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleLanguageChange('fr')}>
-          {t('French')}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleLanguageChange('it')}>
-          {t('Italian')}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleLanguageChange('pt')}>
-          {t('Portuguese')}
-        </DropdownMenuItem>
+        <DropdownMenuLabel className="text-lg">
+          {t('Languages')}
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuRadioGroup
+          value={selectedLanguage}
+          onValueChange={handleLanguageChange}
+        >
+          <DropdownMenuRadioItem
+            value="en"
+            className="cursor-pointer text-base"
+          >
+            {t('English')}
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+            value="es"
+            className="cursor-pointer text-base"
+          >
+            {t('Spanish')}
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+            value="fr"
+            className="cursor-pointer text-base"
+          >
+            {t('French')}
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+            value="it"
+            className="cursor-pointer text-base"
+          >
+            {t('Italian')}
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+            value="pt"
+            className="cursor-pointer text-base"
+          >
+            {t('Portuguese')}
+          </DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -4,7 +4,8 @@
     "English": "English",
     "French": "Français",
     "Italian": "Italiano",
-    "Portuguese": "Português"
+    "Portuguese": "Português",
+    "Languages": "Idiomas"
   },
   "Construction": {
     "title": "Estamos construindo algo incrível!",
@@ -1056,7 +1057,9 @@
       "placeholder": "Ordem",
       "ascending": "Crescente",
       "descending": "Decrescente"
-    }
+    },
+    "themeToggle": "Alternar tema",
+    "accountMenu": "Menu da conta"
   },
   "Inventory": {
     "searchPlaceholder": "Pesquisar por nome do produto, variante ou SKU...",

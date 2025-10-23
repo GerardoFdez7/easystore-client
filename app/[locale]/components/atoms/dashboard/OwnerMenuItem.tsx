@@ -16,7 +16,7 @@ export default function OwnerMenuItem({
   label,
   onClick,
   onSelect,
-  className = 'cursor-pointer text-[16px] sm:text-lg',
+  className = 'cursor-pointer sm:text-base',
 }: OwnerMenuItemProps) {
   return (
     <DropdownMenuItem
@@ -24,7 +24,7 @@ export default function OwnerMenuItem({
       onClick={onClick}
       onSelect={onSelect}
     >
-      <Icon className="mr-2 h-4 w-4" />
+      <Icon className="h-4 w-4" />
       {label}
     </DropdownMenuItem>
   );
