@@ -12,7 +12,7 @@ import EmptyState from '@molecules/shared/EmptyState';
 import ProductSortBySelect from '@atoms/shared/ProductSortBySelect';
 import SortOrderSelect from '@atoms/shared/SortOrderSelect';
 import LoadMoreButton from '@atoms/shared/LoadMoreButton';
-import { ProductSortBy } from '@graphql/generated';
+import { ProductSortBy, ProductFilterMode } from '@graphql/generated';
 
 interface VariantSelectorProps {
   onVariantSelect: (
@@ -34,14 +34,14 @@ const VariantSelector: React.FC<VariantSelectorProps> = ({
     searchTerm,
     sortBy,
     sortOrder,
-    includeSoftDeleted,
+    filterMode,
     products,
     loading,
     hasMore,
     updateSearchTerm,
     updateSortBy,
     updateSortOrder,
-    updateIncludeSoftDeleted,
+    updateFilterMode,
     handleLoadMore,
   } = useVariantSelector();
 
@@ -74,17 +74,23 @@ const VariantSelector: React.FC<VariantSelectorProps> = ({
             {/* Archived Switch */}
             <div className="flex flex-col gap-1">
               <Label
-                htmlFor="includeSoftDeleted"
+                htmlFor="includeArchived"
                 className="text-sm"
-                id="includeSoftDeleted-description"
+                id="includeArchived-description"
               >
                 {t('includeArchived')}
               </Label>
               <Switch
-                id="includeSoftDeleted"
-                checked={includeSoftDeleted}
-                onCheckedChange={updateIncludeSoftDeleted}
-                aria-describedby="includeSoftDeleted-description"
+                id="includeArchived"
+                checked={filterMode === ProductFilterMode.Archives}
+                onCheckedChange={(checked) => {
+                  updateFilterMode(
+                    checked
+                      ? ProductFilterMode.Archives
+                      : ProductFilterMode.Actives,
+                  );
+                }}
+                aria-describedby="includeArchived-description"
               />
             </div>
             <ProductSortBySelect

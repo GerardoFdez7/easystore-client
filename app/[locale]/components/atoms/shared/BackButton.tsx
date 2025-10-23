@@ -28,15 +28,9 @@ export default function BackButton({
       aria-label={label}
       variant="ghost"
       size="icon"
-      className={cx(
-        'absolute',
-        'h-12 w-12',
-        'focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:outline-none',
-        'z-50',
-        className,
-      )}
+      className={cx('absolute', className)}
     >
-      <ArrowLeft className="h-5 w-5" />
+      <ArrowLeft className="size-5" />
     </Button>
   );
 }

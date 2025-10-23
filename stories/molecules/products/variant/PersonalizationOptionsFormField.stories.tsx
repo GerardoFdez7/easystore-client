@@ -2,10 +2,10 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Form } from '@shadcn/ui/form';
-import PersonalizationOptionsFormField from '@molecules/variant/PersonalizationOptionsFormField';
+import PersonalizationOptionsFormField from '@molecules/products/variant/PersonalizationOptionsFormField';
 
 const meta: Meta<typeof PersonalizationOptionsFormField> = {
-  title: 'Molecules/Variant/PersonalizationOptionsFormField',
+  title: 'Molecules/Products/Variant/PersonalizationOptionsFormField',
   component: PersonalizationOptionsFormField,
   parameters: {
     layout: 'centered',

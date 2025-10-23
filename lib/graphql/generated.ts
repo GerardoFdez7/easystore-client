@@ -741,6 +741,12 @@ export type ProductCategory = {
   categoryName?: Maybe<Scalars['String']['output']>;
 };
 
+export enum ProductFilterMode {
+  Actives = 'ACTIVES',
+  All = 'ALL',
+  Archives = 'ARCHIVES',
+}
+
 export enum ProductSortBy {
   CreatedAt = 'CREATED_AT',
   FirstVariantPrice = 'FIRST_VARIANT_PRICE',
@@ -792,7 +798,7 @@ export type QueryGetAllCategoriesArgs = {
 
 export type QueryGetAllProductsArgs = {
   categoriesIds?: InputMaybe<Array<Scalars['ID']['input']>>;
-  includeSoftDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  filterMode?: InputMaybe<ProductFilterMode>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['Float']['input']>;
@@ -2143,7 +2149,7 @@ export type FindAllProductsQueryVariables = Exact<{
   type?: InputMaybe<TypeEnum>;
   sortBy?: InputMaybe<ProductSortBy>;
   sortOrder?: InputMaybe<SortOrder>;
-  includeSoftDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  filterMode?: InputMaybe<ProductFilterMode>;
   name?: InputMaybe<Scalars['String']['input']>;
 }>;
 
@@ -2239,7 +2245,7 @@ export type FindAllVariantsToCreateStockQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Float']['input']>;
   sortBy?: InputMaybe<ProductSortBy>;
   sortOrder?: InputMaybe<SortOrder>;
-  includeSoftDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  filterMode?: InputMaybe<ProductFilterMode>;
   name?: InputMaybe<Scalars['String']['input']>;
 }>;
 
@@ -7152,10 +7158,13 @@ export const FindAllProductsDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'includeSoftDeleted' },
+            name: { kind: 'Name', value: 'filterMode' },
           },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
-          defaultValue: { kind: 'BooleanValue', value: false },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'ProductFilterMode' },
+          },
+          defaultValue: { kind: 'EnumValue', value: 'ALL' },
         },
         {
           kind: 'VariableDefinition',
@@ -7221,10 +7230,10 @@ export const FindAllProductsDocument = {
               },
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'includeSoftDeleted' },
+                name: { kind: 'Name', value: 'filterMode' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'includeSoftDeleted' },
+                  name: { kind: 'Name', value: 'filterMode' },
                 },
               },
               {
@@ -7585,10 +7594,13 @@ export const FindAllVariantsToCreateStockDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'includeSoftDeleted' },
+            name: { kind: 'Name', value: 'filterMode' },
           },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
-          defaultValue: { kind: 'BooleanValue', value: false },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'ProductFilterMode' },
+          },
+          defaultValue: { kind: 'EnumValue', value: 'ACTIVES' },
         },
         {
           kind: 'VariableDefinition',
@@ -7638,10 +7650,10 @@ export const FindAllVariantsToCreateStockDocument = {
               },
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'includeSoftDeleted' },
+                name: { kind: 'Name', value: 'filterMode' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'includeSoftDeleted' },
+                  name: { kind: 'Name', value: 'filterMode' },
                 },
               },
               {

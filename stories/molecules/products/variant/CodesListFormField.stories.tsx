@@ -1,37 +1,39 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import InstallmentPaymentFormField from '@molecules/variant/InstallmentPaymentFormField';
+import CodesListFormField from '@molecules/products/variant/CodesListFormField';
 
-const meta: Meta<typeof InstallmentPaymentFormField> = {
-  title: 'Molecules/Variant/InstallmentPaymentFormField',
-  component: InstallmentPaymentFormField,
+const meta: Meta<typeof CodesListFormField> = {
+  title: 'Molecules/Products/Variant/CodesListFormField',
+  component: CodesListFormField,
   parameters: {
     layout: 'centered',
     nextjs: {
       appDirectory: true,
     },
   },
-  tags: ['autodocs'],
 };
 export default meta;
 
-type Story = StoryObj<typeof InstallmentPaymentFormField>;
+type Story = StoryObj<typeof CodesListFormField>;
 
 function DefaultStory() {
   const methods = useForm({
     defaultValues: {
-      installmentPayment: {
-        months: '',
-        interestRate: '',
+      codes: {
+        sku: '',
+        upc: '',
+        ean: '',
+        isbn: '',
+        barcode: '',
       },
     },
   });
 
   return (
     <FormProvider {...methods}>
-      <div className="w-[400px]">
-        <InstallmentPaymentFormField />
+      <div className="w-[720px]">
+        <CodesListFormField />
       </div>
     </FormProvider>
   );

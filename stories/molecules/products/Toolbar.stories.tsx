@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { ProductsToolbar } from '@molecules/products/Toolbar';
 import { TypeEnum } from '@graphql/generated';
-import { FilterType } from '@atoms/products/TabFilterProducts';
+import { FilterType } from '@lib/types/filter-mode-mapper';
 import { ProductCreationProvider } from '@lib/contexts/ProductCreationContext';
 
 const meta: Meta<typeof ProductsToolbar> = {

@@ -4,14 +4,14 @@ import React from 'react';
 import { FormProvider } from 'react-hook-form';
 import { Form } from '@shadcn/ui/form';
 //import MediaUploader from '@organisms/shared/MediaUploader';
-import PriceConditionFormField from '@molecules/variant/PriceConditionFormField';
-import AttributesFormField from '@molecules/variant/AttributesFormField';
-import DimensionsRow from '@molecules/variant/DimensionRowFormField';
-import WeightFormField from '@molecules/variant/WeightFormField';
-import CodesListFormField from '@molecules/variant/CodesListFormField';
-import PersonalizationOptionsFormField from '@molecules/variant/PersonalizationOptionsFormField';
-import InstallmentPaymentFormField from '@molecules/variant/InstallmentPaymentFormField';
-import WarrantyFormField from '@molecules/variant/WarrantyFormField';
+import PriceConditionFormField from '@molecules/products/variant/PriceConditionFormField';
+import AttributesFormField from '@molecules/products/variant/AttributesFormField';
+import DimensionsRow from '@molecules/products/variant/DimensionRowFormField';
+import WeightFormField from '@molecules/products/variant/WeightFormField';
+import CodesListFormField from '@molecules/products/variant/CodesListFormField';
+import PersonalizationOptionsFormField from '@molecules/products/variant/PersonalizationOptionsFormField';
+import InstallmentPaymentFormField from '@molecules/products/variant/InstallmentPaymentFormField';
+import WarrantyFormField from '@molecules/products/variant/WarrantyFormField';
 import SaveButton from '@atoms/shared/SaveButton';
 import { useVariantForm } from '@hooks/domains/products/variant';
 import MediaFormField from '@molecules/products/product-detail/MediaFormField';
@@ -45,7 +45,7 @@ export default function MainVariant({
               e.preventDefault();
               void form.handleSubmit(handleSubmit)(e);
             }}
-            className="space-y-6"
+            className="w-full space-y-6"
           >
             <MediaFormField
               coverFieldName="variantCover"

@@ -1,8 +1,7 @@
 import { Tabs, TabsList, TabsTrigger } from '@shadcn/ui/tabs';
 import { useTranslations } from 'next-intl';
 import ProductActions from '@atoms/shared/ProductActions';
-
-export type FilterType = 'All' | 'Actives' | 'Archived';
+import { FilterType } from '@lib/types/filter-mode-mapper';
 
 export type FilterProductsProps = {
   selectedFilter: FilterType;

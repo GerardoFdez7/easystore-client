@@ -73,7 +73,7 @@ query findAllProducts(
   $type: TypeEnum
   $sortBy: ProductSortBy = NAME
   $sortOrder: SortOrder = ASC
-  $includeSoftDeleted: Boolean = false
+  $filterMode: ProductFilterMode = ALL
   $name: String = ""
 ) {
   getAllProducts(
@@ -83,7 +83,7 @@ query findAllProducts(
     type: $type
     sortBy: $sortBy
     sortOrder: $sortOrder
-    includeSoftDeleted: $includeSoftDeleted
+    filterMode: $filterMode
     name: $name
   ) {
     products {
@@ -164,7 +164,7 @@ query findAllVariantsToCreateStock(
   $limit: Float = 10
   $sortBy: ProductSortBy = NAME
   $sortOrder: SortOrder = ASC
-  $includeSoftDeleted: Boolean = false
+  $filterMode: ProductFilterMode = ACTIVES
   $name: String = ""
 ) {
   getAllProducts(
@@ -172,7 +172,7 @@ query findAllVariantsToCreateStock(
     limit: $limit
     sortBy: $sortBy
     sortOrder: $sortOrder
-    includeSoftDeleted: $includeSoftDeleted
+    filterMode: $filterMode
     name: $name
   ) {
     products {

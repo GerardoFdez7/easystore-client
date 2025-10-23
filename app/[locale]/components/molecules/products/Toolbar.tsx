@@ -8,7 +8,7 @@ import MultiSelectComboboxCategory from '@atoms/products/MultiSelectComboboxCate
 import TabFilterProducts from '@atoms/products/TabFilterProducts';
 import ProductSortBySelect from '@atoms/shared/ProductSortBySelect';
 import SortOrderSelect from '@atoms/shared/SortOrderSelect';
-import { FilterType } from '@atoms/products/TabFilterProducts';
+import { FilterType } from '@lib/types/filter-mode-mapper';
 import { useTranslations } from 'next-intl';
 import { memo } from 'react';
 import {

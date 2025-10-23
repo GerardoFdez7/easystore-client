@@ -37,7 +37,7 @@ export default function MainProductDetail({
             e.preventDefault();
             void form.handleSubmit(handleSubmit)(e);
           }}
-          className="space-y-6"
+          className="w-full space-y-6"
         >
           {/* Main Content */}
           <div className="flex justify-end">
@@ -48,11 +48,13 @@ export default function MainProductDetail({
             />
           </div>
           <MediaFormField isSubmitting={isSubmitting} />
-          <NameFormField />
+          <div className="w-full space-y-6 sm:flex sm:flex-row sm:gap-6">
+            <NameFormField />
+            <TypeProductFormField />
+          </div>
           <ShortLongDescriptionFormField />
           <CategoryFormField />
           <VariantsFormField productId={param} />
-          <TypeProductFormField />
           <TagsFormField />
           <BrandManufacturerFormField />
           <SustainabilityFormField />

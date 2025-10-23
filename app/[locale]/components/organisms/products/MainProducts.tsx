@@ -5,9 +5,12 @@ import ProductTableSkeleton from '@molecules/products/ProductTableSkeleton';
 import { ProductGrid } from '@molecules/products/ProductGrid';
 import { useState, useCallback, useEffect } from 'react';
 import { ProductsToolbar } from '@molecules/products/Toolbar';
-import { FilterType } from '@atoms/products/TabFilterProducts';
+import {
+  FilterType,
+  mapFilterTypeToProductFilterMode,
+} from '@lib/types/filter-mode-mapper';
 import { useProductsContext } from '@lib/contexts/ProductsContext';
-import { InputMaybe, TypeEnum } from '@graphql/generated';
+import { InputMaybe, TypeEnum, ProductFilterMode } from '@graphql/generated';
 import { PackageOpen, Plus, Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
@@ -45,28 +48,19 @@ export default function MainDashboard() {
     setViewMode,
   } = useProductsContext();
 
-  // Filter products based on selected filter
-  const filteredProducts =
-    allProducts?.filter((product) => {
-      if (selectedFilter === 'Actives') {
-        return !product.isArchived;
-      } else if (selectedFilter === 'Archived') {
-        return product.isArchived;
-      }
-      // 'All' shows both active and archived
-      return true;
-    }) || [];
+  // Products are already filtered by the server based on filterMode
+  const paginatedProducts = allProducts || [];
 
   const totalItems = total || 0;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const paginatedProducts = filteredProducts;
 
   // Effect to refresh products when sort changes
   useEffect(() => {
+    const filterMode = mapFilterTypeToProductFilterMode(selectedFilter);
     void refreshProducts({
       page: currentPage,
       limit: itemsPerPage,
-      includeSoftDeleted: selectedFilter !== 'Actives',
+      filterMode,
       name: searchTerm || null,
       type: typeFilter || null,
       categoriesIds: categoryFilter.length > 0 ? categoryFilter : null,
@@ -90,18 +84,20 @@ export default function MainDashboard() {
 
       if (viewMode === 'table') {
         // Use fetchPage for table pagination
+        const filterMode = mapFilterTypeToProductFilterMode(selectedFilter);
         void fetchPage(page, {
-          includeSoftDeleted: selectedFilter !== 'Actives',
+          filterMode,
           name: searchTerm || null,
           type: typeFilter || null,
           categoriesIds: categoryFilter.length > 0 ? categoryFilter : null,
         });
       } else {
         // For cards view, use refreshProducts to reset and start from page 1
+        const filterMode = mapFilterTypeToProductFilterMode(selectedFilter);
         void refreshProducts({
           page: 1, // Always start from page 1 for cards view
           limit: itemsPerPage,
-          includeSoftDeleted: selectedFilter !== 'Actives',
+          filterMode,
           name: searchTerm || null,
           type: typeFilter || null,
           categoriesIds: categoryFilter.length > 0 ? categoryFilter : null,
@@ -157,7 +153,7 @@ export default function MainDashboard() {
       void refreshProducts({
         page: 1,
         limit: itemsPerPage,
-        includeSoftDeleted: true,
+        filterMode: ProductFilterMode.All,
         name: term || null,
         type: typeFilter || null,
         categoriesIds: categoryFilter.length > 0 ? categoryFilter : null,
@@ -174,7 +170,7 @@ export default function MainDashboard() {
       void refreshProducts({
         page: 1,
         limit: itemsPerPage,
-        includeSoftDeleted: true,
+        filterMode: ProductFilterMode.All,
         name: searchTerm || null,
         type: type || null,
         categoriesIds: categoryFilter.length > 0 ? categoryFilter : null,
@@ -191,7 +187,7 @@ export default function MainDashboard() {
       void refreshProducts({
         page: 1,
         limit: itemsPerPage,
-        includeSoftDeleted: true,
+        filterMode: ProductFilterMode.All,
         name: searchTerm || null,
         type: typeFilter || null,
         categoriesIds: categories.length > 0 ? categories : null,
@@ -206,16 +202,12 @@ export default function MainDashboard() {
       setSelectedFilter(filter);
       setCurrentPage(1); // Reset to first page when filtering
 
-      // Determine includeSoftDeleted based on filter
-      // All: include both active and archived (true)
-      // Actives: only active products (false)
-      // Archived: only archived products (true, but we'll need to filter client-side)
-      const includeSoftDeleted = filter !== 'Actives';
+      const filterMode = mapFilterTypeToProductFilterMode(filter);
 
       void refreshProducts({
         page: 1,
         limit: itemsPerPage,
-        includeSoftDeleted,
+        filterMode,
         name: searchTerm || null,
         type: typeFilter || null,
         categoriesIds: categoryFilter.length > 0 ? categoryFilter : null,
@@ -252,7 +244,7 @@ export default function MainDashboard() {
     void refreshProducts({
       page: 1,
       limit: itemsPerPage,
-      includeSoftDeleted: selectedFilter !== 'Actives',
+      filterMode: mapFilterTypeToProductFilterMode(selectedFilter),
       name: searchTerm || null,
       type: typeFilter || null,
       categoriesIds: categoryFilter.length > 0 ? categoryFilter : null,
@@ -270,7 +262,7 @@ export default function MainDashboard() {
 
   // Show filtered empty state when filters are active but no products match
   const hasFilteredEmptyState =
-    hasActiveFilters && (!filteredProducts || filteredProducts.length === 0);
+    hasActiveFilters && (!allProducts || allProducts.length === 0);
 
   return (
     <main className="flex w-full flex-col gap-4 px-4 xl:mx-auto">
@@ -326,7 +318,7 @@ export default function MainDashboard() {
                 void refreshProducts({
                   page: 1,
                   limit: itemsPerPage,
-                  includeSoftDeleted: true,
+                  filterMode: ProductFilterMode.All,
                   name: null,
                   type: null,
                   categoriesIds: null,

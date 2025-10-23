@@ -1,6 +1,5 @@
-import TabFilterProducts, {
-  FilterType,
-} from '@atoms/products/TabFilterProducts';
+import TabFilterProducts from '@atoms/products/TabFilterProducts';
+import { FilterType } from '@lib/types/filter-mode-mapper';
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
 const meta: Meta<typeof TabFilterProducts> = {

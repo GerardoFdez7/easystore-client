@@ -1,4 +1,4 @@
-import VariantTemplate from '@templates/Variant';
+import VariantTemplate from '@templates/products/Variant';
 
 export default async function VariantDetailPage({
   params,

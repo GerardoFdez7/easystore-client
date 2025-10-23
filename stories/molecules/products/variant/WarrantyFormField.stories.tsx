@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import WarrantyFormField from '@molecules/variant/WarrantyFormField';
+import WarrantyFormField from '@molecules/products/variant/WarrantyFormField';
 
 const meta: Meta<typeof WarrantyFormField> = {
-  title: 'Molecules/Variant/WarrantyFormField',
+  title: 'Molecules/Products/Variant/WarrantyFormField',
   component: WarrantyFormField,
   parameters: {
     layout: 'centered',

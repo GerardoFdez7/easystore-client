@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import { useForm } from 'react-hook-form';
 import { FormProvider } from 'react-hook-form';
 import { Form } from '@shadcn/ui/form';
-import MainVariant from '@organisms/variant/MainVariant';
+import MainVariant from '@organisms/products/variant/MainVariant';
 
 const MockMainVariant = () => {
   const form = useForm();
@@ -32,7 +32,7 @@ const MockMainVariant = () => {
 };
 
 const meta: Meta<typeof MainVariant> = {
-  title: 'Organisms/Variant/MainVariant',
+  title: 'Organisms/Products/Variant/MainVariant',
   component: MockMainVariant,
   parameters: {
     layout: 'fullscreen',

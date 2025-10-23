@@ -7,6 +7,7 @@ import SidebarLayout from '@organisms/shared/SidebarLayout';
 import MainDetailCategory from '@organisms/categories/detail/MainDetailCategory';
 import useCategory from '@hooks/domains/category/useCategory';
 import useCategoryIdBySlug from '@hooks/domains/category/useCategoryIdBySlug';
+import BackButton from '@atoms/shared/BackButton';
 
 interface CategoryDetailProps {
   id: string;
@@ -49,6 +50,7 @@ export default function CategoryDetail({ id, parentId }: CategoryDetailProps) {
     <div className="bg-background flex min-h-screen flex-col">
       <HeaderDashboard />
       <SidebarLayout title={getTitle()}>
+        <BackButton />
         <MainDetailCategory
           categoryId={isNew ? undefined : (resolvedCategoryId ?? undefined)}
           parentId={isAdd ? (resolvedCategoryId ?? undefined) : undefined}

@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import DimensionRowFormField from '@molecules/variant/DimensionRowFormField';
+import DimensionRowFormField from '@molecules/products/variant/DimensionRowFormField';
 
 const meta: Meta<typeof DimensionRowFormField> = {
-  title: 'Molecules/Variant/DimensionRowFormField',
+  title: 'Molecules/Products/Variant/DimensionRowFormField',
   component: DimensionRowFormField,
   parameters: {
     layout: 'centered',

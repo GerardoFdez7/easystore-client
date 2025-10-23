@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import AttributesCard from '@molecules/variant/AttributesFormField';
+import AttributesCard from '@molecules/products/variant/AttributesFormField';
 import type { Attribute } from '@lib/types/variant';
-import AttributesFormField from '@molecules/variant/AttributesFormField';
+import AttributesFormField from '@molecules/products/variant/AttributesFormField';
 
 const meta: Meta<typeof AttributesCard> = {
-  title: 'Molecules/Variant/AttributesFormField',
+  title: 'Molecules/Products/Variant/AttributesFormField',
   component: AttributesFormField,
   parameters: { layout: 'centered' },
 };

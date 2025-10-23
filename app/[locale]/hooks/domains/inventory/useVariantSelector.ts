@@ -8,6 +8,7 @@ import {
   FindAllVariantsToCreateStockQueryVariables,
   ProductSortBy,
   SortOrder,
+  ProductFilterMode,
 } from '@graphql/generated';
 import { useInfiniteScroll } from '@hooks/utils/useInfiniteScroll';
 
@@ -38,7 +39,9 @@ export const useVariantSelector = (options: UseVariantSelectorOptions = {}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<ProductSortBy>(ProductSortBy.UpdatedAt);
   const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.Asc);
-  const [includeSoftDeleted, setIncludeSoftDeleted] = useState(false);
+  const [filterMode, setFilterMode] = useState<ProductFilterMode>(
+    ProductFilterMode.Actives,
+  );
 
   // Stable callback functions for infinite scroll
   const getItems = useCallback(
@@ -109,9 +112,9 @@ export const useVariantSelector = (options: UseVariantSelectorOptions = {}) => {
       name: searchTerm || undefined,
       sortBy,
       sortOrder,
-      includeSoftDeleted,
+      filterMode,
     }),
-    [page, limit, searchTerm, sortBy, sortOrder, includeSoftDeleted],
+    [page, limit, searchTerm, sortBy, sortOrder, filterMode],
   );
 
   // Query
@@ -210,9 +213,9 @@ export const useVariantSelector = (options: UseVariantSelectorOptions = {}) => {
     [resetPagination],
   );
 
-  const updateIncludeSoftDeleted = useCallback(
-    (include: boolean) => {
-      setIncludeSoftDeleted(include);
+  const updateFilterMode = useCallback(
+    (newFilterMode: ProductFilterMode) => {
+      setFilterMode(newFilterMode);
       resetPagination();
     },
     [resetPagination],
@@ -223,7 +226,7 @@ export const useVariantSelector = (options: UseVariantSelectorOptions = {}) => {
     searchTerm,
     sortBy,
     sortOrder,
-    includeSoftDeleted,
+    filterMode,
     products,
 
     // Query state
@@ -237,7 +240,7 @@ export const useVariantSelector = (options: UseVariantSelectorOptions = {}) => {
     updateSearchTerm,
     updateSortBy,
     updateSortOrder,
-    updateIncludeSoftDeleted,
+    updateFilterMode,
     handleLoadMore,
     resetAndSearch,
   };

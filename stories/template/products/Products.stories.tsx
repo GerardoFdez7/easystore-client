@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import ProductsPage from '@templates/products/Products';
 import { ProductsProvider } from '@lib/contexts/ProductsContext';
 import { ProductCreationProvider } from '@lib/contexts/ProductCreationContext';
+import { ProductFilterMode } from '@graphql/generated';
 
 const meta: Meta<typeof ProductsPage> = {
   title: 'Templates/Products',
@@ -20,7 +21,7 @@ const meta: Meta<typeof ProductsPage> = {
           initialVariables={{
             page: 1,
             limit: 10,
-            includeSoftDeleted: true,
+            filterMode: ProductFilterMode.All,
           }}
         >
           <Story />

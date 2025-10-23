@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import TagInputFormField from '../shared/TagInputFormField';
+import TagInputFormField from '../../shared/TagInputFormField';
 
 export default function PersonalizationOptionsFormField() {
   const t = useTranslations('Variant');

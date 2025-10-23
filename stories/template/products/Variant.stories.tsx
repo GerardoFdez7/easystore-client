@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import VariantTemplate from '@templates/Variant';
+import VariantTemplate from '@templates/products/Variant';
 
 const meta: Meta<typeof VariantTemplate> = {
-  title: 'Templates/Variant',
+  title: 'Templates/Products/Variant',
   component: VariantTemplate,
   parameters: {
     layout: 'fullscreen',

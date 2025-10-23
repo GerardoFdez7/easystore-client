@@ -7,6 +7,7 @@ import {
   FindAllProductsDocument,
   ProductSortBy,
   SortOrder,
+  ProductFilterMode,
 } from '@graphql/generated';
 import { mockProducts } from './mocks/productsMocks';
 
@@ -19,8 +20,8 @@ const mockEmptyResponse = {
       limit: 25,
       categoriesIds: [],
       sortBy: ProductSortBy.Name,
-      sortOrder: 'ASC',
-      includeSoftDeleted: false,
+      sortOrder: SortOrder.Asc,
+      filterMode: ProductFilterMode.Actives,
       name: '',
     },
   },
@@ -43,9 +44,9 @@ const mockEmptyFilterResponse = {
       page: 1,
       limit: 25,
       categoriesIds: [],
-      sortBy: 'NAME',
-      sortOrder: 'ASC',
-      includeSoftDeleted: false,
+      sortBy: ProductSortBy.Name,
+      sortOrder: SortOrder.Asc,
+      filterMode: ProductFilterMode.Actives,
       name: 'nonexistent',
     },
   },
@@ -68,9 +69,9 @@ const mockProductsResponse = {
       page: 1,
       limit: 25,
       categoriesIds: [],
-      sortBy: 'NAME',
-      sortOrder: 'ASC',
-      includeSoftDeleted: false,
+      sortBy: ProductSortBy.Name,
+      sortOrder: SortOrder.Asc,
+      filterMode: ProductFilterMode.Actives,
       name: '',
     },
   },
@@ -133,8 +134,8 @@ export const Default: Story = {
             categoriesIds: [],
             sortBy: ProductSortBy.Name,
             sortOrder: SortOrder.Asc,
-            includeSoftDeleted: false,
-            name: '',
+            filterMode: ProductFilterMode.Actives,
+            name: 'nonexistent',
           }}
         >
           <ProductCreationProvider>
@@ -169,7 +170,7 @@ export const ZeroProductsInDatabase: Story = {
             categoriesIds: [],
             sortBy: ProductSortBy.Name,
             sortOrder: SortOrder.Asc,
-            includeSoftDeleted: false,
+            filterMode: ProductFilterMode.Actives,
             name: '',
           }}
         >
@@ -205,8 +206,8 @@ export const ZeroProductsWhenFiltering: Story = {
             categoriesIds: [],
             sortBy: ProductSortBy.Name,
             sortOrder: SortOrder.Asc,
-            includeSoftDeleted: false,
-            name: 'nonexistent',
+            filterMode: ProductFilterMode.Actives,
+            name: '',
           }}
         >
           <ProductCreationProvider>
