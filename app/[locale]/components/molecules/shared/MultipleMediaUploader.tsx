@@ -191,6 +191,11 @@ const MultipleMediaUploader = forwardRef<
 
       // Always append new media items to existing ones
       setMediaItems([...mediaItems, ...newMediaItems]);
+
+      // In alwaysEditing mode, upload immediately when files are selected
+      if (alwaysEditing && files.length > 0) {
+        void startUpload(files);
+      }
     };
 
     const handleRemoveFile = (index: number) => {
@@ -404,7 +409,6 @@ const MultipleMediaUploader = forwardRef<
             <CarouselMedia
               items={mediaItems}
               isEditing={false}
-              className="mx-auto"
               maxItems={maxItems}
               minItems={minItems}
             />
@@ -440,6 +444,7 @@ const MultipleMediaUploader = forwardRef<
                 isEditing={true}
                 onRemoveItem={handleRemoveFile}
                 onReorderItems={handleReorderItems}
+                className="mx-auto"
                 onAddMore={
                   selectedFiles.length < maxItems ? handleAddMore : undefined
                 }

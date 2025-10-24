@@ -82,6 +82,8 @@ const createProductFormSchema = (t: (key: string) => string) =>
       z.object({
         categoryId: z.string(),
         categoryName: z.string().optional(),
+        description: z.string().optional(),
+        cover: z.string().optional(),
       }),
     ),
     variants: z.array(z.any()).optional(),
@@ -208,6 +210,10 @@ export function useProductForm({
         product.categories?.map((cat) => ({
           categoryId: cat.categoryId,
           categoryName: cat.categoryName || '',
+          // Note: description and cover are not available in the current GraphQL schema
+          // but are required by the form schema for consistency
+          description: '',
+          cover: '',
         })) || [],
       variants: product.variants || [],
       sustainabilities: product.sustainabilities || [],

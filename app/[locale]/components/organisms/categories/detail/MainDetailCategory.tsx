@@ -236,7 +236,8 @@ export default function MainDetailCategory({
   }, []);
 
   const handleAddSubcategories = useCallback(
-    (ids: string[]) => {
+    (categories: CategoryItem[]) => {
+      const ids = categories.map((cat) => cat.id);
       setValue('subCategoryIds', [...subcategoryIds, ...ids], {
         shouldDirty: true,
       });

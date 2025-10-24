@@ -557,7 +557,8 @@
     "confirmed": "Confermato",
     "shipped": "Spedito",
     "completed": "Completato",
-    "cancelled": "Annullato"
+    "cancelled": "Annullato",
+    "sidebarToggle": "Attiva/disattiva barra laterale"
   },
   "Products": {
     "addProduct": "Aggiungi un prodotto",
@@ -655,18 +656,18 @@
     "restoring": "Ripristino",
     "restore": "Ripristina",
     "name": "Nome",
-    "namePlaceholder": "Nome del prodotto",
-    "shortDescription": "Descrizione breve",
-    "shortDescriptionPlaceholder": "Una breve descrizione del prodotto",
+    "namePlaceholder": "Portafoglio in Pelle di Lusso",
+    "shortDescription": "Breve descrizione",
+    "shortDescriptionPlaceholder": "Un portafoglio elegante e resistente realizzato in vera pelle italiana.",
     "longDescription": "Descrizione lunga",
-    "longDescriptionPlaceholder": "Una descrizione dettagliata del prodotto",
-    "brand": "Marchio",
-    "brandPlaceholder": "Nome del marchio",
+    "longDescriptionPlaceholder": "Realizzato con la migliore pelle italiana, questo portafoglio presenta diverse fessure per carte, una tasca per le monete e uno scomparto sicuro per le banconote. Il suo design sottile si adatta comodamente a qualsiasi tasca, offrendo eleganza e praticità.",
+    "brand": "Marca",
+    "brandPlaceholder": "Bellroy",
     "manufacturer": "Produttore",
-    "manufacturerPlaceholder": "Nome del produttore",
+    "manufacturerPlaceholder": "Leather Goods Inc.",
     "media": "Media",
     "tags": "Tag",
-    "tagsPlaceholder": "es. estate, cotone, sconto",
+    "tagsPlaceholder": "pelle, portafoglio, accessori",
     "addTag": "Aggiungi tag",
     "categories": "Categorie",
     "categoriesPlaceholder": "Seleziona categorie",
@@ -674,7 +675,7 @@
     "sustainabilities": "Sostenibilità",
     "addSustainability": "Aggiungi sostenibilità",
     "certification": "Certificazione",
-    "certificationPlaceholder": "es. Commercio equo, Biologico",
+    "certificationPlaceholder": "Organico",
     "recycledPercentage": "Percentuale riciclata",
     "noSustainabilityAdded": "Nessuna sostenibilità ancora aggiunta",
     "moveUp": "Sposta su",
@@ -843,8 +844,8 @@
     "moveDown": "Sposta giù",
     "delete": "Elimina",
     "noAttributesYet": "Nessun attributo ancora",
-    "attributeKeyPlaceholder": "colore",
-    "attributeValuePlaceholder": "rosso",
+    "attributeKeyPlaceholder": "Colore",
+    "attributeValuePlaceholder": "Rosso",
     "skuPlaceholder": "ABC-1234",
     "upcPlaceholder": "012345678905",
     "eanPlaceholder": "5901234123457",
@@ -1043,7 +1044,8 @@
       "deleteDescription": "Sei sicuro di voler eliminare questo elemento? Questa azione non può essere annullata.",
       "deleting": "Eliminazione...",
       "archive": "Archiviare",
-      "cancel": "Annullare"
+      "cancel": "Annullare",
+      "archiveDescription": "Sei sicuro di voler archiviare questo elemento? Puoi ripristinarlo in seguito se necessario."
     },
     "sortBy": {
       "createdAt": "Creazione",
@@ -1060,7 +1062,8 @@
       "descending": "Decrescente"
     },
     "themeToggle": "Attiva/disattiva tema",
-    "accountMenu": "Menu account"
+    "accountMenu": "Menu account",
+    "goBack": "Torna indietro"
   },
   "Inventory": {
     "searchPlaceholder": "Cerca per nome prodotto, variante o SKU...",
@@ -1268,6 +1271,7 @@
     "errorDescription": "Si è verificato un errore nel caricamento delle categorie. Riprova.",
     "noCategoriesTitle": "Nessuna categoria ancora",
     "noCategoriesDescription": "Inizia a organizzare la tua boutique creando la tua prima categoria.",
+    "noCategoriesDescriptionProductSelection": "Le categorie devono essere create prima nella sezione di gestione delle categorie.",
     "noSubcategoriesTitle": "Nessuna sottocategoria",
     "noSubcategoriesDescription": "Questa categoria non ha ancora sottocategorie.",
     "noSearchResultsTitle": "Nessun risultato trovato",
@@ -1291,6 +1295,7 @@
     "subcategories": "Sottocategorie",
     "searchCategories": "Cerca sottocategorie",
     "itemsCount": "{count, plural, one {# sottocategoria} other {# sottocategorie}}",
+    "categoriesCount": "{count, plural, one {# categoria} other {# categorie}}",
     "add": "Aggiungi",
     "addSubcategories": "Aggiungi sottocategorie",
     "removeRelation": "Rimuovi relazione",

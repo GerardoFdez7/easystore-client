@@ -116,6 +116,7 @@ export default function InstallmentPaymentFormField() {
                       type="button"
                       variant="outline"
                       size="sm"
+                      className="w-full sm:w-auto"
                       onClick={addInstallmentPayment}
                       disabled={!newMonths.trim() || !newInterestRate.trim()}
                     >

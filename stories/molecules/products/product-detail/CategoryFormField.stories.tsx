@@ -18,7 +18,7 @@ const CategoryFormFieldWrapper = ({
   return (
     <FormProvider {...methods}>
       <form className="w-full max-w-4xl space-y-4">
-        <CategoryFormField />
+        <CategoryFormField name="categories" />
       </form>
     </FormProvider>
   );

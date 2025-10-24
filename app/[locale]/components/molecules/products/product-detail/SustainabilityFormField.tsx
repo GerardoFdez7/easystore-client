@@ -123,7 +123,7 @@ export default function SustainabilityFormField() {
                 <Input
                   id="recycledPercentage"
                   type="number"
-                  placeholder="0-100"
+                  placeholder="99"
                   value={newRecycledPercentage}
                   onChange={(e) => {
                     setNewRecycledPercentage(e.target.value);
@@ -150,6 +150,7 @@ export default function SustainabilityFormField() {
                 type="button"
                 variant="outline"
                 size="sm"
+                className="w-full sm:w-auto"
                 onClick={addAttribute}
               >
                 <Plus className="h-4 w-4" /> {t('addSustainability')}

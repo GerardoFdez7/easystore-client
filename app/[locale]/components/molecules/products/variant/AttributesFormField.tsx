@@ -84,6 +84,7 @@ export default function AttributesCard() {
                     type="button"
                     variant="outline"
                     size="sm"
+                    className="w-full sm:w-auto"
                     onClick={addAttribute}
                     disabled={!newKey.trim() || !newValue.trim()}
                   >

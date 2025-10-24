@@ -23,6 +23,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@shadcn/ui/tooltip';
+import { useTranslations } from 'next-intl';
 
 const SidebarCookieName = 'sidebar_state';
 const SidebarCookieMaxAge = 60 * 60 * 24 * 7;
@@ -258,22 +259,28 @@ function SidebarTrigger({
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { toggleSidebar } = useSidebar();
+  const t = useTranslations('Dashboard');
 
   return (
-    <Button
-      data-sidebar="trigger"
-      data-slot="sidebar-trigger"
-      variant="ghost"
-      className={cn(className)}
-      onClick={(event) => {
-        onClick?.(event);
-        toggleSidebar();
-      }}
-      {...props}
-    >
-      <PanelLeftIcon className="text-text size-6" />
-      <span className="sr-only">Toggle Sidebar</span>
-    </Button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          data-sidebar="trigger"
+          data-slot="sidebar-trigger"
+          variant="ghost"
+          className={cn(className)}
+          onClick={(event) => {
+            onClick?.(event);
+            toggleSidebar();
+          }}
+          {...props}
+        >
+          <PanelLeftIcon className="text-title size-6" />
+          <span className="sr-only">{t('sidebarToggle')}</span>
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>{t('sidebarToggle')}</TooltipContent>
+    </Tooltip>
   );
 }
 

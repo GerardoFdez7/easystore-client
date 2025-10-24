@@ -40,7 +40,7 @@ export default function TypeProductFormField() {
                 }}
               >
                 <SelectTrigger
-                  className="w-full sm:w-[300px]"
+                  className="w-full"
                   aria-invalid={!!fieldState.error}
                 >
                   <SelectValue placeholder={t('selectType')} />

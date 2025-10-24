@@ -16,7 +16,7 @@ const ImageThumb = ({
 }: ImageThumbProps) => {
   return (
     <div
-      className={`min-w-35 flex-[0_0_23%] cursor-pointer overflow-hidden rounded-lg ${
+      className={`min-w-20 flex-[0_0_15%] cursor-pointer overflow-hidden rounded-lg sm:min-w-35 sm:flex-[0_0_23%] ${
         selected ? 'border-title border-opacity-75 border' : ''
       }`}
       onClick={onClick}

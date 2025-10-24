@@ -174,7 +174,7 @@ const CarouselMedia = ({
         <CarouselContent>
           {orderedItems.map((item) => (
             <CarouselItem key={item.id}>
-              <div className="relative mx-auto mb-3 aspect-square max-w-lg">
+              <div className="relative mx-auto mb-3 aspect-square max-w-md lg:max-w-lg">
                 {item.type === 'image' ? (
                   item.src ? (
                     <Image
@@ -219,7 +219,7 @@ const CarouselMedia = ({
       >
         <Carousel
           setApi={setThumbsApi}
-          className="rounded-xl"
+          className="mx-auto max-w-[240px] rounded-xl sm:max-w-xl"
           opts={{
             containScroll: 'keepSnaps',
             dragFree: !isDragging,
@@ -260,7 +260,7 @@ const CarouselMedia = ({
                     <div className="flex items-start">
                       <Separator
                         orientation="vertical"
-                        className="bg-title !h-35"
+                        className="bg-title !h-20 sm:!h-35"
                         decorative={true}
                       />
                     </div>
@@ -273,7 +273,7 @@ const CarouselMedia = ({
                 <CarouselItem className="basis-auto">
                   <div
                     onClick={onAddMore}
-                    className="relative aspect-square min-w-35 flex-[0_0_23%] cursor-pointer overflow-hidden rounded-lg"
+                    className="relative aspect-square min-w-20 flex-[0_0_15%] cursor-pointer overflow-hidden rounded-lg sm:min-w-35 sm:flex-[0_0_23%]"
                   >
                     <div className="flex h-full w-full items-center justify-center border-2 border-dashed border-gray-300 transition-colors hover:border-gray-400">
                       <Plus className="h-6 w-6 text-gray-400" />

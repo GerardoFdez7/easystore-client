@@ -51,10 +51,13 @@ export function ProductCard({ product }: ProductCardProps) {
     ? [...product.media].sort((a, b) => a.position - b.position)
     : [];
 
-  // Create media array: cover first, then all media items
+  // Filter out media items that have the same URL as the cover to avoid duplication
+  const filteredMedia = allMedia.filter((media) => media.url !== product.cover);
+
+  // Create media array: cover first, then filtered media items
   const mediaItems = [
     { url: product.cover, mediaType: 'IMAGE' as const },
-    ...allMedia,
+    ...filteredMedia,
   ];
 
   const handleIndicatorHover = (index: number) => {
@@ -85,7 +88,7 @@ export function ProductCard({ product }: ProductCardProps) {
           src={mediaItem.url}
           alt={`${product.name} ${isPreview ? 'preview' : 'media'}`}
           width={300}
-          height={200}
+          height={300}
           className="h-full w-full object-cover"
         />
       );

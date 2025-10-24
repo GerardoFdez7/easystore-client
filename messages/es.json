@@ -556,7 +556,8 @@
     "confirmed": "Confirmado",
     "shipped": "Enviado",
     "completed": "Completado",
-    "cancelled": "Cancelado"
+    "cancelled": "Cancelado",
+    "sidebarToggle": "Alternar barra lateral"
   },
   "Products": {
     "addProduct": "Agregar producto",
@@ -654,18 +655,18 @@
     "restoring": "Restaurando",
     "restore": "Restaurar",
     "name": "Nombre",
-    "namePlaceholder": "Nombre del producto",
+    "namePlaceholder": "Billetera de Cuero de Lujo",
     "shortDescription": "Descripción corta",
-    "shortDescriptionPlaceholder": "Una breve descripción del producto",
+    "shortDescriptionPlaceholder": "Una billetera elegante y duradera hecha de cuero italiano genuino.",
     "longDescription": "Descripción larga",
-    "longDescriptionPlaceholder": "Una descripción detallada del producto",
+    "longDescriptionPlaceholder": "Elaborada con el mejor cuero italiano, esta billetera cuenta con múltiples ranuras para tarjetas, un bolsillo para monedas y un compartimento seguro para billetes. Su diseño delgado se adapta cómodamente a cualquier bolsillo, ofreciendo elegancia y practicidad.",
     "brand": "Marca",
-    "brandPlaceholder": "Nombre de la marca",
+    "brandPlaceholder": "Bellroy",
     "manufacturer": "Fabricante",
-    "manufacturerPlaceholder": "Nombre del fabricante",
+    "manufacturerPlaceholder": "Leather Goods Inc.",
     "media": "Multimedia",
     "tags": "Etiquetas",
-    "tagsPlaceholder": "ej. verano, algodón, oferta",
+    "tagsPlaceholder": "cuero, billetera, accesorios",
     "addTag": "Agregar etiqueta",
     "categories": "Categorías",
     "categoriesPlaceholder": "Selecciona categorías",
@@ -673,7 +674,7 @@
     "sustainabilities": "Sostenibilidades",
     "addSustainability": "Agregar sostenibilidad",
     "certification": "Certificación",
-    "certificationPlaceholder": "ej. Comercio Justo, Orgánico",
+    "certificationPlaceholder": "Orgánico",
     "recycledPercentage": "Porcentaje reciclado",
     "noSustainabilityAdded": "Aún no hay sostenibilidad",
     "moveUp": "Mover arriba",
@@ -842,8 +843,8 @@
     "moveDown": "Bajar",
     "delete": "Eliminar",
     "noAttributesYet": "Aún no hay atributos",
-    "attributeKeyPlaceholder": "color",
-    "attributeValuePlaceholder": "rojo",
+    "attributeKeyPlaceholder": "Color",
+    "attributeValuePlaceholder": "Rojo",
     "skuPlaceholder": "ABC-1234",
     "upcPlaceholder": "012345678905",
     "eanPlaceholder": "5901234123457",
@@ -1041,7 +1042,8 @@
       "deleteDescription": "¿Estás seguro de que quieres eliminar este elemento? Esta acción no se puede deshacer.",
       "deleting": "Eliminando...",
       "archive": "Archivar",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "archiveDescription": "¿Estás seguro de que quieres archivar este elemento? Puedes restaurarlo más tarde si es necesario."
     },
     "sortBy": {
       "createdAt": "Creación",
@@ -1058,7 +1060,8 @@
       "descending": "Descendente"
     },
     "themeToggle": "Alternar tema",
-    "accountMenu": "Menú de cuenta"
+    "accountMenu": "Menú de cuenta",
+    "goBack": "Volver"
   },
   "Inventory": {
     "searchPlaceholder": "Buscar por nombre de producto, variante o SKU...",
@@ -1263,6 +1266,7 @@
     "errorDescription": "Hubo un error al cargar las categorías. Por favor, inténtalo de nuevo.",
     "noCategoriesTitle": "Aún no hay categorías",
     "noCategoriesDescription": "Comienza a organizar tu tienda creando tu primera categoría.",
+    "noCategoriesDescriptionProductSelection": "Las categorías deben crearse primero en la sección de gestión de categorías.",
     "noSubcategoriesTitle": "Sin subcategorías",
     "noSubcategoriesDescription": "Esta categoría aún no tiene subcategorías.",
     "noSearchResultsTitle": "No se encontraron resultados",
@@ -1286,6 +1290,7 @@
     "subcategories": "Subcategorías",
     "searchSubcategories": "Buscar subcategorías",
     "itemsCount": "{count, plural, one {# subcategoría} other {# subcategorías}}",
+    "categoriesCount": "{count, plural, one {# categoría} other {# categorías}}",
     "add": "Agregar",
     "addSubcategories": "Agregar subcategorías",
     "removeRelation": "Eliminar relación",

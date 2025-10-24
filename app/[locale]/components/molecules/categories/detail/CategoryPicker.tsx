@@ -35,13 +35,14 @@ type Props = {
   items: CategoryItem[];
   currentCategoryId?: string; // Add current category ID to prevent self-selection
   disabled?: boolean;
-  onAdd?: (ids: string[]) => void;
+  onAdd?: (categories: CategoryItem[]) => void;
   onRemove: (id: string) => void;
   onOrderChange?: (order: 'asc' | 'desc') => void;
   onSearch?: (query: string) => void;
   onToggleSelect?: (id: string, value: boolean) => void;
   newCategories?: NewCategoryItem[];
   onNewCategoryAdd?: (category: NewCategoryItem) => void;
+  mode?: 'category-management' | 'product-selection'; // New prop to control behavior
 };
 
 const CategoryPicker = React.memo<Props>(function CategoryPicker({
@@ -52,11 +53,13 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
   onRemove,
   newCategories = [],
   onNewCategoryAdd,
+  mode = 'category-management', // Default to category management mode
 }: Props) {
   const t = useTranslations('CategoryDetail');
   const tCategory = useTranslations('Category');
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isAddSubcategoriesOpen, setIsAddSubcategoriesOpen] = useState(false);
 
   // Track pending IDs to prevent duplicates during rapid additions
   const pendingIdsRef = useRef<Set<string>>(new Set());
@@ -104,9 +107,9 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
   );
 
   const handleAdd = useCallback(
-    (ids: string[]) => {
+    (categories: CategoryItem[]) => {
       if (onAdd) {
-        onAdd(ids);
+        onAdd(categories);
       }
     },
     [onAdd],
@@ -203,9 +206,10 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
   return (
     <section className="space-y-4" aria-labelledby="subcategories-section">
       <header className="flex w-full flex-col items-center justify-end gap-2 sm:flex-row">
-        {allItems.length > 0 && (
+        {allItems.length > 0 && mode === 'category-management' && (
           <AddCategoryDialog onAdd={handleNewCategoryAdd}>
             <Button
+              type="button"
               variant="outline"
               className="w-full sm:w-auto"
               aria-label={t('createSubcategory')}
@@ -215,30 +219,58 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
             </Button>
           </AddCategoryDialog>
         )}
-        <AddSubcategoriesPicker
-          className="w-full sm:w-auto"
-          excludeIds={excludeIds}
-          currentCategoryId={currentCategoryId}
-          disabled={disabled}
-          onAdd={handleAdd}
-        />
+        {allItems.length > 0 && (
+          <AddSubcategoriesPicker
+            className="w-full sm:w-auto"
+            excludeIds={excludeIds}
+            currentCategoryId={currentCategoryId}
+            disabled={disabled}
+            onAdd={handleAdd}
+            open={isAddSubcategoriesOpen}
+            onOpenChange={setIsAddSubcategoriesOpen}
+            mode={mode}
+          />
+        )}
       </header>
 
       {allItems.length === 0 ? (
-        <AddCategoryDialog
-          open={isAddDialogOpen}
-          onOpenChange={setIsAddDialogOpen}
-          onAdd={handleNewCategoryAdd}
-        >
-          <EmptyState
-            icon={Dices}
-            title={tCategory('noSubcategoriesTitle')}
-            description={tCategory('noSubcategoriesDescription')}
-            buttonText={t('createSubcategory')}
-            onButtonClick={handleAddDialogOpen}
-            buttonIcon={Plus}
-          />
-        </AddCategoryDialog>
+        mode === 'category-management' ? (
+          <AddCategoryDialog
+            open={isAddDialogOpen}
+            onOpenChange={setIsAddDialogOpen}
+            onAdd={handleNewCategoryAdd}
+          >
+            <EmptyState
+              icon={Dices}
+              title={tCategory('noSubcategoriesTitle')}
+              description={tCategory('noSubcategoriesDescription')}
+              buttonText={t('createSubcategory')}
+              onButtonClick={handleAddDialogOpen}
+              buttonIcon={Plus}
+            />
+          </AddCategoryDialog>
+        ) : (
+          <>
+            <EmptyState
+              icon={Dices}
+              title={tCategory('noCategoriesTitle')}
+              description={tCategory('noCategoriesDescriptionProductSelection')}
+              buttonText={t('addCategory')}
+              onButtonClick={() => setIsAddSubcategoriesOpen(true)}
+              buttonIcon={Plus}
+            />
+            <AddSubcategoriesPicker
+              className="hidden"
+              excludeIds={excludeIds}
+              currentCategoryId={currentCategoryId}
+              disabled={disabled}
+              onAdd={handleAdd}
+              open={isAddSubcategoriesOpen}
+              onOpenChange={setIsAddSubcategoriesOpen}
+              mode={mode}
+            />
+          </>
+        )
       ) : (
         <div
           className="overflow-hidden rounded-lg border bg-transparent"
@@ -308,6 +340,7 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
+                        type="button"
                         variant="ghost"
                         size="icon"
                         onClick={() => handleRemove(c.id)}
@@ -329,6 +362,7 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
+                        type="button"
                         variant="ghost"
                         size="icon"
                         onClick={() => handleRemove(c.id)}
@@ -340,9 +374,7 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
                         <Unlink className="h-4 w-4" aria-hidden="true" />
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{t('removeRelation')}</p>
-                    </TooltipContent>
+                    <TooltipContent>{t('removeRelation')}</TooltipContent>
                   </Tooltip>
                 </div>
               </article>

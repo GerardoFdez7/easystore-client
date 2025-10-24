@@ -1,81 +1,51 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import AddSubcategory from '@molecules/categories/detail/AddSubcategory';
 import { MockedProvider } from '@apollo/client/testing/react';
+import AddSubcategory from '@molecules/categories/detail/AddSubcategory';
+import { type CategoryItem } from '@molecules/categories/detail/CategoryPicker';
 import {
   FindAllCategoriesDocument,
+  FindAllCategoriesQuery,
   SortBy,
   SortOrder,
 } from '@graphql/generated';
 
-// Mock categories data for GraphQL responses
-const mockCategoriesData = [
+// Mock data for stories
+const mockCategories = [
   {
+    __typename: 'Category' as const,
     id: '1',
     name: 'Electronics',
-    cover: '/laptop.webp',
+    cover: 'https://via.placeholder.com/150',
+    description: 'Electronic devices and gadgets',
     parentId: null,
-    slug: 'electronics',
+    createdAt: '2023-01-01T00:00:00Z',
+    updatedAt: '2023-01-01T00:00:00Z',
     subCategories: [],
   },
   {
+    __typename: 'Category' as const,
     id: '2',
-    name: 'Clothing & Fashion',
-    cover: '/portrait_image.webp',
+    name: 'Clothing',
+    cover: 'https://via.placeholder.com/150',
+    description: 'Fashion andapparel',
     parentId: null,
-    slug: 'clothing-fashion',
+    createdAt: '2023-01-01T00:00:00Z',
+    updatedAt: '2023-01-01T00:00:00Z',
     subCategories: [],
   },
   {
+    __typename: 'Category' as const,
     id: '3',
-    name: 'Home & Garden',
-    cover: '/default.webp',
+    name: 'Books',
+    cover: 'https://via.placeholder.com/150',
+    description: 'Books and literature',
     parentId: null,
-    slug: 'home-garden',
-    subCategories: [],
-  },
-  {
-    id: '4',
-    name: 'Sports & Outdoors',
-    cover: '/phone.webp',
-    parentId: null,
-    slug: 'sports-outdoors',
-    subCategories: [],
-  },
-  {
-    id: '5',
-    name: 'Books & Media',
-    cover: '/laptop.webp',
-    parentId: null,
-    slug: 'books-media',
-    subCategories: [],
-  },
-  {
-    id: '6',
-    name: 'Automotive',
-    cover: '/default.webp',
-    parentId: null,
-    slug: 'automotive',
-    subCategories: [],
-  },
-  {
-    id: '7',
-    name: 'Health & Beauty',
-    cover: '/portrait_image.webp',
-    parentId: null,
-    slug: 'health-beauty',
-    subCategories: [],
-  },
-  {
-    id: '8',
-    name: 'Toys & Games',
-    cover: '/phone.webp',
-    parentId: null,
-    slug: 'toys-games',
+    createdAt: '2023-01-01T00:00:00Z',
+    updatedAt: '2023-01-01T00:00:00Z',
     subCategories: [],
   },
 ];
 
-// Mock for successful categories query
 const successMocks = [
   {
     request: {
@@ -93,16 +63,34 @@ const successMocks = [
     result: {
       data: {
         getAllCategories: {
-          categories: mockCategoriesData,
-          total: mockCategoriesData.length,
+          __typename: 'PaginatedCategoriesType' as const,
+          categories: mockCategories,
+          total: mockCategories.length,
           hasMore: false,
         },
-      },
+      } as FindAllCategoriesQuery,
     },
   },
 ];
 
-// Mock for empty categories query
+const errorMocks = [
+  {
+    request: {
+      query: FindAllCategoriesDocument,
+      variables: {
+        page: 1,
+        limit: 25,
+        name: '',
+        parentId: null,
+        sortBy: SortBy.Name,
+        sortOrder: SortOrder.Asc,
+        includeSubcategories: false,
+      },
+    },
+    error: new globalThis.Error('Failed to fetch categories'),
+  },
+];
+
 const emptyMocks = [
   {
     request: {
@@ -120,17 +108,17 @@ const emptyMocks = [
     result: {
       data: {
         getAllCategories: {
+          __typename: 'PaginatedCategoriesType' as const,
           categories: [],
           total: 0,
           hasMore: false,
         },
-      },
+      } as FindAllCategoriesQuery,
     },
   },
 ];
 
-// Mock for large catalog with pagination
-const largeCatalogMocks = [
+const loadingMocks = [
   {
     request: {
       query: FindAllCategoriesDocument,
@@ -144,14 +132,16 @@ const largeCatalogMocks = [
         includeSubcategories: false,
       },
     },
+    delay: 3000, // Simulate loading
     result: {
       data: {
         getAllCategories: {
-          categories: mockCategoriesData,
-          total: 50,
-          hasMore: true,
+          __typename: 'PaginatedCategoriesType' as const,
+          categories: mockCategories,
+          total: mockCategories.length,
+          hasMore: false,
         },
-      },
+      } as FindAllCategoriesQuery,
     },
   },
 ];
@@ -164,39 +154,46 @@ const meta: Meta<typeof AddSubcategory> = {
     docs: {
       description: {
         component:
-          'AddSubcategory is a dialog/drawer component for selecting and adding subcategories to a parent category. It provides search functionality, infinite scroll, and multi-selection capabilities for category management.',
+          'A dialog component for adding subcategories to a category. Provides search, filtering, and selection capabilities with support for excluding specific category IDs.',
       },
     },
   },
   argTypes: {
     excludeIds: {
+      control: 'object',
       description: 'Array of category IDs to exclude from selection',
-      control: { type: 'object' },
     },
     currentCategoryId: {
+      control: 'text',
       description: 'Current category ID to prevent self-selection',
-      control: { type: 'text' },
     },
     disabled: {
+      control: 'boolean',
       description: 'Whether the component is disabled',
-      control: { type: 'boolean' },
     },
     onAdd: {
-      description: 'Callback function when categories are added',
-      action: 'categories-added',
+      action: 'onAdd',
+      description: 'Callback fired when categories are added',
     },
     className: {
+      control: 'text',
       description: 'Additional CSS classes',
-      control: { type: 'text' },
+    },
+    open: {
+      control: 'boolean',
+      description: 'External control of open state',
+    },
+    onOpenChange: {
+      action: 'onOpenChange',
+      description: 'External control of open state change',
+    },
+    mode: {
+      control: 'select',
+      options: ['category-management', 'product-selection'],
+      description: 'Mode to control behavior',
     },
   },
-  decorators: [
-    (Story) => (
-      <div className="bg-background w-full max-w-md p-4">
-        <Story />
-      </div>
-    ),
-  ],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -206,8 +203,8 @@ type Story = StoryObj<typeof AddSubcategory>;
 export const Default: Story = {
   args: {
     excludeIds: [],
-    onAdd: (ids: string[]) => {
-      console.log('Categories added:', ids);
+    onAdd: (categories: CategoryItem[]) => {
+      console.log('Categories added:', categories);
     },
   },
   decorators: [
@@ -220,18 +217,110 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          'Default state of AddSubcategory dialog. Click the trigger button to open the dialog and browse available categories for selection.',
+        story: 'Default state with all categories available for selection.',
       },
     },
   },
 };
 
-export const EmptyCatalog: Story = {
+export const WithExcludedIds: Story = {
+  args: {
+    excludeIds: ['1', '3'],
+    onAdd: (categories: CategoryItem[]) => {
+      console.log('Categories added (with exclusions):', categories);
+    },
+  },
+  decorators: [
+    (Story) => (
+      <MockedProvider mocks={successMocks}>
+        <Story />
+      </MockedProvider>
+    ),
+  ],
+  parameters: {
+    docs: {
+      description: {
+        story: 'Categories with some IDs excluded from selection.',
+      },
+    },
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    disabled: true,
+    excludeIds: [],
+    onAdd: (categories: CategoryItem[]) => {
+      console.log('Categories added (disabled):', categories);
+    },
+  },
+  decorators: [
+    (Story) => (
+      <MockedProvider mocks={successMocks}>
+        <Story />
+      </MockedProvider>
+    ),
+  ],
+  parameters: {
+    docs: {
+      description: {
+        story: 'Disabled state where no interactions are allowed.',
+      },
+    },
+  },
+};
+
+export const Loading: Story = {
   args: {
     excludeIds: [],
-    onAdd: (ids: string[]) => {
-      console.log('Categories added:', ids);
+    onAdd: (categories: CategoryItem[]) => {
+      console.log('Categories added (loading):', categories);
+    },
+  },
+  decorators: [
+    (Story) => (
+      <MockedProvider mocks={loadingMocks}>
+        <Story />
+      </MockedProvider>
+    ),
+  ],
+  parameters: {
+    docs: {
+      description: {
+        story: 'Loading state while fetching categories.',
+      },
+    },
+  },
+};
+
+export const ErrorState: Story = {
+  args: {
+    excludeIds: [],
+    onAdd: (categories: CategoryItem[]) => {
+      console.log('Categories added (error):', categories);
+    },
+  },
+  decorators: [
+    (Story) => (
+      <MockedProvider mocks={errorMocks}>
+        <Story />
+      </MockedProvider>
+    ),
+  ],
+  parameters: {
+    docs: {
+      description: {
+        story: 'Error state when category fetching fails.',
+      },
+    },
+  },
+};
+
+export const Empty: Story = {
+  args: {
+    excludeIds: [],
+    onAdd: (categories: CategoryItem[]) => {
+      console.log('Categories added (empty):', categories);
     },
   },
   decorators: [
@@ -244,42 +333,18 @@ export const EmptyCatalog: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          'Shows the component when no categories are available in the catalog, displaying an empty state.',
+        story: 'Empty state when no categories are available.',
       },
     },
   },
 };
 
-export const LargeCatalog: Story = {
+export const ProductSelectionMode: Story = {
   args: {
+    mode: 'product-selection',
     excludeIds: [],
-    onAdd: (ids: string[]) => {
-      console.log('Categories added:', ids);
-    },
-  },
-  decorators: [
-    (Story) => (
-      <MockedProvider mocks={largeCatalogMocks}>
-        <Story />
-      </MockedProvider>
-    ),
-  ],
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Demonstrates the component with a large catalog that has pagination, showcasing the infinite scroll functionality.',
-      },
-    },
-  },
-};
-
-export const WithExcludedIds: Story = {
-  args: {
-    excludeIds: ['1', '3', '5'],
-    onAdd: (ids: string[]) => {
-      console.log('Categories added:', ids);
+    onAdd: (categories: CategoryItem[]) => {
+      console.log('Categories added (product selection):', categories);
     },
   },
   decorators: [
@@ -292,83 +357,7 @@ export const WithExcludedIds: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          'Shows the component with specific category IDs excluded from selection, useful when certain categories should not be available.',
-      },
-    },
-  },
-};
-
-export const WithCurrentCategory: Story = {
-  args: {
-    currentCategoryId: '2',
-    excludeIds: [],
-    onAdd: (ids: string[]) => {
-      console.log('Categories added:', ids);
-    },
-  },
-  decorators: [
-    (Story) => (
-      <MockedProvider mocks={successMocks}>
-        <Story />
-      </MockedProvider>
-    ),
-  ],
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Demonstrates the component with a current category ID set to prevent self-selection.',
-      },
-    },
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    excludeIds: [],
-    disabled: true,
-    onAdd: (ids: string[]) => {
-      console.log('Categories added:', ids);
-    },
-  },
-  decorators: [
-    (Story) => (
-      <MockedProvider mocks={successMocks}>
-        <Story />
-      </MockedProvider>
-    ),
-  ],
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Shows the component in a disabled state where the trigger button is disabled and no interactions are allowed.',
-      },
-    },
-  },
-};
-
-export const WithCustomClassName: Story = {
-  args: {
-    excludeIds: [],
-    className: 'border-2 border-primary rounded-lg',
-    onAdd: (ids: string[]) => {
-      console.log('Categories added:', ids);
-    },
-  },
-  decorators: [
-    (Story) => (
-      <MockedProvider mocks={successMocks}>
-        <Story />
-      </MockedProvider>
-    ),
-  ],
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Demonstrates the component with custom CSS classes applied for styling customization.',
+        story: 'Product selection mode with different behavior and styling.',
       },
     },
   },

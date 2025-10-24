@@ -11,8 +11,16 @@ import { Form } from '@shadcn/ui/form';
 import TagsFormField from '@molecules/products/product-detail/TagsFormField';
 import CategoryFormField from '@molecules/products/product-detail/CategoryFormField';
 import SaveButton from '@atoms/shared/SaveButton';
-import ProductActions from '@atoms/shared/ProductActions';
+import Options from '@molecules/shared/Options';
 import { useProductForm } from '@hooks/domains/products';
+import { useTranslations } from 'next-intl';
+import { RotateCcw } from 'lucide-react';
+import {
+  useSoftDeleteProduct,
+  useRestoreProduct,
+  useDeleteProduct,
+} from '@hooks/domains/products';
+import { useState } from 'react';
 
 interface MainProductDetailProps {
   param: string;
@@ -23,11 +31,43 @@ export default function MainProductDetail({
   param,
   isNew,
 }: MainProductDetailProps) {
+  const t = useTranslations('Products');
+  const [hasMediaUploaded, setHasMediaUploaded] = useState(false);
   const { form, handleSubmit, isSubmitting, hasChanges, product } =
     useProductForm({
       productId: param,
       isNew,
     });
+
+  const { handleSoftDelete, loading: archiveLoading } = useSoftDeleteProduct();
+  const { handleRestore, loading: restoreLoading } = useRestoreProduct();
+  const { handleDelete, loading: deleteLoading } = useDeleteProduct();
+
+  const handleArchive = async () => {
+    await handleSoftDelete(param);
+  };
+
+  const handleRestoreAction = async () => {
+    await handleRestore(param);
+  };
+
+  const handleDeleteAction = async () => {
+    await handleDelete(param);
+  };
+
+  const isArchived = product?.isArchived ?? false;
+
+  const customOptions = isArchived
+    ? [
+        {
+          id: 'restore',
+          label: t('restoreProduct'),
+          icon: RotateCcw,
+          onClick: handleRestoreAction,
+          disabled: restoreLoading,
+        },
+      ]
+    : [];
 
   return (
     <main className="mx-4 flex max-w-screen-md justify-center lg:mx-auto lg:w-full">
@@ -40,21 +80,29 @@ export default function MainProductDetail({
           className="w-full space-y-6"
         >
           {/* Main Content */}
-          <div className="flex justify-end">
-            <ProductActions
-              singleMode={true}
-              productId={param}
-              productIsArchived={product?.isArchived ?? false}
-            />
-          </div>
-          <MediaFormField isSubmitting={isSubmitting} />
+          <Options
+            options={customOptions}
+            showArchive={!isArchived}
+            onArchive={handleArchive}
+            archiveTitle={t('archive')}
+            archiveDescription={t('archiveDescriptionSingle')}
+            showDelete={true}
+            onDelete={handleDeleteAction}
+            deleteTitle={t('deleteProduct')}
+            deleteDescription={t('deleteDescriptionSingle')}
+            disabled={archiveLoading || restoreLoading || deleteLoading}
+          />
+          <MediaFormField
+            isSubmitting={isSubmitting}
+            onMediaUploaded={setHasMediaUploaded}
+          />
           <div className="w-full space-y-6 sm:flex sm:flex-row sm:gap-6">
             <NameFormField />
             <TypeProductFormField />
           </div>
           <ShortLongDescriptionFormField />
-          <CategoryFormField />
           <VariantsFormField productId={param} />
+          <CategoryFormField name="categories" />
           <TagsFormField />
           <BrandManufacturerFormField />
           <SustainabilityFormField />
@@ -63,7 +111,11 @@ export default function MainProductDetail({
             <SaveButton
               type="submit"
               loading={isSubmitting}
-              disabled={isNew ? isSubmitting : !hasChanges || isSubmitting}
+              disabled={
+                isNew
+                  ? isSubmitting || !hasMediaUploaded
+                  : !hasChanges || isSubmitting
+              }
               size="lg"
               translationKey={isNew ? 'add' : 'save'}
             />

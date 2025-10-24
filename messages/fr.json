@@ -556,7 +556,8 @@
     "confirmed": "Confirmé",
     "shipped": "Expédié",
     "completed": "Terminé",
-    "cancelled": "Annulé"
+    "cancelled": "Annulé",
+    "sidebarToggle": "Basculer la barre latérale"
   },
   "Products": {
     "addProduct": "Ajouter un produit",
@@ -654,18 +655,18 @@
     "restoring": "Restauration",
     "restore": "Restaurer",
     "name": "Nom",
-    "namePlaceholder": "Nom du produit",
+    "namePlaceholder": "Portefeuille en Cuir de Luxe",
     "shortDescription": "Description courte",
-    "shortDescriptionPlaceholder": "Une brève description du produit",
+    "shortDescriptionPlaceholder": "Un portefeuille élégant et durable fabriqué en cuir italien véritable.",
     "longDescription": "Description longue",
-    "longDescriptionPlaceholder": "Une description détaillée du produit",
+    "longDescriptionPlaceholder": "Fabriqué à partir du meilleur cuir italien, ce portefeuille dispose de plusieurs fentes pour cartes, d'une poche à monnaie et d'un compartiment sécurisé pour les billets. Son design fin se glisse confortablement dans n'importe quelle poche, offrant à la fois élégance et praticité.",
     "brand": "Marque",
-    "brandPlaceholder": "Nom de la marque",
+    "brandPlaceholder": "Bellroy",
     "manufacturer": "Fabricant",
-    "manufacturerPlaceholder": "Nom du fabricant",
+    "manufacturerPlaceholder": "Leather Goods Inc.",
     "media": "Médias",
     "tags": "Étiquettes",
-    "tagsPlaceholder": "ex. été, coton, promotion",
+    "tagsPlaceholder": "cuir, portefeuille, accessoires",
     "addTag": "Ajouter une étiquette",
     "categories": "Catégories",
     "categoriesPlaceholder": "Sélectionner des catégories",
@@ -673,7 +674,7 @@
     "sustainabilities": "Durabilités",
     "addSustainability": "Ajouter une durabilité",
     "certification": "Certification",
-    "certificationPlaceholder": "ex. Commerce équitable, Biologique",
+    "certificationPlaceholder": "Organique",
     "recycledPercentage": "Pourcentage recyclé",
     "noSustainabilityAdded": "Aucune durabilité ajoutée",
     "moveUp": "Déplacer vers le haut",
@@ -842,8 +843,8 @@
     "moveDown": "Descendre",
     "delete": "Supprimer",
     "noAttributesYet": "Aucun attribut pour le moment",
-    "attributeKeyPlaceholder": "couleur",
-    "attributeValuePlaceholder": "rouge",
+    "attributeKeyPlaceholder": "Couleur",
+    "attributeValuePlaceholder": "Rouge",
     "skuPlaceholder": "ABC-1234",
     "upcPlaceholder": "012345678905",
     "eanPlaceholder": "5901234123457",
@@ -1041,7 +1042,8 @@
       "deleteDescription": "Êtes-vous sûr de vouloir supprimer cet élément ? Cette action ne peut pas être annulée.",
       "deleting": "Suppression...",
       "archive": "Archiver",
-      "cancel": "Annuler"
+      "cancel": "Annuler",
+      "archiveDescription": "Êtes-vous sûr de vouloir archiver cet élément ? Vous pourrez le restaurer plus tard si nécessaire."
     },
     "sortBy": {
       "createdAt": "Création",
@@ -1058,7 +1060,8 @@
       "descending": "Décroissant"
     },
     "themeToggle": "Basculer le thème",
-    "accountMenu": "Menu du compte"
+    "accountMenu": "Menu du compte",
+    "goBack": "Retourner"
   },
   "Inventory": {
     "searchPlaceholder": "Rechercher par nom de produit, variante ou SKU...",
@@ -1266,6 +1269,7 @@
     "errorDescription": "Une erreur s'est produite lors du chargement des catégories. Veuillez réessayer.",
     "noCategoriesTitle": "Aucune catégorie pour le moment",
     "noCategoriesDescription": "Commencez à organiser votre boutique en créant votre première catégorie.",
+    "noCategoriesDescriptionProductSelection": "Les catégories doivent d'abord être créées dans la section de gestion des catégories.",
     "noSubcategoriesTitle": "Aucune sous-catégorie",
     "noSubcategoriesDescription": "Cette catégorie n'a pas encore de sous-catégories.",
     "noSearchResultsTitle": "Aucun résultat trouvé",
@@ -1289,6 +1293,7 @@
     "subcategories": "Sous-catégories",
     "searchSubcategories": "Rechercher des sous-catégories",
     "itemsCount": "{count, plural, one {# sous-catégorie} other {# sous-catégories}}",
+    "categoriesCount": "{count, plural, one {# catégorie} other {# catégories}}",
     "add": "Ajouter",
     "addSubcategories": "Ajouter des sous-catégories",
     "removeRelation": "Supprimer la relation",

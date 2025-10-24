@@ -257,12 +257,14 @@ export default function MainDashboard() {
     typeFilter !== undefined ||
     categoryFilter.length > 0 ||
     selectedFilter !== 'All';
+
+  // Detect the "Not products found" error from the server
   const hasNoProductsInDatabase =
-    (!allProducts || allProducts.length === 0) && !hasActiveFilters;
+    (!allProducts || allProducts.length === 0) && !hasActiveFilters && !loading;
 
   // Show filtered empty state when filters are active but no products match
   const hasFilteredEmptyState =
-    hasActiveFilters && (!allProducts || allProducts.length === 0);
+    hasActiveFilters && (!allProducts || allProducts.length === 0) && !loading;
 
   return (
     <main className="flex w-full flex-col gap-4 px-4 xl:mx-auto">

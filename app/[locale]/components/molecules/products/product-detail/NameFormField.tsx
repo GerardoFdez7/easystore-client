@@ -34,7 +34,6 @@ export default function NameFormField() {
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 aria-invalid={!!fieldState.error}
-                className="w-full"
               />
             </FormControl>
             <FormMessage />

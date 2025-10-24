@@ -38,7 +38,6 @@ export default function ShortLongDescriptionFormField() {
                 onChange={(e) => field.onChange(e.target.value)}
                 onBlur={field.onBlur}
                 aria-invalid={!!fieldState.error}
-                className="h-53 sm:h-auto"
               />
             </FormControl>
             <FormMessage />
@@ -68,6 +67,7 @@ export default function ShortLongDescriptionFormField() {
                 onChange={(e) => field.onChange(e.target.value)}
                 onBlur={field.onBlur}
                 aria-invalid={!!fieldState.error}
+                className="h-53 sm:h-40"
               />
             </FormControl>
             <FormMessage />

@@ -17,12 +17,13 @@ interface MediaFormFieldProps {
   isSubmitting?: boolean;
   coverFieldName?: string;
   mediaFieldName?: string;
+  onMediaUploaded?: (hasMedia: boolean) => void;
 }
 
 export default function MediaFormField({
-  isSubmitting = false,
   coverFieldName = 'cover',
   mediaFieldName = 'media',
+  onMediaUploaded,
 }: MediaFormFieldProps) {
   const { control, setValue } = useFormContext();
   const t = useTranslations('Products');
@@ -80,6 +81,7 @@ export default function MediaFormField({
         shouldDirty: true,
         shouldValidate: true,
       });
+      onMediaUploaded?.(false);
       return;
     }
 
@@ -114,16 +116,13 @@ export default function MediaFormField({
         shouldValidate: true,
       });
     }
-  };
 
-  // Handle errors from MediaUploader (including validation errors when no items)
-  const handleUploadError = (_error: string) => {
-    if (!cover || cover === '') {
-      setValue(coverFieldName, '', {
-        shouldDirty: true,
-        shouldValidate: true,
-      });
-    }
+    // Notify parent component about media upload status
+    const hasMedia = !!(
+      processedData.cover ||
+      (processedData.mediaItems && processedData.mediaItems.length > 0)
+    );
+    onMediaUploaded?.(hasMedia);
   };
 
   return (
@@ -134,31 +133,13 @@ export default function MediaFormField({
         <FormItem>
           <FormLabel className="text-lg font-semibold">{t('media')}</FormLabel>
           <FormControl>
-            <div className="space-y-2">
-              <MediaUploader
-                key={uploaderKey}
-                multiple={true}
-                maxImageSize={10}
-                maxVideoSize={50}
-                minItems={1}
-                initialMedia={initialMedia}
-                onMediaProcessed={handleMediaProcessed}
-                onUploadSuccess={(_url) => {
-                  // Upload success handled by the hook
-                }}
-                onUploadError={handleUploadError}
-                renderEditButton={(onEdit, isEditing, hasMedia) => (
-                  <button
-                    type="button"
-                    onClick={onEdit}
-                    disabled={isEditing || !hasMedia || isSubmitting}
-                    className="mt-2 inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    {isEditing ? 'Editing...' : 'Edit Media'}
-                  </button>
-                )}
-              />
-            </div>
+            <MediaUploader
+              key={uploaderKey}
+              multiple={true}
+              initialMedia={initialMedia}
+              onMediaProcessed={handleMediaProcessed}
+              alwaysEditing={true}
+            />
           </FormControl>
           <FormMessage />
         </FormItem>

@@ -39,10 +39,12 @@ interface OptionsProps {
   onDelete?: () => Promise<void> | void;
   deleteTitle?: string;
   deleteDescription?: string;
+  deleteButtonText?: string;
   showArchive?: boolean;
   onArchive?: () => Promise<void> | void;
   archiveTitle?: string;
   archiveDescription?: string;
+  archiveButtonText?: string;
   disabled?: boolean;
   tooltipContent?: string;
   className?: string;
@@ -55,10 +57,12 @@ export default function Options({
   onDelete,
   deleteTitle,
   deleteDescription,
+  deleteButtonText,
   showArchive = false,
   onArchive,
   archiveTitle,
   archiveDescription,
+  archiveButtonText,
   disabled = false,
   tooltipContent,
   className = '',
@@ -124,7 +128,7 @@ export default function Options({
   const destructiveOptions = [];
 
   if (showArchive) {
-    destructiveOptions.push({
+    regularOptions.push({
       id: 'archive',
       label: t('archive'),
       icon: Archive,
@@ -157,7 +161,7 @@ export default function Options({
   return (
     <nav
       className={`flex justify-end ${wrapperClassName}`}
-      aria-label="Item options"
+      aria-label="options"
     >
       <DropdownMenu>
         <Tooltip>
@@ -176,9 +180,7 @@ export default function Options({
               </Button>
             </DropdownMenuTrigger>
           </TooltipTrigger>
-          <TooltipContent>
-            <p>{defaultTooltipContent}</p>
-          </TooltipContent>
+          <TooltipContent>{defaultTooltipContent}</TooltipContent>
         </Tooltip>
 
         <DropdownMenuContent align="end" className="w-48" role="menu">
@@ -250,7 +252,7 @@ export default function Options({
               disabled={isDeleting}
               className="bg-error hover:bg-error/90 text-white"
             >
-              {isDeleting ? t('deleting') : t('delete')}
+              {isDeleting ? t('deleting') : deleteButtonText || t('delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -261,11 +263,10 @@ export default function Options({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {archiveTitle || `${t('archive')} Item`}
+              {archiveTitle || `${t('archive')}`}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {archiveDescription ||
-                `Are you sure you want to archive this item? You can restore it later if needed.`}
+              {archiveDescription || t('archiveDescription')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -279,7 +280,9 @@ export default function Options({
               onClick={() => void handleArchiveConfirm()}
               disabled={isArchiving}
             >
-              {isArchiving ? `${t('archive')}...` : t('archive')}
+              {isArchiving
+                ? `${t('archive')}...`
+                : archiveButtonText || t('archive')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
