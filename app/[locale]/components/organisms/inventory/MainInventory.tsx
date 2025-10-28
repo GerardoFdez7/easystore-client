@@ -13,6 +13,7 @@ import EmptyState from '@molecules/shared/EmptyState';
 import AddStockDialog from '@organisms/inventory/AddStockDialog';
 import WarehouseManagementDialog from '@organisms/inventory/WarehouseManagementDialog';
 import { useRouter } from 'next/navigation';
+import { isUuidV7 } from '@lib/utils';
 import { useMutation } from '@apollo/client/react';
 import {
   RemoveStockFromWarehouseDocument,
@@ -91,9 +92,7 @@ export default function MainInventory() {
 
   const handleDelete = async (row: { id: string; warehouseId: string }) => {
     try {
-      const v7 =
-        /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-7[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$/;
-      if (!v7.test(row.id) || !v7.test(row.warehouseId)) {
+      if (!isUuidV7(row.id) || !isUuidV7(row.warehouseId)) {
         toast.error(
           t('errorDeletingStock', {
             default: 'Failed to delete stock',

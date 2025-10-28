@@ -13,6 +13,7 @@ import { Button } from '@shadcn/ui/button';
 import { Input } from '@shadcn/ui/input';
 import { Label } from '@shadcn/ui/label';
 import { useRouter } from 'next/navigation';
+import { normalizeWarehouseName } from '@lib/utils';
 
 import StockHeader from '@molecules/stock-detail/StockHeader';
 import SerialChips from '@molecules/stock-detail/SerialChips';
@@ -28,7 +29,7 @@ type Props = { warehouseName?: string; sku?: string };
 
 export default function MainStockDetail({ warehouseName, sku }: Props) {
   const t = useTranslations('StockDetail');
-  warehouseName = warehouseName?.split('-').join(' ').trim().toLowerCase();
+  warehouseName = normalizeWarehouseName(warehouseName);
   const router = useRouter();
 
   const [serialNumbers, setSerialNumbers] = useState<string[]>([]);
