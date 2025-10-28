@@ -1158,5 +1158,42 @@
     "saveSuccess": "Categoria atualizada com sucesso.",
     "createSuccess": "Categoria criada com sucesso.",
     "addSubcategory": "Adicionar subcategoria a"
+  },
+  "Billing": {
+    "title": "Métodos de cobrança",
+    "description": "Aqui você pode definir como deseja cobrar seus clientes da loja.",
+    "subtitle": "Aqui você pode definir como deseja cobrar os clientes da sua loja.",
+    "gridAria": "Grade de métodos de cobrança",
+    "methods": {
+      "cards": {
+        "title": "Cartão de crédito / débito",
+        "description": "Aceite os principais cartões de crédito e débito."
+      },
+      "cash": {
+        "title": "Dinheiro",
+        "description": "Aceite pagamentos em dinheiro para transações presenciais."
+      },
+      "bank_transfer": {
+        "title": "Transferência bancária",
+        "description": "Aceite pagamentos de contas bancárias."
+      },
+      "paypal": {
+        "title": "PayPal",
+        "description": "Aceite pagamentos via PayPal."
+      },
+      "cod": {
+        "title": "Pagamento na entrega",
+        "description": "Aceite o pagamento no momento da entrega."
+      },
+      "installments": {
+        "title": "Parcelamento",
+        "description": "Ofereça planos de parcelamento para seus clientes."
+      }
+    },
+    "MethodCard": {
+      "configured": "Configurado",
+      "pendingSetup": "Configuração pendente",
+      "manageSettings": "Gerenciar configurações"
+    }
   }
 }

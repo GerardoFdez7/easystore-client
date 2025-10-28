@@ -1198,5 +1198,41 @@
     "saveSuccess": "Category updated successfully.",
     "createSuccess": "Category created successfully.",
     "addSubcategory": "Add subcategory to"
+  },
+  "Billing": {
+    "title": "Billing Methods",
+    "subtitle": "Here you can define how you want to charge your store customers.",
+    "gridAria": "Billing methods grid",
+    "methods": {
+      "cards": {
+        "title": "Credit / Debit Card",
+        "description": "Accept all major credit and debit cards."
+      },
+      "cash": {
+        "title": "Cash",
+        "description": "Accept cash payments for in-person transactions."
+      },
+      "bank_transfer": {
+        "title": "Bank Transfer",
+        "description": "Accept payments from bank accounts."
+      },
+      "paypal": {
+        "title": "PayPal",
+        "description": "Accept payments through PayPal."
+      },
+      "cod": {
+        "title": "Payment on Delivery",
+        "description": "Accept payment upon delivery."
+      },
+      "installments": {
+        "title": "Installments",
+        "description": "Offer installment plans to your customers."
+      }
+    },
+    "MethodCard": {
+      "configured": "Configured",
+      "pendingSetup": "Pending Setup",
+      "manageSettings": "Manage Settings"
+    }
   }
 }
