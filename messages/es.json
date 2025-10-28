@@ -1445,5 +1445,42 @@
     "serialNumberMustBeNonEmpty": "El número de serie no debe estar vacío",
     "serialNumberExceedsMax": "El número de serie no puede exceder 100 caracteres",
     "serialNumbersExceedsMax": "No se pueden agregar más de 1000 números de serie"
+  },
+  "Billing": {
+    "title": "Métodos de facturación",
+    "description": "Aquí puedes definir cómo deseas cobrar a tus clientes de la tienda.",
+    "subtitle": "Aquí puedes definir cómo deseas cobrar a tus clientes de la tienda.",
+    "gridAria": "Cuadrícula de métodos de facturación",
+    "methods": {
+      "cards": {
+        "title": "Tarjeta de crédito / débito",
+        "description": "Acepta todas las tarjetas de crédito y débito principales."
+      },
+      "cash": {
+        "title": "Efectivo",
+        "description": "Acepta pagos en efectivo para transacciones presenciales."
+      },
+      "bank_transfer": {
+        "title": "Transferencia bancaria",
+        "description": "Acepta pagos desde cuentas bancarias."
+      },
+      "paypal": {
+        "title": "PayPal",
+        "description": "Acepta pagos a través de PayPal."
+      },
+      "cod": {
+        "title": "Pago contra entrega",
+        "description": "Acepta el pago al momento de la entrega."
+      },
+      "installments": {
+        "title": "Cuotas",
+        "description": "Ofrece planes de pago en cuotas a tus clientes."
+      }
+    },
+    "MethodCard": {
+      "configured": "Configurado",
+      "pendingSetup": "Configuración pendiente",
+      "manageSettings": "Administrar configuración"
+    }
   }
 }
