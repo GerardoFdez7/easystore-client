@@ -54,17 +54,18 @@ export default function BillingMethodCard({
   onManage,
 }: Props) {
   const t = useTranslations('Billing.MethodCard');
-  const disabledLook = !enabled && state === 'pending';
+  // Aplica apariencia deshabilitada siempre que el método esté apagado
+  const disabledLook = !enabled;
 
   return (
     <Card
       className={cn(
         'bg-card relative overflow-hidden rounded-2xl border p-6 transition-shadow',
         'hover:shadow-md',
+        'flex h-full flex-col',
         disabledLook && 'opacity-60 grayscale',
       )}
     >
-      {/* Toggle */}
       <div className="absolute top-4 right-4">
         <Switch
           aria-label={`toggle-${id}`}
@@ -73,10 +74,13 @@ export default function BillingMethodCard({
         />
       </div>
 
-      {/* Pill de estado */}
-      <div className="mb-6">
-        {state === 'configured' ? (
-          <span className="bg-secondary/20 text-secondary-foreground inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium">
+      <div className="mb-6 flex w-full justify-center">
+        {!enabled ? (
+          <span className="bg-muted text-secondary-foreground inline-flex items-center rounded-full px-3 py-1 text-xs font-medium">
+            {t('disabled')}
+          </span>
+        ) : state === 'configured' ? (
+          <span className="bg-muted text-secondary-foreground inline-flex items-center rounded-full px-5 py-2 text-xs font-medium">
             {t('configured')}
           </span>
         ) : (
@@ -85,14 +89,11 @@ export default function BillingMethodCard({
           </span>
         )}
       </div>
-
-      <CardContent className="flex flex-col items-center gap-4 p-0">
-        {/* Icono circular */}
+      <CardContent className="flex flex-1 flex-col items-center gap-4 p-0">
         <div className="bg-muted/60 flex h-16 w-16 items-center justify-center rounded-full">
           {iconById[id]}
         </div>
 
-        {/* Título y desc */}
         <div className="text-center">
           <h3 className="text-sm font-semibold">{title}</h3>
           <p className="text-muted-foreground mt-1 max-w-[240px] text-xs">
@@ -101,9 +102,9 @@ export default function BillingMethodCard({
         </div>
 
         <Button
-          className="mt-3 w-full max-w-[240px]"
+          className="mt-auto w-full max-w-[240px]"
           size="sm"
-          variant="secondary"
+          variant="outline"
           onClick={onManage}
         >
           {t('manageSettings')}

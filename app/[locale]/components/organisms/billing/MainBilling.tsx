@@ -1,12 +1,17 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import BillingMethodCard, {
   BillingCardState,
   BillingMethodId,
 } from '@molecules/billing/BillingMethodCard';
+import CardPaymentModal from '@molecules/billing/CardPaymentModal';
+import PayPalModal from '@molecules/billing/PayPalModal';
+import CashPaymentModal from '@molecules/billing/CashPaymentModal';
+import BankTransferModal from '@molecules/billing/BankTransferModal';
+import CODModal from '@molecules/billing/CODModal';
+import InstallmentsModal from '@molecules/billing/InstallmentsModal';
 
 type MethodRow = {
   id: BillingMethodId;
@@ -16,14 +21,16 @@ type MethodRow = {
 
 export default function MainBilling() {
   const t = useTranslations('Billing');
-  const router = useRouter();
+
+  // Estado para controlar qué modal está abierto
+  const [activeModal, setActiveModal] = useState<BillingMethodId | null>(null);
 
   // Estado local (cámbialo luego por tu fetch/GraphQL)
   const [methods, setMethods] = useState<Record<BillingMethodId, MethodRow>>({
-    cards: { id: 'cards', enabled: true, configured: true },
-    cash: { id: 'cash', enabled: true, configured: true },
+    cards: { id: 'cards', enabled: true, configured: false },
+    cash: { id: 'cash', enabled: true, configured: false },
     bank_transfer: { id: 'bank_transfer', enabled: false, configured: false },
-    paypal: { id: 'paypal', enabled: true, configured: true },
+    paypal: { id: 'paypal', enabled: true, configured: false },
     cod: { id: 'cod', enabled: false, configured: false },
     installments: { id: 'installments', enabled: false, configured: false },
   });
@@ -35,16 +42,19 @@ export default function MainBilling() {
       ...prev,
       [id]: { ...prev[id], enabled: next },
     }));
-    // TODO: persistir estado (mutation) si aplica
   };
 
   const onManage = (id: BillingMethodId) => {
-    router.push(`/billing/${id}`); // ajusta la ruta a tu convención
+    setActiveModal(id);
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
   };
 
   return (
     <main className="flex w-full flex-col gap-6 px-2 sm:px-4 xl:mx-auto">
-      <section className="text-muted-foreground text-sm">
+      <section className="text-muted-foreground text-xl">
         {t('subtitle')}
       </section>
 
@@ -71,6 +81,68 @@ export default function MainBilling() {
           );
         })}
       </section>
+
+      {/* Modales */}
+      <CardPaymentModal
+        open={activeModal === 'cards'}
+        onOpenChange={(open) => !open && closeModal()}
+        onSaved={() =>
+          setMethods((prev) => ({
+            ...prev,
+            cards: { ...prev.cards, configured: true },
+          }))
+        }
+      />
+      <PayPalModal
+        open={activeModal === 'paypal'}
+        onOpenChange={(open) => !open && closeModal()}
+        onSaved={() =>
+          setMethods((prev) => ({
+            ...prev,
+            paypal: { ...prev.paypal, configured: true },
+          }))
+        }
+      />
+      <CashPaymentModal
+        open={activeModal === 'cash'}
+        onOpenChange={(open) => !open && closeModal()}
+        onSaved={() =>
+          setMethods((prev) => ({
+            ...prev,
+            cash: { ...prev.cash, configured: true },
+          }))
+        }
+      />
+      <BankTransferModal
+        open={activeModal === 'bank_transfer'}
+        onOpenChange={(open) => !open && closeModal()}
+        onSaved={() =>
+          setMethods((prev) => ({
+            ...prev,
+            bank_transfer: { ...prev.bank_transfer, configured: true },
+          }))
+        }
+      />
+      <CODModal
+        open={activeModal === 'cod'}
+        onOpenChange={(open) => !open && closeModal()}
+        onSaved={() =>
+          setMethods((prev) => ({
+            ...prev,
+            cod: { ...prev.cod, configured: true },
+          }))
+        }
+      />
+      <InstallmentsModal
+        open={activeModal === 'installments'}
+        onOpenChange={(open) => !open && closeModal()}
+        onSaved={() =>
+          setMethods((prev) => ({
+            ...prev,
+            installments: { ...prev.installments, configured: true },
+          }))
+        }
+      />
     </main>
   );
 }
