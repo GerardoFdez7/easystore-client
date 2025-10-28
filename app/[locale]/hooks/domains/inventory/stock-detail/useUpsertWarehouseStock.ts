@@ -7,6 +7,7 @@ import { usePrefillExistingStock } from './usePrefillExistingStock';
 import { useResolveWarehouseId } from './useResolveWarehouseId';
 import type { UseFormReturn } from 'react-hook-form';
 import type { StockFormValues } from './useStockFormSchema';
+import { isUuidV7 } from '@lib/utils';
 
 type Options = {
   warehouseName?: string;
@@ -57,8 +58,6 @@ export function useUpsertWarehouseStock(opts: Options) {
     return async (e?: React.FormEvent<HTMLFormElement>) => {
       e?.preventDefault();
       const values = form.getValues();
-      const v7 =
-        /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-7[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$/;
 
       try {
         const wid = await resolver(undefined);
@@ -66,7 +65,7 @@ export function useUpsertWarehouseStock(opts: Options) {
           selectedVariant as unknown as { stockId?: string }
         )?.stockId;
 
-        if (stockIdGuess && v7.test(stockIdGuess)) {
+        if (stockIdGuess && isUuidV7(stockIdGuess)) {
           const ok = await update(wid, stockIdGuess, values, reason);
           if (ok) onSuccess?.({ updatedWarehouseId: wid });
           return;
