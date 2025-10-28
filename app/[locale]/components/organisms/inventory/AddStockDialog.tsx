@@ -17,6 +17,7 @@ import { Separator } from '@shadcn/ui/separator';
 import { Alert, AlertDescription } from '@shadcn/ui/alert';
 import { Badge } from '@shadcn/ui/badge';
 import { Package, Warehouse } from 'lucide-react';
+import { nameToSlug } from '@lib/utils/path-utils';
 import VariantSelector from '@organisms/inventory/VariantSelector';
 import WarehouseCombobox from '@molecules/inventory/WarehouseCombobox';
 
@@ -30,15 +31,12 @@ interface AddStockDialogProps {
   selectedVariantAttributes?: Array<{ key: string; value: string }>;
 }
 
-const slug = (s: string) =>
-  s
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '') // quita acentos
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
+// Build the inventory URL segment safely, avoiding trailing underscores when SKU is missing
+const buildInventorySegment = (warehouseName: string, variantSku?: string) => {
+  const wh = nameToSlug(warehouseName || '');
+  const sku = variantSku ? nameToSlug(variantSku) : '';
+  return sku ? `${wh}_${sku}` : wh;
+};
 
 const AddStockDialog: FC<AddStockDialogProps> = ({
   open,
@@ -234,7 +232,10 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
                 selectedWarehouseId
               ) {
                 router.push(
-                  `/inventory/${slug(selectedWarehouseName)}_${slug(selectedVariantSku)}`,
+                  `/inventory/${buildInventorySegment(
+                    selectedWarehouseName,
+                    selectedVariantSku,
+                  )}`,
                 );
                 handleReset(); // Reset state after successful navigation
                 onOpenChange(false);

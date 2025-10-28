@@ -12,7 +12,14 @@ export default function StockDetailTemplate({
   warehouseSku,
 }: InventoryTemplateProps) {
   const t = useTranslations('StockDetail');
-  const [warehouseName, sku] = warehouseSku.split('_');
+  let warehouseName: string;
+  let sku: string;
+  if (warehouseSku.includes('_')) {
+    [warehouseName, sku] = warehouseSku.split('_');
+  } else {
+    warehouseName = warehouseSku;
+    sku = '';
+  }
   return (
     <>
       <HeaderDashboard />
