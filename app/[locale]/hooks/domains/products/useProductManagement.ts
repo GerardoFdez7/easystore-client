@@ -91,6 +91,7 @@ export function useProductManagement(): UseProductManagementReturn {
               categories: () => updatedProduct.categories,
               sustainabilities: () => updatedProduct.sustainabilities,
               media: () => updatedProduct.media,
+              variants: () => updatedProduct.variants,
               updatedAt: () => updatedProduct.updatedAt,
             },
           });

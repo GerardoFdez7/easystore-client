@@ -714,7 +714,12 @@
     "variantCreated": "Variante criada com sucesso",
     "variantUpdated": "Variante atualizada com sucesso",
     "noProductsDescription": "Comece criando seu primeiro produto. Adicione detalhes, imagens e preços para começar a vender.",
-    "weight": "Peso"
+    "weight": "Peso",
+    "noVariantsTitle": "Nenhuma variante ainda",
+    "noVariantsDescription": "Crie sua primeira variante para oferecer diferentes opções para este produto. Adicione atributos como tamanho, cor ou material para dar mais escolhas aos clientes.",
+    "createFirstVariant": "Criar Primeira Variante",
+    "variantsRequired": "Pelo menos uma variante é necessária para este produto",
+    "variantLimitReached": "Máximo de 30 variantes permitidas por produto"
   },
   "Privacy": {
     "tableOfContents": "Índice",

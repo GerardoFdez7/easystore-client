@@ -33,11 +33,17 @@ export default function MainProductDetail({
 }: MainProductDetailProps) {
   const t = useTranslations('Products');
   const [hasMediaUploaded, setHasMediaUploaded] = useState(false);
-  const { form, handleSubmit, isSubmitting, hasChanges, product } =
-    useProductForm({
-      productId: param,
-      isNew,
-    });
+  const {
+    form,
+    handleSubmit,
+    isSubmitting,
+    hasChanges,
+    product,
+    markUserInteraction,
+  } = useProductForm({
+    productId: param,
+    isNew,
+  });
 
   const { handleSoftDelete, loading: archiveLoading } = useSoftDeleteProduct();
   const { handleRestore, loading: restoreLoading } = useRestoreProduct();
@@ -77,6 +83,7 @@ export default function MainProductDetail({
             e.preventDefault();
             void form.handleSubmit(handleSubmit)(e);
           }}
+          onFocus={markUserInteraction}
           className="w-full space-y-6"
         >
           {/* Main Content */}

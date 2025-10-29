@@ -347,7 +347,7 @@ export function useVariantForm({
                   ? ConditionEnum.Used
                   : data.condition === 'REFURBISHED'
                     ? ConditionEnum.Refurbished
-                    : undefined,
+                    : ConditionEnum.New,
             attributes: data.attributes.map((attr) => ({
               key: attr.key,
               value: attr.value,
@@ -405,7 +405,7 @@ export function useVariantForm({
             })),
           };
 
-          const result = await addVariant(input);
+          const result = await addVariant(productId, input);
           if (result) {
             router.push(`/products/${productId}`);
             onSuccess?.();
@@ -424,103 +424,82 @@ export function useVariantForm({
           return;
         }
 
-        // Prepare changed fields for update
-        const fieldsToUpdate: Record<string, unknown> = {};
+        // For variant updates, we need to send the complete variant data
+        // since the backend expects a full variant object in the variants array
+        const hasDimensions =
+          (data.dimensions.height !== '' && data.dimensions.height !== null) ||
+          (data.dimensions.width !== '' && data.dimensions.width !== null) ||
+          (data.dimensions.length !== '' && data.dimensions.length !== null);
 
-        Object.keys(changedFields).forEach((key) => {
-          const fieldKey = key as keyof VariantFormData;
-          const value = data[fieldKey];
-
-          // Transform price to number
-          if (fieldKey === 'price') {
-            const priceValue = value as number | string;
-            fieldsToUpdate.price =
-              typeof priceValue === 'string'
-                ? parseFloat(priceValue)
-                : priceValue;
-            return;
-          }
-
-          // Transform weight to number or null
-          if (fieldKey === 'weight') {
-            const weightValue = value as number | string | null;
-            if (weightValue === '' || weightValue === null) {
-              fieldsToUpdate.weight = null;
-            } else {
-              fieldsToUpdate.weight =
-                typeof weightValue === 'string'
-                  ? parseFloat(weightValue)
-                  : weightValue;
-            }
-            return;
-          }
-
-          // Transform dimensions to backend format (singular 'dimension' with Float types)
-          if (fieldKey === 'dimensions') {
-            const dims = value as VariantFormData['dimensions'];
-            fieldsToUpdate.dimension = {
+        const variantInput = {
+          price:
+            typeof data.price === 'string'
+              ? parseFloat(data.price)
+              : data.price,
+          condition:
+            data.condition === 'NEW'
+              ? ConditionEnum.New
+              : data.condition === 'USED'
+                ? ConditionEnum.Used
+                : data.condition === 'REFURBISHED'
+                  ? ConditionEnum.Refurbished
+                  : ConditionEnum.New,
+          attributes: data.attributes.map((attr) => ({
+            key: attr.key,
+            value: attr.value,
+          })),
+          ...(hasDimensions && {
+            dimension: {
               height:
-                dims.height === '' || dims.height === null
-                  ? null
-                  : typeof dims.height === 'string'
-                    ? parseFloat(dims.height)
-                    : dims.height,
+                data.dimensions.height === '' || data.dimensions.height === null
+                  ? 0
+                  : typeof data.dimensions.height === 'string'
+                    ? parseFloat(data.dimensions.height)
+                    : data.dimensions.height,
               width:
-                dims.width === '' || dims.width === null
-                  ? null
-                  : typeof dims.width === 'string'
-                    ? parseFloat(dims.width)
-                    : dims.width,
+                data.dimensions.width === '' || data.dimensions.width === null
+                  ? 0
+                  : typeof data.dimensions.width === 'string'
+                    ? parseFloat(data.dimensions.width)
+                    : data.dimensions.width,
               length:
-                dims.length === '' || dims.length === null
-                  ? null
-                  : typeof dims.length === 'string'
-                    ? parseFloat(dims.length)
-                    : dims.length,
-            };
-            return;
-          }
+                data.dimensions.length === '' || data.dimensions.length === null
+                  ? 0
+                  : typeof data.dimensions.length === 'string'
+                    ? parseFloat(data.dimensions.length)
+                    : data.dimensions.length,
+            },
+          }),
+          weight:
+            data.weight === '' || data.weight === null
+              ? null
+              : typeof data.weight === 'string'
+                ? parseFloat(data.weight)
+                : data.weight,
+          sku: data.codes.sku || '',
+          upc: data.codes.upc || null,
+          ean: data.codes.ean || null,
+          isbn: data.codes.isbn || null,
+          barcode: data.codes.barcode || null,
+          personalizationOptions: data.personalizationOptions,
+          installmentPayments: data.installmentPayments.map((payment) => ({
+            months: payment.months,
+            interestRate: payment.interestRate,
+          })),
+          warranties: data.warranties.map((warranty) => ({
+            months: warranty.months,
+            coverage: warranty.coverage,
+            instructions: warranty.instructions,
+          })),
+          variantCover: data.variantCover || undefined,
+          variantMedia: data.variantMedia.map((url, index) => ({
+            url,
+            mediaType: MediaTypeEnum.Image,
+            position: index + 1,
+          })),
+        };
 
-          // Flatten codes object (backend expects flat structure)
-          if (fieldKey === 'codes') {
-            const codes = value as VariantFormData['codes'];
-            Object.assign(fieldsToUpdate, {
-              sku: codes.sku || null,
-              upc: codes.upc || null,
-              ean: codes.ean || null,
-              isbn: codes.isbn || null,
-              barcode: codes.barcode || null,
-            });
-            return;
-          }
-
-          // Handle empty variantCover
-          if (fieldKey === 'variantCover' && value === '') {
-            fieldsToUpdate.variantCover = null;
-            return;
-          }
-
-          // Handle variantMedia transformation
-          if (fieldKey === 'variantMedia') {
-            fieldsToUpdate.variantMedia = (value as string[]).map(
-              (url, index) => ({
-                url,
-                mediaType: MediaTypeEnum.Image,
-                position: index + 1,
-              }),
-            );
-            return;
-          }
-
-          // Default: use value as-is
-          fieldsToUpdate[fieldKey] = value;
-        });
-
-        const result = await updateVariant(
-          variantId,
-          productId,
-          fieldsToUpdate,
-        );
+        const result = await updateVariant(productId, [variantInput]);
 
         if (result) {
           onSuccess?.();

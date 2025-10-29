@@ -17,15 +17,20 @@ export default function ButtonAddVariant({ productId }: ButtonAddVariantProps) {
       productId === 'new' ||
       window.location.pathname.includes('/products/new')
     ) {
-      router.push('/products/new/variant/add');
+      router.push('/products/new/add');
     } else {
-      router.push(`/products/${productId}/variant/add`);
+      router.push(`/products/${productId}/add`);
     }
   };
 
   return (
-    <Button type="button" variant="title" size="sm" onClick={handleClick}>
-      <Plus className="mr-2 h-4 w-4" />
+    <Button
+      type="button"
+      variant="title"
+      onClick={handleClick}
+      className="w-full items-center sm:w-auto"
+    >
+      <Plus className="h-4 w-4" />
       {t('addVariant')}
     </Button>
   );

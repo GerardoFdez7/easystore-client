@@ -20,9 +20,10 @@ import ButtonAddVariant from '@atoms/products/product-detail/ButtonAddVariant';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useProductCreation } from '@lib/contexts/ProductCreationContext';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Plus, Boxes } from 'lucide-react';
 import { Button } from '@shadcn/ui/button';
 import type { Variant } from '@lib/types/product';
+import EmptyState from '@molecules/shared/EmptyState';
 
 interface VariantsFormFieldProps {
   productId: string;
@@ -47,7 +48,7 @@ export default function VariantsFormField({
       // For draft variants, we could implement edit functionality later
       return;
     }
-    router.push(`/products/${productId}/variant/${variantId}`);
+    router.push(`/products/${productId}/${variantId}`);
   };
 
   const handleDeleteDraft = (e: React.MouseEvent, index: number) => {
@@ -55,57 +56,70 @@ export default function VariantsFormField({
     removeVariantDraft(index);
   };
 
-  return (
-    <section className="w-full">
-      <FormField
-        control={control}
-        name="variants"
-        render={({ field: { value: variants = [] } }) => {
-          // Combine saved variants with draft variants for new products
-          const displayVariants = isNewProduct
-            ? variantsDraft
-            : (variants as Variant[]);
-          const hasVariants = displayVariants.length > 0 || variants.length > 0;
+  const handleAddVariant = () => {
+    if (isNewProduct) {
+      router.push('/products/new/add');
+    } else {
+      router.push(`/products/${productId}/new/add`);
+    }
+  };
 
-          return (
-            <FormItem>
-              <div className="mb-4 flex items-center justify-between">
-                <FormLabel className="text-lg font-semibold">
-                  {t('variants')}
-                </FormLabel>
-                <ButtonAddVariant productId={productId} />
-              </div>
-              <FormControl>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="text-title text-center text-sm sm:text-[16px]">
-                        {t('variants')}
-                      </TableHead>
-                      <TableHead className="text-title text-left text-sm sm:text-[16px]">
-                        {t('price')}
-                      </TableHead>
-                      <TableHead className="text-title text-left text-sm sm:text-[16px]">
-                        {t('condition')}
-                      </TableHead>
-                      {isNewProduct && (
-                        <TableHead className="text-title text-center text-sm sm:text-[16px]">
-                          {t('actions')}
-                        </TableHead>
-                      )}
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {hasVariants ? (
-                      <>
-                        {/* Show draft variants for new products */}
-                        {isNewProduct &&
-                          variantsDraft.map((variant, index) => (
+  return (
+    <FormField
+      control={control}
+      name="variants"
+      render={({ field }) => {
+        const existingVariants = field.value || [];
+        const actualHasVariants = isNewProduct
+          ? variantsDraft.length > 0
+          : existingVariants.length > 0;
+        const actualVariantCount = isNewProduct
+          ? variantsDraft.length
+          : existingVariants.length;
+
+        return (
+          <FormItem>
+            <FormLabel className="text-lg font-semibold">
+              {t('variants')}
+            </FormLabel>
+            <FormControl>
+              <div className="space-y-4">
+                {/* Hide ButtonAddVariant when variant count reaches 30 or no variants exist */}
+                {actualVariantCount < 30 && actualHasVariants && (
+                  <div className="sm:justify-end">
+                    <ButtonAddVariant productId={productId} />
+                  </div>
+                )}
+
+                {/* Replace empty state with EmptyState component */}
+                {!actualHasVariants ? (
+                  <EmptyState
+                    icon={Boxes}
+                    title={t('noVariantsTitle')}
+                    description={t('noVariantsDescription')}
+                    buttonText={t('createFirstVariant')}
+                    onButtonClick={handleAddVariant}
+                    buttonIcon={Plus}
+                  />
+                ) : (
+                  /* Hide variants table when no variants exist */
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>{t('variants')}</TableHead>
+                        <TableHead>{t('price')}</TableHead>
+                        <TableHead>{t('condition')}</TableHead>
+                        <TableHead>{t('actions')}</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {isNewProduct
+                        ? variantsDraft.map((variant, index) => (
                             <TableRow
                               key={`draft-${index}`}
                               className="transition-colors"
                             >
-                              <TableCell className="pl-5">
+                              <TableCell>
                                 <div className="flex items-center gap-3">
                                   <div className="h-10 w-10 overflow-hidden rounded-lg">
                                     <Image
@@ -125,24 +139,20 @@ export default function VariantsFormField({
                                     />
                                   </div>
                                   <div className="flex flex-col">
-                                    <span className="text-foreground text-sm">
+                                    <span>
                                       {variant.attributes?.[0]?.key}:{' '}
                                       {variant.attributes?.[0]?.value}
                                     </span>
                                   </div>
                                 </div>
                               </TableCell>
-                              <TableCell className="text-foreground text-sm">
-                                ${variant.price.toFixed(2)}
-                              </TableCell>
-                              <TableCell className="text-foreground text-sm">
-                                {variant.condition}
-                              </TableCell>
-                              <TableCell className="text-center">
+                              <TableCell>${variant.price.toFixed(2)}</TableCell>
+                              <TableCell>{variant.condition}</TableCell>
+                              <TableCell>
                                 <Button
                                   type="button"
                                   variant="ghost"
-                                  size="sm"
+                                  size="icon"
                                   onClick={(e) => {
                                     handleDeleteDraft(e, index);
                                   }}
@@ -152,70 +162,56 @@ export default function VariantsFormField({
                                 </Button>
                               </TableCell>
                             </TableRow>
-                          ))}
-
-                        {/* Show saved variants for existing products */}
-                        {!isNewProduct &&
-                          (variants as Variant[]).map((variant: Variant) => (
-                            <TableRow
-                              key={variant.id}
-                              className="cursor-pointer transition-colors"
-                              onClick={() => {
-                                handleRowClick(variant.id, false);
-                              }}
-                            >
-                              <TableCell className="pl-5">
-                                <div className="flex items-center gap-3">
-                                  <div className="h-10 w-10 overflow-hidden rounded-lg">
-                                    <Image
-                                      src={
-                                        variant.variantCover &&
-                                        variant.variantCover.trim() !== ''
-                                          ? variant.variantCover
-                                          : '/default.webp'
-                                      }
-                                      alt={
-                                        variant.attributes[0]?.value ||
-                                        'Variant Image'
-                                      }
-                                      width={40}
-                                      height={40}
-                                      className="h-full w-full object-cover"
-                                    />
+                          ))
+                        : /* Show saved variants for existing products */
+                          (existingVariants as Variant[]).map(
+                            (variant: Variant) => (
+                              <TableRow
+                                key={variant.id}
+                                className="cursor-pointer transition-colors"
+                                onClick={() => {
+                                  handleRowClick(variant.id, false);
+                                }}
+                              >
+                                <TableCell>
+                                  <div className="flex items-center gap-3">
+                                    <div className="h-10 w-10 overflow-hidden rounded-lg">
+                                      <Image
+                                        src={
+                                          variant.variantCover &&
+                                          variant.variantCover.trim() !== ''
+                                            ? variant.variantCover
+                                            : '/default.webp'
+                                        }
+                                        alt={
+                                          variant.attributes[0]?.value ||
+                                          'Variant Image'
+                                        }
+                                        width={40}
+                                        height={40}
+                                        className="h-full w-full object-cover"
+                                      />
+                                    </div>
+                                    <span>
+                                      {variant.attributes[0]?.key}:{' '}
+                                      {variant.attributes[0]?.value}
+                                    </span>
                                   </div>
-                                  <span className="text-foreground text-sm">
-                                    {variant.attributes[0]?.key}:{' '}
-                                    {variant.attributes[0]?.value}
-                                  </span>
-                                </div>
-                              </TableCell>
-                              <TableCell className="text-foreground text-sm">
-                                {variant.price}
-                              </TableCell>
-                              <TableCell className="text-foreground text-sm">
-                                {variant.condition}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                      </>
-                    ) : (
-                      <TableRow>
-                        <TableCell
-                          colSpan={isNewProduct ? 4 : 3}
-                          className="text-muted-foreground py-8 text-center"
-                        >
-                          {t('noVariants')}
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          );
-        }}
-      />
-    </section>
+                                </TableCell>
+                                <TableCell>{variant.price}</TableCell>
+                                <TableCell>{variant.condition}</TableCell>
+                              </TableRow>
+                            ),
+                          )}
+                    </TableBody>
+                  </Table>
+                )}
+              </div>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        );
+      }}
+    />
   );
 }

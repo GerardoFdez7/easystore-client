@@ -3,7 +3,6 @@
 import React from 'react';
 import { FormProvider } from 'react-hook-form';
 import { Form } from '@shadcn/ui/form';
-//import MediaUploader from '@organisms/shared/MediaUploader';
 import PriceConditionFormField from '@molecules/products/variant/PriceConditionFormField';
 import AttributesFormField from '@molecules/products/variant/AttributesFormField';
 import DimensionsRow from '@molecules/products/variant/DimensionRowFormField';
@@ -15,6 +14,9 @@ import WarrantyFormField from '@molecules/products/variant/WarrantyFormField';
 import SaveButton from '@atoms/shared/SaveButton';
 import { useVariantForm } from '@hooks/domains/products/variant';
 import MediaFormField from '@molecules/products/product-detail/MediaFormField';
+import { useVariantFromProducts } from '@lib/contexts/ProductsContext';
+import { useProductCreation } from '@lib/contexts/ProductCreationContext';
+import { TypeEnum } from '@graphql/generated';
 
 interface MainVariantProps {
   productId: string;
@@ -36,6 +38,16 @@ export default function MainVariant({
     isNewProduct,
   });
 
+  // Get product data to check product type
+  const { product } = useVariantFromProducts(variantId || '');
+  const { productDraft } = useProductCreation();
+
+  // Determine if the product is digital
+  // For new products, check productDraft; for existing variants, check product from context
+  const isDigitalProduct = isNewProduct
+    ? productDraft?.productType === TypeEnum.Digital
+    : product?.productType === TypeEnum.Digital;
+
   return (
     <main className="mx-4 flex max-w-screen-md justify-center lg:mx-auto lg:w-full">
       <FormProvider {...form}>
@@ -54,8 +66,12 @@ export default function MainVariant({
             />
             <PriceConditionFormField />
             <AttributesFormField />
-            <DimensionsRow />
-            <WeightFormField />
+            {!isDigitalProduct && (
+              <>
+                <DimensionsRow />
+                <WeightFormField />
+              </>
+            )}
             <CodesListFormField />
             <PersonalizationOptionsFormField />
             <InstallmentPaymentFormField />

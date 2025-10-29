@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useCallback } from 'react';
+import { useEffect, useMemo, useCallback, useState } from 'react';
 import { useForm, useFormState } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -16,7 +16,11 @@ import {
 } from '@graphql/generated';
 
 // Create Zod schema factory that uses translations
-const createProductFormSchema = (t: (key: string) => string) =>
+const createProductFormSchema = (
+  t: (key: string) => string,
+  isNew: boolean = false,
+  variantsDraftLength: number = 0,
+) =>
   z.object({
     name: z
       .string()
@@ -86,7 +90,30 @@ const createProductFormSchema = (t: (key: string) => string) =>
         categoryCover: z.string().optional(),
       }),
     ),
-    variants: z.array(z.any()).optional(),
+    variants: z
+      .array(z.any())
+      .refine(
+        (variants) => {
+          // For new products, check variantsDraft length instead of form variants
+          if (isNew) {
+            return variantsDraftLength >= 1;
+          }
+          // For existing products, check form variants
+          return variants.length >= 1;
+        },
+        { message: t('variantsRequired') },
+      )
+      .refine(
+        (variants) => {
+          // For new products, check variantsDraft length instead of form variants
+          if (isNew) {
+            return variantsDraftLength <= 30;
+          }
+          // For existing products, check form variants
+          return variants.length <= 30;
+        },
+        { message: t('variantLimitReached') },
+      ),
     sustainabilities: z
       .array(
         z.object({
@@ -115,22 +142,18 @@ interface UseProductFormProps {
 interface UseProductFormReturn {
   // Form instance
   form: ReturnType<typeof useForm<ProductFormData>>;
-
   // Form handlers
   handleSubmit: (data: ProductFormData) => Promise<void>;
   handleCancel: () => void;
-
+  markUserInteraction: () => void;
   // Loading states
   isSubmitting: boolean;
   loading: boolean;
-
-  // Change detection
+  // Change tracking
   hasChanges: boolean;
   changedFields: Partial<ProductFormData>;
-
-  // Schema for external validation
+  // Schema and data
   productFormSchema: ReturnType<typeof createProductFormSchema>;
-
   // Product data
   product: ReturnType<typeof useGetProductById>['product'];
 }
@@ -155,7 +178,13 @@ export function useProductForm({
     isNew ? '' : productId || '',
   );
 
-  const productFormSchema = createProductFormSchema(t);
+  // Track if user has interacted with the form to avoid immediate validation
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
+
+  const productFormSchema = useMemo(
+    () => createProductFormSchema(t, isNew, variantsDraft.length),
+    [t, isNew, variantsDraft.length],
+  );
 
   const originalValues = useMemo<ProductFormData>(() => {
     // Mode is 'create' - use draft data if available
@@ -171,7 +200,7 @@ export function useProductForm({
           (productDraft?.productType as 'PHYSICAL' | 'DIGITAL') || 'PHYSICAL',
         tags: productDraft?.tags || [],
         categories: productDraft?.categories || [],
-        variants: productDraft?.variants || [],
+        variants: variantsDraft || [],
         sustainabilities: productDraft?.sustainabilities || [],
         media: productDraft?.media || [],
       };
@@ -220,14 +249,27 @@ export function useProductForm({
       sustainabilities: product.sustainabilities || [],
       media: product.media?.map((mediaItem: Media) => mediaItem.url) || [],
     };
-  }, [product, isNew, productDraft]);
+  }, [product, isNew, productDraft, variantsDraft]);
 
   // Initialize form
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productFormSchema),
     defaultValues: originalValues,
-    mode: 'onChange',
+    mode: 'onBlur', // Validate when user leaves a field, not immediately
+    reValidateMode: 'onChange', // Re-validate on change after first validation
   });
+
+  // Update form resolver when schema changes (important for variants validation)
+  // Only validate variants after user has interacted with the form
+  useEffect(() => {
+    form.clearErrors();
+
+    // Only validate variants if user has interacted and we're dealing with new products
+    if (hasUserInteracted && isNew) {
+      // Only validate the variants field specifically
+      void form.trigger('variants');
+    }
+  }, [productFormSchema, form, hasUserInteracted, isNew]);
 
   // Use formState to track isDirty - this causes re-renders when form changes
   const { isDirty } = useFormState({ control: form.control });
@@ -490,10 +532,18 @@ export function useProductForm({
     onCancel?.();
   }, [form, originalValues, onCancel]);
 
+  // Mark that user has interacted with the form
+  const markUserInteraction = useCallback(() => {
+    if (!hasUserInteracted) {
+      setHasUserInteracted(true);
+    }
+  }, [hasUserInteracted]);
+
   return {
     form,
     handleSubmit,
     handleCancel,
+    markUserInteraction,
     isSubmitting: isNew ? isCreating : isUpdating,
     loading: contextLoading,
     hasChanges,
