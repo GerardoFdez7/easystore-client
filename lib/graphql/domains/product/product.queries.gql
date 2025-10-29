@@ -16,6 +16,8 @@ query findProductById($id: String!) {
     categories {
       categoryId
       categoryName
+      categoryDescription
+      categoryCover
     }
     variants {
       id
@@ -93,6 +95,8 @@ query findAllProducts(
       categories {
         categoryId
         categoryName
+        categoryDescription
+        categoryCover
       }
       cover
       createdAt

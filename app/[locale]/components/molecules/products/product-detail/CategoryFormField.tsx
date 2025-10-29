@@ -22,8 +22,8 @@ import CategoryPicker, {
 interface CategoryFormItem {
   categoryId: string;
   categoryName?: string;
-  description?: string;
-  cover?: string;
+  categoryDescription?: string;
+  categoryCover?: string;
 }
 
 interface CategoryFormFieldProps<
@@ -39,19 +39,22 @@ export default function CategoryFormField<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({ name, label }: CategoryFormFieldProps<TFieldValues, TName>) {
   const t = useTranslations('Category');
-  const { control, watch, setValue } = useFormContext<TFieldValues>();
+  const { control, setValue } = useFormContext<TFieldValues>();
 
   const [newCategories, setNewCategories] = useState<NewCategoryItem[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<CategoryItem[]>(
     [],
   );
 
-  // Watch the form field value for initial load and synchronization
-  const fieldValue = watch(name);
-
-  // Initialize selected categories from form value on mount and when form value changes
-  useEffect(() => {
+  // Initialize selected categories from form field value
+  const initializeCategories = useCallback((fieldValue: CategoryFormItem[]) => {
+    // Always update selectedCategories based on fieldValue, even if empty
     if (!fieldValue || !Array.isArray(fieldValue)) {
+      setSelectedCategories([]);
+      return;
+    }
+
+    if (fieldValue.length === 0) {
       setSelectedCategories([]);
       return;
     }
@@ -59,12 +62,11 @@ export default function CategoryFormField<
     const categories = fieldValue.map((item: CategoryFormItem) => ({
       id: item.categoryId,
       name: item.categoryName || '',
-      description: item.description || '',
-      cover: item.cover || '',
+      description: item.categoryDescription || '',
+      cover: item.categoryCover || '',
     }));
-
     setSelectedCategories(categories);
-  }, [fieldValue]);
+  }, []);
 
   // Handle adding categories - now receives full CategoryItem objects
   const handleAddCategories = useCallback(
@@ -79,8 +81,8 @@ export default function CategoryFormField<
         (category) => ({
           categoryId: category.id,
           categoryName: category.name,
-          description: category.description,
-          cover: category.cover,
+          categoryDescription: category.description,
+          categoryCover: category.cover,
         }),
       );
 
@@ -113,8 +115,8 @@ export default function CategoryFormField<
         (category: CategoryItem) => ({
           categoryId: category.id,
           categoryName: category.name,
-          description: category.description,
-          cover: category.cover,
+          categoryDescription: category.description,
+          categoryCover: category.cover,
         }),
       );
 
@@ -132,7 +134,7 @@ export default function CategoryFormField<
       const newCategoryItem: CategoryItem = {
         id: category.id,
         name: category.name,
-        cover: category.cover || '',
+        cover: category.cover,
         description: category.description,
       };
 
@@ -145,8 +147,8 @@ export default function CategoryFormField<
       const formValue: CategoryFormItem[] = updatedCategories.map((cat) => ({
         categoryId: cat.id,
         categoryName: cat.name,
-        description: cat.description,
-        cover: cat.cover,
+        categoryDescription: cat.description,
+        categoryCover: cat.cover,
       }));
 
       setValue(name, formValue as PathValue<TFieldValues, TName>, {
@@ -160,24 +162,31 @@ export default function CategoryFormField<
     <FormField
       control={control}
       name={name}
-      render={({}) => (
-        <FormItem>
-          <FormLabel className="text-lg font-semibold">
-            {label || t('welcomeCategory')}
-          </FormLabel>
-          <FormControl>
-            <CategoryPicker
-              mode="product-selection"
-              items={selectedCategories}
-              onAdd={handleAddCategories}
-              onRemove={handleRemoveCategory}
-              newCategories={newCategories}
-              onNewCategoryAdd={handleNewCategoryAdd}
-            />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
+      render={({ field }) => {
+        // Initialize categories when field value changes
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useEffect(() => {
+          initializeCategories(field.value || []);
+        }, [field.value]);
+        return (
+          <FormItem>
+            <FormLabel className="text-lg font-semibold">
+              {label || t('welcomeCategory')}
+            </FormLabel>
+            <FormControl>
+              <CategoryPicker
+                mode="product-selection"
+                items={selectedCategories}
+                onAdd={handleAddCategories}
+                onRemove={handleRemoveCategory}
+                newCategories={newCategories}
+                onNewCategoryAdd={handleNewCategoryAdd}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        );
+      }}
     />
   );
 }

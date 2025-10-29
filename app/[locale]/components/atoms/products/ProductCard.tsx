@@ -52,7 +52,7 @@ export function ProductCard({ product }: ProductCardProps) {
     : [];
 
   // Filter out media items that have the same URL as the cover to avoid duplication
-  const filteredMedia = allMedia.filter((media) => media.url !== product.cover);
+  const filteredMedia = allMedia.filter((media) => media.url);
 
   // Create media array: cover first, then filtered media items
   const mediaItems = [
@@ -139,17 +139,17 @@ export function ProductCard({ product }: ProductCardProps) {
             )}
 
             {/* Progress indicators with preview */}
-            <div className="absolute bottom-2 left-1/2 z-20 flex -translate-x-1/2 gap-1">
+            <div className="absolute right-0 bottom-2 left-0 z-20 flex justify-center gap-1 px-4">
               {mediaItems.map((_, index) => (
                 <div
                   key={index}
-                  className="relative"
+                  className="relative flex-1"
                   onMouseEnter={() => handleIndicatorHover(index)}
                   onMouseLeave={handleIndicatorLeave}
                   onClick={() => handleIndicatorClick(index)}
                 >
                   <button
-                    className={`h-1 w-8 rounded-full transition-all duration-200 ${
+                    className={`h-1 w-full rounded-full transition-all duration-200 ${
                       index === current - 1
                         ? 'bg-white'
                         : 'bg-white/50 hover:bg-white/70'

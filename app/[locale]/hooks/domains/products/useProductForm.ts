@@ -82,8 +82,8 @@ const createProductFormSchema = (t: (key: string) => string) =>
       z.object({
         categoryId: z.string(),
         categoryName: z.string().optional(),
-        description: z.string().optional(),
-        cover: z.string().optional(),
+        categoryDescription: z.string().optional(),
+        categoryCover: z.string().optional(),
       }),
     ),
     variants: z.array(z.any()).optional(),
@@ -207,14 +207,15 @@ export function useProductForm({
         (product.productType as 'PHYSICAL' | 'DIGITAL') || 'PHYSICAL',
       tags: product.tags?.filter((tag): tag is string => Boolean(tag)) || [],
       categories:
-        product.categories?.map((cat) => ({
-          categoryId: cat.categoryId,
-          categoryName: cat.categoryName || '',
-          // Note: description and cover are not available in the current GraphQL schema
-          // but are required by the form schema for consistency
-          description: '',
-          cover: '',
-        })) || [],
+        product.categories?.map((cat) => {
+          const categoryItem = {
+            categoryId: cat.categoryId || '',
+            categoryName: cat.categoryName || '',
+            categoryDescription: cat.categoryDescription || '',
+            categoryCover: cat.categoryCover || '',
+          };
+          return categoryItem;
+        }) || [],
       variants: product.variants || [],
       sustainabilities: product.sustainabilities || [],
       media: product.media?.map((mediaItem: Media) => mediaItem.url) || [],

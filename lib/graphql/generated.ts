@@ -52,7 +52,7 @@ export type AddStockToWarehouseInput = {
 export type AddVariantToProductInput = {
   attributes: Array<CreateAttributeInput>;
   barcode?: InputMaybe<Scalars['String']['input']>;
-  condition?: InputMaybe<ConditionEnum>;
+  condition: ConditionEnum;
   dimension?: InputMaybe<CreateDimensionInput>;
   ean?: InputMaybe<Scalars['String']['input']>;
   installmentPayments?: InputMaybe<Array<CreateInstallmentInput>>;
@@ -215,7 +215,7 @@ export type CreateProductInput = {
   manufacturer?: InputMaybe<Scalars['String']['input']>;
   media?: InputMaybe<Array<CreateMediaInput>>;
   name: Scalars['String']['input'];
-  productType?: InputMaybe<TypeEnum>;
+  productType: TypeEnum;
   shortDescription: Scalars['String']['input'];
   sustainabilities?: InputMaybe<Array<CreateSustainabilityInput>>;
   tags?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -230,7 +230,7 @@ export type CreateSustainabilityInput = {
 export type CreateVariantInput = {
   attributes: Array<CreateAttributeInput>;
   barcode?: InputMaybe<Scalars['String']['input']>;
-  condition?: InputMaybe<ConditionEnum>;
+  condition: ConditionEnum;
   dimension?: InputMaybe<CreateDimensionInput>;
   ean?: InputMaybe<Scalars['String']['input']>;
   installmentPayments?: InputMaybe<Array<CreateInstallmentInput>>;
@@ -737,7 +737,9 @@ export type Product = {
 
 export type ProductCategory = {
   __typename?: 'ProductCategory';
-  categoryId: Scalars['ID']['output'];
+  categoryCover?: Maybe<Scalars['String']['output']>;
+  categoryDescription?: Maybe<Scalars['String']['output']>;
+  categoryId?: Maybe<Scalars['ID']['output']>;
   categoryName?: Maybe<Scalars['String']['output']>;
 };
 
@@ -1024,6 +1026,7 @@ export type UpdateProductInput = {
   shortDescription?: InputMaybe<Scalars['String']['input']>;
   sustainabilities?: InputMaybe<Array<UpdateSustainabilityInput>>;
   tags?: InputMaybe<Array<Scalars['String']['input']>>;
+  variants?: InputMaybe<Array<AddVariantToProductInput>>;
 };
 
 export type UpdateStockInWarehouseInput = {
@@ -1936,7 +1939,7 @@ export type CreateProductMutation = {
     }> | null;
     categories?: Array<{
       __typename?: 'ProductCategory';
-      categoryId: string;
+      categoryId?: string | null;
     }> | null;
   };
 };
@@ -1963,8 +1966,10 @@ export type UpdateMutation = {
     updatedAt: any;
     categories?: Array<{
       __typename?: 'ProductCategory';
-      categoryId: string;
+      categoryId?: string | null;
       categoryName?: string | null;
+      categoryDescription?: string | null;
+      categoryCover?: string | null;
     }> | null;
     media?: Array<{
       __typename?: 'Media';
@@ -2085,8 +2090,10 @@ export type FindProductByIdQuery = {
     }> | null;
     categories?: Array<{
       __typename?: 'ProductCategory';
-      categoryId: string;
+      categoryId?: string | null;
       categoryName?: string | null;
+      categoryDescription?: string | null;
+      categoryCover?: string | null;
     }> | null;
     variants?: Array<{
       __typename?: 'Variant';
@@ -2175,8 +2182,10 @@ export type FindAllProductsQuery = {
       updatedAt: any;
       categories?: Array<{
         __typename?: 'ProductCategory';
-        categoryId: string;
+        categoryId?: string | null;
         categoryName?: string | null;
+        categoryDescription?: string | null;
+        categoryCover?: string | null;
       }> | null;
       media?: Array<{
         __typename?: 'Media';
@@ -6462,6 +6471,14 @@ export const UpdateDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'categoryName' },
                       },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'categoryDescription' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'categoryCover' },
+                      },
                     ],
                   },
                 },
@@ -6909,6 +6926,14 @@ export const FindProductByIdDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'categoryName' },
                       },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'categoryDescription' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'categoryCover' },
+                      },
                     ],
                   },
                 },
@@ -7270,6 +7295,17 @@ export const FindAllProductsDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'categoryName' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: {
+                                kind: 'Name',
+                                value: 'categoryDescription',
+                              },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'categoryCover' },
                             },
                           ],
                         },

@@ -61,6 +61,9 @@ mutation createProduct($input: CreateProductInput!) {
     }
     categories {
       categoryId
+      categoryName
+      categoryDescription
+      categoryCover
     }
   }
 }
@@ -71,6 +74,8 @@ mutation update($id: String!, $input: UpdateProductInput!) {
     categories {
       categoryId
       categoryName
+      categoryDescription
+      categoryCover
     }
     cover
     createdAt
