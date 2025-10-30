@@ -1,12 +1,15 @@
 import { Mail, Phone } from 'lucide-react';
 import { Button } from '@shadcn/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@shadcn/ui/card';
+import { useTranslations } from 'next-intl';
 
 export default function OrderCustomer() {
+  const t = useTranslations('Orders');
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Customer</CardTitle>
+        <CardTitle>{t('customer')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex items-start gap-3">
@@ -23,7 +26,7 @@ export default function OrderCustomer() {
           <div className="text-sm">+1 (555) 123-4567</div>
         </div>
         <Button variant="link" className="h-auto p-0 text-blue-600">
-          View profile
+          {t('viewProfile')}
         </Button>
       </CardContent>
     </Card>

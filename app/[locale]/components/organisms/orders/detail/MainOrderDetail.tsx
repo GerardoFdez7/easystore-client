@@ -1,4 +1,5 @@
 import { MoreHorizontal } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { Button } from '@shadcn/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@shadcn/ui/card';
 import { Separator } from '@shadcn/ui/separator';
@@ -11,12 +12,15 @@ import OrderShippingAddress from '@molecules/orders/order-detail/OrderShippingAd
 import OrderBillingAddress from '@molecules/orders/order-detail/OrderBillingAddress';
 import OrderCouponsPromotions from '@molecules/orders/order-detail/OrderCouponsPromotions';
 import OrderAudit from '@molecules/orders/order-detail/OrderAudit';
+import SaveButton from '@atoms/shared/SaveButton';
+import { useTranslations } from 'next-intl';
 
 interface MainOrderDetailProps {
   param?: string;
 }
 
 export default function MainOrderDetail({ param }: MainOrderDetailProps) {
+  const t = useTranslations('Orders');
   return (
     <div className="bg-background min-h-screen">
       <div className="p-4 md:p-8">
@@ -27,20 +31,10 @@ export default function MainOrderDetail({ param }: MainOrderDetailProps) {
             <Card>
               <CardHeader>
                 <div className="flex items-center gap-3">
-                  <svg
-                    className="h-6 w-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                  <CardTitle className="text-2xl">Order #{param}</CardTitle>
+                  <FileText className="h-6 w-6" />
+                  <CardTitle className="text-2xl">
+                    {t('order')} #{param}
+                  </CardTitle>
                   <Button variant="ghost" size="icon" className="ml-auto">
                     <MoreHorizontal className="h-5 w-5" />
                   </Button>
@@ -58,9 +52,8 @@ export default function MainOrderDetail({ param }: MainOrderDetailProps) {
             </Card>
 
             {/* Action Buttons */}
-            <div className="flex justify-end gap-3">
-              <Button variant="outline">Cancel</Button>
-              <Button>Save</Button>
+            <div className="flex justify-end">
+              <SaveButton type="submit" size="lg" translationKey={'add'} />
             </div>
           </div>
 

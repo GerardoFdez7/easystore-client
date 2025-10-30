@@ -1,8 +1,10 @@
 import { Package, Truck, MapPin, Home } from 'lucide-react';
 import { Progress } from '@shadcn/ui/progress';
 import { cn } from '@lib/utils';
+import { useTranslations } from 'next-intl';
 
 export default function OrderProgress() {
+  const t = useTranslations('Orders');
   return (
     <div className="space-y-8">
       {/* Progress Bar */}
@@ -23,7 +25,7 @@ export default function OrderProgress() {
             <Package className="h-5 w-5" />
           </div>
           <div className="space-y-1">
-            <p className="text-sm font-medium">Processed</p>
+            <p className="text-sm font-medium">{t('processed')}</p>
             <p className="text-muted-foreground text-xs">Oct 20, 2025</p>
           </div>
         </div>
@@ -39,7 +41,7 @@ export default function OrderProgress() {
             <Truck className="h-5 w-5" />
           </div>
           <div className="space-y-1">
-            <p className="text-sm font-medium">Shipped</p>
+            <p className="text-sm font-medium">{t('shipped')}</p>
             <p className="text-muted-foreground text-xs">Oct 21, 2025</p>
           </div>
         </div>
@@ -55,8 +57,8 @@ export default function OrderProgress() {
             <MapPin className="h-5 w-5" />
           </div>
           <div className="space-y-1">
-            <p className="text-sm font-medium">En Route</p>
-            <p className="text-muted-foreground text-xs">In transit</p>
+            <p className="text-sm font-medium">{t('inTransit')}</p>
+            <p className="text-muted-foreground text-xs">{t('inTransit')}</p>
           </div>
         </div>
 
@@ -72,9 +74,9 @@ export default function OrderProgress() {
           </div>
           <div className="space-y-1">
             <p className="text-muted-foreground text-sm font-medium">
-              Delivered
+              {t('delivered')}
             </p>
-            <p className="text-muted-foreground text-xs">Pending</p>
+            <p className="text-muted-foreground text-xs">{t('pending')}</p>
           </div>
         </div>
       </div>
