@@ -6,6 +6,8 @@ export type Sustainability = {
 export type Category = {
   categoryId: string;
   categoryName: string;
+  categoryDescription?: string;
+  categoryCover: string;
 };
 
 export type Variant = {

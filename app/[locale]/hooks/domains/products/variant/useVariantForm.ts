@@ -9,113 +9,106 @@ import { z } from 'zod';
 import { useVariantFromProducts } from '@lib/contexts/ProductsContext';
 import { useProductCreation } from '@lib/contexts/ProductCreationContext';
 import { useVariantManagement } from './useVariantManagement';
-import { ConditionEnum, MediaTypeEnum, type Variant } from '@graphql/generated';
+import {
+  ConditionEnum,
+  MediaTypeEnum,
+  TypeEnum,
+  type Variant,
+} from '@graphql/generated';
 
 // Create Zod schema factory that uses translations
-const createVariantFormSchema = (t: (key: string) => string) =>
+const createVariantFormSchema = (
+  t: (key: string) => string,
+  isPhysical: boolean = false,
+) =>
   z.object({
-    price: z.coerce.number().nonnegative({ message: t('priceNonNegative') }),
+    price: z.number().nonnegative({ message: t('priceNonNegative') }), // Unnused
     condition: z.enum(['NEW', 'USED', 'REFURBISHED'], {
       errorMap: () => ({ message: t('conditionRequired') }),
     }),
-    attributes: z.array(
-      z.object({
-        key: z.string().min(1, { message: t('attributeKeyRequired') }),
-        value: z.string().min(1, { message: t('attributeValueRequired') }),
-      }),
-    ),
+    attributes: z
+      .array(
+        z.object({
+          key: z.string().min(1, { message: t('attributeKeyRequired') }),
+          value: z.string().min(1, { message: t('attributeValueRequired') }),
+        }),
+      )
+      .min(1, { message: t('attributesRequired') })
+      .max(30, { message: t('attributeLimitReached') }),
     dimensions: z.object({
-      height: z
-        .union([z.coerce.number().nonnegative(), z.literal(''), z.null()])
-        .refine((val) => val === '' || val === null || val >= 0, {
-          message: t('heightNonNegative'),
-        }),
-      width: z
-        .union([z.coerce.number().nonnegative(), z.literal(''), z.null()])
-        .refine((val) => val === '' || val === null || val >= 0, {
-          message: t('widthNonNegative'),
-        }),
-      length: z
-        .union([z.coerce.number().nonnegative(), z.literal(''), z.null()])
-        .refine((val) => val === '' || val === null || val >= 0, {
-          message: t('lengthNonNegative'),
-        }),
+      height: isPhysical
+        ? z.coerce.number().positive({ message: t('heightRequired') })
+        : z.coerce
+            .number()
+            .nonnegative({ message: t('heightNonNegative') })
+            .optional(),
+      width: isPhysical
+        ? z.coerce.number().positive({ message: t('widthRequired') })
+        : z.coerce
+            .number()
+            .nonnegative({ message: t('widthNonNegative') })
+            .optional(),
+      length: isPhysical
+        ? z.coerce.number().positive({ message: t('lengthRequired') })
+        : z.coerce
+            .number()
+            .nonnegative({ message: t('lengthNonNegative') })
+            .optional(),
     }),
-    weight: z
-      .union([z.coerce.number().nonnegative(), z.literal(''), z.null()])
-      .refine((val) => val === '' || val === null || val >= 0, {
-        message: t('weightNonNegative'),
-      }),
+    weight: isPhysical
+      ? z.coerce.number().positive({ message: t('weightRequired') })
+      : z.coerce
+          .number()
+          .nonnegative({ message: t('weightNonNegative') })
+          .optional(),
     codes: z.object({
       sku: z
         .string()
-        .optional()
-        .nullable()
-        .refine(
-          (val) => !val || val.trim().length === 0 || val.trim().length >= 1,
-          {
-            message: t('skuRequired'),
-          },
-        ),
+        .trim()
+        .min(2, { message: t('skuRequired') }),
       upc: z
         .string()
-        .optional()
+        .trim()
+        .refine((val) => !val || /^\d{12}$/.test(val), {
+          message: t('upcInvalid'),
+        })
         .nullable()
-        .refine(
-          (val) => !val || val.trim().length === 0 || /^\d{12}$/.test(val),
-          {
-            message: t('upcInvalid'),
-          },
-        ),
+        .optional(),
       ean: z
         .string()
-        .optional()
+        .trim()
+        .refine((val) => !val || /^(\\d{8}|\\d{13})$/.test(val), {
+          message: t('eanInvalid'),
+        })
         .nullable()
-        .refine(
-          (val) =>
-            !val || val.trim().length === 0 || /^(\d{8}|\d{13})$/.test(val),
-          {
-            message: t('eanInvalid'),
-          },
-        ),
+        .optional(),
       isbn: z
         .string()
-        .optional()
-        .nullable()
+        .trim()
         .refine(
           (val) =>
-            !val ||
-            val.trim().length === 0 ||
-            /^(?:(?:\d{9}[\dX])|(?:(?:978|979)\d{10}))$/.test(val),
+            !val || /^(?:(?:\\d{9}[\\dX])|(?:(?:978|979)\\d{10}))$/.test(val),
           {
             message: t('isbnInvalid'),
           },
-        ),
-      barcode: z
-        .string()
-        .optional()
+        )
         .nullable()
-        .refine((val) => !val || val.trim().length === 0 || val.length >= 1, {
-          message: t('barcodeInvalid'),
-        }),
+        .optional(),
+      barcode: z.string().trim().nullable().optional(),
     }),
-    personalizationOptions: z.array(
-      z.string().min(1, { message: t('personalizationOptionRequired') }),
-    ),
+    personalizationOptions: z.array(z.string()),
     installmentPayments: z.array(
       z.object({
-        months: z.coerce
+        months: z
           .number()
           .int()
-          .min(0, { message: t('monthsMinValue') }),
-        interestRate: z.coerce
-          .number()
-          .min(0, { message: t('interestRateMinValue') }),
+          .min(1, { message: t('monthsMinValue') }),
+        interestRate: z.number().min(0, { message: t('interestRateMinValue') }),
       }),
     ),
     warranties: z.array(
       z.object({
-        months: z.coerce
+        months: z
           .number()
           .int()
           .min(0, { message: t('monthsMinValue') }),
@@ -183,14 +176,27 @@ export function useVariantForm({
   const router = useRouter();
   const { addVariant, updateVariant, isAdding, isUpdating } =
     useVariantManagement();
-  const { addVariantDraft } = useProductCreation();
+  const { addVariantDraft, productDraft } = useProductCreation();
 
   // Get variant data from context only when editing (not creating new)
-  const { variant, loading: contextLoading } = useVariantFromProducts(
-    isNew ? '' : variantId || '',
-  );
+  const {
+    variant,
+    product,
+    loading: contextLoading,
+  } = useVariantFromProducts(isNew ? '' : variantId || '');
 
-  const variantFormSchema = createVariantFormSchema(t);
+  // Determine if product is physical
+  const isPhysical = useMemo(() => {
+    if (isNewProduct && productDraft) {
+      return productDraft.productType === TypeEnum.Physical;
+    }
+    if (product) {
+      return product.productType === TypeEnum.Physical;
+    }
+    return true; // Default to true (Physical) for new products
+  }, [isNewProduct, productDraft, product]);
+
+  const variantFormSchema = createVariantFormSchema(t, isPhysical);
 
   const originalValues = useMemo<VariantFormData>(() => {
     // Mode is 'create' or variant data is not yet available
@@ -200,13 +206,13 @@ export function useVariantForm({
         condition: 'NEW',
         attributes: [],
         dimensions: {
-          height: '',
-          width: '',
-          length: '',
+          height: isPhysical ? 0 : undefined,
+          width: isPhysical ? 0 : undefined,
+          length: isPhysical ? 0 : undefined,
         },
-        weight: '',
+        weight: isPhysical ? 0 : undefined,
         codes: {
-          sku: null,
+          sku: '',
           upc: null,
           ean: null,
           isbn: null,
@@ -229,13 +235,13 @@ export function useVariantForm({
           value: attr.value,
         })) || [],
       dimensions: {
-        height: variant.dimension?.height || '',
-        width: variant.dimension?.width || '',
-        length: variant.dimension?.length || '',
+        height: variant.dimension?.height || 0,
+        width: variant.dimension?.width || 0,
+        length: variant.dimension?.length || 0,
       },
-      weight: variant.weight || '',
+      weight: variant.weight || 0,
       codes: {
-        sku: variant.sku || null,
+        sku: variant.sku,
         upc: variant.upc || null,
         ean: variant.ean || null,
         isbn: variant.isbn || null,
@@ -256,7 +262,7 @@ export function useVariantForm({
       variantCover: variant.variantCover || '',
       variantMedia: variant.variantMedia?.map((media) => media.url) || [],
     };
-  }, [variant, isNew]);
+  }, [variant, isNew, isPhysical]);
 
   // Initialize form
   const form = useForm<VariantFormData>({
@@ -329,13 +335,14 @@ export function useVariantForm({
         if (isNew) {
           // Create new variant for existing product
           const hasDimensions =
-            (data.dimensions.height !== '' &&
-              data.dimensions.height !== null) ||
-            (data.dimensions.width !== '' && data.dimensions.width !== null) ||
-            (data.dimensions.length !== '' && data.dimensions.length !== null);
+            (data.dimensions.height !== undefined &&
+              data.dimensions.height > 0) ||
+            (data.dimensions.width !== undefined &&
+              data.dimensions.width > 0) ||
+            (data.dimensions.length !== undefined &&
+              data.dimensions.length > 0);
 
           const input = {
-            productId,
             price:
               typeof data.price === 'string'
                 ? parseFloat(data.price)
@@ -354,35 +361,18 @@ export function useVariantForm({
             })),
             ...(hasDimensions && {
               dimension: {
-                height:
-                  data.dimensions.height === '' ||
-                  data.dimensions.height === null
-                    ? 0
-                    : typeof data.dimensions.height === 'string'
-                      ? parseFloat(data.dimensions.height)
-                      : data.dimensions.height,
-                width:
-                  data.dimensions.width === '' || data.dimensions.width === null
-                    ? 0
-                    : typeof data.dimensions.width === 'string'
-                      ? parseFloat(data.dimensions.width)
-                      : data.dimensions.width,
-                length:
-                  data.dimensions.length === '' ||
-                  data.dimensions.length === null
-                    ? 0
-                    : typeof data.dimensions.length === 'string'
-                      ? parseFloat(data.dimensions.length)
-                      : data.dimensions.length,
+                height: data.dimensions.height ?? 0,
+                width: data.dimensions.width ?? 0,
+                length: data.dimensions.length ?? 0,
               },
             }),
             weight:
-              data.weight === '' || data.weight === null
+              data.weight === 0 || data.weight === null
                 ? null
                 : typeof data.weight === 'string'
                   ? parseFloat(data.weight)
                   : data.weight,
-            sku: data.codes.sku || '',
+            sku: data.codes.sku,
             upc: data.codes.upc || null,
             ean: data.codes.ean || null,
             isbn: data.codes.isbn || null,
@@ -427,9 +417,10 @@ export function useVariantForm({
         // For variant updates, we need to send the complete variant data
         // since the backend expects a full variant object in the variants array
         const hasDimensions =
-          (data.dimensions.height !== '' && data.dimensions.height !== null) ||
-          (data.dimensions.width !== '' && data.dimensions.width !== null) ||
-          (data.dimensions.length !== '' && data.dimensions.length !== null);
+          (data.dimensions.height !== undefined &&
+            data.dimensions.height > 0) ||
+          (data.dimensions.width !== undefined && data.dimensions.width > 0) ||
+          (data.dimensions.length !== undefined && data.dimensions.length > 0);
 
         const variantInput = {
           price:
@@ -450,33 +441,13 @@ export function useVariantForm({
           })),
           ...(hasDimensions && {
             dimension: {
-              height:
-                data.dimensions.height === '' || data.dimensions.height === null
-                  ? 0
-                  : typeof data.dimensions.height === 'string'
-                    ? parseFloat(data.dimensions.height)
-                    : data.dimensions.height,
-              width:
-                data.dimensions.width === '' || data.dimensions.width === null
-                  ? 0
-                  : typeof data.dimensions.width === 'string'
-                    ? parseFloat(data.dimensions.width)
-                    : data.dimensions.width,
-              length:
-                data.dimensions.length === '' || data.dimensions.length === null
-                  ? 0
-                  : typeof data.dimensions.length === 'string'
-                    ? parseFloat(data.dimensions.length)
-                    : data.dimensions.length,
+              height: data.dimensions.height ?? 0,
+              width: data.dimensions.width ?? 0,
+              length: data.dimensions.length ?? 0,
             },
           }),
-          weight:
-            data.weight === '' || data.weight === null
-              ? null
-              : typeof data.weight === 'string'
-                ? parseFloat(data.weight)
-                : data.weight,
-          sku: data.codes.sku || '',
+          weight: data.weight ?? null,
+          sku: data.codes.sku,
           upc: data.codes.upc || null,
           ean: data.codes.ean || null,
           isbn: data.codes.isbn || null,

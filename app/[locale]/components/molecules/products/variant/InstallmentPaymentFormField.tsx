@@ -143,9 +143,7 @@ export default function InstallmentPaymentFormField() {
                       >
                         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                           <div>
-                            <FormLabel className="text-md">
-                              {t('months')}
-                            </FormLabel>
+                            <FormLabel>{t('months')}</FormLabel>
                             <FormField
                               control={control}
                               name={`installmentPayments.${index}.months`}
@@ -171,9 +169,7 @@ export default function InstallmentPaymentFormField() {
                             />
                           </div>
                           <div>
-                            <FormLabel className="text-xs">
-                              {t('interestRate')}
-                            </FormLabel>
+                            <FormLabel>{t('interestRate')}</FormLabel>
                             <div className="relative">
                               <span className="pointer-events-none absolute inset-y-0 right-3 my-1.5 flex items-center rounded-md border px-2 font-medium">
                                 %

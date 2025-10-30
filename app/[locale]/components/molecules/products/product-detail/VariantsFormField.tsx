@@ -84,9 +84,9 @@ export default function VariantsFormField({
             </FormLabel>
             <FormControl>
               <div className="space-y-4">
-                {/* Hide ButtonAddVariant when variant count reaches 30 or no variants exist */}
-                {actualVariantCount < 30 && actualHasVariants && (
-                  <div className="sm:justify-end">
+                {/* Hide ButtonAddVariant when variant count reaches 20 or no variants exist */}
+                {actualVariantCount <= 20 && actualHasVariants && (
+                  <div className="flex sm:justify-end">
                     <ButtonAddVariant productId={productId} />
                   </div>
                 )}
@@ -105,8 +105,9 @@ export default function VariantsFormField({
                   /* Hide variants table when no variants exist */
                   <Table>
                     <TableHeader>
-                      <TableRow>
+                      <TableRow className="hover:bg-background">
                         <TableHead>{t('variants')}</TableHead>
+                        <TableHead>SKU</TableHead>
                         <TableHead>{t('price')}</TableHead>
                         <TableHead>{t('condition')}</TableHead>
                         <TableHead>{t('actions')}</TableHead>
@@ -146,7 +147,11 @@ export default function VariantsFormField({
                                   </div>
                                 </div>
                               </TableCell>
-                              <TableCell>${variant.price.toFixed(2)}</TableCell>
+                              <TableCell>{variant.codes.sku}</TableCell>
+                              <TableCell>
+                                {process.env.NEXT_PUBLIC_DEFAULT_CURRENCY}
+                                {variant.price.toFixed(2)}
+                              </TableCell>
                               <TableCell>{variant.condition}</TableCell>
                               <TableCell>
                                 <Button
@@ -198,8 +203,27 @@ export default function VariantsFormField({
                                     </span>
                                   </div>
                                 </TableCell>
-                                <TableCell>{variant.price}</TableCell>
+                                <TableCell>{variant.sku}</TableCell>
+                                <TableCell>
+                                  {process.env.NEXT_PUBLIC_DEFAULT_CURRENCY}
+                                  {variant.price}
+                                </TableCell>
                                 <TableCell>{variant.condition}</TableCell>
+                                <TableCell>
+                                  {/* Replace with remove and archive buttons */}
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => {
+                                      // Handle edit or view for existing variant
+                                      handleRowClick(variant.id, false);
+                                    }}
+                                    className="hover:bg-primary/10 hover:text-primary"
+                                  >
+                                    <Boxes className="h-4 w-4" />
+                                  </Button>
+                                </TableCell>
                               </TableRow>
                             ),
                           )}

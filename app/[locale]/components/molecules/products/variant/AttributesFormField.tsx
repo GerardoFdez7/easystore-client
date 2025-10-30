@@ -54,44 +54,46 @@ export default function AttributesCard() {
           <FormControl>
             <div className="space-y-4">
               {/* Persistent input fields for adding new attributes */}
-              <div className="border-border bg-muted/30 rounded-lg border p-4">
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <div>
-                    <FormLabel htmlFor="attributeKey" className="mb-1">
-                      {t('attributeKey')}
-                    </FormLabel>
-                    <Input
-                      id="attributeKey"
-                      type="text"
-                      placeholder={t('attributeKeyPlaceholder')}
-                      value={newKey}
-                      onChange={(e) => setNewKey(e.target.value)}
-                    />
+              {fields.length <= 30 && (
+                <div className="border-border bg-muted/30 rounded-lg border p-4">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <div>
+                      <FormLabel htmlFor="attributeKey" className="mb-1">
+                        {t('attributeKey')}
+                      </FormLabel>
+                      <Input
+                        id="attributeKey"
+                        type="text"
+                        placeholder={t('attributeKeyPlaceholder')}
+                        value={newKey}
+                        onChange={(e) => setNewKey(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <FormLabel className="mb-1">
+                        {t('attributeValue')}
+                      </FormLabel>
+                      <Input
+                        placeholder={t('attributeValuePlaceholder')}
+                        value={newValue}
+                        onChange={(e) => setNewValue(e.target.value)}
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <FormLabel className="mb-1">
-                      {t('attributeValue')}
-                    </FormLabel>
-                    <Input
-                      placeholder={t('attributeValuePlaceholder')}
-                      value={newValue}
-                      onChange={(e) => setNewValue(e.target.value)}
-                    />
+                  <div className="mt-3 flex justify-end">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="w-full sm:w-auto"
+                      onClick={addAttribute}
+                      disabled={!newKey.trim() || !newValue.trim()}
+                    >
+                      <Plus className="h-4 w-4" /> {t('addAttribute')}
+                    </Button>
                   </div>
                 </div>
-                <div className="mt-3 flex justify-end">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="w-full sm:w-auto"
-                    onClick={addAttribute}
-                    disabled={!newKey.trim() || !newValue.trim()}
-                  >
-                    <Plus className="h-4 w-4" /> {t('addAttribute')}
-                  </Button>
-                </div>
-              </div>
+              )}
 
               {/* Display existing attributes */}
               {fields.length > 0 && (

@@ -14,8 +14,9 @@ import WarrantyFormField from '@molecules/products/variant/WarrantyFormField';
 import SaveButton from '@atoms/shared/SaveButton';
 import { useVariantForm } from '@hooks/domains/products/variant';
 import MediaFormField from '@molecules/products/product-detail/MediaFormField';
-import { useVariantFromProducts } from '@lib/contexts/ProductsContext';
-import { useProductCreation } from '@lib/contexts/ProductCreationContext';
+import { useVariantFromProducts } from '@contexts/ProductsContext';
+import { useProductCreation } from '@contexts/ProductCreationContext';
+import { useGetProductById } from '@hooks/domains/products';
 import { TypeEnum } from '@graphql/generated';
 
 interface MainVariantProps {
@@ -39,14 +40,19 @@ export default function MainVariant({
   });
 
   // Get product data to check product type
-  const { product } = useVariantFromProducts(variantId || '');
+  // For existing products, use direct product fetch; for new variants, use context
+  const { product: existingProduct } = useGetProductById(
+    !isNewProduct ? productId : '',
+  );
+  const { product: contextProduct } = useVariantFromProducts(variantId || '');
   const { productDraft } = useProductCreation();
 
   // Determine if the product is digital
-  // For new products, check productDraft; for existing variants, check product from context
+  // Priority: productDraft (new products) > existingProduct (existing products) > contextProduct (fallback)
   const isDigitalProduct = isNewProduct
     ? productDraft?.productType === TypeEnum.Digital
-    : product?.productType === TypeEnum.Digital;
+    : (existingProduct?.productType ?? contextProduct?.productType) ===
+      TypeEnum.Digital;
 
   return (
     <main className="mx-4 flex max-w-screen-md justify-center lg:mx-auto lg:w-full">

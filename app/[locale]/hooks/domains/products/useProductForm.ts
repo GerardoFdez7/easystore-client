@@ -107,10 +107,10 @@ const createProductFormSchema = (
         (variants) => {
           // For new products, check variantsDraft length instead of form variants
           if (isNew) {
-            return variantsDraftLength <= 30;
+            return variantsDraftLength <= 20;
           }
           // For existing products, check form variants
-          return variants.length <= 30;
+          return variants.length <= 20;
         },
         { message: t('variantLimitReached') },
       ),
@@ -197,7 +197,8 @@ export function useProductForm({
         manufacturer: productDraft?.manufacturer || null,
         cover: productDraft?.cover || '',
         productType:
-          (productDraft?.productType as 'PHYSICAL' | 'DIGITAL') || 'PHYSICAL',
+          (productDraft?.productType as TypeEnum.Physical | TypeEnum.Digital) ||
+          TypeEnum.Physical,
         tags: productDraft?.tags || [],
         categories: productDraft?.categories || [],
         variants: variantsDraft || [],
@@ -215,7 +216,7 @@ export function useProductForm({
         brand: null,
         manufacturer: null,
         cover: '',
-        productType: 'PHYSICAL',
+        productType: TypeEnum.Physical,
         tags: [],
         categories: [],
         variants: [],
@@ -233,7 +234,8 @@ export function useProductForm({
       manufacturer: product.manufacturer || null,
       cover: product.cover || '',
       productType:
-        (product.productType as 'PHYSICAL' | 'DIGITAL') || 'PHYSICAL',
+        (product.productType as TypeEnum.Physical | TypeEnum.Digital) ||
+        TypeEnum.Physical,
       tags: product.tags?.filter((tag): tag is string => Boolean(tag)) || [],
       categories:
         product.categories?.map((cat) => {
@@ -265,9 +267,10 @@ export function useProductForm({
     form.clearErrors();
 
     // Only validate variants if user has interacted and we're dealing with new products
-    if (hasUserInteracted && isNew) {
+    if (hasUserInteracted) {
       // Only validate the variants field specifically
       void form.trigger('variants');
+      void form.trigger('cover');
     }
   }, [productFormSchema, form, hasUserInteracted, isNew]);
 
