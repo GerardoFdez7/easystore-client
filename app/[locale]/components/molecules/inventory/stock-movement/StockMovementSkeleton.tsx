@@ -30,29 +30,23 @@ export default function StockMovementSkeleton({
       <Table>
         <TableHeader className="text-lg">
           <TableRow>
-            <TableHead className="pl-2">
-              <Skeleton className="h-4 w-4 rounded-none" />
-            </TableHead>
-            <TableHead className="text-center">
-              <Skeleton className="h-4 w-20" />
-            </TableHead>
-            <TableHead className="text-center">
-              <Skeleton className="h-4 w-12" />
-            </TableHead>
-            <TableHead className="text-center">
+            <TableHead>
               <Skeleton className="h-4 w-28" />
             </TableHead>
-            <TableHead className="text-center">
-              <Skeleton className="h-4 w-20" />
-            </TableHead>
-            <TableHead className="text-center">
+            <TableHead>
               <Skeleton className="h-4 w-16" />
             </TableHead>
-            <TableHead className="text-center">
+            <TableHead>
+              <Skeleton className="h-4 w-16" />
+            </TableHead>
+            <TableHead>
+              <Skeleton className="h-4 w-24" />
+            </TableHead>
+            <TableHead>
               <Skeleton className="h-4 w-20" />
             </TableHead>
-            <TableHead className="text-center">
-              <Skeleton className="h-4 w-16" />
+            <TableHead>
+              <Skeleton className="h-4 w-20" />
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -60,31 +54,25 @@ export default function StockMovementSkeleton({
           {Array.from({ length: rows }).map((_, index) => (
             <TableRow key={index}>
               <TableCell>
-                <Skeleton className="h-4 w-4 rounded-none" />
-              </TableCell>
-              <TableCell>
                 <div className="flex flex-col gap-1">
                   <Skeleton className="h-4 w-32" />
-                  <Skeleton className="h-3 w-20" />
+                  <Skeleton className="h-3 w-24" />
                 </div>
               </TableCell>
-              <TableCell className="text-center">
+              <TableCell>
                 <Skeleton className="h-4 w-20" />
               </TableCell>
-              <TableCell className="text-center">
-                <Skeleton className="h-6 w-16 rounded-full" />
+              <TableCell>
+                <Skeleton className="h-4 w-16" />
               </TableCell>
-              <TableCell className="text-center">
-                <Skeleton className="h-4 w-12" />
+              <TableCell>
+                <Skeleton className="h-4 w-64" />
               </TableCell>
-              <TableCell className="text-center">
+              <TableCell>
+                <Skeleton className="h-4 w-20" />
+              </TableCell>
+              <TableCell>
                 <Skeleton className="h-4 w-24" />
-              </TableCell>
-              <TableCell className="text-center">
-                <Skeleton className="h-4 w-20" />
-              </TableCell>
-              <TableCell className="text-center">
-                <Skeleton className="h-4 w-20" />
               </TableCell>
             </TableRow>
           ))}

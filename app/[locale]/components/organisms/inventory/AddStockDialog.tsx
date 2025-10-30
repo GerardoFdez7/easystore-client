@@ -17,7 +17,7 @@ import { Separator } from '@shadcn/ui/separator';
 import { Alert, AlertDescription } from '@shadcn/ui/alert';
 import { Badge } from '@shadcn/ui/badge';
 import { Package, Warehouse } from 'lucide-react';
-import { nameToSlug } from '@lib/utils/path-utils';
+import { buildInventoryPath } from '@lib/utils/path';
 import VariantSelector from '@organisms/inventory/VariantSelector';
 import WarehouseCombobox from '@molecules/inventory/WarehouseCombobox';
 
@@ -31,12 +31,7 @@ interface AddStockDialogProps {
   selectedVariantAttributes?: Array<{ key: string; value: string }>;
 }
 
-// Build the inventory URL segment safely, avoiding trailing underscores when SKU is missing
-const buildInventorySegment = (warehouseName: string, variantSku?: string) => {
-  const wh = nameToSlug(warehouseName || '');
-  const sku = variantSku ? nameToSlug(variantSku) : '';
-  return sku ? `${wh}_${sku}` : wh;
-};
+// Using shared path util for inventory URLs
 
 const AddStockDialog: FC<AddStockDialogProps> = ({
   open,
@@ -232,10 +227,7 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
                 selectedWarehouseId
               ) {
                 router.push(
-                  `/inventory/${buildInventorySegment(
-                    selectedWarehouseName,
-                    selectedVariantSku,
-                  )}`,
+                  buildInventoryPath(selectedWarehouseName, selectedVariantSku),
                 );
                 handleReset(); // Reset state after successful navigation
                 onOpenChange(false);

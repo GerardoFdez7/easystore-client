@@ -51,6 +51,7 @@ export default function MainStockMovement() {
         <WarehouseCombobox
           value={selectedWarehouseId}
           onChange={setSelectedWarehouseId}
+          autoSelectFirst
         />
       </SkeletonWrapper>
 

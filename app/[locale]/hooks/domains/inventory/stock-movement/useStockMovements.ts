@@ -9,6 +9,7 @@ export interface StockMovementItem {
   id: string;
   productName: string;
   variantSku?: string;
+  variantFirstAttribute?: { key: string; value: string };
   deltaQuantity: number;
   reason: string;
   createdBy: string;
@@ -34,6 +35,7 @@ export const useStockMovements = (
       id: movement.id,
       productName: movement.productName || 'Unknown Product',
       variantSku: movement.variantSku || '',
+      variantFirstAttribute: movement.variantFirstAttribute || undefined,
       deltaQuantity: movement.deltaQty,
       reason: movement.reason,
       createdBy: '',

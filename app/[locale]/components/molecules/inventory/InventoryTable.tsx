@@ -14,20 +14,10 @@ import {
 import { cn, formatDate } from '@lib/utils';
 import { FindInventoryQueryVariables } from '@graphql/generated';
 import { InventoryItem } from '@lib/types/inventory';
-import { Package, Plus, Pencil, Trash2 } from 'lucide-react';
+import { Package, Plus } from 'lucide-react';
 import EmptyState from '@molecules/shared/EmptyState';
 import { useTranslations } from 'next-intl';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@shadcn/ui/alert-dialog';
+// Removed AlertDialog imports as Actions column was dropped
 
 type InventoryTableProps = {
   variables: FindInventoryQueryVariables;
@@ -43,7 +33,7 @@ export default function InventoryTable({
   inventory,
   onCreateStock,
   onEditRow,
-  onDeleteRow,
+  onDeleteRow: _onDeleteRow,
 }: InventoryTableProps) {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -96,15 +86,21 @@ export default function InventoryTable({
             <TableHead>{t('availableTableHead')}</TableHead>
             <TableHead>{t('reservedTableHead')}</TableHead>
             <TableHead>{t('replenishmentDateTableHead')}</TableHead>
-            <TableHead className="w-[140px]">
-              {t('actions') || 'Actions'}
-            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {currentItems.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>
+            <TableRow
+              key={item.id}
+              className="hover:bg-muted/40 cursor-pointer"
+              role="button"
+              tabIndex={0}
+              onClick={() => onEditRow?.(item)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') onEditRow?.(item);
+              }}
+            >
+              <TableCell onClick={(e) => e.stopPropagation()}>
                 <Checkbox
                   checked={selectedRows.includes(item.id)}
                   onCheckedChange={(checked) =>
@@ -126,53 +122,6 @@ export default function InventoryTable({
               <TableCell>{item.qtyReserved}</TableCell>
               <TableCell>
                 {formatDate(item.estimatedReplenishmentDate)}
-              </TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    title={t('WarehouseManagement.edit')}
-                    onClick={() => onEditRow?.(item)}
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </Button>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button
-                        variant="danger"
-                        size="icon"
-                        title={t('WarehouseManagement.delete')}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          {t('deleteStockTitle') || 'Delete stock?'}
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          {t('deleteStockDescription', {
-                            product: item.productName,
-                            sku: item.variantSku,
-                          }) || 'This action cannot be undone.'}
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>
-                          {t('WarehouseManagement.cancel')}
-                        </AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => onDeleteRow?.(item)}
-                          variant="danger"
-                        >
-                          {t('WarehouseManagement.delete')}
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
               </TableCell>
             </TableRow>
           ))}

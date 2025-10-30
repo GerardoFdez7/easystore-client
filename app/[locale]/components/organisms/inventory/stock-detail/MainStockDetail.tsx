@@ -12,8 +12,19 @@ import {
 import { Button } from '@shadcn/ui/button';
 import { Input } from '@shadcn/ui/input';
 import { Label } from '@shadcn/ui/label';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@shadcn/ui/alert-dialog';
 import { useRouter } from 'next/navigation';
 import { normalizeWarehouseName } from '@lib/utils';
+import type { StockFormValues } from '@hooks/domains/inventory/stock-detail/useStockFormSchema';
 
 import StockHeader from '@molecules/stock-detail/StockHeader';
 import SerialChips from '@molecules/stock-detail/SerialChips';
@@ -24,6 +35,7 @@ import { useCreateWarehouseStock as useCreateWarehouseStockByLookup } from '@hoo
 import { usePrefillExistingStock } from '@hooks/domains/inventory/stock-detail/usePrefillExistingStock';
 import { useResolveWarehouseId } from '@hooks/domains/inventory/stock-detail/useResolveWarehouseId';
 import { useUpdateWarehouseStock } from '@hooks/domains/inventory/stock-detail/useUpdateWarehouseStock';
+import { useDeleteWarehouseStock } from '@hooks/domains/inventory/stock-detail/useDeleteWarehouseStock';
 
 type Props = { warehouseName?: string; sku?: string };
 
@@ -60,10 +72,17 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
   });
 
   const { update, state: updateState } = useUpdateWarehouseStock();
+  const { deleteStock, loading: isDeleting } = useDeleteWarehouseStock({
+    onSuccess: () => {
+      router.back();
+    },
+  });
   const [editingIds, setEditingIds] = useState<{
     warehouseId: string;
     stockId: string;
   } | null>(null);
+
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // Prefill when editing an existing stock (warehouse + sku already exist)
   const resolveWarehouseId = useResolveWarehouseId(warehouseName);
@@ -76,14 +95,40 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
     onFound: (ctx) => setEditingIds(ctx),
   });
 
-  const disabled = isCreating || updateState.loading;
+  const disabled = isCreating || updateState.loading || isDeleting;
   const hasFormErrors = Boolean(
     form.formState.errors.reason || form.formState.errors.productLocation,
   );
 
+  const handleDelete = async () => {
+    if (!editingIds) return;
+    const ok = await deleteStock(
+      editingIds.warehouseId,
+      editingIds.stockId,
+      updateReason || undefined,
+    );
+    if (ok) {
+      setShowDeleteConfirm(false);
+    }
+  };
+
   const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
     const v = form.getValues();
+    // Show reason dialog only when qty changed and reason is missing/too short
+    const dv = (form.formState.defaultValues as Partial<StockFormValues>) ?? {};
+    const changedQty =
+      (v.available ?? 0) !== (dv.available ?? 0) ||
+      (v.reserved ?? 0) !== (dv.reserved ?? 0);
+    const reasonOk = (updateReason || '').trim().length >= 10;
+    if (changedQty && !reasonOk) {
+      setShowUpdateReason(true);
+      form.setError('reason', {
+        type: 'minLength',
+        message: t('updateReasonTooShort'),
+      });
+      return;
+    }
     if (editingIds) {
       const ok = await update(
         editingIds.warehouseId,
@@ -136,7 +181,6 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
                       value={field.value ?? 0}
                       disabled={disabled}
                       onChange={(e) => field.onChange(toInt(e.target.value))}
-                      onBlur={() => setShowUpdateReason(true)}
                       placeholder={t('availablePlaceholder')}
                       inputMode="numeric"
                       min={0}
@@ -214,9 +258,12 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
                     </FormLabel>
                     <CalendarPicker
                       id="replenishment-date"
-                      className="mt-2 max-w-xs"
+                      className="mt-2 w-72 md:w-80"
+                      inputClassName="h-10 text-sm md:text-base"
+                      buttonClassName="size-8"
                       value={field.value ?? null}
                       disabled={disabled}
+                      disablePast
                       onChange={field.onChange}
                       placeholder={t('replenishmentDatePlaceholder')}
                     />
@@ -261,23 +308,38 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
             </div>
 
             {/* Acciones */}
-            <div className="flex justify-end gap-3 pt-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => router.back()}
-                disabled={disabled}
-                className="w-full sm:w-auto"
-              >
-                {t('cancel')}
-              </Button>
-              <Button
-                type="submit"
-                disabled={disabled || hasFormErrors}
-                className="text-accent bg-title hover:bg-accent-foreground w-full sm:w-auto"
-              >
-                {t('saveChanges')}
-              </Button>
+            <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-between">
+              <div className="flex gap-3">
+                {editingIds && (
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    onClick={() => setShowDeleteConfirm(true)}
+                    disabled={disabled}
+                    className="w-full sm:w-auto"
+                  >
+                    {t('deleteStock')}
+                  </Button>
+                )}
+              </div>
+              <div className="flex gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => router.back()}
+                  disabled={disabled}
+                  className="w-full sm:w-auto"
+                >
+                  {t('cancel')}
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={disabled || hasFormErrors}
+                  className="text-accent bg-title hover:bg-accent-foreground w-full sm:w-auto"
+                >
+                  {t('saveChanges')}
+                </Button>
+              </div>
             </div>
             {/* Mostrar error del form (zod) para reason si existe */}
             {form.formState.errors.reason?.message ? (
@@ -298,12 +360,42 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
           form.setValue('reason', v, { shouldValidate: true });
         }}
         onConfirm={() => {
-          // trigger validation when the dialog is confirmed/closed
-          void form.trigger('reason');
-          setShowUpdateReason(false);
+          void form.trigger('reason').then(() => {
+            const ok = (updateReason || '').trim().length >= 10;
+            setShowUpdateReason(false);
+            if (ok) {
+              void handleSubmit();
+            }
+          });
         }}
         minLength={10}
       />
+
+      <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('deleteStockTitle')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('deleteStockDescription')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>
+              {t('cancel')}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                void handleDelete();
+              }}
+              disabled={isDeleting}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              {t('deleteStock')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Form>
   );
 }
