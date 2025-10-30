@@ -2,6 +2,7 @@ import { Combobox } from '@shadcn/ui/combobox';
 import { useTranslations } from 'next-intl';
 import { useWarehouseCombobox } from '@hooks/domains/inventory';
 import { cn } from 'utils';
+import { useEffect } from 'react';
 
 interface WarehouseComboboxProps {
   value?: string;
@@ -10,6 +11,7 @@ interface WarehouseComboboxProps {
   disabled?: boolean;
   placeholder?: string;
   className?: string;
+  autoSelectFirst?: boolean;
 }
 
 const WarehouseCombobox: React.FC<WarehouseComboboxProps> = ({
@@ -19,6 +21,7 @@ const WarehouseCombobox: React.FC<WarehouseComboboxProps> = ({
   disabled = false,
   placeholder,
   className,
+  autoSelectFirst = false,
 }) => {
   const t = useTranslations('Inventory');
 
@@ -48,6 +51,14 @@ const WarehouseCombobox: React.FC<WarehouseComboboxProps> = ({
       });
     }
   };
+
+  // Auto-select first option when requested and no value is set yet
+  useEffect(() => {
+    if (autoSelectFirst && !value && options.length > 0) {
+      handleValueChange(options[0].value);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoSelectFirst, value, options]);
 
   return (
     <Combobox

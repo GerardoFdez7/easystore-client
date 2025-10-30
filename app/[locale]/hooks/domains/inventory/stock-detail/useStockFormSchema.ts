@@ -29,12 +29,9 @@ export function buildSchema(t: ReturnType<typeof useTranslations>) {
     reason: z
       .string()
       .trim()
+      .max(2000, { message: 'Maximum 2000 characters' })
       .optional()
-      .or(z.literal(''))
-      .refine(
-        (v) => v === '' || (typeof v === 'string' && v.trim().length >= 10),
-        { message: t('updateReasonTooShort') },
-      ),
+      .or(z.literal('')),
   });
 }
 

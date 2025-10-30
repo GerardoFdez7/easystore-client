@@ -20,6 +20,7 @@ type Props = {
   className?: string;
   inputClassName?: string;
   buttonClassName?: string;
+  disablePast?: boolean;
 };
 
 function formatDateByLocale(date?: Date | null, locale: string = 'es') {
@@ -40,9 +41,12 @@ export default function CalendarPicker({
   className,
   inputClassName,
   buttonClassName,
+  disablePast = false,
 }: Props) {
   const locale = useLocale();
   const dayPickerLocale = locale.startsWith('es') ? dfEs : dfEnUS;
+  const startYear = 2025;
+  const endYear = new Date().getFullYear() + 10;
 
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState<string>(
@@ -54,7 +58,11 @@ export default function CalendarPicker({
 
   React.useEffect(() => {
     setText(formatDateByLocale(value, locale));
-    setMonth(value ?? undefined);
+    if (value && value.getFullYear() < startYear) {
+      setMonth(new Date(startYear, 0, 1));
+    } else {
+      setMonth(value ?? undefined);
+    }
   }, [value, locale]);
 
   return (
@@ -70,7 +78,7 @@ export default function CalendarPicker({
             const v = e.target.value;
             setText(v);
             const parsed = parseDate(v) || null;
-            if (parsed) {
+            if (parsed && parsed.getFullYear() >= startYear) {
               onChange(parsed);
               setMonth(parsed);
             }
@@ -104,9 +112,17 @@ export default function CalendarPicker({
               mode="single"
               selected={value ?? undefined}
               captionLayout="dropdown"
+              fromYear={startYear}
+              fromDate={new Date(startYear, 0, 1)}
+              toYear={endYear}
               month={month}
               onMonthChange={setMonth}
               locale={dayPickerLocale}
+              disabled={
+                disablePast
+                  ? (date) => date < new Date(new Date().setHours(0, 0, 0, 0))
+                  : undefined
+              }
               onSelect={(d) => {
                 onChange(d ?? null);
                 setText(formatDateByLocale(d, locale));

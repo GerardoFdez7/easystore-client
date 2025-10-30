@@ -14,6 +14,7 @@ import AddStockDialog from '@organisms/inventory/AddStockDialog';
 import WarehouseManagementDialog from '@organisms/inventory/WarehouseManagementDialog';
 import { useRouter } from 'next/navigation';
 import { isUuidV7 } from '@lib/utils';
+import { buildInventoryPath } from '@lib/utils/path';
 import { useMutation } from '@apollo/client/react';
 import {
   RemoveStockFromWarehouseDocument,
@@ -82,12 +83,7 @@ export default function MainInventory() {
     warehouseId: string;
     variantSku: string;
   }) => {
-    const whSlug = (row.warehouseName || '')
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, '-');
-    const sku = row.variantSku;
-    router.push(`/inventory/${whSlug}_${sku}`);
+    router.push(buildInventoryPath(row.warehouseName || '', row.variantSku));
   };
 
   const handleDelete = async (row: { id: string; warehouseId: string }) => {
