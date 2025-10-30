@@ -1,58 +1,43 @@
-import { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import InventoryTable from '@molecules/inventory/InventoryTable';
-import { FindInventoryQueryVariables } from '@graphql/generated';
-import { useInventoryStorybook } from './hooks/useInventoryStorybook';
-import { ComponentProps } from 'react';
 import { mockInventoryTableData } from './mocks/inventory-table';
+import type { InventoryItem } from '@lib/types/inventory';
+import type { FindInventoryQueryVariables } from '@graphql/generated';
 
-// Wrapper component for Storybook that uses the non-suspense hook
-const InventoryTableStorybook = (
-  props: ComponentProps<typeof InventoryTable>,
-) => {
-  const { inventory, loading, error } = useInventoryStorybook(
-    props.variables,
-    props.inventory,
-  );
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-
-  return <InventoryTable {...props} inventory={inventory} />;
-};
-
-const meta: Meta<typeof InventoryTableStorybook> = {
+const meta: Meta<typeof InventoryTable> = {
   title: 'Molecules/Inventory/InventoryTable',
-  component: InventoryTableStorybook,
+  component: InventoryTable,
   parameters: {
-    layout: 'centered',
+    layout: 'fullscreen',
   },
   tags: ['autodocs'],
 };
-
 export default meta;
 
-type Story = StoryObj<typeof InventoryTableStorybook>;
+type Story = StoryObj<typeof InventoryTable>;
 
-const variables: FindInventoryQueryVariables = {};
+const variables: FindInventoryQueryVariables = {
+  page: 1,
+  limit: 25,
+} as FindInventoryQueryVariables;
+
+const baseArgs = {
+  variables,
+  onCreateStock: () => alert('Create stock'),
+  onEditRow: (row: InventoryItem) => alert(`Edit ${row.variantSku}`),
+  onDeleteRow: (row: InventoryItem) => alert(`Delete ${row.variantSku}`),
+};
 
 export const Default: Story = {
   args: {
-    variables: variables,
+    ...baseArgs,
     inventory: mockInventoryTableData,
   },
 };
 
 export const Empty: Story = {
   args: {
-    variables: variables,
+    ...baseArgs,
     inventory: [],
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'This story demonstrates the empty state of the InventoryTable component. The empty state is displayed when the `inventory` prop is an empty array. It shows a message indicating no product variants were found and provides a button to add stock.',
-      },
-    },
   },
 };
