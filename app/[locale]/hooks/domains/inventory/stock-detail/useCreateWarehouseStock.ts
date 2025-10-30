@@ -93,6 +93,18 @@ export function useCreateWarehouseStock(opts: CreateStockByLookupOptions = {}) {
           : null,
       };
 
+      // Debug en desarrollo para ver exactamente lo enviado
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('[CreateStock] Payload', {
+          warehouseId: await resolveWarehouseId(initialWarehouseId),
+          variantId: await resolveVariantId(initialVariantId),
+          input,
+          reason: values.reason ?? reason ?? null,
+          nowIso: new Date().toISOString(),
+          nowMs: Date.now(),
+        });
+      }
+
       const res = await mutate({
         variables: {
           warehouseId,

@@ -12,6 +12,7 @@ import {
 } from '@shadcn/ui/table';
 import { cn, formatDate } from '@lib/utils';
 import { Package, Plus } from 'lucide-react';
+import { Popover, PopoverTrigger, PopoverContent } from '@shadcn/ui/popover';
 import EmptyState from '@molecules/shared/EmptyState';
 import { useTranslations } from 'next-intl';
 
@@ -20,6 +21,7 @@ type StockMovementItem = {
   id: string;
   productName: string;
   variantSku?: string;
+  variantFirstAttribute?: { key: string; value: string };
   deltaQuantity: number;
   reason: string;
   createdBy: string;
@@ -83,6 +85,12 @@ export default function StockMovementTable({
                   <span className="text-start font-medium">
                     {item.productName}
                   </span>
+                  {item.variantFirstAttribute ? (
+                    <span className="text-muted-foreground text-start text-xs">
+                      {item.variantFirstAttribute.key}:{' '}
+                      {item.variantFirstAttribute.value}
+                    </span>
+                  ) : null}
                 </div>
               </TableCell>
               <TableCell>{item.variantSku || '-'}</TableCell>
@@ -96,8 +104,25 @@ export default function StockMovementTable({
                   {item.deltaQuantity}
                 </span>
               </TableCell>
-              <TableCell>{item.reason}</TableCell>
-              <TableCell>{item.createdBy ? item.createdBy : '-'}</TableCell>
+              <TableCell>
+                {item.reason ? (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button className="max-w-[28rem] truncate text-left underline-offset-2 hover:underline">
+                        {item.reason.length > 80
+                          ? `${item.reason.slice(0, 80)}…`
+                          : item.reason}
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="max-w-xl break-words whitespace-pre-wrap">
+                      {item.reason}
+                    </PopoverContent>
+                  </Popover>
+                ) : (
+                  '-'
+                )}
+              </TableCell>
+              <TableCell>{item.createdBy ? item.createdBy : 'you'}</TableCell>
               <TableCell>{formatDate(item.date)}</TableCell>
             </TableRow>
           ))}
