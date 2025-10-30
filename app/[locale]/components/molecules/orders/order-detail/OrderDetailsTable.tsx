@@ -9,6 +9,7 @@ import {
   TableRow,
 } from '@shadcn/ui/table';
 import { Separator } from '@shadcn/ui/separator';
+import { useTranslations } from 'next-intl';
 
 interface OrderProduct {
   id: string;
@@ -86,23 +87,24 @@ export default function OrderDetailsTable() {
     const symbol = process.env.NEXT_PUBLIC_DEFAULT_CURRENCY || 'Q';
     return `${symbol}${amount.toFixed(2)}`;
   };
+  const t = useTranslations('Orders');
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-lg font-bold">Product details</h3>
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <h3 className="text-lg font-bold">{t('productDetails')}</h3>
         <Button variant="ghost" size="sm" className="text-muted-foreground">
-          Export PDF / Print
+          {t('exportPDF')} / {t('print')}
         </Button>
       </div>
 
       <Table className="bg-card">
         <TableHeader>
           <TableRow>
-            <TableHead>Product</TableHead>
-            <TableHead>SKU</TableHead>
-            <TableHead>Qty</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead className="text-right">Total</TableHead>
+            <TableHead>{t('product')}</TableHead>
+            <TableHead>{t('sku')}</TableHead>
+            <TableHead>{t('qty')}</TableHead>
+            <TableHead>{t('price')}</TableHead>
+            <TableHead className="text-right">{t('total')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -139,33 +141,33 @@ export default function OrderDetailsTable() {
       </Table>
 
       <div className="space-y-2 border-t px-4 py-3">
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Subtotal</span>
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">{t('subtotal')}</span>
           <span className="font-medium">
             {formatCurrency(orderDetailsData.summary.subtotal)}
           </span>
         </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Discounts</span>
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">{t('discounts')}</span>
           <span className="text-secondary font-medium">
             -{formatCurrency(orderDetailsData.summary.discounts)}
           </span>
         </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Taxes</span>
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">{t('taxes')}</span>
           <span className="font-medium">
             {formatCurrency(orderDetailsData.summary.taxes)}
           </span>
         </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Shipping</span>
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">{t('shipping')}</span>
           <span className="font-medium">
             {formatCurrency(orderDetailsData.summary.shipping)}
           </span>
         </div>
         <Separator />
         <div className="flex justify-between pt-2 text-base font-bold">
-          <span>Total</span>
+          <span>{t('total')}</span>
           <span>{formatCurrency(orderDetailsData.summary.total)}</span>
         </div>
       </div>

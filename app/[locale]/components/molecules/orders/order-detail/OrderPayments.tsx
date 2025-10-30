@@ -1,10 +1,12 @@
 import { Badge } from '@shadcn/ui/badge';
+import { useTranslations } from 'next-intl';
 
 export default function OrderPayments() {
+  const t = useTranslations('Orders');
   return (
     <div>
-      <h3 className="mb-4 text-lg font-bold">Payments</h3>
-      <div className="flex items-center justify-between rounded-lg border p-4">
+      <h3 className="mb-4 text-lg font-bold">{t('payments')}</h3>
+      <div className="flex flex-col justify-between gap-4 rounded-lg border p-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-3">
           <svg
             className="text-muted-foreground h-6 w-6"
@@ -26,10 +28,10 @@ export default function OrderPayments() {
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-row items-center justify-end gap-6 sm:flex-col sm:items-end sm:gap-2">
           <span className="font-bold">GTO 490.00</span>
           <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
-            Confirmed
+            {t('confirmed')}
           </Badge>
         </div>
       </div>

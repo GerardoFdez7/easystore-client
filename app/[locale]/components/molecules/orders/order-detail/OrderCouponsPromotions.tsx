@@ -1,15 +1,19 @@
 import { Tag, Ticket } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@shadcn/ui/card';
+import { useTranslations } from 'next-intl';
 
 export default function OrderCouponsPromotions() {
+  const t = useTranslations('Orders');
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Coupons & Promotions</CardTitle>
+        <CardTitle>{t('couponsAndPromotions')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
-          <div className="text-muted-secondary mb-2 text-sm">Coupons</div>
+          <div className="text-muted-foreground mb-2 text-sm">
+            {t('coupons')}
+          </div>
           <div className="flex items-center gap-2 rounded-lg bg-green-50 p-3">
             <Tag className="text-secondary h-4 w-4" />
             <span className="text-secondary text-sm font-medium">
@@ -19,7 +23,9 @@ export default function OrderCouponsPromotions() {
         </div>
 
         <div>
-          <div className="text-muted-foreground mb-2 text-sm">Promotions</div>
+          <div className="text-muted-foreground mb-2 text-sm">
+            {t('promotions')}
+          </div>
           <div className="flex items-center gap-2 rounded-lg bg-cyan-50 p-3">
             <Ticket className="h-4 w-4 text-blue-600" />
             <span className="text-sm font-medium text-blue-600">

@@ -1,10 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@shadcn/ui/card';
+import { useTranslations } from 'next-intl';
 
 export default function OrderShippingAddress() {
+  const t = useTranslations('Orders');
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Shipping Address</CardTitle>
+        <CardTitle>{t('shippingAddress')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-1 text-sm">
         <div className="font-medium">Sophia Clark</div>
