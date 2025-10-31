@@ -1,5 +1,5 @@
-import Coupon from '@atoms/orders/orderDetail/Coupon';
-import Promotion from '@atoms/orders/orderDetail/Promotion';
+import Coupon from '@atoms/orders/order-detail/Coupon';
+import Promotion from '@atoms/orders/order-detail/Promotion';
 import { Card, CardContent, CardHeader, CardTitle } from '@shadcn/ui/card';
 import { useTranslations } from 'next-intl';
 
