@@ -15,6 +15,7 @@ import InstallmentPaymentFormField from '@molecules/products/variant/Installment
 import WarrantyFormField from '@molecules/products/variant/WarrantyFormField';
 import SaveButton from '@atoms/shared/SaveButton';
 import Options from '@molecules/shared/Options';
+import BackButton from '@atoms/shared/BackButton';
 import {
   useVariantForm,
   useSoftDeleteVariant,
@@ -132,33 +133,19 @@ export default function MainVariant({
 
   return (
     <>
-      {/* Options Menu */}
-      {!isNew && (
-        <Options
-          options={customOptions}
-          showArchive={!isArchived}
-          onArchive={handleArchive}
-          archiveTitle={t('archiveVariant')}
-          archiveDescription={t('archiveVariantDescription')}
-          archiveDisabledTooltip={archiveLoading ? t('archiving') : undefined}
-          showDelete={!isLastActiveVariant}
-          onDelete={handleDeleteAction}
-          deleteTitle={t('deleteVariant')}
-          deleteDescription={
-            isLastActiveVariant
-              ? t('cannotDeleteLastVariant')
-              : t('deleteVariantDescription')
-          }
-          deleteDisabledTooltip={
-            isLastActiveVariant
-              ? t('cannotDeleteLastVariantTooltip')
-              : deleteLoading
-                ? t('deleting')
-                : undefined
-          }
-          disabled={archiveLoading || restoreLoading}
-        />
-      )}
+      <BackButton />
+      <Options
+        options={customOptions}
+        showArchive={!isArchived}
+        onArchive={handleArchive}
+        archiveTitle={t('archiveVariant')}
+        archiveDescription={t('archiveVariantDescription')}
+        showDelete={!isLastActiveVariant}
+        onDelete={handleDeleteAction}
+        deleteTitle={t('deleteVariant')}
+        deleteDescription={t('deleteVariantDescription')}
+        disabled={archiveLoading || restoreLoading || deleteLoading || isNew}
+      />
       {/* Main Content */}
       <main className="mx-4 flex max-w-screen-md justify-center lg:mx-auto lg:w-full">
         <FormProvider {...form}>

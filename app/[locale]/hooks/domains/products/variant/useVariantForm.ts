@@ -22,7 +22,7 @@ const createVariantFormSchema = (
   isPhysical: boolean = false,
 ) =>
   z.object({
-    price: z.number().nonnegative({ message: t('priceNonNegative') }), // Unnused
+    price: z.coerce.number().nonnegative({ message: t('priceNonNegative') }), // Unnused
     condition: z.enum(['NEW', 'USED', 'REFURBISHED'], {
       errorMap: () => ({ message: t('conditionRequired') }),
     }),
@@ -35,31 +35,37 @@ const createVariantFormSchema = (
       )
       .min(1, { message: t('attributesRequired') })
       .max(30, { message: t('attributeLimitReached') }),
-    dimensions: z.object({
-      height: isPhysical
-        ? z.coerce.number().positive({ message: t('heightRequired') })
-        : z.coerce
-            .number()
-            .nonnegative({ message: t('heightNonNegative') })
-            .optional(),
-      width: isPhysical
-        ? z.coerce.number().positive({ message: t('widthRequired') })
-        : z.coerce
-            .number()
-            .nonnegative({ message: t('widthNonNegative') })
-            .optional(),
-      length: isPhysical
-        ? z.coerce.number().positive({ message: t('lengthRequired') })
-        : z.coerce
-            .number()
-            .nonnegative({ message: t('lengthNonNegative') })
-            .optional(),
-    }),
+    dimensions: z
+      .object({
+        height: isPhysical
+          ? z.coerce.number().positive({ message: t('heightRequired') })
+          : z.coerce
+              .number()
+              .nonnegative({ message: t('heightNonNegative') })
+              .nullable()
+              .optional(),
+        width: isPhysical
+          ? z.coerce.number().positive({ message: t('widthRequired') })
+          : z.coerce
+              .number()
+              .nonnegative({ message: t('widthNonNegative') })
+              .nullable()
+              .optional(),
+        length: isPhysical
+          ? z.coerce.number().positive({ message: t('lengthRequired') })
+          : z.coerce
+              .number()
+              .nonnegative({ message: t('lengthNonNegative') })
+              .nullable()
+              .optional(),
+      })
+      .nullable(),
     weight: isPhysical
       ? z.coerce.number().positive({ message: t('weightRequired') })
       : z.coerce
           .number()
           .nonnegative({ message: t('weightNonNegative') })
+          .nullable()
           .optional(),
     codes: z.object({
       sku: z
@@ -193,7 +199,6 @@ export function useVariantForm({
     if (product) {
       return product.productType === TypeEnum.Physical;
     }
-    return true; // Default to true (Physical) for new products
   }, [isNewProduct, productDraft, product]);
 
   const variantFormSchema = createVariantFormSchema(t, isPhysical);
@@ -206,11 +211,11 @@ export function useVariantForm({
         condition: 'NEW',
         attributes: [],
         dimensions: {
-          height: isPhysical ? 0 : undefined,
-          width: isPhysical ? 0 : undefined,
-          length: isPhysical ? 0 : undefined,
+          height: isPhysical ? 0 : null,
+          width: isPhysical ? 0 : null,
+          length: isPhysical ? 0 : null,
         },
-        weight: isPhysical ? 0 : undefined,
+        weight: isPhysical ? 0 : null,
         codes: {
           sku: '',
           upc: null,
@@ -334,14 +339,6 @@ export function useVariantForm({
 
         if (isNew) {
           // Create new variant for existing product
-          const hasDimensions =
-            (data.dimensions.height !== undefined &&
-              data.dimensions.height > 0) ||
-            (data.dimensions.width !== undefined &&
-              data.dimensions.width > 0) ||
-            (data.dimensions.length !== undefined &&
-              data.dimensions.length > 0);
-
           const input = {
             price:
               typeof data.price === 'string'
@@ -359,7 +356,7 @@ export function useVariantForm({
               key: attr.key,
               value: attr.value,
             })),
-            ...(hasDimensions && {
+            ...(data.dimensions && {
               dimension: {
                 height: data.dimensions.height ?? 0,
                 width: data.dimensions.width ?? 0,
@@ -414,14 +411,6 @@ export function useVariantForm({
           return;
         }
 
-        // For variant updates, we need to send the complete variant data
-        // since the backend expects a full variant object in the variants array
-        const hasDimensions =
-          (data.dimensions.height !== undefined &&
-            data.dimensions.height > 0) ||
-          (data.dimensions.width !== undefined && data.dimensions.width > 0) ||
-          (data.dimensions.length !== undefined && data.dimensions.length > 0);
-
         const variantInput = {
           price:
             typeof data.price === 'string'
@@ -439,13 +428,11 @@ export function useVariantForm({
             key: attr.key,
             value: attr.value,
           })),
-          ...(hasDimensions && {
-            dimension: {
-              height: data.dimensions.height ?? 0,
-              width: data.dimensions.width ?? 0,
-              length: data.dimensions.length ?? 0,
-            },
-          }),
+          dimension: {
+            height: data.dimensions?.height ?? 0,
+            width: data.dimensions?.width ?? 0,
+            length: data.dimensions?.length ?? 0,
+          },
           weight: data.weight ?? null,
           sku: data.codes.sku,
           upc: data.codes.upc || null,

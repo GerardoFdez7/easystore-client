@@ -332,49 +332,6 @@ const databaseConstraintHandlers: ErrorHandler[] = [
       return true;
     },
   },
-  {
-    id: 'product-not-found',
-    priority: 150,
-    matcher: (error: GraphQLFormattedError) => {
-      const message = error.message?.toLowerCase() || '';
-      return (
-        (message.includes('database find product by id') ||
-          message.includes('product does not exist') ||
-          (message.includes('product') && message.includes('by id'))) &&
-        !message.includes('variant')
-      );
-    },
-    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
-      const { locale, isDevelopment } = context;
-      toast.error(getLocalizedMessage(locale, 'productNotFound'), {
-        description:
-          getLocalizedMessage(locale, 'productNotFoundDescription') +
-          (isDevelopment ? ` Backend message: ${error.message}` : ''),
-      });
-      return true;
-    },
-  },
-  {
-    id: 'variant-not-found',
-    priority: 160,
-    matcher: (error: GraphQLFormattedError) => {
-      const message = error.message?.toLowerCase() || '';
-      return (
-        message.includes('variant with id') ||
-        message.includes('variant does not exist') ||
-        (message.includes('variant') && message.includes('not found'))
-      );
-    },
-    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
-      const { locale, isDevelopment } = context;
-      toast.error(getLocalizedMessage(locale, 'variantNotFound'), {
-        description:
-          getLocalizedMessage(locale, 'variantNotFoundDescription') +
-          (isDevelopment ? ` Backend message: ${error.message}` : ''),
-      });
-      return true;
-    },
-  },
 ];
 
 /**

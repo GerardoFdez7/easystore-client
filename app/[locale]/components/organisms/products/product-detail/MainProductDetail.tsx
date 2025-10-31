@@ -12,6 +12,7 @@ import TagsFormField from '@molecules/products/product-detail/TagsFormField';
 import CategoryFormField from '@molecules/products/product-detail/CategoryFormField';
 import SaveButton from '@atoms/shared/SaveButton';
 import Options from '@molecules/shared/Options';
+import BackButton from '@atoms/shared/BackButton';
 import { useProductForm } from '@hooks/domains/products';
 import { useTranslations } from 'next-intl';
 import { RotateCcw } from 'lucide-react';
@@ -77,6 +78,7 @@ export default function MainProductDetail({
 
   return (
     <>
+      <BackButton />
       <Options
         options={customOptions}
         showArchive={!isArchived}

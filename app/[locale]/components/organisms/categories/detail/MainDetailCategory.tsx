@@ -48,6 +48,7 @@ import type { MultipleMediaUploaderRef } from '@molecules/shared/MultipleMediaUp
 import type { ProcessedData } from '@lib/types/media';
 import { useMutation, useQuery } from '@apollo/client/react';
 import { getCurrentPathDepth } from '@lib/utils/path-utils';
+import BackButton from '@atoms/shared/BackButton';
 
 interface MainDetailCategoryProps {
   categoryId?: string;
@@ -436,18 +437,14 @@ export default function MainDetailCategory({
 
   return (
     <>
-      {/* Options Menu */}
-      {!isNew && !isAdd && isEdit && (
-        <aside className="flex justify-end">
-          <Options
-            showDelete={true}
-            onDelete={handleDelete}
-            disabled={isSubmitting}
-            deleteTitle={tCategory('title')}
-            deleteDescription={tCategory('description')}
-          />
-        </aside>
-      )}
+      <BackButton />
+      <Options
+        showDelete={true}
+        onDelete={handleDelete}
+        disabled={isSubmitting || !isNew || isAdd}
+        deleteTitle={tCategory('title')}
+        deleteDescription={tCategory('description')}
+      />
       <main className="mx-4 flex max-w-screen-md justify-center lg:mx-auto lg:w-full">
         <div className="relative w-full">
           <section className="flex flex-col gap-4">

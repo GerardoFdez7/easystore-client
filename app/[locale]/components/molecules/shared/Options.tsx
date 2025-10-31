@@ -41,13 +41,11 @@ interface OptionsProps {
   deleteTitle?: string;
   deleteDescription?: string;
   deleteButtonText?: string;
-  deleteDisabledTooltip?: string;
   showArchive?: boolean;
   onArchive?: () => Promise<void> | void;
   archiveTitle?: string;
   archiveDescription?: string;
   archiveButtonText?: string;
-  archiveDisabledTooltip?: string;
   disabled?: boolean;
   tooltipContent?: string;
   className?: string;
@@ -61,13 +59,11 @@ export default function Options({
   deleteTitle,
   deleteDescription,
   deleteButtonText,
-  deleteDisabledTooltip,
   showArchive = false,
   onArchive,
   archiveTitle,
   archiveDescription,
   archiveButtonText,
-  archiveDisabledTooltip,
   disabled = false,
   tooltipContent,
   className = '',
@@ -140,7 +136,6 @@ export default function Options({
       variant: 'default' as const,
       onClick: handleArchiveClick,
       disabled: disabled,
-      disabledTooltip: archiveDisabledTooltip,
     });
   }
 
@@ -152,7 +147,6 @@ export default function Options({
       variant: 'destructive' as const,
       onClick: handleDeleteClick,
       disabled: disabled,
-      disabledTooltip: deleteDisabledTooltip,
     });
   }
 
@@ -246,18 +240,6 @@ export default function Options({
                 {option.label}
               </DropdownMenuItem>
             );
-
-            // Wrap in tooltip if disabled and tooltip text is provided
-            if (option.disabled && option.disabledTooltip) {
-              return (
-                <Tooltip key={option.id}>
-                  <TooltipTrigger asChild>{menuItem}</TooltipTrigger>
-                  <TooltipContent side="left">
-                    {option.disabledTooltip}
-                  </TooltipContent>
-                </Tooltip>
-              );
-            }
 
             return menuItem;
           })}
