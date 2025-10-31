@@ -1198,5 +1198,8 @@
     "saveSuccess": "Category updated successfully.",
     "createSuccess": "Category created successfully.",
     "addSubcategory": "Add subcategory to"
+  },
+  "Preview": {
+    "preview": "Preview"
   }
 }
