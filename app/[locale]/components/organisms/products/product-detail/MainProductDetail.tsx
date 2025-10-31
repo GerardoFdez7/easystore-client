@@ -76,59 +76,60 @@ export default function MainProductDetail({
     : [];
 
   return (
-    <main className="mx-4 flex max-w-screen-md justify-center lg:mx-auto lg:w-full">
-      <Form {...form}>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            void form.handleSubmit(handleSubmit)(e);
-          }}
-          onFocus={markUserInteraction}
-          className="w-full space-y-6"
-        >
-          {/* Main Content */}
-          <Options
-            options={customOptions}
-            showArchive={!isArchived}
-            onArchive={handleArchive}
-            archiveTitle={t('archive')}
-            archiveDescription={t('archiveDescriptionSingle')}
-            showDelete={true}
-            onDelete={handleDeleteAction}
-            deleteTitle={t('deleteProduct')}
-            deleteDescription={t('deleteDescriptionSingle')}
-            disabled={archiveLoading || restoreLoading || deleteLoading}
-          />
-          <MediaFormField
-            isSubmitting={isSubmitting}
-            onMediaUploaded={setHasMediaUploaded}
-          />
-          <div className="w-full space-y-6 sm:flex sm:flex-row sm:gap-6">
-            <NameFormField />
-            <TypeProductFormField />
-          </div>
-          <ShortLongDescriptionFormField />
-          <VariantsFormField productId={param} />
-          <CategoryFormField name="categories" />
-          <TagsFormField />
-          <BrandManufacturerFormField />
-          <SustainabilityFormField />
-
-          <div className="flex justify-end">
-            <SaveButton
-              type="submit"
-              loading={isSubmitting}
-              disabled={
-                isNew
-                  ? isSubmitting || !hasMediaUploaded
-                  : !hasChanges || isSubmitting
-              }
-              size="lg"
-              translationKey={isNew ? 'add' : 'save'}
+    <>
+      <Options
+        options={customOptions}
+        showArchive={!isArchived}
+        onArchive={handleArchive}
+        archiveTitle={t('archive')}
+        archiveDescription={t('archiveDescriptionSingle')}
+        showDelete={true}
+        onDelete={handleDeleteAction}
+        deleteTitle={t('deleteProduct')}
+        deleteDescription={t('deleteDescriptionSingle')}
+        disabled={archiveLoading || restoreLoading || deleteLoading}
+      />
+      <main className="mx-4 flex max-w-screen-md justify-center lg:mx-auto lg:w-full">
+        <Form {...form}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              void form.handleSubmit(handleSubmit)(e);
+            }}
+            onFocus={markUserInteraction}
+            className="w-full space-y-6"
+          >
+            <MediaFormField
+              isSubmitting={isSubmitting}
+              onMediaUploaded={setHasMediaUploaded}
             />
-          </div>
-        </form>
-      </Form>
-    </main>
+            <div className="w-full space-y-6 sm:flex sm:flex-row sm:gap-6">
+              <NameFormField />
+              <TypeProductFormField />
+            </div>
+            <ShortLongDescriptionFormField />
+            <VariantsFormField productId={param} />
+            <CategoryFormField name="categories" />
+            <TagsFormField />
+            <BrandManufacturerFormField />
+            <SustainabilityFormField />
+
+            <div className="flex justify-end">
+              <SaveButton
+                type="submit"
+                loading={isSubmitting}
+                disabled={
+                  isNew
+                    ? isSubmitting || !hasMediaUploaded
+                    : !hasChanges || isSubmitting
+                }
+                size="lg"
+                translationKey={isNew ? 'add' : 'save'}
+              />
+            </div>
+          </form>
+        </Form>
+      </main>
+    </>
   );
 }

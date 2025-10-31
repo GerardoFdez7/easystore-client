@@ -889,7 +889,23 @@
     "warrantyCoverage": "Coverage",
     "warrantyCoveragePlaceholder": "Covers manufacturing defects",
     "warrantyInstructions": "Instructions",
-    "warrantyInstructionsPlaceholder": "Keep receipt; contact support for RMA"
+    "warrantyInstructionsPlaceholder": "Keep receipt; contact support for RMA",
+
+    "archiveVariant": "Archive Variant",
+    "archiveVariantDescription": "Are you sure you want to archive this variant? Can be restored later.",
+    "restoreVariant": "Restore Variant",
+    "deleteVariant": "Delete Variant",
+    "deleteVariantDescription": "Are you sure you want to permanently delete this variant? This action cannot be undone.",
+    "cannotDeleteLastVariant": "Cannot Delete Last Variant",
+    "cannotDeleteLastVariantTooltip": "You cannot delete the last active variant of a product. Please add another variant first or archive this one instead.",
+    "archiving": "Archiving...",
+    "deleting": "Deleting...",
+    "archivingSuccessful": "Variant archived",
+    "archiveSuccessfulDescription": "The variant has been archived successfully",
+    "restoreSuccessful": "Variant restored",
+    "restoreSuccessfulDescription": "The variant has been restored successfully",
+    "deleteSuccessful": "Variant deleted",
+    "deleteSuccessfulDescription": "The variant has been deleted successfully"
   },
   "GetInTouch": {
     "title": "Get in touch with an expert.",

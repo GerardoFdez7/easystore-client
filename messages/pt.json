@@ -891,7 +891,23 @@
     "warrantyCoverage": "Cobertura",
     "warrantyCoveragePlaceholder": "Cobre defeitos de fabricação",
     "warrantyInstructions": "Instruções",
-    "warrantyInstructionsPlaceholder": "Guarde o recibo; contate o suporte para RMA"
+    "warrantyInstructionsPlaceholder": "Guarde o recibo; contate o suporte para RMA",
+
+    "archiveVariant": "Arquivar variante",
+    "archiveVariantDescription": "Tem certeza de que deseja arquivar esta variante? Poderá ser restaurada posteriormente.",
+    "restoreVariant": "Restaurar variante",
+    "deleteVariant": "Excluir variante",
+    "deleteVariantDescription": "Tem certeza de que deseja excluir permanentemente esta variante? Esta ação não pode ser desfeita.",
+    "cannotDeleteLastVariant": "Não é possível excluir a última variante",
+    "cannotDeleteLastVariantTooltip": "Você não pode excluir a última variante ativa de um produto. Por favor, adicione outra variante primeiro ou arquive esta.",
+    "archiving": "Arquivando...",
+    "deleting": "Excluindo...",
+    "archivingSuccessful": "Variante arquivada",
+    "archiveSuccessfulDescription": "A variante foi arquivada com sucesso",
+    "restoreSuccessful": "Variante restaurada",
+    "restoreSuccessfulDescription": "A variante foi restaurada com sucesso",
+    "deleteSuccessful": "Variante excluída",
+    "deleteSuccessfulDescription": "A variante foi excluída com sucesso"
   },
   "GetInTouch": {
     "title": "Entre em contato com um especialista.",

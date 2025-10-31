@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import { useMutation } from '@apollo/client/react';
+import { useMutation, useApolloClient } from '@apollo/client/react';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import {
@@ -34,6 +34,7 @@ interface UseVariantManagementReturn {
 
 export function useVariantManagement(): UseVariantManagementReturn {
   const t = useTranslations('Products');
+  const client = useApolloClient();
 
   // Use the product update mutation for all variant operations
   const [updateProductMutation, { loading: isUpdating, error: updateError }] =
@@ -100,28 +101,74 @@ export function useVariantManagement(): UseVariantManagementReturn {
       input: AddVariantToProductInput,
     ): Promise<UpdateMutation['updateProduct'] | null> => {
       try {
+        // Read existing product data from cache to get current variants
+        const existingProduct = client.readQuery<FindProductByIdQuery>({
+          query: FindProductByIdDocument,
+          variables: { id: productId },
+        });
+
+        // Get existing variants and map them to AddVariantToProductInput format
+        const existingVariants =
+          existingProduct?.getProductById?.variants?.map((variant) => ({
+            sku: variant.sku,
+            price: variant.price,
+            condition: variant.condition,
+            attributes: variant.attributes.map((attr) => ({
+              key: attr.key,
+              value: attr.value,
+            })),
+            dimension: variant.dimension
+              ? {
+                  height: variant.dimension.height,
+                  width: variant.dimension.width,
+                  length: variant.dimension.length,
+                }
+              : undefined,
+            weight: variant.weight ?? undefined,
+            barcode: variant.barcode ?? undefined,
+            ean: variant.ean ?? undefined,
+            isbn: variant.isbn ?? undefined,
+            upc: variant.upc ?? undefined,
+            personalizationOptions: variant.personalizationOptions ?? undefined,
+            installmentPayments: variant.installmentPayments?.map((ip) => ({
+              months: ip.months,
+              interestRate: ip.interestRate,
+            })),
+            warranties: variant.warranties?.map((w) => ({
+              months: w.months,
+              coverage: w.coverage,
+              instructions: w.instructions,
+            })),
+            variantCover: variant.variantCover ?? undefined,
+            variantMedia: variant.variantMedia?.map((m) => ({
+              url: m.url,
+              mediaType: m.mediaType,
+              position: m.position,
+            })),
+          })) ?? [];
+
+        // Append new variant to existing ones
         const { data } = await updateProductMutation({
           variables: {
             id: productId,
             input: {
-              variants: [input],
+              variants: [...existingVariants, input],
             },
           },
         });
 
         if (data?.updateProduct) {
-          toast.success(t('variant.add.success'));
+          toast.success(t('savedChangesTitle'));
           return data.updateProduct;
         }
 
         return null;
       } catch (error) {
         console.error('Error adding variant:', error);
-        toast.error(t('variant.add.error'));
         return null;
       }
     },
-    [updateProductMutation, t],
+    [updateProductMutation, t, client],
   );
 
   const updateVariant = useCallback(
@@ -149,7 +196,6 @@ export function useVariantManagement(): UseVariantManagementReturn {
         return null;
       } catch (error) {
         console.error('Error updating variants:', error);
-        toast.error(t('variant.update.error'));
         return null;
       }
     },

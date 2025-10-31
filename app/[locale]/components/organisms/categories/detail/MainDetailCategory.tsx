@@ -435,174 +435,175 @@ export default function MainDetailCategory({
   }, [isAdd, isEdit]);
 
   return (
-    <main className="mx-4 flex max-w-screen-md justify-center lg:mx-auto lg:w-full">
-      <div className="relative w-full">
-        <section className="flex flex-col gap-4">
-          <Form {...form}>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                void form.handleSubmit(onSubmit)(e);
-              }}
-              className="w-full space-y-8"
-              role="form"
-              aria-label={formAriaLabel}
-            >
-              {/* Options Menu */}
-              {!isNew && !isAdd && isEdit && (
-                <aside className="flex justify-end">
-                  <Options
-                    showDelete={true}
-                    onDelete={handleDelete}
-                    disabled={isSubmitting}
-                    deleteTitle={tCategory('title')}
-                    deleteDescription={tCategory('description')}
-                  />
-                </aside>
-              )}
-
-              {/* Cover Image Section */}
-              <section>
-                <FormField
-                  control={form.control}
-                  name="cover"
-                  render={() => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="cover-upload"
-                        className="text-lg font-semibold"
-                      >
-                        {t('cover')}
-                      </FormLabel>
-                      <FormControl>
-                        <MediaUploader
-                          ref={mediaUploaderRef}
-                          alwaysEditing={true}
-                          initialMedia={effectiveInitialMedia}
-                          onMediaProcessed={handleMediaProcessed}
-                          onMediaChange={handleMediaChange}
-                          acceptedFileTypes={[
-                            'image/jpeg',
-                            'image/png',
-                            'image/webp',
-                          ]}
-                          aria-describedby="cover-error"
-                        />
-                      </FormControl>
-                      <FormMessage id="cover-error" />
-                    </FormItem>
-                  )}
-                />
-              </section>
-
-              {/* Category Name Section */}
-              <section>
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="category-name"
-                        className="text-lg font-semibold"
-                      >
-                        {t('name')}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          id="category-name"
-                          placeholder={t('namePlaceholder')}
-                          {...field}
-                          aria-invalid={errors.name ? 'true' : 'false'}
-                          aria-describedby="name-error"
-                        />
-                      </FormControl>
-                      <FormMessage id="name-error" />
-                    </FormItem>
-                  )}
-                />
-              </section>
-
-              {/* Category Description Section */}
-              <section>
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel
-                        htmlFor="category-description"
-                        className="text-lg font-semibold"
-                      >
-                        {t('description')}
-                      </FormLabel>
-                      <FormControl>
-                        <Textarea
-                          id="category-description"
-                          placeholder={t('descriptionPlaceholder')}
-                          maxLength={200}
-                          {...field}
-                          aria-describedby="description-error"
-                          className="h-53 sm:h-auto"
-                        />
-                      </FormControl>
-                      <FormMessage id="description-error" />
-                    </FormItem>
-                  )}
-                />
-              </section>
-
-              {/* Subcategories Section */}
-              {showSubcategories && (
-                <section>
-                  <FormItem>
-                    <FormLabel
-                      htmlFor="subcategories"
-                      className="text-lg font-semibold"
-                    >
-                      {t('subcategories')}
-                    </FormLabel>
-                    <FormControl>
-                      <CategoryPicker
-                        items={subcategories}
-                        currentCategoryId={categoryId}
-                        disabled={isSubmitting}
-                        onAdd={handleAddSubcategories}
-                        onRemove={handleRemoveSubcategory}
-                        newCategories={newCategories}
-                        onNewCategoryAdd={handleNewCategoryAdd}
-                      />
-                    </FormControl>
-                  </FormItem>
-                </section>
-              )}
-
-              {/* Save Button Section */}
-              <section className="flex justify-end">
-                <SaveButton
-                  type="submit"
-                  loading={isSubmitting}
-                  disabled={!canSave}
-                  size="lg"
-                  translationKey={saveButtonTranslationKey}
-                  aria-describedby="save-button-status"
-                />
-              </section>
-
-              {/* Screen reader status */}
-              <div
-                id="save-button-status"
-                className="sr-only"
-                aria-live="polite"
-                aria-atomic="true"
+    <>
+      {/* Options Menu */}
+      {!isNew && !isAdd && isEdit && (
+        <aside className="flex justify-end">
+          <Options
+            showDelete={true}
+            onDelete={handleDelete}
+            disabled={isSubmitting}
+            deleteTitle={tCategory('title')}
+            deleteDescription={tCategory('description')}
+          />
+        </aside>
+      )}
+      <main className="mx-4 flex max-w-screen-md justify-center lg:mx-auto lg:w-full">
+        <div className="relative w-full">
+          <section className="flex flex-col gap-4">
+            <Form {...form}>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  void form.handleSubmit(onSubmit)(e);
+                }}
+                className="w-full space-y-8"
+                role="form"
+                aria-label={formAriaLabel}
               >
-                {isSubmitting && 'Saving category...'}
-                {!isDirty && !hasMediaChanges && 'No changes to save'}
-              </div>
-            </form>
-          </Form>
-        </section>
-      </div>
-    </main>
+                {/* Cover Image Section */}
+                <section>
+                  <FormField
+                    control={form.control}
+                    name="cover"
+                    render={() => (
+                      <FormItem>
+                        <FormLabel
+                          htmlFor="cover-upload"
+                          className="text-lg font-semibold"
+                        >
+                          {t('cover')}
+                        </FormLabel>
+                        <FormControl>
+                          <MediaUploader
+                            ref={mediaUploaderRef}
+                            alwaysEditing={true}
+                            initialMedia={effectiveInitialMedia}
+                            onMediaProcessed={handleMediaProcessed}
+                            onMediaChange={handleMediaChange}
+                            acceptedFileTypes={[
+                              'image/jpeg',
+                              'image/png',
+                              'image/webp',
+                            ]}
+                            aria-describedby="cover-error"
+                          />
+                        </FormControl>
+                        <FormMessage id="cover-error" />
+                      </FormItem>
+                    )}
+                  />
+                </section>
+
+                {/* Category Name Section */}
+                <section>
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel
+                          htmlFor="category-name"
+                          className="text-lg font-semibold"
+                        >
+                          {t('name')}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            id="category-name"
+                            placeholder={t('namePlaceholder')}
+                            {...field}
+                            aria-invalid={errors.name ? 'true' : 'false'}
+                            aria-describedby="name-error"
+                          />
+                        </FormControl>
+                        <FormMessage id="name-error" />
+                      </FormItem>
+                    )}
+                  />
+                </section>
+
+                {/* Category Description Section */}
+                <section>
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel
+                          htmlFor="category-description"
+                          className="text-lg font-semibold"
+                        >
+                          {t('description')}
+                        </FormLabel>
+                        <FormControl>
+                          <Textarea
+                            id="category-description"
+                            placeholder={t('descriptionPlaceholder')}
+                            maxLength={200}
+                            {...field}
+                            aria-describedby="description-error"
+                            className="h-53 sm:h-auto"
+                          />
+                        </FormControl>
+                        <FormMessage id="description-error" />
+                      </FormItem>
+                    )}
+                  />
+                </section>
+
+                {/* Subcategories Section */}
+                {showSubcategories && (
+                  <section>
+                    <FormItem>
+                      <FormLabel
+                        htmlFor="subcategories"
+                        className="text-lg font-semibold"
+                      >
+                        {t('subcategories')}
+                      </FormLabel>
+                      <FormControl>
+                        <CategoryPicker
+                          items={subcategories}
+                          currentCategoryId={categoryId}
+                          disabled={isSubmitting}
+                          onAdd={handleAddSubcategories}
+                          onRemove={handleRemoveSubcategory}
+                          newCategories={newCategories}
+                          onNewCategoryAdd={handleNewCategoryAdd}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  </section>
+                )}
+
+                {/* Save Button Section */}
+                <section className="flex justify-end">
+                  <SaveButton
+                    type="submit"
+                    loading={isSubmitting}
+                    disabled={!canSave}
+                    size="lg"
+                    translationKey={saveButtonTranslationKey}
+                    aria-describedby="save-button-status"
+                  />
+                </section>
+
+                {/* Screen reader status */}
+                <div
+                  id="save-button-status"
+                  className="sr-only"
+                  aria-live="polite"
+                  aria-atomic="true"
+                >
+                  {isSubmitting && 'Saving category...'}
+                  {!isDirty && !hasMediaChanges && 'No changes to save'}
+                </div>
+              </form>
+            </Form>
+          </section>
+        </div>
+      </main>
+    </>
   );
 }
