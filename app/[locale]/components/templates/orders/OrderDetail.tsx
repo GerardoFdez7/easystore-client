@@ -1,7 +1,7 @@
 import HeaderDashboard from '@organisms/shared/HeaderDashboard';
 import { useTranslations } from 'next-intl';
 import SidebarLayout from '@organisms/shared/SidebarLayout';
-import MainOrderDetail from '@organisms/orders/detail/MainOrderDetail';
+import MainOrderDetail from '@organisms/orders/order-detail/MainOrderDetail';
 
 interface OrderDetailTemplateProps {
   param?: string;
