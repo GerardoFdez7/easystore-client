@@ -227,25 +227,6 @@ export type CreateSustainabilityInput = {
   recycledPercentage: Scalars['Float']['input'];
 };
 
-export type CreateVariantInput = {
-  attributes: Array<CreateAttributeInput>;
-  barcode?: InputMaybe<Scalars['String']['input']>;
-  condition: ConditionEnum;
-  dimension?: InputMaybe<CreateDimensionInput>;
-  ean?: InputMaybe<Scalars['String']['input']>;
-  installmentPayments?: InputMaybe<Array<CreateInstallmentInput>>;
-  isbn?: InputMaybe<Scalars['String']['input']>;
-  personalizationOptions?: InputMaybe<Array<Scalars['String']['input']>>;
-  price: Scalars['Float']['input'];
-  productId: Scalars['ID']['input'];
-  sku: Scalars['String']['input'];
-  upc?: InputMaybe<Scalars['String']['input']>;
-  variantCover?: InputMaybe<Scalars['String']['input']>;
-  variantMedia?: InputMaybe<Array<CreateMediaInput>>;
-  warranties?: InputMaybe<Array<CreateWarrantyInput>>;
-  weight?: InputMaybe<Scalars['Float']['input']>;
-};
-
 export type CreateWarehouseInput = {
   addressId: Scalars['ID']['input'];
   name: Scalars['String']['input'];
@@ -494,7 +475,6 @@ export type Mutation = {
   __typename?: 'Mutation';
   addItemToCart: Cart;
   addStockToWarehouse: Warehouse;
-  addVariant: Product;
   archiveVariant: Product;
   createAddress: AddressType;
   createCategory: Category;
@@ -523,7 +503,6 @@ export type Mutation = {
   updateProduct: Product;
   updateStockInWarehouse: Warehouse;
   updateTenant: Tenant;
-  updateVariant: Product;
   updateWarehouse: Warehouse;
 };
 
@@ -536,10 +515,6 @@ export type MutationAddStockToWarehouseArgs = {
   reason?: InputMaybe<Scalars['String']['input']>;
   variantId: Scalars['ID']['input'];
   warehouseId: Scalars['ID']['input'];
-};
-
-export type MutationAddVariantArgs = {
-  input: CreateVariantInput;
 };
 
 export type MutationArchiveVariantArgs = {
@@ -659,12 +634,6 @@ export type MutationUpdateStockInWarehouseArgs = {
 
 export type MutationUpdateTenantArgs = {
   input: UpdateTenantInput;
-};
-
-export type MutationUpdateVariantArgs = {
-  id: Scalars['String']['input'];
-  input: UpdateVariantInput;
-  productId: Scalars['String']['input'];
 };
 
 export type MutationUpdateWarehouseArgs = {
@@ -970,28 +939,12 @@ export type UpdateAddressInput = {
   stateId?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type UpdateAttributeInput = {
-  key?: InputMaybe<Scalars['String']['input']>;
-  value?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type UpdateCategoryInput = {
   cover?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   parentId?: InputMaybe<Scalars['ID']['input']>;
   subCategories?: InputMaybe<Array<UpdateCategoryInput>>;
-};
-
-export type UpdateDimensionInput = {
-  height?: InputMaybe<Scalars['Float']['input']>;
-  length?: InputMaybe<Scalars['Float']['input']>;
-  width?: InputMaybe<Scalars['Float']['input']>;
-};
-
-export type UpdateInstallmentInput = {
-  interestRate?: InputMaybe<Scalars['Float']['input']>;
-  months?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UpdateItemQtyInput = {
@@ -1055,33 +1008,9 @@ export type UpdateTenantInput = {
   ownerName?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type UpdateVariantInput = {
-  attributes?: InputMaybe<Array<UpdateAttributeInput>>;
-  barcode?: InputMaybe<Scalars['String']['input']>;
-  condition?: InputMaybe<ConditionEnum>;
-  dimension?: InputMaybe<UpdateDimensionInput>;
-  ean?: InputMaybe<Scalars['String']['input']>;
-  installmentPayments?: InputMaybe<Array<UpdateInstallmentInput>>;
-  isbn?: InputMaybe<Scalars['String']['input']>;
-  personalizationOptions?: InputMaybe<Array<Scalars['String']['input']>>;
-  price?: InputMaybe<Scalars['Float']['input']>;
-  sku?: InputMaybe<Scalars['String']['input']>;
-  upc?: InputMaybe<Scalars['String']['input']>;
-  variantCover?: InputMaybe<Scalars['String']['input']>;
-  variantMedia?: InputMaybe<Array<UpdateMediaInput>>;
-  warranties?: InputMaybe<Array<UpdateWarrantyInput>>;
-  weight?: InputMaybe<Scalars['Float']['input']>;
-};
-
 export type UpdateWarehouseInput = {
   addressId?: InputMaybe<Scalars['ID']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type UpdateWarrantyInput = {
-  coverage?: InputMaybe<Scalars['String']['input']>;
-  instructions?: InputMaybe<Scalars['String']['input']>;
-  months?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type Variant = {
@@ -1940,6 +1869,9 @@ export type CreateProductMutation = {
     categories?: Array<{
       __typename?: 'ProductCategory';
       categoryId?: string | null;
+      categoryName?: string | null;
+      categoryDescription?: string | null;
+      categoryCover?: string | null;
     }> | null;
   };
 };
@@ -2108,6 +2040,7 @@ export type FindProductByIdQuery = {
       barcode?: string | null;
       variantCover?: string | null;
       personalizationOptions?: Array<string> | null;
+      isArchived?: boolean | null;
       attributes: Array<{
         __typename?: 'Attribute';
         key: string;
@@ -2278,118 +2211,6 @@ export type FindAllVariantsToCreateStockQuery = {
         }>;
       }> | null;
     }>;
-  };
-};
-
-export type AddVariantToProductMutationVariables = Exact<{
-  input: CreateVariantInput;
-}>;
-
-export type AddVariantToProductMutation = {
-  __typename?: 'Mutation';
-  addVariant: {
-    __typename?: 'Product';
-    variants?: Array<{
-      __typename?: 'Variant';
-      id: string;
-      price: number;
-      condition: ConditionEnum;
-      weight?: number | null;
-      sku: string;
-      ean?: string | null;
-      upc?: string | null;
-      isbn?: string | null;
-      barcode?: string | null;
-      variantCover?: string | null;
-      personalizationOptions?: Array<string> | null;
-      attributes: Array<{
-        __typename?: 'Attribute';
-        key: string;
-        value: string;
-      }>;
-      dimension?: {
-        __typename?: 'Dimension';
-        height: number;
-        length: number;
-        width: number;
-      } | null;
-      installmentPayments?: Array<{
-        __typename?: 'Installment';
-        interestRate: number;
-        months: number;
-      }> | null;
-      variantMedia?: Array<{
-        __typename?: 'Media';
-        mediaType: MediaTypeEnum;
-        position: number;
-        productId?: string | null;
-        url: string;
-        variantId?: string | null;
-      }> | null;
-      warranties?: Array<{
-        __typename?: 'Warranty';
-        coverage: string;
-        instructions: string;
-        months: number;
-      }> | null;
-    }> | null;
-  };
-};
-
-export type UpdateVariantInProductMutationVariables = Exact<{
-  id: Scalars['String']['input'];
-  productId: Scalars['String']['input'];
-  input: UpdateVariantInput;
-}>;
-
-export type UpdateVariantInProductMutation = {
-  __typename?: 'Mutation';
-  updateVariant: {
-    __typename?: 'Product';
-    variants?: Array<{
-      __typename?: 'Variant';
-      id: string;
-      barcode?: string | null;
-      condition: ConditionEnum;
-      weight?: number | null;
-      ean?: string | null;
-      isbn?: string | null;
-      personalizationOptions?: Array<string> | null;
-      price: number;
-      sku: string;
-      upc?: string | null;
-      variantCover?: string | null;
-      attributes: Array<{
-        __typename?: 'Attribute';
-        key: string;
-        value: string;
-      }>;
-      dimension?: {
-        __typename?: 'Dimension';
-        height: number;
-        length: number;
-        width: number;
-      } | null;
-      installmentPayments?: Array<{
-        __typename?: 'Installment';
-        interestRate: number;
-        months: number;
-      }> | null;
-      variantMedia?: Array<{
-        __typename?: 'Media';
-        mediaType: MediaTypeEnum;
-        position: number;
-        productId?: string | null;
-        url: string;
-        variantId?: string | null;
-      }> | null;
-      warranties?: Array<{
-        __typename?: 'Warranty';
-        coverage: string;
-        instructions: string;
-        months: number;
-      }> | null;
-    }> | null;
   };
 };
 
@@ -6381,6 +6202,18 @@ export const CreateProductDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'categoryId' },
                       },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'categoryName' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'categoryDescription' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'categoryCover' },
+                      },
                     ],
                   },
                 },
@@ -7074,6 +6907,10 @@ export const FindProductByIdDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'personalizationOptions' },
                       },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'isArchived' },
+                      },
                     ],
                   },
                 },
@@ -7760,433 +7597,6 @@ export const FindAllVariantsToCreateStockDocument = {
 } as unknown as DocumentNode<
   FindAllVariantsToCreateStockQuery,
   FindAllVariantsToCreateStockQueryVariables
->;
-export const AddVariantToProductDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'addVariantToProduct' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'input' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'CreateVariantInput' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'addVariant' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'input' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'input' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'variants' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'price' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'condition' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'weight' },
-                      },
-                      { kind: 'Field', name: { kind: 'Name', value: 'sku' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'ean' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'upc' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'isbn' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'barcode' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'variantCover' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'personalizationOptions' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'attributes' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'key' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'value' },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'dimension' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'height' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'length' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'width' },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'installmentPayments' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'interestRate' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'months' },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'variantMedia' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'mediaType' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'position' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'productId' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'url' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'variantId' },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'warranties' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'coverage' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'instructions' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'months' },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  AddVariantToProductMutation,
-  AddVariantToProductMutationVariables
->;
-export const UpdateVariantInProductDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'updateVariantInProduct' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'productId' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'input' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'UpdateVariantInput' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'updateVariant' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'id' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'id' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'productId' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'productId' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'input' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'input' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'variants' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'attributes' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'key' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'value' },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'barcode' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'condition' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'weight' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'dimension' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'height' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'length' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'width' },
-                            },
-                          ],
-                        },
-                      },
-                      { kind: 'Field', name: { kind: 'Name', value: 'ean' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'installmentPayments' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'interestRate' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'months' },
-                            },
-                          ],
-                        },
-                      },
-                      { kind: 'Field', name: { kind: 'Name', value: 'isbn' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'personalizationOptions' },
-                      },
-                      { kind: 'Field', name: { kind: 'Name', value: 'price' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'sku' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'upc' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'variantCover' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'variantMedia' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'mediaType' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'position' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'productId' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'url' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'variantId' },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'warranties' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'coverage' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'instructions' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'months' },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  UpdateVariantInProductMutation,
-  UpdateVariantInProductMutationVariables
 >;
 export const ArchiveVariantOfProductDocument = {
   kind: 'Document',

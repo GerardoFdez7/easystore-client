@@ -17,6 +17,7 @@ export type Variant = {
   attributes: Attribute[];
   condition: string;
   variantCover?: string;
+  isArchived?: boolean;
 };
 
 export type Attribute = {
