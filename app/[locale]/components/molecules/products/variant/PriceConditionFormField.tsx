@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useState } from 'react';
 import {
   FormField,
   FormItem,
@@ -17,29 +18,39 @@ import {
 } from '@shadcn/ui/select';
 import type { Condition } from '@lib/types/variant';
 import { useTranslations } from 'next-intl';
+import { formatPriceWithCommasAndDots } from '@lib/utils/input-formatters';
 
 interface PriceConditionFormFieldProps {
   currency?: string;
 }
 
 export default function PriceConditionFormField({
-  currency = process.env.NEXT_PUBLIC_DEFAULT_CURRENCY || 'Q',
+  currency = process.env.NEXT_PUBLIC_DEFAULT_CURRENCY,
 }: PriceConditionFormFieldProps) {
   const { control } = useFormContext();
   const t = useTranslations('Variant');
+  const [isFocused, setIsFocused] = useState(false);
 
-  const onPriceChange = (value: string, onChange: (value: string) => void) => {
+  const onPriceChange = (value: string, onChange: (value: number) => void) => {
+    // Remove all non-numeric characters except the decimal point
     const cleaned = value.replace(/,/g, '.').replace(/[^\d.]/g, '');
     const parts = cleaned.split('.');
     const normalized =
       parts.length <= 2 ? cleaned : `${parts[0]}.${parts.slice(1).join('')}`;
-    onChange(normalized);
+
+    // Convert to number for storage
+    const numValue = normalized === '' ? 0 : Number(normalized);
+    if (!Number.isNaN(numValue)) {
+      onChange(numValue);
+    }
   };
 
-  const onPriceBlur = (value: string, onChange: (value: string) => void) => {
-    if (value === '' || value === null || value === undefined) return;
-    const n = Number(value);
-    if (!Number.isNaN(n)) onChange(n.toFixed(2));
+  const onPriceBlur = (value: number) => {
+    setIsFocused(false);
+    // Value stays as number in the form, display formatting happens in input rendering
+    if (typeof value !== 'number' || Number.isNaN(value)) {
+      return;
+    }
   };
 
   return (
@@ -65,14 +76,21 @@ export default function PriceConditionFormField({
                   required={true}
                   className="sm:w-60"
                   placeholder={t('pricePlaceholder')}
-                  value={String(field.value ?? '')}
+                  value={
+                    !isFocused &&
+                    typeof field.value === 'number' &&
+                    !Number.isNaN(field.value)
+                      ? formatPriceWithCommasAndDots(field.value)
+                      : field.value || ''
+                  }
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => {
+                    onPriceBlur(field.value);
+                    field.onBlur();
+                  }}
                   onChange={(e) =>
                     onPriceChange(e.target.value, field.onChange)
                   }
-                  onBlur={() => {
-                    onPriceBlur(field.value, field.onChange);
-                    field.onBlur();
-                  }}
                   aria-invalid={!!fieldState.error}
                 />
               </div>

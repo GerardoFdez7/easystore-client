@@ -70,6 +70,7 @@ mutation createProduct($input: CreateProductInput!) {
 
 mutation update($id: String!, $input: UpdateProductInput!) {
   updateProduct(id: $id, input: $input) {
+    id
     brand
     categories {
       categoryId
@@ -135,6 +136,7 @@ mutation update($id: String!, $input: UpdateProductInput!) {
         months
       }
       weight
+      isArchived
     }
   }
 }

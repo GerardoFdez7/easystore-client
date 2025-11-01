@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import { Product } from '@graphql/generated';
 import ProductStatus from '@atoms/products/ProductStatus';
 import BadgeTag from '@atoms/shared/BadgeTag';
+import { formatPriceWithCommasAndDots } from '@lib/utils/input-formatters';
 
 interface ProductCardProps {
   product: Product;
@@ -198,7 +199,9 @@ export function ProductCard({ product }: ProductCardProps) {
               <div className="flex items-center justify-between">
                 <span className="text-foreground text-sm">
                   {process.env.NEXT_PUBLIC_DEFAULT_CURRENCY}
-                  {product.variants?.[0]?.price}
+                  {product.variants?.[0]?.price
+                    ? formatPriceWithCommasAndDots(product.variants[0].price)
+                    : '0.00'}
                 </span>
                 <ProductStatus product={product} />
               </div>
@@ -215,9 +218,11 @@ export function ProductCard({ product }: ProductCardProps) {
                     className="text-xs"
                   />
                 )}
-                {product.tags?.slice(0, 3).map((tag) => (
-                  <BadgeTag key={tag} tag={tag} className="text-xs" />
-                ))}
+                {product.tags
+                  ?.slice(0, 3)
+                  .map((tag) => (
+                    <BadgeTag key={tag} tag={tag} className="text-xs" />
+                  ))}
               </div>
             </div>
           </CardContent>

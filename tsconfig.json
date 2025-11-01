@@ -20,7 +20,6 @@
         "name": "next"
       }
     ],
-    "baseUrl": ".",
     "paths": {
       "@atoms/*": ["./app/[locale]/components/atoms/*"],
       "@molecules/*": ["./app/[locale]/components/molecules/*"],
@@ -28,10 +27,10 @@
       "@templates/*": ["./app/[locale]/components/templates/*"],
       "@shadcn/*": ["./app/[locale]/components/shadcn/*"],
       "@schemas/*": ["./app/[locale]/schemas/*"],
-      "@hooks/*": ["app/[locale]/hooks/*"],
-      "@types/*": ["lib/types/*"],
+      "@hooks/*": ["./app/[locale]/hooks/*"],
+      "@types/*": ["./lib/types/*"],
       "@lib/*": ["./lib/*"],
-      "@contexts/*": ["lib/contexts/*"],
+      "@contexts/*": ["./lib/contexts/*"],
       "utils": ["./lib/utils/cn"],
       "@graphql/*": ["./lib/graphql/*"],
       "@consts/*": ["./lib/consts/*"],

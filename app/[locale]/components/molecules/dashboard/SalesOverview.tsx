@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from 'app/[locale]/components/shadcn/ui/table';
+} from '@shadcn/ui/table';
 import { useTranslations } from 'next-intl';
 
 const orders = [

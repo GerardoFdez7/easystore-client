@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Product } from '@lib/graphql/generated';
 import ProductStatus from '@atoms/products/ProductStatus';
+import { formatPriceWithCommasAndDots } from '@lib/utils/input-formatters';
 
 interface ProductTableRowProps {
   product: Product;
@@ -61,7 +62,9 @@ export function ProductTableRow({
       <TableCell>{product.variants?.[0].sku}</TableCell>
       <TableCell>
         {process.env.NEXT_PUBLIC_DEFAULT_CURRENCY}
-        {product.variants?.[0].price}
+        {product.variants?.[0]?.price
+          ? formatPriceWithCommasAndDots(product.variants[0].price)
+          : '0.00'}
       </TableCell>
       <TableCell>{product.variants?.length}</TableCell>
       <TableCell>{product.categories?.[0]?.categoryName || '-'}</TableCell>

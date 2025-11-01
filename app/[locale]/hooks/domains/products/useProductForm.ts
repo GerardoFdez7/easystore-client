@@ -261,19 +261,6 @@ export function useProductForm({
     reValidateMode: 'onChange', // Re-validate on change after first validation
   });
 
-  // Update form resolver when schema changes (important for variants validation)
-  // Only validate variants after user has interacted with the form
-  useEffect(() => {
-    form.clearErrors();
-
-    // Only validate variants if user has interacted and we're dealing with new products
-    if (hasUserInteracted) {
-      // Only validate the variants field specifically
-      void form.trigger('variants');
-      void form.trigger('cover');
-    }
-  }, [productFormSchema, form, hasUserInteracted, isNew]);
-
   // Use formState to track isDirty - this causes re-renders when form changes
   const { isDirty } = useFormState({ control: form.control });
 

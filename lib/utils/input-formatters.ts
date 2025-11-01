@@ -58,3 +58,15 @@ export const handleDecimalInputBlur = (
   const formattedValue = formatDecimalInput(value);
   setValue(formattedValue);
 };
+
+/**
+ * Formats a price number with commas as thousands separators and dot for decimals
+ * @param price - The price number to format
+ * @returns The formatted price string (e.g., "151,933,432.34")
+ */
+export const formatPriceWithCommasAndDots = (price: number): string => {
+  return price.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+};

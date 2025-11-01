@@ -1885,6 +1885,7 @@ export type UpdateMutation = {
   __typename?: 'Mutation';
   updateProduct: {
     __typename?: 'Product';
+    id: string;
     brand?: string | null;
     cover: string;
     createdAt: any;
@@ -1929,6 +1930,7 @@ export type UpdateMutation = {
       upc?: string | null;
       variantCover?: string | null;
       weight?: number | null;
+      isArchived?: boolean | null;
       attributes: Array<{
         __typename?: 'Attribute';
         key: string;
@@ -6289,6 +6291,7 @@ export const UpdateDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'brand' } },
                 {
                   kind: 'Field',
@@ -6513,6 +6516,10 @@ export const UpdateDocument = {
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'weight' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'isArchived' },
                       },
                     ],
                   },

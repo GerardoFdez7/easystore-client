@@ -40,6 +40,7 @@ import {
   useRestoreVariant,
   useDeleteVariant,
 } from '@hooks/domains/products/variant';
+import { formatPriceWithCommasAndDots } from '@lib/utils/input-formatters';
 
 interface VariantsFormFieldProps {
   productId: string;
@@ -231,7 +232,7 @@ export default function VariantsFormField({
                                 <TableCell>{variant.codes.sku}</TableCell>
                                 <TableCell>
                                   {process.env.NEXT_PUBLIC_DEFAULT_CURRENCY}
-                                  {variant.price.toFixed(2)}
+                                  {formatPriceWithCommasAndDots(variant.price)}
                                 </TableCell>
                                 <TableCell>{variant.condition}</TableCell>
                                 <TableCell>
@@ -298,7 +299,9 @@ export default function VariantsFormField({
                                     <TableCell>{variant.sku}</TableCell>
                                     <TableCell>
                                       {process.env.NEXT_PUBLIC_DEFAULT_CURRENCY}
-                                      {variant.price}
+                                      {formatPriceWithCommasAndDots(
+                                        variant.price,
+                                      )}
                                     </TableCell>
                                     <TableCell>{variant.condition}</TableCell>
                                     <TableCell>

@@ -28,7 +28,6 @@ export default function NameFormField() {
               <Input
                 {...field}
                 id="name"
-                required={true}
                 placeholder={t('namePlaceholder')}
                 value={String(field.value ?? '')}
                 onChange={field.onChange}
