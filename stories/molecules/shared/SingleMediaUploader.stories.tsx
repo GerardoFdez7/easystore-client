@@ -43,7 +43,7 @@ const mockCallbacks = {
     console.error('Upload error:', error);
   },
   onMediaProcessed: async (
-    processedData?: import('../../../lib/types/media').ProcessedData | null,
+    processedData?: import('@lib/types/media').ProcessedData | null,
   ) => {
     console.log('Media processed:', processedData);
   },

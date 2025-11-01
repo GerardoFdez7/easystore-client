@@ -10,7 +10,7 @@ import {
   UpdateTenantProfileDocument,
   UpdateTenantProfileMutation,
   UpdateTenantProfileMutationVariables,
-} from '@lib/graphql/generated';
+} from '@graphql/generated';
 
 export type Profile = {
   ownerName: string;

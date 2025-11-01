@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import type { ProcessedData } from '@lib/types/media';
-import type { Media } from '@lib/graphql/generated';
+import type { Media } from '@graphql/generated';
 
 interface MediaEntity {
   cover?: string | null;

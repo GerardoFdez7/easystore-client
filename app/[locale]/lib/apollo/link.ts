@@ -1,6 +1,6 @@
 import { HttpLink } from '@apollo/client';
 import { ErrorLink } from '@apollo/client/link/error';
-import { handleApolloError } from '@lib/errors/error.handler';
+import { handleApolloError } from '@errors/error.handler';
 import {
   CombinedGraphQLErrors,
   CombinedProtocolErrors,

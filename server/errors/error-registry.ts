@@ -7,7 +7,7 @@ import {
   ErrorRegistry,
   ErrorContext,
   ErrorMatchResult,
-} from '@lib/types/error';
+} from '@errors/error.types';
 
 import en from '../../messages/en.json';
 import es from '../../messages/es.json';
@@ -463,7 +463,7 @@ const httpStatusHandlers: ErrorHandler[] = [
       // Show a developer-friendly warning for unexpected 404s
       if (isDevelopment) {
         toast.warning('Unexpected 404', {
-          description: `Operation "${error.path?.[0]}" returned Not Found. Please handle it at your component, showing a friendly message to the user and add it to the expected operations at \"lib/errors/error-registry.ts. line 195"\.`,
+          description: `Operation "${error.path?.[0]}" returned Not Found. Please handle it at your component, showing a friendly message to the user and add it to the expected operations at \"server/errors/error-registry.ts. line 195"\.`,
         });
       } else {
         // In production, show a generic error to users

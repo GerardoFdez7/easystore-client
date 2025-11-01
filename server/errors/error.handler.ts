@@ -1,6 +1,6 @@
 import { GraphQLFormattedError } from 'graphql';
 import { toast } from 'sonner';
-import { ErrorContext } from '@lib/types/error';
+import { ErrorContext } from '@errors/error.types';
 import { processGraphQLError } from './error-registry';
 
 import en from '../../messages/en.json';

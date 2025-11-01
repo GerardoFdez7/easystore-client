@@ -6,7 +6,7 @@ import {
   FindWarehouseByIdQueryVariables,
   FindWarehouseByIdQuery,
   StockPerWarehouseSortBy,
-} from '@lib/graphql/generated';
+} from '@graphql/generated';
 import { InventoryItem } from '@lib/types/inventory';
 import { useQuery } from '@apollo/client/react';
 

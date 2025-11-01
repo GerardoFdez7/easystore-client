@@ -71,11 +71,11 @@ Reasoning: Contains business logic keywords (limit, exceeded)
 
 ### Core Components
 
-1. **Error Registry** (`lib/errors/error-registry.ts`) - Centralized error matching and handling system with console logging control
-2. **Error Handler** (`lib/errors/error.handler.ts`) - Main entry point for Apollo Client errors
-3. **Priority Calculator** (`lib/errors/priority-calculator.ts`) - Automated priority assignment and conflict detection
-4. **Apollo Link** (`lib/apollo/link.ts`) - Error middleware integration
-5. **Type Definitions** (`lib/types/error.ts`) - TypeScript interfaces for type safety
+1. **Error Registry** (`server/errors/error-registry.ts`) - Centralized error matching and handling system with console logging control
+2. **Error Handler** (`server/errors/error.handler.ts`) - Main entry point for Apollo Client errors
+3. **Priority Calculator** (`server/errors/priority-calculator.ts`) - Automated priority assignment and conflict detection
+4. **Apollo Link** (`app/locale/lib/apollo/link.ts`) - Error middleware integration
+5. **Type Definitions** (`server/error.types.ts`) - TypeScript interfaces for type safety
 
 ### Priority-Based Error Matching
 
@@ -126,7 +126,7 @@ Always check for conflicts before adding your handler to the registry.
 
 #### 4. Add to Registry
 
-Add your handler to the appropriate category in `lib/errors/error-registry.ts`:
+Add your handler to the appropriate category in `server/errors/error-registry.ts`:
 
 ```typescript
 const databaseConstraintHandlers: ErrorHandler[] = [

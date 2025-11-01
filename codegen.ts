@@ -3,9 +3,9 @@ import { CodegenConfig } from '@graphql-codegen/cli';
 const config: CodegenConfig = {
   overwrite: true,
   schema: process.env.NEXT_PUBLIC_GRAPHQL_URI,
-  documents: ['lib/graphql/**/*.gql'],
+  documents: ['server/graphql/**/*.gql'],
   generates: {
-    './lib/graphql/generated.ts': {
+    './server/graphql/generated.ts': {
       plugins: ['typescript', 'typescript-operations', 'typed-document-node'],
     },
   },

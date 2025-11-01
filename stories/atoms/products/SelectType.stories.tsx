@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import SelectType from '@atoms/products/SelectType';
-import { TypeEnum } from '@lib/graphql/generated';
+import { TypeEnum } from '@graphql/generated';
 
 const meta: Meta<typeof SelectType> = {
   title: 'Atoms/Products/SelectType',

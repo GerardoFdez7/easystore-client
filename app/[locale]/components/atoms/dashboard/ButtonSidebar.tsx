@@ -55,7 +55,7 @@ export default function ButtonSidebar({
       className={cn(
         'text-text h-12 w-full cursor-pointer justify-start',
         isSelected
-          ? 'dark:!bg-hover dark:hover:!bg-hover !bg-[#d7d7d7] hover:!bg-[#d7d7d7]'
+          ? 'dark:bg-hover! dark:hover:bg-hover! bg-[#d7d7d7]! hover:bg-[#d7d7d7]!'
           : 'text-foreground hover:text-title dark:hover:bg-hover hover:bg-[#d7d7d7]',
         className,
       )}

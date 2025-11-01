@@ -4,7 +4,7 @@ import { Checkbox } from '@shadcn/ui/checkbox';
 import { TableCell, TableRow } from '@shadcn/ui/table';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Product } from '@lib/graphql/generated';
+import { Product } from '@graphql/generated';
 import ProductStatus from '@atoms/products/ProductStatus';
 import { formatPriceWithCommasAndDots } from '@lib/utils/input-formatters';
 
