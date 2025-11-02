@@ -1,34 +1,32 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { Warehouse, Plus } from 'lucide-react';
-import { FindInventoryQueryVariables } from '@graphql/generated';
+import {
+  FindInventoryQueryVariables,
+  CreateWarehouseMutationVariables,
+  UpdateWarehouseMutationVariables,
+} from '@graphql/generated';
+import type { SortDirection } from '@lib/types/sort';
+import type { SortField } from '@lib/types/inventory';
 import { useInventory } from '@hooks/domains/inventory';
+import { useWarehouseManagement } from '@hooks/domains/inventory';
 import WarehouseCombobox from '@molecules/inventory/WarehouseCombobox';
 import InventoryTable from '@molecules/inventory/InventoryTable';
 import InventoryTableSkeleton from '@molecules/inventory/InventoryTableSkeleton';
 import InventoryActionButtons from '@molecules/inventory/InventoryActionButtons';
 import EmptyState from '@molecules/shared/EmptyState';
+import SearchBar from '@atoms/shared/SearchBar';
 import AddStockDialog from '@organisms/inventory/AddStockDialog';
 import WarehouseManagementDialog from '@organisms/inventory/WarehouseManagementDialog';
-import { useRouter } from 'next/navigation';
-import { isUuidV7 } from '@lib/utils';
-import { buildInventoryPath } from '@lib/utils/path';
-import { useMutation } from '@apollo/client/react';
-import {
-  RemoveStockFromWarehouseDocument,
-  type RemoveStockFromWarehouseMutation,
-  type RemoveStockFromWarehouseMutationVariables,
-  FindWarehouseByIdDocument,
-} from '@graphql/generated';
-import { toast } from 'sonner';
+import WarehouseForm from '@molecules/inventory/WarehouseForm';
 
 export default function MainInventory() {
   const t = useTranslations('Inventory');
   const tProduct = useTranslations('Products');
-  const router = useRouter();
   const [selectedWarehouseId, setSelectedWarehouseId] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [isAddStockDialogOpen, setIsAddStockDialogOpen] = useState(false);
   const [isWarehouseManagementOpen, setIsWarehouseManagementOpen] =
     useState(false);
@@ -70,60 +68,47 @@ export default function MainInventory() {
     selectedWarehouseId || undefined,
   );
 
-  const [removeStock] = useMutation<
-    RemoveStockFromWarehouseMutation,
-    RemoveStockFromWarehouseMutationVariables
-  >(RemoveStockFromWarehouseDocument, {
-    awaitRefetchQueries: true,
-    errorPolicy: 'all',
-  });
-
-  const handleEdit = (row: {
-    warehouseName?: string;
-    warehouseId: string;
-    variantSku: string;
-  }) => {
-    router.push(buildInventoryPath(row.warehouseName || '', row.variantSku));
-  };
-
-  const handleDelete = async (row: { id: string; warehouseId: string }) => {
-    try {
-      if (!isUuidV7(row.id) || !isUuidV7(row.warehouseId)) {
-        toast.error(
-          t('errorDeletingStock', {
-            default: 'Failed to delete stock',
-          } as Record<string, string | number | Date>),
-        );
-        return;
-      }
-      await removeStock({
-        variables: { warehouseId: row.warehouseId, stockId: row.id },
-        refetchQueries: selectedWarehouseId
-          ? [
-              {
-                query: FindWarehouseByIdDocument,
-                variables: { id: selectedWarehouseId },
-              },
-            ]
-          : undefined,
-      });
-      toast.success(
-        t('stockDeletedSuccessfully', {
-          default: 'Stock deleted',
-        } as Record<string, string | number | Date>) || 'Stock deleted',
-      );
-      await refetch();
-    } catch (_e) {
-      toast.error(
-        t('errorDeletingStock', {
-          default: 'Failed to delete stock',
-        } as Record<string, string | number | Date>) ||
-          'Failed to delete stock',
-      );
+  // Warehouse management for creating the first warehouse
+  const { createWarehouse, isCreating } = useWarehouseManagement();
+  const handleWarehouseSubmit = async (
+    data:
+      | CreateWarehouseMutationVariables['input']
+      | UpdateWarehouseMutationVariables['input'],
+  ) => {
+    const result = await createWarehouse(
+      data as CreateWarehouseMutationVariables['input'],
+    );
+    if (result) {
+      setIsWarehouseFormOpen(false);
+      void refetch().catch((_error) => {});
     }
   };
+  // Handle warehouse form cancellation
+  const handleWarehouseCancel = () => {
+    setIsWarehouseFormOpen(false);
+  };
 
-  if (error) {
+  const handleSortChange = useCallback(
+    (field: SortField, direction: SortDirection) => {
+      setSortField(field);
+      setSortDirection(direction);
+    },
+    [],
+  );
+
+  const handleCreateStock = useCallback(() => {
+    setIsAddStockDialogOpen(true);
+  }, []);
+
+  const handleStockAdded = useCallback(() => {
+    void refetch().catch((_error) => {});
+  }, [refetch]);
+
+  // Only show warehouse creation UI for actual "no warehouses" errors
+  const isNoWarehousesError =
+    error && !error.message?.toLowerCase().includes('no variants found');
+
+  if (isNoWarehousesError) {
     return (
       <>
         <EmptyState
@@ -132,18 +117,21 @@ export default function MainInventory() {
           description={t('noWarehousesDescription')}
           buttonText={t('createWarehouse')}
           buttonIcon={Plus}
-          onButtonClick={() => setIsWarehouseManagementOpen(true)}
+          onButtonClick={() => setIsWarehouseFormOpen(true)}
         />
-        <WarehouseManagementDialog
-          open={isWarehouseManagementOpen}
-          onOpenChange={setIsWarehouseManagementOpen}
+        <WarehouseForm
+          open={isWarehouseFormOpen}
+          onOpenChange={setIsWarehouseFormOpen}
+          onSubmit={handleWarehouseSubmit}
+          onCancel={handleWarehouseCancel}
+          isSubmitting={isCreating}
         />
       </>
     );
   }
 
   return (
-    <main className="mx-4 flex w-full max-w-7xl flex-col gap-4 xl:mx-auto">
+    <main className="flex w-full flex-col gap-4 px-4 xl:mx-auto">
       <InventoryActionButtons
         loading={loading}
         onAddStockClick={() => setIsAddStockDialogOpen(true)}
@@ -166,23 +154,23 @@ export default function MainInventory() {
         <InventoryTable
           variables={variables}
           inventory={inventory}
-          onCreateStock={() => setIsAddStockDialogOpen(true)}
-          onEditRow={handleEdit}
-          onDeleteRow={(row) => {
-            void handleDelete(row);
-          }}
+          onCreateStock={handleCreateStock}
+          onSortChange={handleSortChange}
+          sortField={sortField}
+          sortDirection={sortDirection}
         />
       )}
       <AddStockDialog
         open={isAddStockDialogOpen}
         onOpenChange={setIsAddStockDialogOpen}
-        onStockAdded={() => {
-          void refetch().catch((_error) => {});
-        }}
+        onStockAdded={handleStockAdded}
       />
       <WarehouseManagementDialog
         open={isWarehouseManagementOpen}
         onOpenChange={setIsWarehouseManagementOpen}
+        onLastWarehouseDeleted={() => {
+          void refetch().catch((_error) => {});
+        }}
       />
     </main>
   );

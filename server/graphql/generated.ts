@@ -1298,26 +1298,16 @@ export type CreateCategoryMutation = {
   __typename?: 'Mutation';
   createCategory: {
     __typename?: 'Category';
+    id: string;
     name: string;
-    description: string;
+    description?: string | null;
     cover: string;
-    updatedAt: any;
-    createdAt: any;
     subCategories: Array<{
       __typename?: 'Category';
+      id: string;
       cover: string;
-      createdAt: any;
-      description: string;
+      description?: string | null;
       name: string;
-      updatedAt: any;
-      subCategories: Array<{
-        __typename?: 'Category';
-        cover: string;
-        createdAt: any;
-        description: string;
-        name: string;
-        updatedAt: any;
-      }>;
     }>;
   };
 };
@@ -1331,15 +1321,23 @@ export type UpdateCategoryMutation = {
   __typename?: 'Mutation';
   updateCategory: {
     __typename?: 'Category';
+    id: string;
     name: string;
-    description: string;
+    description?: string | null;
     cover: string;
-    createdAt: any;
     subCategories: Array<{
       __typename?: 'Category';
+      id: string;
       name: string;
-      description: string;
+      description?: string | null;
       cover: string;
+      subCategories: Array<{
+        __typename?: 'Category';
+        id: string;
+        name: string;
+        description?: string | null;
+        cover: string;
+      }>;
     }>;
   };
 };
@@ -1350,11 +1348,7 @@ export type DeleteMutationVariables = Exact<{
 
 export type DeleteMutation = {
   __typename?: 'Mutation';
-  deleteCategory: {
-    __typename?: 'Category';
-    name: string;
-    description: string;
-  };
+  deleteCategory: { __typename?: 'Category'; name: string };
 };
 
 export type FindCategoryByIdQueryVariables = Exact<{
@@ -1365,39 +1359,23 @@ export type FindCategoryByIdQuery = {
   __typename?: 'Query';
   getCategoryById: {
     __typename?: 'Category';
+    id: string;
     name: string;
-    description: string;
+    description?: string | null;
     cover: string;
     updatedAt: any;
     createdAt: any;
     subCategories: Array<{
       __typename?: 'Category';
+      id: string;
       name: string;
-      description: string;
+      description?: string | null;
       cover: string;
-      createdAt: any;
-      updatedAt: any;
-      subCategories: Array<{
-        __typename?: 'Category';
-        name: string;
-        description: string;
-        cover: string;
-        createdAt: any;
-        updatedAt: any;
-        subCategories: Array<{
-          __typename?: 'Category';
-          cover: string;
-          createdAt: any;
-          description: string;
-          name: string;
-          updatedAt: any;
-        }>;
-      }>;
     }>;
   };
 };
 
-export type FindCategoriesForPickerQueryVariables = Exact<{
+export type FindAllCategoriesQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -1415,32 +1393,123 @@ export type FindAllCategoriesQuery = {
     hasMore: boolean;
     categories: Array<{
       __typename?: 'Category';
+      id: string;
       name: string;
-      description: string;
+      description?: string | null;
       cover: string;
       updatedAt: any;
       createdAt: any;
+      parentId?: string | null;
       subCategories: Array<{
         __typename?: 'Category';
+        id: string;
+        parentId?: string | null;
         name: string;
-        description: string;
+        description?: string | null;
         cover: string;
         createdAt: any;
         updatedAt: any;
+      }>;
+    }>;
+  };
+};
+
+export type FindCategoriesForPickerQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  parentId?: InputMaybe<Scalars['ID']['input']>;
+  sortBy?: InputMaybe<SortBy>;
+  sortOrder?: InputMaybe<SortOrder>;
+  includeSubcategories?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+export type FindCategoriesForPickerQuery = {
+  __typename?: 'Query';
+  getAllCategories: {
+    __typename?: 'PaginatedCategoriesType';
+    total: number;
+    hasMore: boolean;
+    categories: Array<{
+      __typename?: 'Category';
+      id: string;
+      name: string;
+      cover: string;
+    }>;
+  };
+};
+
+export type FindCategoriesTreeQueryVariables = Exact<{
+  sortBy?: InputMaybe<SortBy>;
+  sortOrder?: InputMaybe<SortOrder>;
+}>;
+
+export type FindCategoriesTreeQuery = {
+  __typename?: 'Query';
+  getAllCategories: {
+    __typename?: 'PaginatedCategoriesType';
+    categories: Array<{
+      __typename?: 'Category';
+      id: string;
+      name: string;
+      parentId?: string | null;
+      subCategories: Array<{
+        __typename?: 'Category';
+        id: string;
+        parentId?: string | null;
+        name: string;
         subCategories: Array<{
           __typename?: 'Category';
+          id: string;
+          parentId?: string | null;
           name: string;
-          description: string;
-          cover: string;
-          createdAt: any;
-          updatedAt: any;
           subCategories: Array<{
             __typename?: 'Category';
-            cover: string;
-            createdAt: any;
-            description: string;
+            id: string;
+            parentId?: string | null;
             name: string;
-            updatedAt: any;
+            subCategories: Array<{
+              __typename?: 'Category';
+              id: string;
+              parentId?: string | null;
+              name: string;
+              subCategories: Array<{
+                __typename?: 'Category';
+                id: string;
+                parentId?: string | null;
+                name: string;
+                subCategories: Array<{
+                  __typename?: 'Category';
+                  id: string;
+                  parentId?: string | null;
+                  name: string;
+                  subCategories: Array<{
+                    __typename?: 'Category';
+                    id: string;
+                    parentId?: string | null;
+                    name: string;
+                    subCategories: Array<{
+                      __typename?: 'Category';
+                      id: string;
+                      parentId?: string | null;
+                      name: string;
+                      subCategories: Array<{
+                        __typename?: 'Category';
+                        id: string;
+                        parentId?: string | null;
+                        name: string;
+                        subCategories: Array<{
+                          __typename?: 'Category';
+                          id: string;
+                          parentId?: string | null;
+                          name: string;
+                        }>;
+                      }>;
+                    }>;
+                  }>;
+                }>;
+              }>;
+            }>;
           }>;
         }>;
       }>;
@@ -1672,14 +1741,26 @@ export type FindInventoryQuery = {
       __typename?: 'Warehouse';
       id: string;
       name: string;
+      createdAt: any;
+      updatedAt: any;
+      addressId: string;
+      addressLine1?: string | null;
+      city?: string | null;
+      countryCode?: string | null;
+      postalCode?: string | null;
       stockPerWarehouses: Array<{
         __typename?: 'StockPerWarehouse';
         id: string;
+        warehouseId: string;
         qtyAvailable: number;
         qtyReserved: number;
+        lotNumber?: string | null;
+        serialNumbers?: Array<string> | null;
+        productLocation?: string | null;
         estimatedReplenishmentDate?: any | null;
-        productName?: string | null;
+        variantId: string;
         variantSku?: string | null;
+        productName?: string | null;
         variantFirstAttribute?: {
           __typename?: 'VariantAttribute';
           key: string;
@@ -2184,7 +2265,7 @@ export type RemoveVariantfromProductMutation = {
   __typename?: 'Mutation';
   removeVariant: {
     __typename?: 'Product';
-    variants?: Array<{ __typename?: 'Variant'; sku?: string | null }> | null;
+    variants?: Array<{ __typename?: 'Variant'; sku: string }> | null;
   };
 };
 
@@ -2219,6 +2300,18 @@ export type FindTenantProfileQuery = {
     domain?: string | null;
     logo?: string | null;
     defaultPhoneNumberId?: string | null;
+  };
+};
+
+export type FindTenantAuthInfoQueryVariables = Exact<{ [key: string]: never }>;
+
+export type FindTenantAuthInfoQuery = {
+  __typename?: 'Query';
+  getTenantById: {
+    __typename?: 'Tenant';
+    ownerName: string;
+    businessName?: string | null;
+    logo?: string | null;
   };
 };
 
@@ -5656,6 +5749,10 @@ export const FindInventoryDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'warehouseId' },
                             },
                             {
                               kind: 'Field',

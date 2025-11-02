@@ -1,5 +1,4 @@
 import type { Preview } from '@storybook/nextjs';
-import '../app/[locale]/globals.css';
 import { withNextIntl } from './decorators/withNextIntl';
 import { withNextThemes } from './decorators/withNextThemes';
 import { withApollo } from './decorators/withApollo';

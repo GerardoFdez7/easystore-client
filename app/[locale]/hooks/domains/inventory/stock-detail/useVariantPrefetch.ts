@@ -6,7 +6,7 @@ import {
   FindAllVariantsToCreateStockDocument,
   type FindAllVariantsToCreateStockQuery,
   type FindAllVariantsToCreateStockQueryVariables,
-  SortBy,
+  ProductSortBy,
   SortOrder,
 } from '@graphql/generated';
 
@@ -50,11 +50,10 @@ export function useVariantPrefetch(opts: Options) {
 
         const variables: FindAllVariantsToCreateStockQueryVariables = {
           page: 1,
-          limit: 20,
+          limit: 25,
           name: productName || undefined,
-          sortBy: SortBy.Name,
+          sortBy: ProductSortBy.Name,
           sortOrder: SortOrder.Asc,
-          includeSoftDeleted: false,
         };
 
         const res = await apollo.query<

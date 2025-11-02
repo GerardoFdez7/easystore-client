@@ -1383,7 +1383,10 @@
     "createdByTableHead": "Creado por",
     "dateTableHead": "Fecha",
     "previousButton": "Anterior",
-    "nextButton": "Siguiente"
+    "nextButton": "Siguiente",
+    "you": "Tú",
+    "reasonDetailsTitle": "Detalles de la Razón",
+    "reasonDetailsDescription": "Descripción completa de la razón para este movimiento de stock"
   },
   "StockDetail": {
     "updateSuccess": "Stock actualizado exitosamente",

@@ -1389,7 +1389,10 @@
     "createdByTableHead": "Criado por",
     "dateTableHead": "Data",
     "previousButton": "Anterior",
-    "nextButton": "Próximo"
+    "nextButton": "Próximo",
+    "you": "Você",
+    "reasonDetailsTitle": "Detalhes do motivo",
+    "reasonDetailsDescription": "Descrição completa do motivo para este movimento de estoque"
   },
   "StockDetail": {
     "updateSuccess": "Estoque atualizado com sucesso",

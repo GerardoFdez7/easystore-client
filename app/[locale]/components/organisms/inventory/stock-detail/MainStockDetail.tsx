@@ -25,12 +25,10 @@ import {
 import { useRouter } from 'next/navigation';
 import { normalizeWarehouseName } from '@lib/utils';
 import type { StockFormValues } from '@hooks/domains/inventory/stock-detail/useStockFormSchema';
-
 import StockHeader from '@molecules/stock-detail/StockHeader';
 import SerialChips from '@molecules/stock-detail/SerialChips';
 import UpdateReasonDialog from '@molecules/stock-detail/UpdateReasonDialog';
 import CalendarPicker from '@molecules/stock-detail/CalendarPicker';
-
 import { useCreateWarehouseStock as useCreateWarehouseStockByLookup } from '@hooks/domains/inventory/stock-detail/useCreateWarehouseStock';
 import { usePrefillExistingStock } from '@hooks/domains/inventory/stock-detail/usePrefillExistingStock';
 import { useResolveWarehouseId } from '@hooks/domains/inventory/stock-detail/useResolveWarehouseId';

@@ -8,7 +8,6 @@ import { Button } from '@shadcn/ui/button';
 import { Calendar } from '@shadcn/ui/calendar';
 import { Input } from '@shadcn/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@shadcn/ui/popover';
-
 import { es as dfEs, enUS as dfEnUS } from 'date-fns/locale';
 
 type Props = {
@@ -128,7 +127,7 @@ export default function CalendarPicker({
                 setText(formatDateByLocale(d, locale));
                 setOpen(false);
               }}
-              className="[&_[data-selected-single=true]]:!bg-title [&_[data-selected-single=true]]:!text-accent"
+              className="**:data-[selected-single=true]:bg-title! **:data-[selected-single=true]:text-accent!"
             />
           </PopoverContent>
         </Popover>

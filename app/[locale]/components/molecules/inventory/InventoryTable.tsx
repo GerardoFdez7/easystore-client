@@ -22,7 +22,6 @@ import EmptyState from '@molecules/shared/EmptyState';
 import { useTranslations } from 'next-intl';
 import TablePagination from '@molecules/shared/TablePagination';
 import SortableHeader from '@atoms/shared/SortableHeader';
-// Removed AlertDialog imports as Actions column was dropped
 
 type InventoryTableProps = {
   variables: FindInventoryQueryVariables;
@@ -40,11 +39,14 @@ type InventoryTableProps = {
 export default function InventoryTable({
   inventory,
   onCreateStock,
-  onEditRow,
-  onDeleteRow: _onDeleteRow,
+  onSortChange,
+  sortField: externalSortField,
+  sortDirection: externalSortDirection,
 }: InventoryTableProps) {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const sortField = externalSortField ?? 'variantFirstAttribute';
+  const sortDirection = externalSortDirection ?? 'ASC';
   const itemsPerPage = 25;
   const t = useTranslations('Inventory');
 
@@ -80,24 +82,22 @@ export default function InventoryTable({
   // Show empty state if no inventory items
   if (inventory.length === 0) {
     return (
-      <div className={cn('w-full', className)}>
-        <EmptyState
-          icon={Package}
-          title={t('noProductVariantsFound')}
-          description={t('emptyStateDescription')}
-          buttonText={t('addStockButton')}
-          buttonIcon={Plus}
-          onButtonClick={() => onCreateStock?.()}
-        />
-      </div>
+      <EmptyState
+        icon={Package}
+        title={t('noProductVariantsFound')}
+        description={t('emptyStateDescription')}
+        buttonText={t('addStockButton')}
+        buttonIcon={Plus}
+        onButtonClick={() => onCreateStock?.()}
+      />
     );
   }
 
   return (
     <>
       <Table>
-        <TableHeader className="text-lg">
-          <TableRow>
+        <TableHeader>
+          <TableRow className="hover:bg-background">
             <TableHead className="pl-2">
               <Checkbox
                 checked={

@@ -7,7 +7,7 @@ import {
   FindAllVariantsToCreateStockDocument,
   type FindAllVariantsToCreateStockQuery,
   type FindAllVariantsToCreateStockQueryVariables,
-  SortBy,
+  ProductSortBy,
   SortOrder,
 } from '@graphql/generated';
 import type { SelectedVariant } from './useVariantPrefetch';
@@ -44,11 +44,10 @@ export function useResolveVariantId(opts: Options) {
       if (skuToUse && skuToUse.trim()) {
         const variables: FindAllVariantsToCreateStockQueryVariables = {
           page: 1,
-          limit: 20,
+          limit: 25,
           name: undefined,
-          sortBy: SortBy.Name,
+          sortBy: ProductSortBy.Name,
           sortOrder: SortOrder.Asc,
-          includeSoftDeleted: false,
         };
 
         const res = await apollo.query<
@@ -120,11 +119,10 @@ export function useResolveVariantId(opts: Options) {
 
       const variables: FindAllVariantsToCreateStockQueryVariables = {
         page: 1,
-        limit: 20,
+        limit: 25,
         name,
-        sortBy: SortBy.Name,
+        sortBy: ProductSortBy.Name,
         sortOrder: SortOrder.Asc,
-        includeSoftDeleted: false,
       };
 
       const res = await apollo.query<

@@ -27,7 +27,7 @@ export function useResolveWarehouseId(warehouseName?: string) {
 
       const variables: FindWarehousesQueryVariables = {
         page: 1,
-        limit: 10,
+        limit: 25,
         name,
         sortBy: SortBy.Name,
         sortOrder: SortOrder.Asc,
