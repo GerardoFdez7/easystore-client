@@ -423,6 +423,7 @@ const httpStatusHandlers: ErrorHandler[] = [
         'getAllProducts',
         'getAllCategories',
         'getCategoryById',
+        'getAllStockMovements',
       ];
 
       // Check if this error comes from an expected operation
@@ -463,7 +464,7 @@ const httpStatusHandlers: ErrorHandler[] = [
       // Show a developer-friendly warning for unexpected 404s
       if (isDevelopment) {
         toast.warning('Unexpected 404', {
-          description: `Operation "${error.path?.[0]}" returned Not Found. Please handle it at your component, showing a friendly message to the user and add it to the expected operations at \"server/errors/error-registry.ts. line 195"\.`,
+          description: `Operation "${error.path?.[0]}" returned Not Found. Please handle it at your component, showing a friendly message to the user and add it to the expected operations at \"server/errors/error-registry.ts."\.`,
         });
       } else {
         // In production, show a generic error to users

@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-import { Button } from '@shadcn/ui/button';
 import {
   Table,
   TableBody,
@@ -12,8 +10,17 @@ import {
 } from '@shadcn/ui/table';
 import { cn, formatDate } from '@lib/utils';
 import { Package, Plus } from 'lucide-react';
-import { Popover, PopoverTrigger, PopoverContent } from '@shadcn/ui/popover';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@shadcn/ui/dialog';
+import { Separator } from '@shadcn/ui/separator';
 import EmptyState from '@molecules/shared/EmptyState';
+import TablePagination from '@molecules/shared/TablePagination';
 import { useTranslations } from 'next-intl';
 
 // Define the stock movement item type
@@ -32,21 +39,22 @@ type StockMovementTableProps = {
   className?: string;
   stockMovements: StockMovementItem[];
   onCreateMovement?: () => void;
+  currentPage: number;
+  totalPages: number;
+  totalRows: number;
+  onPageChange: (page: number) => void;
 };
 
 export default function StockMovementTable({
   className,
   stockMovements,
   onCreateMovement,
+  currentPage,
+  totalPages,
+  totalRows,
+  onPageChange,
 }: StockMovementTableProps) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 25;
   const t = useTranslations('StockMovement');
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = stockMovements.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(stockMovements.length / itemsPerPage);
 
   // Show empty state if no stock movement items
   if (stockMovements.length === 0) {
@@ -67,8 +75,8 @@ export default function StockMovementTable({
   return (
     <div className={cn('w-full', className)}>
       <Table>
-        <TableHeader className="text-lg">
-          <TableRow>
+        <TableHeader>
+          <TableRow className="hover:bg-background">
             <TableHead>{t('productTableHead')}</TableHead>
             <TableHead>{t('skuTableHead')}</TableHead>
             <TableHead>{t('deltaQuantityTableHead')}</TableHead>
@@ -78,26 +86,24 @@ export default function StockMovementTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {currentItems.map((item) => (
-            <TableRow key={item.id}>
+          {stockMovements.map((item) => (
+            <TableRow key={item.id} className="hover:bg-background">
               <TableCell>
                 <div className="flex flex-col">
-                  <span className="text-start font-medium">
-                    {item.productName}
-                  </span>
-                  {item.variantFirstAttribute ? (
-                    <span className="text-muted-foreground text-start text-xs">
+                  {item.variantFirstAttribute && (
+                    <span className="text-start font-medium">
                       {item.variantFirstAttribute.key}:{' '}
                       {item.variantFirstAttribute.value}
                     </span>
-                  ) : null}
+                  )}
+                  <span className="text-start">{item.productName}</span>
                 </div>
               </TableCell>
               <TableCell>{item.variantSku || '-'}</TableCell>
               <TableCell>
                 <span
                   className={
-                    item.deltaQuantity >= 0 ? 'text-green-600' : 'text-red-600'
+                    item.deltaQuantity >= 0 ? 'text-secondary' : 'text-error'
                   }
                 >
                   {item.deltaQuantity >= 0 ? '+' : ''}
@@ -106,48 +112,52 @@ export default function StockMovementTable({
               </TableCell>
               <TableCell>
                 {item.reason ? (
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button className="max-w-[28rem] truncate text-left underline-offset-2 hover:underline">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <button className="max-w-sm cursor-pointer truncate text-left underline-offset-2 hover:underline">
                         {item.reason.length > 80
                           ? `${item.reason.slice(0, 80)}…`
                           : item.reason}
                       </button>
-                    </PopoverTrigger>
-                    <PopoverContent className="max-w-xl break-words whitespace-pre-wrap">
-                      {item.reason}
-                    </PopoverContent>
-                  </Popover>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>{t('reasonDetailsTitle')}</DialogTitle>
+                        <DialogDescription>
+                          {t('reasonDetailsDescription')}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <Separator />
+                      <div className="overflow-y-auto wrap-break-word whitespace-pre-wrap">
+                        {item.reason}
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 ) : (
                   '-'
                 )}
               </TableCell>
-              <TableCell>{item.createdBy ? item.createdBy : 'you'}</TableCell>
+              <TableCell>
+                {item.createdBy ? item.createdBy : t('you')}
+              </TableCell>
               <TableCell>{formatDate(item.date)}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <div className="flex justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-        >
-          {t('previousButton')}
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-          }
-          disabled={currentPage === totalPages}
-        >
-          {t('nextButton')}
-        </Button>
-      </div>
+      <TablePagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        selectedCount={0}
+        totalRows={totalRows}
+        onPageChange={onPageChange}
+        onPreviousPage={() => onPageChange(Math.max(currentPage - 1, 1))}
+        onNextPage={() => onPageChange(Math.min(currentPage + 1, totalPages))}
+        onFirstPage={() => onPageChange(1)}
+        onLastPage={() => onPageChange(totalPages)}
+        canPreviousPage={currentPage > 1}
+        canNextPage={currentPage < totalPages}
+      />
     </div>
   );
 }

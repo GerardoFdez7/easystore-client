@@ -18,7 +18,6 @@ type StockData =
   | NonNullable<
       FindInventoryQuery['getAllWarehouses']['warehouses'][0]
     >['stockPerWarehouses'][0];
-type StockDataMaybeWarehouse = StockData & { warehouseId?: string };
 
 export const useInventory = (
   variables: FindInventoryQueryVariables,
@@ -33,17 +32,16 @@ export const useInventory = (
     errorPolicy: 'all',
   });
 
-  // Use general inventory query if no specific warehouse is selected
   const inventoryQuery = useQuery(FindInventoryDocument, {
     variables,
     skip: !!warehouseId,
-    fetchPolicy: 'cache-first',
-    notifyOnNetworkStatusChange: false,
+    fetchPolicy: 'cache-and-network',
+    notifyOnNetworkStatusChange: true,
     errorPolicy: 'all',
   });
 
-  // Determine which query to use based on warehouseId
-  const { loading, error } = warehouseId ? warehouseQuery : inventoryQuery;
+  const loading = warehouseId ? warehouseQuery.loading : inventoryQuery.loading;
+  const error = warehouseId ? warehouseQuery.error : inventoryQuery.error;
 
   let inventoryData: StockData[] = [];
 
@@ -52,17 +50,8 @@ export const useInventory = (
     inventoryData =
       warehouseQuery.data.getWarehouseById?.stockPerWarehouses || [];
   } else if (!warehouseId && inventoryQuery.data) {
-    // Handle general inventory data structure
-    inventoryData =
-      inventoryQuery.data?.getAllWarehouses?.warehouses?.flatMap((warehouse) =>
-        (warehouse.stockPerWarehouses || []).map((s) => ({
-          ...s,
-          // si el backend no retorna warehouseId en el stock, usamos el id del padre
-          warehouseId:
-            (s as { warehouseId?: string }).warehouseId ?? warehouse.id,
-          __warehouseName: warehouse.name,
-        })),
-      ) || [];
+    const warehouses = inventoryQuery.data.getAllWarehouses?.warehouses || [];
+    inventoryData = warehouses.flatMap((w) => w.stockPerWarehouses || []);
   }
 
   const formattedInventory: InventoryItem[] = inventoryData.map((item) => ({
@@ -139,7 +128,7 @@ export const useInventory = (
   const refetch = warehouseId ? warehouseQuery.refetch : inventoryQuery.refetch;
 
   return {
-    inventory: formattedInventory,
+    inventory: processedInventory,
     loading,
     error,
     refetch,

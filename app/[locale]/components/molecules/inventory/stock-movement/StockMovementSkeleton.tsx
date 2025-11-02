@@ -28,59 +28,99 @@ export default function StockMovementSkeleton({
   return (
     <div className={cn('w-full', className)}>
       <Table>
-        <TableHeader className="text-lg">
-          <TableRow>
-            <TableHead>
+        <TableHeader>
+          <TableRow className="hover:bg-background">
+            <TableHead className="flex items-center justify-center">
               <Skeleton className="h-4 w-28" />
             </TableHead>
-            <TableHead>
-              <Skeleton className="h-4 w-16" />
+            <TableHead className="text-center">
+              <div className="flex items-center justify-center">
+                <Skeleton className="h-4 w-16" />
+              </div>
             </TableHead>
-            <TableHead>
-              <Skeleton className="h-4 w-16" />
+            <TableHead className="text-center">
+              <div className="flex items-center justify-center">
+                <Skeleton className="h-4 w-30" />
+              </div>
             </TableHead>
-            <TableHead>
-              <Skeleton className="h-4 w-24" />
+            <TableHead className="text-center">
+              <div className="flex items-center justify-center">
+                <Skeleton className="h-4 w-24" />
+              </div>
             </TableHead>
-            <TableHead>
-              <Skeleton className="h-4 w-20" />
+            <TableHead className="text-center">
+              <div className="flex items-center justify-center">
+                <Skeleton className="h-4 w-24" />
+              </div>
             </TableHead>
-            <TableHead>
-              <Skeleton className="h-4 w-20" />
+            <TableHead className="text-center">
+              <div className="flex items-center justify-center">
+                <Skeleton className="h-4 w-20" />
+              </div>
             </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {Array.from({ length: rows }).map((_, index) => (
-            <TableRow key={index}>
+            <TableRow key={index} className="hover:bg-background">
               <TableCell>
                 <div className="flex flex-col gap-1">
                   <Skeleton className="h-4 w-32" />
                   <Skeleton className="h-3 w-24" />
                 </div>
               </TableCell>
-              <TableCell>
-                <Skeleton className="h-4 w-20" />
+              <TableCell className="text-center">
+                <div className="flex justify-center">
+                  <Skeleton className="h-4 w-24" />
+                </div>
               </TableCell>
-              <TableCell>
-                <Skeleton className="h-4 w-16" />
+              <TableCell className="text-center">
+                <div className="flex justify-center">
+                  <Skeleton className="h-4 w-16" />
+                </div>
               </TableCell>
-              <TableCell>
-                <Skeleton className="h-4 w-64" />
+              <TableCell className="text-center">
+                <div className="flex justify-center">
+                  <Skeleton className="h-4 w-64" />
+                </div>
               </TableCell>
-              <TableCell>
-                <Skeleton className="h-4 w-20" />
+              <TableCell className="text-center">
+                <div className="flex justify-center">
+                  <Skeleton className="h-4 w-14" />
+                </div>
               </TableCell>
-              <TableCell>
-                <Skeleton className="h-4 w-24" />
+              <TableCell className="text-center">
+                <div className="flex justify-center">
+                  <Skeleton className="h-4 w-24" />
+                </div>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <div className="flex justify-end space-x-2 py-4">
-        <Skeleton className="h-8 w-20" />
-        <Skeleton className="h-8 w-16" />
+      {/* TablePagination Skeleton */}
+      <div className="text-muted-foreground mt-4 flex items-center justify-between px-2 text-left">
+        {/* Left side - Page info skeleton */}
+        <div className="flex-1 text-left">
+          <Skeleton className="h-4 w-32 md:w-40" />
+        </div>
+
+        {/* Right side - Pagination buttons skeleton */}
+        <div className="flex items-center space-x-2">
+          {/* Desktop: Show all 4 buttons */}
+          <div className="hidden items-center space-x-2 md:flex">
+            <Skeleton className="h-8 w-8" />
+            <Skeleton className="h-8 w-8" />
+            <Skeleton className="h-8 w-8" />
+            <Skeleton className="h-8 w-8" />
+          </div>
+
+          {/* Mobile: Show only 2 buttons */}
+          <div className="flex items-center space-x-2 md:hidden">
+            <Skeleton className="h-8 w-8" />
+            <Skeleton className="h-8 w-8" />
+          </div>
+        </div>
       </div>
     </div>
   );
