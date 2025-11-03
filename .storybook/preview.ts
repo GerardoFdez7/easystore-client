@@ -17,6 +17,20 @@ const preview: Preview = {
     nextjs: {
       appDirectory: true,
     },
+    a11y: {
+      // Accessibility addon configuration
+      config: {
+        rules: [
+          {
+            // Allow color contrast issues for now (can be strict later)
+            id: 'color-contrast',
+            enabled: true,
+          },
+        ],
+      },
+      // Run accessibility checks automatically
+      manual: false,
+    },
   },
   decorators: [withApollo, withAuth, withNextIntl, withNextThemes],
   globalTypes: {
