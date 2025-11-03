@@ -1,6 +1,6 @@
 import { ComponentType } from 'react';
 import { ApolloNextAppProvider } from '@apollo/client-integration-nextjs';
-import getClient from '../../lib/apollo/client';
+import getClient from '../../app/[locale]/lib/apollo/client';
 
 export const withApollo = (Story: ComponentType) => {
   return (

@@ -1,6 +1,7 @@
 'use client';
 
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import type { Decorator } from '@storybook/nextjs';
 import { createContext, useContext, useState, ReactNode } from 'react';
 
 type PageThemeContextType = {
@@ -25,7 +26,15 @@ function PageThemeProvider({ children }: { children: ReactNode }) {
   );
 }
 
-function CustomThemeProvider({ children, theme, ...props }) {
+function CustomThemeProvider({
+  children,
+  theme,
+  ...props
+}: {
+  children: ReactNode;
+  theme: string;
+  [key: string]: any;
+}) {
   const { isDarkModeEnabled } = usePageTheme();
 
   return (
@@ -42,8 +51,8 @@ function CustomThemeProvider({ children, theme, ...props }) {
   );
 }
 
-export const withNextThemes = (Story, context) => {
-  const theme = context?.globals?.theme || 'system';
+export const withNextThemes: Decorator = (Story, context) => {
+  const theme = (context?.globals?.theme as string) || 'system';
 
   // Force re-render when theme changes by using key
   return (
