@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import InventoryTemplate from '@templates/Inventory';
+import InventoryTemplate from '@templates/inventory/Inventory';
 
 const meta: Meta<typeof InventoryTemplate> = {
   component: InventoryTemplate,

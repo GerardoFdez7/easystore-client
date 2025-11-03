@@ -45,7 +45,7 @@ export function useCreateWarehouseStock(opts: CreateStockByLookupOptions = {}) {
   } = opts;
 
   // 1) form
-  const { form, t } = useStockForm();
+  const { form } = useStockForm();
 
   // 2) variant (UI selector / prefetch)
   const { selectedVariant, selectVariantFromSelector, setSelectedVariant } =
@@ -67,7 +67,7 @@ export function useCreateWarehouseStock(opts: CreateStockByLookupOptions = {}) {
   });
 
   // 4) mutation
-  const { mutate, state, notifySuccess, notifyError } = useCreateStockMutation({
+  const { mutate, state, notifySuccess } = useCreateStockMutation({
     initialWarehouseId,
     extraRefetchQueries,
   });
@@ -127,17 +127,10 @@ export function useCreateWarehouseStock(opts: CreateStockByLookupOptions = {}) {
           productLocation: '',
           lotNumber: '',
           replenishmentDate: null,
+          serialNumbers: [],
         });
-      } else {
-        notifyError();
       }
-    } catch (e) {
-      const msg =
-        (e as { message?: string })?.message ??
-        t('createError') ??
-        'Error al crear stock';
-      notifyError(msg);
-    }
+    } catch (_e) {}
   });
 
   const handleSubmit = (e?: React.FormEvent<HTMLFormElement>) => {

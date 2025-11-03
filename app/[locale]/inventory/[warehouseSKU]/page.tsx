@@ -1,4 +1,4 @@
-import StockDetailTemplate from '@templates/StockDetail';
+import StockDetailTemplate from '@templates/inventory/StockDetail';
 
 type PageProps = {
   params: Promise<{ warehouseSKU: string }>;

@@ -69,7 +69,6 @@ export default function InstallmentPaymentFormField() {
                       <Input
                         id="months"
                         inputMode="numeric"
-                        type="number"
                         placeholder={t('monthsPlaceholder')}
                         value={newMonths}
                         onChange={(e) => {

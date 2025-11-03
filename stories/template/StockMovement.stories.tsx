@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import StockMovementTemplate from '@templates/StockMovement';
+import StockMovementTemplate from '@templates/inventory/StockMovement';
 
 const meta: Meta<typeof StockMovementTemplate> = {
   title: 'Templates/StockMovement',

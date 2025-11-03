@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Checkbox } from '@shadcn/ui/checkbox';
 import {
   Table,
@@ -11,6 +12,7 @@ import {
   TableRow,
 } from '@shadcn/ui/table';
 import { formatDate } from '@lib/utils';
+import { buildInventoryPath } from '@lib/utils/path';
 import {
   FindInventoryQueryVariables,
   StockPerWarehouseSortBy,
@@ -19,7 +21,7 @@ import { InventoryItem } from '@lib/types/inventory';
 import type { SortDirection } from '@lib/types/sort';
 import { Package, Plus, ClockArrowUp, ClockArrowDown } from 'lucide-react';
 import EmptyState from '@molecules/shared/EmptyState';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import TablePagination from '@molecules/shared/TablePagination';
 import SortableHeader from '@atoms/shared/SortableHeader';
 
@@ -49,6 +51,8 @@ export default function InventoryTable({
   const sortDirection = externalSortDirection ?? 'ASC';
   const itemsPerPage = 25;
   const t = useTranslations('Inventory');
+  const router = useRouter();
+  const locale = useLocale();
 
   const handleSort = (field: keyof StockPerWarehouseSortBy) => {
     let newDirection: SortDirection = 'ASC';
@@ -153,7 +157,16 @@ export default function InventoryTable({
         </TableHeader>
         <TableBody>
           {currentItems.map((item) => (
-            <TableRow key={item.id} className="group cursor-pointer">
+            <TableRow
+              key={item.id}
+              className="group cursor-pointer"
+              onClick={() =>
+                item.variantSku &&
+                router.push(
+                  `/${locale}${buildInventoryPath(item.warehouseName, item.variantSku)}`,
+                )
+              }
+            >
               <TableCell
                 className="group-hover:bg-background cursor-default"
                 onClick={handleCheckboxClick}

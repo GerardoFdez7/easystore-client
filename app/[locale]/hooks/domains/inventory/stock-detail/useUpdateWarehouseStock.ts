@@ -42,6 +42,9 @@ export function useUpdateWarehouseStock(opts: Options = {}) {
       qtyReserved: Number(values.reserved ?? 0),
       productLocation: (values.productLocation ?? '').trim() || null,
       lotNumber: (values.lotNumber ?? '').trim() || null,
+      serialNumbers: values.serialNumbers?.length
+        ? values.serialNumbers
+        : undefined,
       estimatedReplenishmentDate: values.replenishmentDate
         ? values.replenishmentDate.toISOString()
         : null,
@@ -56,10 +59,9 @@ export function useUpdateWarehouseStock(opts: Options = {}) {
     });
 
     if (res.data?.updateStockInWarehouse?.id) {
-      toast.success(t('updateSuccess') || 'Stock actualizado exitosamente');
+      toast.success(t('updateSuccess'));
       return true;
     }
-    toast.error(t('updateError') || 'Error al actualizar stock');
     return false;
   };
 

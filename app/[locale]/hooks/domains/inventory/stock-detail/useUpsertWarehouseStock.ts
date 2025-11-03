@@ -72,9 +72,7 @@ export function useUpsertWarehouseStock(opts: Options) {
         }
 
         createSubmit(e);
-      } catch (_err) {
-        createSubmit(e);
-      }
+      } catch (_err) {}
     };
   }, [
     form,

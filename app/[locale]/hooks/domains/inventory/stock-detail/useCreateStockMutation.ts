@@ -42,10 +42,7 @@ export function useCreateStockMutation(opts: Options) {
     errorPolicy: 'all',
   });
 
-  const notifySuccess = () =>
-    toast.success(t('createSuccess') || 'Stock creado exitosamente');
-  const notifyError = (msg?: string) =>
-    toast.error(msg ?? t('createError') ?? 'Error al crear stock');
+  const notifySuccess = () => toast.success(t('createSuccess'));
 
-  return { mutate, state, notifySuccess, notifyError };
+  return { mutate, state, notifySuccess };
 }

@@ -163,7 +163,7 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
               </AlertDescription>
             </Alert>
 
-            <div className="space-y-2">
+            <div className="flex flex-col space-y-2">
               <Label
                 htmlFor="warehouse-combobox"
                 className="text-sm font-medium"
@@ -176,7 +176,7 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
                 onChange={setSelectedWarehouseId}
                 onChangeDetailed={(w) => setSelectedWarehouseName(w.name)}
                 placeholder={t('selectWarehousePlaceholder')}
-                className="flex w-full flex-1"
+                className="w-full flex-1 sm:w-full"
                 aria-labelledby="warehouse-label"
               />
             </div>

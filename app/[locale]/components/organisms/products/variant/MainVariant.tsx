@@ -147,7 +147,7 @@ export default function MainVariant({
         disabled={archiveLoading || restoreLoading || deleteLoading || isNew}
       />
       {/* Main Content */}
-      <main className="mx-4 flex max-w-screen-md justify-center lg:mx-auto lg:w-full">
+      <main className="mx-4 flex max-w-3xl justify-center lg:mx-auto lg:w-full">
         <FormProvider {...form}>
           <Form {...form}>
             <form

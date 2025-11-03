@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import SerialChips from '@molecules/stock-detail/SerialChips';
+import SerialChips from '@molecules/inventory/stock-detail/SerialChips';
 
 const meta: Meta<typeof SerialChips> = {
   title: 'Molecules/StockDetail/SerialChips',
