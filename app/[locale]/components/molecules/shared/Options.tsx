@@ -83,9 +83,14 @@ export default function Options({
     if (!onDelete) return;
 
     setIsDeleting(true);
+    // Close dialog immediately to prevent overlay from persisting after navigation
+    setShowDeleteDialog(false);
+
+    // Wait for Radix UI portal to fully unmount (includes exit animations + cleanup)
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     try {
       await onDelete();
-      setShowDeleteDialog(false);
     } catch (_error) {
     } finally {
       setIsDeleting(false);

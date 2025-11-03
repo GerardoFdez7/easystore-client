@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import { normalizeWarehouseName } from '@lib/utils';
 import { useCreateWarehouseStock as useCreateWarehouseStockByLookup } from '@hooks/domains/inventory/stock-detail/useCreateWarehouseStock';
 import { usePrefillExistingStock } from '@hooks/domains/inventory/stock-detail/usePrefillExistingStock';
@@ -33,7 +32,6 @@ type Props = { warehouseName?: string; sku?: string };
 export default function MainStockDetail({ warehouseName, sku }: Props) {
   const t = useTranslations('StockDetail');
   warehouseName = normalizeWarehouseName(warehouseName);
-  const router = useRouter();
 
   const [showUpdateReason, setShowUpdateReason] = useState(false);
 
@@ -58,11 +56,7 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
   });
 
   const { update, state: updateState } = useUpdateWarehouseStock();
-  const { deleteStock, loading: isDeleting } = useDeleteWarehouseStock({
-    onSuccess: () => {
-      router.back();
-    },
-  });
+  const { deleteStock, loading: isDeleting } = useDeleteWarehouseStock();
   const [editingIds, setEditingIds] = useState<{
     warehouseId: string;
     stockId: string;
