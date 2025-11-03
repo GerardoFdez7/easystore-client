@@ -1393,7 +1393,8 @@
     "nextButton": "Successivo",
     "you": "Tu",
     "reasonDetailsTitle": "Dettagli del motivo",
-    "reasonDetailsDescription": "Descrizione completa del motivo per questo movimento di stock"
+    "reasonDetailsDescription": "Descrizione completa del motivo per questo movimento di stock",
+    "includeDeleted": "Includi Eliminati"
   },
   "StockDetail": {
     "updateSuccess": "Stock aggiornato con successo",

@@ -1,12 +1,12 @@
 query findAllMovements(
   $warehouseId: ID!
-  $page: Int = 1
-  $limit: Int = 10
+  $page: Int
+  $limit: Int
   $variantId: ID
   $createdById: ID
   $dateFrom: DateTime
   $dateTo: DateTime
-  $includeDeleted: Boolean = false
+  $includeDeleted: Boolean
   $sortBy: SortBy
   $sortOrder: SortOrder
 ) {

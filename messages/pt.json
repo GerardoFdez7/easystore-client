@@ -1392,7 +1392,8 @@
     "nextButton": "Próximo",
     "you": "Você",
     "reasonDetailsTitle": "Detalhes do motivo",
-    "reasonDetailsDescription": "Descrição completa do motivo para este movimento de estoque"
+    "reasonDetailsDescription": "Descrição completa do motivo para este movimento de estoque",
+    "includeDeleted": "Incluir Excluídos"
   },
   "StockDetail": {
     "updateSuccess": "Estoque atualizado com sucesso",

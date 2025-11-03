@@ -1386,7 +1386,8 @@
     "nextButton": "Siguiente",
     "you": "Tú",
     "reasonDetailsTitle": "Detalles de la Razón",
-    "reasonDetailsDescription": "Descripción completa de la razón para este movimiento de stock"
+    "reasonDetailsDescription": "Descripción completa de la razón para este movimiento de stock",
+    "includeDeleted": "Incluir Eliminados"
   },
   "StockDetail": {
     "updateSuccess": "Stock actualizado exitosamente",

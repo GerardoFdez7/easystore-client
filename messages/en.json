@@ -1379,7 +1379,8 @@
     "nextButton": "Next",
     "you": "You",
     "reasonDetailsTitle": "Reason Details",
-    "reasonDetailsDescription": "Full reason description for this stock movement"
+    "reasonDetailsDescription": "Full reason description for this stock movement",
+    "includeDeleted": "Include Deleted"
   },
   "StockDetail": {
     "updateSuccess": "Stock updated successfully",

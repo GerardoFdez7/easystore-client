@@ -4597,7 +4597,6 @@ export const FindAllMovementsDocument = {
           kind: 'VariableDefinition',
           variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
           type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-          defaultValue: { kind: 'IntValue', value: '1' },
         },
         {
           kind: 'VariableDefinition',
@@ -4606,7 +4605,6 @@ export const FindAllMovementsDocument = {
             name: { kind: 'Name', value: 'limit' },
           },
           type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-          defaultValue: { kind: 'IntValue', value: '10' },
         },
         {
           kind: 'VariableDefinition',
@@ -4653,7 +4651,6 @@ export const FindAllMovementsDocument = {
             name: { kind: 'Name', value: 'includeDeleted' },
           },
           type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
-          defaultValue: { kind: 'BooleanValue', value: false },
         },
         {
           kind: 'VariableDefinition',
