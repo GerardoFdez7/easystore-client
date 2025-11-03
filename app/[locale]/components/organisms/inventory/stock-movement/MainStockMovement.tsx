@@ -3,12 +3,12 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Warehouse } from 'lucide-react';
+import { FindAllMovementsQueryVariables } from '@graphql/generated';
+import { useStockMovements } from '@hooks/domains/inventory';
 import WarehouseCombobox from '@molecules/inventory/WarehouseCombobox';
 import StockMovementTable from '@molecules/inventory/stock-movement/StockMovementTable';
 import StockMovementSkeleton from '@molecules/inventory/stock-movement/StockMovementSkeleton';
 import EmptyState from '@molecules/shared/EmptyState';
-import { FindAllMovementsQueryVariables } from '@graphql/generated';
-import { useStockMovements } from '@hooks/domains/inventory/stock-movement/useStockMovements';
 
 export default function MainStockMovement() {
   const t = useTranslations('StockMovement');
