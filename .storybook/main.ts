@@ -6,7 +6,11 @@ const config: StorybookConfig = {
     '../stories/**/*.mdx',
     '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
-  addons: ['@storybook/addon-onboarding', '@chromatic-com/storybook'],
+  addons: [
+    '@storybook/addon-onboarding',
+    '@chromatic-com/storybook',
+    '@storybook/addon-a11y',
+  ],
   framework: {
     name: '@storybook/nextjs',
     options: {},
