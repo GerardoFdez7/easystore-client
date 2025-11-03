@@ -74,8 +74,10 @@ export default function Options({
   const [showArchiveDialog, setShowArchiveDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isArchiving, setIsArchiving] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleDeleteClick = () => {
+    setDropdownOpen(false); // Close dropdown first
     setShowDeleteDialog(true);
   };
 
@@ -83,17 +85,13 @@ export default function Options({
     if (!onDelete) return;
 
     setIsDeleting(true);
-    // Close dialog immediately to prevent overlay from persisting after navigation
-    setShowDeleteDialog(false);
-
-    // Wait for Radix UI portal to fully unmount (includes exit animations + cleanup)
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
     try {
       await onDelete();
     } catch (_error) {
+      // Error handling
     } finally {
       setIsDeleting(false);
+      setShowDeleteDialog(false);
     }
   };
 
@@ -102,6 +100,7 @@ export default function Options({
   };
 
   const handleArchiveClick = () => {
+    setDropdownOpen(false); // Close dropdown first
     setShowArchiveDialog(true);
   };
 
@@ -111,10 +110,11 @@ export default function Options({
     setIsArchiving(true);
     try {
       await onArchive();
-      setShowArchiveDialog(false);
     } catch (_error) {
+      // Error handling
     } finally {
       setIsArchiving(false);
+      setShowArchiveDialog(false);
     }
   };
 
@@ -169,7 +169,7 @@ export default function Options({
       className={`flex justify-end ${wrapperClassName}`}
       aria-label="options"
     >
-      <DropdownMenu>
+      <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
         <Tooltip>
           <TooltipTrigger asChild>
             <DropdownMenuTrigger asChild>
