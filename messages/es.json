@@ -1387,7 +1387,8 @@
     "you": "Tú",
     "reasonDetailsTitle": "Detalles de la Razón",
     "reasonDetailsDescription": "Descripción completa de la razón para este movimiento de stock",
-    "includeDeleted": "Incluir Eliminados"
+    "includeDeleted": "Incluir Eliminados",
+    "title": "Historial de Movimientos de Stock"
   },
   "StockDetail": {
     "updateSuccess": "Stock actualizado exitosamente",

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import CalendarPicker from '@molecules/inventory/stock-detail/CalendarPicker';
 
 const meta: Meta<typeof CalendarPicker> = {
-  title: 'Molecules/StockDetail/CalendarPicker',
+  title: 'Molecules/Inventory/Detail/CalendarPicker',
   component: CalendarPicker,
   tags: ['autodocs'],
 };

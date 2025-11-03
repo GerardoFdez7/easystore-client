@@ -1304,7 +1304,8 @@
         "IN": "Entrada de Estoque",
         "OUT": "Saída de Estoque",
         "ADJUSTMENT": "Ajuste"
-      }
+      },
+      "title": "Histórico de Movimentos de Estoque"
     }
   },
   "Category": {

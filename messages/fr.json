@@ -1303,7 +1303,8 @@
         "IN": "Entrée de stock",
         "OUT": "Sortie de stock",
         "ADJUSTMENT": "Ajustement"
-      }
+      },
+      "title": "Historique des mouvements de stock"
     }
   },
   "Category": {
