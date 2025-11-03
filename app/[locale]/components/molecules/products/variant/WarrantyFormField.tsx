@@ -71,7 +71,6 @@ export default function WarrantyFormField() {
                       <Input
                         id="warrantyMonths"
                         inputMode="numeric"
-                        type="number"
                         className="sm:w-60"
                         placeholder={t('warrantyMonthsPlaceholder')}
                         value={newMonths}

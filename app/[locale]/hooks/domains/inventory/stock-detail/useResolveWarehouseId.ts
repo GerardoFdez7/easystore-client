@@ -20,10 +20,7 @@ export function useResolveWarehouseId(warehouseName?: string) {
       if (providedId) return providedId;
 
       const name = (warehouseName ?? '').trim();
-      if (!name)
-        throw new Error(
-          t('missingWarehouseName') || 'Falta el nombre del almacén',
-        );
+      if (!name) throw new Error(t('missingWarehouseName'));
 
       const variables: FindWarehousesQueryVariables = {
         page: 1,
@@ -51,10 +48,7 @@ export function useResolveWarehouseId(warehouseName?: string) {
         throw new Error(`No se encontró almacén con nombre "${name}".`);
       }
       if (exact.length > 1) {
-        throw new Error(
-          t('warehouseAmbiguous') ||
-            `Hay múltiples almacenes con nombre "${name}". Refina el nombre o usa el ID.`,
-        );
+        throw new Error(t('warehouseAmbiguous'));
       }
       return exact[0].id;
     },

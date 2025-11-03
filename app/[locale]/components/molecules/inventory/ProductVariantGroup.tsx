@@ -1,5 +1,3 @@
-'use client';
-
 import { FC } from 'react';
 import { useTranslations } from 'next-intl';
 import { Card, CardContent, CardHeader, CardTitle } from '@shadcn/ui/card';

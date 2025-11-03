@@ -1,4 +1,4 @@
-import StockMovementTemplate from '@templates/StockMovement';
+import StockMovementTemplate from '@templates/inventory/StockMovement';
 
 export default function StockMovementPage() {
   return <StockMovementTemplate />;

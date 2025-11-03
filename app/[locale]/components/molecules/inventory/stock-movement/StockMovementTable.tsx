@@ -103,10 +103,14 @@ export default function StockMovementTable({
               <TableCell>
                 <span
                   className={
-                    item.deltaQuantity >= 0 ? 'text-secondary' : 'text-error'
+                    item.deltaQuantity > 0
+                      ? 'text-secondary'
+                      : item.deltaQuantity < 0
+                        ? 'text-error'
+                        : ''
                   }
                 >
-                  {item.deltaQuantity >= 0 ? '+' : ''}
+                  {item.deltaQuantity > 0 ? '+' : ''}
                   {item.deltaQuantity}
                 </span>
               </TableCell>

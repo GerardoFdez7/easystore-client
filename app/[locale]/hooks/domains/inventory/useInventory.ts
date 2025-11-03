@@ -43,19 +43,31 @@ export const useInventory = (
   const loading = warehouseId ? warehouseQuery.loading : inventoryQuery.loading;
   const error = warehouseId ? warehouseQuery.error : inventoryQuery.error;
 
-  let inventoryData: StockData[] = [];
+  let inventoryData: Array<StockData & { warehouseName: string }> = [];
 
   if (warehouseId && warehouseQuery.data) {
     // Handle warehouse-specific data structure
+    const warehouse = warehouseQuery.data.getWarehouseById;
+    const warehouseName = warehouse?.name ?? '';
     inventoryData =
-      warehouseQuery.data.getWarehouseById?.stockPerWarehouses || [];
+      warehouse?.stockPerWarehouses.map((stock) => ({
+        ...stock,
+        warehouseName,
+      })) || [];
   } else if (!warehouseId && inventoryQuery.data) {
     const warehouses = inventoryQuery.data.getAllWarehouses?.warehouses || [];
-    inventoryData = warehouses.flatMap((w) => w.stockPerWarehouses || []);
+    inventoryData = warehouses.flatMap((w) =>
+      (w.stockPerWarehouses || []).map((stock) => ({
+        ...stock,
+        warehouseName: w.name,
+      })),
+    );
   }
 
   const formattedInventory: InventoryItem[] = inventoryData.map((item) => ({
     id: item.id,
+    warehouseId: item.warehouseId,
+    warehouseName: item.warehouseName,
     variantFirstAttribute: {
       key: item.variantFirstAttribute?.key ?? '',
       value: item.variantFirstAttribute?.value ?? '',

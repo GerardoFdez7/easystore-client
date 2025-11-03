@@ -122,7 +122,6 @@ export default function SustainabilityFormField() {
                 </FormLabel>
                 <Input
                   id="recycledPercentage"
-                  type="number"
                   placeholder="99"
                   value={newRecycledPercentage}
                   onChange={(e) => {

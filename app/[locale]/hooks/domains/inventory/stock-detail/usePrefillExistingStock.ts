@@ -84,8 +84,6 @@ export function usePrefillExistingStock(opts: Options) {
     };
 
     void run();
-    // we intentionally exclude form from deps to avoid resetting after user edits
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     apollo,
     warehouseName,
@@ -93,5 +91,7 @@ export function usePrefillExistingStock(opts: Options) {
     variantSku,
     resolveWarehouseId,
     setSerialNumbers,
+    form,
+    onFound,
   ]);
 }

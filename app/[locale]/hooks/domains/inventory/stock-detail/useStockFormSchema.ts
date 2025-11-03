@@ -9,29 +9,51 @@ import { zodResolver } from '@hookform/resolvers/zod';
 export function buildSchema(t: ReturnType<typeof useTranslations>) {
   return z.object({
     available: z
-      .number({ invalid_type_error: t('availablePlaceholder') })
-      .min(0, { message: t('availablePlaceholder') }),
+      .number()
+      .int({ message: t('availableMustBeInteger') })
+      .min(1, { message: t('availableMustBeGreaterThanZero') })
+      .max(999999999, { message: t('availableExceedsMax') }),
     reserved: z
-      .number({ invalid_type_error: t('reservedPlaceholder') })
-      .min(0, { message: t('reservedPlaceholder') }),
+      .number()
+      .int({ message: t('reservedMustBeInteger') })
+      .min(0, { message: t('reservedCannotBeNegative') })
+      .max(999999999, { message: t('reservedExceedsMax') }),
     productLocation: z
       .string()
       .trim()
-      .max(100, { message: t('productLocationPlaceholder') })
+      .min(10, { message: t('productLocationTooShort') })
+      .max(200)
       .optional()
-      .or(z.literal(''))
-      .refine(
-        (v) => v === '' || (typeof v === 'string' && v.trim().length >= 10),
-        { message: t('productLocationTooShort') },
-      ),
-    lotNumber: z.string().trim().max(50).optional().or(z.literal('')),
-    replenishmentDate: z.date().nullable().optional(),
+      .or(z.literal('')),
+    lotNumber: z
+      .string()
+      .trim()
+      .min(1, { message: t('lotNumberMustBeNonEmpty') })
+      .max(50, { message: t('lotNumberExceedsMax') })
+      .optional()
+      .or(z.literal('')),
+    replenishmentDate: z
+      .date()
+      .min(new Date(), { message: t('replenishmentDateMustBeFuture') })
+      .nullable()
+      .optional(),
     reason: z
       .string()
       .trim()
-      .max(2000, { message: 'Maximum 2000 characters' })
+      .min(20, { message: t('reasonTooShort') })
+      .max(2000)
       .optional()
       .or(z.literal('')),
+    serialNumbers: z
+      .array(
+        z
+          .string()
+          .min(1, { message: t('serialNumberMustBeNonEmpty') })
+          .max(100, { message: t('serialNumberExceedsMax') })
+          .trim(),
+      )
+      .max(1000, { message: t('serialNumbersExceedsMax') })
+      .optional(),
   });
 }
 
@@ -49,6 +71,7 @@ export function useStockForm() {
       productLocation: '',
       lotNumber: '',
       replenishmentDate: null,
+      serialNumbers: [],
     },
     mode: 'onChange',
   });

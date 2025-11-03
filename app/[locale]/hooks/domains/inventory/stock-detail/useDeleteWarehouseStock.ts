@@ -16,7 +16,7 @@ type DeleteStockOptions = {
 
 export function useDeleteWarehouseStock(opts: DeleteStockOptions = {}) {
   const t = useTranslations('StockDetail');
-  const { onSuccess, onError } = opts;
+  const { onSuccess } = opts;
 
   const [mutate, { loading, error }] = useMutation<
     RemoveStockFromWarehouseMutation,
@@ -42,13 +42,8 @@ export function useDeleteWarehouseStock(opts: DeleteStockOptions = {}) {
         onSuccess?.();
         return true;
       }
-
-      toast.error(t('deleteError'));
       return false;
-    } catch (e) {
-      const msg = (e as Error)?.message ?? t('deleteError');
-      toast.error(msg);
-      onError?.(e as Error);
+    } catch (_e) {
       return false;
     }
   };

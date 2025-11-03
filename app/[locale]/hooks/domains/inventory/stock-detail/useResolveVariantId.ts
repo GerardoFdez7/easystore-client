@@ -73,10 +73,7 @@ export function useResolveVariantId(opts: Options) {
         );
 
         if (matchesBySku.length === 0) {
-          throw new Error(
-            t('variantNotFoundBySku') ||
-              `No se encontró variante con SKU "${skuToUse}".`,
-          );
+          throw new Error(t('variantNotFoundBySku'));
         }
         if (matchesBySku.length > 1) {
           if (variantAttributeFilter?.key && variantAttributeFilter?.value) {
@@ -91,10 +88,7 @@ export function useResolveVariantId(opts: Options) {
             );
             if (narrowed.length === 1) return narrowed[0].id;
           }
-          throw new Error(
-            t('variantAmbiguousSku') ||
-              `Existen múltiples variantes con SKU "${skuToUse}". Añade filtros o usa variantId.`,
-          );
+          throw new Error(t('variantAmbiguousSku'));
         }
         if (!selectedVariant) {
           const first = matchesBySku[0];
@@ -111,10 +105,7 @@ export function useResolveVariantId(opts: Options) {
       // 2) Fallback: por nombre de producto (+ atributo opcional)
       const name = (selectedVariant?.productName ?? productName ?? '').trim();
       if (!name) {
-        throw new Error(
-          t('missingVariantIdentifier') ||
-            'Falta cómo identificar la variante (variantId, variantSku o productName).',
-        );
+        throw new Error(t('missingVariantIdentifier'));
       }
 
       const variables: FindAllVariantsToCreateStockQueryVariables = {
@@ -140,16 +131,10 @@ export function useResolveVariantId(opts: Options) {
       );
 
       if (exactProducts.length === 0) {
-        throw new Error(
-          t('productNotFound') ||
-            `No se encontró producto con nombre "${name}".`,
-        );
+        throw new Error(t('productNotFound'));
       }
       if (exactProducts.length > 1) {
-        throw new Error(
-          t('productAmbiguous') ||
-            `Hay múltiples productos con nombre "${name}". Refina el nombre.`,
-        );
+        throw new Error(t('productAmbiguous'));
       }
 
       const variants = exactProducts[0].variants ?? [];
@@ -172,10 +157,7 @@ export function useResolveVariantId(opts: Options) {
         );
         if (narrowed.length === 1) return narrowed[0].id;
         if (narrowed.length > 1) {
-          throw new Error(
-            t('variantAmbiguousAttr') ||
-              `Varias variantes coinciden con ${variantAttributeFilter.key}:${variantAttributeFilter.value}.`,
-          );
+          throw new Error(t('variantAmbiguousAttr'));
         }
       }
 
@@ -192,10 +174,7 @@ export function useResolveVariantId(opts: Options) {
         return v.id;
       }
 
-      throw new Error(
-        t('variantAmbiguous') ||
-          `El producto "${name}" tiene múltiples variantes. Especifica SKU, atributos o usa variantId.`,
-      );
+      throw new Error(t('variantAmbiguous'));
     },
     [
       apollo,

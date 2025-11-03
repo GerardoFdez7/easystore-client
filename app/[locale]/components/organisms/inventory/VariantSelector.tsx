@@ -84,12 +84,10 @@ const VariantSelector: React.FC<VariantSelectorProps> = ({
               </Label>
               <Switch
                 id="includeArchived"
-                checked={filterMode === ProductFilterMode.Archives}
+                checked={filterMode === ProductFilterMode.All}
                 onCheckedChange={(checked) => {
                   updateFilterMode(
-                    checked
-                      ? ProductFilterMode.Archives
-                      : ProductFilterMode.Actives,
+                    checked ? ProductFilterMode.All : ProductFilterMode.Actives,
                   );
                 }}
                 aria-describedby="includeArchived-description"

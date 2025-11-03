@@ -1,7 +1,7 @@
 export type InventoryItem = {
   id: string;
-  warehouseId?: string;
-  warehouseName?: string;
+  warehouseId: string;
+  warehouseName: string;
   variantFirstAttribute: {
     key: string;
     value: string;

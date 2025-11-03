@@ -2,7 +2,7 @@ import { Combobox } from '@shadcn/ui/combobox';
 import { useTranslations } from 'next-intl';
 import { useWarehouseCombobox } from '@hooks/domains/inventory';
 import { cn } from 'utils';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 
 interface WarehouseComboboxProps {
   value?: string;
@@ -41,24 +41,26 @@ const WarehouseCombobox: React.FC<WarehouseComboboxProps> = ({
     }
   };
 
-  const handleValueChange = (val?: string) => {
-    onChange?.(val ?? '');
-    if (onChangeDetailed) {
-      const w = warehouses.find((wh) => wh.id === val);
-      onChangeDetailed({
-        id: val ?? '',
-        name: (w?.name ?? '').trim(),
-      });
-    }
-  };
+  const handleValueChange = useCallback(
+    (val?: string) => {
+      onChange?.(val ?? '');
+      if (onChangeDetailed) {
+        const w = warehouses.find((wh) => wh.id === val);
+        onChangeDetailed({
+          id: val ?? '',
+          name: (w?.name ?? '').trim(),
+        });
+      }
+    },
+    [onChange, onChangeDetailed, warehouses],
+  );
 
   // Auto-select first option when requested and no value is set yet
   useEffect(() => {
     if (autoSelectFirst && !value && options.length > 0) {
       handleValueChange(options[0].value);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoSelectFirst, value, options]);
+  }, [autoSelectFirst, value, options, handleValueChange]);
 
   return (
     <Combobox
