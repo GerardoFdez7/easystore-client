@@ -1305,7 +1305,8 @@
         "IN": "Entrata di Stock",
         "OUT": "Uscita di Stock",
         "ADJUSTMENT": "Aggiustamento"
-      }
+      },
+      "title": "Cronologia Movimenti di Magazzino"
     }
   },
   "Category": {

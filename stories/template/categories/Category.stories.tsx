@@ -7,10 +7,7 @@ import {
   SortBy,
   SortOrder,
 } from '@graphql/generated';
-import {
-  mockCategories,
-  mockEmptyCategories,
-} from '../../molecules/categories/mocks/categoryMocks';
+import { mockCategories } from '../../molecules/categories/mocks/categoryMocks';
 
 // Enhanced mock categories with proper GraphQL structure
 const mockCategoriesWithSubcategories = mockCategories.map((cat) => ({
@@ -47,7 +44,9 @@ const successMocks = [
       variables: {
         page: 1,
         limit: 25,
-        sortBy: SortBy.Name,
+        name: '',
+        parentId: null,
+        sortBy: SortBy.UpdatedAt,
         sortOrder: SortOrder.Asc,
         includeSubcategories: true,
       },
@@ -64,28 +63,11 @@ const successMocks = [
   },
   {
     request: {
-      query: FindAllCategoriesDocument,
+      query: FindCategoriesTreeDocument,
       variables: {
-        page: 1,
-        limit: 25,
         sortBy: SortBy.Name,
         sortOrder: SortOrder.Asc,
       },
-    },
-    result: {
-      data: {
-        getAllCategories: {
-          categories: mockCategoriesWithSubcategories,
-          total: mockCategoriesWithSubcategories.length,
-          hasMore: true,
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: FindCategoriesTreeDocument,
-      variables: {},
     },
     result: {
       data: {
@@ -105,7 +87,9 @@ const loadingMocks = [
       variables: {
         page: 1,
         limit: 25,
-        sortBy: SortBy.Name,
+        name: '',
+        parentId: null,
+        sortBy: SortBy.UpdatedAt,
         sortOrder: SortOrder.Asc,
         includeSubcategories: true,
       },
@@ -113,7 +97,7 @@ const loadingMocks = [
     result: {
       data: {
         getAllCategories: {
-          categories: mockEmptyCategories,
+          categories: [],
           total: 0,
           hasMore: false,
         },
@@ -124,7 +108,10 @@ const loadingMocks = [
   {
     request: {
       query: FindCategoriesTreeDocument,
-      variables: {},
+      variables: {
+        sortBy: SortBy.Name,
+        sortOrder: SortOrder.Asc,
+      },
     },
     result: {
       data: {
@@ -133,37 +120,7 @@ const loadingMocks = [
         },
       },
     },
-    delay: Infinity,
-  },
-];
-
-// Mock data for error state
-const errorMocks = [
-  {
-    request: {
-      query: FindAllCategoriesDocument,
-      variables: {
-        page: 1,
-        limit: 25,
-        sortBy: SortBy.Name,
-        sortOrder: SortOrder.Asc,
-        includeSubcategories: true,
-      },
-    },
-    error: {
-      name: 'GraphQLError',
-      message: 'Failed to fetch categories',
-    },
-  },
-  {
-    request: {
-      query: FindCategoriesTreeDocument,
-      variables: {},
-    },
-    error: {
-      name: 'GraphQLError',
-      message: 'Failed to fetch category tree',
-    },
+    delay: Infinity, // Simulate loading delay
   },
 ];
 
@@ -242,72 +199,6 @@ export const Loading: Story = {
       description: {
         story:
           'Loading state showing skeleton placeholders while data is being fetched within the template layout.',
-      },
-    },
-  },
-};
-
-export const Error: Story = {
-  args: {
-    categoryPath: [],
-  },
-  parameters: {
-    apolloMocks: errorMocks,
-    docs: {
-      description: {
-        story:
-          'Error state displaying an error message when category data fails to load within the template layout.',
-      },
-    },
-  },
-};
-
-export const NoSearchResults: Story = {
-  args: {
-    categoryPath: [],
-  },
-  parameters: {
-    apolloMocks: [
-      {
-        request: {
-          query: FindAllCategoriesDocument,
-          variables: {
-            page: 1,
-            limit: 25,
-            sortBy: SortBy.Name,
-            sortOrder: SortOrder.Asc,
-            includeSubcategories: false,
-            name: 'nonexistent',
-          },
-        },
-        result: {
-          data: {
-            getAllCategories: {
-              categories: [],
-              total: 0,
-              hasMore: false,
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: FindCategoriesTreeDocument,
-          variables: {},
-        },
-        result: {
-          data: {
-            getAllCategories: {
-              categories: mockCategoriesWithSubcategories,
-            },
-          },
-        },
-      },
-    ],
-    docs: {
-      description: {
-        story:
-          'Empty state when search returns no results, showing search-specific empty state with search icon within the template layout.',
       },
     },
   },

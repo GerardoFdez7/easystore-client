@@ -1380,7 +1380,8 @@
     "you": "You",
     "reasonDetailsTitle": "Reason Details",
     "reasonDetailsDescription": "Full reason description for this stock movement",
-    "includeDeleted": "Include Deleted"
+    "includeDeleted": "Include Deleted",
+    "title": "Stock Movement History"
   },
   "StockDetail": {
     "updateSuccess": "Stock updated successfully",

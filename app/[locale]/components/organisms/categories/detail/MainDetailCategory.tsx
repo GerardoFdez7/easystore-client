@@ -441,7 +441,7 @@ export default function MainDetailCategory({
       <Options
         showDelete={true}
         onDelete={handleDelete}
-        disabled={isSubmitting || !isNew || isAdd}
+        disabled={isSubmitting || isNew || isAdd}
         deleteTitle={tCategory('title')}
         deleteDescription={tCategory('description')}
       />

@@ -14,7 +14,7 @@ const Wrapper = () => {
 };
 
 const meta: Meta<typeof Wrapper> = {
-  title: 'Molecules/StockDetail/UpdateReasonDialog',
+  title: 'Molecules/Inventory/Detail/UpdateReasonDialog',
   component: Wrapper,
   tags: ['autodocs'],
 };

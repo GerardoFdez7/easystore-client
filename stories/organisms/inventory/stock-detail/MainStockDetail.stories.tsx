@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import MainStockDetail from '@organisms/inventory/stock-detail/MainStockDetail';
 
 const meta: Meta<typeof MainStockDetail> = {
-  title: 'Organisms/StockDetail/MainStockDetail',
+  title: 'Organisms/Inventory/Detail/MainStockDetail',
   component: MainStockDetail,
   parameters: {
     layout: 'fullscreen',
