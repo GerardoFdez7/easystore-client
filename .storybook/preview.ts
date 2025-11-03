@@ -3,6 +3,8 @@ import { withNextIntl } from './decorators/withNextIntl';
 import { withNextThemes } from './decorators/withNextThemes';
 import { withApollo } from './decorators/withApollo';
 import { withAuth } from './decorators/withAuth';
+// @ts-ignore - CSS import for styling
+import '../app/[locale]/globals.css';
 
 const preview: Preview = {
   parameters: {

@@ -1,10 +1,10 @@
 import { ComponentType, ReactNode } from 'react';
 import { MockedProvider } from '@apollo/client/testing/react';
-import { AuthProvider } from '../../lib/contexts/AuthContext';
+import { AuthProvider } from '../../app/[locale]/lib/contexts/AuthContext';
 import {
   ValidateTokenDocument,
   FindTenantAuthInfoDocument,
-} from '../../lib/graphql/generated';
+} from '../../server/graphql/generated';
 
 // Mock GraphQL responses for authentication
 const authMocks = [

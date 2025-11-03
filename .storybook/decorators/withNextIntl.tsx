@@ -1,4 +1,5 @@
 import { NextIntlClientProvider } from 'next-intl';
+import type { Decorator } from '@storybook/nextjs';
 import enMessages from '../../messages/en.json';
 import esMessages from '../../messages/es.json';
 import frMessages from '../../messages/fr.json';
@@ -14,9 +15,13 @@ const messages = {
   pt: ptMessages,
 };
 
-export const withNextIntl = (Story, context) => {
+type Locale = keyof typeof messages;
+
+export const withNextIntl: Decorator = (Story, context) => {
   const locale =
-    context?.globals?.locale || context?.parameters?.locale || 'en';
+    (context?.globals?.locale as Locale) ||
+    (context?.parameters?.locale as Locale) ||
+    'en';
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages[locale]}>

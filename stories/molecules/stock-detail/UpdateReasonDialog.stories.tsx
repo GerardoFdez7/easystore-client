@@ -1,18 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import UpdateReasonDialog from '@molecules/inventory/stock-detail/UpdateReasonDialog';
 
 const Wrapper = () => {
   const [open, setOpen] = useState(true);
-  const [value, setValue] = useState('');
   return (
     <UpdateReasonDialog
       open={open}
       onOpenChange={setOpen}
-      value={value}
-      onChange={setValue}
       onConfirm={() => setOpen(false)}
-      minLength={10}
     />
   );
 };
