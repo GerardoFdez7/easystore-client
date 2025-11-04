@@ -52,7 +52,7 @@ export type AddStockToWarehouseInput = {
 export type AddVariantToProductInput = {
   attributes: Array<CreateAttributeInput>;
   barcode?: InputMaybe<Scalars['String']['input']>;
-  condition: ConditionEnum;
+  condition?: InputMaybe<ConditionEnum>;
   dimension?: InputMaybe<CreateDimensionInput>;
   ean?: InputMaybe<Scalars['String']['input']>;
   installmentPayments?: InputMaybe<Array<CreateInstallmentInput>>;
@@ -215,7 +215,7 @@ export type CreateProductInput = {
   manufacturer?: InputMaybe<Scalars['String']['input']>;
   media?: InputMaybe<Array<CreateMediaInput>>;
   name: Scalars['String']['input'];
-  productType: TypeEnum;
+  productType?: InputMaybe<TypeEnum>;
   shortDescription: Scalars['String']['input'];
   sustainabilities?: InputMaybe<Array<CreateSustainabilityInput>>;
   tags?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -225,6 +225,25 @@ export type CreateProductInput = {
 export type CreateSustainabilityInput = {
   certification: Scalars['String']['input'];
   recycledPercentage: Scalars['Float']['input'];
+};
+
+export type CreateVariantInput = {
+  attributes: Array<CreateAttributeInput>;
+  barcode?: InputMaybe<Scalars['String']['input']>;
+  condition?: InputMaybe<ConditionEnum>;
+  dimension?: InputMaybe<CreateDimensionInput>;
+  ean?: InputMaybe<Scalars['String']['input']>;
+  installmentPayments?: InputMaybe<Array<CreateInstallmentInput>>;
+  isbn?: InputMaybe<Scalars['String']['input']>;
+  personalizationOptions?: InputMaybe<Array<Scalars['String']['input']>>;
+  price: Scalars['Float']['input'];
+  productId: Scalars['ID']['input'];
+  sku: Scalars['String']['input'];
+  upc?: InputMaybe<Scalars['String']['input']>;
+  variantCover?: InputMaybe<Scalars['String']['input']>;
+  variantMedia?: InputMaybe<Array<CreateMediaInput>>;
+  warranties?: InputMaybe<Array<CreateWarrantyInput>>;
+  weight?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type CreateWarehouseInput = {
@@ -407,6 +426,29 @@ export enum CurrencyCodes {
   Zwl = 'ZWL',
 }
 
+export type DashboardData = {
+  __typename?: 'DashboardData';
+  ordersTimeline: Array<OrderTimeline>;
+  recentOrders: Array<RecentOrder>;
+  summary: DashboardSummary;
+  topProducts: Array<TopProduct>;
+};
+
+export type DashboardSummary = {
+  __typename?: 'DashboardSummary';
+  average_order_value: Scalars['Float']['output'];
+  cancelled_orders: Scalars['Int']['output'];
+  cancelled_revenue: Scalars['Float']['output'];
+  completed_orders: Scalars['Int']['output'];
+  completed_revenue: Scalars['Float']['output'];
+  confirmed_orders: Scalars['Int']['output'];
+  processing_orders: Scalars['Int']['output'];
+  shipped_orders: Scalars['Int']['output'];
+  total_orders: Scalars['Int']['output'];
+  total_revenue: Scalars['Float']['output'];
+  unique_customers: Scalars['Int']['output'];
+};
+
 export type Dimension = {
   __typename?: 'Dimension';
   height: Scalars['Float']['output'];
@@ -475,6 +517,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addItemToCart: Cart;
   addStockToWarehouse: Warehouse;
+  addVariant: Product;
   archiveVariant: Product;
   createAddress: AddressType;
   createCategory: Category;
@@ -503,6 +546,7 @@ export type Mutation = {
   updateProduct: Product;
   updateStockInWarehouse: Warehouse;
   updateTenant: Tenant;
+  updateVariant: Product;
   updateWarehouse: Warehouse;
 };
 
@@ -515,6 +559,10 @@ export type MutationAddStockToWarehouseArgs = {
   reason?: InputMaybe<Scalars['String']['input']>;
   variantId: Scalars['ID']['input'];
   warehouseId: Scalars['ID']['input'];
+};
+
+export type MutationAddVariantArgs = {
+  input: CreateVariantInput;
 };
 
 export type MutationArchiveVariantArgs = {
@@ -636,9 +684,22 @@ export type MutationUpdateTenantArgs = {
   input: UpdateTenantInput;
 };
 
+export type MutationUpdateVariantArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateVariantInput;
+  productId: Scalars['String']['input'];
+};
+
 export type MutationUpdateWarehouseArgs = {
   id: Scalars['ID']['input'];
   input: UpdateWarehouseInput;
+};
+
+export type OrderTimeline = {
+  __typename?: 'OrderTimeline';
+  date: Scalars['String']['output'];
+  orders_count: Scalars['Int']['output'];
+  revenue: Scalars['Float']['output'];
 };
 
 export type PaginatedAddressesType = {
@@ -706,26 +767,9 @@ export type Product = {
 
 export type ProductCategory = {
   __typename?: 'ProductCategory';
-  categoryCover?: Maybe<Scalars['String']['output']>;
-  categoryDescription?: Maybe<Scalars['String']['output']>;
-  categoryId?: Maybe<Scalars['ID']['output']>;
+  categoryId: Scalars['ID']['output'];
   categoryName?: Maybe<Scalars['String']['output']>;
 };
-
-export enum ProductFilterMode {
-  Actives = 'ACTIVES',
-  All = 'ALL',
-  Archives = 'ARCHIVES',
-}
-
-export enum ProductSortBy {
-  CreatedAt = 'CREATED_AT',
-  FirstVariantPrice = 'FIRST_VARIANT_PRICE',
-  Name = 'NAME',
-  Sku = 'SKU',
-  UpdatedAt = 'UPDATED_AT',
-  VariantCount = 'VARIANT_COUNT',
-}
 
 export type Query = {
   __typename?: 'Query';
@@ -738,6 +782,8 @@ export type Query = {
   getAllWarehouses: PaginatedWarehousesType;
   getCart: PaginatedCart;
   getCategoryById: Category;
+  /** Get all dashboard data in a single query: summary, timeline, recent orders, and top products */
+  getDashboardData: DashboardData;
   getMediaUploadToken: MediaAuthResponse;
   getProductById: Product;
   getStatesByCountryId: Array<StateType>;
@@ -769,11 +815,11 @@ export type QueryGetAllCategoriesArgs = {
 
 export type QueryGetAllProductsArgs = {
   categoriesIds?: InputMaybe<Array<Scalars['ID']['input']>>;
-  filterMode?: InputMaybe<ProductFilterMode>;
+  includeSoftDeleted?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['Float']['input']>;
-  sortBy?: InputMaybe<ProductSortBy>;
+  sortBy?: InputMaybe<SortBy>;
   sortOrder?: InputMaybe<SortOrder>;
   type?: InputMaybe<TypeEnum>;
 };
@@ -821,6 +867,17 @@ export type QueryGetStatesByCountryIdArgs = {
 export type QueryGetWarehouseByIdArgs = {
   id: Scalars['ID']['input'];
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type RecentOrder = {
+  __typename?: 'RecentOrder';
+  customer_name: Scalars['String']['output'];
+  order_date: Scalars['DateTime']['output'];
+  order_id: Scalars['ID']['output'];
+  order_number: Scalars['String']['output'];
+  order_status: Scalars['String']['output'];
+  order_total: Scalars['Float']['output'];
+  shipping_city?: Maybe<Scalars['String']['output']>;
 };
 
 export type RemoveItemFromCartInput = {
@@ -895,7 +952,6 @@ export type StockPerWarehouseSortBy = {
   available?: InputMaybe<SortOrder>;
   replenishmentDate?: InputMaybe<SortOrder>;
   reserved?: InputMaybe<SortOrder>;
-  sku?: InputMaybe<SortOrder>;
   variantFirstAttribute?: InputMaybe<SortOrder>;
 };
 
@@ -921,6 +977,20 @@ export type Tenant = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type TopProduct = {
+  __typename?: 'TopProduct';
+  orders_count: Scalars['Int']['output'];
+  product_brand?: Maybe<Scalars['String']['output']>;
+  product_cover?: Maybe<Scalars['String']['output']>;
+  product_name: Scalars['String']['output'];
+  total_quantity_sold: Scalars['Int']['output'];
+  total_revenue: Scalars['Float']['output'];
+  variant_cover?: Maybe<Scalars['String']['output']>;
+  variant_id: Scalars['ID']['output'];
+  variant_price: Scalars['Float']['output'];
+  variant_sku: Scalars['String']['output'];
+};
+
 export enum TypeEnum {
   Digital = 'DIGITAL',
   Physical = 'PHYSICAL',
@@ -939,12 +1009,28 @@ export type UpdateAddressInput = {
   stateId?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UpdateAttributeInput = {
+  key?: InputMaybe<Scalars['String']['input']>;
+  value?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UpdateCategoryInput = {
   cover?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   parentId?: InputMaybe<Scalars['ID']['input']>;
   subCategories?: InputMaybe<Array<UpdateCategoryInput>>;
+};
+
+export type UpdateDimensionInput = {
+  height?: InputMaybe<Scalars['Float']['input']>;
+  length?: InputMaybe<Scalars['Float']['input']>;
+  width?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type UpdateInstallmentInput = {
+  interestRate?: InputMaybe<Scalars['Float']['input']>;
+  months?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UpdateItemQtyInput = {
@@ -979,7 +1065,6 @@ export type UpdateProductInput = {
   shortDescription?: InputMaybe<Scalars['String']['input']>;
   sustainabilities?: InputMaybe<Array<UpdateSustainabilityInput>>;
   tags?: InputMaybe<Array<Scalars['String']['input']>>;
-  variants?: InputMaybe<Array<AddVariantToProductInput>>;
 };
 
 export type UpdateStockInWarehouseInput = {
@@ -1008,9 +1093,33 @@ export type UpdateTenantInput = {
   ownerName?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UpdateVariantInput = {
+  attributes?: InputMaybe<Array<UpdateAttributeInput>>;
+  barcode?: InputMaybe<Scalars['String']['input']>;
+  condition?: InputMaybe<ConditionEnum>;
+  dimension?: InputMaybe<UpdateDimensionInput>;
+  ean?: InputMaybe<Scalars['String']['input']>;
+  installmentPayments?: InputMaybe<Array<UpdateInstallmentInput>>;
+  isbn?: InputMaybe<Scalars['String']['input']>;
+  personalizationOptions?: InputMaybe<Array<Scalars['String']['input']>>;
+  price?: InputMaybe<Scalars['Float']['input']>;
+  sku?: InputMaybe<Scalars['String']['input']>;
+  upc?: InputMaybe<Scalars['String']['input']>;
+  variantCover?: InputMaybe<Scalars['String']['input']>;
+  variantMedia?: InputMaybe<Array<UpdateMediaInput>>;
+  warranties?: InputMaybe<Array<UpdateWarrantyInput>>;
+  weight?: InputMaybe<Scalars['Float']['input']>;
+};
+
 export type UpdateWarehouseInput = {
   addressId?: InputMaybe<Scalars['ID']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateWarrantyInput = {
+  coverage?: InputMaybe<Scalars['String']['input']>;
+  instructions?: InputMaybe<Scalars['String']['input']>;
+  months?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type Variant = {
@@ -1517,6 +1626,58 @@ export type FindCategoriesTreeQuery = {
   };
 };
 
+export type GetDashboardDataQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetDashboardDataQuery = {
+  __typename?: 'Query';
+  getDashboardData: {
+    __typename?: 'DashboardData';
+    summary: {
+      __typename?: 'DashboardSummary';
+      total_orders: number;
+      total_revenue: number;
+      average_order_value: number;
+      unique_customers: number;
+      completed_orders: number;
+      cancelled_orders: number;
+      processing_orders: number;
+      confirmed_orders: number;
+      shipped_orders: number;
+      completed_revenue: number;
+      cancelled_revenue: number;
+    };
+    ordersTimeline: Array<{
+      __typename?: 'OrderTimeline';
+      date: string;
+      orders_count: number;
+      revenue: number;
+    }>;
+    recentOrders: Array<{
+      __typename?: 'RecentOrder';
+      order_id: string;
+      order_number: string;
+      order_date: any;
+      customer_name: string;
+      order_total: number;
+      order_status: string;
+      shipping_city?: string | null;
+    }>;
+    topProducts: Array<{
+      __typename?: 'TopProduct';
+      variant_id: string;
+      variant_sku: string;
+      product_name: string;
+      product_brand?: string | null;
+      variant_price: number;
+      variant_cover?: string | null;
+      product_cover?: string | null;
+      total_quantity_sold: number;
+      total_revenue: number;
+      orders_count: number;
+    }>;
+  };
+};
+
 export type FindAllMovementsQueryVariables = Exact<{
   warehouseId: Scalars['ID']['input'];
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -1876,10 +2037,8 @@ export type CreateProductMutation = {
     }> | null;
     categories?: Array<{
       __typename?: 'ProductCategory';
-      categoryId?: string | null;
+      categoryId: string;
       categoryName?: string | null;
-      categoryDescription?: string | null;
-      categoryCover?: string | null;
     }> | null;
   };
 };
@@ -1907,10 +2066,8 @@ export type UpdateMutation = {
     updatedAt: any;
     categories?: Array<{
       __typename?: 'ProductCategory';
-      categoryId?: string | null;
+      categoryId: string;
       categoryName?: string | null;
-      categoryDescription?: string | null;
-      categoryCover?: string | null;
     }> | null;
     media?: Array<{
       __typename?: 'Media';
@@ -2032,10 +2189,8 @@ export type FindProductByIdQuery = {
     }> | null;
     categories?: Array<{
       __typename?: 'ProductCategory';
-      categoryId?: string | null;
+      categoryId: string;
       categoryName?: string | null;
-      categoryDescription?: string | null;
-      categoryCover?: string | null;
     }> | null;
     variants?: Array<{
       __typename?: 'Variant';
@@ -2097,9 +2252,7 @@ export type FindAllProductsQueryVariables = Exact<{
     Array<Scalars['ID']['input']> | Scalars['ID']['input']
   >;
   type?: InputMaybe<TypeEnum>;
-  sortBy?: InputMaybe<ProductSortBy>;
   sortOrder?: InputMaybe<SortOrder>;
-  filterMode?: InputMaybe<ProductFilterMode>;
   name?: InputMaybe<Scalars['String']['input']>;
 }>;
 
@@ -2125,10 +2278,8 @@ export type FindAllProductsQuery = {
       updatedAt: any;
       categories?: Array<{
         __typename?: 'ProductCategory';
-        categoryId?: string | null;
+        categoryId: string;
         categoryName?: string | null;
-        categoryDescription?: string | null;
-        categoryCover?: string | null;
       }> | null;
       media?: Array<{
         __typename?: 'Media';
@@ -2195,9 +2346,7 @@ export type FindAllProductsQuery = {
 export type FindAllVariantsToCreateStockQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Float']['input']>;
   limit?: InputMaybe<Scalars['Float']['input']>;
-  sortBy?: InputMaybe<ProductSortBy>;
   sortOrder?: InputMaybe<SortOrder>;
-  filterMode?: InputMaybe<ProductFilterMode>;
   name?: InputMaybe<Scalars['String']['input']>;
 }>;
 
@@ -4574,6 +4723,190 @@ export const FindCategoriesTreeDocument = {
   FindCategoriesTreeQuery,
   FindCategoriesTreeQueryVariables
 >;
+export const GetDashboardDataDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetDashboardData' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getDashboardData' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'summary' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'total_orders' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'total_revenue' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'average_order_value' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'unique_customers' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'completed_orders' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'cancelled_orders' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'processing_orders' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'confirmed_orders' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'shipped_orders' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'completed_revenue' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'cancelled_revenue' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'ordersTimeline' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'date' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'orders_count' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'revenue' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'recentOrders' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'order_id' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'order_number' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'order_date' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'customer_name' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'order_total' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'order_status' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'shipping_city' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'topProducts' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variant_id' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variant_sku' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'product_name' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'product_brand' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variant_price' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variant_cover' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'product_cover' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'total_quantity_sold' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'total_revenue' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'orders_count' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetDashboardDataQuery,
+  GetDashboardDataQueryVariables
+>;
 export const FindAllMovementsDocument = {
   kind: 'Document',
   definitions: [
@@ -6242,14 +6575,6 @@ export const CreateProductDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'categoryName' },
                       },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'categoryDescription' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'categoryCover' },
-                      },
                     ],
                   },
                 },
@@ -6340,14 +6665,6 @@ export const UpdateDocument = {
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'categoryName' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'categoryDescription' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'categoryCover' },
                       },
                     ],
                   },
@@ -6800,14 +7117,6 @@ export const FindProductByIdDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'categoryName' },
                       },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'categoryDescription' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'categoryCover' },
-                      },
                     ],
                   },
                 },
@@ -7037,18 +7346,6 @@ export const FindAllProductsDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'sortBy' },
-          },
-          type: {
-            kind: 'NamedType',
-            name: { kind: 'Name', value: 'ProductSortBy' },
-          },
-          defaultValue: { kind: 'EnumValue', value: 'NAME' },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
             name: { kind: 'Name', value: 'sortOrder' },
           },
           type: {
@@ -7056,18 +7353,6 @@ export const FindAllProductsDocument = {
             name: { kind: 'Name', value: 'SortOrder' },
           },
           defaultValue: { kind: 'EnumValue', value: 'ASC' },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'filterMode' },
-          },
-          type: {
-            kind: 'NamedType',
-            name: { kind: 'Name', value: 'ProductFilterMode' },
-          },
-          defaultValue: { kind: 'EnumValue', value: 'ALL' },
         },
         {
           kind: 'VariableDefinition',
@@ -7117,26 +7402,10 @@ export const FindAllProductsDocument = {
               },
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'sortBy' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'sortBy' },
-                },
-              },
-              {
-                kind: 'Argument',
                 name: { kind: 'Name', value: 'sortOrder' },
                 value: {
                   kind: 'Variable',
                   name: { kind: 'Name', value: 'sortOrder' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'filterMode' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'filterMode' },
                 },
               },
               {
@@ -7173,17 +7442,6 @@ export const FindAllProductsDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'categoryName' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'categoryDescription',
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'categoryCover' },
                             },
                           ],
                         },
@@ -7484,18 +7742,6 @@ export const FindAllVariantsToCreateStockDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'sortBy' },
-          },
-          type: {
-            kind: 'NamedType',
-            name: { kind: 'Name', value: 'ProductSortBy' },
-          },
-          defaultValue: { kind: 'EnumValue', value: 'NAME' },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
             name: { kind: 'Name', value: 'sortOrder' },
           },
           type: {
@@ -7503,18 +7749,6 @@ export const FindAllVariantsToCreateStockDocument = {
             name: { kind: 'Name', value: 'SortOrder' },
           },
           defaultValue: { kind: 'EnumValue', value: 'ASC' },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'filterMode' },
-          },
-          type: {
-            kind: 'NamedType',
-            name: { kind: 'Name', value: 'ProductFilterMode' },
-          },
-          defaultValue: { kind: 'EnumValue', value: 'ACTIVES' },
         },
         {
           kind: 'VariableDefinition',
@@ -7548,26 +7782,10 @@ export const FindAllVariantsToCreateStockDocument = {
               },
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'sortBy' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'sortBy' },
-                },
-              },
-              {
-                kind: 'Argument',
                 name: { kind: 'Name', value: 'sortOrder' },
                 value: {
                   kind: 'Variable',
                   name: { kind: 'Name', value: 'sortOrder' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'filterMode' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'filterMode' },
                 },
               },
               {
