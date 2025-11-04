@@ -53,7 +53,7 @@ export type AddStockToWarehouseInput = {
 export type AddVariantToProductInput = {
   attributes: Array<CreateAttributeInput>;
   barcode?: InputMaybe<Scalars['String']['input']>;
-  condition: ConditionEnum;
+  condition?: InputMaybe<ConditionEnum>;
   dimension?: InputMaybe<CreateDimensionInput>;
   ean?: InputMaybe<Scalars['String']['input']>;
   installmentPayments?: InputMaybe<Array<CreateInstallmentInput>>;
@@ -227,7 +227,7 @@ export type CreateProductInput = {
   manufacturer?: InputMaybe<Scalars['String']['input']>;
   media?: InputMaybe<Array<CreateMediaInput>>;
   name: Scalars['String']['input'];
-  productType: TypeEnum;
+  productType?: InputMaybe<TypeEnum>;
   shortDescription: Scalars['String']['input'];
   sustainabilities?: InputMaybe<Array<CreateSustainabilityInput>>;
   tags?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -245,6 +245,25 @@ export type CreateStoreInput = {
 export type CreateSustainabilityInput = {
   certification: Scalars['String']['input'];
   recycledPercentage: Scalars['Float']['input'];
+};
+
+export type CreateVariantInput = {
+  attributes: Array<CreateAttributeInput>;
+  barcode?: InputMaybe<Scalars['String']['input']>;
+  condition?: InputMaybe<ConditionEnum>;
+  dimension?: InputMaybe<CreateDimensionInput>;
+  ean?: InputMaybe<Scalars['String']['input']>;
+  installmentPayments?: InputMaybe<Array<CreateInstallmentInput>>;
+  isbn?: InputMaybe<Scalars['String']['input']>;
+  personalizationOptions?: InputMaybe<Array<Scalars['String']['input']>>;
+  price: Scalars['Float']['input'];
+  productId: Scalars['ID']['input'];
+  sku: Scalars['String']['input'];
+  upc?: InputMaybe<Scalars['String']['input']>;
+  variantCover?: InputMaybe<Scalars['String']['input']>;
+  variantMedia?: InputMaybe<Array<CreateMediaInput>>;
+  warranties?: InputMaybe<Array<CreateWarrantyInput>>;
+  weight?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type CreateWarehouseInput = {
@@ -437,6 +456,7 @@ export type Mutation = {
   updateStockInWarehouse: Warehouse;
   updateStore: Store;
   updateTenant: Tenant;
+  updateVariant: Product;
   updateWarehouse: Warehouse;
 };
 
@@ -614,6 +634,12 @@ export type MutationUpdateTenantArgs = {
   input: UpdateTenantInput;
 };
 
+export type MutationUpdateVariantArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateVariantInput;
+  productId: Scalars['String']['input'];
+};
+
 export type MutationUpdateWarehouseArgs = {
   id: Scalars['ID']['input'];
   input: UpdateWarehouseInput;
@@ -713,26 +739,9 @@ export type Product = {
 
 export type ProductCategory = {
   __typename?: 'ProductCategory';
-  categoryCover?: Maybe<Scalars['String']['output']>;
-  categoryDescription?: Maybe<Scalars['String']['output']>;
-  categoryId?: Maybe<Scalars['ID']['output']>;
+  categoryId: Scalars['ID']['output'];
   categoryName?: Maybe<Scalars['String']['output']>;
 };
-
-export enum ProductFilterMode {
-  Actives = 'ACTIVES',
-  All = 'ALL',
-  Archives = 'ARCHIVES',
-}
-
-export enum ProductSortBy {
-  CreatedAt = 'CREATED_AT',
-  FirstVariantPrice = 'FIRST_VARIANT_PRICE',
-  Name = 'NAME',
-  Sku = 'SKU',
-  UpdatedAt = 'UPDATED_AT',
-  VariantCount = 'VARIANT_COUNT',
-}
 
 export type Query = {
   __typename?: 'Query';
@@ -943,7 +952,6 @@ export type StockPerWarehouseSortBy = {
   available?: InputMaybe<SortOrder>;
   replenishmentDate?: InputMaybe<SortOrder>;
   reserved?: InputMaybe<SortOrder>;
-  sku?: InputMaybe<SortOrder>;
   variantFirstAttribute?: InputMaybe<SortOrder>;
 };
 
@@ -1009,6 +1017,11 @@ export type UpdateAddressInput = {
   stateId?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UpdateAttributeInput = {
+  key?: InputMaybe<Scalars['String']['input']>;
+  value?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UpdateCategoryInput = {
   cover?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
@@ -1066,7 +1079,6 @@ export type UpdateProductInput = {
   shortDescription?: InputMaybe<Scalars['String']['input']>;
   sustainabilities?: InputMaybe<Array<UpdateSustainabilityInput>>;
   tags?: InputMaybe<Array<Scalars['String']['input']>>;
-  variants?: InputMaybe<Array<AddVariantToProductInput>>;
 };
 
 export type UpdateStockInWarehouseInput = {
@@ -1101,6 +1113,12 @@ export type UpdateTenantInput = {
 export type UpdateWarehouseInput = {
   addressId?: InputMaybe<Scalars['ID']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateWarrantyInput = {
+  coverage?: InputMaybe<Scalars['String']['input']>;
+  instructions?: InputMaybe<Scalars['String']['input']>;
+  months?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type Variant = {
@@ -1969,10 +1987,8 @@ export type CreateProductMutation = {
     }> | null;
     categories?: Array<{
       __typename?: 'ProductCategory';
-      categoryId?: string | null;
+      categoryId: string;
       categoryName?: string | null;
-      categoryDescription?: string | null;
-      categoryCover?: string | null;
     }> | null;
   };
 };
@@ -2001,10 +2017,8 @@ export type UpdateMutation = {
     updatedAt: any;
     categories?: Array<{
       __typename?: 'ProductCategory';
-      categoryId?: string | null;
+      categoryId: string;
       categoryName?: string | null;
-      categoryDescription?: string | null;
-      categoryCover?: string | null;
     }> | null;
     media?: Array<{
       __typename?: 'Media';
@@ -2127,10 +2141,8 @@ export type FindProductByIdQuery = {
     }> | null;
     categories?: Array<{
       __typename?: 'ProductCategory';
-      categoryId?: string | null;
+      categoryId: string;
       categoryName?: string | null;
-      categoryDescription?: string | null;
-      categoryCover?: string | null;
     }> | null;
     variants?: Array<{
       __typename?: 'Variant';
@@ -2192,9 +2204,7 @@ export type FindAllProductsQueryVariables = Exact<{
     Array<Scalars['ID']['input']> | Scalars['ID']['input']
   >;
   type?: InputMaybe<TypeEnum>;
-  sortBy?: InputMaybe<ProductSortBy>;
   sortOrder?: InputMaybe<SortOrder>;
-  filterMode?: InputMaybe<ProductFilterMode>;
   name?: InputMaybe<Scalars['String']['input']>;
 }>;
 
@@ -2221,10 +2231,8 @@ export type FindAllProductsQuery = {
       updatedAt: any;
       categories?: Array<{
         __typename?: 'ProductCategory';
-        categoryId?: string | null;
+        categoryId: string;
         categoryName?: string | null;
-        categoryDescription?: string | null;
-        categoryCover?: string | null;
       }> | null;
       media?: Array<{
         __typename?: 'Media';
@@ -2293,7 +2301,6 @@ export type FindAllVariantsToCreateStockQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   sortBy?: InputMaybe<ProductSortBy>;
   sortOrder?: InputMaybe<SortOrder>;
-  filterMode?: InputMaybe<ProductFilterMode>;
   name?: InputMaybe<Scalars['String']['input']>;
 }>;
 
@@ -4403,8 +4410,8 @@ export const FindCategoriesTreeDocument = {
     },
   ],
 } as unknown as DocumentNode<
-  FindCategoriesTreeQuery,
-  FindCategoriesTreeQueryVariables
+  GetDashboardDataQuery,
+  GetDashboardDataQueryVariables
 >;
 export const FindAllMovementsDocument = {
   kind: 'Document',
@@ -6075,14 +6082,6 @@ export const CreateProductDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'categoryName' },
                       },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'categoryDescription' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'categoryCover' },
-                      },
                     ],
                   },
                 },
@@ -6173,14 +6172,6 @@ export const UpdateDocument = {
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'categoryName' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'categoryDescription' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'categoryCover' },
                       },
                     ],
                   },
@@ -6634,14 +6625,6 @@ export const FindProductByIdDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'categoryName' },
                       },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'categoryDescription' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'categoryCover' },
-                      },
                     ],
                   },
                 },
@@ -6872,18 +6855,6 @@ export const FindAllProductsDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'sortBy' },
-          },
-          type: {
-            kind: 'NamedType',
-            name: { kind: 'Name', value: 'ProductSortBy' },
-          },
-          defaultValue: { kind: 'EnumValue', value: 'NAME' },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
             name: { kind: 'Name', value: 'sortOrder' },
           },
           type: {
@@ -6891,18 +6862,6 @@ export const FindAllProductsDocument = {
             name: { kind: 'Name', value: 'SortOrder' },
           },
           defaultValue: { kind: 'EnumValue', value: 'ASC' },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'filterMode' },
-          },
-          type: {
-            kind: 'NamedType',
-            name: { kind: 'Name', value: 'ProductFilterMode' },
-          },
-          defaultValue: { kind: 'EnumValue', value: 'ALL' },
         },
         {
           kind: 'VariableDefinition',
@@ -6952,26 +6911,10 @@ export const FindAllProductsDocument = {
               },
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'sortBy' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'sortBy' },
-                },
-              },
-              {
-                kind: 'Argument',
                 name: { kind: 'Name', value: 'sortOrder' },
                 value: {
                   kind: 'Variable',
                   name: { kind: 'Name', value: 'sortOrder' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'filterMode' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'filterMode' },
                 },
               },
               {
@@ -7008,17 +6951,6 @@ export const FindAllProductsDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'categoryName' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'categoryDescription',
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'categoryCover' },
                             },
                           ],
                         },
@@ -7323,18 +7255,6 @@ export const FindAllVariantsToCreateStockDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'sortBy' },
-          },
-          type: {
-            kind: 'NamedType',
-            name: { kind: 'Name', value: 'ProductSortBy' },
-          },
-          defaultValue: { kind: 'EnumValue', value: 'NAME' },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
             name: { kind: 'Name', value: 'sortOrder' },
           },
           type: {
@@ -7342,18 +7262,6 @@ export const FindAllVariantsToCreateStockDocument = {
             name: { kind: 'Name', value: 'SortOrder' },
           },
           defaultValue: { kind: 'EnumValue', value: 'ASC' },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'filterMode' },
-          },
-          type: {
-            kind: 'NamedType',
-            name: { kind: 'Name', value: 'ProductFilterMode' },
-          },
-          defaultValue: { kind: 'EnumValue', value: 'ACTIVES' },
         },
         {
           kind: 'VariableDefinition',
@@ -7387,26 +7295,10 @@ export const FindAllVariantsToCreateStockDocument = {
               },
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'sortBy' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'sortBy' },
-                },
-              },
-              {
-                kind: 'Argument',
                 name: { kind: 'Name', value: 'sortOrder' },
                 value: {
                   kind: 'Variable',
                   name: { kind: 'Name', value: 'sortOrder' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'filterMode' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'filterMode' },
                 },
               },
               {
