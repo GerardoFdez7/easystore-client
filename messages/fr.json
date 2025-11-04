@@ -574,7 +574,8 @@
     "sold": "vendu",
     "revenue": "Revenu",
     "noOrdersTitle": "Aucune commande pour le moment",
-    "noOrdersDescription": "Votre tableau de bord prendra vie une fois que vous commencerez à recevoir des commandes. Toutes vos statistiques et analyses de ventes apparaîtront ici."
+    "noOrdersDescription": "Votre tableau de bord prendra vie une fois que vous commencerez à recevoir des commandes. Toutes vos statistiques et analyses de ventes apparaîtront ici.",
+    "createOrder": "Créer une Commande"
   },
   "Products": {
     "addProduct": "Créer un produit",

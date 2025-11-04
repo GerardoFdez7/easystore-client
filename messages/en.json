@@ -573,7 +573,8 @@
     "sold": "sold",
     "revenue": "Revenue",
     "noOrdersTitle": "No Orders Yet",
-    "noOrdersDescription": "Your dashboard will come to life once you start receiving orders. All your sales metrics and analytics will appear here."
+    "noOrdersDescription": "Your dashboard will come to life once you start receiving orders. All your sales metrics and analytics will appear here.",
+    "createOrder": "Create Order"
   },
   "Products": {
     "addProduct": "Create Product",

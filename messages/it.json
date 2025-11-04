@@ -575,7 +575,8 @@
     "sold": "venduto",
     "revenue": "Entrate",
     "noOrdersTitle": "Nessun ordine ancora",
-    "noOrdersDescription": "La tua dashboard prenderà vita non appena inizierai a ricevere ordini. Tutte le metriche e le analisi delle vendite appariranno qui."
+    "noOrdersDescription": "La tua dashboard prenderà vita non appena inizierai a ricevere ordini. Tutte le metriche e le analisi delle vendite appariranno qui.",
+    "createOrder": "Crea Ordine"
   },
   "Products": {
     "addProduct": "Crea un prodotto",

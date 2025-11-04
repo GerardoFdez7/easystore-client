@@ -574,7 +574,8 @@
     "sold": "vendido",
     "revenue": "Ingresos",
     "noOrdersTitle": "Aún no hay pedidos",
-    "noOrdersDescription": "Tu panel cobrará vida una vez que comiences a recibir pedidos. Todas tus métricas y análisis de ventas aparecerán aquí."
+    "noOrdersDescription": "Tu panel cobrará vida una vez que comiences a recibir pedidos. Todas tus métricas y análisis de ventas aparecerán aquí.",
+    "createOrder": "Crear Pedido"
   },
   "Products": {
     "addProduct": "Crear producto",

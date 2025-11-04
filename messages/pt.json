@@ -574,7 +574,8 @@
     "sold": "vendido",
     "revenue": "Receita",
     "noOrdersTitle": "Ainda não há pedidos",
-    "noOrdersDescription": "Seu painel ganhará vida assim que você começar a receber pedidos. Todas as suas métricas e análises de vendas aparecerão aqui."
+    "noOrdersDescription": "Seu painel ganhará vida assim que você começar a receber pedidos. Todas as suas métricas e análises de vendas aparecerão aqui.",
+    "createOrder": "Criar Pedido"
   },
   "Products": {
     "addProduct": "Criar produto",
