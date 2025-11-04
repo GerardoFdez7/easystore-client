@@ -16,35 +16,27 @@ import TopProductsSkeleton from '@molecules/dashboard/TopProductsSkeleton';
 import EmptyState from '@molecules/shared/EmptyState';
 import { useTranslations } from 'next-intl';
 import { useDashboard } from '@hooks/domains/dashboard';
-import { Card, CardContent } from '@shadcn/ui/card';
-import { ShoppingCart } from 'lucide-react';
+import { Plus, ShoppingCart } from 'lucide-react';
 
 export default function MainDashboard() {
   const t = useTranslations('Dashboard');
   const { dashboardData, loading, error } = useDashboard({ skip: false });
 
+  // Check if there's an error (no orders found)
   if (error) {
     return (
       <SidebarLayout title={t('dashboard')}>
-        <div className="px-5 py-10">
-          <Card>
-            <CardContent className="p-6">
-              <p className="text-destructive">
-                Error al cargar los datos del dashboard
-              </p>
-            </CardContent>
-          </Card>
-        </div>
+        <EmptyState
+          icon={ShoppingCart}
+          title={t('noOrdersTitle')}
+          description={t('noOrdersDescription')}
+          buttonText={t('createOrder')}
+          buttonIcon={Plus}
+          onButtonClick={() => {}}
+        />
       </SidebarLayout>
     );
   }
-
-  // Check if there are no orders (empty state)
-  const hasNoOrders =
-    !loading &&
-    dashboardData?.summary.totalOrders === 0 &&
-    dashboardData?.recentOrders.length === 0 &&
-    dashboardData?.topProducts.length === 0;
 
   return (
     <SidebarLayout title={t('dashboard')}>
@@ -58,14 +50,6 @@ export default function MainDashboard() {
             <TopProductsSkeleton />
           </div>
         </>
-      ) : hasNoOrders ? (
-        <div className="px-5">
-          <EmptyState
-            icon={ShoppingCart}
-            title={t('noOrdersTitle')}
-            description={t('noOrdersDescription')}
-          />
-        </div>
       ) : (
         <>
           <KPICards summary={dashboardData?.summary} />

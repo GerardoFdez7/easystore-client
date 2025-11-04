@@ -71,28 +71,6 @@ export function useDashboard(options: UseDashboardOptions = {}) {
 
     const backendData = data.getDashboardData;
 
-    // If no data is returned (404 handled silently), return empty state
-    if (!backendData.summary) {
-      return {
-        summary: {
-          totalOrders: 0,
-          totalRevenue: 0,
-          averageOrderValue: 0,
-          uniqueCustomers: 0,
-          completedOrders: 0,
-          cancelledOrders: 0,
-          processingOrders: 0,
-          confirmedOrders: 0,
-          shippedOrders: 0,
-          completedRevenue: 0,
-          cancelledRevenue: 0,
-        },
-        ordersTimeline: [],
-        recentOrders: [],
-        topProducts: [],
-      };
-    }
-
     return {
       summary: {
         totalOrders: backendData.summary.total_orders,
