@@ -9,7 +9,7 @@ const meta: Meta<typeof TopProductsSkeleton> = {
     docs: {
       description: {
         component:
-          'A skeleton loading component for the Top Products section in the dashboard. Displays animated skeleton placeholders for the section title and a responsive grid of 10 product cards. Each card shows placeholders for the product image, name, brand, and sales information. The grid adapts from 2 columns on mobile to 5 columns on ultra-wide screens.',
+          'A skeleton loading component for the Top Products section in the dashboard. ',
       },
     },
   },
