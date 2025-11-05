@@ -60,7 +60,7 @@ export function ChartTotalSales({
     }
   }, [isMobile]);
 
-  // Transformar los datos para el gráfico
+  // Transform the data for the chart
   const chartData = React.useMemo(() => {
     return ordersTimeline.map((item) => ({
       date: item.date,
