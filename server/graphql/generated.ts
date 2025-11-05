@@ -407,6 +407,29 @@ export enum CurrencyCodes {
   Zwl = 'ZWL',
 }
 
+export type DashboardData = {
+  __typename?: 'DashboardData';
+  ordersTimeline: Array<OrderTimeline>;
+  recentOrders: Array<RecentOrder>;
+  summary: DashboardSummary;
+  topProducts: Array<TopProduct>;
+};
+
+export type DashboardSummary = {
+  __typename?: 'DashboardSummary';
+  average_order_value: Scalars['Float']['output'];
+  cancelled_orders: Scalars['Int']['output'];
+  cancelled_revenue: Scalars['Float']['output'];
+  completed_orders: Scalars['Int']['output'];
+  completed_revenue: Scalars['Float']['output'];
+  confirmed_orders: Scalars['Int']['output'];
+  processing_orders: Scalars['Int']['output'];
+  shipped_orders: Scalars['Int']['output'];
+  total_orders: Scalars['Int']['output'];
+  total_revenue: Scalars['Float']['output'];
+  unique_customers: Scalars['Int']['output'];
+};
+
 export type Dimension = {
   __typename?: 'Dimension';
   height: Scalars['Float']['output'];
@@ -641,6 +664,13 @@ export type MutationUpdateWarehouseArgs = {
   input: UpdateWarehouseInput;
 };
 
+export type OrderTimeline = {
+  __typename?: 'OrderTimeline';
+  date: Scalars['String']['output'];
+  orders_count: Scalars['Int']['output'];
+  revenue: Scalars['Float']['output'];
+};
+
 export type PaginatedAddressesType = {
   __typename?: 'PaginatedAddressesType';
   addresses: Array<AddressType>;
@@ -738,6 +768,8 @@ export type Query = {
   getAllWarehouses: PaginatedWarehousesType;
   getCart: PaginatedCart;
   getCategoryById: Category;
+  /** Get all dashboard data in a single query: summary, timeline, recent orders, and top products */
+  getDashboardData: DashboardData;
   getMediaUploadToken: MediaAuthResponse;
   getProductById: Product;
   getStatesByCountryId: Array<StateType>;
@@ -821,6 +853,17 @@ export type QueryGetStatesByCountryIdArgs = {
 export type QueryGetWarehouseByIdArgs = {
   id: Scalars['ID']['input'];
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type RecentOrder = {
+  __typename?: 'RecentOrder';
+  customer_name: Scalars['String']['output'];
+  order_date: Scalars['DateTime']['output'];
+  order_id: Scalars['ID']['output'];
+  order_number: Scalars['String']['output'];
+  order_status: Scalars['String']['output'];
+  order_total: Scalars['Float']['output'];
+  shipping_city?: Maybe<Scalars['String']['output']>;
 };
 
 export type RemoveItemFromCartInput = {
@@ -919,6 +962,20 @@ export type Tenant = {
   logo?: Maybe<Scalars['String']['output']>;
   ownerName: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type TopProduct = {
+  __typename?: 'TopProduct';
+  orders_count: Scalars['Int']['output'];
+  product_brand?: Maybe<Scalars['String']['output']>;
+  product_cover?: Maybe<Scalars['String']['output']>;
+  product_name: Scalars['String']['output'];
+  total_quantity_sold: Scalars['Int']['output'];
+  total_revenue: Scalars['Float']['output'];
+  variant_cover?: Maybe<Scalars['String']['output']>;
+  variant_id: Scalars['ID']['output'];
+  variant_price: Scalars['Float']['output'];
+  variant_sku: Scalars['String']['output'];
 };
 
 export enum TypeEnum {
