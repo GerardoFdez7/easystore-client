@@ -30,7 +30,7 @@ const RichText: React.FC<{ text: string }> = ({ text }) => {
         elements.push(
           <ul
             key={`ul-${idx}`}
-            className="mb-4 list-disc space-y-1 pl-6 text-gray-700"
+            className="text-text mb-4 list-disc space-y-1 pl-6"
           >
             {currentList}
           </ul>,
@@ -41,7 +41,7 @@ const RichText: React.FC<{ text: string }> = ({ text }) => {
         elements.push(
           <p
             key={`p-${idx}`}
-            className="mb-4 leading-relaxed whitespace-pre-line text-gray-700"
+            className="text-text mb-4 leading-relaxed whitespace-pre-line"
           >
             {rawLine}
           </p>,
@@ -52,10 +52,7 @@ const RichText: React.FC<{ text: string }> = ({ text }) => {
 
   if (currentList) {
     elements.push(
-      <ul
-        key="ul-final"
-        className="mb-4 list-disc space-y-1 pl-6 text-gray-700"
-      >
+      <ul key="ul-final" className="text-text mb-4 list-disc space-y-1 pl-6">
         {currentList}
       </ul>,
     );
@@ -183,7 +180,7 @@ export function TermsContent() {
   return (
     <main className="container mx-auto px-6 pt-32 pb-16">
       {/* Header */}
-      <div className="mt-4 mb-12 rounded-md bg-[#423F3D] px-8 py-12 text-white">
+      <div className="text-accent bg-foreground mt-4 mb-12 rounded-md px-8 py-12">
         <h1 className="text-center text-3xl font-bold">{t('pageTitle')}</h1>
       </div>
 

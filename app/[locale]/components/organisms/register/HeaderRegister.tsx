@@ -3,12 +3,14 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { LanguageButton } from '@atoms/shared/ButtonLanguage';
+import BackButton from '@atoms/shared/BackButton';
 
 export default function HeaderRegister() {
   const t = useTranslations('Register');
 
   return (
     <header className="px-4 py-6 sm:px-8 md:px-16 lg:px-32">
+      <BackButton />
       <div className="absolute top-4 right-4 sm:top-6 sm:right-8 md:top-6 md:right-16">
         <LanguageButton />
       </div>

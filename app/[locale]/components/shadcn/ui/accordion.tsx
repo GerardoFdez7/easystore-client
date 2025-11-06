@@ -68,7 +68,7 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          'text-title focus-visible:border-ring focus-visible:ring-ring/50 bg-card flex flex-1 items-start justify-between gap-4 rounded-t-md p-5 py-4 text-left text-2xl font-medium transition-all outline-none hover:cursor-pointer focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180',
+          'text-title focus-visible:border-ring focus-visible:ring-ring/50 bg-card flex flex-1 cursor-pointer items-start justify-between gap-4 rounded-t-md p-5 py-4 text-left text-2xl font-medium transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180',
           className,
         )}
         {...props}
@@ -88,7 +88,7 @@ function AccordionContent({
   return (
     <AccordionPrimitive.Content
       data-slot="accordion-content"
-      className="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down text-text overflow-hidden rounded-b-md bg-white px-5 pb-5 text-xl"
+      className="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down text-text bg-card overflow-hidden rounded-b-md px-5 pb-5 text-xl"
       {...props}
     >
       <div className={cn('pt-0 pb-4', className)}>{children}</div>

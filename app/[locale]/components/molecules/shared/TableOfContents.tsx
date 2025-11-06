@@ -13,8 +13,8 @@ export function TableOfContents({
   const t = useTranslations('Privacy');
 
   return (
-    <nav className={`rounded-lg bg-gray-100 p-8 ${className}`}>
-      <p className="mb-6 text-sm font-medium text-gray-600 uppercase">
+    <nav className={`bg-card rounded-lg p-8 ${className}`}>
+      <p className="text-text mb-6 font-medium uppercase">
         {t('tableOfContents')}
       </p>
       <ul className="space-y-1">
@@ -23,11 +23,11 @@ export function TableOfContents({
           return (
             <li
               key={x.id}
-              className={`flex w-full items-center rounded-full transition-colors ${isActive ? 'bg-gray-300' : 'hover:bg-gray-200'} `}
+              className={`flex w-full items-center rounded-full transition-colors ${isActive ? 'bg-hover' : 'hover:bg-hover'} `}
             >
               <Link
                 href={`#${x.id}`}
-                className="flex-1 px-6 py-1 font-medium text-gray-900"
+                className="text-title flex-1 px-6 py-1 font-medium"
               >
                 {x.label}
               </Link>

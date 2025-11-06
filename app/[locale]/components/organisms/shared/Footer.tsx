@@ -1,12 +1,12 @@
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { Facebook, Instagram, Linkedin } from 'lucide-react';
+// import Link from 'next/link';
+// import { Facebook, Instagram, Linkedin } from 'lucide-react';
 import LinkFooter from '@atoms/shared/LinkFooter';
 
 export default function Footer() {
   const t = useTranslations('Landing');
-  const styleIcons =
-    'text-foreground hover:text-primary h-7 w-7 2xl:h-8 2xl:w-8 transition-colors';
+  // const styleIcons =
+  //   'text-foreground hover:text-primary h-7 w-7 2xl:h-8 2xl:w-8 transition-colors';
 
   return (
     <footer className="mt-auto px-10 2xl:px-35">
@@ -22,13 +22,13 @@ export default function Footer() {
         <LinkFooter href="/privacy" text={t('privacyPolicy')} />
       </div>
 
-      <div className="mb-6 text-center text-[17px] 2xl:mb-9 2xl:text-xl">
+      <div className="text-center text-[17px] 2xl:text-xl">
         <span style={{ opacity: 0.7 }} className="text-foreground">
           {t('inc')}
         </span>
       </div>
 
-      <div className="flex justify-center gap-4">
+      {/* <div className="flex justify-center gap-4">
         <Link href="#" aria-label="Facebook">
           <span style={{ opacity: 0.7 }}>
             <Facebook className={styleIcons} />
@@ -44,7 +44,7 @@ export default function Footer() {
             <Linkedin className={styleIcons} />
           </span>{' '}
         </Link>
-      </div>
+      </div> */}
     </footer>
   );
 }
