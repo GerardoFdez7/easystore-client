@@ -16,7 +16,7 @@ export default function Portrait() {
         backgroundImage: `url('/portrait_image.webp')`,
       }}
     >
-      <div className="max-w-screen-xl py-20 sm:ml-13">
+      <div className="max-w-7xl py-20 sm:ml-13">
         <div className="max-w-85 pl-5 sm:max-w-xl">
           <h1 className="mb-13 text-5xl font-extrabold sm:text-6xl">
             {t('title')}

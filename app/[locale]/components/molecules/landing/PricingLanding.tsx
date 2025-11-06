@@ -15,7 +15,7 @@ export default function PricingLading() {
         <h1 className="text-primary my-5 text-2xl font-medium sm:text-3xl">
           {t('pricing&Plans')}
         </h1>
-        <h2 className="text-title my-5 text-5xl font-extrabold sm:text-6xl">
+        <h2 className="text-title my-5 text-3xl font-extrabold sm:text-5xl">
           {t('pricingTitle')}
         </h2>
         <p className="text-foreground mx-auto my-5 max-w-5xl text-center text-[20px] sm:text-2xl">

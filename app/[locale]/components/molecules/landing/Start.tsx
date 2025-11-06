@@ -6,8 +6,8 @@ export default function Start() {
   const t = useTranslations('Landing');
 
   return (
-    <section className="mx-auto px-5 pt-10 pb-5 sm:py-16 md:py-16">
-      <h2 className="text-title mb-12 text-5xl font-extrabold sm:text-6xl xl:text-left">
+    <section className="mx-auto px-5 pt-35">
+      <h2 className="text-title mb-12 text-3xl font-extrabold sm:text-5xl xl:text-left">
         {t('starting')}
       </h2>
 

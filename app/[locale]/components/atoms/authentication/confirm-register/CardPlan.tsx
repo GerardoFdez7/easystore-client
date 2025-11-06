@@ -17,7 +17,7 @@ export default function CardPlan({
   children,
 }: CardPlanProps) {
   return (
-    <section className="bg-card flex h-[466px] w-[360px] flex-col justify-between rounded-lg border p-6 shadow-sm">
+    <section className="bg-card flex h-[466px] w-xs flex-col justify-between rounded-lg border p-6 shadow-sm lg:w-[30vw] 2xl:w-[20vw]">
       <div className="flex-1">
         <HeaderPlan title={title} price={price} from={from} />
         <ul className="mb-8 space-y-1.5">

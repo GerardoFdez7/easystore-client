@@ -7,11 +7,11 @@ export default function Features() {
   return (
     <section className="mx-auto">
       <div className="mb-10 max-w-7xl p-5">
-        <h1 className="text-title mb-12 text-5xl font-extrabold sm:text-6xl xl:text-left">
+        <h1 className="text-title mb-12 text-3xl font-extrabold sm:text-5xl xl:text-left">
           {t('featureTitle')}
         </h1>
 
-        <p className="text-text text-xl sm:text-3xl">{t('featureText')}</p>
+        <p className="text-text text-xl sm:text-2xl">{t('featureText')}</p>
       </div>
       <div className="flex items-center justify-center md:-mx-20 xl:-mx-35">
         <CarouselFeature />

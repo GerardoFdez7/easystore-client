@@ -27,7 +27,7 @@ export default function Pricing({
   const [width, setWidth] = useState<number | null>(null);
   const [billing, setBilling] = useState<BillingType>('monthly');
   const styleTriggersPlans =
-    'data-[state=active]:bg-foreground text-[12px] rounded-xl';
+    'data-[state=active]:bg-title dark:data-[state=active]:bg-title text-title text-[12px] rounded-xl dark:data-[state=active]:text-black';
 
   const prices: Record<BillingType, Record<PlanType, string>> = {
     monthly: {
@@ -98,7 +98,7 @@ export default function Pricing({
       </Tabs>
 
       <div className="hidden min-[904px]:block">
-        <div className="flex flex-wrap justify-center gap-6">
+        <div className="grid grid-cols-2 justify-items-center gap-6 2xl:grid-cols-4">
           <PlanBasic
             price={prices[billing].basic}
             selected={selectedPlan === 'basic'}

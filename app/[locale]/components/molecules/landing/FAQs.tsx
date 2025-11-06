@@ -11,7 +11,7 @@ export default function FAQs() {
 
   return (
     <section className="mx-auto p-5">
-      <h1 className="text-title mb-12 text-5xl font-extrabold sm:text-6xl xl:text-left">
+      <h1 className="text-title mb-12 text-3xl font-extrabold sm:text-5xl xl:text-left">
         {t('FAQsTitle')}
       </h1>
       <Accordion type="single" collapsible>

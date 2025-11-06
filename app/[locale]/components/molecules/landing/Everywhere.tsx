@@ -6,10 +6,10 @@ export default function Everywhere() {
 
   return (
     <section className="mx-auto p-5">
-      <h2 className="text-title mb-5 text-5xl font-extrabold sm:text-6xl">
+      <h2 className="text-title mb-5 text-3xl font-extrabold sm:text-5xl">
         {t('everyWhereTitle')}
       </h2>
-      <p className="text-text mb-5 text-xl sm:text-3xl">
+      <p className="text-text mb-5 text-xl sm:text-2xl">
         {t('everyWhereText')}
       </p>
       <div className="mx-auto max-w-[2000px]">

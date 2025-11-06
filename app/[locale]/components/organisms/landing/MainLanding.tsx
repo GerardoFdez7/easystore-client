@@ -9,7 +9,7 @@ import PricingLading from '@molecules/landing/PricingLanding';
 
 export default function MainLanding() {
   return (
-    <main className="mt-21 sm:mt-26 md:mx-20 xl:mx-35">
+    <main className="mt-21 space-y-30 sm:mt-26 md:mx-20 xl:mx-35">
       <Portrait />
       <Start />
       <Features />
