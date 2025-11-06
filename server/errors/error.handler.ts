@@ -53,6 +53,7 @@ function handleNetworkError(networkError: Error, context: ErrorContext): void {
     description:
       getLocalizedMessage(locale, 'network-error') +
       (isDevelopment ? ` Backend message: "${networkError.message}"` : ''),
+    duration: Infinity,
   });
 }
 
