@@ -1,4 +1,4 @@
-import GetInTouchTemplate from '@templates/GetInTouch';
+import GetInTouchTemplate from '@templates/landing/GetInTouch';
 
 export default function GetInTouch() {
   return <GetInTouchTemplate />;

@@ -1,8 +1,8 @@
 'use client';
-import PlanBasic from '@molecules/confirm-register/PlanBasic';
-import PlanAdvanced from '@molecules/confirm-register/PlanAdvanced';
-import PlanPremium from '@molecules/confirm-register/PlanPremium';
-import PlanEnterprise from '@molecules/confirm-register/PlanEnterprise';
+import PlanBasic from '@molecules/authentication/confirm-register/PlanBasic';
+import PlanAdvanced from '@molecules/authentication/confirm-register/PlanAdvanced';
+import PlanPremium from '@molecules/authentication/confirm-register/PlanPremium';
+import PlanEnterprise from '@molecules/authentication/confirm-register/PlanEnterprise';
 import { Tabs, TabsList, TabsTrigger } from '@atoms/shared/PricingTabs';
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';

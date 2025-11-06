@@ -1,4 +1,3 @@
-// components/organisms/PrivacyContent.tsx
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -38,15 +37,16 @@ const RichText: React.FC<{ text: string }> = ({ text }) => {
         );
         currentList = null;
       }
-      if (line === '') return;
-      elements.push(
-        <p
-          key={`p-${idx}`}
-          className="text-text mb-4 leading-relaxed whitespace-pre-line"
-        >
-          {rawLine}
-        </p>,
-      );
+      if (line !== '') {
+        elements.push(
+          <p
+            key={`p-${idx}`}
+            className="text-text mb-4 leading-relaxed whitespace-pre-line"
+          >
+            {rawLine}
+          </p>,
+        );
+      }
     }
   });
 
@@ -61,30 +61,107 @@ const RichText: React.FC<{ text: string }> = ({ text }) => {
   return <>{elements}</>;
 };
 
-export function PrivacyContent() {
-  const t = useTranslations('Privacy');
+export function TermsContent() {
+  const t = useTranslations('Terms');
   const [activeId, setActiveId] = useState<string>('');
 
   const sections = useMemo<SectionData[]>(
     () => [
-      { id: 'intro', titleKey: 'introTitle', bodyKeys: ['introP1', 'introP2'] },
       {
-        id: 'values',
-        titleKey: 'valuesTitle',
-        bodyKeys: ['valuesP1', 'valuesP2'],
+        id: 'acceptance',
+        titleKey: 'acceptanceTitle',
+        bodyKeys: ['acceptanceP1', 'acceptanceP2', 'acceptanceP3'],
       },
-      { id: 'why', titleKey: 'whyTitle', bodyKeys: ['whyP1'] },
-      { id: 'where', titleKey: 'whereTitle', bodyKeys: ['whereP1'] },
-      { id: 'howLong', titleKey: 'howLongTitle', bodyKeys: ['howLongP1'] },
-      { id: 'protect', titleKey: 'protectTitle', bodyKeys: ['protectP1'] },
-      { id: 'cookies', titleKey: 'cookiesTitle', bodyKeys: ['cookiesP1'] },
-      { id: 'contact', titleKey: 'contactTitle', bodyKeys: ['contactP1'] },
+      {
+        id: 'account',
+        titleKey: 'accountTitle',
+        bodyKeys: [
+          'accountIntro',
+          'accountRequirements',
+          'accountRegistration',
+          'accountResponsibility',
+          'accountRestrictions',
+        ],
+      },
+      {
+        id: 'general',
+        titleKey: 'generalTitle',
+        bodyKeys: [
+          'generalP1',
+          'generalP2',
+          'generalP3',
+          'generalP4',
+          'generalP5',
+          'generalP6',
+          'generalP7',
+          'generalP8',
+        ],
+      },
+      {
+        id: 'payments',
+        titleKey: 'paymentsTitle',
+        bodyKeys: [
+          'paymentsIntro',
+          'paymentsPlans',
+          'paymentsCycle',
+          'paymentsTaxes',
+          'paymentsMethods',
+          'paymentsSuspension',
+          'paymentsRefunds',
+        ],
+      },
+      {
+        id: 'thirdParty',
+        titleKey: 'thirdPartyTitle',
+        bodyKeys: [
+          'thirdPartyIntro',
+          'thirdPartyIntegrations',
+          'thirdPartyLiability',
+        ],
+      },
+      {
+        id: 'confidentiality',
+        titleKey: 'privacyPolicyTitle',
+        bodyKeys: [
+          'confidentialityIntro',
+          'privacyPolicySection',
+          'merchantDataSection',
+        ],
+      },
+      {
+        id: 'termination',
+        titleKey: 'terminationTitle',
+        bodyKeys: [
+          'terminationIntro',
+          'terminationUserSection',
+          'terminationEasyStoreSection',
+          'terminationEffectsSection',
+        ],
+      },
+      {
+        id: 'liability',
+        titleKey: 'liabilityTitle',
+        bodyKeys: ['noWarrantiesSection', 'limitsOfLiabilitySection'],
+      },
+      {
+        id: 'miscellaneous',
+        titleKey: 'miscTitle',
+        bodyKeys: [
+          'miscIntro',
+          'miscGoverningLawSection',
+          'miscJurisdictionSection',
+          'miscSeverabilitySection',
+          'miscEntireAgreementSection',
+          'miscAssignmentSection',
+          'miscNoticesSection',
+        ],
+      },
     ],
     [],
   );
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
           if (e.isIntersecting) setActiveId(e.target.id);
@@ -95,17 +172,19 @@ export function PrivacyContent() {
 
     sections.forEach((s) => {
       const el = document.getElementById(s.id);
-      if (el) observer.observe(el);
+      if (el) obs.observe(el);
     });
-    return () => observer.disconnect();
+    return () => obs.disconnect();
   }, [sections]);
 
   return (
     <main className="container mx-auto px-6 pt-32 pb-16">
-      <div className="bg-card text-title mt-4 mb-12 rounded-md px-8 py-12">
+      {/* Header */}
+      <div className="text-title bg-card mt-4 mb-12 rounded-md px-8 py-12">
         <h1 className="text-center text-3xl font-bold">{t('pageTitle')}</h1>
       </div>
 
+      {/* Responsive layout */}
       <div className="flex flex-col items-center gap-12 lg:grid lg:grid-cols-[250px_1fr] lg:items-start lg:gap-x-32">
         <aside className="mb-8 w-full max-w-md lg:sticky lg:top-32 lg:mb-0">
           <TableOfContents
