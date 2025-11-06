@@ -54,8 +54,9 @@ export const LanguageButton = () => {
         <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
             <Button
-              className="text-title h-9 w-9 p-0 font-medium sm:h-10 sm:w-16 sm:gap-1 sm:text-2xl"
+              className="text-title h-9 w-9 cursor-pointer p-0 font-medium sm:h-10 sm:w-16 sm:gap-1 sm:text-2xl"
               variant="ghost"
+              type="button"
               aria-label={t('Languages')}
             >
               <Globe className="size-6" />

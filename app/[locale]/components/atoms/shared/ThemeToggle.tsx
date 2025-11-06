@@ -38,8 +38,9 @@ export default function ThemeToggle() {
         <Button
           variant="ghost"
           size="icon"
+          type="button"
           onClick={toggleTheme}
-          className="hover:bg-hover h-10 w-10 rounded-md"
+          className="hover:bg-hover h-10 w-10 cursor-pointer rounded-md"
           aria-label={t('themeToggle')}
         >
           <Sun className="text-title size-6 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />

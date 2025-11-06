@@ -1,8 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
-import { PublicRoutes } from '@lib/consts/routes';
+import React, { createContext, useContext, useState } from 'react';
 
 type PageThemeContextType = {
   isDarkModeEnabled: boolean;
@@ -17,26 +15,7 @@ export function usePageTheme() {
 }
 
 export function PageThemeProvider({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const [isDarkModeEnabled, setIsDarkModeEnabled] = useState(true);
-
-  useEffect(() => {
-    // Helper function to check if current path should disable dark mode
-    const shouldDisableDarkMode = (): boolean => {
-      // Remove locale prefix if present (e.g., /en/login -> /login)
-      const cleanPath = pathname.replace(/^\/[a-z]{2}(?=\/|$)/, '') || '/';
-
-      return PublicRoutes.some((route) => {
-        if (route === '/') {
-          return cleanPath === '/';
-        }
-        return cleanPath.startsWith(route);
-      });
-    };
-
-    // Enable dark mode for all pages except public routes
-    setIsDarkModeEnabled(!shouldDisableDarkMode());
-  }, [pathname]);
+  const [isDarkModeEnabled] = useState(true);
 
   return (
     <PageThemeContext.Provider value={{ isDarkModeEnabled }}>
