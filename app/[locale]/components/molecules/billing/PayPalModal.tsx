@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React from 'react';
 import { useTranslations } from 'next-intl';
 import {
   Dialog,
@@ -13,13 +13,7 @@ import {
 import { Button } from '@shadcn/ui/button';
 import { Input } from '@shadcn/ui/input';
 import { Label } from '@shadcn/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@shadcn/ui/select';
+
 import { Wallet, Lock } from 'lucide-react';
 
 type Props = {
@@ -30,7 +24,6 @@ type Props = {
 
 export default function PayPalModal({ open, onOpenChange, onSaved }: Props) {
   const t = useTranslations('Billing.PayPal');
-  const [mode, setMode] = useState<'sandbox' | 'live'>('sandbox');
 
   const handleSave = () => {
     // TODO: Implement save logic with GraphQL mutation
@@ -51,23 +44,7 @@ export default function PayPalModal({ open, onOpenChange, onSaved }: Props) {
         </DialogHeader>
 
         <div className="space-y-6 py-4">
-          {/* Mode Selection */}
-          <div className="space-y-2">
-            <Label htmlFor="mode">{t('mode')}</Label>
-            <Select
-              value={mode}
-              onValueChange={(value: 'sandbox' | 'live') => setMode(value)}
-            >
-              <SelectTrigger id="mode">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="sandbox">{t('sandbox')}</SelectItem>
-                <SelectItem value="live">{t('live')}</SelectItem>
-              </SelectContent>
-            </Select>
-            <p className="text-muted-foreground text-xs">{t('modeHint')}</p>
-          </div>
+          {/* Mode selection removed — production only */}
 
           {/* Client ID */}
           <div className="space-y-2">

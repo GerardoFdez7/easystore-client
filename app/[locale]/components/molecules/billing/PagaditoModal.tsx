@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import {
   Dialog,
@@ -13,13 +12,7 @@ import {
 import { Button } from '@shadcn/ui/button';
 import { Input } from '@shadcn/ui/input';
 import { Label } from '@shadcn/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@shadcn/ui/select';
+
 import { Landmark, Lock } from 'lucide-react';
 
 type Props = {
@@ -29,9 +22,6 @@ type Props = {
 
 export default function PagaditoModal({ open, onOpenChange }: Props) {
   const t = useTranslations('Billing.Pagadito');
-  const [environment, setEnvironment] = useState<'sandbox' | 'production'>(
-    'sandbox',
-  );
 
   const handleSave = () => {
     // TODO: Implement save logic with GraphQL mutation
@@ -51,25 +41,6 @@ export default function PagaditoModal({ open, onOpenChange }: Props) {
         </DialogHeader>
 
         <div className="space-y-6 py-4">
-          {/* Environment Selection */}
-          <div className="space-y-2">
-            <Label htmlFor="environment">{t('environment')}</Label>
-            <Select
-              value={environment}
-              onValueChange={(value: 'sandbox' | 'production') =>
-                setEnvironment(value)
-              }
-            >
-              <SelectTrigger id="environment">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="sandbox">{t('sandbox')}</SelectItem>
-                <SelectItem value="production">{t('production')}</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
           {/* UID */}
           <div className="space-y-2">
             <Label htmlFor="uid">

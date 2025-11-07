@@ -38,9 +38,6 @@ export default function CardPaymentModal({
   const [provider, setProvider] = useState<'cybersource' | 'pagadito'>(
     'cybersource',
   );
-  const [environment, setEnvironment] = useState<'sandbox' | 'production'>(
-    'sandbox',
-  );
   const [capture, setCapture] = useState(true);
 
   const handleSave = () => {
@@ -82,28 +79,6 @@ export default function CardPaymentModal({
               </SelectContent>
             </Select>
             <p className="text-muted-foreground text-xs">{t('providerHint')}</p>
-          </div>
-
-          {/* Environment Selection */}
-          <div className="space-y-2">
-            <Label htmlFor="environment">{t('environment')}</Label>
-            <Select
-              value={environment}
-              onValueChange={(value: 'sandbox' | 'production') =>
-                setEnvironment(value)
-              }
-            >
-              <SelectTrigger id="environment">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="sandbox">{t('sandbox')}</SelectItem>
-                <SelectItem value="production">{t('production')}</SelectItem>
-              </SelectContent>
-            </Select>
-            <p className="text-muted-foreground text-xs">
-              {t('environmentHint')}
-            </p>
           </div>
 
           {/* CyberSource/VisaNet Fields */}
