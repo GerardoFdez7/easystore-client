@@ -166,7 +166,7 @@ export function ChartTotalSales() {
   });
 
   return (
-    <section className="pb-10">
+    <section className="pb-10" data-tour="chart-total-sales">
       <h1 className="text-title mb-4 text-2xl font-bold">{t('totalSales')}</h1>
       <Card className="@container/card">
         <CardHeader>
@@ -182,7 +182,7 @@ export function ChartTotalSales() {
               value={timeRange}
               onValueChange={setTimeRange}
               variant="outline"
-              className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
+              className="hidden *:data-[slot=toggle-group-item]:px-4! @[767px]/card:flex"
             >
               <ToggleGroupItem value="90d">{t('3months')}</ToggleGroupItem>
               <ToggleGroupItem value="30d">{t('30days')}</ToggleGroupItem>

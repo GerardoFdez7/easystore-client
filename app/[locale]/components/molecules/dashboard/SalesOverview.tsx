@@ -88,7 +88,7 @@ export default function SalesOverview() {
   const t = useTranslations('Dashboard');
 
   return (
-    <>
+    <section data-tour="sales-overview">
       <h1 className="text-title mb-4 text-2xl font-bold">
         {t('salesOverview')}
       </h1>
@@ -131,6 +131,6 @@ export default function SalesOverview() {
           </TableBody>
         </Table>
       </div>
-    </>
+    </section>
   );
 }

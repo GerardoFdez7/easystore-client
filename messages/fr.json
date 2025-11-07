@@ -557,7 +557,37 @@
     "shipped": "Expédié",
     "completed": "Terminé",
     "cancelled": "Annulé",
-    "sidebarToggle": "Basculer la barre latérale"
+    "sidebarToggle": "Basculer la barre latérale",
+    "tour": {
+      "welcome": {
+        "title": "Bienvenue",
+        "description": "Voici votre tableau de bord. Vous y verrez un résumé rapide de votre activité."
+      },
+      "kpis": {
+        "title": "Indicateurs clés",
+        "description": "Résumé rapide des mesures importantes : revenus, clients et croissance."
+      },
+      "totalSales": {
+        "title": "Ventes totales",
+        "description": "Consultez l'évolution des ventes au fil du temps et comparez par appareil."
+      },
+      "orders": {
+        "title": "Aperçu des commandes",
+        "description": "Tableau des commandes récentes et de leur statut."
+      },
+      "topProducts": {
+        "title": "Meilleures ventes",
+        "description": "Produits les plus demandés sur la période sélectionnée."
+      },
+      "satisfaction": {
+        "title": "Satisfaction client",
+        "description": "Graphique montrant la répartition des notes des clients."
+      },
+      "reviews": {
+        "title": "Avis",
+        "description": "Résumé des avis et évaluations reçus."
+      }
+    }
   },
   "Products": {
     "addProduct": "Créer un produit",

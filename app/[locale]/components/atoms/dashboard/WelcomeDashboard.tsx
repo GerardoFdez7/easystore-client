@@ -8,7 +8,7 @@ export default function WelcomeDashboard() {
   const { tenantData } = useAuth();
 
   return (
-    <div className="mx-5 mb-8">
+    <div className="mx-5 mb-8" data-tour="welcome">
       <h1 className="text-title mb-2 text-2xl font-bold sm:text-4xl">
         {t('welcomeDashboard')} {tenantData?.ownerName || ''}
       </h1>

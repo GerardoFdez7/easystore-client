@@ -558,7 +558,37 @@
     "shipped": "Spedito",
     "completed": "Completato",
     "cancelled": "Annullato",
-    "sidebarToggle": "Attiva/disattiva barra laterale"
+    "sidebarToggle": "Toggle sidebar",
+    "tour": {
+      "welcome": {
+        "title": "Benvenuto",
+        "description": "Questo è il tuo pannello. Qui troverai un riepilogo rapido della tua attività."
+      },
+      "kpis": {
+        "title": "Metriche principali",
+        "description": "Riepilogo rapido delle metriche importanti: entrate, clienti e crescita."
+      },
+      "totalSales": {
+        "title": "Vendite totali",
+        "description": "Visualizza l'andamento delle vendite nel tempo e confronta per dispositivo."
+      },
+      "orders": {
+        "title": "Panoramica ordini",
+        "description": "Tabella con gli ordini recenti e il loro stato."
+      },
+      "topProducts": {
+        "title": "Prodotti più venduti",
+        "description": "Prodotti con maggiore richiesta nel periodo selezionato."
+      },
+      "satisfaction": {
+        "title": "Soddisfazione clienti",
+        "description": "Grafico che mostra la distribuzione delle valutazioni dei clienti."
+      },
+      "reviews": {
+        "title": "Recensioni",
+        "description": "Riepilogo delle recensioni e delle valutazioni ricevute."
+      }
+    }
   },
   "Products": {
     "addProduct": "Crea un prodotto",

@@ -557,7 +557,37 @@
     "shipped": "Enviado",
     "completed": "Completado",
     "cancelled": "Cancelado",
-    "sidebarToggle": "Alternar barra lateral"
+    "sidebarToggle": "Alternar barra lateral",
+    "tour": {
+      "welcome": {
+        "title": "Bienvenido",
+        "description": "Este es tu panel. Aquí verás un resumen rápido de tu negocio."
+      },
+      "kpis": {
+        "title": "Indicadores clave",
+        "description": "Resumen rápido de métricas importantes: ingresos, clientes y crecimiento."
+      },
+      "totalSales": {
+        "title": "Ventas totales",
+        "description": "Consulta la evolución de las ventas por periodo y compárala por dispositivo."
+      },
+      "orders": {
+        "title": "Resumen de pedidos",
+        "description": "Tabla con los pedidos recientes y su estado."
+      },
+      "topProducts": {
+        "title": "Productos más vendidos",
+        "description": "Productos con mayor demanda en el periodo seleccionado."
+      },
+      "satisfaction": {
+        "title": "Satisfacción del cliente",
+        "description": "Gráfico que muestra la distribución de las valoraciones de los clientes."
+      },
+      "reviews": {
+        "title": "Reseñas",
+        "description": "Resumen de reseñas y puntuaciones recibidas."
+      }
+    }
   },
   "Products": {
     "addProduct": "Crear producto",

@@ -10,9 +10,12 @@ import CustomerSatisfaction from '@molecules/dashboard/CustomerSatisfaction';
 import Reviews from '@molecules/dashboard/Reviews';
 import SalesOverview from '@molecules/dashboard/SalesOverview';
 import { useTranslations } from 'next-intl';
+import useDriverTour from '../../hooks/useDriverTour';
 
 export default function MainDashboard() {
   const t = useTranslations('Dashboard');
+  // Hook para mostrar el tour (sólo la primera vez)
+  useDriverTour();
 
   return (
     <SidebarLayout title={t('dashboard')}>

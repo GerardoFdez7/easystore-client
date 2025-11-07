@@ -6,7 +6,7 @@ export default function Reviews() {
   const t = useTranslations('Dashboard');
 
   return (
-    <section className="py-10">
+    <section className="py-10" data-tour="reviews">
       <h1 className="text-title mb-4 text-2xl font-bold">{t('reviews')}</h1>
       <Card>
         <CardHeader>

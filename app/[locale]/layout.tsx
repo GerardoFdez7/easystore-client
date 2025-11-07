@@ -9,6 +9,7 @@ import { routing } from '@i18n/routing';
 import { Toaster } from '@shadcn/ui/sonner';
 import { AuthProvider } from '@contexts/AuthContext';
 import './globals.css';
+import 'driver.js/dist/driver.css';
 
 // Load Inter font with all weights
 const inter = Inter({

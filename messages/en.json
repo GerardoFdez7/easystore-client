@@ -556,7 +556,37 @@
     "shipped": "Shipped",
     "completed": "Completed",
     "cancelled": "Cancelled",
-    "sidebarToggle": "Toggle sidebar"
+    "sidebarToggle": "Toggle sidebar",
+    "tour": {
+      "welcome": {
+        "title": "Welcome",
+        "description": "This is your dashboard. Here you'll see a quick summary of your business."
+      },
+      "kpis": {
+        "title": "Key metrics",
+        "description": "Quick summary of important metrics: revenue, customers and growth."
+      },
+      "totalSales": {
+        "title": "Total sales",
+        "description": "View sales evolution over time and compare by device."
+      },
+      "orders": {
+        "title": "Orders overview",
+        "description": "Table with recent orders and their status."
+      },
+      "topProducts": {
+        "title": "Top products",
+        "description": "Products with the highest demand in the selected period."
+      },
+      "satisfaction": {
+        "title": "Customer satisfaction",
+        "description": "Chart showing distribution of customer ratings."
+      },
+      "reviews": {
+        "title": "Reviews",
+        "description": "Summary of reviews and ratings received."
+      }
+    }
   },
   "Products": {
     "addProduct": "Create Product",

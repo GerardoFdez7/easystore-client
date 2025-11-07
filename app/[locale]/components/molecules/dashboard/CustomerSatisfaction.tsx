@@ -29,7 +29,7 @@ export default function CustomerSatisfaction() {
   const t = useTranslations('Dashboard');
 
   return (
-    <section>
+    <section data-tour="customer-satisfaction">
       <h1 className="text-title mb-4 text-2xl font-bold">
         {t('customerSatisfaction')}
       </h1>

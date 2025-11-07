@@ -3,7 +3,10 @@ import { IconTrendingDown, IconTrendingUp } from '@tabler/icons-react';
 
 export function KPICards() {
   return (
-    <section className="grid grid-cols-1 gap-4 px-5 @2xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+    <section
+      className="grid grid-cols-1 gap-4 px-5 @2xl/main:grid-cols-2 @5xl/main:grid-cols-4"
+      data-tour="kpi-cards"
+    >
       <CardStat
         description="Total Revenue"
         amount="$1,250.00"

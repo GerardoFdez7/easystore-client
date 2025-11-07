@@ -49,7 +49,7 @@ export default function TopProducts() {
   ];
 
   return (
-    <section className="py-10">
+    <section className="py-10" data-tour="top-products">
       <h1 className="text-title mb-4 text-2xl font-bold">{t('topProducts')}</h1>
       <Card className="mb-8">
         <CardHeader></CardHeader>
