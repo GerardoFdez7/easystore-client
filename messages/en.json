@@ -1037,7 +1037,31 @@
     "ownerNameUpdated": "Owner name updated successfully.",
     "storeNameUpdated": "Store name updated successfully.",
     "logoUpdated": "Logo updated successfully.",
-    "noPhone": "No phone number"
+    "noPhone": "No phone number",
+    "tour": {
+      "logoTitle": "Store logo",
+      "logoDesc": "Upload a logo to represent your store. It will be shown to customers.",
+      "businessNameTitle": "Business name",
+      "businessNameDesc": "This is your public store name — edit it to customize how customers see you.",
+      "descriptionTitle": "Store description",
+      "descriptionDesc": "Add a short description about your business to give customers context.",
+      "ownerNameTitle": "Owner name",
+      "ownerNameDesc": "The primary contact name for this store.",
+      "domainTitle": "Domain",
+      "domainDesc": "Your store domain. You can configure a custom domain if needed.",
+      "emailTitle": "Contact email",
+      "emailDesc": "Primary email for account notifications and recovery.",
+      "passwordTitle": "Password",
+      "passwordDesc": "Change your account password here for security.",
+      "planTitle": "Plan",
+      "planDesc": "View or change your subscription plan and features.",
+      "logoutTitle": "Logout",
+      "logoutDesc": "Sign out from your account safely.",
+      "done": "Done",
+      "close": "Close",
+      "next": "Next",
+      "prev": "Prev"
+    }
   },
   "Errors": {
     "title": "Error",

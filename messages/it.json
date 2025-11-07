@@ -1042,7 +1042,31 @@
     "ownerNameUpdated": "Nome del proprietario aggiornato correttamente.",
     "storeNameUpdated": "Nome del negozio aggiornato correttamente.",
     "logoUpdated": "Logo aggiornato correttamente.",
-    "noPhone": "Nessun numero di telefono"
+    "noPhone": "Nessun numero di telefono",
+    "tour": {
+      "logoTitle": "Logo del negozio",
+      "logoDesc": "Carica un logo per rappresentare il tuo negozio. Verrà mostrato ai clienti.",
+      "businessNameTitle": "Nome dell'attività",
+      "businessNameDesc": "Questo è il nome pubblico del tuo negozio — modificalo per personalizzare la visualizzazione.",
+      "descriptionTitle": "Descrizione del negozio",
+      "descriptionDesc": "Aggiungi una breve descrizione sulla tua attività per informare i clienti.",
+      "ownerNameTitle": "Nome del proprietario",
+      "ownerNameDesc": "Nome del contatto principale del negozio.",
+      "domainTitle": "Dominio",
+      "domainDesc": "Il dominio del tuo negozio. Puoi configurare un dominio personalizzato.",
+      "emailTitle": "Email di contatto",
+      "emailDesc": "Email principale per le notifiche e il recupero dell'account.",
+      "passwordTitle": "Password",
+      "passwordDesc": "Modifica la password del tuo account qui per la sicurezza.",
+      "planTitle": "Piano",
+      "planDesc": "Visualizza o modifica il tuo piano di abbonamento e le funzionalità.",
+      "logoutTitle": "Disconnetti",
+      "logoutDesc": "Esci dal tuo account in modo sicuro.",
+      "done": "Fatto",
+      "close": "Chiudi",
+      "next": "Avanti",
+      "prev": "Indietro"
+    }
   },
   "Errors": {
     "title": "Errore",

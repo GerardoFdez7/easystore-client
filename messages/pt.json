@@ -1041,7 +1041,31 @@
     "ownerNameUpdated": "Nome do proprietário atualizado com sucesso.",
     "storeNameUpdated": "Nome da loja atualizado com sucesso.",
     "logoUpdated": "Logotipo atualizado com sucesso.",
-    "noPhone": "Sem número de telefone"
+    "noPhone": "Sem número de telefone",
+    "tour": {
+      "logoTitle": "Logotipo da loja",
+      "logoDesc": "Envie um logotipo para representar sua loja. Será exibido para os clientes.",
+      "businessNameTitle": "Nome da empresa",
+      "businessNameDesc": "Este é o nome público da sua loja — edite para personalizar como os clientes veem você.",
+      "descriptionTitle": "Descrição da loja",
+      "descriptionDesc": "Adicione uma breve descrição sobre seu negócio para informar os clientes.",
+      "ownerNameTitle": "Nome do proprietário",
+      "ownerNameDesc": "Nome de contato principal desta loja.",
+      "domainTitle": "Domínio",
+      "domainDesc": "Domínio da sua loja. Você pode configurar um domínio personalizado se necessário.",
+      "emailTitle": "E-mail de contato",
+      "emailDesc": "E-mail principal para notificações e recuperação de conta.",
+      "passwordTitle": "Senha",
+      "passwordDesc": "Altere sua senha de conta aqui por segurança.",
+      "planTitle": "Plano",
+      "planDesc": "Visualize ou altere seu plano de assinatura e recursos.",
+      "logoutTitle": "Sair",
+      "logoutDesc": "Encerre sua sessão com segurança.",
+      "done": "Concluído",
+      "close": "Fechar",
+      "next": "Próximo",
+      "prev": "Anterior"
+    }
   },
   "Errors": {
     "title": "Erro",

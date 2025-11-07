@@ -1038,7 +1038,31 @@
     "ownerNameUpdated": "Nombre del propietario actualizado correctamente.",
     "storeNameUpdated": "Nombre de la tienda actualizado correctamente.",
     "logoUpdated": "Logo actualizado correctamente.",
-    "noPhone": "Sin número de teléfono"
+    "noPhone": "Sin número de teléfono",
+    "tour": {
+      "done": "Hecho",
+      "close": "Cerrar",
+      "next": "Siguiente",
+      "prev": "Anterior",
+      "logoTitle": "Logo de la tienda",
+      "logoDesc": "Sube un logo para representar tu tienda. Se mostrará en tu perfil público.",
+      "businessNameTitle": "Nombre del negocio",
+      "businessNameDesc": "Este es el nombre público de tu tienda. Puedes editarlo aquí.",
+      "descriptionTitle": "Descripción de la tienda",
+      "descriptionDesc": "Agrega una breve descripción para contarle a los clientes sobre tu tienda.",
+      "ownerNameTitle": "Nombre del propietario",
+      "ownerNameDesc": "El nombre de contacto del propietario de la tienda.",
+      "domainTitle": "Dominio",
+      "domainDesc": "Configura tu dominio o utiliza el dominio predeterminado para tu tienda.",
+      "emailTitle": "Correo de contacto",
+      "emailDesc": "Correo principal para notificaciones y recuperación de cuenta.",
+      "passwordTitle": "Contraseña",
+      "passwordDesc": "Cambia la contraseña de tu cuenta aquí.",
+      "planTitle": "Plan",
+      "planDesc": "Revisa o cambia tu plan de suscripción actual.",
+      "logoutTitle": "Cerrar sesión",
+      "logoutDesc": "Haz clic aquí para salir de tu cuenta."
+    }
   },
   "Errors": {
     "title": "Error",

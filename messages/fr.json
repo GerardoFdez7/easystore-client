@@ -1040,7 +1040,31 @@
     "ownerNameUpdated": "Nom du propriétaire mis à jour avec succès.",
     "storeNameUpdated": "Nom de la boutique mis à jour avec succès.",
     "logoUpdated": "Logo mis à jour avec succès.",
-    "noPhone": "Aucun numéro de téléphone"
+    "noPhone": "Aucun numéro de téléphone",
+    "tour": {
+      "logoTitle": "Logo de la boutique",
+      "logoDesc": "Téléversez un logo pour représenter votre boutique. Il sera visible par les clients.",
+      "businessNameTitle": "Nom de l'entreprise",
+      "businessNameDesc": "Ceci est le nom public de votre boutique — modifiez-le pour personnaliser l'affichage.",
+      "descriptionTitle": "Description de la boutique",
+      "descriptionDesc": "Ajoutez une courte description pour informer les clients sur votre activité.",
+      "ownerNameTitle": "Nom du propriétaire",
+      "ownerNameDesc": "Nom du contact principal de la boutique.",
+      "domainTitle": "Domaine",
+      "domainDesc": "Le domaine de votre boutique. Vous pouvez configurer un domaine personnalisé.",
+      "emailTitle": "E-mail de contact",
+      "emailDesc": "E-mail principal pour les notifications et la récupération du compte.",
+      "passwordTitle": "Mot de passe",
+      "passwordDesc": "Changez votre mot de passe ici pour la sécurité.",
+      "planTitle": "Abonnement",
+      "planDesc": "Consultez ou modifiez votre plan d'abonnement et ses fonctionnalités.",
+      "logoutTitle": "Se déconnecter",
+      "logoutDesc": "Déconnectez-vous en toute sécurité.",
+      "done": "Terminé",
+      "close": "Fermer",
+      "next": "Suivant",
+      "prev": "Précédent"
+    }
   },
   "Errors": {
     "title": "Erreur",

@@ -8,7 +8,7 @@ export default function ProfileTemplate() {
       <div className="flex w-full max-w-7xl flex-col md:min-h-screen md:flex-row md:items-center">
         <SidebarProfile />
         <Separator
-          className="bg-title !w-0.2 mx-6 hidden !h-200 md:block"
+          className="bg-title w-0.2! mx-6 hidden h-200! md:block"
           orientation="vertical"
           decorative={true}
         />

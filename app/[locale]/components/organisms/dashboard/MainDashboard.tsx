@@ -10,7 +10,7 @@ import CustomerSatisfaction from '@molecules/dashboard/CustomerSatisfaction';
 import Reviews from '@molecules/dashboard/Reviews';
 import SalesOverview from '@molecules/dashboard/SalesOverview';
 import { useTranslations } from 'next-intl';
-import useDriverTour from '../../hooks/useDriverTour';
+import useDriverTour from '@hooks/driver/useDriverTour';
 
 export default function MainDashboard() {
   const t = useTranslations('Dashboard');
