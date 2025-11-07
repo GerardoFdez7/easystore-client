@@ -62,7 +62,7 @@ const TreeItem = memo(function TreeItem({
         <Button
           variant="ghost"
           size="sm"
-          className={`text-text flex-shrink-0 justify-start gap-2 py-1 ${
+          className={`text-text shrink-0 justify-start gap-2 py-1 ${
             hasChildren ? 'hover:bg-hover cursor-pointer' : 'cursor-default'
           }`}
           onClick={handleToggleExpand}
@@ -140,8 +140,13 @@ export default function CategoryTree({
         aria-labelledby="category-tree-title"
         aria-describedby="category-tree-description"
       >
-        <SheetHeader className="flex-shrink-0">
-          <SheetTitle id="category-tree-title">{t('categoryTree')}</SheetTitle>
+        <SheetHeader className="shrink-0">
+          <SheetTitle
+            id="category-tree-title"
+            data-tour="categories-tree-title"
+          >
+            {t('categoryTree')}
+          </SheetTitle>
           <SheetDescription id="category-tree-description">
             {t('categoryTreeDescription')}
           </SheetDescription>
@@ -155,6 +160,7 @@ export default function CategoryTree({
             aria-label={allOpen ? t('collapseAll') : t('expandAll')}
             type="button"
             className="mb-4"
+            data-tour="categories-tree-toggle-all"
           >
             {allOpen ? t('collapseAll') : t('expandAll')}
           </Button>

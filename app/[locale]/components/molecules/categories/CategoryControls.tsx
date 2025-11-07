@@ -72,6 +72,7 @@ function CategoryControls({
               variant="outline"
               disabled={loading}
               aria-label={editButtonText}
+              data-tour="categories-edit-button"
             >
               <Link href={editButtonHref}>
                 <Edit className="h-4 w-4" aria-hidden="true" />
@@ -85,6 +86,7 @@ function CategoryControls({
               disabled={loading}
               className="text-accent bg-title hover:bg-accent-foreground"
               aria-label={addButtonText}
+              data-tour="categories-add-button"
             >
               <Link href={addButtonHref}>
                 <Plus className="h-4 w-4" aria-hidden="true" />
@@ -94,15 +96,20 @@ function CategoryControls({
           )}
         </div>
 
-        <SearchBar
-          placeholder={searchPlaceholder}
-          searchTerm={searchTerm}
-          onSearchChange={onSearchChange}
-          aria-label="Search categories"
-        />
+        <div data-tour="categories-search">
+          <SearchBar
+            placeholder={searchPlaceholder}
+            searchTerm={searchTerm}
+            onSearchChange={onSearchChange}
+            aria-label="Search categories"
+          />
+        </div>
 
         <div className="flex w-full items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
+          <div
+            className="flex items-center gap-2"
+            data-tour="categories-sort-by"
+          >
             <SortBySelect
               value={sortBy}
               onChange={handleSortByChange}
@@ -110,7 +117,10 @@ function CategoryControls({
             />
           </div>
 
-          <div className="flex items-center gap-2">
+          <div
+            className="flex items-center gap-2"
+            data-tour="categories-sort-order"
+          >
             <SortOrderSelect
               value={sortOrder}
               onChange={handleSortOrderChange}
@@ -124,6 +134,7 @@ function CategoryControls({
                 className="flex items-center gap-2"
                 aria-label={`Toggle ${treeButtonText.toLowerCase()}`}
                 type="button"
+                data-tour="categories-tree-toggle"
               >
                 <ListTree className="h-4 w-4" aria-hidden="true" />
                 <span className="hidden sm:inline">{treeButtonText}</span>

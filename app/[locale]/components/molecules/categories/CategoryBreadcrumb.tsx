@@ -57,6 +57,7 @@ export default function CategoryBreadcrumb({
               href={`/${locale}/categories`}
               className="hover:text-title transition-colors"
               aria-label={t('allCategories')}
+              data-tour="categories-breadcrumb-all"
             >
               {t('allCategories')}
             </BreadcrumbLink>
@@ -88,6 +89,7 @@ export default function CategoryBreadcrumb({
                           aria-label="category Options"
                           aria-haspopup="menu"
                           aria-expanded="false"
+                          data-tour="categories-breadcrumb-siblings"
                         >
                           {item.name}
                           <ChevronDown

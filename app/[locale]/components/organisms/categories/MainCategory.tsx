@@ -13,6 +13,7 @@ import CategoryTree from '@molecules/categories/CategoryTree';
 import CategoryControls from '@molecules/categories/CategoryControls';
 import CategoryBreadcrumb from '@molecules/categories/CategoryBreadcrumb';
 import LoadMoreButton from '@atoms/shared/LoadMoreButton';
+import useDriverTourCategories from '@hooks/driver/useDriverTourCategories';
 
 interface MainCategoryProps {
   categoryPath?: string[];
@@ -110,6 +111,9 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
     [categoriesLoading, pathLoading, error],
   );
 
+  // initialize categories tour (client-side hook)
+  useDriverTourCategories();
+
   const handleCreateCategory = useCallback(() => {
     router.push(newHref);
   }, [router, newHref]);
@@ -126,13 +130,15 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
         role="main"
         aria-labelledby="categories-title"
       >
-        <EmptyState
-          icon={Dices}
-          title={t('noCategoriesTitle')}
-          description={t('noCategoriesDescription')}
-          buttonText={t('createCategory')}
-          onButtonClick={handleCreateCategory}
-        />
+        <div data-tour="categories-add">
+          <EmptyState
+            icon={Dices}
+            title={t('noCategoriesTitle')}
+            description={t('noCategoriesDescription')}
+            buttonText={t('createCategory')}
+            onButtonClick={handleCreateCategory}
+          />
+        </div>
       </main>
     );
   }
@@ -145,30 +151,34 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
     >
       <div className="flex flex-col gap-4">
         {categoryPath.length > 0 && (
-          <CategoryBreadcrumb categoryPath={categoryPath} />
+          <div data-tour="categories-breadcrumb">
+            <CategoryBreadcrumb categoryPath={categoryPath} />
+          </div>
         )}
-        <CategoryControls
-          searchTerm={searchTerm}
-          onSearchChange={handleSearchChange}
-          sortBy={sortBy}
-          updateSortBy={handleSortByChange}
-          sortOrder={sortOrder}
-          updateSortOrder={handleSortOrderChange}
-          searchPlaceholder={t('searchPlaceholder')}
-          addButtonHref={addHref}
-          addButtonText={
-            categoryPath.length === 0
-              ? t('createCategory')
-              : tDetail('addSubcategories')
-          }
-          showAddButton={categoryPathDepth < 10}
-          editButtonHref={editHref}
-          editButtonText={tDetail('editCategory')}
-          showEditButton={!!editHref}
-          onTreeToggle={handleTreeToggle}
-          treeButtonText={t('categoryTreeButton')}
-          loading={controlsLoading}
-        />
+        <div data-tour="categories-controls">
+          <CategoryControls
+            searchTerm={searchTerm}
+            onSearchChange={handleSearchChange}
+            sortBy={sortBy}
+            updateSortBy={handleSortByChange}
+            sortOrder={sortOrder}
+            updateSortOrder={handleSortOrderChange}
+            searchPlaceholder={t('searchPlaceholder')}
+            addButtonHref={addHref}
+            addButtonText={
+              categoryPath.length === 0
+                ? t('createCategory')
+                : tDetail('addSubcategories')
+            }
+            showAddButton={categoryPathDepth < 10}
+            editButtonHref={editHref}
+            editButtonText={tDetail('editCategory')}
+            showEditButton={!!editHref}
+            onTreeToggle={handleTreeToggle}
+            treeButtonText={t('categoryTreeButton')}
+            loading={controlsLoading}
+          />
+        </div>
         {/* If there are categories but search returned no results */}
         {searchTerm.trim() && categories.length === 0 && !isLoading ? (
           <EmptyState
@@ -198,18 +208,20 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
             buttonIcon={categoryPathDepth < 10 ? Plus : undefined}
           />
         ) : (
-          <CategoryGrid
-            categories={categories}
-            loading={categoriesLoading}
-            isLoadingMore={isLoadingMore}
-            query={searchTerm}
-            parentPath={parentPath}
-            limit={25}
-            hideCount={!!searchTerm.trim()}
-          />
+          <div data-tour="categories-grid">
+            <CategoryGrid
+              categories={categories}
+              loading={categoriesLoading}
+              isLoadingMore={isLoadingMore}
+              query={searchTerm}
+              parentPath={parentPath}
+              limit={25}
+              hideCount={!!searchTerm.trim()}
+            />
+          </div>
         )}
         {hasMore && (
-          <div className="flex justify-center">
+          <div className="flex justify-center" data-tour="categories-load-more">
             <LoadMoreButton
               onClick={handleLoadMoreClick}
               isLoading={isLoadingMore}
@@ -218,7 +230,9 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
           </div>
         )}
       </div>
-      <CategoryTree open={treeOpen} onOpenChange={setTreeOpen} />
+      <div data-tour="categories-tree">
+        <CategoryTree open={treeOpen} onOpenChange={setTreeOpen} />
+      </div>
     </main>
   );
 }

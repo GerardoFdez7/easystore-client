@@ -49,6 +49,7 @@ import type { ProcessedData } from '@lib/types/media';
 import { useMutation, useQuery } from '@apollo/client/react';
 import { getCurrentPathDepth } from '@lib/utils/path-utils';
 import BackButton from '@atoms/shared/BackButton';
+import useDriverTourCategories from '@hooks/driver/useDriverTourCategories';
 
 interface MainDetailCategoryProps {
   categoryId?: string;
@@ -143,6 +144,9 @@ export default function MainDetailCategory({
   });
 
   const { remove: deleteCategory } = useDeleteCategory();
+
+  // initialize categories tour (client-side)
+  useDriverTourCategories();
 
   // Form management
   const form = isEdit ? updateCategoryHook.form : createCategoryHook.form;
@@ -438,13 +442,15 @@ export default function MainDetailCategory({
   return (
     <>
       <BackButton />
-      <Options
-        showDelete={true}
-        onDelete={handleDelete}
-        disabled={isSubmitting || isNew || isAdd}
-        deleteTitle={tCategory('title')}
-        deleteDescription={tCategory('description')}
-      />
+      <div data-tour="category-options">
+        <Options
+          showDelete={true}
+          onDelete={handleDelete}
+          disabled={isSubmitting || isNew || isAdd}
+          deleteTitle={tCategory('title')}
+          deleteDescription={tCategory('description')}
+        />
+      </div>
       <main className="mx-4 flex max-w-3xl justify-center lg:mx-auto lg:w-full">
         <div className="relative w-full">
           <section className="flex flex-col gap-4">
@@ -459,7 +465,7 @@ export default function MainDetailCategory({
                 aria-label={formAriaLabel}
               >
                 {/* Cover Image Section */}
-                <section>
+                <section data-tour="category-cover">
                   <FormField
                     control={form.control}
                     name="cover"
@@ -493,7 +499,7 @@ export default function MainDetailCategory({
                 </section>
 
                 {/* Category Name Section */}
-                <section>
+                <section data-tour="category-name">
                   <FormField
                     control={form.control}
                     name="name"
@@ -521,7 +527,7 @@ export default function MainDetailCategory({
                 </section>
 
                 {/* Category Description Section */}
-                <section>
+                <section data-tour="category-description">
                   <FormField
                     control={form.control}
                     name="description"
@@ -551,7 +557,7 @@ export default function MainDetailCategory({
 
                 {/* Subcategories Section */}
                 {showSubcategories && (
-                  <section>
+                  <section data-tour="category-subcategories">
                     <FormItem>
                       <FormLabel
                         htmlFor="subcategories"
@@ -575,7 +581,7 @@ export default function MainDetailCategory({
                 )}
 
                 {/* Save Button Section */}
-                <section className="flex justify-end">
+                <section className="flex justify-end" data-tour="category-save">
                   <SaveButton
                     type="submit"
                     loading={isSubmitting}

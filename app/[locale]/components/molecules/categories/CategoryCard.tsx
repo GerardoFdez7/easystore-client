@@ -68,6 +68,7 @@ export default function CategoryCard({
           onClick={handleClick}
           className="group relative block aspect-square w-full overflow-hidden rounded-t-lg focus-visible:ring-2 focus-visible:outline-none"
           aria-label="view Category"
+          data-tour="category-card-cover"
         >
           <Image
             alt="category Image"
@@ -85,6 +86,7 @@ export default function CategoryCard({
             onClick={handleClick}
             className="mt-4 flex flex-col rounded px-4 focus-visible:ring-2 focus-visible:outline-none"
             aria-label="view Category Details"
+            data-tour="category-card-name"
           >
             <CardTitle className="line-clamp-2 text-sm sm:text-base">
               {name}
@@ -104,6 +106,7 @@ export default function CategoryCard({
                   variant="ghost"
                   onClick={handleDelete}
                   aria-label={t('delete', { category: name })}
+                  data-tour="category-card-delete"
                 >
                   <Trash className="text-error h-4 w-4" />
                 </Button>
@@ -119,6 +122,7 @@ export default function CategoryCard({
               aria-label={t('edit', { category: name })}
               className="text-text"
               size="sm"
+              data-tour="category-card-edit"
             >
               <Pencil className="text-text mr-1 h-4 w-4" />
               <span>{t('edit')}</span>
