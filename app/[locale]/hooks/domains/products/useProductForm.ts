@@ -312,30 +312,6 @@ export function useProductForm({
     return isDirty;
   }, [isNew, isDirty, form]);
 
-  // Calculate changed fields for update mutations
-  const changedFields = useMemo(() => {
-    if (isNew) {
-      // In create mode - return all current values if required fields are filled
-      return hasChanges ? form.getValues() : {};
-    }
-
-    // In update mode, use React Hook Form's dirtyFields to identify changes
-    const dirtyFields = form.formState.dirtyFields;
-    const currentValues = form.getValues();
-    const changes: Partial<ProductFormData> = {};
-
-    // Only include fields that are marked as dirty and exclude variants
-    (Object.keys(dirtyFields) as Array<keyof ProductFormData>).forEach(
-      (key) => {
-        if (key !== 'variants') {
-          (changes as Record<string, unknown>)[key] = currentValues[key];
-        }
-      },
-    );
-
-    return changes;
-  }, [isNew, hasChanges, form]);
-
   // Handle form submission
   const handleSubmit = useCallback(
     async (data: ProductFormData) => {
@@ -427,6 +403,19 @@ export function useProductForm({
           throw new Error('Product ID is required for update');
         }
 
+        // Calculate changed fields at submission time
+        const dirtyFields = form.formState.dirtyFields;
+        const changedFields: Partial<ProductFormData> = {};
+
+        // Only include fields that are marked as dirty and exclude variants
+        (Object.keys(dirtyFields) as Array<keyof ProductFormData>).forEach(
+          (key) => {
+            if (key !== 'variants') {
+              (changedFields as Record<string, unknown>)[key] = data[key];
+            }
+          },
+        );
+
         // Update existing product - only send changed fields
         if (Object.keys(changedFields).length === 0) {
           return;
@@ -508,13 +497,35 @@ export function useProductForm({
       createProduct,
       updateProduct,
       onSuccess,
-      changedFields,
       form,
       variantsDraft,
       clearAllDrafts,
       router,
     ],
   );
+
+  // Calculate changed fields for debugging/logging purposes
+  const changedFields = useMemo(() => {
+    if (isNew) {
+      return hasChanges ? form.getValues() : {};
+    }
+
+    const dirtyFields = form.formState.dirtyFields;
+    const currentValues = form.getValues();
+    const changes: Partial<ProductFormData> = {};
+
+    (Object.keys(dirtyFields) as Array<keyof ProductFormData>).forEach(
+      (key) => {
+        if (key !== 'variants') {
+          (changes as Record<string, unknown>)[key] = currentValues[key];
+        }
+      },
+    );
+
+    return changes;
+    // We need isDirty to force recalculation when form changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isNew, hasChanges, isDirty, form]);
 
   // Handle form cancellation
   const handleCancel = useCallback(() => {

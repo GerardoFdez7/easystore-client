@@ -17,13 +17,13 @@ interface MediaFormFieldProps {
   isSubmitting?: boolean;
   coverFieldName?: string;
   mediaFieldName?: string;
-  onMediaUploaded?: (hasMedia: boolean) => void;
+  onUploadingChange?: (isUploading: boolean) => void;
 }
 
 export default function MediaFormField({
   coverFieldName = 'cover',
   mediaFieldName = 'media',
-  onMediaUploaded,
+  onUploadingChange,
 }: MediaFormFieldProps) {
   const { control, setValue } = useFormContext();
   const t = useTranslations('Products');
@@ -81,7 +81,6 @@ export default function MediaFormField({
         shouldDirty: true,
         shouldValidate: true,
       });
-      onMediaUploaded?.(false);
       return;
     }
 
@@ -116,13 +115,6 @@ export default function MediaFormField({
         shouldValidate: true,
       });
     }
-
-    // Notify parent component about media upload status
-    const hasMedia = !!(
-      processedData.cover ||
-      (processedData.mediaItems && processedData.mediaItems.length > 0)
-    );
-    onMediaUploaded?.(hasMedia);
   };
 
   return (
@@ -138,6 +130,7 @@ export default function MediaFormField({
               multiple={true}
               initialMedia={initialMedia}
               onMediaProcessed={handleMediaProcessed}
+              onUploadingChange={onUploadingChange}
               alwaysEditing={true}
             />
           </FormControl>

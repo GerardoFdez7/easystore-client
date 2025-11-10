@@ -24,6 +24,7 @@ interface MultipleMediaUploaderProps
   hideDoneButton?: boolean;
   alwaysEditing?: boolean;
   initialMedia?: string[] | null;
+  onUploadingChange?: (isUploading: boolean) => void;
   renderDoneButton?: (
     onDone: () => void,
     isProcessing: boolean,
@@ -49,6 +50,7 @@ const MultipleMediaUploader = forwardRef<
       onUploadError,
       onMediaProcessed,
       onMediaChange,
+      onUploadingChange,
       className,
       hideDoneButton = false,
       alwaysEditing = false,
@@ -159,6 +161,11 @@ const MultipleMediaUploader = forwardRef<
       }
     }, [alwaysEditing, setIsEditing]);
 
+    // Notify parent about uploading state changes
+    useEffect(() => {
+      onUploadingChange?.(isUploading);
+    }, [isUploading, onUploadingChange]);
+
     const handleValidationError = (error: string) => {
       onUploadError?.(error);
     };
@@ -230,6 +237,22 @@ const MultipleMediaUploader = forwardRef<
           void onMediaProcessed?.(null);
           setIsEditing(false);
           setPersistedMedia(null);
+        } else if (alwaysEditing && selectedFiles.length === 0) {
+          // In alwaysEditing mode with existing media, update form immediately
+          const mediaUrls = newMediaItems.map((item) => item.src);
+          const processedData = {
+            cover: mediaUrls[0] || '',
+            mediaItems: newMediaItems.map((item, idx) => {
+              const mediaType: 'VIDEO' | 'IMAGE' =
+                item.type === 'video' ? 'VIDEO' : 'IMAGE';
+              return {
+                url: item.src,
+                position: idx,
+                mediaType,
+              };
+            }),
+          };
+          void onMediaProcessed?.(processedData);
         }
 
         // Only exit editing mode if we have no items left AND we were working with new files
@@ -246,6 +269,24 @@ const MultipleMediaUploader = forwardRef<
         const [movedItem] = newItems.splice(fromIndex, 1);
         newItems.splice(toIndex, 0, movedItem);
         setMediaItems(newItems);
+
+        // In alwaysEditing mode, update form immediately
+        if (alwaysEditing) {
+          const mediaUrls = newItems.map((item) => item.src);
+          const processedData = {
+            cover: mediaUrls[0] || '',
+            mediaItems: newItems.map((item, idx) => {
+              const mediaType: 'VIDEO' | 'IMAGE' =
+                item.type === 'video' ? 'VIDEO' : 'IMAGE';
+              return {
+                url: item.src,
+                position: idx,
+                mediaType,
+              };
+            }),
+          };
+          void onMediaProcessed?.(processedData);
+        }
       } else {
         // For new files, reorder both arrays in sync
         const { reorderedArray1: newItems, reorderedArray2: newFiles } =

@@ -22,6 +22,7 @@ interface MediaUploaderProps
   hideDoneButton?: boolean;
   alwaysEditing?: boolean;
   initialMedia?: string | string[] | null;
+  onUploadingChange?: (isUploading: boolean) => void;
   renderDoneButton?: (
     onDone: () => void,
     isProcessing: boolean,
@@ -43,6 +44,7 @@ const MediaUploader = forwardRef<
       onUploadError,
       onMediaProcessed,
       onMediaChange,
+      onUploadingChange,
       className,
       multiple = DefaultMultipleUpload,
       acceptedFileTypes = DefaultAcceptedFileTypes,
@@ -67,6 +69,7 @@ const MediaUploader = forwardRef<
           onUploadError={onUploadError}
           onMediaProcessed={onMediaProcessed}
           onMediaChange={onMediaChange}
+          onUploadingChange={onUploadingChange}
           className={className}
           hideDoneButton={hideDoneButton || alwaysEditing}
           alwaysEditing={alwaysEditing}

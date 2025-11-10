@@ -33,7 +33,7 @@ export default function MainProductDetail({
   isNew,
 }: MainProductDetailProps) {
   const t = useTranslations('Products');
-  const [hasMediaUploaded, setHasMediaUploaded] = useState(false);
+  const [isUploadingMedia, setIsUploadingMedia] = useState(false);
   const { form, handleSubmit, isSubmitting, hasChanges, product } =
     useProductForm({
       productId: param,
@@ -96,7 +96,7 @@ export default function MainProductDetail({
           >
             <MediaFormField
               isSubmitting={isSubmitting}
-              onMediaUploaded={setHasMediaUploaded}
+              onUploadingChange={setIsUploadingMedia}
             />
             <div className="w-full space-y-6 sm:flex sm:flex-row sm:gap-6">
               <NameFormField />
@@ -116,7 +116,7 @@ export default function MainProductDetail({
                 disabled={
                   isNew
                     ? isSubmitting
-                    : !hasChanges || isSubmitting || !hasMediaUploaded
+                    : !hasChanges || isSubmitting || isUploadingMedia
                 }
                 size="lg"
                 translationKey={isNew ? 'add' : 'save'}
