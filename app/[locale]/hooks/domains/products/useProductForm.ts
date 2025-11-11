@@ -423,14 +423,40 @@ export function useProductForm({
                 coverage: warranty.coverage,
                 instructions: warranty.instructions,
               })),
-              variantCover: variant.variantCover || undefined,
-              variantMedia: variant.variantMedia?.map((url, index) => ({
-                url,
-                position: index + 1,
-                mediaType: url.includes('.mp4')
-                  ? MediaTypeEnum.Video
-                  : MediaTypeEnum.Image,
-              })),
+              variantCover: !variant.variantCover
+                ? undefined
+                : typeof variant.variantCover === 'string'
+                  ? variant.variantCover || undefined
+                  : variant.variantCover.url || undefined,
+              variantMedia: variant.variantMedia?.map(
+                (
+                  item:
+                    | string
+                    | { url: string; mediaType: string; position: number },
+                  index: number,
+                ) => {
+                  // Handle both old format (string) and new format (object with mediaType)
+                  if (typeof item === 'string') {
+                    // Legacy format: detect type from URL extension
+                    return {
+                      url: item,
+                      position: index + 1,
+                      mediaType: (item.includes('.mp4') ||
+                      item.includes('.webm') ||
+                      item.includes('.avi') ||
+                      item.includes('.mov')
+                        ? 'VIDEO'
+                        : 'IMAGE') as MediaTypeEnum,
+                    };
+                  }
+                  // New format: use provided mediaType
+                  return {
+                    url: item.url,
+                    position: index + 1,
+                    mediaType: item.mediaType as MediaTypeEnum,
+                  };
+                },
+              ),
             })),
           };
 

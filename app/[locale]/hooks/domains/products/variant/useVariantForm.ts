@@ -129,11 +129,26 @@ const createVariantFormSchema = (
       }),
     ),
     variantCover: z
-      .string()
-      .url({ message: t('variantCoverInvalidUrl') })
-      .optional()
-      .or(z.literal('')),
-    variantMedia: z.array(z.string().url({ message: t('mediaUrlInvalid') })),
+      .union([
+        z.string().url({ message: t('variantCoverInvalidUrl') }),
+        z.object({
+          url: z.string().url({ message: t('mediaUrlInvalid') }),
+          mediaType: z.string(),
+          position: z.number(),
+        }),
+        z.literal(''),
+      ])
+      .optional(),
+    variantMedia: z.array(
+      z.union([
+        z.string().url({ message: t('mediaUrlInvalid') }),
+        z.object({
+          url: z.string().url({ message: t('mediaUrlInvalid') }),
+          mediaType: z.string(),
+          position: z.number(),
+        }),
+      ]),
+    ),
   });
 
 type VariantFormData = z.infer<ReturnType<typeof createVariantFormSchema>>;
@@ -265,7 +280,12 @@ export function useVariantForm({
           instructions: warranty.instructions,
         })) || [],
       variantCover: variant.variantCover || '',
-      variantMedia: variant.variantMedia?.map((media) => media.url) || [],
+      variantMedia:
+        variant.variantMedia?.map((media) => ({
+          url: media.url,
+          mediaType: media.mediaType,
+          position: media.position,
+        })) || [],
     };
   }, [variant, isNew, isPhysical]);
 
@@ -384,12 +404,40 @@ export function useVariantForm({
               coverage: warranty.coverage,
               instructions: warranty.instructions,
             })),
-            variantCover: data.variantCover || undefined,
-            variantMedia: data.variantMedia.map((url, index) => ({
-              url,
-              mediaType: MediaTypeEnum.Image,
-              position: index + 1,
-            })),
+            variantCover: !data.variantCover
+              ? undefined
+              : typeof data.variantCover === 'string'
+                ? data.variantCover || undefined
+                : data.variantCover.url || undefined,
+            variantMedia: data.variantMedia.map(
+              (
+                item:
+                  | string
+                  | { url: string; mediaType: string; position: number },
+                index: number,
+              ) => {
+                // Handle both old format (string) and new format (object with mediaType)
+                if (typeof item === 'string') {
+                  // Legacy format: detect type from URL extension
+                  return {
+                    url: item,
+                    position: index + 1,
+                    mediaType: (item.includes('.mp4') ||
+                    item.includes('.webm') ||
+                    item.includes('.avi') ||
+                    item.includes('.mov')
+                      ? 'VIDEO'
+                      : 'IMAGE') as MediaTypeEnum,
+                  };
+                }
+                // New format: use provided mediaType
+                return {
+                  url: item.url,
+                  position: index + 1,
+                  mediaType: item.mediaType as MediaTypeEnum,
+                };
+              },
+            ),
           };
 
           const result = await addVariant(productId, input);
@@ -449,12 +497,40 @@ export function useVariantForm({
             coverage: warranty.coverage,
             instructions: warranty.instructions,
           })),
-          variantCover: data.variantCover || undefined,
-          variantMedia: data.variantMedia.map((url, index) => ({
-            url,
-            mediaType: MediaTypeEnum.Image,
-            position: index + 1,
-          })),
+          variantCover: !data.variantCover
+            ? undefined
+            : typeof data.variantCover === 'string'
+              ? data.variantCover || undefined
+              : data.variantCover.url || undefined,
+          variantMedia: data.variantMedia.map(
+            (
+              item:
+                | string
+                | { url: string; mediaType: string; position: number },
+              index: number,
+            ) => {
+              // Handle both old format (string) and new format (object with mediaType)
+              if (typeof item === 'string') {
+                // Legacy format: detect type from URL extension
+                return {
+                  url: item,
+                  position: index + 1,
+                  mediaType: (item.includes('.mp4') ||
+                  item.includes('.webm') ||
+                  item.includes('.avi') ||
+                  item.includes('.mov')
+                    ? 'VIDEO'
+                    : 'IMAGE') as MediaTypeEnum,
+                };
+              }
+              // New format: use provided mediaType
+              return {
+                url: item.url,
+                position: index + 1,
+                mediaType: item.mediaType as MediaTypeEnum,
+              };
+            },
+          ),
         };
 
         const result = await updateVariant(productId, [variantInput]);
