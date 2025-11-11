@@ -65,10 +65,17 @@ const createProductFormSchema = (
       .refine((val) => !val || val.length <= 100, {
         message: t('manufacturerTooLong'),
       }),
-    cover: z
-      .string()
-      .min(1, { message: t('coverRequired') })
-      .url({ message: t('mediaUrlInvalid') }),
+    cover: z.union([
+      z
+        .string()
+        .min(1, { message: t('coverRequired') })
+        .url({ message: t('mediaUrlInvalid') }),
+      z.object({
+        url: z.string().url({ message: t('mediaUrlInvalid') }),
+        mediaType: z.string(),
+        position: z.number(),
+      }),
+    ]),
     productType: z.enum(['PHYSICAL', 'DIGITAL'], {
       errorMap: () => ({ message: t('productTypeRequired') }),
     }),
@@ -315,10 +322,14 @@ export function useProductForm({
     if (isNew) {
       // In create mode - check if required fields are filled
       const currentValues = form.getValues();
+      const coverUrl =
+        typeof currentValues.cover === 'string'
+          ? currentValues.cover
+          : currentValues.cover?.url || '';
       return (
         currentValues.name.trim().length >= 2 &&
         currentValues.shortDescription.trim().length >= 10 &&
-        currentValues.cover.trim().length > 0
+        coverUrl.trim().length > 0
       );
     }
 
@@ -338,7 +349,7 @@ export function useProductForm({
             longDescription: data.longDescription || null,
             brand: data.brand || null,
             manufacturer: data.manufacturer || null,
-            cover: data.cover,
+            cover: typeof data.cover === 'string' ? data.cover : data.cover.url,
             productType: data.productType as TypeEnum,
             tags: data.tags || null,
             categories: data.categories?.map((cat) => ({
@@ -481,7 +492,10 @@ export function useProductForm({
               fieldsToUpdate.manufacturer = value || null;
               break;
             case 'cover':
-              fieldsToUpdate.cover = value;
+              fieldsToUpdate.cover =
+                typeof value === 'string'
+                  ? value
+                  : (value as { url: string })?.url || '';
               break;
             case 'productType':
               fieldsToUpdate.productType = value as TypeEnum;

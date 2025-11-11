@@ -32,7 +32,7 @@ export default function MediaFormField({
     control,
     name: coverFieldName,
     defaultValue: '',
-  }) as string;
+  }) as string | { url: string; mediaType: string; position: number };
 
   const mediaArray = useWatch({
     control,
@@ -62,14 +62,16 @@ export default function MediaFormField({
 
     // Always add cover as first item if it exists
     if (cover) {
-      mediaUrls.push(cover);
+      const coverUrl = typeof cover === 'string' ? cover : cover.url;
+      mediaUrls.push(coverUrl);
     }
 
     if (mediaArray && mediaArray.length > 0) {
       // Handle both old format (string[]) and new format (object[])
+      const coverUrl = typeof cover === 'string' ? cover : cover?.url;
       const additionalMedia = mediaArray
         .map((item) => (typeof item === 'string' ? item : item.url))
-        .filter((url) => url !== cover);
+        .filter((url) => url !== coverUrl);
       mediaUrls.push(...additionalMedia);
     }
 
@@ -80,9 +82,20 @@ export default function MediaFormField({
   const initialMediaTypes = useMemo(() => {
     const types: Array<'video' | 'image'> = [];
 
-    // Cover is always an image (we don't support video covers)
+    // Detect cover type - can be image or video
     if (cover) {
-      types.push('image');
+      if (typeof cover === 'string') {
+        // Legacy format: detect from URL
+        const isVideo =
+          cover.includes('.mp4') ||
+          cover.includes('.webm') ||
+          cover.includes('.avi') ||
+          cover.includes('.mov');
+        types.push(isVideo ? 'video' : 'image');
+      } else {
+        // New format: use mediaType from object
+        types.push(cover.mediaType === 'VIDEO' ? 'video' : 'image');
+      }
     }
 
     if (mediaArray && mediaArray.length > 0) {
@@ -117,11 +130,33 @@ export default function MediaFormField({
     }
 
     // Update cover if provided (first element)
+    // Save complete object with mediaType to preserve video/image type
     if (processedData.cover) {
-      setValue(coverFieldName, processedData.cover, {
-        shouldDirty: true,
-        shouldValidate: true,
-      });
+      // Find the cover item in mediaItems to get its complete data
+      const coverItem = processedData.mediaItems?.find(
+        (item) => item.position === 0,
+      );
+
+      if (coverItem) {
+        setValue(
+          coverFieldName,
+          {
+            url: coverItem.url,
+            mediaType: coverItem.mediaType,
+            position: coverItem.position,
+          },
+          {
+            shouldDirty: true,
+            shouldValidate: true,
+          },
+        );
+      } else {
+        // Fallback to just the URL if item not found
+        setValue(coverFieldName, processedData.cover, {
+          shouldDirty: true,
+          shouldValidate: true,
+        });
+      }
     } else {
       setValue(coverFieldName, '', {
         shouldDirty: true,
