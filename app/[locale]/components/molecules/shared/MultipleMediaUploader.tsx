@@ -24,6 +24,7 @@ interface MultipleMediaUploaderProps
   hideDoneButton?: boolean;
   alwaysEditing?: boolean;
   initialMedia?: string[] | null;
+  initialMediaTypes?: Array<'video' | 'image'> | null;
   onUploadingChange?: (isUploading: boolean) => void;
   renderDoneButton?: (
     onDone: () => void,
@@ -55,6 +56,7 @@ const MultipleMediaUploader = forwardRef<
       hideDoneButton = false,
       alwaysEditing = false,
       initialMedia,
+      initialMediaTypes,
       renderDoneButton,
       renderEditButton,
       acceptedFileTypes,
@@ -141,12 +143,14 @@ const MultipleMediaUploader = forwardRef<
         const mediaItemsFromUrls = initialMedia.map((url, index) => ({
           id: `existing-${index}-${Date.now()}`,
           type:
-            url.includes('.mp4') ||
-            url.includes('.webm') ||
-            url.includes('.avi') ||
-            url.includes('.mov')
-              ? ('video' as const)
-              : ('image' as const),
+            initialMediaTypes && initialMediaTypes[index]
+              ? initialMediaTypes[index]
+              : url.includes('.mp4') ||
+                  url.includes('.webm') ||
+                  url.includes('.avi') ||
+                  url.includes('.mov')
+                ? ('video' as const)
+                : ('image' as const),
           src: url,
           alt: `Media ${index + 1}`,
           // No file property since these are existing URLs
@@ -154,7 +158,7 @@ const MultipleMediaUploader = forwardRef<
 
         setMediaItems(mediaItemsFromUrls);
       }
-    }, [initialMedia, setPersistedMedia, setMediaItems]);
+    }, [initialMedia, initialMediaTypes, setPersistedMedia, setMediaItems]);
 
     // Check for changes whenever mediaItems or selectedFiles change
     useEffect(() => {

@@ -22,6 +22,7 @@ interface MediaUploaderProps
   hideDoneButton?: boolean;
   alwaysEditing?: boolean;
   initialMedia?: string | string[] | null;
+  initialMediaTypes?: Array<'video' | 'image'> | null;
   onUploadingChange?: (isUploading: boolean) => void;
   renderDoneButton?: (
     onDone: () => void,
@@ -56,6 +57,7 @@ const MediaUploader = forwardRef<
       hideDoneButton = false,
       alwaysEditing = false,
       initialMedia,
+      initialMediaTypes,
       renderDoneButton,
       renderEditButton,
     },
@@ -74,6 +76,7 @@ const MediaUploader = forwardRef<
           hideDoneButton={hideDoneButton || alwaysEditing}
           alwaysEditing={alwaysEditing}
           initialMedia={Array.isArray(initialMedia) ? initialMedia : null}
+          initialMediaTypes={initialMediaTypes}
           renderDoneButton={alwaysEditing ? undefined : renderDoneButton}
           renderEditButton={alwaysEditing ? undefined : renderEditButton}
           acceptedFileTypes={acceptedFileTypes}

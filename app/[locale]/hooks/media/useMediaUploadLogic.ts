@@ -33,6 +33,7 @@ export const useMediaUploadLogic = ({
     mediaItems,
     uploadedUrlsRef,
     expectedFileCountRef,
+    uploadingMediaTypesRef,
     setIsEditing,
     setSelectedFiles,
     setIsProcessing,
@@ -76,12 +77,27 @@ export const useMediaUploadLogic = ({
             const processedData = {
               cover: existingCover || urls[0] || '', // Preserve existing cover, fallback to first new URL if no existing cover
               mediaItems: allGalleryUrls.map((url, index) => {
-                // Determine media type from existing mediaItems or default to IMAGE
-                const existingItem = mediaItems.find(
-                  (item) => item.src === url,
-                );
-                const mediaType: 'VIDEO' | 'IMAGE' =
-                  existingItem?.type === 'video' ? 'VIDEO' : 'IMAGE';
+                // Check if this URL is from an existing item (not newly uploaded)
+                const existingItem = existingMediaItems
+                  .slice(1)
+                  .find((item) => item.src === url);
+
+                // If not existing, it's a new upload - find the corresponding new media item by index
+                let mediaType: 'VIDEO' | 'IMAGE' = 'IMAGE';
+                if (existingItem) {
+                  mediaType = existingItem.type === 'video' ? 'VIDEO' : 'IMAGE';
+                } else {
+                  // This is a newly uploaded URL - use the saved type from uploadingMediaTypesRef
+                  const urlIndexInNewUploads = urls.indexOf(url);
+                  if (
+                    urlIndexInNewUploads !== -1 &&
+                    urlIndexInNewUploads < uploadingMediaTypesRef.current.length
+                  ) {
+                    const savedType =
+                      uploadingMediaTypesRef.current[urlIndexInNewUploads];
+                    mediaType = savedType === 'video' ? 'VIDEO' : 'IMAGE';
+                  }
+                }
 
                 return {
                   url,
@@ -162,6 +178,7 @@ export const useMediaUploadLogic = ({
       setSelectedFiles,
       setIsProcessing,
       onUploadError,
+      uploadingMediaTypesRef,
     ],
   );
 
@@ -205,6 +222,11 @@ export const useMediaUploadLogic = ({
         expectedFileCountRef.current = fileCount;
         uploadedUrlsRef.current = [];
 
+        // Save the media types before uploading
+        uploadingMediaTypesRef.current = files.map((file) =>
+          file.type.startsWith('video/') ? 'video' : 'image',
+        );
+
         try {
           await handleFileSelect(files);
         } catch (error) {
@@ -241,6 +263,7 @@ export const useMediaUploadLogic = ({
       setSelectedFiles,
       expectedFileCountRef,
       uploadedUrlsRef,
+      uploadingMediaTypesRef,
     ],
   );
 

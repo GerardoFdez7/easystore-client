@@ -18,6 +18,7 @@ export const useMediaState = () => {
   // Refs for tracking upload progress
   const uploadedUrlsRef = useRef<string[]>([]);
   const expectedFileCountRef = useRef(0);
+  const uploadingMediaTypesRef = useRef<Array<'video' | 'image'>>([]);
 
   const resetState = () => {
     setIsEditing(false);
@@ -26,11 +27,13 @@ export const useMediaState = () => {
     setMediaItems([]);
     uploadedUrlsRef.current = [];
     expectedFileCountRef.current = 0;
+    uploadingMediaTypesRef.current = [];
   };
 
   const resetUploadTracking = () => {
     uploadedUrlsRef.current = [];
     expectedFileCountRef.current = 0;
+    uploadingMediaTypesRef.current = [];
   };
 
   return {
@@ -42,6 +45,7 @@ export const useMediaState = () => {
     mediaItems,
     uploadedUrlsRef,
     expectedFileCountRef,
+    uploadingMediaTypesRef,
 
     // State setters
     setIsEditing,

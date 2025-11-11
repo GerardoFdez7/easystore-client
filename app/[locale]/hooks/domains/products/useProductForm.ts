@@ -127,7 +127,16 @@ const createProductFormSchema = (
         }),
       )
       .optional(),
-    media: z.array(z.string().url({ message: t('mediaUrlInvalid') })),
+    media: z.array(
+      z.union([
+        z.string().url({ message: t('mediaUrlInvalid') }),
+        z.object({
+          url: z.string().url({ message: t('mediaUrlInvalid') }),
+          mediaType: z.string(),
+          position: z.number(),
+        }),
+      ]),
+    ),
   });
 
 type ProductFormData = z.infer<ReturnType<typeof createProductFormSchema>>;
@@ -249,7 +258,12 @@ export function useProductForm({
         }) || [],
       variants: product.variants || [],
       sustainabilities: product.sustainabilities || [],
-      media: product.media?.map((mediaItem: Media) => mediaItem.url) || [],
+      media:
+        product.media?.map((mediaItem: Media) => ({
+          url: mediaItem.url,
+          mediaType: mediaItem.mediaType,
+          position: mediaItem.position,
+        })) || [],
     };
   }, [product, isNew, productDraft, variantsDraft]);
 
@@ -334,13 +348,35 @@ export function useProductForm({
               certification: sus.certification,
               recycledPercentage: sus.recycledPercentage,
             })),
-            media: data.media?.map((url, index) => ({
-              url,
-              position: index + 1,
-              mediaType: (url.includes('.mp4')
-                ? 'VIDEO'
-                : 'IMAGE') as MediaTypeEnum,
-            })),
+            media: data.media?.map(
+              (
+                item:
+                  | string
+                  | { url: string; mediaType: string; position: number },
+                index: number,
+              ) => {
+                // Handle both old format (string) and new format (object with mediaType)
+                if (typeof item === 'string') {
+                  // Legacy format: detect type from URL extension
+                  return {
+                    url: item,
+                    position: index + 1,
+                    mediaType: (item.includes('.mp4') ||
+                    item.includes('.webm') ||
+                    item.includes('.avi') ||
+                    item.includes('.mov')
+                      ? 'VIDEO'
+                      : 'IMAGE') as MediaTypeEnum,
+                  };
+                }
+                // New format: use provided mediaType
+                return {
+                  url: item.url,
+                  position: index + 1,
+                  mediaType: item.mediaType as MediaTypeEnum,
+                };
+              },
+            ),
             variants: variantsDraft.map((variant) => ({
               price: variant.price,
               condition: variant.condition as ConditionEnum,
@@ -472,13 +508,39 @@ export function useProductForm({
               }));
               break;
             case 'media':
-              fieldsToUpdate.media = (value as string[])?.map((url, index) => ({
-                url,
-                position: index + 1,
-                mediaType: (url.includes('.mp4')
-                  ? 'VIDEO'
-                  : 'IMAGE') as MediaTypeEnum,
-              }));
+              fieldsToUpdate.media = (
+                value as Array<
+                  string | { url: string; mediaType: string; position: number }
+                >
+              )?.map(
+                (
+                  item:
+                    | string
+                    | { url: string; mediaType: string; position: number },
+                  index: number,
+                ) => {
+                  // Handle both old format (string) and new format (object with mediaType)
+                  if (typeof item === 'string') {
+                    // Legacy format: detect type from URL extension
+                    return {
+                      url: item,
+                      position: index + 1,
+                      mediaType: (item.includes('.mp4') ||
+                      item.includes('.webm') ||
+                      item.includes('.avi') ||
+                      item.includes('.mov')
+                        ? 'VIDEO'
+                        : 'IMAGE') as MediaTypeEnum,
+                    };
+                  }
+                  // New format: use provided mediaType
+                  return {
+                    url: item.url,
+                    position: index + 1,
+                    mediaType: item.mediaType as MediaTypeEnum,
+                  };
+                },
+              );
               break;
           }
         });

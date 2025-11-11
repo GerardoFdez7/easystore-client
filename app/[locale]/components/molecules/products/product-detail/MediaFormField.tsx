@@ -38,7 +38,7 @@ export default function MediaFormField({
     control,
     name: mediaFieldName,
     defaultValue: [],
-  }) as string[];
+  }) as Array<{ url: string; mediaType: string; position: number } | string>;
 
   const [uploaderKey, setUploaderKey] = useState(0);
   const hasInitializedRef = useRef(false);
@@ -66,11 +66,43 @@ export default function MediaFormField({
     }
 
     if (mediaArray && mediaArray.length > 0) {
-      const additionalMedia = mediaArray.filter((url) => url !== cover);
+      // Handle both old format (string[]) and new format (object[])
+      const additionalMedia = mediaArray
+        .map((item) => (typeof item === 'string' ? item : item.url))
+        .filter((url) => url !== cover);
       mediaUrls.push(...additionalMedia);
     }
 
     return mediaUrls.length > 0 ? mediaUrls : null;
+  }, [cover, mediaArray]);
+
+  // Extract media types for proper video/image detection
+  const initialMediaTypes = useMemo(() => {
+    const types: Array<'video' | 'image'> = [];
+
+    // Cover is always an image (we don't support video covers)
+    if (cover) {
+      types.push('image');
+    }
+
+    if (mediaArray && mediaArray.length > 0) {
+      mediaArray.forEach((item) => {
+        if (typeof item === 'string') {
+          // Legacy format: detect from URL
+          const isVideo =
+            item.includes('.mp4') ||
+            item.includes('.webm') ||
+            item.includes('.avi') ||
+            item.includes('.mov');
+          types.push(isVideo ? 'video' : 'image');
+        } else {
+          // New format: use mediaType from object
+          types.push(item.mediaType === 'VIDEO' ? 'video' : 'image');
+        }
+      });
+    }
+
+    return types.length > 0 ? types : null;
   }, [cover, mediaArray]);
 
   // Handle media updates from MediaUploader
@@ -100,11 +132,12 @@ export default function MediaFormField({
     // Update media array if provided - ONLY additional media (position 1+)
     if (processedData.mediaItems && processedData.mediaItems.length > 0) {
       // Filter out position 0 items (those should go to cover field)
-      const additionalMediaUrls = processedData.mediaItems
-        .filter((item) => item.position > 0)
-        .map((item) => item.url);
+      // Keep the complete media objects with type information
+      const additionalMedia = processedData.mediaItems.filter(
+        (item) => item.position > 0,
+      );
 
-      setValue(mediaFieldName, additionalMediaUrls, {
+      setValue(mediaFieldName, additionalMedia, {
         shouldDirty: true,
         shouldValidate: true,
       });
@@ -129,6 +162,7 @@ export default function MediaFormField({
               key={uploaderKey}
               multiple={true}
               initialMedia={initialMedia}
+              initialMediaTypes={initialMediaTypes}
               onMediaProcessed={handleMediaProcessed}
               onUploadingChange={onUploadingChange}
               alwaysEditing={true}
