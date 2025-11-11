@@ -15,7 +15,7 @@ export default function MainTouch() {
   const { form, handleSubmit, loading } = useTouch();
 
   return (
-    <main className="flex-1 bg-gray-100 pt-16">
+    <main className="bg-background flex-1 pt-16">
       <div className="mx-auto max-w-7xl px-6 py-12">
         <div className="grid grid-cols-1 items-start gap-16 lg:grid-cols-2">
           <section>
@@ -47,9 +47,9 @@ export default function MainTouch() {
                     {t('submit')}
                   </ButtonLoadable>
 
-                  <p className="text-sm leading-relaxed text-gray-600">
+                  <p className="text-text text-sm leading-relaxed">
                     {t('privacyNoticePrefix')}{' '}
-                    <Link href="/privacy" className="text-primary underline">
+                    <Link href="/privacy" className="text-secondary underline">
                       {t('privacyPolicy')}
                     </Link>
                   </p>

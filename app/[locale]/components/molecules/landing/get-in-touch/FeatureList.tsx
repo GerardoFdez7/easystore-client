@@ -24,9 +24,9 @@ export const FeaturesList: React.FC = () => {
       {featureKeys.map((key) => (
         <div key={key} className="flex items-center gap-3">
           <div className="bg-secondary flex h-5 w-5 items-center justify-center rounded-full">
-            <Check className="h-3 w-3 text-white" />
+            <Check className="text-text h-3 w-3" />
           </div>
-          <span className="text-black">{t(`features.${key}`)}</span>
+          <span className="text-foreground">{t(`features.${key}`)}</span>
         </div>
       ))}
     </div>
