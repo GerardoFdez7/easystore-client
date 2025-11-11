@@ -71,7 +71,7 @@ const MultipleMediaUploader = forwardRef<
       isEditing,
       selectedFiles,
       isProcessing,
-      persistedMedia,
+      persistedMedia: _persistedMedia,
       mediaItems,
       isUploading,
       setIsEditing,
@@ -96,6 +96,7 @@ const MultipleMediaUploader = forwardRef<
       string[] | null
     >(null);
     const [hasChanges, setHasChanges] = React.useState(false);
+    const hasInitializedRef = React.useRef(false);
 
     // Helper function to check if media has changed
     const checkForChanges = React.useCallback(
@@ -126,7 +127,13 @@ const MultipleMediaUploader = forwardRef<
 
     // Initialize persistedMedia with initialMedia if provided
     useEffect(() => {
-      if (initialMedia && initialMedia.length > 0 && !persistedMedia) {
+      // Only initialize once when component mounts with initialMedia
+      if (
+        initialMedia &&
+        initialMedia.length > 0 &&
+        !hasInitializedRef.current
+      ) {
+        hasInitializedRef.current = true;
         setPersistedMedia(initialMedia);
         setInitialMediaState(initialMedia); // Set initial state for change detection
 
@@ -147,7 +154,7 @@ const MultipleMediaUploader = forwardRef<
 
         setMediaItems(mediaItemsFromUrls);
       }
-    }, [initialMedia, persistedMedia, setPersistedMedia, setMediaItems]);
+    }, [initialMedia, setPersistedMedia, setMediaItems]);
 
     // Check for changes whenever mediaItems or selectedFiles change
     useEffect(() => {
@@ -156,10 +163,10 @@ const MultipleMediaUploader = forwardRef<
 
     // Set editing mode based on alwaysEditing prop
     useEffect(() => {
-      if (alwaysEditing) {
+      if (alwaysEditing && !isEditing) {
         setIsEditing(true);
       }
-    }, [alwaysEditing, setIsEditing]);
+    }, [alwaysEditing, isEditing, setIsEditing]);
 
     // Notify parent about uploading state changes
     useEffect(() => {

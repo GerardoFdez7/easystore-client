@@ -105,8 +105,13 @@ export const useMediaUploadLogic = ({
 
         // Save for preview - update mediaItems with uploaded URLs
         if (multiple && urls.length >= 1) {
-          const updatedMediaItems = updateMediaItemsWithUrls(mediaItems, urls);
-          setMediaItems(updatedMediaItems);
+          setMediaItems((currentMediaItems) => {
+            const updatedMediaItems = updateMediaItemsWithUrls(
+              currentMediaItems,
+              urls,
+            );
+            return updatedMediaItems;
+          });
 
           // Update persisted media to include all URLs (existing + new)
           // Separate cover from gallery media
