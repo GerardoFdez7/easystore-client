@@ -407,6 +407,29 @@ export enum CurrencyCodes {
   Zwl = 'ZWL',
 }
 
+export type DashboardData = {
+  __typename?: 'DashboardData';
+  ordersTimeline: Array<OrderTimeline>;
+  recentOrders: Array<RecentOrder>;
+  summary: DashboardSummary;
+  topProducts: Array<TopProduct>;
+};
+
+export type DashboardSummary = {
+  __typename?: 'DashboardSummary';
+  average_order_value: Scalars['Float']['output'];
+  cancelled_orders: Scalars['Int']['output'];
+  cancelled_revenue: Scalars['Float']['output'];
+  completed_orders: Scalars['Int']['output'];
+  completed_revenue: Scalars['Float']['output'];
+  confirmed_orders: Scalars['Int']['output'];
+  processing_orders: Scalars['Int']['output'];
+  shipped_orders: Scalars['Int']['output'];
+  total_orders: Scalars['Int']['output'];
+  total_revenue: Scalars['Float']['output'];
+  unique_customers: Scalars['Int']['output'];
+};
+
 export type Dimension = {
   __typename?: 'Dimension';
   height: Scalars['Float']['output'];
@@ -641,6 +664,13 @@ export type MutationUpdateWarehouseArgs = {
   input: UpdateWarehouseInput;
 };
 
+export type OrderTimeline = {
+  __typename?: 'OrderTimeline';
+  date: Scalars['String']['output'];
+  orders_count: Scalars['Int']['output'];
+  revenue: Scalars['Float']['output'];
+};
+
 export type PaginatedAddressesType = {
   __typename?: 'PaginatedAddressesType';
   addresses: Array<AddressType>;
@@ -738,6 +768,8 @@ export type Query = {
   getAllWarehouses: PaginatedWarehousesType;
   getCart: PaginatedCart;
   getCategoryById: Category;
+  /** Get all dashboard data in a single query: summary, timeline, recent orders, and top products */
+  getDashboardData: DashboardData;
   getMediaUploadToken: MediaAuthResponse;
   getProductById: Product;
   getStatesByCountryId: Array<StateType>;
@@ -821,6 +853,17 @@ export type QueryGetStatesByCountryIdArgs = {
 export type QueryGetWarehouseByIdArgs = {
   id: Scalars['ID']['input'];
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type RecentOrder = {
+  __typename?: 'RecentOrder';
+  customer_name: Scalars['String']['output'];
+  order_date: Scalars['DateTime']['output'];
+  order_id: Scalars['ID']['output'];
+  order_number: Scalars['String']['output'];
+  order_status: Scalars['String']['output'];
+  order_total: Scalars['Float']['output'];
+  shipping_city?: Maybe<Scalars['String']['output']>;
 };
 
 export type RemoveItemFromCartInput = {
@@ -919,6 +962,20 @@ export type Tenant = {
   logo?: Maybe<Scalars['String']['output']>;
   ownerName: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type TopProduct = {
+  __typename?: 'TopProduct';
+  orders_count: Scalars['Int']['output'];
+  product_brand?: Maybe<Scalars['String']['output']>;
+  product_cover?: Maybe<Scalars['String']['output']>;
+  product_name: Scalars['String']['output'];
+  total_quantity_sold: Scalars['Int']['output'];
+  total_revenue: Scalars['Float']['output'];
+  variant_cover?: Maybe<Scalars['String']['output']>;
+  variant_id: Scalars['ID']['output'];
+  variant_price: Scalars['Float']['output'];
+  variant_sku: Scalars['String']['output'];
 };
 
 export enum TypeEnum {
@@ -1513,6 +1570,58 @@ export type FindCategoriesTreeQuery = {
           }>;
         }>;
       }>;
+    }>;
+  };
+};
+
+export type GetDashboardDataQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetDashboardDataQuery = {
+  __typename?: 'Query';
+  getDashboardData: {
+    __typename?: 'DashboardData';
+    summary: {
+      __typename?: 'DashboardSummary';
+      total_orders: number;
+      total_revenue: number;
+      average_order_value: number;
+      unique_customers: number;
+      completed_orders: number;
+      cancelled_orders: number;
+      processing_orders: number;
+      confirmed_orders: number;
+      shipped_orders: number;
+      completed_revenue: number;
+      cancelled_revenue: number;
+    };
+    ordersTimeline: Array<{
+      __typename?: 'OrderTimeline';
+      date: string;
+      orders_count: number;
+      revenue: number;
+    }>;
+    recentOrders: Array<{
+      __typename?: 'RecentOrder';
+      order_id: string;
+      order_number: string;
+      order_date: any;
+      customer_name: string;
+      order_total: number;
+      order_status: string;
+      shipping_city?: string | null;
+    }>;
+    topProducts: Array<{
+      __typename?: 'TopProduct';
+      variant_id: string;
+      variant_sku: string;
+      product_name: string;
+      product_brand?: string | null;
+      variant_price: number;
+      variant_cover?: string | null;
+      product_cover?: string | null;
+      total_quantity_sold: number;
+      total_revenue: number;
+      orders_count: number;
     }>;
   };
 };
@@ -4573,6 +4682,190 @@ export const FindCategoriesTreeDocument = {
 } as unknown as DocumentNode<
   FindCategoriesTreeQuery,
   FindCategoriesTreeQueryVariables
+>;
+export const GetDashboardDataDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetDashboardData' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getDashboardData' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'summary' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'total_orders' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'total_revenue' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'average_order_value' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'unique_customers' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'completed_orders' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'cancelled_orders' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'processing_orders' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'confirmed_orders' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'shipped_orders' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'completed_revenue' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'cancelled_revenue' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'ordersTimeline' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'date' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'orders_count' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'revenue' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'recentOrders' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'order_id' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'order_number' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'order_date' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'customer_name' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'order_total' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'order_status' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'shipping_city' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'topProducts' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variant_id' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variant_sku' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'product_name' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'product_brand' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variant_price' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variant_cover' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'product_cover' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'total_quantity_sold' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'total_revenue' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'orders_count' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetDashboardDataQuery,
+  GetDashboardDataQueryVariables
 >;
 export const FindAllMovementsDocument = {
   kind: 'Document',
