@@ -207,9 +207,15 @@ export default function VariantsFormField({
                                     <div className="h-10 w-10 overflow-hidden rounded-lg">
                                       <Image
                                         src={
-                                          variant.variantCover &&
-                                          variant.variantCover.trim() !== ''
-                                            ? variant.variantCover
+                                          variant.variantCover
+                                            ? typeof variant.variantCover ===
+                                              'string'
+                                              ? variant.variantCover
+                                              : (
+                                                  variant.variantCover as {
+                                                    url: string;
+                                                  }
+                                                ).url
                                             : '/default.webp'
                                         }
                                         alt={
@@ -276,9 +282,15 @@ export default function VariantsFormField({
                                         <div className="h-10 w-10 overflow-hidden rounded-lg">
                                           <Image
                                             src={
-                                              variant.variantCover &&
-                                              variant.variantCover.trim() !== ''
-                                                ? variant.variantCover
+                                              variant.variantCover
+                                                ? typeof variant.variantCover ===
+                                                  'string'
+                                                  ? variant.variantCover
+                                                  : (
+                                                      variant.variantCover as {
+                                                        url: string;
+                                                      }
+                                                    ).url
                                                 : '/default.webp'
                                             }
                                             alt={
