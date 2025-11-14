@@ -23,7 +23,7 @@ function Textarea({
         ? value
         : ''
       : typeof defaultValue === 'string'
-        ? (defaultValue as string)
+        ? defaultValue
         : '';
     return initialText.length;
   });

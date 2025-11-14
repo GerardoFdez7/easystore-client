@@ -1523,6 +1523,25 @@
       "cancel": "Annuler",
       "saveConfiguration": "Enregistrer la Configuration"
     },
+    "Pagadito": {
+      "title": "Pagadito",
+      "description": "Configurez les identifiants Pagadito",
+      "uid": "UID (ID Utilisateur)",
+      "uidPlaceholder": "Entrez votre UID Pagadito",
+      "uidHint": "Votre identifiant unique de marchand Pagadito",
+      "wsk": "WSK (Clé de Service Web)",
+      "wskPlaceholder": "Entrez votre WSK",
+      "wskHint": "Votre clé de service web Pagadito pour l'authentification API",
+      "featuresTitle": "Fonctionnalités Pagadito",
+      "feature1": "Virements bancaires en Amérique Centrale",
+      "feature2": "Traitement des cartes de crédit et débit",
+      "feature3": "Paiements via portefeuille mobile",
+      "feature4": "Génération de paiements par code QR",
+      "securityNotice": "Avis de Sécurité",
+      "securityNoticeDescription": "Tous les identifiants sont chiffrés avec AES-256-CBC avant le stockage. Ne partagez jamais vos clés.",
+      "cancel": "Annuler",
+      "saveConfiguration": "Enregistrer la Configuration"
+    },
     "PayPal": {
       "title": "Configuration PayPal",
       "description": "Configurez vos identifiants API PayPal",

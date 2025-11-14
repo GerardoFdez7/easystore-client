@@ -1518,6 +1518,25 @@
       "cancel": "Cancelar",
       "saveConfiguration": "Guardar Configuración"
     },
+    "Pagadito": {
+      "title": "Pagadito",
+      "description": "Configure las credenciales de Pagadito",
+      "uid": "UID (ID de Usuario)",
+      "uidPlaceholder": "Ingrese su UID de Pagadito",
+      "uidHint": "Su identificador único de comercio Pagadito",
+      "wsk": "WSK (Clave de Servicio Web)",
+      "wskPlaceholder": "Ingrese su WSK",
+      "wskHint": "Su clave de servicio web de Pagadito para autenticación API",
+      "featuresTitle": "Características de Pagadito",
+      "feature1": "Transferencias bancarias en Centroamérica",
+      "feature2": "Procesamiento de tarjetas de crédito y débito",
+      "feature3": "Pagos con billeteras móviles",
+      "feature4": "Generación de pagos con código QR",
+      "securityNotice": "Aviso de Seguridad",
+      "securityNoticeDescription": "Todas las credenciales se cifran con AES-256-CBC antes del almacenamiento. Nunca comparta sus claves con nadie.",
+      "cancel": "Cancelar",
+      "saveConfiguration": "Guardar Configuración"
+    },
     "PayPal": {
       "title": "Configuración de PayPal",
       "description": "Configure sus credenciales de la API de PayPal",

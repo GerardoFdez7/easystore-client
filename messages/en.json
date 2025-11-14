@@ -1442,6 +1442,7 @@
   },
   "Billing": {
     "title": "Billing Methods",
+    "description": "Here you can define how you want to charge your store customers.",
     "subtitle": "Here you can define how you want to charge your store customers.",
     "gridAria": "Billing methods grid",
     "methods": {
@@ -1506,6 +1507,25 @@
       "pagaditoFeature2": "Credit and debit card processing",
       "pagaditoFeature3": "Mobile wallet payments",
       "pagaditoFeature4": "QR code payment generation",
+      "securityNotice": "Security Notice",
+      "securityNoticeDescription": "All credentials are encrypted using AES-256-CBC before storage. Never share your keys with anyone.",
+      "cancel": "Cancel",
+      "saveConfiguration": "Save Configuration"
+    },
+    "Pagadito": {
+      "title": "Pagadito",
+      "description": "Configure Pagadito credentials",
+      "uid": "UID (User ID)",
+      "uidPlaceholder": "Enter your Pagadito UID",
+      "uidHint": "Your Pagadito UID",
+      "wsk": "WSK (Web Service Key)",
+      "wskPlaceholder": "Enter your WSK",
+      "wskHint": "Your Pagadito Web Service Key for API authentication",
+      "featuresTitle": "Pagadito Features",
+      "feature1": "Bank transfers in Central America",
+      "feature2": "Credit and debit card processing",
+      "feature3": "Mobile wallet payments",
+      "feature4": "QR code payment generation",
       "securityNotice": "Security Notice",
       "securityNoticeDescription": "All credentials are encrypted using AES-256-CBC before storage. Never share your keys with anyone.",
       "cancel": "Cancel",

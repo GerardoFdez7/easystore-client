@@ -13,11 +13,14 @@ const messages = {
       wsk: 'WSK',
       wskPlaceholder: 'Enter WSK',
       wskHint: 'Web Service Key',
-      pagaditoFeatures: 'Pagadito features',
-      pagaditoFeature1: 'Feature 1',
-      pagaditoFeature2: 'Feature 2',
-      pagaditoFeature3: 'Feature 3',
-      pagaditoFeature4: 'Feature 4',
+      featuresTitle: 'Pagadito features',
+      feature1: 'Feature 1',
+      feature2: 'Feature 2',
+      feature3: 'Feature 3',
+      feature4: 'Feature 4',
+      securityNotice: 'Security Notice',
+      securityNoticeDescription:
+        'All credentials are encrypted and stored securely.',
       cancel: 'Cancel',
       saveConfiguration: 'Save Configuration',
     },
@@ -36,7 +39,11 @@ type Story = StoryObj<typeof PagaditoModal>;
 export const Default: Story = {
   render: () => (
     <NextIntlClientProvider locale="en" messages={messages}>
-      <PagaditoModal open={true} onOpenChange={() => {}} />
+      <PagaditoModal
+        open={true}
+        onOpenChange={() => {}}
+        onSaved={() => console.log('Pagadito saved from Story')}
+      />
     </NextIntlClientProvider>
   ),
 };

@@ -18,14 +18,16 @@ import { Landmark, Lock } from 'lucide-react';
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSaved?: () => void;
 };
 
-export default function PagaditoModal({ open, onOpenChange }: Props) {
+export default function PagaditoModal({ open, onOpenChange, onSaved }: Props) {
   const t = useTranslations('Billing.Pagadito');
 
   const handleSave = () => {
     // TODO: Implement save logic with GraphQL mutation
     console.log('Save Pagadito configuration');
+    onSaved?.();
     onOpenChange(false);
   };
 
@@ -80,7 +82,7 @@ export default function PagaditoModal({ open, onOpenChange }: Props) {
 
           {/* Security Notice */}
           <div className="bg-warning/10 border-warning/30 flex gap-3 rounded-lg border p-4">
-            <Lock className="text-warning h-5 w-5 flex-shrink-0" />
+            <Lock className="text-warning h-5 w-5 shrink-0" />
             <div className="space-y-1">
               <p className="text-sm font-medium">{t('securityNotice')}</p>
               <p className="text-muted-foreground text-xs">

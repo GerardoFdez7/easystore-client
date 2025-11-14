@@ -55,6 +55,7 @@ export default function BillingMethodCard({
 }: Props) {
   const t = useTranslations('Billing.MethodCard');
   // Aplica apariencia deshabilitada siempre que el método esté apagado
+  // Apply disabled appearance when the method is turned off
   const disabledLook = !enabled;
 
   return (
