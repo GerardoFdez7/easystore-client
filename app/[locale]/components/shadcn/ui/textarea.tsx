@@ -11,10 +11,35 @@ function Textarea({
   className,
   maxLength,
   showCharacterCount = true,
-  value = '',
+  value,
+  defaultValue,
+  onChange,
   ...props
 }: TextareaProps) {
-  const currentLength = typeof value === 'string' ? value.length : 0;
+  const isControlled = value !== undefined;
+  const [currentLength, setCurrentLength] = React.useState(() => {
+    const initialText = isControlled
+      ? typeof value === 'string'
+        ? value
+        : ''
+      : typeof defaultValue === 'string'
+        ? defaultValue
+        : '';
+    return initialText.length;
+  });
+
+  React.useEffect(() => {
+    if (isControlled && typeof value === 'string') {
+      setCurrentLength(value.length);
+    }
+  }, [isControlled, value]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (!isControlled) {
+      setCurrentLength(e.target.value.length);
+    }
+    onChange?.(e);
+  };
 
   return (
     <div className="relative">
@@ -26,7 +51,9 @@ function Textarea({
           className,
         )}
         maxLength={maxLength}
-        value={value}
+        value={isControlled ? value : undefined}
+        defaultValue={!isControlled ? defaultValue : undefined}
+        onChange={handleChange}
         {...props}
       />
       {showCharacterCount && (

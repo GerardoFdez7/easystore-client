@@ -219,7 +219,7 @@ const CarouselMedia = ({
       >
         <Carousel
           setApi={setThumbsApi}
-          className="mx-auto max-w-[240px] rounded-xl sm:max-w-xl"
+          className="mx-auto max-w-60 rounded-xl sm:max-w-xl"
           opts={{
             containScroll: 'keepSnaps',
             dragFree: !isDragging,
