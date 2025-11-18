@@ -6,14 +6,8 @@ import { Card, CardContent } from '@shadcn/ui/card';
 import { Button } from '@shadcn/ui/button';
 import { Switch } from '@shadcn/ui/switch';
 import { cn } from '@lib/utils';
-import {
-  CreditCard,
-  Banknote,
-  Landmark,
-  Wallet,
-  Truck,
-  CircleDollarSign,
-} from 'lucide-react';
+import { CreditCard, Banknote, Landmark, Truck, HandCoins } from 'lucide-react';
+import { FaPaypal } from 'react-icons/fa';
 
 export type BillingMethodId =
   | 'cards'
@@ -39,9 +33,11 @@ const iconById: Record<BillingMethodId, ReactNode> = {
   cards: <CreditCard className="h-7 w-7" aria-hidden="true" />,
   cash: <Banknote className="h-7 w-7" aria-hidden="true" />,
   bank_transfer: <Landmark className="h-7 w-7" aria-hidden="true" />,
-  paypal: <Wallet className="h-7 w-7" aria-hidden="true" />,
+  paypal: (
+    <FaPaypal className="h-7 w-7" aria-hidden="true" aria-label="PayPal" />
+  ),
   cod: <Truck className="h-7 w-7" aria-hidden="true" />,
-  installments: <CircleDollarSign className="h-7 w-7" aria-hidden="true" />,
+  installments: <HandCoins className="h-7 w-7" aria-hidden="true" />,
 };
 
 export default function BillingMethodCard({

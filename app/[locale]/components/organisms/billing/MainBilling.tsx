@@ -22,12 +22,8 @@ type MethodRow = {
 export default function MainBilling() {
   const t = useTranslations('Billing');
 
-  // Estado para controlar qué modal está abierto
-  // State to control which modal is open
   const [activeModal, setActiveModal] = useState<BillingMethodId | null>(null);
 
-  // Estado local (cámbialo luego por tu fetch/GraphQL)
-  // Local state (replace later with fetch/GraphQL)
   const [methods, setMethods] = useState<Record<BillingMethodId, MethodRow>>({
     cards: { id: 'cards', enabled: true, configured: false },
     cash: { id: 'cash', enabled: true, configured: false },
