@@ -72,9 +72,7 @@ export default function CardPaymentModal({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="cybersource">
-                  CyberSource / VisaNet
-                </SelectItem>
+                <SelectItem value="cybersource">VisaNet</SelectItem>
                 <SelectItem value="pagadito">Pagadito</SelectItem>
               </SelectContent>
             </Select>
@@ -86,9 +84,7 @@ export default function CardPaymentModal({
             <>
               {/* Merchant ID */}
               <div className="space-y-2">
-                <Label htmlFor="merchantId">
-                  {t('merchantId')} <span className="text-error">*</span>
-                </Label>
+                <Label htmlFor="merchantId">{t('merchantId')}</Label>
                 <Input
                   id="merchantId"
                   placeholder={t('merchantIdPlaceholder')}
@@ -98,9 +94,7 @@ export default function CardPaymentModal({
 
               {/* API Key */}
               <div className="space-y-2">
-                <Label htmlFor="apiKey">
-                  {t('apiKey')} <span className="text-error">*</span>
-                </Label>
+                <Label htmlFor="apiKey">{t('apiKey')}</Label>
                 <div className="relative">
                   <Lock className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                   <Input
@@ -114,9 +108,7 @@ export default function CardPaymentModal({
 
               {/* Secret Key */}
               <div className="space-y-2">
-                <Label htmlFor="secretKey">
-                  {t('secretKey')} <span className="text-error">*</span>
-                </Label>
+                <Label htmlFor="secretKey">{t('secretKey')}</Label>
                 <div className="relative">
                   <Lock className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                   <Input
@@ -155,18 +147,14 @@ export default function CardPaymentModal({
             <>
               {/* UID */}
               <div className="space-y-2">
-                <Label htmlFor="uid">
-                  {t('uid')} <span className="text-error">*</span>
-                </Label>
+                <Label htmlFor="uid">{t('uid')}</Label>
                 <Input id="uid" placeholder={t('uidPlaceholder')} type="text" />
                 <p className="text-muted-foreground text-xs">{t('uidHint')}</p>
               </div>
 
               {/* WSK (Web Service Key) */}
               <div className="space-y-2">
-                <Label htmlFor="wsk">
-                  {t('wsk')} <span className="text-error">*</span>
-                </Label>
+                <Label htmlFor="wsk">{t('wsk')}</Label>
                 <div className="relative">
                   <Lock className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                   <Input
@@ -194,7 +182,7 @@ export default function CardPaymentModal({
 
           {/* Security Notice */}
           <div className="bg-warning/10 border-warning/30 flex gap-3 rounded-lg border p-4">
-            <Lock className="text-warning h-5 w-5 flex-shrink-0" />
+            <Lock className="text-warning h-5 w-5 shrink-0" />
             <div className="space-y-1">
               <p className="text-sm font-medium">{t('securityNotice')}</p>
               <p className="text-muted-foreground text-xs">

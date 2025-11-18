@@ -48,9 +48,7 @@ export default function PayPalModal({ open, onOpenChange, onSaved }: Props) {
 
           {/* Client ID */}
           <div className="space-y-2">
-            <Label htmlFor="clientId">
-              {t('clientId')} <span className="text-error">*</span>
-            </Label>
+            <Label htmlFor="clientId">{t('clientId')}</Label>
             <Input
               id="clientId"
               placeholder={t('clientIdPlaceholder')}
@@ -61,9 +59,7 @@ export default function PayPalModal({ open, onOpenChange, onSaved }: Props) {
 
           {/* Client Secret */}
           <div className="space-y-2">
-            <Label htmlFor="clientSecret">
-              {t('clientSecret')} <span className="text-error">*</span>
-            </Label>
+            <Label htmlFor="clientSecret">{t('clientSecret')}</Label>
             <div className="relative">
               <Lock className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
               <Input
@@ -91,7 +87,7 @@ export default function PayPalModal({ open, onOpenChange, onSaved }: Props) {
 
           {/* Security Notice */}
           <div className="bg-warning/10 border-warning/30 flex gap-3 rounded-lg border p-4">
-            <Lock className="text-warning h-5 w-5 flex-shrink-0" />
+            <Lock className="text-warning h-5 w-5 shrink-0" />
             <div className="space-y-1">
               <p className="text-sm font-medium">{t('securityNotice')}</p>
               <p className="text-muted-foreground text-xs">

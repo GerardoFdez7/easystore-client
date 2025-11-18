@@ -218,7 +218,7 @@ export default function InstallmentsModal({
 
           {/* Features Section */}
           <div className="bg-secondary/10 border-secondary/30 flex gap-3 rounded-lg border p-4">
-            <Info className="text-secondary h-5 w-5 flex-shrink-0" />
+            <Info className="text-secondary h-5 w-5 shrink-0" />
             <div className="space-y-2">
               <p className="text-sm font-medium">{t('featuresTitle')}</p>
               <ul className="text-muted-foreground space-y-1 text-xs">
@@ -232,7 +232,7 @@ export default function InstallmentsModal({
 
           {/* Info Section */}
           <div className="bg-warning/10 border-warning/30 flex gap-3 rounded-lg border p-4">
-            <Info className="text-warning h-5 w-5 flex-shrink-0" />
+            <Info className="text-warning h-5 w-5 shrink-0" />
             <div className="space-y-1">
               <p className="text-sm font-medium">{t('infoTitle')}</p>
               <p className="text-muted-foreground text-xs">{t('infoText')}</p>

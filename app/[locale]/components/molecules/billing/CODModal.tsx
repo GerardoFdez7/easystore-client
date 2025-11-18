@@ -60,7 +60,7 @@ export default function CODModal({ open, onOpenChange, onSaved }: Props) {
                 step="0.01"
               />
               <Button variant="outline" className="w-20">
-                USD
+                {process.env.NEXT_PUBLIC_DEFAULT_CURRENCY ?? 'USD'}
               </Button>
             </div>
             <p className="text-muted-foreground text-xs">{t('extraFeeHint')}</p>
@@ -78,7 +78,7 @@ export default function CODModal({ open, onOpenChange, onSaved }: Props) {
                 step="0.01"
               />
               <Button variant="outline" className="w-20">
-                USD
+                {process.env.NEXT_PUBLIC_DEFAULT_CURRENCY ?? 'USD'}
               </Button>
             </div>
             <p className="text-muted-foreground text-xs">
@@ -140,7 +140,7 @@ export default function CODModal({ open, onOpenChange, onSaved }: Props) {
 
           {/* Best Practices Info */}
           <div className="bg-secondary/10 border-secondary/30 flex gap-3 rounded-lg border p-4">
-            <Info className="text-secondary h-5 w-5 flex-shrink-0" />
+            <Info className="text-secondary h-5 w-5 shrink-0" />
             <div className="space-y-2">
               <p className="text-sm font-medium">{t('bestPracticesTitle')}</p>
               <ul className="text-muted-foreground space-y-1 text-xs">

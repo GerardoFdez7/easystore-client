@@ -52,9 +52,7 @@ export default function BankTransferModal({
         <div className="space-y-6 py-4">
           {/* Bank Name */}
           <div className="space-y-2">
-            <Label htmlFor="bankName">
-              {t('bankName')} <span className="text-error">*</span>
-            </Label>
+            <Label htmlFor="bankName">{t('bankName')}</Label>
             <Input
               id="bankName"
               placeholder={t('bankNamePlaceholder')}
@@ -64,9 +62,7 @@ export default function BankTransferModal({
 
           {/* Account Holder */}
           <div className="space-y-2">
-            <Label htmlFor="accountHolder">
-              {t('accountHolder')} <span className="text-error">*</span>
-            </Label>
+            <Label htmlFor="accountHolder">{t('accountHolder')}</Label>
             <Input
               id="accountHolder"
               placeholder={t('accountHolderPlaceholder')}
@@ -76,9 +72,7 @@ export default function BankTransferModal({
 
           {/* Account Number */}
           <div className="space-y-2">
-            <Label htmlFor="accountNumber">
-              {t('accountNumber')} <span className="text-error">*</span>
-            </Label>
+            <Label htmlFor="accountNumber">{t('accountNumber')}</Label>
             <Input
               id="accountNumber"
               placeholder={t('accountNumberPlaceholder')}
@@ -126,7 +120,7 @@ export default function BankTransferModal({
 
           {/* Info Section */}
           <div className="bg-secondary/10 border-secondary/30 flex gap-3 rounded-lg border p-4">
-            <Info className="text-secondary h-5 w-5 flex-shrink-0" />
+            <Info className="text-secondary h-5 w-5 shrink-0" />
             <div className="space-y-2">
               <p className="text-sm font-medium">{t('infoTitle')}</p>
               <ul className="text-muted-foreground space-y-1 text-xs">

@@ -45,18 +45,14 @@ export default function PagaditoModal({ open, onOpenChange, onSaved }: Props) {
         <div className="space-y-6 py-4">
           {/* UID */}
           <div className="space-y-2">
-            <Label htmlFor="uid">
-              {t('uid')} <span className="text-error">*</span>
-            </Label>
+            <Label htmlFor="uid">{t('uid')}</Label>
             <Input id="uid" placeholder={t('uidPlaceholder')} type="text" />
             <p className="text-muted-foreground text-xs">{t('uidHint')}</p>
           </div>
 
           {/* WSK (Web Service Key) */}
           <div className="space-y-2">
-            <Label htmlFor="wsk">
-              {t('wsk')} <span className="text-error">*</span>
-            </Label>
+            <Label htmlFor="wsk">{t('wsk')}</Label>
             <div className="relative">
               <Lock className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
               <Input

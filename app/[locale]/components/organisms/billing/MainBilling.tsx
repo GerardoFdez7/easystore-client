@@ -56,9 +56,7 @@ export default function MainBilling() {
 
   return (
     <main className="flex w-full flex-col gap-6 px-2 sm:px-4 xl:mx-auto">
-      <section className="text-muted-foreground text-xl">
-        {t('subtitle')}
-      </section>
+      <h2 className="text-text text-sm sm:text-lg">{t('subtitle')}</h2>
 
       <section
         aria-label={t('gridAria')}
@@ -84,7 +82,7 @@ export default function MainBilling() {
         })}
       </section>
 
-      {/* Modales */}
+      {/* Modals */}
       <CardPaymentModal
         open={activeModal === 'cards'}
         onOpenChange={(open) => !open && closeModal()}

@@ -80,15 +80,11 @@ export default function BillingMethodCard({
           <span className="bg-muted text-secondary-foreground inline-flex items-center rounded-full px-3 py-1 text-xs font-medium">
             {t('disabled')}
           </span>
-        ) : state === 'configured' ? (
-          <span className="bg-muted text-secondary-foreground inline-flex items-center rounded-full px-5 py-2 text-xs font-medium">
-            {t('configured')}
-          </span>
-        ) : (
+        ) : state === 'pending' ? (
           <span className="bg-warning/20 text-warning inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium">
             {t('pendingSetup')}
           </span>
-        )}
+        ) : null}
       </div>
       <CardContent className="flex flex-1 flex-col items-center gap-4 p-0">
         <div className="bg-muted/60 flex h-16 w-16 items-center justify-center rounded-full">
@@ -97,13 +93,13 @@ export default function BillingMethodCard({
 
         <div className="text-center">
           <h3 className="text-sm font-semibold">{title}</h3>
-          <p className="text-muted-foreground mt-1 max-w-[240px] text-xs">
+          <p className="text-muted-foreground mt-1 max-w-60 text-xs">
             {description}
           </p>
         </div>
 
         <Button
-          className="mt-auto w-full max-w-[240px]"
+          className="mt-auto w-full max-w-60"
           size="sm"
           variant="outline"
           onClick={onManage}
