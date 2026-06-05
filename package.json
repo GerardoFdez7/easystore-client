@@ -2,6 +2,12 @@
   "name": "easystore-web",
   "version": "0.1.0",
   "private": true,
+  "description": "Frontend project of EasyStore, the web application that empowers you to build your own e-commerce platform without any programming knowledge. This user-friendly solution provides all the tools you need to create, manage, and grow your online store with ease.",
+  "author": "EasyStore Team",
+  "engines": {
+    "node": ">=24.0.0",
+    "npm": ">=11.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "storybook": "storybook dev -p 6006",
@@ -96,7 +102,7 @@
     "@storybook/nextjs": "9.1.8",
     "@tailwindcss/postcss": "4",
     "@types/graphql": "14.2.3",
-    "@types/node": "20",
+    "@types/node": "24",
     "@types/react": "19",
     "@types/react-dom": "19",
     "@typescript-eslint/parser": "8.28.0",
