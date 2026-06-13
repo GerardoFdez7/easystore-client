@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2021",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -13,7 +17,7 @@
     "noImplicitAny": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
       {
@@ -21,21 +25,51 @@
       }
     ],
     "paths": {
-      "@atoms/*": ["./app/[locale]/components/atoms/*"],
-      "@molecules/*": ["./app/[locale]/components/molecules/*"],
-      "@organisms/*": ["./app/[locale]/components/organisms/*"],
-      "@templates/*": ["./app/[locale]/components/templates/*"],
-      "@shadcn/*": ["./app/[locale]/components/shadcn/*"],
-      "@schemas/*": ["./app/[locale]/schemas/*"],
-      "@hooks/*": ["./app/[locale]/hooks/*"],
-      "@types/*": ["./app/[locale]/lib/types/*"],
-      "@lib/*": ["./app/[locale]/lib/*"],
-      "@contexts/*": ["./app/[locale]/lib/contexts/*"],
-      "@consts/*": ["./app/[locale]/lib/consts/*"],
-      "utils": ["./app/[locale]/lib/utils/cn"],
-      "@graphql/*": ["./server/graphql/*"],
-      "@errors/*": ["./server/errors/*"],
-      "@i18n/*": ["./i18n/*"]
+      "@atoms/*": [
+        "./app/[locale]/components/atoms/*"
+      ],
+      "@molecules/*": [
+        "./app/[locale]/components/molecules/*"
+      ],
+      "@organisms/*": [
+        "./app/[locale]/components/organisms/*"
+      ],
+      "@templates/*": [
+        "./app/[locale]/components/templates/*"
+      ],
+      "@shadcn/*": [
+        "./app/[locale]/components/shadcn/*"
+      ],
+      "@schemas/*": [
+        "./app/[locale]/schemas/*"
+      ],
+      "@hooks/*": [
+        "./app/[locale]/hooks/*"
+      ],
+      "@types/*": [
+        "./app/[locale]/lib/types/*"
+      ],
+      "@lib/*": [
+        "./app/[locale]/lib/*"
+      ],
+      "@contexts/*": [
+        "./app/[locale]/lib/contexts/*"
+      ],
+      "@consts/*": [
+        "./app/[locale]/lib/consts/*"
+      ],
+      "utils": [
+        "./app/[locale]/lib/utils/cn"
+      ],
+      "@graphql/*": [
+        "./server/graphql/*"
+      ],
+      "@errors/*": [
+        "./server/errors/*"
+      ],
+      "@i18n/*": [
+        "./i18n/*"
+      ]
     }
   },
   "include": [
@@ -43,7 +77,12 @@
     "global.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "**/*.jsx", "cypress/**/*"]
+  "exclude": [
+    "node_modules",
+    "**/*.jsx",
+    "cypress/**/*"
+  ]
 }

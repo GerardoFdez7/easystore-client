@@ -14,9 +14,6 @@ const nextConfig: NextConfig = {
     ],
     unoptimized: process.env.NODE_ENV === 'production' ? false : true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   compiler: {
     removeConsole:
       process.env.NODE_ENV === 'production'
@@ -47,9 +44,7 @@ const nextConfig: NextConfig = {
           }
         : false,
   },
-  experimental: {
-    reactCompiler: true,
-  },
+  reactCompiler: true,
 };
 
 export default withNextIntl(nextConfig);
