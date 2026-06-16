@@ -1,4 +1,4 @@
-import OrdersTemplate from '@templates/Orders';
+import OrdersTemplate from '@templates/orders/Orders';
 
 export default function OrdersPage() {
   return <OrdersTemplate />;
