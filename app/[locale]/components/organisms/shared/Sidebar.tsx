@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   Settings,
   Wallpaper,
+  Wallet,
   // Gift,
   // BookUser,
   ClipboardList,
@@ -131,6 +132,13 @@ export default function Sidebar(props: ComponentProps<typeof ShadcnSidebar>) {
               icon={<Users className="text-title" />}
               label={t('customers')}
               route="customers"
+            />
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <ButtonSidebar
+              icon={<Wallet className="text-title" />}
+              label={t('billing')}
+              route="billing"
             />
           </SidebarMenuItem>
           {/* <SidebarMenuItem>
