@@ -9,44 +9,7 @@ import {
   TableRow,
 } from '@shadcn/ui/table';
 import { useTranslations } from 'next-intl';
-
-const orders = [
-  {
-    order: 'ORD-001',
-    date: '2024-06-01',
-    customer: 'Alice Johnson',
-    total: '$120.00',
-    status: 'PROCESSING',
-  },
-  {
-    order: 'ORD-002',
-    date: '2024-06-02',
-    customer: 'Bob Smith',
-    total: '$80.00',
-    status: 'CONFIRMED',
-  },
-  {
-    order: 'ORD-003',
-    date: '2024-06-03',
-    customer: 'Charlie Brown',
-    total: '$150.00',
-    status: 'SHIPPED',
-  },
-  {
-    order: 'ORD-004',
-    date: '2024-06-04',
-    customer: 'Diana Prince',
-    total: '$200.00',
-    status: 'COMPLETED',
-  },
-  {
-    order: 'ORD-005',
-    date: '2024-06-05',
-    customer: 'Eve Adams',
-    total: '$95.00',
-    status: 'CANCELLED',
-  },
-];
+import type { RecentOrder } from '@hooks/domains/dashboard';
 
 function StatusBadge({ status }: { status: string }) {
   const t = useTranslations('Dashboard');
@@ -84,8 +47,13 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-export default function SalesOverview() {
+interface SalesOverviewProps {
+  recentOrders: RecentOrder[];
+}
+
+export default function SalesOverview({ recentOrders }: SalesOverviewProps) {
   const t = useTranslations('Dashboard');
+  const currency = process.env.NEXT_PUBLIC_DEFAULT_CURRENCY || 'Q';
 
   return (
     <>
@@ -115,19 +83,43 @@ export default function SalesOverview() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {orders.map((order) => (
-              <TableRow key={order.order} className="hover:bg-hover transition">
-                <TableCell className="font-mono text-sm sm:pl-5">
-                  {order.order}
-                </TableCell>
-                <TableCell className="text-sm">{order.date}</TableCell>
-                <TableCell className="text-sm">{order.customer}</TableCell>
-                <TableCell className="text-sm">{order.total}</TableCell>
-                <TableCell>
-                  <StatusBadge status={order.status} />
+            {recentOrders.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center">
+                  <span className="text-muted-foreground">
+                    {t('noRecentOrders')}
+                  </span>
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              recentOrders.map((order) => (
+                <TableRow
+                  key={order.orderId}
+                  className="hover:bg-hover transition"
+                >
+                  <TableCell className="font-mono text-sm sm:pl-5">
+                    {order.orderNumber}
+                  </TableCell>
+                  <TableCell className="text-sm">
+                    {new Date(order.orderDate).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                    })}
+                  </TableCell>
+                  <TableCell className="text-sm">
+                    {order.customerName}
+                  </TableCell>
+                  <TableCell className="text-sm">
+                    {currency}
+                    {order.orderTotal.toLocaleString()}
+                  </TableCell>
+                  <TableCell>
+                    <StatusBadge status={order.orderStatus} />
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

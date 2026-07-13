@@ -424,6 +424,7 @@ const httpStatusHandlers: ErrorHandler[] = [
         'getAllCategories',
         'getCategoryById',
         'getAllStockMovements',
+        'getDashboardData',
       ];
 
       // Check if this error comes from an expected operation

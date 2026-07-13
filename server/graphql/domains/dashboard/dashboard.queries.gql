@@ -1,0 +1,43 @@
+query GetDashboardData {
+  getDashboardData {
+    summary {
+      total_orders
+      total_revenue
+      average_order_value
+      unique_customers
+      completed_orders
+      cancelled_orders
+      processing_orders
+      confirmed_orders
+      shipped_orders
+      completed_revenue
+      cancelled_revenue
+    }
+    ordersTimeline {
+      date
+      orders_count
+      revenue
+    }
+    recentOrders {
+      order_id
+      order_number
+      order_date
+      customer_name
+      order_total
+      order_status
+      shipping_city
+    }
+    topProducts {
+      variant_id
+      variant_sku
+      product_name
+      product_brand
+      variant_price
+      variant_cover
+      product_cover
+      total_quantity_sold
+      total_revenue
+      orders_count
+    }
+  }
+}
