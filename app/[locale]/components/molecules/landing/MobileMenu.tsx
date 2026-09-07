@@ -31,7 +31,7 @@ export default function MobileMenu() {
           aria-haspopup="true"
           aria-expanded="false"
         >
-          <Menu size={32} />
+          <Menu className="size-6" />
         </Button>
       </DrawerTrigger>
       <DrawerContent

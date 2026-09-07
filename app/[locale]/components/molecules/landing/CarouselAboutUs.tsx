@@ -20,7 +20,7 @@ export default function CarouselAboutUs() {
         opts={landingCarouselOptions}
         autoScroll={true}
       >
-        <CarouselContent className="gap-4 xl:justify-center">
+        <CarouselContent className="-ml-4 sm:ml-0 sm:gap-4 xl:justify-center">
           <ItemFeature
             icon={<Building2 className={iconClass} />}
             title={t('foundedT')}
@@ -46,7 +46,7 @@ export default function CarouselAboutUs() {
         opts={landingCarouselOptions}
         autoScroll={true}
       >
-        <CarouselContent className="gap-4 xl:justify-center">
+        <CarouselContent className="-ml-4 sm:ml-0 sm:gap-4 xl:justify-center">
           <ItemFeature
             icon={<Focus className={iconClass} />}
             title={t('focusT')}

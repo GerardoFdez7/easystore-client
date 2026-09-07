@@ -31,7 +31,7 @@ export default function CarouselFeature() {
         opts={landingCarouselOptions}
         autoScroll={true}
       >
-        <CarouselContent className="gap-4 xl:justify-center">
+        <CarouselContent className="-ml-4 sm:ml-0 sm:gap-4 xl:justify-center">
           <ItemFeature
             icon={<Sparkles className={iconClass} />}
             title={t('aiIntegratedT')}
@@ -57,7 +57,7 @@ export default function CarouselFeature() {
         opts={landingCarouselOptions}
         autoScroll={true}
       >
-        <CarouselContent className="gap-4 xl:justify-center">
+        <CarouselContent className="-ml-4 sm:ml-0 sm:gap-4 xl:justify-center">
           <ItemFeature
             icon={<ChartColumnBig className={iconClass} />}
             title={t('growBussinessT')}
@@ -87,7 +87,7 @@ export default function CarouselFeature() {
         opts={landingCarouselOptions}
         autoScroll={true}
       >
-        <CarouselContent className="gap-4 xl:justify-center">
+        <CarouselContent className="-ml-4 sm:ml-0 sm:gap-4 xl:justify-center">
           <ItemFeature
             icon={<Globe className={iconClass} />}
             title={t('sellEverywhereT')}
