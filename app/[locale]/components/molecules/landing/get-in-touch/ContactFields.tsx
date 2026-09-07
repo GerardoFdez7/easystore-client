@@ -159,7 +159,7 @@ export const ContactFields: React.FC = () => {
               <FormLabel>{t('annualRevenue')}</FormLabel>
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="border-primary h-12 w-full">
+                  <SelectTrigger className="border-primary w-full font-light">
                     <SelectValue placeholder={t('selectAnnualRevenue')} />
                   </SelectTrigger>
                   <SelectContent>

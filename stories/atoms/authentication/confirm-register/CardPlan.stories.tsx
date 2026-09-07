@@ -37,7 +37,7 @@ export const Default: Story = {
     title: 'Basic',
     price: '$0',
     features: [
-      '50 products limit',
+      '15 products limit',
       '1 warehouse limit',
       '1 sales page',
       'Forum support',

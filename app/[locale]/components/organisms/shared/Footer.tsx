@@ -5,6 +5,7 @@ import LinkFooter from '@atoms/shared/LinkFooter';
 
 export default function Footer() {
   const t = useTranslations('Landing');
+  const currentYear = new Date().getFullYear();
   // const styleIcons =
   //   'text-foreground hover:text-primary h-7 w-7 2xl:h-8 2xl:w-8 transition-colors';
 
@@ -24,7 +25,7 @@ export default function Footer() {
 
       <div className="text-center text-[17px] 2xl:text-xl">
         <span style={{ opacity: 0.7 }} className="text-foreground">
-          {t('inc')}
+          {t('inc', { year: currentYear })}
         </span>
       </div>
 

@@ -15,7 +15,8 @@
     "prod": "env-cmd -f .env next build && next start",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint . --ignore-pattern \"**/generated.ts\"",
+    "lint:fix": "prettier --write .",
     "docker": "docker-compose up",
     "docker:dev": "docker-compose -f docker-compose.dev.yml up",
     "build-storybook": "storybook build",
@@ -122,10 +123,5 @@
     "tailwindcss": "4",
     "tsx": "4.19.2",
     "typescript": "5"
-  },
-  "eslintConfig": {
-    "extends": [
-      "plugin:storybook/recommended"
-    ]
   }
 }

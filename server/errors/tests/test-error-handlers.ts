@@ -38,6 +38,15 @@ const testCases = [
     expectedHandler: 'warehouse-name-exists',
   },
   {
+    name: 'Unauthenticated Token Validation',
+    error: {
+      message: 'Authentication required',
+      extensions: { code: 'UNAUTHENTICATED' },
+      path: ['validateToken'],
+    },
+    expectedHandler: 'unauthenticated-token-validation',
+  },
+  {
     name: 'Invalid Credentials',
     error: { message: 'invalid credentials' },
     expectedHandler: 'invalid-credentials',

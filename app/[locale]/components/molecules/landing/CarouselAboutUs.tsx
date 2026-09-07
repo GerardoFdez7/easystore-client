@@ -3,6 +3,11 @@ import ItemFeature from '@atoms/landing/ItemFeature';
 import { useTranslations } from 'next-intl';
 import { Building2, Users, Earth, Focus, Flag } from 'lucide-react';
 
+const landingCarouselOptions = {
+  align: 'start' as const,
+  loop: true,
+};
+
 export default function CarouselAboutUs() {
   const t = useTranslations('Landing');
   const iconClass = 'text-secondary h-9 w-9';
@@ -10,8 +15,12 @@ export default function CarouselAboutUs() {
   return (
     <div className="flex w-full flex-col items-center">
       {/*Row 1*/}
-      <Carousel className="mb-10 w-full" autoScroll={true}>
-        <CarouselContent className="justify-center gap-4">
+      <Carousel
+        className="mb-10 w-full px-4"
+        opts={landingCarouselOptions}
+        autoScroll={true}
+      >
+        <CarouselContent className="gap-4 xl:justify-center">
           <ItemFeature
             icon={<Building2 className={iconClass} />}
             title={t('foundedT')}
@@ -31,8 +40,13 @@ export default function CarouselAboutUs() {
       </Carousel>
 
       {/*Row 2*/}
-      <Carousel startAtEnd className="mb-10 w-full" autoScroll={true}>
-        <CarouselContent className="justify-center gap-4">
+      <Carousel
+        startAtEnd
+        className="mb-10 w-full px-4"
+        opts={landingCarouselOptions}
+        autoScroll={true}
+      >
+        <CarouselContent className="gap-4 xl:justify-center">
           <ItemFeature
             icon={<Focus className={iconClass} />}
             title={t('focusT')}

@@ -11,15 +11,11 @@ import {
 
 import en from '../../messages/en.json';
 import es from '../../messages/es.json';
-import fr from '../../messages/fr.json';
-import it from '../../messages/it.json';
 import pt from '../../messages/pt.json';
 
 const messagesMap = {
   en,
   es,
-  fr,
-  it,
   pt,
 };
 
@@ -340,8 +336,25 @@ const databaseConstraintHandlers: ErrorHandler[] = [
  */
 const authenticationHandlers: ErrorHandler[] = [
   {
-    id: 'invalid-credentials',
+    id: 'unauthenticated-token-validation',
     priority: 200,
+    matcher: (error: GraphQLFormattedError) => {
+      const operationName = error.path?.[0];
+
+      return (
+        error.extensions?.code === 'UNAUTHENTICATED' &&
+        operationName === 'validateToken'
+      );
+    },
+    handler: () => {
+      // AuthContext handles this expected result by redirecting protected routes
+      // to the login page. Do not surface a toast or development console error.
+      return true;
+    },
+  },
+  {
+    id: 'invalid-credentials',
+    priority: 210,
     matcher: (error: GraphQLFormattedError) => {
       const message = error.message?.toLowerCase() || '';
       return message.includes('invalid credentials');
@@ -358,7 +371,7 @@ const authenticationHandlers: ErrorHandler[] = [
   },
   {
     id: 'account-locked',
-    priority: 210,
+    priority: 220,
     matcher: (error: GraphQLFormattedError) => {
       const message = error.message?.toLowerCase() || '';
       return message.includes('account is temporarily locked');
@@ -375,7 +388,7 @@ const authenticationHandlers: ErrorHandler[] = [
   },
   {
     id: 'email-already-exists',
-    priority: 220,
+    priority: 230,
     matcher: (error: GraphQLFormattedError) => {
       const message = error.message?.toLowerCase() || '';
       return (
@@ -416,14 +429,8 @@ const httpStatusHandlers: ErrorHandler[] = [
       // List of GraphQL operations where 404 is expected and should be silent
       // Add more operations here as needed
       const expectedNotFoundOperations = [
-        'getAllWarehouses',
         'getWarehouseById',
-        'findInventory',
-        'getAllAddresses',
-        'getAllProducts',
-        'getAllCategories',
         'getCategoryById',
-        'getAllStockMovements',
       ];
 
       // Check if this error comes from an expected operation

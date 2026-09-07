@@ -22,8 +22,9 @@ const messages = {
     sellEverywhere: 'Web, social, and marketplaces.',
     searchEngineT: 'Search engine',
     searchEngine: 'Fast product search that converts.',
-    inventorySyncT: 'Inventory sync',
-    inventorySync: 'Keep stock consistent across channels.',
+    managedShipmentsT: 'Managed shipments',
+    managedShipments:
+      'Use our trusted shipping partners to deliver every order.',
   },
 };
 

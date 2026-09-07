@@ -18,7 +18,7 @@ const messages = {
     community: 'Community',
     termsConditions: 'Terms & Conditions',
     privacyPolicy: 'Privacy Policy',
-    inc: '\u00a9 2025 EasyStore, Inc. All rights reserved',
+    inc: '\u00a9 {year} EasyStore, Inc. All rights reserved',
     unlimetedProductsT: 'Unlimited products',
     unlimetedProducts: 'Add as many products as you like',
     customDomainsT: 'Custom domains',
@@ -38,9 +38,9 @@ const messages = {
     sellEverywhere: 'Reach customers on social media, marketplaces, and more',
     searchEngineT: 'Search Engine Optimization',
     searchEngine: 'Attract more organic traffic and reach new customers',
-    inventorySyncT: 'Inventory Synchronization',
-    inventorySync:
-      'Automatically sync your inventory across your online and in-person stores',
+    managedShipmentsT: 'Managed shipments',
+    managedShipments:
+      'Use our trusted shipping partners to deliver every order.',
     featureTitle: 'Why choose EasyStore?',
     featureText:
       'EasyStore is the all-in-one solution for growing businesses. Our platform includes everything you need to start, run, and scale your online business.',
@@ -133,16 +133,10 @@ const messages = {
     '8featureAdvanced': 'Advanced feature 8',
     '9featureAdvanced': 'Advanced feature 9',
     '10featureAdvanced': 'Advanced feature 10',
-    '1featureEnterprise': 'Enterprise feature 1',
-    '2featureEnterprise': 'Enterprise feature 2',
-    '3featureEnterprise': 'Enterprise feature 3',
-    '4featureEnterprise': 'Enterprise feature 4',
-    '5featureEnterprise': 'Enterprise feature 5',
-    '6featureEnterprise': 'Enterprise feature 6',
-    '7featureEnterprise': 'Enterprise feature 7',
-    '8featureEnterprise': 'Enterprise feature 8',
-    '9featureEnterprise': 'Enterprise feature 9',
-    '10featureEnterprise': 'Enterprise feature 10',
+    '1featureEnterprise': 'Everything Unlimited',
+    '2featureEnterprise': '100% custom site',
+    '3featureEnterprise': 'Domain included',
+    '4featureEnterprise': '24/7 priority support',
   },
 };
 

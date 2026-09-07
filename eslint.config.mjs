@@ -1,12 +1,12 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { FlatCompat } from '@eslint/eslintrc';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import prettierRecommended from 'eslint-plugin-prettier/recommended';
+import storybook from 'eslint-plugin-storybook';
+import tsParser from '@typescript-eslint/parser';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
 const ignorePatterns = [
   '*.config.js',
   '*.config.ts',
@@ -17,10 +17,17 @@ const ignorePatterns = [
 
 const eslintConfig = [
   { ignores: ignorePatterns },
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  ...nextVitals,
+  ...storybook.configs['flat/recommended'],
   {
+    files: [
+      'app/**/*.{ts,tsx}',
+      'i18n/**/*.ts',
+      'server/**/*.ts',
+      'stories/**/*.{ts,tsx}',
+    ],
     languageOptions: {
-      parser: await import('@typescript-eslint/parser'),
+      parser: tsParser,
       parserOptions: {
         project: './tsconfig.json',
         tsconfigRootDir: __dirname,
@@ -37,6 +44,13 @@ const eslintConfig = [
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/await-thenable': 'error',
       '@typescript-eslint/no-misused-promises': 'error',
+
+      // React Compiler diagnostics are opt-in while the existing components
+      // are progressively migrated to its stricter render and effect model.
+      'react-hooks/immutability': 'off',
+      'react-hooks/purity': 'off',
+      'react-hooks/refs': 'off',
+      'react-hooks/set-state-in-effect': 'off',
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
@@ -95,9 +109,7 @@ const eslintConfig = [
       'prettier/prettier': 'warn',
     },
   },
-  ...compat.config({
-    extends: ['plugin:prettier/recommended'],
-  }),
+  prettierRecommended,
 ];
 
 export default eslintConfig;

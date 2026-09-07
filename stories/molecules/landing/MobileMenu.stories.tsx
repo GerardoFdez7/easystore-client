@@ -7,8 +7,6 @@ const messages = {
   Languages: {
     English: 'English',
     Spanish: 'Spanish',
-    French: 'French',
-    Italian: 'Italian',
     Portuguese: 'Portuguese',
   },
 };

@@ -23,6 +23,13 @@ const testCases = [
   },
   // Authentication errors
   {
+    description: 'unauthenticated token validation (should be silent)',
+    errorMessage: 'Authentication required',
+    extensions: { code: 'UNAUTHENTICATED' },
+    path: ['validateToken'],
+    expectedHandlerId: 'unauthenticated-token-validation',
+  },
+  {
     description: 'invalid credentials',
     errorMessage: 'invalid credentials',
     expectedHandlerId: 'invalid-credentials',
@@ -42,6 +49,7 @@ const testCases = [
     description: 'not found error (should be silent)',
     errorMessage: 'Resource not found',
     extensions: { originalError: { error: 'Not Found' } },
+    path: ['validateToken'],
     expectedHandlerId: 'not-found-expected',
   },
   {
@@ -88,6 +96,7 @@ export function testErrorHandlers(): {
     const error: GraphQLFormattedError = {
       message: testCase.errorMessage,
       extensions: testCase.extensions,
+      path: testCase.path,
     };
 
     const matchResult = findErrorHandler(error);

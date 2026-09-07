@@ -25,12 +25,8 @@ export default function PlanPremium({
         t('1featurePremium'),
         t('2featurePremium'),
         t('3featurePremium'),
-        t('4featurePremium'),
-        t('5featurePremium'),
         t('6featurePremium'),
         t('7featurePremium'),
-        t('8featurePremium'),
-        t('9featurePremium'),
       ]}
     >
       <ButtonPlan

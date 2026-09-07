@@ -8,15 +8,10 @@ export const FeaturesList: React.FC = () => {
   const t = useTranslations('GetInTouch');
 
   const featureKeys = [
-    'unlimitedProducts',
-    'unlimitedWarehouses',
-    'unlimitedEmployeeAccounts',
+    'everythingUnlimited',
     'customSite',
+    'domainIncluded',
     'prioritySupport',
-    'completeAnalytics',
-    'customDomain',
-    'inventorySync',
-    'aiContent',
   ] as const;
 
   return (

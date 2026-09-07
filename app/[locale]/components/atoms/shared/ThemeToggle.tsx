@@ -1,15 +1,15 @@
 'use client';
 
 import { Moon, Sun } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@shadcn/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@shadcn/ui/tooltip';
 import { usePageTheme } from '@shadcn/features/page-theme';
+import { useTheme } from '@shadcn/features/theme-provider';
 
 export default function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const { isDarkModeEnabled } = usePageTheme();
   const [mounted, setMounted] = useState(false);
   const t = useTranslations('Shared');
@@ -29,7 +29,7 @@ export default function ThemeToggle() {
   }
 
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
   };
 
   return (

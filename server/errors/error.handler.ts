@@ -5,15 +5,11 @@ import { processGraphQLError } from './error-registry';
 
 import en from '../../messages/en.json';
 import es from '../../messages/es.json';
-import fr from '../../messages/fr.json';
-import it from '../../messages/it.json';
 import pt from '../../messages/pt.json';
 
 const messagesMap = {
   en,
   es,
-  fr,
-  it,
   pt,
 };
 

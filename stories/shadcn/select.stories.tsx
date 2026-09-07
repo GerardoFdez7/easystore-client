@@ -48,7 +48,7 @@ export const Basic: Story = {
       <SelectContent>
         <SelectItem value="es">Spanish</SelectItem>
         <SelectItem value="en">English</SelectItem>
-        <SelectItem value="fr">French</SelectItem>
+        <SelectItem value="pt">Portuguese</SelectItem>
       </SelectContent>
     </Select>
   ),

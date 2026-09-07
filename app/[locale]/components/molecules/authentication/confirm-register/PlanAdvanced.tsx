@@ -24,13 +24,8 @@ export default function PlanAdvanced({
         t('1featureAdvanced'),
         t('2featureAdvanced'),
         t('3featureAdvanced'),
-        t('4featureAdvanced'),
-        t('5featureAdvanced'),
-        t('6featureAdvanced'),
         t('7featureAdvanced'),
         t('8featureAdvanced'),
-        t('9featureAdvanced'),
-        t('10featureAdvanced'),
       ]}
     >
       <ButtonPlan

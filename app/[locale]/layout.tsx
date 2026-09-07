@@ -39,7 +39,7 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <body className={`${inter.variable} antialiased`}>
         <ApolloWrapper>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider>
             <NextIntlClientProvider>
               <CountdownProvider>
                 <AuthProvider>{children}</AuthProvider>

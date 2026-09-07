@@ -7,7 +7,7 @@ const messages = {
     community: 'Community',
     termsConditions: 'Terms & Conditions',
     privacyPolicy: 'Privacy Policy',
-    inc: '\u00a9 2025 EasyStore, Inc. All rights reserved',
+    inc: '\u00a9 {year} EasyStore, Inc. All rights reserved',
   },
 };
 

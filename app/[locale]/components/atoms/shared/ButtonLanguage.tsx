@@ -43,8 +43,6 @@ export const LanguageButton = () => {
   const languageAbbreviations: Record<string, string> = {
     en: 'En',
     es: 'Es',
-    fr: 'Fr',
-    it: 'It',
     pt: 'Pt',
   };
 
@@ -88,18 +86,6 @@ export const LanguageButton = () => {
             className="cursor-pointer text-base"
           >
             {t('Spanish')}
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem
-            value="fr"
-            className="cursor-pointer text-base"
-          >
-            {t('French')}
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem
-            value="it"
-            className="cursor-pointer text-base"
-          >
-            {t('Italian')}
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem
             value="pt"

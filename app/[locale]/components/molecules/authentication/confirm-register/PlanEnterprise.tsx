@@ -19,11 +19,6 @@ export default function PlanEnterprise({ price }: PlanEnterpriseProps) {
         t('2featureEnterprise'),
         t('3featureEnterprise'),
         t('4featureEnterprise'),
-        t('5featureEnterprise'),
-        t('6featureEnterprise'),
-        t('7featureEnterprise'),
-        t('8featureEnterprise'),
-        t('9featureEnterprise'),
       ]}
     >
       <div className="flex justify-center">

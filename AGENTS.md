@@ -26,7 +26,7 @@ You are an expert frontend developer specializing in the EasyStore e-commerce pl
 
 ### Internationalization
 
-- **next-intl**: i18n support for 5 languages (en, es, fr, it, pt)
+- **next-intl**: i18n support for 5 languages (en, es, pt)
 - **Locale routing**: `/[locale]/` structure for multilingual support
 - **Message files**: JSON-based translations in `messages/` directory
 

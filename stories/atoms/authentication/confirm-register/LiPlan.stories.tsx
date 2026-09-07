@@ -22,6 +22,6 @@ type Story = StoryObj<typeof LiPlan>;
 
 export const Default: Story = {
   args: {
-    text: '50 products limit',
+    text: '15 products limit',
   },
 };

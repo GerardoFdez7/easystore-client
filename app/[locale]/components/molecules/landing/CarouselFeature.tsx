@@ -4,15 +4,20 @@ import { useTranslations } from 'next-intl';
 import { MdCodeOff } from 'react-icons/md';
 import {
   Tag,
-  Infinity,
   CreditCard,
   ChartColumnBig,
   Ban,
-  ChartNoAxesGantt,
   Globe,
+  Landmark,
   Search,
-  RefreshCcw,
+  Sparkles,
+  Truck,
 } from 'lucide-react';
+
+const landingCarouselOptions = {
+  align: 'start' as const,
+  loop: true,
+};
 
 export default function CarouselFeature() {
   const t = useTranslations('Landing');
@@ -21,12 +26,16 @@ export default function CarouselFeature() {
   return (
     <div className="flex w-full flex-col items-center">
       {/*Row 1*/}
-      <Carousel className="mb-10 w-full" autoScroll={true}>
-        <CarouselContent className="justify-center gap-4">
+      <Carousel
+        className="mb-10 w-full px-4"
+        opts={landingCarouselOptions}
+        autoScroll={true}
+      >
+        <CarouselContent className="gap-4 xl:justify-center">
           <ItemFeature
-            icon={<Infinity className={iconClass} />}
-            title={t('unlimetedProductsT')}
-            text={t('unlimetedProducts')}
+            icon={<Sparkles className={iconClass} />}
+            title={t('aiIntegratedT')}
+            text={t('aiIntegrated')}
           />
           <ItemFeature
             icon={<Tag className={iconClass} />}
@@ -42,8 +51,13 @@ export default function CarouselFeature() {
       </Carousel>
 
       {/*Row 2*/}
-      <Carousel startAtEnd className="mb-10 w-full" autoScroll={true}>
-        <CarouselContent className="justify-center gap-4">
+      <Carousel
+        startAtEnd
+        className="mb-10 w-full px-4"
+        opts={landingCarouselOptions}
+        autoScroll={true}
+      >
+        <CarouselContent className="gap-4 xl:justify-center">
           <ItemFeature
             icon={<ChartColumnBig className={iconClass} />}
             title={t('growBussinessT')}
@@ -55,9 +69,9 @@ export default function CarouselFeature() {
             text={t('zeroTransaction')}
           />
           <ItemFeature
-            icon={<ChartNoAxesGantt className={iconClass} />}
-            title={t('manageEaseT')}
-            text={t('manageEase')}
+            icon={<Landmark className={iconClass} />}
+            title={t('satIntegrationT')}
+            text={t('satIntegration')}
           />
           <ItemFeature
             icon={<MdCodeOff className={iconClass} />}
@@ -68,22 +82,26 @@ export default function CarouselFeature() {
       </Carousel>
 
       {/*Row 3*/}
-      <Carousel className="mb-10 w-full" autoScroll={true}>
-        <CarouselContent className="justify-center gap-4">
+      <Carousel
+        className="mb-10 w-full px-4"
+        opts={landingCarouselOptions}
+        autoScroll={true}
+      >
+        <CarouselContent className="gap-4 xl:justify-center">
           <ItemFeature
             icon={<Globe className={iconClass} />}
             title={t('sellEverywhereT')}
             text={t('sellEverywhere')}
           />
           <ItemFeature
-            icon={<Search className="text-secondary h-[46px] w-[46px]" />}
+            icon={<Search className="text-secondary h-11.5 w-11.5" />}
             title={t('searchEngineT')}
             text={t('searchEngine')}
           />
           <ItemFeature
-            icon={<RefreshCcw className={iconClass} />}
-            title={t('inventorySyncT')}
-            text={t('inventorySync')}
+            icon={<Truck className={iconClass} />}
+            title={t('managedShipmentsT')}
+            text={t('managedShipments')}
           />
         </CarouselContent>
       </Carousel>
