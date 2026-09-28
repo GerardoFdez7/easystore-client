@@ -36,7 +36,9 @@ export function EditableField({
   const [currentValue, setCurrentValue] = useState(value);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => setCurrentValue(value), [value]);
+  useEffect(() => {
+    setCurrentValue(value);
+  }, [value]);
 
   const startEditing = () => {
     setIsEditing(true);

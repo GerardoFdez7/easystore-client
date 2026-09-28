@@ -120,7 +120,7 @@ export default function CategoryGrid({
   const skeletonItems = useMemo(
     () =>
       Array.from({ length: limit }, (_, i) => (
-        <CategoryCardSkeleton key={`skeleton-${Date.now()}-${i}`} />
+        <CategoryCardSkeleton key={`skeleton-${i}`} />
       )),
     [limit],
   );

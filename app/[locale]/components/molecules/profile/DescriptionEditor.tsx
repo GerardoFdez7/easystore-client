@@ -19,7 +19,9 @@ export function DescriptionEditor({
   const [description, setDescription] = useState(value ?? '');
   const t = useTranslations('Profile');
 
-  useEffect(() => setDescription(value ?? ''), [value]);
+  useEffect(() => {
+    setDescription(value ?? '');
+  }, [value]);
 
   const handleToggle = () => {
     if (isEditing) void onSave?.(description);

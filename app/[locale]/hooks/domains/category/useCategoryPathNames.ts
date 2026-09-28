@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useCallback } from 'react';
+import { useMemo } from 'react';
 import { useQuery } from '@apollo/client/react';
 import {
   FindCategoriesTreeDocument,
@@ -15,6 +15,22 @@ import { slugToName } from '@lib/utils/path-utils';
 type GqlCategory = NonNullable<
   FindCategoriesTreeQuery['getAllCategories']
 >['categories'][number];
+
+function findCategoryByPath(
+  hierarchy: CategoryInfo[],
+  targetPath: string,
+): CategoryInfo | null {
+  for (const category of hierarchy) {
+    if (category.path === targetPath) {
+      return category;
+    }
+    if (category.children) {
+      const found = findCategoryByPath(category.children, targetPath);
+      if (found) return found;
+    }
+  }
+  return null;
+}
 
 export interface CategoryInfo {
   name: string;
@@ -75,23 +91,6 @@ export function useCategoryPathNames(categoryPath: string[] = []) {
     );
   }, [data?.getAllCategories?.categories]);
 
-  // Find category by path - wrapped in useCallback to prevent useMemo dependencies from changing
-  const findCategoryByPath = useCallback(
-    (hierarchy: CategoryInfo[], targetPath: string): CategoryInfo | null => {
-      for (const category of hierarchy) {
-        if (category.path === targetPath) {
-          return category;
-        }
-        if (category.children) {
-          const found = findCategoryByPath(category.children, targetPath);
-          if (found) return found;
-        }
-      }
-      return null;
-    },
-    [],
-  );
-
   // Build breadcrumb items from the current path
   const breadcrumbItems = useMemo(() => {
     if (categoryPath.length === 0) {
@@ -127,7 +126,7 @@ export function useCategoryPathNames(categoryPath: string[] = []) {
     }
 
     return items;
-  }, [categoryPath, categoryHierarchy, findCategoryByPath]);
+  }, [categoryPath, categoryHierarchy]);
 
   // Get siblings for each level in the breadcrumb path
   const siblingCategories = useMemo(() => {
@@ -149,7 +148,7 @@ export function useCategoryPathNames(categoryPath: string[] = []) {
     }
 
     return siblings;
-  }, [categoryPath, categoryHierarchy, findCategoryByPath]);
+  }, [categoryPath, categoryHierarchy]);
 
   // Get siblings of the current category for dropdown navigation
   const currentCategorySiblings = useMemo(() => {
@@ -166,7 +165,7 @@ export function useCategoryPathNames(categoryPath: string[] = []) {
     const parentCategory = findCategoryByPath(categoryHierarchy, parentPath);
 
     return parentCategory?.children ?? [];
-  }, [categoryPath, categoryHierarchy, findCategoryByPath]);
+  }, [categoryPath, categoryHierarchy]);
 
   return {
     breadcrumbItems,

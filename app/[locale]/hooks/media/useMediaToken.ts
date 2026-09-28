@@ -22,35 +22,38 @@ const useMediaToken = () => {
   );
 
   // Silent refresh function
-  const silentRefresh = useCallback(async () => {
-    try {
-      const result = await refetch();
-      if (result.data?.getMediaUploadToken) {
-        const token = result.data.getMediaUploadToken;
+  const silentRefresh = useCallback(
+    async function refreshToken() {
+      try {
+        const result = await refetch();
+        if (result.data?.getMediaUploadToken) {
+          const token = result.data.getMediaUploadToken;
 
-        setCachedToken(token);
+          setCachedToken(token);
 
-        // Schedule next silent refresh
+          // Schedule next silent refresh
+          if (refreshTimeoutRef.current) {
+            clearTimeout(refreshTimeoutRef.current);
+          }
+          refreshTimeoutRef.current = setTimeout(
+            () => void refreshToken(),
+            55 * 60 * 1000,
+          );
+        }
+      } catch (err) {
+        console.error('Silent refresh failed:', err);
+        // Retry silent refresh in 5 minutes on failure
         if (refreshTimeoutRef.current) {
           clearTimeout(refreshTimeoutRef.current);
         }
         refreshTimeoutRef.current = setTimeout(
-          () => void silentRefresh(),
-          55 * 60 * 1000,
+          () => void refreshToken(),
+          5 * 60 * 1000,
         );
       }
-    } catch (err) {
-      console.error('Silent refresh failed:', err);
-      // Retry silent refresh in 5 minutes on failure
-      if (refreshTimeoutRef.current) {
-        clearTimeout(refreshTimeoutRef.current);
-      }
-      refreshTimeoutRef.current = setTimeout(
-        () => void silentRefresh(),
-        5 * 60 * 1000,
-      );
-    }
-  }, [refetch]);
+    },
+    [refetch],
+  );
 
   // Initialize token and set up silent refresh
   useEffect(() => {

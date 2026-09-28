@@ -33,7 +33,9 @@ const TreeItem = memo(function TreeItem({
   const locale = params?.locale;
 
   useEffect(() => {
-    if (forcedOpen !== undefined) setOpen(forcedOpen);
+    if (forcedOpen !== undefined) {
+      setOpen(forcedOpen);
+    }
   }, [forcedOpen]);
 
   const handleToggleExpand = useCallback(() => {

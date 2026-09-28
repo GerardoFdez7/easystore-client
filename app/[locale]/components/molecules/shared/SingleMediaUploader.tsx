@@ -105,7 +105,7 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
   useEffect(() => {
     if (initialMedia && !persistedMedia && !wasRemovedIntentionally) {
       setPersistedMedia({ url: initialMedia });
-      setInitialMediaState(initialMedia); // Set initial state for change detection
+      setInitialMediaState(initialMedia);
     } else if (!initialMedia && persistedMedia) {
       // Clear persisted media when initialMedia is removed
       setPersistedMedia(null);

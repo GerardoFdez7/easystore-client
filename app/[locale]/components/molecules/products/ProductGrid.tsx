@@ -21,7 +21,7 @@ export function ProductGrid({
   onLoadMore,
 }: ProductGridProps) {
   const skeletonItems = Array.from({ length: limit }, (_, i) => (
-    <ProductCardSkeleton key={`skeleton-${Date.now()}-${i}`} />
+    <ProductCardSkeleton key={`skeleton-${i}`} />
   ));
 
   if (loading && !isLoadingMore) {

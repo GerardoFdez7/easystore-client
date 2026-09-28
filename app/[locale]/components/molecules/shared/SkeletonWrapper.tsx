@@ -11,6 +11,14 @@ import {
 } from 'react';
 import React from 'react';
 
+function assignRef(ref: React.Ref<HTMLElement>, value: HTMLElement | null) {
+  if (typeof ref === 'function') {
+    ref(value);
+  } else if (ref && 'current' in ref) {
+    ref.current = value;
+  }
+}
+
 interface SkeletonWrapperProps {
   children: ReactNode;
   loading: boolean;
@@ -319,9 +327,7 @@ export default function SkeletonWrapper({
               typeof originalRef === 'object' &&
               'current' in originalRef
             ) {
-              (
-                originalRef as React.MutableRefObject<HTMLElement | null>
-              ).current = node;
+              assignRef(originalRef, node);
             }
           },
         })

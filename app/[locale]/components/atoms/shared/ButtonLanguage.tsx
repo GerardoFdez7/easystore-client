@@ -75,22 +75,13 @@ export const LanguageButton = () => {
           value={selectedLanguage}
           onValueChange={handleLanguageChange}
         >
-          <DropdownMenuRadioItem
-            value="en"
-            className="cursor-pointer text-base"
-          >
+          <DropdownMenuRadioItem value="en" className="cursor-pointer">
             {t('English')}
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem
-            value="es"
-            className="cursor-pointer text-base"
-          >
+          <DropdownMenuRadioItem value="es" className="cursor-pointer">
             {t('Spanish')}
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem
-            value="pt"
-            className="cursor-pointer text-base"
-          >
+          <DropdownMenuRadioItem value="pt" className="cursor-pointer">
             {t('Portuguese')}
           </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>

@@ -45,11 +45,9 @@ const eslintConfig = [
       '@typescript-eslint/await-thenable': 'error',
       '@typescript-eslint/no-misused-promises': 'error',
 
-      // React Compiler diagnostics are opt-in while the existing components
-      // are progressively migrated to its stricter render and effect model.
-      'react-hooks/immutability': 'off',
-      'react-hooks/purity': 'off',
-      'react-hooks/refs': 'off',
+      'react-hooks/immutability': 'error',
+      'react-hooks/purity': 'error',
+      'react-hooks/refs': 'error',
       'react-hooks/set-state-in-effect': 'off',
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [

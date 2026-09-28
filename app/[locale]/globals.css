@@ -9,6 +9,7 @@
 
 :root {
   --font-sans: var(--font-inter);
+  --font-size-default: 1rem;
   --radius: 0.625rem;
 
   /* Default colors for all pages */
@@ -134,11 +135,29 @@
 }
 
 @layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+    font-size: var(--font-size-default);
+  }
+
+  /*
+   * Text inherits the application's default size. Use Tailwind's important
+   * modifier (for example, !text-sm or sm:!text-lg) only for intentional
+   * exceptions to this baseline.
+   */
+  button,
+  input,
+  optgroup,
+  select,
+  textarea {
+    font-size: inherit;
   }
 }
 
