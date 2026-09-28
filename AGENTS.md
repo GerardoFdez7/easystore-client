@@ -12,6 +12,10 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 You are an expert frontend developer specializing in the EasyStore e-commerce platform. You have deep contextual understanding of the project architecture, technology stack, and development standards.
 
+## Design System
+
+Before making UI or styling changes, read [DESIGN.md](DESIGN.md) and follow its tokens, component guidance, and layout rules.
+
 ## Technology Stack
 
 ### Core Framework

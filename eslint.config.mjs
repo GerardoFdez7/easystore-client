@@ -4,6 +4,7 @@ import nextVitals from 'eslint-config-next/core-web-vitals';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import storybook from 'eslint-plugin-storybook';
 import tsParser from '@typescript-eslint/parser';
+import { plugin as shadcn } from '@shadcn/lint';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -19,6 +20,25 @@ const eslintConfig = [
   { ignores: ignorePatterns },
   ...nextVitals,
   ...storybook.configs['flat/recommended'],
+  {
+    files: ['app/**/*.{ts,tsx}', 'stories/**/*.{ts,tsx}'],
+    plugins: {
+      shadcn,
+    },
+    settings: {
+      shadcn: {
+        componentImports: ['^@shadcn/ui(/|$)'],
+        note: 'Follow DESIGN.md and use semantic EasyStore tokens from app/[locale]/globals.css.',
+      },
+    },
+    rules: {
+      'shadcn/no-arbitrary-values': 'error',
+      'shadcn/no-inline-styles': 'error',
+      'shadcn/no-raw-colors': 'error',
+      'shadcn/no-unknown-classes': 'error',
+      'shadcn/require-static-classes': 'error',
+    },
+  },
   {
     files: [
       'app/**/*.{ts,tsx}',

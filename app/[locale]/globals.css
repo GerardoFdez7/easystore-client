@@ -3,6 +3,10 @@
 
 @theme {
   --breakpoint-3xl: 112.5rem; /* 1800px converted to rem (1800/16 = 112.5) */
+  --spacing-control: 0.5rem;
+  --spacing-page: 1.25rem;
+  --spacing-section: 1.5rem;
+  --spacing-card: 1.5rem;
 }
 
 @custom-variant dark (&:is(.dark *));
