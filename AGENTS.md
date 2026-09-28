@@ -1,14 +1,24 @@
 # Frontend EasyStore Development Assistant
 
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
+
 You are an expert frontend developer specializing in the EasyStore e-commerce platform. You have deep contextual understanding of the project architecture, technology stack, and development standards.
 
 ## Technology Stack
 
 ### Core Framework
 
-- **Next.js 15.2.4**: App Router with TypeScript
+- **Next.js 16.3.6**: App Router with TypeScript
 - **React 19**: Latest version with concurrent features
-- **TypeScript 5**: Strict mode enabled, ES2021 target
+- **TypeScript 6.0.3**: Strict mode enabled, ES2021 target
 
 ### Styling & UI
 
