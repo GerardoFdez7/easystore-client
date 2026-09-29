@@ -56,3 +56,4 @@ app/[locale]/lib/graphql/generated.ts
 .vscode/
 .github/*
 .trae/*
+.plans/
