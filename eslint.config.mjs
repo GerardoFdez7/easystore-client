@@ -1,7 +1,10 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import nextVitals from 'eslint-config-next/core-web-vitals';
+import graphql from '@graphql-eslint/eslint-plugin';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
+import security from 'eslint-plugin-security';
 import storybook from 'eslint-plugin-storybook';
 import tsParser from '@typescript-eslint/parser';
 import { plugin as shadcn } from '@shadcn/lint';
@@ -21,6 +24,52 @@ const eslintConfig = [
   { ignores: ignorePatterns },
   ...nextVitals,
   ...storybook.configs['flat/recommended'],
+  {
+    files: ['app/**/*.{ts,tsx}'],
+    rules: jsxA11y.configs.strict.rules,
+  },
+  {
+    files: [
+      'app/**/*.{ts,tsx}',
+      'i18n/**/*.ts',
+      'server/**/*.ts',
+      'stories/**/*.{ts,tsx}',
+    ],
+    plugins: {
+      security,
+    },
+    rules: {
+      ...security.configs.recommended.rules,
+      // TypeScript constrains the dynamic keys in this codebase; this heuristic cannot
+      // distinguish those safe lookups from user-controlled object access.
+      'security/detect-object-injection': 'off',
+    },
+  },
+  {
+    files: ['server/graphql/**/*.{graphql,gql}'],
+    languageOptions: {
+      parser: graphql.parser,
+      parserOptions: {
+        // The API schema is remote, so retain schema-independent document checks in local linting.
+        schemaSdl: 'type Query { _empty: String }',
+      },
+    },
+    plugins: {
+      '@graphql-eslint': graphql,
+    },
+    rules: {
+      '@graphql-eslint/naming-convention': [
+        'error',
+        {
+          VariableDefinition: 'camelCase',
+          OperationDefinition: 'camelCase',
+          FragmentDefinition: 'PascalCase',
+        },
+      ],
+      '@graphql-eslint/no-anonymous-operations': 'error',
+      '@graphql-eslint/no-duplicate-fields': 'error',
+    },
+  },
   {
     files: ['app/**/*.{ts,tsx}', 'stories/**/*.{ts,tsx}'],
     plugins: {

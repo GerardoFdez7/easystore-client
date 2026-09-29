@@ -28,7 +28,7 @@ import FormActions from '@molecules/shared/FormActions';
 import MediaUploader from '@organisms/shared/MediaUploader';
 import type { MultipleMediaUploaderRef } from '@molecules/shared/MultipleMediaUploader';
 import type { ProcessedData } from '@lib/types/media';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   buildCategorySchema,
@@ -92,14 +92,14 @@ export default function AddCategoryDialog({
 
   const {
     formState: { isDirty, errors },
-    watch,
     setValue,
     getValues,
     reset,
   } = localForm;
 
   // Watch values
-  const effectiveInitialMedia = watch('cover') || null;
+  const effectiveInitialMedia =
+    useWatch({ control: localForm.control, name: 'cover' }) || null;
 
   // Event handlers
   const handleMediaProcessed = useCallback(
@@ -194,7 +194,6 @@ export default function AddCategoryDialog({
               void onSubmit();
             }}
             className="space-y-6"
-            role="form"
             aria-labelledby="add-category-title"
             aria-describedby="add-category-description"
           >

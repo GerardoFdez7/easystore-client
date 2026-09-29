@@ -59,11 +59,7 @@ function CategoryControls({
   );
 
   return (
-    <section
-      className="flex flex-col gap-4"
-      role="region"
-      aria-label="Category controls"
-    >
+    <section className="flex flex-col gap-4" aria-label="Category controls">
       <div className="flex w-full flex-col items-center gap-4">
         <div className="flex w-full flex-col justify-end gap-2 sm:flex-row">
           {showEditButton && editButtonHref && editButtonText && (

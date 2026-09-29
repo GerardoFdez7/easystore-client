@@ -72,7 +72,6 @@ export default function TagInputFormField({
                     value={newTag}
                     onChange={(e) => setNewTag(e.target.value)}
                     placeholder={placeholder}
-                    // eslint-disable-next-line shadcn/require-static-classes -- inputClassName is a caller-supplied override prop, not literally named "className", so the linter's static forwarding check cannot trace it
                     className={inputClassName}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {

@@ -127,7 +127,7 @@ export default function CategoryGrid({
 
   return (
     <>
-      <section
+      <div
         className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
         role="grid"
         aria-label="categories Grid"
@@ -153,7 +153,7 @@ export default function CategoryGrid({
             {isLoadingMore && skeletonItems}
           </>
         )}
-      </section>
+      </div>
 
       <AlertDialog open={open} onOpenChange={handleDialogClose}>
         <AlertDialogContent>

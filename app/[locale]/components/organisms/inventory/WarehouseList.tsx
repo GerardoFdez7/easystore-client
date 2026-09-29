@@ -85,11 +85,7 @@ export default function WarehouseList({
   );
 
   return (
-    <section
-      className={`space-y-6 ${className}`}
-      role="region"
-      aria-label={'warehouseList'}
-    >
+    <section className={`space-y-6 ${className}`} aria-label={'warehouseList'}>
       {/* Header with search and actions */}
       {(showSearch || showCreateButton) && (
         <header className="flex flex-col gap-4 sm:flex-row">

@@ -70,7 +70,7 @@ const createProductFormSchema = (
       .min(1, { message: t('coverRequired') })
       .url({ message: t('mediaUrlInvalid') }),
     productType: z.enum(['PHYSICAL', 'DIGITAL'], {
-      errorMap: () => ({ message: t('productTypeRequired') }),
+      error: t('productTypeRequired'),
     }),
     tags: z
       .array(
@@ -280,19 +280,22 @@ export function useProductForm({
     let timeoutId: NodeJS.Timeout;
 
     // Subscribe to form changes without causing component re-renders
-    const subscription = form.watch((values) => {
-      // Clear previous timeout
-      clearTimeout(timeoutId);
+    const unsubscribe = form.subscribe({
+      formState: { values: true },
+      callback: ({ values }) => {
+        // Clear previous timeout
+        clearTimeout(timeoutId);
 
-      // Debounce: save draft after 500ms of inactivity
-      timeoutId = setTimeout(() => {
-        setProductDraft(values as Partial<ProductFormData>);
-      }, 500);
+        // Debounce: save draft after 500ms of inactivity
+        timeoutId = setTimeout(() => {
+          setProductDraft(values as Partial<ProductFormData>);
+        }, 500);
+      },
     });
 
     return () => {
       clearTimeout(timeoutId);
-      subscription.unsubscribe();
+      unsubscribe();
     };
   }, [isNew, form, setProductDraft]);
 

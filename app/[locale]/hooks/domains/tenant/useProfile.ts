@@ -35,15 +35,20 @@ export function useProfile() {
 
   const profile = data?.getTenantById;
 
+  const isValidDomain = (value: string) => {
+    try {
+      const hostname = new URL(`https://${value}`).hostname;
+
+      return hostname === value && hostname.includes('.');
+    } catch (_error) {
+      return false;
+    }
+  };
+
   /** Field validators */
   const phoneRegex = /^[+\d().\-\s]{6,20}$/;
   const validators = {
-    domain: z
-      .string()
-      .regex(
-        /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/i,
-        { message: t('invalidDomain') },
-      ),
+    domain: z.string().refine(isValidDomain, { message: t('invalidDomain') }),
     phone: z
       .string()
       .trim()

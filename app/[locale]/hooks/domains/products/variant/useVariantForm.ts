@@ -22,9 +22,11 @@ const createVariantFormSchema = (
   isPhysical: boolean = false,
 ) =>
   z.object({
-    price: z.coerce.number().nonnegative({ message: t('priceNonNegative') }), // Unnused
+    price: z.coerce
+      .number<number>()
+      .nonnegative({ message: t('priceNonNegative') }), // Unnused
     condition: z.enum(['NEW', 'USED', 'REFURBISHED'], {
-      errorMap: () => ({ message: t('conditionRequired') }),
+      error: t('conditionRequired'),
     }),
     attributes: z
       .array(
@@ -38,32 +40,32 @@ const createVariantFormSchema = (
     dimensions: z
       .object({
         height: isPhysical
-          ? z.coerce.number().positive({ message: t('heightRequired') })
+          ? z.coerce.number<number>().positive({ message: t('heightRequired') })
           : z.coerce
-              .number()
+              .number<number>()
               .nonnegative({ message: t('heightNonNegative') })
               .nullable()
               .optional(),
         width: isPhysical
-          ? z.coerce.number().positive({ message: t('widthRequired') })
+          ? z.coerce.number<number>().positive({ message: t('widthRequired') })
           : z.coerce
-              .number()
+              .number<number>()
               .nonnegative({ message: t('widthNonNegative') })
               .nullable()
               .optional(),
         length: isPhysical
-          ? z.coerce.number().positive({ message: t('lengthRequired') })
+          ? z.coerce.number<number>().positive({ message: t('lengthRequired') })
           : z.coerce
-              .number()
+              .number<number>()
               .nonnegative({ message: t('lengthNonNegative') })
               .nullable()
               .optional(),
       })
       .nullable(),
     weight: isPhysical
-      ? z.coerce.number().positive({ message: t('weightRequired') })
+      ? z.coerce.number<number>().positive({ message: t('weightRequired') })
       : z.coerce
-          .number()
+          .number<number>()
           .nonnegative({ message: t('weightNonNegative') })
           .nullable()
           .optional(),

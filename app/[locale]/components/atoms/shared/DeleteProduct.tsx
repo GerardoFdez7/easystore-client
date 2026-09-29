@@ -49,7 +49,8 @@ export default function DeleteProduct({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <div
+        <button
+          type="button"
           className="hover:bg-hover flex w-full cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm"
           onClick={(e) => e.stopPropagation()}
         >
@@ -58,7 +59,7 @@ export default function DeleteProduct({
             {' '}
             {singleMode ? t('deleteProduct') : t('deleteProducts')}
           </span>
-        </div>
+        </button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

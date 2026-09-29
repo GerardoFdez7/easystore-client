@@ -102,6 +102,7 @@ export function ProductCard({ product }: ProductCardProps) {
           preload="metadata"
           muted={isPreview}
         >
+          <track kind="captions" srcLang="en" label="Captions unavailable" />
           Your browser does not support the video tag.
         </video>
       );
@@ -142,22 +143,25 @@ export function ProductCard({ product }: ProductCardProps) {
             {/* Progress indicators with preview */}
             <div className="absolute right-0 bottom-2 left-0 z-20 flex justify-center gap-1 px-4">
               {mediaItems.map((_, index) => (
-                <div
+                <button
                   key={index}
+                  type="button"
                   className="relative flex-1"
                   onMouseEnter={() => handleIndicatorHover(index)}
                   onMouseLeave={handleIndicatorLeave}
                   onClick={() => handleIndicatorClick(index)}
                 >
-                  <button
-                    className={`h-1 w-full rounded-full transition-all duration-200 ${
+                  <span
+                    className={`block h-1 w-full rounded-full transition-all duration-200 ${
                       index === current - 1
                         ? 'bg-white'
                         : 'bg-white/50 hover:bg-white/70'
                     }`}
-                    aria-label={`Preview slide ${index + 1}${index === 0 ? ' (cover)' : ''}`}
                   />
-                </div>
+                  <span className="sr-only">
+                    {`Preview slide ${index + 1}${index === 0 ? ' (cover)' : ''}`}
+                  </span>
+                </button>
               ))}
             </div>
           </Carousel>

@@ -493,14 +493,12 @@ export default function SkeletonWrapper({
           // Enhanced fallback for non-React elements with mobile considerations
           return (
             <Skeleton
-              /* eslint-disable shadcn/require-static-classes -- fallbackHeight/fallbackWidth are this component's own caller-supplied props, not literally named "className", so the linter's static forwarding check cannot trace them */
               className={cn(
                 fallbackHeight,
                 fallbackWidth,
                 'max-w-full min-w-0',
                 className,
               )}
-              /* eslint-enable shadcn/require-static-classes */
             />
           );
         })()

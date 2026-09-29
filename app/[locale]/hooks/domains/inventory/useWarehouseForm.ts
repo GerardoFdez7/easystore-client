@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { z } from 'zod';
@@ -76,7 +76,7 @@ export function useWarehouseForm({
   });
 
   // Watch form values for change detection
-  const watchedValues = form.watch();
+  const watchedValues = useWatch({ control: form.control });
 
   // Calculate changed fields and hasChanges
   const { hasChanges, changedFields } = useMemo(() => {

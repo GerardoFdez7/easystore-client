@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import React from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm, FormProvider, useWatch } from 'react-hook-form';
 import AttributesCard from '@molecules/products/variant/AttributesFormField';
 import type { Attribute } from '@lib/types/variant';
 import AttributesFormField from '@molecules/products/variant/AttributesFormField';
@@ -27,6 +27,7 @@ const Wrapper: React.FC = () => {
       ],
     },
   });
+  const attributes = useWatch({ control: methods.control, name: 'attributes' });
 
   return (
     <FormProvider {...methods}>
@@ -34,9 +35,7 @@ const Wrapper: React.FC = () => {
         <AttributesFormField />
         <div className="bg-muted mt-4 rounded-lg p-4">
           <h4 className="mb-2 text-sm font-medium">Form Values:</h4>
-          <pre className="text-xs">
-            {JSON.stringify(methods.watch('attributes'), null, 2)}
-          </pre>
+          <pre className="text-xs">{JSON.stringify(attributes, null, 2)}</pre>
         </div>
       </form>
     </FormProvider>
@@ -49,6 +48,7 @@ const EmptyWrapper: React.FC = () => {
       attributes: [],
     },
   });
+  const attributes = useWatch({ control: methods.control, name: 'attributes' });
 
   return (
     <FormProvider {...methods}>
@@ -56,9 +56,7 @@ const EmptyWrapper: React.FC = () => {
         <AttributesFormField />
         <div className="bg-muted mt-4 rounded-lg p-4">
           <h4 className="mb-2 text-sm font-medium">Form Values:</h4>
-          <pre className="text-xs">
-            {JSON.stringify(methods.watch('attributes'), null, 2)}
-          </pre>
+          <pre className="text-xs">{JSON.stringify(attributes, null, 2)}</pre>
         </div>
       </form>
     </FormProvider>

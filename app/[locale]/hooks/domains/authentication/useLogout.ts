@@ -26,7 +26,7 @@ export const useLogout = () => {
   const handleLogout = async () => {
     try {
       await logoutMutation();
-      window.location.href = '/login';
+      router.push('/login');
     } catch (_error) {
       // Error handling is done in error.handler
     }

@@ -37,13 +37,14 @@ export default function RestoreProduct({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <div
+        <button
+          type="button"
           className="flex w-full cursor-pointer items-center gap-2 px-2 py-1.5 text-sm"
           onClick={(e) => e.stopPropagation()}
         >
           <RotateCcw className="text-title h-4 w-4" />
           <span>{t('restoreProducts')}</span>
-        </div>
+        </button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

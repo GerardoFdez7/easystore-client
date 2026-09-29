@@ -305,11 +305,7 @@ export default function VariantsFormField({
                                     </TableCell>
                                     <TableCell>{variant.condition}</TableCell>
                                     <TableCell>
-                                      <div
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                        }}
-                                      >
+                                      <div>
                                         {isArchived ? (
                                           <Tooltip>
                                             <TooltipTrigger asChild>
@@ -318,6 +314,7 @@ export default function VariantsFormField({
                                                 variant="ghost"
                                                 size="icon"
                                                 onClick={(e) => {
+                                                  e.stopPropagation();
                                                   handleArchiveClick(
                                                     e,
                                                     variant.id,

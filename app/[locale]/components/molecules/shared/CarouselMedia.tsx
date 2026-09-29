@@ -269,14 +269,17 @@ const CarouselMedia = ({
               {/* Add more button in editing mode */}
               {isEditing && onAddMore && orderedItems.length < maxItems && (
                 <CarouselItem className="basis-auto">
-                  <div
+                  <Button
+                    type="button"
                     onClick={onAddMore}
-                    className="basis-thumb sm:basis-thumb-sm relative aspect-square min-w-20 cursor-pointer overflow-hidden rounded-lg sm:min-w-35"
+                    className="basis-thumb sm:basis-thumb-sm relative aspect-square min-w-20 cursor-pointer overflow-hidden rounded-lg p-0 sm:min-w-35"
+                    variant="ghost"
+                    aria-label={t('addMore')}
                   >
                     <div className="border-hover hover:border-ring flex h-full w-full items-center justify-center border-2 border-dashed transition-colors">
                       <Plus className="text-ring h-6 w-6" />
                     </div>
-                  </div>
+                  </Button>
                 </CarouselItem>
               )}
             </SortableContext>

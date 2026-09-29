@@ -95,8 +95,10 @@ const VideoThumb = ({
   }, [videoSrc]);
 
   return (
-    <div
-      className={`basis-thumb sm:basis-thumb-sm min-w-20 cursor-pointer overflow-hidden rounded-lg sm:min-w-35 ${
+    <button
+      type="button"
+      aria-label={altText}
+      className={`basis-thumb sm:basis-thumb-sm min-w-20 cursor-pointer overflow-hidden rounded-lg border-0 bg-transparent p-0 text-left sm:min-w-35 ${
         selected ? 'border-title/75 border' : ''
       }`}
       onClick={onClick}
@@ -182,7 +184,7 @@ const VideoThumb = ({
           }`}
         />
       </div>
-    </div>
+    </button>
   );
 };
 

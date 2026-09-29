@@ -455,7 +455,6 @@ export default function MainDetailCategory({
                   void form.handleSubmit(onSubmit)(e);
                 }}
                 className="w-full space-y-8"
-                role="form"
                 aria-label={formAriaLabel}
               >
                 {/* Cover Image Section */}

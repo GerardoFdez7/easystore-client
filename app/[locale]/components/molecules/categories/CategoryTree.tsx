@@ -162,7 +162,7 @@ export default function CategoryTree({
           </Button>
 
           {!loading && !error && (
-            <nav
+            <div
               role="tree"
               aria-label="category Navigation"
               className="space-y-1"
@@ -170,7 +170,7 @@ export default function CategoryTree({
               {nodes.map((n) => (
                 <TreeItem key={n.id} node={n} forcedOpen={allOpen} />
               ))}
-            </nav>
+            </div>
           )}
         </div>
       </SheetContent>

@@ -25,13 +25,11 @@ const Logo = ({ redirectTo, className }: LogoProps) => {
   };
 
   return (
-    <div
+    <button
+      type="button"
       className={`flex items-center ${redirectTo ? 'cursor-pointer' : ''} ${className || ''}`}
-      onClick={redirectTo ? handleClick : undefined}
-      role={redirectTo ? 'button' : undefined}
-      aria-label={
-        redirectTo ? 'Navigate to home or scroll to top' : 'EasyStore Logo'
-      }
+      onClick={handleClick}
+      aria-label="Navigate to home or scroll to top"
     >
       <Image
         src={'/logo.webp'}
@@ -45,7 +43,7 @@ const Logo = ({ redirectTo, className }: LogoProps) => {
       >
         EasyStore
       </span>
-    </div>
+    </button>
   );
 };
 

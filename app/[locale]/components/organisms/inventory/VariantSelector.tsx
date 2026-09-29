@@ -56,11 +56,7 @@ const VariantSelector: React.FC<VariantSelectorProps> = ({
   };
 
   return (
-    <section
-      className="mx-4 space-y-4"
-      role="region"
-      aria-label={'variantSelection'}
-    >
+    <section className="mx-4 space-y-4" aria-label={'variantSelection'}>
       {/* Search and Filters */}
       <div className="space-y-4">
         {/* Search Input */}
