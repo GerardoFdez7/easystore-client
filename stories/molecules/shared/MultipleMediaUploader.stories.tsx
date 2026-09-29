@@ -172,16 +172,11 @@ export const WithCustomDoneButton: Story = {
       <button
         onClick={onDone}
         disabled={isProcessing}
-        style={{
-          padding: '12px 24px',
-          backgroundColor: isProcessing ? '#ccc' : '#28a745',
-          color: 'white',
-          border: 'none',
-          borderRadius: '8px',
-          cursor: isProcessing ? 'not-allowed' : 'pointer',
-          fontSize: '16px',
-          fontWeight: 'bold',
-        }}
+        className={
+          isProcessing
+            ? 'bg-muted-foreground cursor-not-allowed rounded-lg border-none px-6 py-3 text-base font-bold text-white'
+            : 'bg-secondary cursor-pointer rounded-lg border-none px-6 py-3 text-base font-bold text-white'
+        }
       >
         {isProcessing ? 'Processing...' : 'Upload Gallery'}
       </button>

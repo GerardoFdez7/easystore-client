@@ -10,11 +10,11 @@ export default function BadgeTag({ text, onRemove }: BadgeTagProps) {
   return (
     <Badge
       variant="secondary"
-      className="text-foreground bg-[#d9d9d9] text-xs hover:bg-[#c4c0c0] sm:text-sm dark:text-gray-600"
+      className="text-foreground bg-border hover:bg-hover dark:text-foreground text-xs sm:text-sm"
     >
       {text}
       <button onClick={onRemove} className="ml-2">
-        <X className="h-3 w-3 hover:text-red-600" />
+        <X className="hover:text-destructive h-3 w-3" />
       </button>
     </Badge>
   );

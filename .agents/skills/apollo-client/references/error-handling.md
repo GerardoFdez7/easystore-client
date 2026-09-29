@@ -76,7 +76,7 @@ Apollo Client 4.x provides specific error classes for different error scenarios:
 Represents GraphQL errors returned by the server. Most common error type in applications.
 
 ```tsx
-import { CombinedGraphQLErrors } from "@apollo/client/errors";
+import { CombinedGraphQLErrors } from '@apollo/client/errors';
 
 function UserProfile({ userId }: { userId: string }) {
   const { data, error } = useQuery(GET_USER, {
@@ -108,10 +108,10 @@ Represents fatal transport-level errors during multipart HTTP subscription execu
 Occurs when the server responds with a non-200 HTTP status code.
 
 ```tsx
-import { ServerError } from "@apollo/client/errors";
+import { ServerError } from '@apollo/client/errors';
 
 if (ServerError.is(error)) {
-  console.error("Server error:", error.statusCode, error.result);
+  console.error('Server error:', error.statusCode, error.result);
 }
 ```
 
@@ -120,10 +120,10 @@ if (ServerError.is(error)) {
 Occurs when the server response cannot be parsed as valid JSON.
 
 ```tsx
-import { ServerParseError } from "@apollo/client/errors";
+import { ServerParseError } from '@apollo/client/errors';
 
 if (ServerParseError.is(error)) {
-  console.error("Invalid JSON response:", error.bodyText);
+  console.error('Invalid JSON response:', error.bodyText);
 }
 ```
 
@@ -148,20 +148,20 @@ import {
   ServerParseError,
   UnconventionalError,
   ErrorLike,
-} from "@apollo/client/errors";
+} from '@apollo/client/errors';
 
 // Anything returned in the `error` field of Apollo Client hooks or methods is of type `ErrorLike` or `undefined`.
 function handleError(error?: ErrorLike) {
   if (CombinedGraphQLErrors.is(error)) {
     // Handle GraphQL errors
-    console.error("GraphQL errors:", error.graphQLErrors);
+    console.error('GraphQL errors:', error.graphQLErrors);
   } else if (CombinedProtocolErrors.is(error)) {
     // Handle multipart subscription protocol errors
   } else if (LocalStateError.is(error)) {
     // Handle errors thrown by the LocalState class
   } else if (ServerError.is(error)) {
     // Handle server HTTP errors
-    console.error("Server error:", error.statusCode);
+    console.error('Server error:', error.statusCode);
   } else if (ServerParseError.is(error)) {
     // Handle JSON parse errors
   } else if (UnconventionalError.is(error)) {
@@ -209,7 +209,7 @@ const MY_QUERY = gql`
 `;
 
 function ShowingSomeErrors() {
-  const { loading, error, data } = useQuery(MY_QUERY, { errorPolicy: "all" });
+  const { loading, error, data } = useQuery(MY_QUERY, { errorPolicy: 'all' });
 
   if (loading) return <span>loading...</span>;
 
@@ -233,7 +233,7 @@ The `ErrorLink` can be used to e.g. log error globally or perform specific side 
 An `ErrorLink` can't be used to swallow errors fully, but it can be used to retry an operation after handling an error, in which case the error wouldn't propagate. Otherwise, the most common use for `ErrorLink` is logging.
 
 ```ts
-import { ErrorLink } from "@apollo/client/link/error";
+import { ErrorLink } from '@apollo/client/link/error';
 
 const errorLink = new ErrorLink(({ error, operation, forward }) => {
   if (someCondition(error)) {
@@ -254,7 +254,7 @@ const errorLink = new ErrorLink(({ error, operation, forward }) => {
 Alternatively, you can use the `RetryLink` from `@apollo/client/link/retry` to implement retry logic for failed operations.
 
 ```typescript
-import { RetryLink } from "@apollo/client/link/retry";
+import { RetryLink } from '@apollo/client/link/retry';
 
 const retryLink = new RetryLink({
   delay: {
@@ -266,7 +266,7 @@ const retryLink = new RetryLink({
     max: 5,
     retryIf: (error, operation) => {
       // Retry on network errors
-      return !!error && operation.operationName !== "SensitiveOperation";
+      return !!error && operation.operationName !== 'SensitiveOperation';
     },
   },
 });
@@ -286,7 +286,7 @@ const retryLink = new RetryLink({
     if (
       operation.query.definitions.some(
         (def) =>
-          def.kind === "OperationDefinition" && def.operation === "mutation"
+          def.kind === 'OperationDefinition' && def.operation === 'mutation',
       )
     ) {
       return false;
@@ -313,11 +313,11 @@ import {
   CombinedGraphQLErrors,
   ServerError,
   ServerParseError,
-} from "@apollo/client/errors";
+} from '@apollo/client/errors';
 
 function SafeUserList() {
   const { data, error, loading, refetch } = useQuery(GET_USERS, {
-    errorPolicy: "all",
+    errorPolicy: 'all',
     notifyOnNetworkStatusChange: true,
   });
 

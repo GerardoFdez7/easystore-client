@@ -6,7 +6,7 @@ type ImageStartProps = {
 
 export default function ImageEveryWhere({ src }: ImageStartProps) {
   return (
-    <div className="bg-opacity-20 rounded-lg p-4">
+    <div className="bg-accent/20 rounded-lg p-4">
       <Image
         src={src}
         alt="Image"

@@ -9,7 +9,7 @@ const meta: Meta<typeof CustomerSatisfaction> = {
   },
   decorators: [
     (Story) => (
-      <div style={{ width: '100vw', maxWidth: 900 }}>
+      <div className="w-screen max-w-225">
         <Story />
       </div>
     ),

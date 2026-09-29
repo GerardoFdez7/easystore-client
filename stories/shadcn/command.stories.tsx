@@ -16,7 +16,7 @@ const meta: Meta<typeof Command> = {
   parameters: { layout: 'centered' },
   decorators: [
     (Story) => (
-      <div style={{ padding: 24, width: 420 }}>
+      <div className="w-105 p-6">
         <Story />
       </div>
     ),

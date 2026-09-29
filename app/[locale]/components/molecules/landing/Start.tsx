@@ -11,7 +11,7 @@ export default function Start() {
         {t('starting')}
       </h2>
 
-      <div className="mx-auto flex max-w-[2000px] flex-col items-center gap-8 sm:pr-0 xl:flex-row xl:items-start">
+      <div className="mx-auto flex max-w-500 flex-col items-center gap-8 sm:pr-0 xl:flex-row xl:items-start">
         {/* Left column - Numbered steps */}
         <div className="flex w-fit flex-col items-center gap-8 sm:pr-10 md:items-start">
           <StepText number="1." title={t('addYourProducts')} />

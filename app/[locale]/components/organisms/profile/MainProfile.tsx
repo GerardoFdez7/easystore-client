@@ -73,7 +73,7 @@ export default function MainProfile() {
         <LogoutConfirmDialog>
           <Button
             variant="outline"
-            className="text-title h-10 w-full justify-start rounded-lg border-gray-200 bg-white px-4 shadow-sm hover:bg-gray-50"
+            className="text-title bg-card hover:bg-accent border-border h-10 w-full justify-start rounded-lg px-4 shadow-sm"
           >
             <LogOut className="mr-2 h-4 w-4" />
             {t('logOut')}

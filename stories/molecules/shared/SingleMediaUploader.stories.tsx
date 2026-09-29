@@ -122,14 +122,11 @@ export const WithCustomDoneButton: Story = {
       <button
         onClick={onDone}
         disabled={isProcessing}
-        style={{
-          padding: '8px 16px',
-          backgroundColor: isProcessing ? '#ccc' : '#007bff',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: isProcessing ? 'not-allowed' : 'pointer',
-        }}
+        className={
+          isProcessing
+            ? 'bg-muted-foreground cursor-not-allowed rounded border-none px-4 py-2 text-white'
+            : 'bg-primary cursor-pointer rounded border-none px-4 py-2 text-white'
+        }
       >
         {isProcessing ? 'Uploading...' : 'Custom Upload'}
       </button>

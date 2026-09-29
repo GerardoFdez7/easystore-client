@@ -114,7 +114,7 @@ export default function ArchivedProduct({
           <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleArchive}
-            className="bg-title border border-black hover:bg-black/85 dark:hover:bg-gray-300"
+            className="bg-title dark:hover:bg-hover border border-black hover:bg-black/85"
             disabled={loading}
           >
             {loading

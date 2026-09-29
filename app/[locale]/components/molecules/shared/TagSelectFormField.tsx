@@ -122,7 +122,7 @@ export default function TagSelectFormField<T>({
                           type="button"
                           variant="ghost"
                           size="icon"
-                          className="text-error hover:bg-hover h-5 w-5 hover:text-red-700"
+                          className="text-error hover:bg-hover hover:text-destructive h-5 w-5"
                           onClick={() => removeItem(index)}
                           aria-label={`${deleteAriaLabel} ${getOptionLabel(item)}`}
                         >

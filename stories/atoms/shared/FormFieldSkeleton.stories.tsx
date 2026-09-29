@@ -12,7 +12,7 @@ const meta: Meta<typeof FormFieldSkeleton> = {
   },
   decorators: [
     (Story) => (
-      <div className="w-[720px] rounded-xl border p-6 shadow-sm">
+      <div className="w-180 rounded-xl border p-6 shadow-sm">
         <Story />
       </div>
     ),

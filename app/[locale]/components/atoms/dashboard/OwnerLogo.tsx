@@ -7,7 +7,7 @@ export default function OwnerLogo() {
   const { tenantData } = useAuth();
 
   return (
-    <div className="bg-opacity-20 flex justify-center rounded-lg pt-2 group-data-[collapsible=icon]:hidden">
+    <div className="bg-accent/20 flex justify-center rounded-lg pt-2 group-data-[collapsible=icon]:hidden">
       <Image
         src={tenantData?.logo || ''}
         alt="Company Logo"

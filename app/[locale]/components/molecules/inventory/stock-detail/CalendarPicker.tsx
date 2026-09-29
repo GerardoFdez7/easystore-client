@@ -8,6 +8,7 @@ import { Calendar } from '@shadcn/ui/calendar';
 import { Input } from '@shadcn/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@shadcn/ui/popover';
 import { es as dfEs, enUS as dfEnUS } from 'date-fns/locale';
+import { cn } from '@lib/utils';
 
 type Props = {
   id?: string;
@@ -67,7 +68,10 @@ export default function CalendarPicker({
               disabled={disabled}
               value={text}
               placeholder={placeholder}
-              className={`bg-background cursor-pointer pr-10 ${inputClassName ?? ''}`}
+              className={cn(
+                'bg-background cursor-pointer pr-10',
+                inputClassName,
+              )}
               onChange={(e) => {
                 const v = e.target.value;
                 setText(v);

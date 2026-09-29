@@ -56,7 +56,7 @@ export function DescriptionEditor({
         readOnly={!isEditing}
         placeholder={t('enterDescription')}
         maxLength={2000}
-        className="min-h-[140px] w-full max-w-sm resize-none items-center rounded-lg border border-gray-200 bg-white p-3 shadow-sm sm:min-h-[200px] sm:max-w-md"
+        className="border-border min-h-35 w-full max-w-sm resize-none items-center rounded-lg border bg-white p-3 shadow-sm sm:min-h-50 sm:max-w-md"
       />
     </div>
   );

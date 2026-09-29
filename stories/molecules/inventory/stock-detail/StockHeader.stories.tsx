@@ -69,7 +69,7 @@ type Story = StoryObj<typeof StockHeader>;
 export const Default: Story = {
   args: {},
   render: (args) => (
-    <div className="w-[800px]">
+    <div className="w-200">
       <StockHeader {...args} />
     </div>
   ),
@@ -80,7 +80,7 @@ export const Minimal: Story = {
     ...mockStockHeaderMinimal,
   },
   render: (args) => (
-    <div className="w-[800px]">
+    <div className="w-200">
       <StockHeader {...args} />
     </div>
   ),
@@ -91,7 +91,7 @@ export const NoAttributes: Story = {
     ...mockStockHeaderNoAttributes,
   },
   render: (args) => (
-    <div className="w-[800px]">
+    <div className="w-200">
       <StockHeader {...args} />
     </div>
   ),
@@ -102,7 +102,7 @@ export const NoWarehouse: Story = {
     ...mockStockHeaderNoWarehouse,
   },
   render: (args) => (
-    <div className="w-[800px]">
+    <div className="w-200">
       <StockHeader {...args} />
     </div>
   ),
@@ -113,7 +113,7 @@ export const OnlySKU: Story = {
     ...mockStockHeaderOnlySKU,
   },
   render: (args) => (
-    <div className="w-[800px]">
+    <div className="w-200">
       <StockHeader {...args} />
     </div>
   ),

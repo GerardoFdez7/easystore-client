@@ -55,6 +55,6 @@ function ShippingCostDisplay({ control }: { control: Control<CheckoutFormData> }
 }
 ```
 
-**Push the subscription as deep as it will go.** The win is not `useWatch` over `watch` in itself — it is *where the subscription lives*. A `useWatch` at the top of the form re-renders the whole form exactly like `watch` does. Put it in the leaf that renders the value, and pass `control` down rather than the watched value; the sibling sections then never re-render. If you don't want to author a component for it, `<Watch>` does the same inline — see `sub-render-prop-components`.
+**Push the subscription as deep as it will go.** The win is not `useWatch` over `watch` in itself — it is _where the subscription lives_. A `useWatch` at the top of the form re-renders the whole form exactly like `watch` does. Put it in the leaf that renders the value, and pass `control` down rather than the watched value; the sibling sections then never re-render. If you don't want to author a component for it, `<Watch>` does the same inline — see `sub-render-prop-components`.
 
 Reference: [useWatch](https://react-hook-form.com/docs/usewatch)

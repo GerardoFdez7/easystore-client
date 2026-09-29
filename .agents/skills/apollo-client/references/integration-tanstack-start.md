@@ -56,15 +56,15 @@ import {
   routerWithApolloClient,
   ApolloClient,
   InMemoryCache,
-} from "@apollo/client-integration-tanstack-start";
-import { HttpLink } from "@apollo/client";
-import { createRouter } from "@tanstack/react-router";
-import { routeTree } from "./routeTree.gen";
+} from '@apollo/client-integration-tanstack-start';
+import { HttpLink } from '@apollo/client';
+import { createRouter } from '@tanstack/react-router';
+import { routeTree } from './routeTree.gen';
 
 export function getRouter() {
   const apolloClient = new ApolloClient({
     cache: new InMemoryCache(),
-    link: new HttpLink({ uri: "https://your-graphql-endpoint.com/graphql" }),
+    link: new HttpLink({ uri: 'https://your-graphql-endpoint.com/graphql' }),
   });
 
   const router = createRouter({
@@ -275,13 +275,13 @@ import {
   ApolloClient,
   InMemoryCache,
   routerWithApolloClient,
-} from "@apollo/client-integration-tanstack-start";
-import { ApolloLink, HttpLink } from "@apollo/client";
-import { SetContextLink } from "@apollo/client/link/context";
-import { createIsomorphicFn } from "@tanstack/react-start";
-import { createRouter } from "@tanstack/react-router";
-import { getSession, getCookie } from "@tanstack/react-start/server";
-import { routeTree } from "./routeTree.gen";
+} from '@apollo/client-integration-tanstack-start';
+import { ApolloLink, HttpLink } from '@apollo/client';
+import { SetContextLink } from '@apollo/client/link/context';
+import { createIsomorphicFn } from '@tanstack/react-start';
+import { createRouter } from '@tanstack/react-router';
+import { getSession, getCookie } from '@tanstack/react-start/server';
+import { routeTree } from './routeTree.gen';
 
 // Create isomorphic link that uses different implementations per environment
 const createAuthLink = createIsomorphicFn()
@@ -291,7 +291,7 @@ const createAuthLink = createIsomorphicFn()
       return {
         headers: {
           ...prevContext.headers,
-          authorization: getCookie("Authorization"),
+          authorization: getCookie('Authorization'),
         },
       };
     });
@@ -302,7 +302,7 @@ const createAuthLink = createIsomorphicFn()
       return {
         headers: {
           ...prevContext.headers,
-          authorization: localStorage.getItem("authToken") ?? "",
+          authorization: localStorage.getItem('authToken') ?? '',
         },
       };
     });
@@ -310,7 +310,7 @@ const createAuthLink = createIsomorphicFn()
 
 export function getRouter() {
   const httpLink = new HttpLink({
-    uri: "https://your-graphql-endpoint.com/graphql",
+    uri: 'https://your-graphql-endpoint.com/graphql',
   });
 
   const apolloClient = new ApolloClient({
@@ -342,11 +342,11 @@ export function getRouter() {
 import {
   ApolloClient,
   InMemoryCache,
-} from "@apollo/client-integration-tanstack-start";
-import { HttpLink } from "@apollo/client";
-import { createRouter } from "@tanstack/react-router";
-import { routeTree } from "./routeTree.gen";
-import { routerWithApolloClient } from "@apollo/client-integration-tanstack-start";
+} from '@apollo/client-integration-tanstack-start';
+import { HttpLink } from '@apollo/client';
+import { createRouter } from '@tanstack/react-router';
+import { routeTree } from './routeTree.gen';
+import { routerWithApolloClient } from '@apollo/client-integration-tanstack-start';
 
 export function getRouter() {
   const apolloClient = new ApolloClient({
@@ -363,7 +363,7 @@ export function getRouter() {
         },
       },
     }),
-    link: new HttpLink({ uri: "https://your-graphql-endpoint.com/graphql" }),
+    link: new HttpLink({ uri: 'https://your-graphql-endpoint.com/graphql' }),
   });
 
   const router = createRouter({

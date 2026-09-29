@@ -284,8 +284,8 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
               <article
                 key={c.id}
                 className={cn(
-                  'border-border/30 grid grid-cols-[48px_1fr_auto] items-center gap-3 border-b px-4 py-3 last:border-none',
-                  'sm:grid-cols-[48px_1fr_auto_auto_48px]',
+                  'border-border/30 grid-cols-category-row grid items-center gap-3 border-b px-4 py-3 last:border-none',
+                  'sm:grid-cols-category-row-lg',
                   'hover:bg-muted/50 transition-colors duration-200',
                   'focus-within:bg-muted/50 focus-within:ring-ring/20 focus-within:ring-2',
                   isNewCategory && 'bg-muted/50', // Visual indicator for new categories

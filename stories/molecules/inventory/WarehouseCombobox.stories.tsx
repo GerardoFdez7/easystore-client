@@ -252,7 +252,6 @@ export const Disabled: Story = {
 export const HasMore: Story = {
   render: () => {
     const [selectedWarehouse, setSelectedWarehouse] =
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       React.useState<string>('');
 
     return (

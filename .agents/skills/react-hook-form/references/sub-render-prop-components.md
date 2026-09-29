@@ -68,6 +68,7 @@ function InvoiceForm() {
 ```
 
 **Two traps in the current typings:**
+
 - `<Watch>` accepts both `name` and `names`. `names` is marked `@deprecated` in 7.82 and is renamed away in v8 — write `name`, even though the shipped JSDoc example still shows `names`.
 - `FieldArrayProps.render` is typed to return `React.ReactElement`, not `ReactNode[]`. Returning `fields.map(...)` directly fails to typecheck despite appearing that way in the shipped JSDoc — wrap the output in a fragment.
 

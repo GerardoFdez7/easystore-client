@@ -78,6 +78,7 @@ function LoginForm() {
 ```
 
 **Key details:**
+
 - Root-level errors live under `errors.root.{key}` — pick any key (`serverError`, `network`, `rateLimit`) and read it back the same way
 - Root errors **persist across submissions** until you call `clearErrors('root.serverError')` — clear at the start of each submit, or rely on the next resolver pass to overwrite
 - Always `try/catch` async submit handlers. `handleSubmit` will not surface thrown errors, and `isSubmitting` only resets when the handler returns (resolves), not when it throws — see also `formstate-async-submit-lifecycle`

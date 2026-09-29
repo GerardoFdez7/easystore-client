@@ -49,6 +49,7 @@ function CheckoutForm() {
 ```
 
 **When to deviate from the default:**
+
 - Validation involves a network call or expensive computation (>16ms per keystroke)
 - The form has dozens of fields and post-submit re-render cost is measurable in profiling
 - The error message is purely informational, not correctable in real time

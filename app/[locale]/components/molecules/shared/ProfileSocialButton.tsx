@@ -24,7 +24,7 @@ export const ProfileSocialButtons: React.FC = () => {
         variant="outline"
         size="lg"
         onClick={handleGoogleAuth}
-        className="h-12 min-w-[260px] justify-center rounded-xl border border-gray-200 bg-white px-5 text-gray-800 shadow-md hover:bg-gray-50 hover:shadow-lg focus-visible:ring-2 focus-visible:ring-gray-300 focus-visible:outline-none"
+        className="border-hover hover:bg-sidebar focus-visible:ring-border text-secondary-foreground h-12 min-w-65 justify-center rounded-xl border bg-white px-5 shadow-md hover:shadow-lg focus-visible:ring-2 focus-visible:outline-none"
       >
         <Image
           src="/icon_google.webp"
@@ -42,7 +42,7 @@ export const ProfileSocialButtons: React.FC = () => {
         variant="outline"
         size="lg"
         onClick={handleFacebookAuth}
-        className="h-12 min-w-[260px] justify-center rounded-xl border border-gray-200 bg-white px-5 text-gray-800 shadow-md hover:bg-gray-50 hover:shadow-lg focus-visible:ring-2 focus-visible:ring-gray-300 focus-visible:outline-none"
+        className="border-hover hover:bg-sidebar focus-visible:ring-border text-secondary-foreground h-12 min-w-65 justify-center rounded-xl border bg-white px-5 shadow-md hover:shadow-lg focus-visible:ring-2 focus-visible:outline-none"
       >
         <Image
           src="/icon_facebook.webp"

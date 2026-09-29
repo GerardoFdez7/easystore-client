@@ -9,7 +9,7 @@ const meta: Meta<typeof ProductVariantGroup> = {
   },
   decorators: [
     (Story) => (
-      <div style={{ width: '100%', maxWidth: 800 }}>
+      <div className="w-full max-w-200">
         <Story />
       </div>
     ),

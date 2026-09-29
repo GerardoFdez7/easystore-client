@@ -23,12 +23,12 @@ For type-safe GraphQL operations with TypeScript, see the [TypeScript Code Gener
 ### Step 1: Create Client
 
 ```typescript
-import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
+import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 
 // Recommended: Use HttpOnly cookies for authentication
 const httpLink = new HttpLink({
-  uri: "https://your-graphql-endpoint.com/graphql",
-  credentials: "include", // Sends cookies with requests (secure when using HttpOnly cookies)
+  uri: 'https://your-graphql-endpoint.com/graphql',
+  credentials: 'include', // Sends cookies with requests (secure when using HttpOnly cookies)
 });
 
 const client = new ApolloClient({
@@ -40,19 +40,19 @@ const client = new ApolloClient({
 If you need manual token management (less secure, only when HttpOnly cookies aren't available):
 
 ```typescript
-import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
-import { SetContextLink } from "@apollo/client/link/context";
+import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
+import { SetContextLink } from '@apollo/client/link/context';
 
 const httpLink = new HttpLink({
-  uri: "https://your-graphql-endpoint.com/graphql",
+  uri: 'https://your-graphql-endpoint.com/graphql',
 });
 
 const authLink = new SetContextLink(({ headers }) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      authorization: token ? `Bearer ${token}` : '',
     },
   };
 });
@@ -66,8 +66,8 @@ const client = new ApolloClient({
 ### Step 2: Setup Provider
 
 ```tsx
-import { ApolloProvider } from "@apollo/client";
-import App from "./App";
+import { ApolloProvider } from '@apollo/client';
+import App from './App';
 
 function Root() {
   return (
@@ -81,8 +81,8 @@ function Root() {
 ### Step 3: Execute Query
 
 ```tsx
-import { gql } from "@apollo/client";
-import { useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 
 const GET_USERS = gql`
   query GetUsers {
@@ -219,8 +219,8 @@ function UserProfile({ userId }: { userId: string }) {
 ## Basic Mutation Usage
 
 ```tsx
-import { gql, TypedDocumentNode } from "@apollo/client";
-import { useMutation } from "@apollo/client/react";
+import { gql, TypedDocumentNode } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 
 interface CreateUserMutation {
   createUser: {
@@ -257,13 +257,13 @@ function CreateUserForm() {
     const { data } = await createUser({
       variables: {
         input: {
-          name: formData.get("name") as string,
-          email: formData.get("email") as string,
+          name: formData.get('name') as string,
+          email: formData.get('email') as string,
         },
       },
     });
     if (data) {
-      console.log("Created user:", data.createUser);
+      console.log('Created user:', data.createUser);
     }
   };
 
@@ -277,7 +277,7 @@ function CreateUserForm() {
       <input name="name" placeholder="Name" />
       <input name="email" placeholder="Email" />
       <button type="submit" disabled={loading}>
-        {loading ? "Creating..." : "Create User"}
+        {loading ? 'Creating...' : 'Create User'}
       </button>
       {error && <p>Error: {error.message}</p>}
     </form>
@@ -301,7 +301,7 @@ const client = new ApolloClient({
   }),
 
   // Network layer
-  link: new HttpLink({ uri: "/graphql" }),
+  link: new HttpLink({ uri: '/graphql' }),
 
   // Avoid defaultOptions if possible as they break TypeScript expectations.
   // Configure options per-query/mutation instead for better type safety.
@@ -317,8 +317,8 @@ const client = new ApolloClient({
 
   // Custom name for this client instance
   clientAwareness: {
-    name: "web-client",
-    version: "1.0.0",
+    name: 'web-client',
+    version: '1.0.0',
   },
 });
 ```

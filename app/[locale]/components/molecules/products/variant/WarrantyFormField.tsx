@@ -64,7 +64,7 @@ export default function WarrantyFormField() {
                     <div>
                       <FormLabel
                         htmlFor="warrantyMonths"
-                        className="text-md mb-1"
+                        className="mb-1 text-base"
                       >
                         {t('warrantyMonths')}
                       </FormLabel>
@@ -100,7 +100,7 @@ export default function WarrantyFormField() {
                     <div>
                       <FormLabel
                         htmlFor="warrantyCoverage"
-                        className="text-md mb-1"
+                        className="mb-1 text-base"
                       >
                         {t('warrantyCoverage')}
                       </FormLabel>
@@ -113,7 +113,7 @@ export default function WarrantyFormField() {
                       />
                     </div>
                     <div>
-                      <FormLabel className="text-md mb-1">
+                      <FormLabel className="mb-1 text-base">
                         {t('warrantyInstructions')}
                       </FormLabel>
                       <Textarea

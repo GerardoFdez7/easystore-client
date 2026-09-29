@@ -38,10 +38,10 @@ const Logo = ({ redirectTo, className }: LogoProps) => {
         alt="EasyStore Logo"
         width={60}
         height={64}
-        className={`max-[580px]:h-[10vw] max-[580px]:w-[10vw] ${className?.includes('text-') ? 'h-auto w-auto' : ''}`}
+        className={`max-[580px]:size-logo-icon ${className?.includes('text-') ? 'h-auto w-auto' : ''}`}
       />
       <span
-        className={`text-title font-extrabold max-[580px]:text-[6vw] ${className?.includes('text-') ? className.split(' ').find((c) => c.startsWith('text-')) || 'text-[40px]' : 'text-[40px]'}`}
+        className={`text-title max-[580px]:text-logo-sm font-extrabold ${className?.includes('text-') ? className.split(' ').find((c) => c.startsWith('text-')) || 'text-logo' : 'text-logo'}`}
       >
         EasyStore
       </span>

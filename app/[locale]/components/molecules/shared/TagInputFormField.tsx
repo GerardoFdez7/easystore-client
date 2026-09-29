@@ -72,6 +72,7 @@ export default function TagInputFormField({
                     value={newTag}
                     onChange={(e) => setNewTag(e.target.value)}
                     placeholder={placeholder}
+                    // eslint-disable-next-line shadcn/require-static-classes -- inputClassName is a caller-supplied override prop, not literally named "className", so the linter's static forwarding check cannot trace it
                     className={inputClassName}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
@@ -108,7 +109,7 @@ export default function TagInputFormField({
                           type="button"
                           variant="ghost"
                           size="icon"
-                          className="text-error hover:bg-hover h-5 w-5 hover:text-red-700"
+                          className="text-error hover:bg-hover hover:text-destructive h-5 w-5"
                           onClick={() => deleteTag(i)}
                           aria-label={deleteAriaLabel}
                         >

@@ -63,7 +63,7 @@ export default function InstallmentPaymentFormField() {
                 <div className="space-y-3">
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <div>
-                      <FormLabel htmlFor="months" className="text-md mb-1">
+                      <FormLabel htmlFor="months" className="mb-1 text-base">
                         {t('months')}
                       </FormLabel>
                       <Input
@@ -80,7 +80,7 @@ export default function InstallmentPaymentFormField() {
                     <div>
                       <FormLabel
                         htmlFor="interestRate"
-                        className="text-md mb-1"
+                        className="mb-1 text-base"
                       >
                         {t('interestRate')}
                       </FormLabel>

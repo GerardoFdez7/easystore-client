@@ -9,12 +9,7 @@ const meta: Meta<typeof TopProducts> = {
   },
   decorators: [
     (Story) => (
-      <div
-        style={{
-          width: '100vw',
-          maxWidth: 1000,
-        }}
-      >
+      <div className="w-screen max-w-250">
         <Story />
       </div>
     ),

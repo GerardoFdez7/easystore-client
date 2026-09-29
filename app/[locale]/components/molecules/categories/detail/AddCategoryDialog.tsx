@@ -175,7 +175,7 @@ export default function AddCategoryDialog({
         {children || trigger || defaultTrigger}
       </DialogTrigger>
       <DialogContent
-        className="sm:max-w-[600px]"
+        className="sm:max-w-150"
         aria-describedby="add-category-description"
       >
         <DialogHeader>

@@ -50,11 +50,11 @@ export default function DeleteProduct({
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <div
-          className="flex w-full cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-red-100"
+          className="hover:bg-hover flex w-full cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm"
           onClick={(e) => e.stopPropagation()}
         >
-          <Trash2 className="h-4 w-4 text-red-700" />
-          <span className="text-red-700">
+          <Trash2 className="text-destructive h-4 w-4" />
+          <span className="text-destructive">
             {' '}
             {singleMode ? t('deleteProduct') : t('deleteProducts')}
           </span>
@@ -73,7 +73,7 @@ export default function DeleteProduct({
           <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleDeleteAction}
-            className="bg-[#ed2727] text-white hover:bg-[#d12525]"
+            className="bg-destructive text-card hover:bg-error"
             disabled={loading}
           >
             {loading

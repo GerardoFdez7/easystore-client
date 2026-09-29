@@ -18,14 +18,7 @@ const meta: Meta<typeof Separator> = {
   decorators: [
     (Story) => {
       return (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: 200,
-          }}
-        >
+        <div className="flex h-50 items-center justify-center">
           <Story />
         </div>
       );

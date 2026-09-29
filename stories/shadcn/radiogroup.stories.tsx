@@ -8,7 +8,7 @@ const meta: Meta<typeof RadioGroup> = {
   subcomponents: { RadioGroupItem },
   decorators: [
     (Story) => (
-      <div style={{ padding: 24, maxWidth: 420 }}>
+      <div className="max-w-105 p-6">
         <Story />
       </div>
     ),

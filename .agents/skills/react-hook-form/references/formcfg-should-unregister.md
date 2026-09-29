@@ -49,6 +49,7 @@ function OnboardingWizard() {
 ```
 
 **When `shouldUnregister: true` is the right call:**
+
 - A discriminated payload where the hidden branch's keys must be absent, not empty — e.g. a "Business" account sends `taxId` and a "Personal" one must not send the key at all
 - A backend that treats a present-but-empty key differently from an absent one
 - Set it per field via `register('taxId', { shouldUnregister: true })` rather than form-wide, so the rest of the form keeps the safe default

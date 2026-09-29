@@ -38,7 +38,7 @@ type Story = StoryObj<typeof InventoryTableSkeleton>;
 export const Default: Story = {
   args: {},
   render: (args) => (
-    <div className="w-[800px]">
+    <div className="w-200">
       <InventoryTableSkeleton {...args} />
     </div>
   ),
@@ -49,7 +49,7 @@ export const WithFewerRows: Story = {
     rows: 3,
   },
   render: (args) => (
-    <div className="w-[800px]">
+    <div className="w-200">
       <InventoryTableSkeleton {...args} />
     </div>
   ),
@@ -60,7 +60,7 @@ export const WithMoreRows: Story = {
     rows: 10,
   },
   render: (args) => (
-    <div className="w-[800px]">
+    <div className="w-200">
       <InventoryTableSkeleton {...args} />
     </div>
   ),

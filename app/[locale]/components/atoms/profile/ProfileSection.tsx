@@ -17,10 +17,10 @@ export default function ProfileSection({
 }: ProfileSectionProps) {
   return (
     <section
-      className={`${className} grid grid-cols-1 items-start gap-3 md:grid-cols-[140px_1fr] md:gap-6`}
+      className={`${className} md:grid-cols-profile-section grid grid-cols-1 items-start gap-3 md:gap-6`}
     >
       <div className="text-title pt-1 font-bold md:pt-2">{title}</div>
-      <div className="bg-foregorund rounded-xl border border-gray-200 p-4 shadow-sm sm:p-5">
+      <div className="bg-foreground border-border rounded-xl border p-4 shadow-sm sm:p-5">
         {description && (
           <p className="text-text mb-4 font-medium">{description}</p>
         )}

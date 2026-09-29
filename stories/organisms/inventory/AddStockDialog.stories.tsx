@@ -52,7 +52,7 @@ const meta: Meta<typeof AddStockDialog> = {
   },
   decorators: [
     (Story) => (
-      <div style={{ width: '100%', maxWidth: 1200, height: '700px' }}>
+      <div className="h-175 w-full max-w-300">
         <Story />
       </div>
     ),

@@ -49,7 +49,7 @@ const meta: Meta<typeof ChartContainer> = {
   },
   decorators: [
     (Story) => (
-      <div style={{ width: 500, height: 350 }}>
+      <div className="h-87.5 w-125">
         <Story />
       </div>
     ),

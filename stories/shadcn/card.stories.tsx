@@ -22,7 +22,7 @@ type Story = StoryObj<typeof Card>;
 
 export const Default: Story = {
   render: () => (
-    <Card className="w-[380px]">
+    <Card className="w-95">
       <CardHeader>
         <CardTitle>Pro plan</CardTitle>
         <CardDescription>

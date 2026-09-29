@@ -13,7 +13,7 @@ July 2026
 
 ## Abstract
 
-Focused guide to the React Hook Form decisions a capable model gets wrong. Contains 35 rules across 7 categories, verified against react-hook-form 7.82.0 by diffing the shipped type definitions and type-checking every code block under tsc --strict against the real package types. Covers where a subscription must live to isolate re-renders, the third useForm generic that transforming resolvers require, the options that silently drop data from the submitted payload (register disabled, shouldUnregister, useFieldArray disabled), the NaN that valueAsNumber produces for an empty input, server error handling via setError('root.*'), resetDefaultValues() for rebasing the dirty baseline after a save, and the Watch / FormStateSubscribe / FieldArray render-prop components. Rules that merely restate what the library already does correctly have been removed.
+Focused guide to the React Hook Form decisions a capable model gets wrong. Contains 35 rules across 7 categories, verified against react-hook-form 7.82.0 by diffing the shipped type definitions and type-checking every code block under tsc --strict against the real package types. Covers where a subscription must live to isolate re-renders, the third useForm generic that transforming resolvers require, the options that silently drop data from the submitted payload (register disabled, shouldUnregister, useFieldArray disabled), the NaN that valueAsNumber produces for an empty input, server error handling via setError('root.\*'), resetDefaultValues() for rebasing the dirty baseline after a save, and the Watch / FormStateSubscribe / FieldArray render-prop components. Rules that merely restate what the library already does correctly have been removed.
 
 ---
 
@@ -88,9 +88,9 @@ Focused guide to the React Hook Form decisions a capable model gets wrong. Conta
 
 This document was compiled from individual reference files. For detailed editing or extension:
 
-| File | Description |
-|------|-------------|
-| [references/_sections.md](references/_sections.md) | Category definitions and impact ordering |
-| [assets/templates/_template.md](assets/templates/_template.md) | Template for creating new rules |
-| [SKILL.md](SKILL.md) | Quick reference entry point |
-| [metadata.json](metadata.json) | Version and reference URLs |
+| File                                                            | Description                              |
+| --------------------------------------------------------------- | ---------------------------------------- |
+| [references/\_sections.md](references/_sections.md)             | Category definitions and impact ordering |
+| [assets/templates/\_template.md](assets/templates/_template.md) | Template for creating new rules          |
+| [SKILL.md](SKILL.md)                                            | Quick reference entry point              |
+| [metadata.json](metadata.json)                                  | Version and reference URLs               |

@@ -149,7 +149,7 @@ export default function WarehouseManagementDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleDialogClose}>
-      <DialogContent className="flex max-h-[90vh] flex-col overflow-hidden sm:max-w-4xl">
+      <DialogContent className="max-h-dialog flex flex-col overflow-hidden sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle className="flex items-start space-x-2 text-left">
             <Warehouse className="h-5 w-5" />

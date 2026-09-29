@@ -1,4 +1,5 @@
 import { Skeleton } from '@shadcn/ui/skeleton';
+import { cn } from '@lib/utils/cn';
 import {
   ReactNode,
   isValidElement,
@@ -7,7 +8,6 @@ import {
   useLayoutEffect,
   useState,
   useCallback,
-  useMemo,
 } from 'react';
 import React from 'react';
 
@@ -263,39 +263,39 @@ export default function SkeletonWrapper({
     };
   }, [loading, measureChild, autoMeasure, isVisible, measurementComplete]);
 
-  // Memoize the skeleton style to prevent unnecessary re-renders
-  const skeletonStyle = useMemo(() => {
-    if (!autoMeasure || !measuredDimensions) return {};
-
-    const baseStyle: React.CSSProperties = {
-      width: measuredDimensions.width,
-      height: measuredDimensions.height,
-    };
-
-    // Apply layout properties if inheritLayout is enabled
-    if (inheritLayout && layoutProperties) {
-      return {
-        ...baseStyle,
-        display: layoutProperties.display,
-        flexDirection:
-          layoutProperties.flexDirection as React.CSSProperties['flexDirection'],
-        flexWrap: layoutProperties.flexWrap as React.CSSProperties['flexWrap'],
-        justifyContent:
-          layoutProperties.justifyContent as React.CSSProperties['justifyContent'],
-        alignItems:
-          layoutProperties.alignItems as React.CSSProperties['alignItems'],
-        gap: layoutProperties.gap,
-        gridTemplateColumns: layoutProperties.gridTemplateColumns,
-        gridTemplateRows: layoutProperties.gridTemplateRows,
-        position: layoutProperties.position as React.CSSProperties['position'],
-        margin: layoutProperties.margin,
-        padding: layoutProperties.padding,
-        borderRadius: layoutProperties.borderRadius,
-      };
-    }
-
-    return baseStyle;
-  }, [autoMeasure, measuredDimensions, inheritLayout, layoutProperties]);
+  // CSS custom properties carrying the measured, truly dynamic values.
+  // Kept as a plain object (not memoized) so the linter can verify every
+  // key is a CSS custom property rather than a fixed style property.
+  const skeletonStyle: React.CSSProperties & Record<string, string> =
+    autoMeasure && measuredDimensions
+      ? {
+          '--sk-width': `${measuredDimensions.width}px`,
+          '--sk-height': `${measuredDimensions.height}px`,
+          '--sk-gap':
+            (inheritLayout && layoutProperties ? layoutProperties.gap : '') ??
+            '',
+          '--sk-grid-cols':
+            (inheritLayout && layoutProperties
+              ? layoutProperties.gridTemplateColumns
+              : '') ?? '',
+          '--sk-grid-rows':
+            (inheritLayout && layoutProperties
+              ? layoutProperties.gridTemplateRows
+              : '') ?? '',
+          '--sk-margin':
+            (inheritLayout && layoutProperties
+              ? layoutProperties.margin
+              : '') ?? '',
+          '--sk-padding':
+            (inheritLayout && layoutProperties
+              ? layoutProperties.padding
+              : '') ?? '',
+          '--sk-radius':
+            (inheritLayout && layoutProperties
+              ? layoutProperties.borderRadius
+              : '') ?? '',
+        }
+      : {};
 
   // Clone child with ref for invisible measurement
   const invisibleChild =
@@ -336,21 +336,12 @@ export default function SkeletonWrapper({
   if (!loading) return <>{childWithRef}</>;
 
   return (
-    <div ref={containerRef} style={{ display: 'contents' }}>
+    <div ref={containerRef} className="contents">
       {/* Invisible render for measurement - only shown during loading */}
       {invisibleChild && (
         <div
-          style={{
-            position: 'absolute',
-            visibility: 'hidden',
-            pointerEvents: 'none',
-            zIndex: -9999,
-            opacity: 0,
-            top: 0,
-            left: 0,
-            // Inherit the container's width to ensure proper responsive measurement
-            width: '100%',
-          }}
+          // Inherit the container's width to ensure proper responsive measurement
+          className="pointer-events-none invisible absolute top-0 left-0 -z-50 w-full opacity-0"
           aria-hidden="true"
         >
           {invisibleChild}
@@ -359,7 +350,103 @@ export default function SkeletonWrapper({
 
       {/* Actual skeleton with enhanced layout mirroring */}
       {autoMeasure && measuredDimensions ? (
-        <Skeleton className={className} style={skeletonStyle} />
+        <Skeleton
+          className={cn(
+            'h-(--sk-height) w-(--sk-width)',
+            inheritLayout && layoutProperties
+              ? cn(
+                  layoutProperties.display === 'flex'
+                    ? 'flex'
+                    : layoutProperties.display === 'inline-flex'
+                      ? 'inline-flex'
+                      : layoutProperties.display === 'grid'
+                        ? 'grid'
+                        : layoutProperties.display === 'inline-grid'
+                          ? 'inline-grid'
+                          : layoutProperties.display === 'inline-block'
+                            ? 'inline-block'
+                            : layoutProperties.display === 'inline'
+                              ? 'inline'
+                              : layoutProperties.display === 'contents'
+                                ? 'contents'
+                                : layoutProperties.display === 'table'
+                                  ? 'table'
+                                  : layoutProperties.display === 'none'
+                                    ? 'hidden'
+                                    : layoutProperties.display === 'block'
+                                      ? 'block'
+                                      : '',
+                  layoutProperties.flexDirection === 'row'
+                    ? 'flex-row'
+                    : layoutProperties.flexDirection === 'row-reverse'
+                      ? 'flex-row-reverse'
+                      : layoutProperties.flexDirection === 'column'
+                        ? 'flex-col'
+                        : layoutProperties.flexDirection === 'column-reverse'
+                          ? 'flex-col-reverse'
+                          : '',
+                  layoutProperties.flexWrap === 'wrap'
+                    ? 'flex-wrap'
+                    : layoutProperties.flexWrap === 'wrap-reverse'
+                      ? 'flex-wrap-reverse'
+                      : layoutProperties.flexWrap === 'nowrap'
+                        ? 'flex-nowrap'
+                        : '',
+                  layoutProperties.justifyContent === 'flex-start' ||
+                    layoutProperties.justifyContent === 'start'
+                    ? 'justify-start'
+                    : layoutProperties.justifyContent === 'flex-end' ||
+                        layoutProperties.justifyContent === 'end'
+                      ? 'justify-end'
+                      : layoutProperties.justifyContent === 'center'
+                        ? 'justify-center'
+                        : layoutProperties.justifyContent === 'space-between'
+                          ? 'justify-between'
+                          : layoutProperties.justifyContent === 'space-around'
+                            ? 'justify-around'
+                            : layoutProperties.justifyContent === 'space-evenly'
+                              ? 'justify-evenly'
+                              : '',
+                  layoutProperties.alignItems === 'flex-start' ||
+                    layoutProperties.alignItems === 'start'
+                    ? 'items-start'
+                    : layoutProperties.alignItems === 'flex-end' ||
+                        layoutProperties.alignItems === 'end'
+                      ? 'items-end'
+                      : layoutProperties.alignItems === 'center'
+                        ? 'items-center'
+                        : layoutProperties.alignItems === 'baseline'
+                          ? 'items-baseline'
+                          : layoutProperties.alignItems === 'stretch'
+                            ? 'items-stretch'
+                            : '',
+                  layoutProperties.position === 'relative'
+                    ? 'relative'
+                    : layoutProperties.position === 'absolute'
+                      ? 'absolute'
+                      : layoutProperties.position === 'fixed'
+                        ? 'fixed'
+                        : layoutProperties.position === 'sticky'
+                          ? 'sticky'
+                          : layoutProperties.position === 'static'
+                            ? 'static'
+                            : '',
+                  layoutProperties.gap ? 'gap-(--sk-gap)' : '',
+                  layoutProperties.gridTemplateColumns
+                    ? 'grid-cols-(--sk-grid-cols)'
+                    : '',
+                  layoutProperties.gridTemplateRows
+                    ? 'grid-rows-(--sk-grid-rows)'
+                    : '',
+                  layoutProperties.margin ? 'm-(--sk-margin)' : '',
+                  layoutProperties.padding ? 'p-(--sk-padding)' : '',
+                  layoutProperties.borderRadius ? 'rounded-(--sk-radius)' : '',
+                )
+              : '',
+            className,
+          )}
+          style={skeletonStyle}
+        />
       ) : (
         // Enhanced fallback logic when autoMeasure is disabled or no dimensions measured
         (() => {
@@ -373,45 +460,47 @@ export default function SkeletonWrapper({
 
             // Extract width from props if available (for components like Combobox)
             const elementWidth = element.props.width;
-            const widthStyle: React.CSSProperties = {};
-            let widthClass = '';
-
-            if (elementWidth) {
-              if (typeof elementWidth === 'number') {
-                widthStyle.width = `${elementWidth}px`;
-              } else {
-                widthStyle.width = elementWidth;
-              }
-            } else {
-              // Use fallback width class if no width is specified
-              widthClass = fallbackWidth;
-            }
-
-            // Combine styles with responsive considerations
-            const combinedStyle = {
-              ...element.props.style,
-              ...widthStyle,
-              // Ensure proper mobile scaling
-              minWidth: 0,
-              maxWidth: '100%',
-            };
+            const hasElementWidth = Boolean(elementWidth);
+            const elementWidthValue = elementWidth
+              ? typeof elementWidth === 'number'
+                ? `${elementWidth}px`
+                : elementWidth
+              : undefined;
 
             return (
-              <Skeleton
-                className={`${element.props.className || ''} ${fallbackHeight} ${widthClass} ${className || ''}`.trim()}
-                style={combinedStyle}
-              />
+              <div
+                className={element.props.className}
+                // eslint-disable-next-line shadcn/no-inline-styles -- forwards an arbitrary child element's own style prop, whose shape is unknown at lint time
+                style={element.props.style}
+              >
+                <Skeleton
+                  className={cn(
+                    fallbackHeight,
+                    hasElementWidth ? 'w-(--sk-fallback-width)' : fallbackWidth,
+                    'max-w-full min-w-0',
+                    className,
+                  )}
+                  style={
+                    {
+                      '--sk-fallback-width': elementWidthValue,
+                    } as React.CSSProperties & Record<string, string>
+                  }
+                />
+              </div>
             );
           }
 
           // Enhanced fallback for non-React elements with mobile considerations
           return (
             <Skeleton
-              className={`${fallbackHeight} ${fallbackWidth} ${className || ''}`.trim()}
-              style={{
-                minWidth: 0,
-                maxWidth: '100%',
-              }}
+              /* eslint-disable shadcn/require-static-classes -- fallbackHeight/fallbackWidth are this component's own caller-supplied props, not literally named "className", so the linter's static forwarding check cannot trace them */
+              className={cn(
+                fallbackHeight,
+                fallbackWidth,
+                'max-w-full min-w-0',
+                className,
+              )}
+              /* eslint-enable shadcn/require-static-classes */
             />
           );
         })()

@@ -18,7 +18,7 @@ export default function DeleteProduct() {
       <AlertDialogTrigger asChild>
         <Button
           variant="outline"
-          className="border-[#ed2727] bg-[#ffffff] text-[#ed2727] hover:bg-[#ed2727] hover:text-[#ffffff] dark:text-white"
+          className="border-destructive bg-card text-destructive hover:bg-destructive hover:text-card dark:text-card"
         >
           <Trash2 className="mr-2 h-4 w-4" />
           Delete
@@ -34,7 +34,7 @@ export default function DeleteProduct() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction className="bg-[#ed2727] text-white hover:bg-[#d12525]">
+          <AlertDialogAction className="bg-destructive text-card hover:bg-error">
             Delete
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import React, { useState } from 'react';
 import { MockedProvider } from '@apollo/client/testing/react';
@@ -322,7 +321,7 @@ export const Interactive: Story = {
           onChange={setValue}
           placeholder="Interactive address selection..."
         />
-        <div className="text-sm text-gray-600">
+        <div className="text-foreground text-sm">
           Selected address ID: {value || 'None'}
         </div>
       </div>

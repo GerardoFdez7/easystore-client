@@ -19,17 +19,17 @@ npm install @apollo/client-integration-react-router @apollo/client graphql rxjs
 Create an `app/apollo.ts` file that exports a `makeClient` function and an `apolloLoader`:
 
 ```typescript
-import { HttpLink, InMemoryCache } from "@apollo/client";
+import { HttpLink, InMemoryCache } from '@apollo/client';
 import {
   createApolloLoaderHandler,
   ApolloClient,
-} from "@apollo/client-integration-react-router";
+} from '@apollo/client-integration-react-router';
 
 // `request` will be available on the server during SSR or in loaders, but not in the browser
 export const makeClient = (request?: Request) => {
   return new ApolloClient({
     cache: new InMemoryCache(),
-    link: new HttpLink({ uri: "https://your-graphql-endpoint.com/graphql" }),
+    link: new HttpLink({ uri: 'https://your-graphql-endpoint.com/graphql' }),
   });
 };
 

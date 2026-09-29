@@ -7,7 +7,7 @@ function Card({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="card"
       className={cn(
-        'bg-card text-card-foreground flex flex-col gap-card rounded-xl border py-card shadow-sm',
+        'bg-card text-card-foreground gap-card py-card flex flex-col rounded-xl border shadow-sm',
         className,
       )}
       {...props}
@@ -20,7 +20,7 @@ function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="card-header"
       className={cn(
-        '@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-control px-card has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-card',
+        'gap-control px-card [.border-b]:pb-card @container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start has-data-[slot=card-action]:grid-cols-[1fr_auto]',
         className,
       )}
       {...props}
@@ -75,7 +75,7 @@ function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="card-footer"
-      className={cn('flex items-center px-card [.border-t]:pt-card', className)}
+      className={cn('px-card [.border-t]:pt-card flex items-center', className)}
       {...props}
     />
   );

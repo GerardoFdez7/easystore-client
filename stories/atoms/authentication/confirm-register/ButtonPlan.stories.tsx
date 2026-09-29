@@ -24,7 +24,7 @@ const meta: Meta<typeof ButtonPlan> = {
   },
   decorators: [
     (Story) => (
-      <div className="w-[300px]">
+      <div className="w-75">
         <Story />
       </div>
     ),

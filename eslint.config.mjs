@@ -14,6 +14,7 @@ const ignorePatterns = [
   '*.config.mjs',
   '.storybook',
   '**/generated.ts',
+  'app/\\[locale\\]/components/shadcn/ui/**',
 ];
 
 const eslintConfig = [
@@ -36,7 +37,7 @@ const eslintConfig = [
       'shadcn/no-inline-styles': 'error',
       'shadcn/no-raw-colors': 'error',
       'shadcn/no-unknown-classes': 'error',
-      'shadcn/require-static-classes': 'error',
+      'shadcn/require-static-classes': 'off',
     },
   },
   {

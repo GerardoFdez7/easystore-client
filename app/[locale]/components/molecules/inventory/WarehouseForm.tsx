@@ -234,7 +234,7 @@ export default function WarehouseForm({
         // Dialog mode: render form within dialog
         <>
           <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[600px]">
+            <DialogContent className="sm:max-w-150">
               <DialogHeader>
                 <DialogTitle>
                   {warehouse ? t('editWarehouse') : t('createWarehouse')}
@@ -254,7 +254,7 @@ export default function WarehouseForm({
 
       {/* Address Creation Dialog */}
       <Dialog open={isAddressDialogOpen} onOpenChange={setIsAddressDialogOpen}>
-        <DialogContent className="sm:max-w-[600px]">
+        <DialogContent className="sm:max-w-150">
           <DialogHeader>
             <DialogTitle>{t('createNewAddress')}</DialogTitle>
             <DialogDescription>

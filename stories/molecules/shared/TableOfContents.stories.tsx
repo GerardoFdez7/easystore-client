@@ -84,11 +84,11 @@ function InteractiveTableOfContents() {
           <button
             key={item.id}
             onClick={() => setActiveId(item.id)}
-            className={`rounded px-3 py-1 text-sm ${
+            className={
               activeId === item.id
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
+                ? 'bg-primary rounded px-3 py-1 text-sm text-white'
+                : 'bg-border text-foreground hover:bg-hover rounded px-3 py-1 text-sm'
+            }
           >
             {item.label}
           </button>

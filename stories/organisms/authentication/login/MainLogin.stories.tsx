@@ -39,7 +39,7 @@ export const Centered: Story = {
 export const WithBackground: Story = {
   decorators: [
     (Story) => (
-      <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100">
+      <div className="from-background to-border min-h-screen bg-linear-to-br">
         <Story />
       </div>
     ),

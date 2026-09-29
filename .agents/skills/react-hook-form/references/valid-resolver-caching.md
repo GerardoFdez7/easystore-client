@@ -77,6 +77,6 @@ function SeatAllocationForm({ maxSeats }: { maxSeats: number }) {
 }
 ```
 
-Prefer a schema-level `.refine()` over a factory when the rule depends on *other fields* rather than on props — cross-field rules don't need the schema rebuilt.
+Prefer a schema-level `.refine()` over a factory when the rule depends on _other fields_ rather than on props — cross-field rules don't need the schema rebuilt.
 
 Reference: [React Hook Form Resolvers](https://github.com/react-hook-form/resolvers)

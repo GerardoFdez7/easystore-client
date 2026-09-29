@@ -191,19 +191,19 @@ const ControlledComponent = (args: ComboboxProps) => {
       <div className="flex gap-2">
         <button
           onClick={() => setValue('vue')}
-          className="rounded bg-blue-500 px-3 py-1 text-sm text-white"
+          className="bg-primary rounded px-3 py-1 text-sm text-white"
         >
           Set to Vue.js
         </button>
         <button
           onClick={() => setValue('')}
-          className="rounded bg-gray-500 px-3 py-1 text-sm text-white"
+          className="bg-muted-foreground rounded px-3 py-1 text-sm text-white"
         >
           Clear
         </button>
         <button
           onClick={() => setOpen(!open)}
-          className="rounded bg-green-500 px-3 py-1 text-sm text-white"
+          className="bg-secondary rounded px-3 py-1 text-sm text-white"
         >
           Toggle Open
         </button>

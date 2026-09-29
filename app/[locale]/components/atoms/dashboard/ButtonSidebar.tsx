@@ -55,12 +55,12 @@ export default function ButtonSidebar({
       className={cn(
         'text-text h-12 w-full cursor-pointer justify-start',
         isSelected
-          ? 'dark:bg-hover! dark:hover:bg-hover! bg-[#d7d7d7]! hover:bg-[#d7d7d7]!'
-          : 'text-foreground hover:text-title dark:hover:bg-hover hover:bg-[#d7d7d7]',
+          ? 'dark:bg-hover! dark:hover:bg-hover! bg-hover! hover:bg-hover!'
+          : 'text-foreground hover:text-title dark:hover:bg-hover hover:bg-hover',
         className,
       )}
     >
-      <div className="text-tile flex items-center justify-center [&>svg]:h-6 [&>svg]:w-6 lg:[&>svg]:h-6 lg:[&>svg]:w-6">
+      <div className="text-title flex items-center justify-center [&>svg]:h-6 [&>svg]:w-6 lg:[&>svg]:h-6 lg:[&>svg]:w-6">
         {icon}
       </div>
       <span className="font-medium">{label}</span>

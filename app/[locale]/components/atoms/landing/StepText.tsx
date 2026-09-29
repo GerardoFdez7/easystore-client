@@ -12,7 +12,7 @@ export default function StepText({ number, title }: StepTitleProps) {
         </span>
         <h3 className="text-text font-regular text-2xl sm:text-3xl">{title}</h3>
       </div>
-      <div className="w-full border-t border-gray-300 pt-4"></div>
+      <div className="border-border w-full border-t pt-4"></div>
     </div>
   );
 }

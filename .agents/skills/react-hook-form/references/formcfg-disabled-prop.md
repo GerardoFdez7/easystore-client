@@ -9,7 +9,7 @@ tags: formcfg, register, disabled, validation, footgun
 
 Passing `disabled: true` to `register` (or to `useController`/`Controller`) tells RHF the field is "not part of submission": `handleSubmit` deletes the field from the values object it hands your handler, and validation for that field is skipped. It is **not** the same as `<input disabled>` for purely visual disabling. If you only want the input greyed out, use the plain HTML attribute.
 
-The value itself is **not** destroyed — `handleSubmit` unsets disabled names from a *clone* of the form values, so `getValues('promoCode')` still returns what the user typed and re-enabling the field brings it back into the payload. The bug this causes is a field that quietly vanishes from your submit handler while the UI still shows a value in it.
+The value itself is **not** destroyed — `handleSubmit` unsets disabled names from a _clone_ of the form values, so `getValues('promoCode')` still returns what the user typed and re-enabling the field brings it back into the payload. The bug this causes is a field that quietly vanishes from your submit handler while the UI still shows a value in it.
 
 **Incorrect (using register's disabled option for visual disabling — promoCode silently disappears from the submitted payload):**
 
@@ -75,6 +75,7 @@ function CheckoutForm() {
 ```
 
 **Rule of thumb:**
+
 - Want the field greyed out but still submitted/validated → use the HTML `disabled` attribute directly on the input
 - Want the field excluded from submission and validation → use `register('name', { disabled: true })`
 

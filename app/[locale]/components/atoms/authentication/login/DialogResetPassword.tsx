@@ -45,7 +45,7 @@ export default function DialogResetPassword({
             <DialogTitle>{t('title')}</DialogTitle>
           </DialogHeader>
           <div className="text-center">
-            <p className="text-red-600">{t('invalidResetLink')}</p>
+            <p className="text-destructive">{t('invalidResetLink')}</p>
           </div>
         </DialogContent>
       </Dialog>

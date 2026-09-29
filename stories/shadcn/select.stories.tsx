@@ -25,7 +25,7 @@ const meta: Meta<typeof Select> = {
   },
   decorators: [
     (Story: React.ComponentType) => (
-      <div style={{ padding: 24 }}>
+      <div className="p-6">
         <Story />
       </div>
     ),

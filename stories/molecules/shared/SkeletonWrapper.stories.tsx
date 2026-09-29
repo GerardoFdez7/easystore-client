@@ -59,7 +59,7 @@ export const WithComponent: Story = {
 
 export const CustomDimensions: Story = {
   args: {
-    children: <div className="h-32 w-64 rounded-lg bg-blue-200" />,
+    children: <div className="bg-border h-32 w-64 rounded-lg" />,
     fallbackHeight: 'h-32',
     fallbackWidth: 'w-64',
   },

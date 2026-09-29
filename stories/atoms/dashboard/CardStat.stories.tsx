@@ -10,7 +10,7 @@ const meta: Meta<typeof CardStat> = {
   },
   decorators: [
     (Story) => (
-      <div style={{ width: 320 }}>
+      <div className="w-80">
         <Story />
       </div>
     ),

@@ -83,6 +83,7 @@ function DraftEditor() {
 ```
 
 **When to use which:**
+
 - `useWatch` / `Controller` — the value drives a rendered element
 - `subscribe` — the value drives a non-UI side-effect (analytics, autosave, localStorage sync, telemetry)
 - `watch(callback)` — legacy callback form; prefer `subscribe` in new code (subscribe replaces the watch-callback pattern with explicit formState slicing and no implicit re-renders)

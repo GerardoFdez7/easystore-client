@@ -13,7 +13,7 @@ const meta: Meta<typeof BackButton> = {
   // Wrap in a relative box so the absolute button is visible
   decorators: [
     (Story) => (
-      <div className="relative h-40 w-80 rounded border border-gray-200 bg-gray-50">
+      <div className="border-border bg-accent relative h-40 w-80 rounded border">
         <Story />
       </div>
     ),

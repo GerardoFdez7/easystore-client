@@ -17,7 +17,7 @@ Reactive variables are a way to store local state outside of the Apollo Client c
 ### Creating Reactive Variables
 
 ```typescript
-import { makeVar } from "@apollo/client";
+import { makeVar } from '@apollo/client';
 
 // Simple reactive variable
 export const isLoggedInVar = makeVar<boolean>(false);
@@ -27,13 +27,13 @@ export const cartItemsVar = makeVar<CartItem[]>([]);
 
 // Complex state
 interface AppState {
-  theme: "light" | "dark";
+  theme: 'light' | 'dark';
   sidebarOpen: boolean;
   notifications: Notification[];
 }
 
 export const appStateVar = makeVar<AppState>({
-  theme: "light",
+  theme: 'light',
   sidebarOpen: true,
   notifications: [],
 });
@@ -46,14 +46,16 @@ export const appStateVar = makeVar<AppState>({
 const isLoggedIn = isLoggedInVar();
 
 // Reactive read in component
-import { useReactiveVar } from "@apollo/client/react";
+import { useReactiveVar } from '@apollo/client/react';
 
 function AuthButton() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
 
-  return isLoggedIn ?
-      <button onClick={() => isLoggedInVar(false)}>Logout</button>
-    : <button onClick={() => isLoggedInVar(true)}>Login</button>;
+  return isLoggedIn ? (
+    <button onClick={() => isLoggedInVar(false)}>Logout</button>
+  ) : (
+    <button onClick={() => isLoggedInVar(true)}>Login</button>
+  );
 }
 ```
 
@@ -69,7 +71,7 @@ cartItemsVar([...cartItemsVar(), newItem]);
 // Update object state
 appStateVar({
   ...appStateVar(),
-  theme: "dark",
+  theme: 'dark',
 });
 
 // Helper function pattern
@@ -94,8 +96,8 @@ Local-only fields are fields defined in queries but resolved entirely on the cli
 **Important**: To use any `@client` fields, you need to add `LocalState` to the `ApolloClient` initialization:
 
 ```typescript
-import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { LocalState } from "@apollo/client/local-state";
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { LocalState } from '@apollo/client/local-state';
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
@@ -128,7 +130,7 @@ function UserCard({ userId }: { userId: string }) {
   });
 
   return (
-    <div className={data?.user.isSelected ? "selected" : ""}>
+    <div className={data?.user.isSelected ? 'selected' : ''}>
       <h2>{data?.user.displayName}</h2>
       <p>{data?.user.email}</p>
     </div>
@@ -148,7 +150,7 @@ const cache = new InMemoryCache({
         // Simple local field from reactive variable
         isSelected: {
           read(_, { readField }) {
-            const id = readField("id");
+            const id = readField('id');
             return selectedUsersVar().includes(id);
           },
         },
@@ -156,9 +158,9 @@ const cache = new InMemoryCache({
         // Computed local field (derived value)
         displayName: {
           read(_, { readField }) {
-            const name = readField("name");
-            const email = readField("email");
-            return name || email?.split("@")[0] || "Anonymous";
+            const name = readField('name');
+            const email = readField('email');
+            return name || email?.split('@')[0] || 'Anonymous';
           },
         },
       },
@@ -174,7 +176,7 @@ const cache = new InMemoryCache({
 Query-level local fields can be defined using `LocalState` resolvers. **Note**: Do not read reactive variables inside LocalState resolvers - this is not a documented/tested feature. It might not behave as expected.
 
 ```typescript
-import { LocalState } from "@apollo/client/local-state";
+import { LocalState } from '@apollo/client/local-state';
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
@@ -183,19 +185,19 @@ const client = new ApolloClient({
       Query: {
         // Read from localStorage
         theme: () => {
-          if (typeof window !== "undefined") {
-            return localStorage.getItem("theme") || "light";
+          if (typeof window !== 'undefined') {
+            return localStorage.getItem('theme') || 'light';
           }
-          return "light";
+          return 'light';
         },
 
         // Read from cache
         currentUser: (_, __, { cache }) => {
-          if (typeof window === "undefined") return null;
-          const userId = localStorage.getItem("currentUserId");
+          if (typeof window === 'undefined') return null;
+          const userId = localStorage.getItem('currentUserId');
           if (!userId) return null;
           return cache.readFragment({
-            id: cache.identify({ __typename: "User", id: userId }),
+            id: cache.identify({ __typename: 'User', id: userId }),
             fragment: gql`
               fragment CurrentUser on User {
                 id
@@ -208,7 +210,7 @@ const client = new ApolloClient({
 
         // Compute value
         isOnline: () => {
-          if (typeof navigator !== "undefined") {
+          if (typeof navigator !== 'undefined') {
             return navigator.onLine;
           }
           return true;
@@ -268,9 +270,9 @@ const cache = new InMemoryCache({
       fields: {
         quantity: {
           read(_, { readField }) {
-            const id = readField("id");
+            const id = readField('id');
             const cartItem = cartItemsVar().find(
-              (item) => item.productId === id
+              (item) => item.productId === id,
             );
             return cartItem?.quantity ?? 0;
           },
@@ -278,7 +280,7 @@ const cache = new InMemoryCache({
 
         isInCart: {
           read(_, { readField }) {
-            const id = readField("id");
+            const id = readField('id');
             return cartItemsVar().some((item) => item.productId === id);
           },
         },
@@ -291,7 +293,7 @@ const cache = new InMemoryCache({
 ### Local Mutations
 
 ```tsx
-import { LocalState } from "@apollo/client/local-state";
+import { LocalState } from '@apollo/client/local-state';
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
@@ -304,14 +306,13 @@ const client = new ApolloClient({
 
           const existing = cart.find((item) => item.productId === productId);
 
-          const updatedCart =
-            existing ?
-              cart.map((item) =>
-                item.productId === productId ?
-                  { ...item, quantity: item.quantity + quantity }
-                : item
+          const updatedCart = existing
+            ? cart.map((item) =>
+                item.productId === productId
+                  ? { ...item, quantity: item.quantity + quantity }
+                  : item,
               )
-            : [...cart, { productId, quantity, __typename: "CartItem" }];
+            : [...cart, { productId, quantity, __typename: 'CartItem' }];
 
           // Write updated cart back to cache
           cache.writeQuery({
@@ -339,7 +340,7 @@ const ADD_TO_CART = gql`
 // Create a helper function to permanently subscribe to reactive variable changes, without creating memory leaks
 function subscribeToVariable<T>(
   weakRef: WeakRef<ReactiveVar<T>>,
-  listener: ReactiveListener<T>
+  listener: ReactiveListener<T>,
 ) {
   weakRef.deref()?.onNextChange((value) => {
     listener(value);
@@ -349,19 +350,19 @@ function subscribeToVariable<T>(
 
 // Create reactive variable with persistence
 const persistentCartVar = makeVar<CartItem[]>(
-  typeof window !== "undefined" && localStorage.getItem("cart") ?
-    JSON.parse(localStorage.getItem("cart")!)
-  : []
+  typeof window !== 'undefined' && localStorage.getItem('cart')
+    ? JSON.parse(localStorage.getItem('cart')!)
+    : [],
 );
 
 // Save to localStorage when reactive variable changes
 subscribeToVariable(new WeakRef(persistentCartVar), (items) => {
   try {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("cart", JSON.stringify(items));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('cart', JSON.stringify(items));
     }
   } catch (error) {
-    console.error("Failed to persist cart:", error);
+    console.error('Failed to persist cart:', error);
   }
 });
 ```
@@ -373,13 +374,13 @@ The `useReactiveVar` hook subscribes a component to reactive variable updates.
 ### Basic Usage
 
 ```tsx
-import { useReactiveVar } from "@apollo/client/react";
+import { useReactiveVar } from '@apollo/client/react';
 
 function ThemeToggle() {
   const theme = useReactiveVar(themeVar);
 
   return (
-    <button onClick={() => themeVar(theme === "light" ? "dark" : "light")}>
+    <button onClick={() => themeVar(theme === 'light' ? 'dark' : 'light')}>
       Current: {theme}
     </button>
   );
@@ -396,7 +397,7 @@ function CartSummary() {
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
-    0
+    0,
   );
 
   return (

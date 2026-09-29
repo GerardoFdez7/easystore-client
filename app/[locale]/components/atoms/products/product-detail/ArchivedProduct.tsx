@@ -21,7 +21,7 @@ export default function ArchivedProduct() {
       <AlertDialogTrigger asChild>
         <Button
           variant="outline"
-          className="border border-black bg-[#ffffff] hover:bg-[#000000] hover:text-[#ffffff]"
+          className="border-title bg-card hover:bg-title hover:text-card border"
         >
           <Archive className="mr-2 h-4 w-4" />
           {isArchived ? 'Unarchive product' : 'Archive product'}

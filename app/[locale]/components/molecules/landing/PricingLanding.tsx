@@ -18,7 +18,7 @@ export default function PricingLading() {
         <h2 className="text-title my-5 text-3xl font-extrabold sm:text-5xl">
           {t('pricingTitle')}
         </h2>
-        <p className="text-foreground mx-auto my-5 max-w-5xl text-center text-[20px] sm:text-2xl">
+        <p className="text-foreground mx-auto my-5 max-w-5xl text-center text-xl sm:text-2xl">
           {t('pricingDescription')}
         </p>
       </div>

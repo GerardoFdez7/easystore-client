@@ -52,6 +52,7 @@ function ProfileForm({ userId }: { userId: string }) {
 ```
 
 **Which initialiser to reach for:**
+
 - `defaultValues` — the shape and the baseline; required regardless (see `formcfg-default-values`)
 - `values` — the record is fetched and may change while the form is open
 - async `defaultValues` — the record is fetched once and will not change under the form (see `formcfg-async-default-values`)

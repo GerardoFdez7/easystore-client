@@ -182,7 +182,7 @@ export function ChartTotalSales() {
               value={timeRange}
               onValueChange={setTimeRange}
               variant="outline"
-              className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
+              className="hidden *:data-[slot=toggle-group-item]:px-4! @[767px]/card:flex"
             >
               <ToggleGroupItem value="90d">{t('3months')}</ToggleGroupItem>
               <ToggleGroupItem value="30d">{t('30days')}</ToggleGroupItem>
@@ -213,7 +213,7 @@ export function ChartTotalSales() {
         <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
           <ChartContainer
             config={chartConfig}
-            className="aspect-auto h-[250px] w-full"
+            className="aspect-auto h-62.5 w-full"
           >
             <AreaChart data={filteredData}>
               <defs>

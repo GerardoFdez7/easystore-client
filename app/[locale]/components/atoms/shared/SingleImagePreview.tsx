@@ -61,10 +61,10 @@ const SingleImagePreview: React.FC<SingleImagePreviewProps> = ({
           {!viewOnly && onRemove && (
             <Button
               onClick={onRemove}
-              className="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:bg-gray-100 hover:shadow-xl"
+              className="hover:bg-background absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:shadow-xl"
               disabled={isProcessing}
             >
-              <X className="h-4 w-4 text-gray-600" />
+              <X className="text-foreground h-4 w-4" />
             </Button>
           )}
         </div>

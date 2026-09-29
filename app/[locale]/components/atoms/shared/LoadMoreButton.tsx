@@ -42,13 +42,15 @@ const LoadMoreButton: React.FC<LoadMoreButtonProps> = ({
     }
   };
 
+  const sizeClassName = size === 'sm' ? 'text-xs' : '';
+
   const buttonContent = (
     <Button
       variant="outline"
       size={size}
       onClick={onClick}
       disabled={disabled || isLoading}
-      className={cn(size === 'sm' && 'text-xs', size === 'default', className)}
+      className={cn(sizeClassName, className)}
     >
       {isLoading ? (
         <>

@@ -14,19 +14,19 @@ Create a `codegen.ts` file in your project root:
 
 ```typescript
 // codegen.ts
-import { CodegenConfig } from "@graphql-codegen/cli";
+import { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: "<URL_OF_YOUR_GRAPHQL_API>",
+  schema: '<URL_OF_YOUR_GRAPHQL_API>',
   // This assumes that all your source files are in a top-level `src/` directory - you might need to adjust this to your file structure
-  documents: ["src/**/*.{ts,tsx}"],
+  documents: ['src/**/*.{ts,tsx}'],
   // Don't exit with non-zero status when there are no documents
   ignoreNoDocuments: true,
   generates: {
     // Use a path that works the best for the structure of your application
-    "./src/types/__generated__/graphql.ts": {
-      plugins: ["typescript", "typescript-operations", "typed-document-node"],
+    './src/types/__generated__/graphql.ts': {
+      plugins: ['typescript', 'typescript-operations', 'typed-document-node'],
       config: {
         avoidOptionals: {
           // Use `null` for nullable fields instead of optionals
@@ -35,7 +35,7 @@ const config: CodegenConfig = {
           inputValue: false,
         },
         // Use `unknown` instead of `any` for unconfigured scalars
-        defaultScalarType: "unknown",
+        defaultScalarType: 'unknown',
         // Apollo Client always includes `__typename` fields
         nonOptionalTypename: true,
         // Apollo Client doesn't add the `__typename` field to root types so
@@ -55,9 +55,9 @@ To enable data masking with GraphQL Code Generator, create a type declaration fi
 
 ```typescript
 // apollo-client.d.ts
-import { GraphQLCodegenDataMasking } from "@apollo/client/masking";
+import { GraphQLCodegenDataMasking } from '@apollo/client/masking';
 
-declare module "@apollo/client" {
+declare module '@apollo/client' {
   export interface TypeOverrides
     extends GraphQLCodegenDataMasking.TypeOverrides {}
 }
@@ -90,7 +90,7 @@ The typed-document-node plugin generates `TypedDocumentNode` types that Apollo C
 Define your operations inline with the `if (false)` pattern. This allows GraphQL Code Generator to detect and extract operations without executing the code at runtime (bundlers omit this dead code during minification):
 
 ```typescript
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 // This query will never be consumed in runtime code, so it is wrapped in `if (false)` so the bundler can omit it when bundling.
 if (false) {

@@ -185,7 +185,7 @@ export function TermsContent() {
       </div>
 
       {/* Responsive layout */}
-      <div className="flex flex-col items-center gap-12 lg:mx-auto lg:grid lg:w-fit lg:grid-cols-[250px_minmax(0,42rem)] lg:items-start lg:gap-x-32">
+      <div className="lg:grid-cols-legal flex flex-col items-center gap-12 lg:mx-auto lg:grid lg:w-fit lg:items-start lg:gap-x-32">
         <aside className="mb-8 w-full max-w-md lg:sticky lg:top-32 lg:mb-0">
           <TableOfContents
             className="mx-auto w-full sm:w-80"

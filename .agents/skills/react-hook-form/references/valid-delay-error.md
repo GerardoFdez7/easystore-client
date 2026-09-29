@@ -45,6 +45,7 @@ function SearchForm() {
 ```
 
 **When to use:**
+
 - Real-time validation with `onChange` mode
 - Fields with character count requirements
 - Search inputs with minimum length
@@ -52,9 +53,9 @@ function SearchForm() {
 **Opting a single `setValue` into the delay (7.82+):** `setValue` accepts `delayError`, but it is a **boolean** — it opts that call into the debounce, and the duration still comes from `useForm({ delayError })`. Passing a number is a type error, even though the 7.82.0 release notes show `delayError: 500`:
 
 ```typescript
-const { setValue } = useForm({ mode: 'onChange', delayError: 300 })
+const { setValue } = useForm({ mode: 'onChange', delayError: 300 });
 
-setValue('query', suggestion, { shouldValidate: true, delayError: true })  // debounced by 300ms
+setValue('query', suggestion, { shouldValidate: true, delayError: true }); // debounced by 300ms
 ```
 
 Without a form-level `delayError`, `{ delayError: true }` on `setValue` has nothing to debounce with and the error appears immediately.

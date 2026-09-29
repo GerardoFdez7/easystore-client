@@ -41,15 +41,15 @@ node /path/to/dev-skill/scripts/validate-skill.js .  # discipline-aware validati
 
 1. Choose the appropriate category prefix:
 
-| Category | Prefix | Impact |
-|----------|--------|--------|
-| Form Configuration | `formcfg-` | CRITICAL |
-| Field Subscription | `sub-` | CRITICAL |
-| Controlled Components | `ctrl-` | HIGH |
-| Validation Patterns | `valid-` | HIGH |
-| State Management | `formstate-` | MEDIUM-HIGH |
-| Field Arrays | `array-` | MEDIUM-HIGH |
-| Integration Patterns | `integ-` | MEDIUM |
+| Category              | Prefix       | Impact      |
+| --------------------- | ------------ | ----------- |
+| Form Configuration    | `formcfg-`   | CRITICAL    |
+| Field Subscription    | `sub-`       | CRITICAL    |
+| Controlled Components | `ctrl-`      | HIGH        |
+| Validation Patterns   | `valid-`     | HIGH        |
+| State Management      | `formstate-` | MEDIUM-HIGH |
+| Field Arrays          | `array-`     | MEDIUM-HIGH |
+| Integration Patterns  | `integ-`     | MEDIUM      |
 
 2. Create a new file: `references/{prefix}-{slug}.md`
 
@@ -94,20 +94,21 @@ Rules follow the pattern: `{prefix}-{slug}.md`
 - **slug**: Kebab-case description of the rule
 
 Examples:
+
 - `formcfg-validation-mode.md`
 - `sub-usewatch-over-watch.md`
 - `ctrl-usecontroller-isolation.md`
 
 ## Impact Levels
 
-| Level | Description |
-|-------|-------------|
-| CRITICAL | Cascade effect on entire form performance |
-| HIGH | Significant impact on specific operations |
-| MEDIUM-HIGH | Notable improvement for common patterns |
-| MEDIUM | Measurable improvement in specific scenarios |
-| LOW-MEDIUM | Minor optimization for edge cases |
-| LOW | Best practice with minimal performance impact |
+| Level       | Description                                   |
+| ----------- | --------------------------------------------- |
+| CRITICAL    | Cascade effect on entire form performance     |
+| HIGH        | Significant impact on specific operations     |
+| MEDIUM-HIGH | Notable improvement for common patterns       |
+| MEDIUM      | Measurable improvement in specific scenarios  |
+| LOW-MEDIUM  | Minor optimization for edge cases             |
+| LOW         | Best practice with minimal performance impact |
 
 ## Companion Skill
 

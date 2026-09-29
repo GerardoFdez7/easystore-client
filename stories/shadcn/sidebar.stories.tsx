@@ -21,7 +21,7 @@ const meta: Meta<typeof Sidebar> = {
   decorators: [
     (Story) => (
       <SidebarProvider>
-        <div style={{ minHeight: 400, background: '#f1f5f9', display: 'flex' }}>
+        <div className="bg-accent flex min-h-100">
           <Story />
         </div>
       </SidebarProvider>

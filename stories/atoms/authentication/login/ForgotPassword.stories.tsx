@@ -46,7 +46,7 @@ export const InForm: Story = {
             <div className="text-center">
               <Story />
             </div>
-            <button className="w-full rounded bg-blue-600 p-2 text-white">
+            <button className="bg-primary text-primary-foreground w-full rounded p-2">
               Login
             </button>
           </div>

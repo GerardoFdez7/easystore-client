@@ -234,7 +234,7 @@ export default function AddSubcategoriesPicker({
       {isMobile ? (
         <Drawer open={isOpen} onOpenChange={handleOpenChange}>
           <DrawerTrigger asChild>{Trigger}</DrawerTrigger>
-          <DrawerContent className="flex h-[85vh] flex-col">
+          <DrawerContent className="h-drawer flex flex-col">
             <DrawerHeader className="text-left">
               <DrawerTitle>
                 {mode === 'product-selection'
@@ -254,7 +254,7 @@ export default function AddSubcategoriesPicker({
       ) : (
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
           <DialogTrigger asChild>{Trigger}</DialogTrigger>
-          <DialogContent className="sm:max-w-[560px]">
+          <DialogContent className="sm:max-w-140">
             <DialogHeader>
               <DialogTitle>
                 {mode === 'product-selection'

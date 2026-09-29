@@ -32,7 +32,7 @@ function DefaultStory() {
 
   return (
     <FormProvider {...methods}>
-      <div className="w-[720px]">
+      <div className="w-180">
         <CodesListFormField />
       </div>
     </FormProvider>

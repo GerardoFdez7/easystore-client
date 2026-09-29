@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 import { Card, CardContent, CardHeader } from '@shadcn/ui/card';
 import { Star } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -36,10 +38,14 @@ export default function Reviews() {
                 <span className="text-foreground w-2 text-sm">
                   {review.stars}
                 </span>
-                <div className="h-2 flex-1 rounded-full bg-[#e2e8f0]">
+                <div className="bg-hover h-2 flex-1 rounded-full">
                   <div
-                    className="bg-secondary h-2 rounded-full"
-                    style={{ width: `${review.percentage}%` }}
+                    className="bg-secondary h-2 w-(--review-percentage) rounded-full"
+                    style={
+                      {
+                        '--review-percentage': `${review.percentage}%`,
+                      } as CSSProperties
+                    }
                   ></div>
                 </div>
                 <span className="text-foreground w-8 text-sm">

@@ -23,12 +23,10 @@ export default function Header() {
           className="h-20 w-20 sm:h-20 sm:w-20 md:h-28 md:w-28"
         />
         <div>
-          <h1 className="text-title text-[42px] font-bold sm:mt-4">
+          <h1 className="text-title text-4xl font-bold sm:mt-4">
             {t('welcomeBack')}
           </h1>
-          <p className="text-text text-primary text-lg font-medium">
-            {t('loginMessage')}
-          </p>
+          <p className="text-text text-lg font-medium">{t('loginMessage')}</p>
         </div>
       </div>
     </header>

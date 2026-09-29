@@ -21,7 +21,7 @@
 
 ```tsx
 // Ensure ApolloProvider wraps your app
-import { ApolloProvider } from "@apollo/client";
+import { ApolloProvider } from '@apollo/client';
 
 function App() {
   return (
@@ -54,11 +54,11 @@ export function App() {
 
 // Multiple clients (rare use case)
 const publicClient = new ApolloClient({
-  uri: "/public/graphql",
+  uri: '/public/graphql',
   cache: new InMemoryCache(),
 });
 const adminClient = new ApolloClient({
-  uri: "/admin/graphql",
+  uri: '/admin/graphql',
   cache: new InMemoryCache(),
 });
 
@@ -105,7 +105,7 @@ function useApolloClient(makeApolloClient: () => ApolloClient): ApolloClient {
 }
 
 // Better - singleton global in non-SSR environments to survive unmounts
-const singleton = Symbol.for("ApolloClientSingleton");
+const singleton = Symbol.for('ApolloClientSingleton');
 declare global {
   interface Window {
     [singleton]?: ApolloClient;
@@ -115,7 +115,7 @@ declare global {
 function useApolloClient(makeApolloClient: () => ApolloClient): ApolloClient {
   const storeRef = useRef<ApolloClient | null>(null);
   if (!storeRef.current) {
-    if (typeof window === "undefined") {
+    if (typeof window === 'undefined') {
       storeRef.current = makeApolloClient();
     } else {
       window[singleton] ??= makeApolloClient();
@@ -140,7 +140,7 @@ const cache = new InMemoryCache({
   typePolicies: {
     // Ensure proper identification
     Product: {
-      keyFields: ["id"], // or ['sku'] if no id field
+      keyFields: ['id'], // or ['sku'] if no id field
     },
   },
 });
@@ -161,7 +161,7 @@ const [deleteProduct] = useMutation(DELETE_PRODUCT, {
 
 ```tsx
 const { data } = useQuery(GET_PRODUCTS, {
-  fetchPolicy: "cache-and-network", // Always fetch fresh data
+  fetchPolicy: 'cache-and-network', // Always fetch fresh data
 });
 ```
 
@@ -200,7 +200,7 @@ const cache = new InMemoryCache({
     Query: {
       fields: {
         products: {
-          keyArgs: ["category"], // Only category creates new cache entries
+          keyArgs: ['category'], // Only category creates new cache entries
           merge(existing = [], incoming) {
             return [...existing, ...incoming];
           },
@@ -244,8 +244,8 @@ query GetUsers {
 ### Using Generated Types
 
 ```tsx
-import { useQuery } from "@apollo/client/react";
-import { GetUsersDocument, GetUsersQuery } from "./generated/graphql";
+import { useQuery } from '@apollo/client/react';
+import { GetUsersDocument, GetUsersQuery } from './generated/graphql';
 
 function UserList() {
   // Fully typed without manual type annotations
@@ -332,7 +332,7 @@ query GetUserWithPosts($id: ID!) {
 // Prefer useFragment with data masking
 const { data } = useFragment({
   fragment: USER_FRAGMENT,
-  from: { __typename: "User", id },
+  from: { __typename: 'User', id },
 });
 
 // Alternative: use @nonreactive directive
@@ -410,7 +410,7 @@ console.log(JSON.stringify(client.cache.extract(), null, 2));
 // Check specific object using cache.identify
 console.log(
   client.cache.readFragment({
-    id: cache.identify({ __typename: "User", id: 1 }),
+    id: cache.identify({ __typename: 'User', id: 1 }),
     fragment: gql`
       fragment _ on User {
         id
@@ -418,7 +418,7 @@ console.log(
         email
       }
     `,
-  })
+  }),
 );
 ```
 
@@ -477,7 +477,7 @@ const { data, dataState } = useQuery(GET_USER);
 
 // dataState can be "complete", "partial", "streaming", or "empty"
 // It describes the completeness of the data, not a loading state
-if (dataState === "empty") return <Spinner />;
+if (dataState === 'empty') return <Spinner />;
 
 // Now data is guaranteed to exist
 return <div>{data.user.name}</div>;

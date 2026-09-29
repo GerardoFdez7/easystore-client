@@ -32,7 +32,7 @@ function ResetPasswordFormWrapper({
             ? 'Reset Password Form (with token)'
             : 'Reset Password Form (no token)'}
         </h2>
-        <p className="mt-2 text-sm text-gray-600">
+        <p className="text-foreground mt-2 text-sm">
           {hasToken
             ? 'The reset password dialog should appear automatically'
             : 'No reset token in URL - dialog will not appear'}

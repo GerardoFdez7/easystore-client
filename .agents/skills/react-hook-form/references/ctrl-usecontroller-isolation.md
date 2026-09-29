@@ -72,6 +72,7 @@ function AmountField({ control }: { control: Control<PaymentFormData> }) {
 ```
 
 **When to prefer one API over the other:**
+
 - `useController` — when you also need `fieldState`/`formState` in the same component, or want to compose with custom logic
 - `Controller` — when you want a single JSX-only declaration and don't need to read state in the surrounding component
 

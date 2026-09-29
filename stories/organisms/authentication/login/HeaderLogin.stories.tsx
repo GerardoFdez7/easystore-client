@@ -29,7 +29,7 @@ export const Default: Story = {};
 export const WithDarkBackground: Story = {
   decorators: [
     (Story) => (
-      <div className="min-h-screen bg-gray-900">
+      <div className="bg-sidebar-primary min-h-screen">
         <Story />
       </div>
     ),
@@ -39,7 +39,7 @@ export const WithDarkBackground: Story = {
 export const WithColoredBackground: Story = {
   decorators: [
     (Story) => (
-      <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100">
+      <div className="from-background to-border min-h-screen bg-linear-to-br">
         <Story />
       </div>
     ),

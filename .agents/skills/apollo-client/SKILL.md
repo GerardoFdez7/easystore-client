@@ -11,7 +11,7 @@ license: MIT
 compatibility: React 18+, React 19 (Suspense/RSC). Works with Next.js, Vite, CRA, and other React frameworks.
 metadata:
   author: apollographql
-  version: "1.0.0"
+  version: '1.0.0'
 allowed-tools: Bash(npm:*) Bash(npx:*) Bash(node:*) Read Write Edit Glob Grep
 ---
 
@@ -35,8 +35,8 @@ Each guide includes installation steps, configuration, and framework-specific pa
 ### Basic Query
 
 ```tsx
-import { gql } from "@apollo/client";
-import { useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 
 const GET_USER = gql`
   query GetUser($id: ID!) {
@@ -63,8 +63,8 @@ function UserProfile({ userId }: { userId: string }) {
 ### Basic Mutation
 
 ```tsx
-import { gql } from "@apollo/client";
-import { useMutation } from "@apollo/client/react";
+import { gql } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 
 const CREATE_USER = gql`
   mutation CreateUser($input: CreateUserInput!) {
@@ -82,15 +82,15 @@ function CreateUserForm() {
     await createUser({ variables: { input: { name } } });
   };
 
-  return <button onClick={() => handleSubmit("John")}>Create User</button>;
+  return <button onClick={() => handleSubmit('John')}>Create User</button>;
 }
 ```
 
 ### Suspense Query
 
 ```tsx
-import { Suspense } from "react";
-import { useSuspenseQuery } from "@apollo/client/react";
+import { Suspense } from 'react';
+import { useSuspenseQuery } from '@apollo/client/react';
 
 function UserProfile({ userId }: { userId: string }) {
   const { data } = useSuspenseQuery(GET_USER, {

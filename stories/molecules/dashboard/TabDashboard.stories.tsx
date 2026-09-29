@@ -9,12 +9,7 @@ const meta: Meta<typeof TabDashboard> = {
   },
   decorators: [
     (Story) => (
-      <div
-        style={{
-          width: '100vw',
-          maxWidth: 800,
-        }}
-      >
+      <div className="w-screen max-w-200">
         <Story />
       </div>
     ),

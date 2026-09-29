@@ -13,7 +13,7 @@ const meta = {
   argTypes: {},
   decorators: [
     (Story) => (
-      <div style={{ padding: '2rem' }}>
+      <div className="p-8">
         <Story />
       </div>
     ),
@@ -29,7 +29,7 @@ export const Default: Story = {
   render: () => (
     <div>
       <Toaster />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div className="flex flex-col gap-4">
         <Button onClick={() => toast('This is a default toast')}>
           Show Default Toast
         </Button>
@@ -75,7 +75,7 @@ export const Default: Story = {
           Show Toast with Action
         </Button>
         <Button
-          className="bg-blue-400"
+          className="bg-accent"
           onClick={() =>
             toast.promise(new Promise((resolve) => setTimeout(resolve, 2000)), {
               loading: 'Loading...',

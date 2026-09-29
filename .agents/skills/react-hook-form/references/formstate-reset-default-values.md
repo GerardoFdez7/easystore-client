@@ -62,6 +62,7 @@ function NotificationSettingsForm({ settings }: { settings: NotificationSettings
 ```
 
 **Which to reach for:**
+
 - `resetDefaultValues(saved)` — form stays mounted and the user keeps editing; you only want the dirty baseline moved
 - `reset(saved)` — you genuinely want to discard the current values too (form closes, or you are loading a different record)
 

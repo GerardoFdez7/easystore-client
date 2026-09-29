@@ -15,7 +15,7 @@
 ### Basic Configuration
 
 ```typescript
-import { InMemoryCache } from "@apollo/client";
+import { InMemoryCache } from '@apollo/client';
 
 const cache = new InMemoryCache({
   // Custom type policies
@@ -26,7 +26,7 @@ const cache = new InMemoryCache({
       },
     },
     User: {
-      keyFields: ["id"],
+      keyFields: ['id'],
       fields: {
         // User-level field policies
       },
@@ -35,8 +35,8 @@ const cache = new InMemoryCache({
 
   // Custom type name handling (rare)
   possibleTypes: {
-    Character: ["Human", "Droid"],
-    Node: ["User", "Post", "Comment"],
+    Character: ['Human', 'Droid'],
+    Node: ['User', 'Post', 'Comment'],
   },
 });
 ```
@@ -57,7 +57,7 @@ new InMemoryCache({
 
   // Custom function to generate cache IDs (rare)
   dataIdFromObject: (object) => {
-    if (object.__typename === "Book") {
+    if (object.__typename === 'Book') {
       return `Book:${object.isbn}`;
     }
     return defaultDataIdFromObject(object);
@@ -122,17 +122,17 @@ const cache = new InMemoryCache({
   typePolicies: {
     // Use ISBN instead of id for books
     Book: {
-      keyFields: ["isbn"],
+      keyFields: ['isbn'],
     },
 
     // Composite key
     UserSession: {
-      keyFields: ["userId", "deviceId"],
+      keyFields: ['userId', 'deviceId'],
     },
 
     // Nested key
     Review: {
-      keyFields: ["book", ["isbn"], "reviewer", ["id"]],
+      keyFields: ['book', ['isbn'], 'reviewer', ['id']],
     },
 
     // No key fields (singleton, only one object in cache per type)
@@ -192,8 +192,8 @@ const cache = new InMemoryCache({
         // Computed field
         fullName: {
           read(_, { readField }) {
-            const firstName = readField("firstName");
-            const lastName = readField("lastName");
+            const firstName = readField('firstName');
+            const lastName = readField('lastName');
             return `${firstName} ${lastName}`;
           },
         },
@@ -207,7 +207,7 @@ const cache = new InMemoryCache({
 
         // Default value
         role: {
-          read(existing = "USER") {
+          read(existing = 'USER') {
             return existing;
           },
         },
@@ -246,7 +246,7 @@ const cache = new InMemoryCache({
       fields: {
         // Merge paginated results
         posts: {
-          keyArgs: ["category"], // Only category affects cache key
+          keyArgs: ['category'], // Only category affects cache key
           merge(existing = { items: [] }, incoming) {
             return {
               ...incoming,
@@ -272,7 +272,7 @@ const cache = new InMemoryCache({
         // Different cache entry per userId only
         // (limit, offset don't create new entries)
         userPosts: {
-          keyArgs: ["userId"],
+          keyArgs: ['userId'],
         },
 
         // No arguments affect cache key
@@ -283,7 +283,7 @@ const cache = new InMemoryCache({
 
         // Nested argument
         search: {
-          keyArgs: ["filter", ["category", "status"]],
+          keyArgs: ['filter', ['category', 'status']],
         },
       },
     },
@@ -296,7 +296,7 @@ const cache = new InMemoryCache({
 ### Offset-Based Pagination
 
 ```typescript
-import { offsetLimitPagination } from "@apollo/client/utilities";
+import { offsetLimitPagination } from '@apollo/client/utilities';
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -305,7 +305,7 @@ const cache = new InMemoryCache({
         posts: offsetLimitPagination(),
 
         // With key arguments
-        userPosts: offsetLimitPagination(["userId"]),
+        userPosts: offsetLimitPagination(['userId']),
       },
     },
   },
@@ -315,7 +315,7 @@ const cache = new InMemoryCache({
 ### Cursor-Based Pagination (Relay Style)
 
 ```typescript
-import { relayStylePagination } from "@apollo/client/utilities";
+import { relayStylePagination } from '@apollo/client/utilities';
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -324,7 +324,7 @@ const cache = new InMemoryCache({
         posts: relayStylePagination(),
 
         // With key arguments
-        userPosts: relayStylePagination(["userId"]),
+        userPosts: relayStylePagination(['userId']),
       },
     },
   },
@@ -405,7 +405,7 @@ const data = cache.readQuery({
 // With variables
 const userData = cache.readQuery({
   query: GET_USER,
-  variables: { id: "1" },
+  variables: { id: '1' },
 });
 ```
 
@@ -417,7 +417,7 @@ cache.writeQuery({
   query: GET_TODOS,
   data: {
     todos: [
-      { __typename: "Todo", id: "1", text: "Buy milk", completed: false },
+      { __typename: 'Todo', id: '1', text: 'Buy milk', completed: false },
     ],
   },
 });
@@ -425,9 +425,9 @@ cache.writeQuery({
 // With variables
 cache.writeQuery({
   query: GET_USER,
-  variables: { id: "1" },
+  variables: { id: '1' },
   data: {
-    user: { __typename: "User", id: "1", name: "John" },
+    user: { __typename: 'User', id: '1', name: 'John' },
   },
 });
 ```
@@ -437,7 +437,7 @@ cache.writeQuery({
 ```typescript
 // Read a specific object - use cache.identify for safety
 const user = cache.readFragment({
-  id: cache.identify({ __typename: "User", id: "1" }),
+  id: cache.identify({ __typename: 'User', id: '1' }),
   fragment: gql`
     fragment UserFragment on User {
       id
@@ -449,7 +449,7 @@ const user = cache.readFragment({
 
 // Apollo Client 4.1+: Use 'from' parameter (recommended)
 const user = cache.readFragment({
-  from: { __typename: "User", id: "1" },
+  from: { __typename: 'User', id: '1' },
   fragment: gql`
     fragment UserFragment on User {
       id
@@ -461,27 +461,27 @@ const user = cache.readFragment({
 
 // Update a specific object
 cache.writeFragment({
-  id: cache.identify({ __typename: "User", id: "1" }),
+  id: cache.identify({ __typename: 'User', id: '1' }),
   fragment: gql`
     fragment UpdateUser on User {
       name
     }
   `,
   data: {
-    name: "Jane",
+    name: 'Jane',
   },
 });
 
 // Apollo Client 4.1+: Use 'from' parameter (recommended)
 cache.writeFragment({
-  from: { __typename: "User", id: "1" },
+  from: { __typename: 'User', id: '1' },
   fragment: gql`
     fragment UpdateUser on User {
       name
     }
   `,
   data: {
-    name: "Jane",
+    name: 'Jane',
   },
 });
 ```
@@ -494,7 +494,7 @@ cache.modify({
   id: cache.identify(user),
   fields: {
     // Set new value
-    name: () => "New Name",
+    name: () => 'New Name',
 
     // Transform existing value
     postCount: (existing) => existing + 1,
@@ -505,7 +505,7 @@ cache.modify({
     // Add to array
     friends: (existing, { toReference }) => [
       ...existing,
-      toReference({ __typename: "User", id: "2" }),
+      toReference({ __typename: 'User', id: '2' }),
     ],
   },
 });
@@ -515,13 +515,13 @@ cache.modify({
 
 ```typescript
 // Remove object from cache
-cache.evict({ id: "User:1" });
+cache.evict({ id: 'User:1' });
 
 // Remove specific field
-cache.evict({ id: "User:1", fieldName: "friends" });
+cache.evict({ id: 'User:1', fieldName: 'friends' });
 
 // Remove with broadcast (trigger re-renders)
-cache.evict({ id: "User:1", broadcast: true });
+cache.evict({ id: 'User:1', broadcast: true });
 ```
 
 ## Garbage Collection
@@ -530,7 +530,7 @@ cache.evict({ id: "User:1", broadcast: true });
 
 ```typescript
 // After evicting objects, clean up dangling references
-cache.evict({ id: "User:1" });
+cache.evict({ id: 'User:1' });
 cache.gc();
 ```
 
@@ -538,7 +538,7 @@ cache.gc();
 
 ```typescript
 // Prevent objects from being garbage collected
-const release = cache.retain("User:1");
+const release = cache.retain('User:1');
 
 // Later, allow GC
 release();
@@ -555,6 +555,6 @@ const cacheContents = cache.extract();
 cache.restore(previousCacheContents);
 
 // Get identified object cache key
-const userId = cache.identify({ __typename: "User", id: "1" });
+const userId = cache.identify({ __typename: 'User', id: '1' });
 // Returns: 'User:1'
 ```

@@ -78,11 +78,11 @@ export function EditableField({
               className={cn(
                 'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs',
                 statusChip.tone === 'success' &&
-                  'text-secondary bg-emerald-50 dark:bg-emerald-900',
+                  'text-secondary bg-secondary/10 dark:bg-secondary/20',
                 statusChip.tone === 'denied' &&
-                  'text-error bg-red-50 dark:bg-red-900 dark:text-red-300',
+                  'text-error bg-error/10 dark:bg-error/20 dark:text-error',
                 (!statusChip.tone || statusChip.tone === 'neutral') &&
-                  'text-title bg-gray-100',
+                  'text-title bg-accent',
               )}
             >
               {statusChip.tone === 'success' && (
@@ -149,7 +149,7 @@ export function EditableField({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           className={cn(
-            'h-10 min-w-0 flex-1 rounded-md border-gray-200 bg-white shadow-sm',
+            'border-border h-10 min-w-0 flex-1 rounded-md bg-white shadow-sm',
             className,
           )}
         />

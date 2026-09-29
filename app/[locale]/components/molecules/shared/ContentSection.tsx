@@ -12,7 +12,7 @@ export function ContentSection({
   return (
     <section
       id={id}
-      className={`mb-5 border-b border-gray-200 pb-8 dark:border-gray-700 ${className}`}
+      className={`border-hover dark:border-chart-3 mb-5 border-b pb-8 ${className}`}
     >
       <h2 className="text-text mb-6 text-2xl font-semibold">{title}</h2>
       <div className="space-y-6">{children}</div>

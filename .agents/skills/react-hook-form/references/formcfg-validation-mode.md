@@ -44,9 +44,10 @@ function RegistrationForm() {
 }
 ```
 
-`reValidateMode` already defaults to `'onChange'`, so a field that has *failed* validation does give immediate feedback as the user corrects it — which is what people usually think they need `mode: 'onChange'` for.
+`reValidateMode` already defaults to `'onChange'`, so a field that has _failed_ validation does give immediate feedback as the user corrects it — which is what people usually think they need `mode: 'onChange'` for.
 
 **Modes worth the escalation:**
+
 - `onTouched` — validate after the first blur, then on change. The usual right answer when submit-time errors feel too late.
 - `onBlur` — validate on blur only; quieter than `onTouched` while correcting.
 - `onChange` — password-strength meters, "username is available" checks, live-computed totals. Add a comment saying which.

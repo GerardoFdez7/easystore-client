@@ -94,7 +94,7 @@ export default function SalesOverview() {
       </h1>
 
       <div className="overflow-x-auto rounded-lg shadow-sm">
-        <Table className="bg-card min-w-[600px]">
+        <Table className="bg-card min-w-150">
           <TableHeader>
             <TableRow>
               <TableHead className="text-foreground text-sm font-semibold sm:pl-5">

@@ -53,12 +53,12 @@ export const WithLightBackground: Story = {
   },
   decorators: [
     (Story) => (
-      <div className="relative h-screen w-full overflow-hidden bg-gray-100">
+      <div className="bg-background relative h-screen w-full overflow-hidden">
         <Story />
         <div className="relative z-10 flex h-full items-center justify-center">
           <div className="rounded-lg bg-black/10 p-8 text-center backdrop-blur-sm">
-            <h2 className="text-2xl font-bold text-gray-800">Light Theme</h2>
-            <p className="mt-2 text-gray-600">
+            <h2 className="text-foreground text-2xl font-bold">Light Theme</h2>
+            <p className="text-chart-3 mt-2">
               The animated background adapts to light themes with subtle opacity
               adjustments.
             </p>

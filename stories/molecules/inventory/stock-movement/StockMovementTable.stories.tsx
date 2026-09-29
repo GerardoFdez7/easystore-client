@@ -67,7 +67,7 @@ type Story = StoryObj<typeof StockMovementTable>;
 export const Default: Story = {
   args: {},
   render: (args) => (
-    <div className="w-[1200px]">
+    <div className="w-300">
       <StockMovementTable {...args} />
     </div>
   ),
@@ -81,7 +81,7 @@ export const EmptyState: Story = {
     totalRows: 0,
   },
   render: (args) => (
-    <div className="w-[1200px]">
+    <div className="w-300">
       <StockMovementTable {...args} />
     </div>
   ),
@@ -95,7 +95,7 @@ export const SinglePage: Story = {
     totalRows: 3,
   },
   render: (args) => (
-    <div className="w-[1200px]">
+    <div className="w-300">
       <StockMovementTable {...args} />
     </div>
   ),

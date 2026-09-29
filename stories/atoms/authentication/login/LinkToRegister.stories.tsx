@@ -44,7 +44,7 @@ export const InLoginForm: Story = {
               className="w-full rounded border p-2"
             />
             <Story />
-            <button className="w-full rounded bg-blue-600 p-2 text-white">
+            <button className="bg-primary text-primary-foreground w-full rounded p-2">
               Login
             </button>
           </div>

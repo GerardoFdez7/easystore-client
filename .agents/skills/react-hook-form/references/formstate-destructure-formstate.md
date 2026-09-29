@@ -7,7 +7,7 @@ tags: formstate, formState, proxy, subscription, conditional
 
 ## Read Every formState Property You Depend On During Render
 
-`formState` is a Proxy: each property has a getter that marks it subscribed the first time it is read. Subscription is established by the *read*, not by how you write it — `formState.isValid`, `const { isValid } = formState`, and destructuring in the `useForm` call are all equivalent, and all three subscribe to exactly `isValid`. (The common claim that touching the whole object "disables the optimization" is not true; the getters are per-property.)
+`formState` is a Proxy: each property has a getter that marks it subscribed the first time it is read. Subscription is established by the _read_, not by how you write it — `formState.isValid`, `const { isValid } = formState`, and destructuring in the `useForm` call are all equivalent, and all three subscribe to exactly `isValid`. (The common claim that touching the whole object "disables the optimization" is not true; the getters are per-property.)
 
 The real trap is a property that is never read during render. Read it only inside a callback, or only in a branch that doesn't run on the first render, and the getter never fires — so RHF never re-renders the component when that property changes, and the UI silently stops updating.
 

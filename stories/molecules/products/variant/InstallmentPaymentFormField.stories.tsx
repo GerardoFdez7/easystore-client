@@ -30,7 +30,7 @@ function DefaultStory() {
 
   return (
     <FormProvider {...methods}>
-      <div className="w-[400px]">
+      <div className="w-100">
         <InstallmentPaymentFormField />
       </div>
     </FormProvider>

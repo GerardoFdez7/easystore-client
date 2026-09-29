@@ -3,10 +3,76 @@
 
 @theme {
   --breakpoint-3xl: 112.5rem; /* 1800px converted to rem (1800/16 = 112.5) */
+  --font-heading: var(--font-inter);
+  --font-regular: var(--font-inter);
+  --color-text: var(--foreground);
   --spacing-control: 0.5rem;
   --spacing-page: 1.25rem;
   --spacing-section: 1.5rem;
   --spacing-card: 1.5rem;
+}
+
+@utility embla {
+  overflow: hidden;
+}
+
+@utility grid-cols-profile-section {
+  grid-template-columns: 140px 1fr;
+}
+
+@utility max-h-dialog {
+  max-height: 90vh;
+}
+
+@utility grid-cols-legal {
+  grid-template-columns: 250px minmax(0, 42rem);
+}
+
+@utility basis-thumb {
+  flex: 0 0 15%;
+}
+
+@utility basis-thumb-sm {
+  flex: 0 0 23%;
+}
+
+@utility size-logo-icon {
+  height: 10vw;
+  width: 10vw;
+}
+
+@utility text-logo-sm {
+  font-size: 6vw;
+}
+
+@utility text-logo {
+  font-size: 40px;
+}
+
+@utility h-fill-inset {
+  height: calc(100% - 1px);
+}
+
+@utility transition-tab {
+  transition-property: color, box-shadow;
+  transition-timing-function: var(--default-transition-timing-function);
+  transition-duration: var(--default-transition-duration);
+}
+
+@utility transition-header-size {
+  transition-property: width, height;
+}
+
+@utility h-drawer {
+  height: 85vh;
+}
+
+@utility grid-cols-category-row {
+  grid-template-columns: 48px 1fr auto;
+}
+
+@utility grid-cols-category-row-lg {
+  grid-template-columns: 48px 1fr auto auto 48px;
 }
 
 @custom-variant dark (&:is(.dark *));

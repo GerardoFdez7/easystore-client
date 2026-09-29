@@ -32,7 +32,7 @@ const DoneButton: React.FC<DoneButtonProps> = ({
     >
       {/* Water fill effect */}
       {isProcessing && (
-        <div className="animate-water-fill absolute inset-0 bg-gray-200/50 dark:bg-gray-700/50" />
+        <div className="animate-water-fill bg-hover/50 dark:bg-muted/50 absolute inset-0" />
       )}
       {children || (isProcessing ? t('uploading') : t('done'))}
     </Button>

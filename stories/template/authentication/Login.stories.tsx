@@ -51,7 +51,7 @@ export const LargeDesktop: Story = {
   },
   decorators: [
     (Story) => (
-      <div style={{ minWidth: '1440px', minHeight: '900px' }}>
+      <div className="min-h-225 min-w-360">
         <Story />
       </div>
     ),
@@ -76,7 +76,7 @@ export const DarkMode: Story = {
 export const HighContrast: Story = {
   decorators: [
     (Story) => (
-      <div style={{ filter: 'contrast(1.2) brightness(1.1)' }}>
+      <div className="brightness-110 contrast-125">
         <Story />
       </div>
     ),

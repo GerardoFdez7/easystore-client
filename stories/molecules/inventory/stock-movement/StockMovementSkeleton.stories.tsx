@@ -39,7 +39,7 @@ type Story = StoryObj<typeof StockMovementSkeleton>;
 export const Default: Story = {
   args: {},
   render: (args) => (
-    <div className="w-[1000px]">
+    <div className="w-250">
       <StockMovementSkeleton {...args} />
     </div>
   ),
@@ -50,7 +50,7 @@ export const WithFewerRows: Story = {
     rows: 3,
   },
   render: (args) => (
-    <div className="w-[1000px]">
+    <div className="w-250">
       <StockMovementSkeleton {...args} />
     </div>
   ),
@@ -61,7 +61,7 @@ export const WithMoreRows: Story = {
     rows: 15,
   },
   render: (args) => (
-    <div className="w-[1000px]">
+    <div className="w-250">
       <StockMovementSkeleton {...args} />
     </div>
   ),

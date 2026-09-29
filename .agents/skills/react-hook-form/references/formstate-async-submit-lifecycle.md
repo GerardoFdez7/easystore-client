@@ -71,6 +71,7 @@ function CreatePostForm() {
 ```
 
 **Key details:**
+
 - `isSubmitting` resets only when the handler **returns** (resolves). A throw leaves it `true` and the form unrecoverable
 - `isSubmitSuccessful` becomes `true` when the handler completes without throwing and without calling `setError`. Use it to gate the post-success reset
 - Calling `reset()` inside the submit handler races with React's commit of `isSubmitSuccessful`; the `useEffect` form is the documented pattern

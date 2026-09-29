@@ -19,7 +19,7 @@ type Story = StoryObj<typeof CountdownTimer>;
 export const Default: Story = {
   decorators: [
     (Story) => (
-      <div className="min-h-[400px] w-full max-w-2xl p-8">
+      <div className="min-h-100 w-full max-w-2xl p-8">
         <Story />
       </div>
     ),

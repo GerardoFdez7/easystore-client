@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { type CSSProperties } from 'react';
 import Image from 'next/image';
 import { Carousel, CarouselContent, CarouselItem } from '@shadcn/ui/carousel';
 import { Button } from '@shadcn/ui/button';
@@ -65,21 +65,19 @@ const SortableItem: React.FC<SortableItemProps> = ({
   } = useSortable({ id });
 
   const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
-  };
+    '--sortable-transform': CSS.Transform.toString(transform) ?? 'none',
+    '--sortable-transition': transition ?? 'none',
+    '--sortable-opacity': isDragging ? 0.5 : 1,
+  } as CSSProperties;
 
   return (
     <div
       ref={setNodeRef}
-      style={{
-        ...style,
-        touchAction: isEditing ? 'none' : 'auto', // Prevent default touch behaviors during editing
-      }}
+      style={style}
       className={cn(
         'relative transition-all duration-200',
-        isEditing && 'cursor-move touch-none', // Add touch-none class
+        'transform-(--sortable-transform) opacity-(--sortable-opacity) transition-(--sortable-transition)',
+        isEditing ? 'cursor-move touch-none' : 'touch-auto', // Prevent default touch behaviors during editing
         isDragging && 'z-50',
       )}
       {...attributes}
@@ -112,10 +110,10 @@ const SortableItem: React.FC<SortableItemProps> = ({
             e.stopPropagation();
             onRemoveItem(index);
           }}
-          className="absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:bg-gray-100 hover:shadow-xl"
+          className="hover:bg-background absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:shadow-xl"
           size="sm"
         >
-          <X className="h-3 w-3 text-gray-600" />
+          <X className="text-foreground h-3 w-3" />
         </Button>
       )}
 
@@ -219,7 +217,7 @@ const CarouselMedia = ({
       >
         <Carousel
           setApi={setThumbsApi}
-          className="mx-auto max-w-[240px] rounded-xl sm:max-w-xl"
+          className="mx-auto max-w-60 rounded-xl sm:max-w-xl"
           opts={{
             containScroll: 'keepSnaps',
             dragFree: !isDragging,
@@ -260,7 +258,7 @@ const CarouselMedia = ({
                     <div className="flex items-start">
                       <Separator
                         orientation="vertical"
-                        className="bg-title !h-20 sm:!h-35"
+                        className="bg-title h-20! sm:h-35!"
                         decorative={true}
                       />
                     </div>
@@ -273,10 +271,10 @@ const CarouselMedia = ({
                 <CarouselItem className="basis-auto">
                   <div
                     onClick={onAddMore}
-                    className="relative aspect-square min-w-20 flex-[0_0_15%] cursor-pointer overflow-hidden rounded-lg sm:min-w-35 sm:flex-[0_0_23%]"
+                    className="basis-thumb sm:basis-thumb-sm relative aspect-square min-w-20 cursor-pointer overflow-hidden rounded-lg sm:min-w-35"
                   >
-                    <div className="flex h-full w-full items-center justify-center border-2 border-dashed border-gray-300 transition-colors hover:border-gray-400">
-                      <Plus className="h-6 w-6 text-gray-400" />
+                    <div className="border-hover hover:border-ring flex h-full w-full items-center justify-center border-2 border-dashed transition-colors">
+                      <Plus className="text-ring h-6 w-6" />
                     </div>
                   </div>
                 </CarouselItem>

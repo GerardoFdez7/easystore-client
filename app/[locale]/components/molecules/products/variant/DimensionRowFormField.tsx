@@ -30,7 +30,7 @@ export default function DimensionsRowFormField() {
             <FormItem>
               <FormLabel
                 htmlFor="dimensions.height"
-                className="text-md font-normal"
+                className="text-base font-normal"
               >
                 {t('height')}
               </FormLabel>
@@ -62,7 +62,7 @@ export default function DimensionsRowFormField() {
             <FormItem>
               <FormLabel
                 htmlFor="dimensions.width"
-                className="text-md font-normal"
+                className="text-base font-normal"
               >
                 {t('width')}
               </FormLabel>
@@ -95,7 +95,7 @@ export default function DimensionsRowFormField() {
             <FormItem>
               <FormLabel
                 htmlFor="dimensions.length"
-                className="text-md font-normal"
+                className="text-base font-normal"
               >
                 {t('length')}
               </FormLabel>

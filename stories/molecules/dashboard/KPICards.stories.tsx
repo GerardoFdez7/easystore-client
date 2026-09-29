@@ -9,7 +9,7 @@ const meta: Meta<typeof KPICards> = {
   },
   decorators: [
     (Story) => (
-      <div style={{ width: 300 }}>
+      <div className="w-75">
         <Story />
       </div>
     ),

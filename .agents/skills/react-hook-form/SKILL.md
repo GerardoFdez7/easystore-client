@@ -10,6 +10,7 @@ Comprehensive performance optimization guide for React Hook Form applications. C
 ## When to Apply
 
 Reference these guidelines when:
+
 - Writing new forms with React Hook Form
 - Configuring useForm options (mode, defaultValues, validation)
 - Subscribing to form values with watch / useWatch / subscribe
@@ -26,15 +27,15 @@ Reference these guidelines when:
 
 ## Rule Categories by Priority
 
-| Priority | Category | Impact | Prefix |
-|----------|----------|--------|--------|
-| 1 | Form Configuration | CRITICAL | `formcfg-` |
-| 2 | Field Subscription | CRITICAL | `sub-` |
-| 3 | Controlled Components | HIGH | `ctrl-` |
-| 4 | Validation Patterns | HIGH | `valid-` |
-| 5 | State Management | MEDIUM-HIGH | `formstate-` |
-| 6 | Field Arrays | MEDIUM-HIGH | `array-` |
-| 7 | Integration Patterns | MEDIUM | `integ-` |
+| Priority | Category              | Impact      | Prefix       |
+| -------- | --------------------- | ----------- | ------------ |
+| 1        | Form Configuration    | CRITICAL    | `formcfg-`   |
+| 2        | Field Subscription    | CRITICAL    | `sub-`       |
+| 3        | Controlled Components | HIGH        | `ctrl-`      |
+| 4        | Validation Patterns   | HIGH        | `valid-`     |
+| 5        | State Management      | MEDIUM-HIGH | `formstate-` |
+| 6        | Field Arrays          | MEDIUM-HIGH | `array-`     |
+| 7        | Integration Patterns  | MEDIUM      | `integ-`     |
 
 ## Quick Reference
 

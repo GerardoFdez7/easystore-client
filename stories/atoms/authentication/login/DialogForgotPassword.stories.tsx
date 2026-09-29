@@ -14,7 +14,7 @@ function DefaultTrigger() {
 function LinkTrigger() {
   return (
     <DialogForgotPassword>
-      <button className="text-blue-600 underline hover:text-blue-800">
+      <button className="text-primary hover:text-primary underline">
         Forgot your password?
       </button>
     </DialogForgotPassword>

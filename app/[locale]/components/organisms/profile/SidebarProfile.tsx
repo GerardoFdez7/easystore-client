@@ -16,7 +16,7 @@ export default function SidebarProfile() {
 
   return (
     <aside className="mt-6 flex w-full flex-col md:mt-0 md:min-h-full md:max-w-md md:shrink-0">
-      <div className="border-b border-gray-300 md:border-none">
+      <div className="border-border border-b md:border-none">
         <BackButton />
         <MediaUploader
           multiple={false}
@@ -64,7 +64,7 @@ export default function SidebarProfile() {
         <div className="relative [&_.flex.md\:hidden]:absolute [&_.flex.md\:hidden]:right-0">
           <EditableField
             value={profile?.businessName ?? ''}
-            className="bg-background dark:bg-dark text-title flex items-center justify-center border-none !p-0 text-center !text-2xl font-bold shadow-none"
+            className="bg-background text-title flex items-center justify-center border-none !p-0 text-center !text-2xl font-bold shadow-none"
             placeholder={t('defaultName')}
             iconEditable
             saveLabel={t('save')}
@@ -92,7 +92,7 @@ export default function SidebarProfile() {
         <LogoutConfirmDialog>
           <Button
             variant="outline"
-            className="text-title h-10 w-full justify-start rounded-lg border-gray-200 bg-white px-4 shadow-sm hover:bg-gray-50"
+            className="text-title bg-card hover:bg-accent border-border h-10 w-full justify-start rounded-lg px-4 shadow-sm"
           >
             <LogOut className="mr-2 h-4 w-4" />
             {t('logOut')}
