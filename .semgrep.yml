@@ -1,0 +1,37 @@
+rules:
+  - id: easystore-no-network-in-atomic-components
+    languages: [typescript, javascript]
+    message: Network calls do not belong in atoms or molecules; use a hook/organism boundary.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          ...
+      - pattern-either:
+          - pattern: fetch(...)
+          - pattern: new XMLHttpRequest(...)
+    paths:
+      include:
+        - '/app/[locale]/components/atoms/**'
+        - '/app/[locale]/components/molecules/**'
+  - id: easystore-no-dangerous-html
+    languages: [typescript, javascript]
+    message: Review dangerouslySetInnerHTML and centralize/sanitize rich HTML.
+    severity: ERROR
+    pattern: dangerouslySetInnerHTML={...}
+  - id: easystore-no-next-router
+    languages: [typescript, javascript]
+    message: App Router code must use next/navigation instead of next/router.
+    severity: ERROR
+    pattern-regex: import\s+[^;]+\s+from\s+[\"']next/router[\"']
+  - id: easystore-no-server-secret-in-client
+    languages: [typescript, javascript]
+    message: Client modules may only read explicitly public NEXT_PUBLIC_* environment variables.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          'use client'
+          ...
+      - pattern: process.env.$NAME
+      - metavariable-regex:
+          metavariable: $NAME
+          regex: ^(?!NEXT_PUBLIC_).+$

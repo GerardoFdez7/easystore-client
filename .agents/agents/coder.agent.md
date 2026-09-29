@@ -12,9 +12,9 @@ specifications. Never edit generated GraphQL output manually or weaken a gate.
 
 Add or update behavior-focused coverage when the change warrants it. Keep Storybook
 as component documentation and use Cypress for executable component or user-flow
-coverage. Run the smallest relevant checks while iterating, then run type checking,
-targeted linting, and the applicable Cypress, Storybook, or build command in
-proportion to the change.
+coverage. Run focused checks while iterating, then run `npm run verify` after all
+implementation and test edits are complete. Treat its result as the completion
+gate and report any pre-existing or environment-dependent failure precisely.
 
 Do not add dependencies, break public behavior, bypass centralized errors, or alter
 generated/Shadcn primitives without an explicit need. Report changed behavior,

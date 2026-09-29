@@ -15,7 +15,8 @@ generic guidance already provided by specialist skills.
 2. Read `DESIGN.md` for any UI or styling change.
 3. Before writing Next.js code, read the relevant version-matched guide under
    `node_modules/next/dist/docs/`.
-4. Load only the references below that match the task.
+4. Load only the references below that match the task; use `npm run verify` as the
+   single final verification gate.
 
 ## Route the work
 
