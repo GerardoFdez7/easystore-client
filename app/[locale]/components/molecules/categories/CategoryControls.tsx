@@ -1,11 +1,11 @@
 import { memo, useCallback } from 'react';
 import Link from 'next/link';
-import { SortBy, SortOrder } from '@graphql/generated';
 import { Plus, ListTree, Edit } from 'lucide-react';
 import { Button } from '@shadcn/ui/button';
 import SearchBar from '@atoms/shared/SearchBar';
 import SortBySelect from '@atoms/shared/SortBySelect';
 import SortOrderSelect from '@atoms/shared/SortOrderSelect';
+import { SortBy, SortOrder } from '@lib/types/sort';
 
 interface CategoryControlsProps {
   searchTerm: string;

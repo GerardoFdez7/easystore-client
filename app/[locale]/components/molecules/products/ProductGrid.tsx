@@ -1,10 +1,10 @@
 import { ProductCard } from '@atoms/products/ProductCard';
 import ProductCardSkeleton from '@atoms/products/ProductCardSkeleton';
 import LoadMoreButton from '@atoms/shared/LoadMoreButton';
-import { Product } from '@graphql/generated';
+import type { ProductListItem } from '@lib/types/product';
 
 interface ProductGridProps {
-  products: Product[];
+  products: ProductListItem[];
   loading?: boolean;
   isLoadingMore?: boolean;
   limit?: number;

@@ -6,11 +6,11 @@ import {
   SelectValue,
 } from '@shadcn/ui/select';
 import { useTranslations } from 'next-intl';
-import { InputMaybe, TypeEnum } from '@graphql/generated';
+import { ProductType } from '@lib/types/product';
 
 type SelectTypeProps = {
-  value?: InputMaybe<TypeEnum>;
-  onValueChange?: (value: InputMaybe<TypeEnum>) => void;
+  value?: ProductType | null;
+  onValueChange?: (value: ProductType | null) => void;
   className?: string;
   disabled?: boolean;
 };
@@ -24,20 +24,29 @@ export default function SelectType({
   const t = useTranslations('Products');
 
   const typeOptions = [
-    { value: TypeEnum.Physical, label: t('physical') },
-    { value: TypeEnum.Digital, label: t('digital') },
+    { value: ProductType.Physical, label: t('physical') },
+    { value: ProductType.Digital, label: t('digital') },
   ];
 
   // Handle toggle functionality - deselect if same value is selected
   const handleValueChange = (selectedValue: string) => {
     if (onValueChange) {
       const newValue = selectedValue === value ? null : selectedValue;
-      onValueChange(newValue as InputMaybe<TypeEnum>);
+      if (
+        newValue === null ||
+        newValue === ProductType.Physical ||
+        newValue === ProductType.Digital
+      ) {
+        onValueChange(newValue);
+      }
     }
   };
 
   // Handle pointer down for toggle behavior
-  const handlePointerDown = (optionValue: TypeEnum, e: React.PointerEvent) => {
+  const handlePointerDown = (
+    optionValue: ProductType,
+    e: React.PointerEvent,
+  ) => {
     // If clicking the already-selected item, prevent default and clear selection
     if (value === optionValue) {
       e.preventDefault();

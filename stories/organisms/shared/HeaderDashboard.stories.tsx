@@ -1,0 +1,16 @@
+import type { Meta, StoryObj } from '@storybook/nextjs';
+import HeaderDashboard from '@organisms/shared/HeaderDashboard';
+
+const meta: Meta<typeof HeaderDashboard> = {
+  title: 'Organisms/Shared/HeaderDashboard',
+  component: HeaderDashboard,
+  parameters: {
+    layout: 'fullscreen',
+  },
+  tags: ['autodocs'],
+};
+export default meta;
+
+type Story = StoryObj<typeof HeaderDashboard>;
+
+export const Default: Story = {};

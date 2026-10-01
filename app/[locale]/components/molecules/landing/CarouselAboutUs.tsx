@@ -1,64 +1,15 @@
-import { Carousel, CarouselContent } from '@shadcn/ui/carousel';
-import ItemFeature from '@atoms/landing/ItemFeature';
-import { useTranslations } from 'next-intl';
-import { Building2, Users, Earth, Focus, Flag } from 'lucide-react';
+import { Building2, Earth, Flag, Focus, Users } from 'lucide-react';
+import LandingFeatureCarousel from '@molecules/landing/LandingFeatureCarousel';
+import type { LandingCarouselItemDefinition } from '@lib/types/landing-carousel';
 
-const landingCarouselOptions = {
-  align: 'start' as const,
-  loop: true,
-};
+const aboutUsItems = [
+  [Building2, 'foundedT', 'founded'],
+  [Users, 'managedT', 'managed'],
+  [Earth, 'headquartersT', 'headquarters'],
+  [Focus, 'focusT', 'focus'],
+  [Flag, 'missionT', 'mission'],
+] satisfies readonly LandingCarouselItemDefinition[];
 
 export default function CarouselAboutUs() {
-  const t = useTranslations('Landing');
-  const iconClass = 'text-secondary h-9 w-9';
-
-  return (
-    <div className="flex w-full flex-col items-center">
-      {/*Row 1*/}
-      <Carousel
-        className="mb-10 w-full px-4"
-        opts={landingCarouselOptions}
-        autoScroll={true}
-      >
-        <CarouselContent className="-ml-4 sm:ml-0 sm:gap-4 xl:justify-center">
-          <ItemFeature
-            icon={<Building2 className={iconClass} />}
-            title={t('foundedT')}
-            text={t('founded')}
-          />
-          <ItemFeature
-            icon={<Users className={iconClass} />}
-            title={t('managedT')}
-            text={t('managed')}
-          />
-          <ItemFeature
-            icon={<Earth className={iconClass} />}
-            title={t('headquartersT')}
-            text={t('headquarters')}
-          />
-        </CarouselContent>
-      </Carousel>
-
-      {/*Row 2*/}
-      <Carousel
-        startAtEnd
-        className="mb-10 w-full px-4"
-        opts={landingCarouselOptions}
-        autoScroll={true}
-      >
-        <CarouselContent className="-ml-4 sm:ml-0 sm:gap-4 xl:justify-center">
-          <ItemFeature
-            icon={<Focus className={iconClass} />}
-            title={t('focusT')}
-            text={t('focus')}
-          />
-          <ItemFeature
-            icon={<Flag className={iconClass} />}
-            title={t('missionT')}
-            text={t('mission')}
-          />
-        </CarouselContent>
-      </Carousel>
-    </div>
-  );
+  return <LandingFeatureCarousel items={aboutUsItems} rowSizes={[3, 2]} />;
 }

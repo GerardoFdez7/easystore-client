@@ -1,3 +1,9 @@
+import {
+  ProductSortBy as GeneratedProductSortBy,
+  TypeEnum,
+  type Product as GeneratedProduct,
+} from '@graphql/generated';
+
 export type Sustainability = {
   certification: string;
   recycledPercentage: number;
@@ -32,4 +38,12 @@ export type UploadResult = {
   message?: string;
 };
 
-export type ProductType = 'PHYSICAL' | 'DIGITAL';
+export const ProductType = TypeEnum;
+export type ProductType = TypeEnum;
+
+export const ProductSortBy = GeneratedProductSortBy;
+export type ProductSortBy = GeneratedProductSortBy;
+
+export type ProductListItem = GeneratedProduct;
+
+export type ProductStatusSummary = Pick<GeneratedProduct, 'isArchived'>;

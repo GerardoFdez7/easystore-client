@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { Button } from '@shadcn/ui/button';
 import {
   FormField,
   FormItem,
@@ -18,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@shadcn/ui/select';
-import { Trash2 } from 'lucide-react';
+import RemovableTagList from '@atoms/shared/RemovableTagList';
 
 interface TagSelectFormFieldProps<T> {
   name: string;
@@ -114,23 +113,16 @@ export default function TagSelectFormField<T>({
 
                 {/* Selected Items Display */}
                 {selectedItems.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {selectedItems.map((item, index) => (
-                      <div key={getOptionId(item)} className={tagClassName}>
-                        <span className="text-sm">{getOptionLabel(item)}</span>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="text-error hover:bg-hover hover:text-destructive h-5 w-5"
-                          onClick={() => removeItem(index)}
-                          aria-label={`${deleteAriaLabel} ${getOptionLabel(item)}`}
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
+                  <RemovableTagList
+                    items={selectedItems}
+                    getKey={getOptionId}
+                    getLabel={getOptionLabel}
+                    getDeleteAriaLabel={(item) =>
+                      `${deleteAriaLabel} ${getOptionLabel(item)}`
+                    }
+                    onRemove={removeItem}
+                    tagClassName={tagClassName}
+                  />
                 )}
               </div>
             </FormControl>

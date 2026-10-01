@@ -1,6 +1,6 @@
 import SortBySelect from '@atoms/shared/SortBySelect';
 import SortOrderSelect from '@atoms/shared/SortOrderSelect';
-import { SortOrder, SortBy } from '@graphql/generated';
+import { SortBy, SortOrder } from '@lib/types/sort';
 import { cn } from 'utils';
 
 export interface SortControlsProps {

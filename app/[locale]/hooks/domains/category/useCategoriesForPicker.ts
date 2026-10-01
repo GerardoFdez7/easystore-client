@@ -1,24 +1,24 @@
 'use client';
 
-import React, { useMemo, useState, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useQuery } from '@apollo/client/react';
 import {
   FindCategoriesForPickerDocument,
   FindCategoriesForPickerQuery,
   FindCategoriesForPickerQueryVariables,
-  SortBy,
-  SortOrder,
 } from '@graphql/generated';
+import {
+  categoryQueryOptions,
+  createCategoryPageVariables,
+  getCategoryList,
+  selectCategoryItems,
+  useCategoryPagination,
+  useCategoryResult,
+  useStableCategoryPageOptions,
+  type CategoryPageOptions,
+} from './categoryPagination';
 
-export interface UseCategoriesForPickerOptions {
-  page?: number;
-  limit?: number;
-  name?: string;
-  parentId?: string;
-  sortBy?: SortBy;
-  sortOrder?: SortOrder;
-  includeSubcategories?: boolean;
-}
+export type UseCategoriesForPickerOptions = CategoryPageOptions;
 
 type GqlCategory = NonNullable<
   FindCategoriesForPickerQuery['getAllCategories']
@@ -52,72 +52,59 @@ export function useCategoriesForPicker<T = CategoryPickerSummary>(
   opts: UseCategoriesForPickerOptions = {},
   config?: UseCategoriesForPickerConfig<T>,
 ) {
-  const [page, setPage] = useState(opts.page ?? 1);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const options = useStableCategoryPageOptions(opts);
+  const resetKey = JSON.stringify([
+    options.name,
+    options.parentId,
+    options.sortBy,
+    options.sortOrder,
+    options.includeSubcategories,
+  ]);
+  const pagination = useCategoryPagination({
+    initialPage: options.page ?? 1,
+    resetKey,
+  });
+  const { page } = pagination;
 
   const variables: FindCategoriesForPickerQueryVariables = useMemo(
-    () => ({
-      page,
-      limit: opts.limit ?? 25,
-      name: opts.name ?? '',
-      parentId: opts.parentId || null,
-      sortBy: opts.sortBy ?? SortBy.Name,
-      sortOrder: opts.sortOrder ?? SortOrder.Asc,
-      includeSubcategories: opts.includeSubcategories,
-    }),
-    [
-      page,
-      opts.limit,
-      opts.name,
-      opts.parentId,
-      opts.sortBy,
-      opts.sortOrder,
-      opts.includeSubcategories,
-    ],
+    () =>
+      createCategoryPageVariables(options, page, options.includeSubcategories),
+    [options, page],
   );
 
-  const { data, loading, error, refetch, fetchMore, networkStatus } = useQuery<
+  const query = useQuery<
     FindCategoriesForPickerQuery,
     FindCategoriesForPickerQueryVariables
   >(FindCategoriesForPickerDocument, {
     variables,
-    notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'cache-and-network',
-    errorPolicy: 'all',
+    ...categoryQueryOptions,
     context: {
       queryDeduplication: false,
     },
   });
+  const { data, fetchMore } = query;
 
-  const list = useMemo(() => {
-    const allCategories = (data?.getAllCategories?.categories ??
-      []) as GqlCategory[];
-
-    return allCategories;
-  }, [data?.getAllCategories?.categories]);
+  const list = useMemo(() => getCategoryList<GqlCategory>(data), [data]);
 
   const select = config?.select;
 
-  const items = useMemo<T[]>(() => {
-    if (select) return select(list);
-    return list.map(mapToPickerSummary) as unknown as T[];
-  }, [list, select]);
+  const items = useMemo(
+    () =>
+      selectCategoryItems(
+        list,
+        select,
+        mapToPickerSummary as (c: GqlCategory) => T,
+      ),
+    [list, select],
+  );
 
-  const handleLoadMore = useCallback(async () => {
-    const hasMore = data?.getAllCategories?.hasMore ?? false;
-    if (!hasMore || loading || isLoadingMore) return;
-
-    setIsLoadingMore(true);
-    try {
+  const fetchNextPage = useCallback(
+    async (nextPage: number) => {
       await fetchMore({
         variables: {
-          page: page + 1,
-          limit: opts.limit ?? 25,
-          name: opts.name ?? '',
-          parentId: opts.parentId || null,
-          sortBy: opts.sortBy ?? SortBy.Name,
-          sortOrder: opts.sortOrder ?? SortOrder.Asc,
-          includeSubcategories: opts.includeSubcategories ?? true,
+          ...variables,
+          page: nextPage,
+          includeSubcategories: options.includeSubcategories ?? true,
         },
         updateQuery: (prev, { fetchMoreResult }) => {
           if (!fetchMoreResult?.getAllCategories?.categories) return prev;
@@ -136,75 +123,9 @@ export function useCategoriesForPicker<T = CategoryPickerSummary>(
           };
         },
       });
-      setPage((prev) => prev + 1);
-    } catch (_error) {
-      // Error handling is managed by Apollo Client error link
-    } finally {
-      setIsLoadingMore(false);
-    }
-  }, [
-    data?.getAllCategories?.hasMore,
-    loading,
-    isLoadingMore,
-    fetchMore,
-    page,
-    opts.limit,
-    opts.name,
-    opts.parentId,
-    opts.sortBy,
-    opts.sortOrder,
-    opts.includeSubcategories,
-  ]);
-
-  // Reset page when search or filter options change
-  const resetPage = useCallback(() => {
-    setPage(1);
-  }, []);
-
-  // Reset page when options change
-  const prevOptions = useMemo(
-    () => ({
-      name: opts.name,
-      parentId: opts.parentId,
-      sortBy: opts.sortBy,
-      sortOrder: opts.sortOrder,
-      includeSubcategories: opts.includeSubcategories,
-    }),
-    [
-      opts.name,
-      opts.parentId,
-      opts.sortBy,
-      opts.sortOrder,
-      opts.includeSubcategories,
-    ],
+    },
+    [fetchMore, options.includeSubcategories, variables],
   );
 
-  // Reset page when options change (but not during load more operations)
-  React.useEffect(() => {
-    if (!isLoadingMore) {
-      setPage(1);
-    }
-  }, [
-    prevOptions.name,
-    prevOptions.parentId,
-    prevOptions.sortBy,
-    prevOptions.sortOrder,
-    prevOptions.includeSubcategories,
-    isLoadingMore,
-  ]);
-
-  return {
-    items,
-    raw: list,
-    total: data?.getAllCategories?.total ?? 0,
-    hasMore: data?.getAllCategories?.hasMore ?? false,
-    loading: loading || isLoadingMore,
-    error,
-    refetch,
-    fetchMore,
-    networkStatus,
-    handleLoadMore,
-    resetPage,
-    currentPage: page,
-  };
+  return useCategoryResult(items, list, query, pagination, fetchNextPage, true);
 }

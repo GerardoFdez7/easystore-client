@@ -1,110 +1,31 @@
-import { Carousel, CarouselContent } from '@shadcn/ui/carousel';
-import ItemFeature from '@atoms/landing/ItemFeature';
-import { useTranslations } from 'next-intl';
-import { MdCodeOff } from 'react-icons/md';
 import {
-  Tag,
-  CreditCard,
-  ChartColumnBig,
   Ban,
+  ChartColumnBig,
+  CreditCard,
   Globe,
   Landmark,
   Search,
   Sparkles,
+  Tag,
   Truck,
 } from 'lucide-react';
+import { MdCodeOff } from 'react-icons/md';
+import LandingFeatureCarousel from '@molecules/landing/LandingFeatureCarousel';
+import type { LandingCarouselItemDefinition } from '@lib/types/landing-carousel';
 
-const landingCarouselOptions = {
-  align: 'start' as const,
-  loop: true,
-};
+const featureItems = [
+  [Sparkles, 'aiIntegratedT', 'aiIntegrated'],
+  [Tag, 'customDomainsT', 'customDomains'],
+  [CreditCard, 'paymantT', 'paymant'],
+  [ChartColumnBig, 'growBussinessT', 'growBussiness'],
+  [Ban, 'zeroTransactionT', 'zeroTransaction'],
+  [Landmark, 'satIntegrationT', 'satIntegration'],
+  [MdCodeOff, 'noCodeT', 'noCode'],
+  [Globe, 'sellEverywhereT', 'sellEverywhere'],
+  [Search, 'searchEngineT', 'searchEngine', 'text-secondary h-11.5 w-11.5'],
+  [Truck, 'managedShipmentsT', 'managedShipments'],
+] satisfies readonly LandingCarouselItemDefinition[];
 
 export default function CarouselFeature() {
-  const t = useTranslations('Landing');
-  const iconClass = 'text-secondary h-9 w-9';
-
-  return (
-    <div className="flex w-full flex-col items-center">
-      {/*Row 1*/}
-      <Carousel
-        className="mb-10 w-full px-4"
-        opts={landingCarouselOptions}
-        autoScroll={true}
-      >
-        <CarouselContent className="-ml-4 sm:ml-0 sm:gap-4 xl:justify-center">
-          <ItemFeature
-            icon={<Sparkles className={iconClass} />}
-            title={t('aiIntegratedT')}
-            text={t('aiIntegrated')}
-          />
-          <ItemFeature
-            icon={<Tag className={iconClass} />}
-            title={t('customDomainsT')}
-            text={t('customDomains')}
-          />
-          <ItemFeature
-            icon={<CreditCard className={iconClass} />}
-            title={t('paymantT')}
-            text={t('paymant')}
-          />
-        </CarouselContent>
-      </Carousel>
-
-      {/*Row 2*/}
-      <Carousel
-        startAtEnd
-        className="mb-10 w-full px-4"
-        opts={landingCarouselOptions}
-        autoScroll={true}
-      >
-        <CarouselContent className="-ml-4 sm:ml-0 sm:gap-4 xl:justify-center">
-          <ItemFeature
-            icon={<ChartColumnBig className={iconClass} />}
-            title={t('growBussinessT')}
-            text={t('growBussiness')}
-          />
-          <ItemFeature
-            icon={<Ban className={iconClass} />}
-            title={t('zeroTransactionT')}
-            text={t('zeroTransaction')}
-          />
-          <ItemFeature
-            icon={<Landmark className={iconClass} />}
-            title={t('satIntegrationT')}
-            text={t('satIntegration')}
-          />
-          <ItemFeature
-            icon={<MdCodeOff className={iconClass} />}
-            title={t('noCodeT')}
-            text={t('noCode')}
-          />
-        </CarouselContent>
-      </Carousel>
-
-      {/*Row 3*/}
-      <Carousel
-        className="mb-10 w-full px-4"
-        opts={landingCarouselOptions}
-        autoScroll={true}
-      >
-        <CarouselContent className="-ml-4 sm:ml-0 sm:gap-4 xl:justify-center">
-          <ItemFeature
-            icon={<Globe className={iconClass} />}
-            title={t('sellEverywhereT')}
-            text={t('sellEverywhere')}
-          />
-          <ItemFeature
-            icon={<Search className="text-secondary h-11.5 w-11.5" />}
-            title={t('searchEngineT')}
-            text={t('searchEngine')}
-          />
-          <ItemFeature
-            icon={<Truck className={iconClass} />}
-            title={t('managedShipmentsT')}
-            text={t('managedShipments')}
-          />
-        </CarouselContent>
-      </Carousel>
-    </div>
-  );
+  return <LandingFeatureCarousel items={featureItems} rowSizes={[3, 4, 3]} />;
 }

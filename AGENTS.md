@@ -27,12 +27,12 @@ separate reasoning level, report the available model variant or capability tier
 instead. This notice applies to every delegated subagent and must not promise
 model details the platform does not expose.
 
-| Delegated task                                                            | Profile              | Model requirement                         |
-| ------------------------------------------------------------------------- | -------------------- | ----------------------------------------- |
-| Focused repository inspection, UI tracing, and evidence gathering         | `explorer.agent.md`  | Lowest capable tier                       |
-| Implementation-ready plan, architecture decision, or cross-cutting design | `architect.agent.md` | Highest available tier                    |
-| Approved implementation                                                   | `coder.agent.md`     | Mid-capability implementation tier        |
-| Reproducible failure Coder could not resolve in scope                     | `debugger.agent.md`  | Mid-to-high tier selected for the failure |
+| Delegated task                                                            | Profile              | Model requirement                                                                                              |
+| ------------------------------------------------------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Focused repository inspection, UI tracing, and evidence gathering         | `explorer.agent.md`  | Lowest capable tier (for example, GPT-5.6 Luna with low reasoning)                                             |
+| Implementation-ready plan, architecture decision, or cross-cutting design | `architect.agent.md` | Highest available tier (for example, GPT-6 Astra with high reasoning or GPT-5.6 Sol)                           |
+| Approved implementation                                                   | `coder.agent.md`     | Mid-capability tier suited to code changes (for example, GPT-5.6 Terra with medium reasoning or Claude Sonnet) |
+| Reproducible failure Coder could not resolve in scope                     | `debugger.agent.md`  | Mid-to-high tier selected for the failure                                                                      |
 
 For work that needs a plan, Orchestrator delegates Explorer, then Architect with the
 evidence brief, then Coder with the approved plan. Small, self-contained changes may

@@ -12,10 +12,9 @@ import {
   type FindWarehousesQueryVariables,
 } from '@graphql/generated';
 import { ComboboxOption } from '@shadcn/ui/combobox';
+import { mergeWarehousesById, type Warehouse } from './warehousePagination';
 
-type WarehouseType = NonNullable<
-  FindWarehousesQuery['getAllWarehouses']
->['warehouses'][0];
+type WarehouseType = Warehouse;
 
 interface UseWarehouseComboboxOptions {
   searchTerm?: string;
@@ -52,25 +51,7 @@ export const useWarehouseCombobox = (
     getItems: (data) => data?.getAllWarehouses?.warehouses || [],
     getHasMore: (data) => data?.getAllWarehouses?.hasMore || false,
     getTotal: (data) => data?.getAllWarehouses?.total || 0,
-    mergeItems: (existing: unknown[], incoming: unknown[]) => {
-      const existingWarehouses = existing as WarehouseType[];
-      const incomingWarehouses = incoming as WarehouseType[];
-
-      // Create a map of existing items by ID for efficient lookup
-      const existingMap = new Map(
-        existingWarehouses.map((item) => [item.id, item]),
-      );
-
-      // Add incoming items, avoiding duplicates
-      incomingWarehouses.forEach((item) => {
-        if (!existingMap.has(item.id)) {
-          existingMap.set(item.id, item);
-        }
-      });
-
-      // Return deduplicated array
-      return Array.from(existingMap.values());
-    },
+    mergeItems: mergeWarehousesById,
   });
 
   // Query variables

@@ -12,7 +12,7 @@ import {
 import { Button } from '@shadcn/ui/button';
 import { Input } from '@shadcn/ui/input';
 import { Plus } from 'lucide-react';
-import ArrayItemBox from '@atoms/shared/ArrayItemBox';
+import ReorderableFieldArray from '@atoms/shared/ReorderableFieldArray';
 import { useTranslations } from 'next-intl';
 import {
   handleDecimalInputChange,
@@ -127,92 +127,79 @@ export default function InstallmentPaymentFormField() {
 
               {/* Display existing installment payments */}
               {fields.length > 0 && (
-                <div className="border-border bg-muted/10 rounded-lg border p-8">
-                  <div className="space-y-3">
-                    {fields.map((field, index) => (
-                      <ArrayItemBox
-                        key={field.id}
-                        index={index}
-                        canMoveUp={index > 0}
-                        canMoveDown={index < fields.length - 1}
-                        onMoveUp={() => moveInstallmentPayment(index, 'up')}
-                        onMoveDown={() => moveInstallmentPayment(index, 'down')}
-                        onDelete={() => remove(index)}
-                        t={t}
-                      >
-                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                          <div>
-                            <FormLabel>{t('months')}</FormLabel>
-                            <FormField
-                              control={control}
-                              name={`installmentPayments.${index}.months`}
-                              render={({ field: fieldProps }) => (
-                                <FormItem>
-                                  <FormControl>
-                                    <Input
-                                      {...fieldProps}
-                                      inputMode="numeric"
-                                      type="number"
-                                      placeholder={t('monthsPlaceholder')}
-                                      onChange={(e) => {
-                                        const value = sanitizeNumericInput(
-                                          e.target.value,
-                                        );
-                                        fieldProps.onChange(value);
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                          </div>
-                          <div>
-                            <FormLabel>{t('interestRate')}</FormLabel>
-                            <div className="relative">
-                              <span className="pointer-events-none absolute inset-y-0 right-3 my-1.5 flex items-center rounded-md border px-2 font-medium">
-                                %
-                              </span>
-                              <FormField
-                                control={control}
-                                name={`installmentPayments.${index}.interestRate`}
-                                render={({ field: fieldProps }) => (
-                                  <FormItem>
-                                    <FormControl>
-                                      <Input
-                                        {...fieldProps}
-                                        inputMode="decimal"
-                                        type="decimal"
-                                        placeholder={t(
-                                          'interestRatePlaceholder',
-                                        )}
-                                        onChange={(e) => {
-                                          handleDecimalInputChange(
-                                            e.target.value,
-                                            (value) =>
-                                              fieldProps.onChange(value),
-                                          );
-                                        }}
-                                        onBlur={(e) => {
-                                          handleDecimalInputBlur(
-                                            e.target.value,
-                                            (value) =>
-                                              fieldProps.onChange(value),
-                                          );
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                            </div>
-                          </div>
+                <ReorderableFieldArray
+                  items={fields}
+                  onMove={moveInstallmentPayment}
+                  onRemove={remove}
+                  t={t}
+                  renderItem={(index) => (
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      <div>
+                        <FormLabel>{t('months')}</FormLabel>
+                        <FormField
+                          control={control}
+                          name={`installmentPayments.${index}.months`}
+                          render={({ field: fieldProps }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Input
+                                  {...fieldProps}
+                                  inputMode="numeric"
+                                  type="number"
+                                  placeholder={t('monthsPlaceholder')}
+                                  onChange={(e) => {
+                                    const value = sanitizeNumericInput(
+                                      e.target.value,
+                                    );
+                                    fieldProps.onChange(value);
+                                  }}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div>
+                        <FormLabel>{t('interestRate')}</FormLabel>
+                        <div className="relative">
+                          <span className="pointer-events-none absolute inset-y-0 right-3 my-1.5 flex items-center rounded-md border px-2 font-medium">
+                            %
+                          </span>
+                          <FormField
+                            control={control}
+                            name={`installmentPayments.${index}.interestRate`}
+                            render={({ field: fieldProps }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Input
+                                    {...fieldProps}
+                                    inputMode="decimal"
+                                    type="decimal"
+                                    placeholder={t('interestRatePlaceholder')}
+                                    onChange={(e) => {
+                                      handleDecimalInputChange(
+                                        e.target.value,
+                                        (value) => fieldProps.onChange(value),
+                                      );
+                                    }}
+                                    onBlur={(e) => {
+                                      handleDecimalInputBlur(
+                                        e.target.value,
+                                        (value) => fieldProps.onChange(value),
+                                      );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
                         </div>
-                      </ArrayItemBox>
-                    ))}
-                  </div>
-                </div>
+                      </div>
+                    </div>
+                  )}
+                />
               )}
 
               {fields.length === 0 && (

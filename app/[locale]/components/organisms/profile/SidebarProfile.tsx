@@ -2,7 +2,7 @@
 
 import { DescriptionEditor } from '@molecules/profile/DescriptionEditor';
 import { useTranslations } from 'next-intl';
-import MediaUploader from '@organisms/shared/MediaUploader';
+import MediaUploader from '@molecules/shared/MediaUploader';
 import { Button } from '@shadcn/ui/button';
 import { useProfile } from '@hooks/domains/tenant/useProfile';
 import LogoutConfirmDialog from '@atoms/shared/LogoutConfirmDialog';

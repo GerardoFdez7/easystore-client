@@ -10,13 +10,13 @@ import {
 import { Card, CardContent, CardTitle } from '@shadcn/ui/card';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Product } from '@graphql/generated';
 import ProductStatus from '@atoms/products/ProductStatus';
 import BadgeTag from '@atoms/shared/BadgeTag';
 import { formatPriceWithCommasAndDots } from '@lib/utils/input-formatters';
+import type { ProductListItem } from '@lib/types/product';
 
 interface ProductCardProps {
-  product: Product;
+  product: ProductListItem;
 }
 
 export function ProductCard({ product }: ProductCardProps) {

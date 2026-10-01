@@ -88,10 +88,7 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
     return null;
   };
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (!files || files.length === 0) return;
-
+  const processSelectedFiles = (files: FileList) => {
     const selectedFiles = Array.from(files);
 
     // Check if adding these files would exceed the limit
@@ -127,6 +124,13 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
     }
   };
 
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    processSelectedFiles(files);
+  };
+
   const handleDragOver = (event: React.DragEvent) => {
     event.preventDefault();
     event.stopPropagation();
@@ -150,45 +154,7 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
 
     const files = event.dataTransfer.files;
     if (files && files.length > 0) {
-      const selectedFiles = Array.from(files);
-
-      // Check if adding these files would exceed the limit
-      if (maxItems && currentItemCount + selectedFiles.length > maxItems) {
-        const allowedCount = maxItems - currentItemCount;
-        console.log('Toast should show (drop):', {
-          maxItems,
-          currentItemCount,
-          selectedFilesLength: selectedFiles.length,
-          allowedCount,
-        });
-        toast.warning(t('imageLimitExceeded'), {
-          description: t('imageLimitExceededDescription', {
-            maxItems,
-            currentCount: currentItemCount,
-            allowedCount: allowedCount > 0 ? allowedCount : 0,
-          }),
-        });
-        return;
-      }
-
-      const validFiles: File[] = [];
-      let hasErrors = false;
-
-      for (const file of selectedFiles) {
-        const validationError = validateFile(file);
-        if (validationError) {
-          setInternalError(validationError);
-          onValidationError?.(validationError);
-          hasErrors = true;
-          break;
-        }
-        validFiles.push(file);
-      }
-
-      if (!hasErrors) {
-        setInternalError(null);
-        onFileSelect(validFiles);
-      }
+      processSelectedFiles(files);
     }
   };
 

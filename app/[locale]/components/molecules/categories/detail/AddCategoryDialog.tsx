@@ -25,7 +25,7 @@ import {
 } from '@shadcn/ui/form';
 import { Separator } from '@shadcn/ui/separator';
 import FormActions from '@molecules/shared/FormActions';
-import MediaUploader from '@organisms/shared/MediaUploader';
+import MediaUploader from '@molecules/shared/MediaUploader';
 import type { MultipleMediaUploaderRef } from '@molecules/shared/MultipleMediaUploader';
 import type { ProcessedData } from '@lib/types/media';
 import { useForm, useWatch } from 'react-hook-form';

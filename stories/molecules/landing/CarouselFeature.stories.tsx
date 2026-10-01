@@ -4,8 +4,8 @@ import CarouselFeature from '@molecules/landing/CarouselFeature';
 
 const messages = {
   Landing: {
-    unlimetedProductsT: 'Unlimited products',
-    unlimetedProducts: 'No hard caps on catalog size.',
+    aiIntegratedT: 'AI integrated',
+    aiIntegrated: 'Create product content faster.',
     customDomainsT: 'Custom domains',
     customDomains: 'Bring your own domain easily.',
     paymantT: 'Payments',
@@ -14,8 +14,8 @@ const messages = {
     growBussiness: 'Insights and analytics built-in.',
     zeroTransactionT: '0% fees',
     zeroTransaction: 'Keep more of what you earn.',
-    manageEaseT: 'Manage with ease',
-    manageEase: 'Centralized dashboard for operations.',
+    satIntegrationT: 'SAT integration',
+    satIntegration: 'Keep tax workflows connected.',
     noCodeT: 'No-code',
     noCode: 'Launch without writing code.',
     sellEverywhereT: 'Sell everywhere',

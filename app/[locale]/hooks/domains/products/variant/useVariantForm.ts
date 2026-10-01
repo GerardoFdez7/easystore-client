@@ -13,6 +13,7 @@ import {
   ConditionEnum,
   MediaTypeEnum,
   TypeEnum,
+  type AddVariantToProductInput,
   type Variant,
 } from '@graphql/generated';
 
@@ -139,6 +140,47 @@ const createVariantFormSchema = (
   });
 
 type VariantFormData = z.infer<ReturnType<typeof createVariantFormSchema>>;
+
+function normalizeCondition(condition: VariantFormData['condition']) {
+  switch (condition) {
+    case 'USED':
+      return ConditionEnum.Used;
+    case 'REFURBISHED':
+      return ConditionEnum.Refurbished;
+    default:
+      return ConditionEnum.New;
+  }
+}
+
+function buildSharedVariantInput(
+  data: VariantFormData,
+): Omit<AddVariantToProductInput, 'dimension' | 'weight'> {
+  return {
+    price: typeof data.price === 'string' ? parseFloat(data.price) : data.price,
+    condition: normalizeCondition(data.condition),
+    attributes: data.attributes.map(({ key, value }) => ({ key, value })),
+    sku: data.codes.sku,
+    upc: data.codes.upc || null,
+    ean: data.codes.ean || null,
+    isbn: data.codes.isbn || null,
+    barcode: data.codes.barcode || null,
+    personalizationOptions: data.personalizationOptions,
+    installmentPayments: data.installmentPayments.map(
+      ({ months, interestRate }) => ({ months, interestRate }),
+    ),
+    warranties: data.warranties.map(({ months, coverage, instructions }) => ({
+      months,
+      coverage,
+      instructions,
+    })),
+    variantCover: data.variantCover || undefined,
+    variantMedia: data.variantMedia.map((url, index) => ({
+      url,
+      mediaType: MediaTypeEnum.Image,
+      position: index + 1,
+    })),
+  };
+}
 
 interface UseVariantFormProps {
   productId: string;
@@ -341,23 +383,8 @@ export function useVariantForm({
 
         if (isNew) {
           // Create new variant for existing product
-          const input = {
-            price:
-              typeof data.price === 'string'
-                ? parseFloat(data.price)
-                : data.price,
-            condition:
-              data.condition === 'NEW'
-                ? ConditionEnum.New
-                : data.condition === 'USED'
-                  ? ConditionEnum.Used
-                  : data.condition === 'REFURBISHED'
-                    ? ConditionEnum.Refurbished
-                    : ConditionEnum.New,
-            attributes: data.attributes.map((attr) => ({
-              key: attr.key,
-              value: attr.value,
-            })),
+          const input: AddVariantToProductInput = {
+            ...buildSharedVariantInput(data),
             ...(data.dimensions && {
               dimension: {
                 height: data.dimensions.height ?? 0,
@@ -371,27 +398,6 @@ export function useVariantForm({
                 : typeof data.weight === 'string'
                   ? parseFloat(data.weight)
                   : data.weight,
-            sku: data.codes.sku,
-            upc: data.codes.upc || null,
-            ean: data.codes.ean || null,
-            isbn: data.codes.isbn || null,
-            barcode: data.codes.barcode || null,
-            personalizationOptions: data.personalizationOptions,
-            installmentPayments: data.installmentPayments.map((payment) => ({
-              months: payment.months,
-              interestRate: payment.interestRate,
-            })),
-            warranties: data.warranties.map((warranty) => ({
-              months: warranty.months,
-              coverage: warranty.coverage,
-              instructions: warranty.instructions,
-            })),
-            variantCover: data.variantCover || undefined,
-            variantMedia: data.variantMedia.map((url, index) => ({
-              url,
-              mediaType: MediaTypeEnum.Image,
-              position: index + 1,
-            })),
           };
 
           const result = await addVariant(productId, input);
@@ -413,50 +419,14 @@ export function useVariantForm({
           return;
         }
 
-        const variantInput = {
-          price:
-            typeof data.price === 'string'
-              ? parseFloat(data.price)
-              : data.price,
-          condition:
-            data.condition === 'NEW'
-              ? ConditionEnum.New
-              : data.condition === 'USED'
-                ? ConditionEnum.Used
-                : data.condition === 'REFURBISHED'
-                  ? ConditionEnum.Refurbished
-                  : ConditionEnum.New,
-          attributes: data.attributes.map((attr) => ({
-            key: attr.key,
-            value: attr.value,
-          })),
+        const variantInput: AddVariantToProductInput = {
+          ...buildSharedVariantInput(data),
           dimension: {
             height: data.dimensions?.height ?? 0,
             width: data.dimensions?.width ?? 0,
             length: data.dimensions?.length ?? 0,
           },
           weight: data.weight ?? null,
-          sku: data.codes.sku,
-          upc: data.codes.upc || null,
-          ean: data.codes.ean || null,
-          isbn: data.codes.isbn || null,
-          barcode: data.codes.barcode || null,
-          personalizationOptions: data.personalizationOptions,
-          installmentPayments: data.installmentPayments.map((payment) => ({
-            months: payment.months,
-            interestRate: payment.interestRate,
-          })),
-          warranties: data.warranties.map((warranty) => ({
-            months: warranty.months,
-            coverage: warranty.coverage,
-            instructions: warranty.instructions,
-          })),
-          variantCover: data.variantCover || undefined,
-          variantMedia: data.variantMedia.map((url, index) => ({
-            url,
-            mediaType: MediaTypeEnum.Image,
-            position: index + 1,
-          })),
         };
 
         const result = await updateVariant(productId, [variantInput]);

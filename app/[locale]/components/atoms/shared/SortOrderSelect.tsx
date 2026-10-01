@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl';
 import { ArrowUpWideNarrow } from 'lucide-react';
-import { SortOrder } from '@graphql/generated';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@shadcn/ui/tooltip';
+import { SortOrder } from '@lib/types/sort';
 
 type SortOrderSelectProps = {
   value?: SortOrder | null;

@@ -3,18 +3,18 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { useLogin } from '@hooks/domains/authentication/useLogin';
-import { AccountTypeEnum } from '@graphql/generated';
 import { Form } from '@shadcn/ui/form';
 import ButtonLoadable from '@atoms/shared/ButtonLoadable';
 import LoginFields from '@molecules/authentication/login/LoginFields';
 import LinkToRegister from '@atoms/authentication/login/LinkToRegister';
+import { AccountType } from '@lib/types/authentication';
 
 interface LoginFormProps {
-  accountType?: AccountTypeEnum;
+  accountType?: AccountType;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({
-  accountType = AccountTypeEnum.Tenant,
+  accountType = AccountType.Tenant,
 }) => {
   const t = useTranslations('Login');
   const { form, handleSubmit, loading } = useLogin(accountType);

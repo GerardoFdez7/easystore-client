@@ -1,18 +1,52 @@
-import { Skeleton } from '@shadcn/ui/skeleton';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@shadcn/ui/table';
-import { cn } from '@lib/utils';
+import TableSkeleton, {
+  skeletonCell,
+  stackedSkeletonCell,
+  type TableSkeletonColumnSpec,
+} from '@molecules/shared/TableSkeleton';
 
 interface InventoryTableSkeletonProps {
   className?: string;
   rows?: number;
 }
+
+const centeredHeader = {
+  cellClassName: 'text-center',
+  wrapperClassName: 'flex items-center justify-center',
+};
+
+const centeredBody = {
+  cellClassName: 'text-center',
+  wrapperClassName: 'flex justify-center',
+};
+
+const columns: readonly TableSkeletonColumnSpec[] = [
+  {
+    header: skeletonCell('h-4 w-4 rounded-none', { cellClassName: 'pl-2' }),
+    body: skeletonCell('h-4 w-4 rounded-none'),
+  },
+  {
+    header: skeletonCell('h-4 w-20', centeredHeader),
+    body: stackedSkeletonCell(['h-4 w-32', 'h-4 w-24'], {
+      wrapperClassName: 'flex flex-col gap-1',
+    }),
+  },
+  {
+    header: skeletonCell('h-4 w-12'),
+    body: skeletonCell('h-4 w-20'),
+  },
+  {
+    header: skeletonCell('h-4 w-24', centeredHeader),
+    body: skeletonCell('h-4 w-12', centeredBody),
+  },
+  {
+    header: skeletonCell('h-4 w-24', centeredHeader),
+    body: skeletonCell('h-4 w-12', centeredBody),
+  },
+  {
+    header: skeletonCell('h-4 w-32', centeredHeader),
+    body: skeletonCell('h-4 w-20', centeredBody),
+  },
+];
 
 /**
  * InventoryTableSkeleton - A skeleton component that matches the InventoryTable structure
@@ -26,101 +60,11 @@ export default function InventoryTableSkeleton({
   rows = 25,
 }: InventoryTableSkeletonProps) {
   return (
-    <div className={cn('w-full', className)}>
-      <Table>
-        <TableHeader className="text-lg">
-          <TableRow>
-            <TableHead className="pl-2">
-              <Skeleton className="h-4 w-4 rounded-none" />
-            </TableHead>
-            <TableHead className="text-center">
-              <div className="flex items-center justify-center">
-                <Skeleton className="h-4 w-20" />
-              </div>
-            </TableHead>
-            <TableHead>
-              <Skeleton className="h-4 w-12" />
-            </TableHead>
-            <TableHead className="text-center">
-              <div className="flex items-center justify-center">
-                <Skeleton className="h-4 w-24" />
-              </div>
-            </TableHead>
-            <TableHead className="text-center">
-              <div className="flex items-center justify-center">
-                <Skeleton className="h-4 w-24" />
-              </div>
-            </TableHead>
-            <TableHead className="text-center">
-              <div className="flex items-center justify-center">
-                <Skeleton className="h-4 w-32" />
-              </div>
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {Array.from({ length: rows }).map((_, index) => (
-            <TableRow key={index}>
-              <TableCell>
-                <Skeleton className="h-4 w-4 rounded-none" />
-              </TableCell>
-              {/* Product and variant */}
-              <TableCell>
-                <div className="flex flex-col gap-1">
-                  <Skeleton className="h-4 w-32" />
-                  <Skeleton className="h-4 w-24" />
-                </div>
-              </TableCell>
-              {/* SKU */}
-              <TableCell>
-                <Skeleton className="h-4 w-20" />
-              </TableCell>
-              {/* Available */}
-              <TableCell className="text-center">
-                <div className="flex justify-center">
-                  <Skeleton className="h-4 w-12" />
-                </div>
-              </TableCell>
-              {/* Reserved */}
-              <TableCell className="text-center">
-                <div className="flex justify-center">
-                  <Skeleton className="h-4 w-12" />
-                </div>
-              </TableCell>
-              {/* Replenishment Date */}
-              <TableCell className="text-center">
-                <div className="flex justify-center">
-                  <Skeleton className="h-4 w-20" />
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      {/* TablePagination Skeleton */}
-      <div className="text-muted-foreground mt-4 flex items-center justify-between px-2 text-left">
-        {/* Left side - Page info skeleton */}
-        <div className="flex-1 text-left">
-          <Skeleton className="h-4 w-32 md:w-40" />
-        </div>
-
-        {/* Right side - Pagination buttons skeleton */}
-        <div className="flex items-center space-x-2">
-          {/* Desktop: Show all 4 buttons */}
-          <div className="hidden items-center space-x-2 md:flex">
-            <Skeleton className="h-8 w-8" />
-            <Skeleton className="h-8 w-8" />
-            <Skeleton className="h-8 w-8" />
-            <Skeleton className="h-8 w-8" />
-          </div>
-
-          {/* Mobile: Show only 2 buttons */}
-          <div className="flex items-center space-x-2 md:hidden">
-            <Skeleton className="h-8 w-8" />
-            <Skeleton className="h-8 w-8" />
-          </div>
-        </div>
-      </div>
-    </div>
+    <TableSkeleton
+      className={className}
+      columns={columns}
+      headerClassName="text-lg"
+      rows={rows}
+    />
   );
 }

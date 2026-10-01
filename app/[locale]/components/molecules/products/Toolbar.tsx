@@ -5,22 +5,18 @@ import ButtonViewMode from '@atoms/products/ButtonViewMode';
 import SelectType from '@atoms/products/SelectType';
 import SearchBar from '@atoms/shared/SearchBar';
 import MultiSelectComboboxCategory from '@atoms/products/MultiSelectComboboxCategory';
-import TabFilterProducts from '@atoms/products/TabFilterProducts';
+import TabFilterProducts from '@molecules/products/TabFilterProducts';
 import ProductSortBySelect from '@atoms/shared/ProductSortBySelect';
 import SortOrderSelect from '@atoms/shared/SortOrderSelect';
 import { FilterType } from '@lib/types/filter-mode-mapper';
 import { useTranslations } from 'next-intl';
 import { memo } from 'react';
-import {
-  InputMaybe,
-  TypeEnum,
-  ProductSortBy,
-  SortOrder,
-} from '@graphql/generated';
+import { ProductSortBy, type ProductType } from '@lib/types/product';
+import { SortOrder } from '@lib/types/sort';
 
 interface ProductsToolbarProps {
-  typeFilter?: InputMaybe<TypeEnum>;
-  onTypeFilterChange?: (value: InputMaybe<TypeEnum>) => void;
+  typeFilter?: ProductType | null;
+  onTypeFilterChange?: (value: ProductType | null) => void;
   categoryFilter?: string[];
   onCategoryFilterChange?: (value: string[]) => void;
   viewMode: string;

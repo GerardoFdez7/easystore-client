@@ -4,13 +4,11 @@ import { useCallback } from 'react';
 import { useApolloClient } from '@apollo/client/react';
 import { useTranslations } from 'next-intl';
 import {
-  FindAllVariantsToCreateStockDocument,
-  type FindAllVariantsToCreateStockQuery,
-  type FindAllVariantsToCreateStockQueryVariables,
-  ProductSortBy,
-  SortOrder,
-} from '@graphql/generated';
-import type { SelectedVariant } from './useVariantPrefetch';
+  fetchVariantLookup,
+  matchesVariantAttribute,
+  toSelectedVariant,
+  type SelectedVariant,
+} from './variantLookup';
 
 type Options = {
   initialVariantId?: string;
@@ -42,33 +40,9 @@ export function useResolveVariantId(opts: Options) {
       // 1) Resolver por SKU exacto
       const skuToUse = selectedVariant?.sku ?? variantSku ?? '';
       if (skuToUse && skuToUse.trim()) {
-        const variables: FindAllVariantsToCreateStockQueryVariables = {
-          page: 1,
-          limit: 25,
-          name: undefined,
-          sortBy: ProductSortBy.Name,
-          sortOrder: SortOrder.Asc,
-        };
+        const { variants } = await fetchVariantLookup(apollo);
 
-        const res = await apollo.query<
-          FindAllVariantsToCreateStockQuery,
-          FindAllVariantsToCreateStockQueryVariables
-        >({
-          query: FindAllVariantsToCreateStockDocument,
-          variables,
-          fetchPolicy: 'network-only',
-        });
-
-        const products = res.data?.getAllProducts?.products ?? [];
-        const allVariants =
-          products.flatMap((p) =>
-            (p.variants ?? []).map((v) => ({
-              ...v,
-              productName: p.name,
-            })),
-          ) ?? [];
-
-        const matchesBySku = allVariants.filter(
+        const matchesBySku = variants.filter(
           (v) => (v.sku ?? '').toLowerCase() === skuToUse.toLowerCase(),
         );
 
@@ -77,14 +51,8 @@ export function useResolveVariantId(opts: Options) {
         }
         if (matchesBySku.length > 1) {
           if (variantAttributeFilter?.key && variantAttributeFilter?.value) {
-            const narrowed = matchesBySku.filter((v) =>
-              (v.attributes ?? []).some(
-                (a) =>
-                  a.key?.toLowerCase() ===
-                    variantAttributeFilter.key.toLowerCase() &&
-                  a.value?.toLowerCase() ===
-                    variantAttributeFilter.value.toLowerCase(),
-              ),
+            const narrowed = matchesBySku.filter((variant) =>
+              matchesVariantAttribute(variant, variantAttributeFilter),
             );
             if (narrowed.length === 1) return narrowed[0].id;
           }
@@ -92,12 +60,7 @@ export function useResolveVariantId(opts: Options) {
         }
         if (!selectedVariant) {
           const first = matchesBySku[0];
-          setSelectedVariant({
-            id: first.id,
-            sku: first.sku,
-            productName: first.productName,
-            attributes: first.attributes ?? [],
-          });
+          setSelectedVariant(toSelectedVariant(first, first.productName));
         }
         return matchesBySku[0].id;
       }
@@ -108,24 +71,7 @@ export function useResolveVariantId(opts: Options) {
         throw new Error(t('missingVariantIdentifier'));
       }
 
-      const variables: FindAllVariantsToCreateStockQueryVariables = {
-        page: 1,
-        limit: 25,
-        name,
-        sortBy: ProductSortBy.Name,
-        sortOrder: SortOrder.Asc,
-      };
-
-      const res = await apollo.query<
-        FindAllVariantsToCreateStockQuery,
-        FindAllVariantsToCreateStockQueryVariables
-      >({
-        query: FindAllVariantsToCreateStockDocument,
-        variables,
-        fetchPolicy: 'network-only',
-      });
-
-      const products = res.data?.getAllProducts?.products ?? [];
+      const { products } = await fetchVariantLookup(apollo, name);
       const exactProducts = products.filter(
         (p) => (p.name ?? '').toLowerCase() === name.toLowerCase(),
       );
@@ -146,14 +92,8 @@ export function useResolveVariantId(opts: Options) {
       }
 
       if (variantAttributeFilter?.key && variantAttributeFilter?.value) {
-        const narrowed = variants.filter((v) =>
-          (v.attributes ?? []).some(
-            (a) =>
-              a.key?.toLowerCase() ===
-                variantAttributeFilter.key.toLowerCase() &&
-              a.value?.toLowerCase() ===
-                variantAttributeFilter.value.toLowerCase(),
-          ),
+        const narrowed = variants.filter((variant) =>
+          matchesVariantAttribute(variant, variantAttributeFilter),
         );
         if (narrowed.length === 1) return narrowed[0].id;
         if (narrowed.length > 1) {
@@ -164,12 +104,7 @@ export function useResolveVariantId(opts: Options) {
       if (variants.length === 1) {
         const v = variants[0];
         if (!selectedVariant) {
-          setSelectedVariant({
-            id: v.id,
-            sku: v.sku,
-            productName: exactProducts[0].name,
-            attributes: v.attributes ?? [],
-          });
+          setSelectedVariant(toSelectedVariant(v, exactProducts[0].name));
         }
         return v.id;
       }

@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Check, ChevronsUpDown, Loader2 } from 'lucide-react';
 import { cn } from 'utils';
 import { Button } from './button';
 import {
@@ -13,7 +14,6 @@ import {
   CommandList,
 } from './command';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
-import LoadMoreButton from '@atoms/shared/LoadMoreButton';
 
 export interface ComboboxOption {
   value: string;
@@ -44,6 +44,34 @@ export interface ComboboxProps {
   onLoadMore?: () => void;
   loadMoreText?: string;
   loadingText?: string;
+}
+
+function ComboboxLoadMoreButton({
+  isLoading,
+  onClick,
+}: {
+  isLoading: boolean;
+  onClick: () => void;
+}) {
+  const t = useTranslations('Shared');
+
+  return (
+    <div className="flex justify-center p-2">
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={onClick}
+        disabled={isLoading}
+        className="text-xs"
+      >
+        {isLoading ? (
+          <Loader2 className="h-3 w-3 animate-spin" />
+        ) : (
+          t('loadMore')
+        )}
+      </Button>
+    </div>
+  );
 }
 
 function Combobox({
@@ -182,13 +210,9 @@ function Combobox({
               ))}
             </CommandGroup>
             {hasMore && onLoadMore && (
-              <LoadMoreButton
+              <ComboboxLoadMoreButton
                 onClick={onLoadMore}
                 isLoading={isLoadingMore}
-                size="sm"
-                iconSize="sm"
-                containerClassName="p-2"
-                className="text-xs"
               />
             )}
           </CommandList>

@@ -43,8 +43,6 @@ const preview: Preview = {
         items: [
           { value: 'en', title: 'English' },
           { value: 'es', title: 'Español' },
-          { value: 'fr', title: 'Français' },
-          { value: 'it', title: 'Italiano' },
           { value: 'pt', title: 'Português' },
         ],
       },

@@ -1,0 +1,37 @@
+import { Separator } from '@shadcn/ui/separator';
+import type { Meta, StoryObj } from '@storybook/nextjs';
+
+const meta: Meta<typeof Separator> = {
+  title: 'Shadcn/UI/Separator',
+  component: Separator,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    orientation: {
+      control: 'radio',
+      options: ['horizontal', 'vertical'],
+    },
+    className: { control: 'text' },
+  },
+  decorators: [
+    (Story) => {
+      return (
+        <div className="flex h-50 items-center justify-center">
+          <Story />
+        </div>
+      );
+    },
+  ],
+};
+export default meta;
+
+type Story = StoryObj<typeof Separator>;
+
+export const Vertical: Story = {
+  args: {
+    orientation: 'vertical',
+    className: 'h-40 w-2 bg-gray-400 rounded',
+  },
+};

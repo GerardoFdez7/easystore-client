@@ -3,19 +3,12 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useApolloClient } from '@apollo/client/react';
 import {
-  FindAllVariantsToCreateStockDocument,
-  type FindAllVariantsToCreateStockQuery,
-  type FindAllVariantsToCreateStockQueryVariables,
-  ProductSortBy,
-  SortOrder,
-} from '@graphql/generated';
+  fetchVariantLookup,
+  toSelectedVariant,
+  type SelectedVariant,
+} from './variantLookup';
 
-export type SelectedVariant = {
-  id: string;
-  sku?: string | null;
-  productName?: string;
-  attributes?: Array<{ key: string; value: string }>;
-};
+export type { SelectedVariant } from './variantLookup';
 
 type Options = {
   initialVariantId?: string;
@@ -48,36 +41,19 @@ export function useVariantPrefetch(opts: Options) {
         if (selectedVariant) return;
         if (!initialVariantId && !variantSku && !productName) return;
 
-        const variables: FindAllVariantsToCreateStockQueryVariables = {
-          page: 1,
-          limit: 25,
-          name: productName || undefined,
-          sortBy: ProductSortBy.Name,
-          sortOrder: SortOrder.Asc,
-        };
-
-        const res = await apollo.query<
-          FindAllVariantsToCreateStockQuery,
-          FindAllVariantsToCreateStockQueryVariables
-        >({
-          query: FindAllVariantsToCreateStockDocument,
-          variables,
-          fetchPolicy: 'network-only',
-        });
-
-        const products = res.data?.getAllProducts?.products ?? [];
-        const allVariants = products.flatMap((p) =>
-          (p.variants ?? []).map((v) => ({ ...v, productName: p.name })),
+        const { products, variants } = await fetchVariantLookup(
+          apollo,
+          productName || undefined,
         );
 
         let found: SelectedVariant | null = null;
 
         if (initialVariantId) {
-          found = allVariants.find((v) => v.id === initialVariantId) ?? null;
+          found = variants.find((v) => v.id === initialVariantId) ?? null;
         }
         if (!found && variantSku) {
           found =
-            allVariants.find(
+            variants.find(
               (v) => (v.sku ?? '').toLowerCase() === variantSku.toLowerCase(),
             ) ?? null;
         }
@@ -89,12 +65,7 @@ export function useVariantPrefetch(opts: Options) {
             const vs = exact[0].variants ?? [];
             if (vs.length === 1) {
               const v = vs[0];
-              found = {
-                id: v.id,
-                sku: v.sku ?? null,
-                attributes: v.attributes ?? [],
-                productName: exact[0].name,
-              };
+              found = toSelectedVariant(v, exact[0].name);
             }
           }
         }

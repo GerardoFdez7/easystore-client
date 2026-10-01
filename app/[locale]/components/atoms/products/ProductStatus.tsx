@@ -1,8 +1,12 @@
 import { Badge } from '@shadcn/ui/badge';
-import { Product } from '@graphql/generated';
 import { useTranslations } from 'next-intl';
+import type { ProductStatusSummary } from '@lib/types/product';
 
-export default function ProductStatus({ product }: { product: Product }) {
+export default function ProductStatus({
+  product,
+}: {
+  product: ProductStatusSummary;
+}) {
   const t = useTranslations('Products');
   return (
     <Badge

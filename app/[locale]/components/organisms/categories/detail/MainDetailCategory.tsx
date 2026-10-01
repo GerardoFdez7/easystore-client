@@ -39,7 +39,7 @@ import {
 } from '@shadcn/ui/form';
 import SaveButton from '@atoms/shared/SaveButton';
 import Options from '@molecules/shared/Options';
-import MediaUploader from '@organisms/shared/MediaUploader';
+import MediaUploader from '@molecules/shared/MediaUploader';
 import CategoryPicker, {
   type CategoryItem,
   type NewCategoryItem,

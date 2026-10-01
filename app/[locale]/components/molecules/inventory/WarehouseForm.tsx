@@ -2,12 +2,6 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import type {
-  CreateWarehouseMutationVariables,
-  UpdateWarehouseMutationVariables,
-  FindWarehousesQuery,
-  CreateAddressMutationVariables,
-} from '@graphql/generated';
 import { useAddressManagement } from '@hooks/domains/address';
 import { useWarehouseForm } from '@hooks/domains/inventory';
 import { Plus, Trash2 } from 'lucide-react';
@@ -44,17 +38,17 @@ import {
 import AddressForm from '@molecules/inventory/AddressForm';
 import AddressCombobox from '@molecules/inventory/AddressCombobox';
 import FormActions from '@molecules/shared/FormActions';
-
-type WarehouseType = NonNullable<
-  FindWarehousesQuery['getAllWarehouses']
->['warehouses'][0];
+import type {
+  AddressInput,
+  CreateWarehouseInput,
+  UpdateWarehouseInput,
+  WarehouseListItem,
+} from '@lib/types/inventory';
 
 interface WarehouseFormProps {
-  warehouse?: WarehouseType;
+  warehouse?: WarehouseListItem;
   onSubmit?: (
-    data:
-      | CreateWarehouseMutationVariables['input']
-      | UpdateWarehouseMutationVariables['input'],
+    data: CreateWarehouseInput | UpdateWarehouseInput,
   ) => Promise<void>;
   onCancel?: () => void;
   onDelete?: (warehouseId: string) => Promise<boolean>;
@@ -92,9 +86,7 @@ export default function WarehouseForm({
   // Use external onSubmit if provided, otherwise use the hook's handleSubmit
   const finalHandleSubmit = onSubmit || handleSubmit;
 
-  const handleCreateAddress = async (
-    addressInput: CreateAddressMutationVariables['input'],
-  ) => {
+  const handleCreateAddress = async (addressInput: AddressInput) => {
     const newAddress = await createAddress(addressInput);
     if (newAddress) {
       form.setValue('addressId', newAddress.id);

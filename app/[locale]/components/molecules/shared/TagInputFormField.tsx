@@ -11,7 +11,8 @@ import {
   FormMessage,
 } from '@shadcn/ui/form';
 import { useFormContext } from 'react-hook-form';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus } from 'lucide-react';
+import RemovableTagList from '@atoms/shared/RemovableTagList';
 
 interface TagInputFormFieldProps {
   name: string;
@@ -44,7 +45,7 @@ export default function TagInputFormField({
       control={control}
       name={name}
       render={({ field }) => {
-        const tags = field.value || [];
+        const tags: string[] = field.value || [];
 
         const addTag = () => {
           if (newTag.trim()) {
@@ -100,23 +101,14 @@ export default function TagInputFormField({
                 )}
 
                 {tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {tags.map((val: string, i: number) => (
-                      <div key={i} className={tagClassName}>
-                        <span className="text-sm">{val}</span>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="text-error hover:bg-hover hover:text-destructive h-5 w-5"
-                          onClick={() => deleteTag(i)}
-                          aria-label={deleteAriaLabel}
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
+                  <RemovableTagList
+                    items={tags}
+                    getKey={(_, index) => index}
+                    getLabel={(tag) => tag}
+                    getDeleteAriaLabel={() => deleteAriaLabel}
+                    onRemove={deleteTag}
+                    tagClassName={tagClassName}
+                  />
                 )}
               </div>
             </FormControl>

@@ -368,6 +368,7 @@
     "minFilesRequired": "At least {minItems} media files are required",
     "mediaUploaderConfigError": "Media uploader configuration error",
     "uploadFailed": "Upload failed",
+    "authenticationFailed": "Authentication failed",
     "uploading": "Uploading...",
     "cover": "Cover",
     "imageLimitExceeded": "Image limit exceeded",

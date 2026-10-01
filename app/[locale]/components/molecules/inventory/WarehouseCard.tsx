@@ -2,16 +2,11 @@ import { useTranslations } from 'next-intl';
 import { Warehouse, MapPin } from 'lucide-react';
 import { Card, CardContent } from '@shadcn/ui/card';
 import { Label } from '@shadcn/ui/label';
-
-import type { FindWarehousesQuery } from '@graphql/generated';
-
-type WarehouseType = NonNullable<
-  FindWarehousesQuery['getAllWarehouses']
->['warehouses'][0];
+import type { WarehouseListItem } from '@lib/types/inventory';
 
 interface WarehouseCardProps {
-  warehouse: WarehouseType;
-  onEdit: (warehouse: WarehouseType) => void;
+  warehouse: WarehouseListItem;
+  onEdit: (warehouse: WarehouseListItem) => void;
 }
 
 export default function WarehouseCard({
@@ -24,7 +19,7 @@ export default function WarehouseCard({
     onEdit(warehouse);
   };
 
-  const formatAddress = (warehouse: WarehouseType) => {
+  const formatAddress = (warehouse: WarehouseListItem) => {
     const parts = [
       warehouse.addressLine1,
       warehouse.city,

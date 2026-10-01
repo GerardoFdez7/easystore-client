@@ -9,14 +9,15 @@ import {
   TableHeader,
   TableRow,
 } from '@shadcn/ui/table';
-import { Product, ProductSortBy, SortOrder } from '@graphql/generated';
 import { ProductTableRow } from '@atoms/products/ProductTableRow';
 import TablePagination from '@molecules/shared/TablePagination';
 import SortableHeader from '@atoms/shared/SortableHeader';
 import { useTranslations } from 'next-intl';
+import { ProductSortBy, type ProductListItem } from '@lib/types/product';
+import { SortOrder } from '@lib/types/sort';
 
 interface ProductTableProps {
-  products: Product[];
+  products: ProductListItem[];
   selectedProducts: string[];
   onSelectProduct: (productId: string, checked: boolean) => void;
   onSelectAll: (checked: boolean) => void;

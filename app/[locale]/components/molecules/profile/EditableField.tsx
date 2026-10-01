@@ -9,6 +9,53 @@ import { cn } from '@lib/utils/cn';
 
 type Chip = { label: string; tone?: 'success' | 'neutral' | 'denied' };
 
+interface EditActionProps {
+  actionLabel?: string;
+  iconEditable: boolean;
+  isEditing: boolean;
+  saveLabel: string;
+  onEdit: () => void;
+  onSave: () => void;
+}
+
+function EditAction({
+  actionLabel,
+  iconEditable,
+  isEditing,
+  saveLabel,
+  onEdit,
+  onSave,
+}: EditActionProps) {
+  if (actionLabel) {
+    return (
+      <Button
+        type="button"
+        variant="link"
+        className="text-secondary h-9 px-2 underline-offset-2 hover:underline"
+        onClick={isEditing ? onSave : onEdit}
+      >
+        {isEditing ? saveLabel : actionLabel}
+      </Button>
+    );
+  }
+
+  if (!iconEditable) return null;
+
+  const ActionIcon = isEditing ? SaveIcon : Edit2;
+
+  return (
+    <Button
+      type="button"
+      variant="link"
+      className="text-secondary h-9 px-2"
+      onClick={isEditing ? onSave : onEdit}
+      aria-label={isEditing ? 'Save' : 'Edit'}
+    >
+      <ActionIcon className="h-4 w-4" />
+    </Button>
+  );
+}
+
 export function EditableField({
   label,
   value,
@@ -98,43 +145,14 @@ export function EditableField({
 
         {/* Mobile: Show button next to label */}
         <div className="flex md:hidden">
-          {actionLabel ? (
-            isEditing ? (
-              <Button
-                type="button"
-                variant="link"
-                className="text-secondary h-9 px-2 underline-offset-2 hover:underline"
-                onClick={save}
-              >
-                {saveLabel}
-              </Button>
-            ) : (
-              <Button
-                type="button"
-                variant="link"
-                className="text-secondary h-9 px-2 underline-offset-2 hover:underline"
-                onClick={startEditing}
-              >
-                {actionLabel}
-              </Button>
-            )
-          ) : (
-            iconEditable && (
-              <Button
-                type="button"
-                variant="link"
-                className="text-secondary h-9 px-2"
-                onClick={isEditing ? save : startEditing}
-                aria-label={isEditing ? 'Save' : 'Edit'}
-              >
-                {isEditing ? (
-                  <SaveIcon className="h-4 w-4" />
-                ) : (
-                  <Edit2 className="h-4 w-4" />
-                )}
-              </Button>
-            )
-          )}
+          <EditAction
+            actionLabel={actionLabel}
+            iconEditable={iconEditable}
+            isEditing={isEditing}
+            saveLabel={saveLabel}
+            onEdit={startEditing}
+            onSave={save}
+          />
         </div>
       </div>
 
@@ -156,43 +174,14 @@ export function EditableField({
 
         {/* Desktop: Show button next to input */}
         <div className="hidden w-auto md:flex">
-          {actionLabel ? (
-            isEditing ? (
-              <Button
-                type="button"
-                variant="link"
-                className="text-secondary h-9 px-2 underline-offset-2 hover:underline"
-                onClick={save}
-              >
-                {saveLabel}
-              </Button>
-            ) : (
-              <Button
-                type="button"
-                variant="link"
-                className="text-secondary h-9 px-2 underline-offset-2 hover:underline"
-                onClick={startEditing}
-              >
-                {actionLabel}
-              </Button>
-            )
-          ) : (
-            iconEditable && (
-              <Button
-                type="button"
-                variant="link"
-                className="text-secondary h-9 px-2"
-                onClick={isEditing ? save : startEditing}
-                aria-label={isEditing ? 'Save' : 'Edit'}
-              >
-                {isEditing ? (
-                  <SaveIcon className="h-4 w-4" />
-                ) : (
-                  <Edit2 className="h-4 w-4" />
-                )}
-              </Button>
-            )
-          )}
+          <EditAction
+            actionLabel={actionLabel}
+            iconEditable={iconEditable}
+            isEditing={isEditing}
+            saveLabel={saveLabel}
+            onEdit={startEditing}
+            onSave={save}
+          />
         </div>
       </div>
     </div>
