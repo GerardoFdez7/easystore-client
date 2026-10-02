@@ -1,4 +1,5 @@
-import type { Preview } from '@storybook/nextjs';
+import type { Preview } from '@storybook/nextjs-vite';
+import { mswLoader } from 'msw-storybook-addon/csf3';
 import { withNextIntl } from './decorators/withNextIntl';
 import { withNextThemes } from './decorators/withNextThemes';
 import { withApollo } from './decorators/withApollo';
@@ -33,6 +34,8 @@ const preview: Preview = {
     },
   },
   decorators: [withApollo, withAuth, withNextIntl, withNextThemes],
+  // mswLoader() creates and initializes the browser worker for CSF 3 stories.
+  loaders: [mswLoader()],
   globalTypes: {
     locale: {
       name: 'Locale',

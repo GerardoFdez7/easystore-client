@@ -12,7 +12,7 @@ capability, write the plan under `./plans` as Markdown.
 
 Name affected routes and UI states, component ownership and atomic layer,
 Server/Client boundaries, props and generated contracts, hooks, GraphQL/error flow,
-translations, Storybook/Cypress coverage, risks, and verification. Use Mermaid only
+translations, Storybook coverage, risks, and verification. Use Mermaid only
 when it materially clarifies the design. Never estimate time.
 
 When working directly with the user, request approval only for decisions or side

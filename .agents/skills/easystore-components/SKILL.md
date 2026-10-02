@@ -1,6 +1,6 @@
 ---
 name: easystore-components
-description: Build, refactor, review, or document EasyStore frontend components and their hooks, GraphQL data flow, localized errors, Storybook stories, and Cypress coverage. Use for UI work in easystore-client; use generic component skills alone outside this repository.
+description: Build, refactor, review, or document EasyStore frontend components and their hooks, GraphQL data flow, localized errors, and Storybook stories. Use for UI work in easystore-client; use generic component skills alone outside this repository.
 ---
 
 # EasyStore Components
@@ -25,8 +25,8 @@ generic guidance already provided by specialist skills.
   [references/component-architecture.md](references/component-architecture.md).
 - For hooks, GraphQL operations, Apollo usage, forms, and centralized errors, read
   [references/data-and-errors.md](references/data-and-errors.md).
-- For reusable-component documentation and fixtures, read
-  [references/storybook.md](references/storybook.md).
+- For reusable-component documentation, executable interactions, and network
+  fixtures, read [references/storybook.md](references/storybook.md).
 - Before handing off an implementation, read
   [references/verification.md](references/verification.md).
 

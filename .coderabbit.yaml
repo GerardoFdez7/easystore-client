@@ -45,8 +45,6 @@ reviews:
     - '!build/**'
     - '!coverage/**'
     - '!test-results/**'
-    - '!cypress/screenshots/**'
-    - '!cypress/videos/**'
     - '!storybook-static/**'
     - '!**/*.snap'
     - '!**/*generated*.ts'
@@ -147,7 +145,7 @@ reviews:
           Enforce AGENTS.md and .agents/skills/easystore-components with their applicable
           references: semantic component ownership and reuse, explicit public types,
           generated GraphQL contracts, centralized localized errors, and React Hook Form
-          plus Zod form conventions. Require Storybook states, Cypress scenarios, mocks,
+          plus Zod form conventions. Require Storybook states, test scenarios, mocks,
           and observable assertions only when changed behavior or risk warrants them.
           Do not repeat automated checks for syntax, tokens, naming, story presence, or
           deterministic architecture rules. Treat weakening quality scripts, exclusions,
@@ -269,13 +267,6 @@ reviews:
         error, disabled, selected, and overflow states when relevant; accessible markup;
         realistic typed mocks; and global decorators. Request additions only for changed
         reusable behavior or visual risk, not as a mechanical presence requirement.
-
-    - path: 'cypress/**/*'
-      instructions: |
-        Review critical user scenarios, observable user-facing assertions, deterministic
-        setup, scoped mocks, isolation, and regression coverage proportional to behavior
-        risk. Reject implementation-detail assertions and flaky time, ordering, or shared
-        state dependencies.
 
     - path: 'DESIGN.md'
       instructions: |

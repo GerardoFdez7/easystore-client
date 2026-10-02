@@ -2,8 +2,7 @@
 
 EasyStore Client is the multilingual web application for creating and managing
 e-commerce stores. It uses Next.js 16 App Router, React 19, TypeScript, Tailwind CSS
-4, Shadcn/Radix, next-intl, Apollo Client/GraphQL, React Hook Form, Zod, Storybook,
-and Cypress.
+4, Shadcn/Radix, next-intl, Apollo Client/GraphQL, React Hook Form, Zod, Storybook.
 
 Project-specific component work is governed by
 `.agents/skills/easystore-components/SKILL.md`; use the narrower installed skills it

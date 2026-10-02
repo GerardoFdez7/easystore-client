@@ -29,7 +29,7 @@ Describe las pruebas que has realizado para asegurar la calidad y corrección de
 
 * **Pruebas Automatizadas:**
     * [ ] Pruebas unitarias (Jest/RTL) añadidas/actualizadas para componentes/hooks.
-    * [ ] Pruebas de integración (Playwright/Cypress) añadidas/actualizadas para flujos clave.
+    * [ ] Pruebas de integración (Playwright) añadidas/actualizadas para flujos clave.
     * Detalles sobre pruebas específicas ejecutadas:
         * [Ej: `npm run test:unit src/components/UserProfileCard`]
         * [Ej: `npm run test:e2e -- --spec=login-flow.spec.ts`]

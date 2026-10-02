@@ -7,12 +7,11 @@ relevant version-matched guide under `node_modules/next/dist/docs/`.
 For UI, component, hook, Storybook, GraphQL-client, or frontend error-handling work,
 load and follow `.agents/skills/easystore-components/SKILL.md` plus only the narrower
 skills it routes to for the affected concerns. Treat `DESIGN.md`, TypeScript, ESLint,
-GraphQL Code Generator, Storybook, Cypress, and existing architecture as executable
+GraphQL Code Generator, Storybook, and existing architecture as executable
 specifications. Never edit generated GraphQL output manually or weaken a gate.
 
 Add or update behavior-focused coverage when the change warrants it. Keep Storybook
-as component documentation and use Cypress for executable component or user-flow
-coverage. Run focused checks while iterating, then run `npm run verify` after all
+as component documentation. Run focused checks while iterating, then run `npm run verify` after all
 implementation and test edits are complete. Treat its result as the completion
 gate and report any pre-existing or environment-dependent failure precisely.
 
