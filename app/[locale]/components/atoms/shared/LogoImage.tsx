@@ -6,7 +6,7 @@ type LogoImageProps = Omit<ImageProps, 'src' | 'alt'> & {
 };
 
 export default function LogoImage({
-  src = '/logo.webp',
+  src = '/logo.svg',
   alt = 'EasyStore Logo',
   ...props
 }: LogoImageProps) {

@@ -619,7 +619,7 @@ All buttons come from one `cva` definition (`button.tsx`). Shared base: `inline-
 ### Brand & Identity
 
 - **`Logo`**: an interactive button with the logo mark (60 × 64) and the "EasyStore" wordmark. The wordmark is `text-title`, `font-extrabold`, 40px by default (`text-logo`); under 580px both mark and wordmark scale with viewport width. Clicking always scrolls smoothly to the top and then, if `redirectTo` is set, navigates there. Passing a `text-*` class in `className` overrides the wordmark size and neutralises the mark's fixed size.
-- **`LogoImage`**: the mark alone (`/logo.webp`, `object-contain`) with an optional `src` and `alt` override. Use where only the mark is wanted (favicons, compact sidebar, auth cards).
+- **`LogoImage`**: the mark alone (`/logo.svg`, `object-contain`) with an optional `src` and `alt` override. Use where only the mark is wanted (favicons, compact sidebar, auth cards).
 - Never recolour, outline, rotate or crop the logo mark.
 
 ### Signature Components

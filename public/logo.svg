@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 544" role="img" aria-label="EasyStore cart logo">
-  <!-- The handle, diagonal frame and lower chassis are one continuous support. -->
-  <path fill="none" stroke="#9D3FE0" stroke-linecap="round" stroke-linejoin="round" stroke-width="45" d="M46 83h48c20 0 31.5 10.5 35.5 30.5L167 337c4.3 25.7 16.8 42.9 38.5 52"/>
-  <path fill="#9D3FE0" fill-rule="evenodd" d="M149 143h288c16.3 0 27.3 12.2 24.5 29.1l-23.8 135.3c-4.3 24.3-15.5 37.6-39.7 37.6H202.5c-11.7 0-19.4-7.4-21.7-21.2L144 146.5c-.4-2 1.1-3.5 5-3.5Zm65 55h166c15.8 0 15.8 23.8 0 23.8H214c-15.9 0-15.9-23.8 0-23.8Zm10.7 64.2h140.6c15.8 0 15.8 20.8 0 20.8H224.7c-15.8 0-15.8-20.8 0-20.8Z"/>
-  <!-- This overlaps the diagonal support, so the base is visibly attached to the basket. -->
-  <rect x="194" y="369" width="230" height="41" rx="20.5" fill="#9D3FE0"/>
-  <!-- Circular donut wheels: both the exterior and hub use true circles. -->
-  <path fill="#9D3FE0" fill-rule="evenodd" d="M211 405a55 55 0 1 1 0 110 55 55 0 0 1 0-110Zm0 35a20 20 0 1 0 0 40 20 20 0 0 0 0-40Zm160-35a55 55 0 1 1 0 110 55 55 0 0 1 0-110Zm0 35a20 20 0 1 0 0 40 20 20 0 0 0 0-40Z"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="544" viewBox="14 17.9 94.9 100.8" preserveAspectRatio="xMidYMid meet" role="img" aria-label="EasyStore alternative cart logo">
+  <g fill="none" stroke="#9D3FE0" stroke-linecap="round" stroke-linejoin="round">
+    <!-- A compact upper cart with its basket continuously braced into a wide chassis. -->
+    <path class="logo-cart" style="--logo-dash-length: 210" stroke-width="6" d="M22 32h12v10h62l-6 35H38l5 9h45" />
+    <!-- Ring wheels preserve the open centers on a transparent canvas. -->
+    <circle class="logo-wheel" style="--logo-dash-length: 51" cx="51" cy="103" r="8" stroke-width="5" />
+    <circle class="logo-wheel" style="--logo-dash-length: 51" cx="80" cy="103" r="8" stroke-width="5" />
+  </g>
 </svg>

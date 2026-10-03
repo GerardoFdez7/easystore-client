@@ -34,7 +34,7 @@ const Logo = ({ redirectTo, className }: LogoProps) => {
       aria-label={t('logoLabel')}
     >
       <Image
-        src={'/logo.webp'}
+        src={'/logo.svg'}
         alt={t('logoAlt')}
         width={60}
         height={64}

@@ -12,7 +12,7 @@ const meta: Meta<typeof LogoImage> = {
     layout: 'centered',
   },
   component: LogoImage,
-  args: { src: '/logo.webp', alt: 'Image', width: 40, height: 40 },
+  args: { src: '/logo.svg', alt: 'Image', width: 40, height: 40 },
 };
 
 export default meta;
@@ -21,6 +21,6 @@ type Story = StoryObj<typeof LogoImage>;
 
 export const Default: Story = {
   args: {
-    src: '/logo.webp',
+    src: '/logo.svg',
   },
 };
