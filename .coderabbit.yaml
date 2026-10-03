@@ -139,7 +139,7 @@ reviews:
           proper names and brands, established standards or protocol names, and external
           API or schema fields that must preserve their contract. Do not flag ordinary
           technical terms, generated files, or code that is outside the changed scope.
-      - name: 'Frontend conventions and risk-proportionate coverage'
+      - name: 'Frontend conventions and risk-aware coverage'
         mode: 'error'
         instructions: >-
           Enforce AGENTS.md and .agents/skills/easystore-components with their applicable
