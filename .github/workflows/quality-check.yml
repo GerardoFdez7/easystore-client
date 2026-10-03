@@ -36,6 +36,9 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Build
+        run: npm run build
+
       - name: Lint
         run: npm run lint
 
@@ -44,11 +47,6 @@ jobs:
 
       - name: Test architecture
         run: npm run architecture:test
-
-      - name: Test Storybook
-        run: npm run test:storybook:ci
-        env:
-          NEXT_PUBLIC_GRAPHQL_URI: http://localhost:3001/gql
 
       - name: Check architecture
         run: npm run architecture
@@ -59,8 +57,10 @@ jobs:
       - name: Check duplication
         run: npm run duplication
 
-      - name: Build
-        run: npm run build
+      - name: Test Storybook
+        run: npm run test:storybook:ci
+        env:
+          NEXT_PUBLIC_GRAPHQL_URI: http://localhost:3001/gql
 
       - name: Comment PR on failure
         if: failure()
