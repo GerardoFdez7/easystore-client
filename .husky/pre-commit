@@ -15,4 +15,4 @@ if [ -n "${1:-}" ] && [ -f "$1" ]; then
     reject_ai_coauthor "$1"
 fi
 
-npx lint-staged && npm run test-errors
+ npm run typecheck && npx lint-staged &&  npm run test-errors 
