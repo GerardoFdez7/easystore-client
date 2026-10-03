@@ -445,7 +445,7 @@ export default function MainDetailCategory({
         deleteTitle={tCategory('title')}
         deleteDescription={tCategory('description')}
       />
-      <main className="mx-4 flex max-w-3xl justify-center lg:mx-auto lg:w-full">
+      <div className="mx-4 flex max-w-3xl justify-center lg:mx-auto lg:w-full">
         <div className="relative w-full">
           <section className="flex flex-col gap-4">
             <Form {...form}>
@@ -599,7 +599,7 @@ export default function MainDetailCategory({
             </Form>
           </section>
         </div>
-      </main>
+      </div>
     </>
   );
 }

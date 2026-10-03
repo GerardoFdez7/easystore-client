@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   Field,
   FieldDescription,
@@ -47,6 +48,15 @@ export const ProfileFields: Story = {
       </FieldGroup>
     </FieldSet>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByLabelText('Store name')).toHaveValue(
+      'EasyStore Market',
+    );
+    await storybookExpect(canvas.getByLabelText('Support email')).toHaveValue(
+      'support@example.com',
+    );
+  },
 };
 
 export const Invalid: Story = {
@@ -57,4 +67,14 @@ export const Invalid: Story = {
       <FieldError>Store name must contain at least two characters.</FieldError>
     </Field>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByLabelText('Store name')).toHaveAttribute(
+      'aria-invalid',
+      'true',
+    );
+    await storybookExpect(canvas.getByRole('alert')).toHaveTextContent(
+      'Store name must contain at least two characters.',
+    );
+  },
 };

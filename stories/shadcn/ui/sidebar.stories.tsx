@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   SidebarProvider,
   Sidebar,
@@ -12,6 +13,10 @@ import {
 import { Home, Settings, User } from 'lucide-react';
 
 const meta: Meta<typeof Sidebar> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByText('Owner Name')).toBeInTheDocument();
+  },
   title: 'Shadcn/UI/Sidebar',
   component: Sidebar,
   parameters: {

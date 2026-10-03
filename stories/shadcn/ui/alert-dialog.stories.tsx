@@ -1,4 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import {
+  expect as storybookExpect,
+  screen,
+  userEvent,
+  within,
+} from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -13,6 +19,13 @@ import {
 import { Button } from '@shadcn/ui/button';
 
 const meta: Meta<typeof AlertDialog> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Open Alert' }));
+    await storybookExpect(
+      await screen.findByRole('alertdialog', { name: 'Are you sure?' }),
+    ).toHaveTextContent('This action cannot be undone.');
+  },
   title: 'Shadcn/UI/AlertDialog',
   component: AlertDialog,
   parameters: {

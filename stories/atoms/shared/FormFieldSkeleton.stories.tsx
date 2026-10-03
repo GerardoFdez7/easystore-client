@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import FormFieldSkeleton from '@atoms/shared/FormFieldSkeleton';
 
 const meta: Meta<typeof FormFieldSkeleton> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('status', { name: 'Loading form field' }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/FormFieldSkeleton',
   component: FormFieldSkeleton,
   parameters: { layout: 'centered' },
@@ -38,4 +45,11 @@ export const ThreeRows: Story = {
       <FormFieldSkeleton />
     </>
   ),
+  play: async ({ canvasElement }) => {
+    await storybookExpect(
+      within(canvasElement).getAllByRole('status', {
+        name: 'Loading form field',
+      }),
+    ).toHaveLength(3);
+  },
 };

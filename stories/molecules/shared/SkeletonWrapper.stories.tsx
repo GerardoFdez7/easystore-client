@@ -1,8 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import SkeletonWrapper from '@molecules/shared/SkeletonWrapper';
 import WarehouseCombobox from '@molecules/inventory/WarehouseCombobox';
 
 const meta: Meta<typeof SkeletonWrapper> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('status', { name: 'Loading content' }),
+    ).toBeInTheDocument();
+  },
   title: 'Molecules/Shared/SkeletonWrapper',
   component: SkeletonWrapper,
   parameters: {

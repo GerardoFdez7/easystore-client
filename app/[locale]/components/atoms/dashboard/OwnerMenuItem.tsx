@@ -24,7 +24,7 @@ export default function OwnerMenuItem({
       onClick={onClick}
       onSelect={onSelect}
     >
-      <Icon className="h-4 w-4" />
+      <Icon className="h-4 w-4" aria-hidden="true" />
       {label}
     </DropdownMenuItem>
   );

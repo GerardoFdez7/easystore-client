@@ -281,7 +281,7 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
               (newCat) => newCat.id === c.id,
             );
             return (
-              <article
+              <div
                 key={c.id}
                 className={cn(
                   'border-border/30 grid-cols-category-row grid items-center gap-3 border-b px-4 py-3 last:border-none',
@@ -291,14 +291,19 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
                   isNewCategory && 'bg-muted/50', // Visual indicator for new categories
                 )}
                 role="listitem"
-                aria-label={`Subcategory: ${c.name}${isNewCategory ? ' (new)' : ''}`}
+                aria-label={t(
+                  isNewCategory ? 'subcategoryNewLabel' : 'subcategoryLabel',
+                  {
+                    name: c.name,
+                  },
+                )}
               >
                 <div className="flex items-center justify-center">
                   <div className="border-border/20 bg-muted/30 relative h-10 w-10 overflow-hidden rounded-lg border">
                     {c.cover ? (
                       <Image
                         src={c.cover}
-                        alt={`${c.name} category cover`}
+                        alt={t('categoryCoverAlt', { name: c.name })}
                         fill
                         className="object-cover transition-transform duration-200 hover:scale-105"
                         sizes="40px"
@@ -307,7 +312,7 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
                       <div
                         className="bg-muted flex h-full w-full items-center justify-center"
                         role="img"
-                        aria-label={`Default icon for ${c.name}`}
+                        aria-label={t('defaultIconFor', { name: c.name })}
                       >
                         <Dices
                           className="text-muted-foreground h-4 w-4"
@@ -351,7 +356,7 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
                   tooltip={t('removeRelation')}
                   onRemove={() => handleRemove(c.id)}
                 />
-              </article>
+              </div>
             );
           })}
         </div>

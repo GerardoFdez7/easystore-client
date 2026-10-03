@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { CSSProperties } from 'react';
 import { Skeleton } from '@shadcn/ui/skeleton';
 
@@ -15,8 +16,13 @@ export default function FormFieldSkeleton({
   inputHeight = 40,
   className,
 }: Props) {
+  const t = useTranslations('Shared');
   return (
-    <div className={cx('mb-6', className)}>
+    <div
+      className={cx('mb-6', className)}
+      role="status"
+      aria-label={t('loadingFormField')}
+    >
       <div className={cx('mb-2', labelWidth)}>
         <Skeleton className="h-4 w-full rounded" />
       </div>

@@ -1,4 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import {
+  expect as storybookExpect,
+  fn,
+  userEvent,
+  waitFor,
+} from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { ProductsToolbar } from '@molecules/products/Toolbar';
 import { TypeEnum } from '@graphql/generated';
 import { FilterType } from '@lib/types/filter-mode-mapper';
@@ -90,36 +96,73 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     typeFilter: null,
-    onTypeFilterChange: () => {},
+    onTypeFilterChange: fn(),
     categoryFilter: [],
-    onCategoryFilterChange: () => {},
+    onCategoryFilterChange: fn(),
     viewMode: 'grid',
-    onViewModeToggle: () => {},
+    onViewModeToggle: fn(),
     searchTerm: '',
-    onSearch: () => {},
+    onSearch: fn(),
     selectedFilter: 'All' as FilterType,
-    setSelectedFilter: () => {},
+    setSelectedFilter: fn(),
     selectedProducts: [],
     isArchived: false,
-    onDeleteComplete: () => {},
+    onDeleteComplete: fn(),
+  },
+  play: async ({ canvas, args }) => {
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Create Product' }),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByRole('tab', { name: 'All' }),
+    ).toHaveAttribute('aria-selected', 'true');
+
+    await userEvent.type(
+      canvas.getByRole('textbox', { name: 'Search Products' }),
+      'phone',
+    );
+    await waitFor(() =>
+      storybookExpect(args.onSearch).toHaveBeenCalledWith('phone'),
+    );
+
+    await userEvent.click(
+      canvas.getByRole('button', { name: 'Switch to table view' }),
+    );
+    await storybookExpect(args.onViewModeToggle).toHaveBeenCalledTimes(1);
+
+    await userEvent.click(canvas.getByRole('tab', { name: 'Archived' }));
+    await storybookExpect(args.setSelectedFilter).toHaveBeenCalledWith(
+      'Archived',
+    );
   },
 };
 
 export const WithFilters: Story = {
   args: {
     typeFilter: TypeEnum.Physical,
-    onTypeFilterChange: () => {},
+    onTypeFilterChange: fn(),
     categoryFilter: ['electronics'],
-    onCategoryFilterChange: () => {},
+    onCategoryFilterChange: fn(),
     viewMode: 'table',
-    onViewModeToggle: () => {},
+    onViewModeToggle: fn(),
     searchTerm: 'laptop',
-    onSearch: () => {},
+    onSearch: fn(),
     selectedFilter: 'Actives' as FilterType,
-    setSelectedFilter: () => {},
+    setSelectedFilter: fn(),
     selectedProducts: [],
     isArchived: false,
-    onDeleteComplete: () => {},
+    onDeleteComplete: fn(),
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Search Products' }),
+    ).toHaveValue('laptop');
+    await storybookExpect(
+      canvas.getByRole('tab', { name: 'Actives' }),
+    ).toHaveAttribute('aria-selected', 'true');
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Switch to grid view' }),
+    ).toBeInTheDocument();
   },
   parameters: {
     docs: {
@@ -136,33 +179,47 @@ export const WithSearch: Story = {
     categoryFilter: [],
     viewMode: 'table',
     searchTerm: 'product name',
-    onTypeFilterChange: () => {},
-    onCategoryFilterChange: () => {},
-    onViewModeToggle: () => {},
-    onSearch: () => {},
+    onTypeFilterChange: fn(),
+    onCategoryFilterChange: fn(),
+    onViewModeToggle: fn(),
+    onSearch: fn(),
     selectedFilter: 'All' as FilterType,
-    setSelectedFilter: () => {},
+    setSelectedFilter: fn(),
     selectedProducts: [],
     isArchived: false,
-    onDeleteComplete: () => {},
+    onDeleteComplete: fn(),
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Search Products' }),
+    ).toHaveValue('product name');
   },
 };
 
 export const TableView: Story = {
   args: {
     typeFilter: null,
-    onTypeFilterChange: () => {},
+    onTypeFilterChange: fn(),
     categoryFilter: [],
-    onCategoryFilterChange: () => {},
+    onCategoryFilterChange: fn(),
     viewMode: 'table',
-    onViewModeToggle: () => {},
+    onViewModeToggle: fn(),
     searchTerm: '',
-    onSearch: () => {},
+    onSearch: fn(),
     selectedFilter: 'All' as FilterType,
-    setSelectedFilter: () => {},
+    setSelectedFilter: fn(),
     selectedProducts: [],
     isArchived: false,
-    onDeleteComplete: () => {},
+    onDeleteComplete: fn(),
+  },
+  play: async ({ canvas, args }) => {
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Switch to grid view' }),
+    ).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole('tab', { name: 'Actives' }));
+    await storybookExpect(args.setSelectedFilter).toHaveBeenCalledWith(
+      'Actives',
+    );
   },
   parameters: {
     docs: {
@@ -176,18 +233,30 @@ export const TableView: Story = {
 export const FullyActive: Story = {
   args: {
     typeFilter: TypeEnum.Digital,
-    onTypeFilterChange: () => {},
+    onTypeFilterChange: fn(),
     categoryFilter: ['software'],
-    onCategoryFilterChange: () => {},
+    onCategoryFilterChange: fn(),
     viewMode: 'table',
-    onViewModeToggle: () => {},
+    onViewModeToggle: fn(),
     searchTerm: 'premium',
-    onSearch: () => {},
+    onSearch: fn(),
     selectedFilter: 'Archived' as FilterType,
-    setSelectedFilter: () => {},
+    setSelectedFilter: fn(),
     selectedProducts: ['1', '2'],
     isArchived: true,
-    onDeleteComplete: () => {},
+    onDeleteComplete: fn(),
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Search Products' }),
+    ).toHaveValue('premium');
+    await storybookExpect(
+      canvas.getByRole('tab', { name: 'Archived' }),
+    ).toHaveAttribute('aria-selected', 'true');
+    // Selected products reveal the bulk options menu.
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Options' }),
+    ).toBeInTheDocument();
   },
   parameters: {
     docs: {

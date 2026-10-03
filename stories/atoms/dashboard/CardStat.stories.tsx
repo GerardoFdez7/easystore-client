@@ -1,8 +1,13 @@
+import { expect as storybookExpect, within } from 'storybook/test';
 import CardStat from '@atoms/dashboard/CardStat';
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { ArrowUpRight } from 'lucide-react';
 
 const meta: Meta<typeof CardStat> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByText('Sales')).toBeInTheDocument();
+  },
   title: 'Atoms/Dashboard/CardStat',
   component: CardStat,
   parameters: {

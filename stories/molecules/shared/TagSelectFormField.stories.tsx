@@ -1,5 +1,6 @@
+import { expect as storybookExpect, screen, userEvent } from 'storybook/test';
 import TagSelectFormField from '@molecules/shared/TagSelectFormField';
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { FormProvider, useForm } from 'react-hook-form';
 import type { ComponentProps } from 'react';
 
@@ -88,10 +89,45 @@ type Story = StoryObj<typeof DemoTagSelectFormField>;
 
 export const Empty: Story = {
   render: () => <TagSelectFixture selected={[]} />,
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByText('No tags selected'),
+    ).toBeInTheDocument();
+
+    await userEvent.click(
+      canvas.getByRole('combobox', { name: 'Product tags' }),
+    );
+    await userEvent.click(
+      await screen.findByRole('option', { name: 'Locally made' }),
+    );
+
+    await storybookExpect(canvas.getByText('Locally made')).toBeInTheDocument();
+    await storybookExpect(canvas.queryByText('No tags selected')).toBeNull();
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Remove Locally made' }),
+    ).toBeInTheDocument();
+  },
 };
 
 export const SelectedTags: Story = {
   render: () => (
     <TagSelectFixture selected={[availableOptions[0], availableOptions[2]]} />
   ),
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getByText('Organic')).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByText('Recycled materials'),
+    ).toBeInTheDocument();
+    await storybookExpect(canvas.queryByText('No tags selected')).toBeNull();
+
+    await userEvent.click(
+      canvas.getByRole('button', { name: 'Remove Organic' }),
+    );
+    await storybookExpect(
+      canvas.queryByRole('button', { name: 'Remove Organic' }),
+    ).toBeNull();
+    await storybookExpect(
+      canvas.getByText('Recycled materials'),
+    ).toBeInTheDocument();
+  },
 };

@@ -144,6 +144,7 @@ export default function InstallmentPaymentFormField() {
                               <FormControl>
                                 <Input
                                   {...fieldProps}
+                                  aria-label={t('months')}
                                   inputMode="numeric"
                                   type="number"
                                   placeholder={t('monthsPlaceholder')}
@@ -174,6 +175,7 @@ export default function InstallmentPaymentFormField() {
                                 <FormControl>
                                   <Input
                                     {...fieldProps}
+                                    aria-label={t('interestRate')}
                                     inputMode="decimal"
                                     type="decimal"
                                     placeholder={t('interestRatePlaceholder')}

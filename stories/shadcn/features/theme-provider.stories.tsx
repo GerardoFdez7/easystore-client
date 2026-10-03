@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { ThemeProvider, useTheme } from '@shadcn/features/theme-provider';
 import { Button } from '@shadcn/ui/button';
 
@@ -26,6 +27,12 @@ function ThemeControls() {
 }
 
 const meta = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('region', { name: 'Theme controls' }),
+    ).toBeInTheDocument();
+  },
   title: 'Shadcn/Features/ThemeProvider',
   component: ThemeProvider,
   parameters: { layout: 'centered' },

@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import MultipleMediaUploader from '@molecules/shared/MultipleMediaUploader';
 
 const meta: Meta<typeof MultipleMediaUploader> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Choose Files' }),
+    ).toBeInTheDocument();
+  },
   title: 'Molecules/Shared/MultipleMediaUploader',
   component: MultipleMediaUploader,
   tags: ['autodocs'],

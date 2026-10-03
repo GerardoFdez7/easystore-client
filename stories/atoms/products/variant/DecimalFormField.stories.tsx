@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { FormProvider, useForm } from 'react-hook-form';
 import DecimalFormField, {
   type DecimalFormFieldProps,
@@ -25,6 +26,10 @@ function DecimalFormFieldFixture(props: DecimalFormFieldProps) {
 }
 
 const meta = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('textbox')).toBeInTheDocument();
+  },
   title: 'Atoms/Products/Variant/DecimalFormField',
   component: DecimalFormField,
   parameters: {

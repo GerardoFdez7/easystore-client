@@ -3,102 +3,56 @@
 import { DescriptionEditor } from '@molecules/profile/DescriptionEditor';
 import { useTranslations } from 'next-intl';
 import MediaUploader from '@molecules/shared/MediaUploader';
-import { Button } from '@shadcn/ui/button';
-import { useProfile } from '@hooks/domains/tenant/useProfile';
-import LogoutConfirmDialog from '@atoms/shared/LogoutConfirmDialog';
-import { LogOut, Edit2, Save as SaveIcon } from 'lucide-react';
-import BackButton from '@atoms/shared/BackButton';
+import { Card, CardContent } from '@shadcn/ui/card';
+import { useProfileDraft } from '@contexts/ProfileDraftContext';
 import { EditableField } from '@molecules/profile/EditableField';
 
 export default function SidebarProfile() {
   const t = useTranslations('Profile');
-  const { profile, actions, loading } = useProfile();
+  const { profile, loading, values, setField, resetKey } = useProfileDraft();
 
   return (
-    <aside className="mt-6 flex w-full flex-col md:mt-0 md:min-h-full md:max-w-md md:shrink-0">
-      <div className="border-border border-b md:border-none">
-        <BackButton />
-        <MediaUploader
-          multiple={false}
-          className="mx-auto max-w-40 sm:max-w-60"
-          initialMedia={profile?.logo}
-          acceptedFileTypes={['image/jpeg', 'image/png', 'image/webp']}
-          onMediaProcessed={async (processedData) => {
-            try {
-              if (processedData === null) {
-                // Handle logo removal
-                await actions.updateLogo(null);
-              } else {
-                const cover = processedData?.cover;
-                if (cover) {
-                  await actions.updateLogo(cover);
-                }
-              }
-            } catch (_error) {}
-          }}
-          renderDoneButton={(onDone, isProcessing) => (
-            <Button
-              type="button"
-              variant="link"
-              className="text-secondary h-9 translate-x-full -translate-y-full transform px-2"
-              onClick={onDone}
-              disabled={isProcessing}
-              aria-label="Save"
-            >
-              <SaveIcon className="h-4 w-4" />
-            </Button>
-          )}
-          renderEditButton={(onEdit, isEditing, hasMedia) => (
-            <Button
-              type="button"
-              variant="link"
-              disabled={isEditing || !hasMedia}
-              className="text-secondary h-9 translate-x-full -translate-y-full transform px-2"
-              onClick={onEdit}
-              aria-label="Edit"
-            >
-              <Edit2 className="h-4 w-4" />
-            </Button>
-          )}
-        />
-        <div className="relative [&_.flex.md\:hidden]:absolute [&_.flex.md\:hidden]:right-0">
-          <EditableField
-            value={profile?.businessName ?? ''}
-            className="bg-background text-title flex items-center justify-center border-none !p-0 text-center !text-2xl font-bold shadow-none"
-            placeholder={t('defaultName')}
-            iconEditable
-            saveLabel={t('save')}
-            onSave={(v) => void actions.updateBusinessName(v)}
+    <aside>
+      <Card>
+        <CardContent className="gap-card flex flex-col">
+          <MediaUploader
+            key={resetKey}
+            multiple={false}
+            alwaysEditing
+            reportRemoval
+            className="mx-auto max-w-40 sm:max-w-60"
+            initialMedia={profile?.logo}
+            acceptedFileTypes={['image/jpeg', 'image/png', 'image/webp']}
+            onMediaProcessed={async (processedData) => {
+              setField('logo', processedData?.cover ?? null);
+            }}
           />
-        </div>
 
-        <DescriptionEditor
-          value={profile?.description ?? ''}
-          onSave={(v) => void actions.updateDescription(v)}
-          loading={loading}
-        />
+          <EditableField
+            id="profile-business-name"
+            label={t('defaultName')}
+            placeholder={t('defaultName')}
+            value={values.businessName}
+            onChange={(v) => setField('businessName', v)}
+            inputClassName="font-semibold"
+          />
 
-        <div className="mt-4 mb-5 sm:mt-6">
-          <h3 className="text-title mb-2 text-sm font-bold">
-            {t('storeProfileTitle')}
-          </h3>
-          <p className="text-text text-sm leading-relaxed">
-            {t('storeProfileDescription')}
-          </p>
-        </div>
-      </div>
+          <DescriptionEditor
+            value={values.description}
+            onChange={(v) => setField('description', v)}
+            disabled={loading}
+          />
 
-      <div className="hidden md:mt-auto md:block">
-        <LogoutConfirmDialog>
-          <Button
-            variant="outline"
-            className="text-title bg-card hover:bg-accent border-border h-10 w-full justify-start rounded-lg px-4 shadow-sm"
-          >
-            <LogOut className="mr-2 h-4 w-4" />
-            {t('logOut')}
-          </Button>
-        </LogoutConfirmDialog>
-      </div>
+          <div className="gap-control flex flex-col">
+            <h2 className="text-title text-sm font-medium">
+              {t('storeProfileTitle')}
+            </h2>
+            <p className="text-muted-foreground text-sm">
+              {t('storeProfileDescription')}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
     </aside>
   );
 }

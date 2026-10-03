@@ -1,6 +1,12 @@
+import {
+  expect as storybookExpect,
+  fn,
+  screen,
+  userEvent,
+} from 'storybook/test';
 import MultiSelectComboboxCategory from '@atoms/products/MultiSelectComboboxCategory';
-import { MockedProvider } from '@apollo/client/testing/react';
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   FindCategoriesForPickerDocument,
   SortBy,
@@ -60,11 +66,11 @@ const meta: Meta<typeof MultiSelectComboboxCategory> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <MockedProvider mocks={[categoryPickerMock]}>
+      <ApolloMswMocks mocks={[categoryPickerMock]}>
         <div className="w-80">
           <Story />
         </div>
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   argTypes: {
@@ -86,7 +92,7 @@ const meta: Meta<typeof MultiSelectComboboxCategory> = {
     },
   },
   args: {
-    onValueChange: () => {},
+    onValueChange: fn(),
     placeholder: 'Select categories',
   },
 };
@@ -99,11 +105,38 @@ export const Empty: Story = {
   args: {
     value: [],
   },
+  play: async ({ canvas, args }) => {
+    const combobox = canvas.getByRole('combobox', {
+      name: 'Select categories',
+    });
+    await storybookExpect(combobox).toHaveAttribute('aria-expanded', 'false');
+    await userEvent.click(combobox);
+    await storybookExpect(combobox).toHaveAttribute('aria-expanded', 'true');
+    // The category list renders in a portal outside the canvas.
+    await userEvent.click(
+      await screen.findByRole('option', { name: 'Electronics' }),
+    );
+    await storybookExpect(args.onValueChange).toHaveBeenCalledWith([
+      'category-electronics',
+    ]);
+    await storybookExpect(
+      canvas.queryByRole('button', { name: 'Clear filters' }),
+    ).not.toBeInTheDocument();
+  },
 };
 
 export const MultipleSelected: Story = {
   args: {
     value: ['category-electronics', 'category-home'],
+  },
+  play: async ({ canvas, args }) => {
+    await storybookExpect(
+      canvas.getByRole('combobox', { name: '2 Categories selected' }),
+    ).toBeEnabled();
+    await userEvent.click(
+      canvas.getByRole('button', { name: 'Clear filters' }),
+    );
+    await storybookExpect(args.onValueChange).toHaveBeenCalledWith([]);
   },
 };
 
@@ -111,5 +144,13 @@ export const Disabled: Story = {
   args: {
     disabled: true,
     value: ['category-outdoors'],
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('combobox', { name: '1 Category selected' }),
+    ).toBeDisabled();
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Clear filters' }),
+    ).toBeDisabled();
   },
 };

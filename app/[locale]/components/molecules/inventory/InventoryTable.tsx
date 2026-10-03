@@ -106,6 +106,7 @@ export default function InventoryTable({
                   currentItems.length > 0
                 }
                 onCheckedChange={handleSelectAll}
+                aria-label={t('selectAllRows')}
               />
             </TableHead>
             <SortableHeader<SortField>
@@ -173,6 +174,7 @@ export default function InventoryTable({
                   onCheckedChange={(checked) =>
                     handleSelectRow(item.id, checked as boolean)
                   }
+                  aria-label={t('selectRow')}
                 />
               </TableCell>
               <TableCell>

@@ -75,13 +75,30 @@ const isExpectCall = (node, expectNames) =>
   ts.isCallExpression(node) &&
   ts.isIdentifier(node.expression) &&
   expectNames.has(node.expression.text);
-const hasExpectAssertion = (node, expectNames) => {
+const isLiteralExpression = (node) =>
+  !!node &&
+  (ts.isStringLiteral(node) ||
+    ts.isNumericLiteral(node) ||
+    ts.isNoSubstitutionTemplateLiteral(node) ||
+    node.kind === ts.SyntaxKind.TrueKeyword ||
+    node.kind === ts.SyntaxKind.FalseKeyword ||
+    node.kind === ts.SyntaxKind.NullKeyword);
+const isPlaceholderAssertion = (assertion) => {
+  const received = assertion.expression.expression.arguments[0];
+  if (isLiteralExpression(received)) return true;
+  return (
+    ts.isPropertyAccessExpression(received) &&
+    received.name.text === 'childElementCount'
+  );
+};
+const hasMeaningfulExpectAssertion = (node, expectNames) => {
   let asserted = false;
   const visit = (child) => {
     if (
       ts.isCallExpression(child) &&
       ts.isPropertyAccessExpression(child.expression) &&
-      isExpectCall(child.expression.expression, expectNames)
+      isExpectCall(child.expression.expression, expectNames) &&
+      !isPlaceholderAssertion(child)
     )
       asserted = true;
     if (!asserted) ts.forEachChild(child, visit);
@@ -155,18 +172,15 @@ const verifyStorybookRules = (file) => {
         )
           expectNames.add(element.name.text);
     if (isStoryFile(file) && statement.importClause) {
-      const hasStoryType =
-        statement.importClause.isTypeOnly ||
-        (named &&
-          ts.isNamedImports(named) &&
-          named.elements.some(
-            (element) =>
-              element.isTypeOnly ||
-              ['Meta', 'StoryObj', 'StoryFn'].includes(
-                (element.propertyName ?? element.name).text,
-              ),
-          ));
-      if (hasStoryType && specifier !== '@storybook/nextjs-vite')
+      const importsStoryType =
+        named &&
+        ts.isNamedImports(named) &&
+        named.elements.some((element) =>
+          ['Meta', 'StoryObj', 'StoryFn'].includes(
+            (element.propertyName ?? element.name).text,
+          ),
+        );
+      if (importsStoryType && specifier !== '@storybook/nextjs-vite')
         report(
           'storybook-nextjs-vite-required',
           file,
@@ -213,12 +227,12 @@ const verifyStorybookRules = (file) => {
     const effectivePlay = ownPlay ?? metaPlay;
     if (
       !effectivePlay ||
-      !hasExpectAssertion(resolvePlay(effectivePlay), expectNames)
+      !hasMeaningfulExpectAssertion(resolvePlay(effectivePlay), expectNames)
     )
       report(
         'storybook-story-test-required',
         file,
-        `story ${name} needs an effective play assertion from storybook/test`,
+        `story ${name} needs an effective meaningful play assertion from storybook/test`,
       );
   }
 };

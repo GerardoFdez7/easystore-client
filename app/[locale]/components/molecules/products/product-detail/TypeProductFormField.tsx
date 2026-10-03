@@ -41,6 +41,7 @@ export default function TypeProductFormField() {
               >
                 <SelectTrigger
                   className="w-full"
+                  aria-label={t('productType')}
                   aria-invalid={!!fieldState.error}
                 >
                   <SelectValue placeholder={t('selectType')} />

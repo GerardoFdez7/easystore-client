@@ -1,7 +1,12 @@
+import { expect as storybookExpect, within } from 'storybook/test';
 import LinkFooter from '@atoms/shared/LinkFooter';
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 const meta: Meta<typeof LinkFooter> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('link')).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/LinkFooter',
   component: LinkFooter,
   parameters: {

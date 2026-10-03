@@ -1,9 +1,16 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { SearchIcon } from 'lucide-react';
 import { Button } from '@shadcn/ui/button';
 import { VisuallyHidden } from '@shadcn/ui/visually-hidden';
 
 const meta = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Search products' }),
+    ).toBeInTheDocument();
+  },
   title: 'Shadcn/UI/VisuallyHidden',
   component: VisuallyHidden,
   parameters: { layout: 'centered' },

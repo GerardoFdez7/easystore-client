@@ -1,7 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Textarea } from '@shadcn/ui/textarea';
 
 const meta: Meta<typeof Textarea> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('textbox')).toBeInTheDocument();
+  },
   title: 'Shadcn/UI/Textarea',
   component: Textarea,
   parameters: { layout: 'centered' },

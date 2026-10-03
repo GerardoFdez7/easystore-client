@@ -1,8 +1,15 @@
+import { expect as storybookExpect, within } from 'storybook/test';
 import ProductSortBySelect from '@atoms/shared/ProductSortBySelect';
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { ProductSortBy } from '@graphql/generated';
 
 const meta: Meta<typeof ProductSortBySelect> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('combobox', { name: 'Sort' }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/ProductSortBySelect',
   component: ProductSortBySelect,
   parameters: {

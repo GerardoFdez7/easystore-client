@@ -1,7 +1,17 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import HeaderLogin from '@organisms/authentication/login/HeaderLogin';
 
 const meta = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('heading', { level: 1, name: 'Welcome Back!' }),
+    ).toBeVisible();
+    await storybookExpect(
+      canvas.getByText('Log in to access your EasyStore account.'),
+    ).toBeVisible();
+  },
   title: 'Organisms/Authentication/Login/HeaderLogin',
   component: HeaderLogin,
   parameters: {
@@ -29,7 +39,7 @@ export const Default: Story = {};
 export const WithDarkBackground: Story = {
   decorators: [
     (Story) => (
-      <div className="bg-sidebar-primary min-h-screen">
+      <div className="dark bg-sidebar-primary min-h-screen">
         <Story />
       </div>
     ),

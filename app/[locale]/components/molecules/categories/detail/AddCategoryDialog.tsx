@@ -179,7 +179,7 @@ export default function AddCategoryDialog({
         aria-describedby="add-category-description"
       >
         <DialogHeader>
-          <DialogTitle id="add-category-title">{t('addCategory')}</DialogTitle>
+          <DialogTitle>{t('addCategory')}</DialogTitle>
           <DialogDescription id="add-category-description">
             {t('addCategoryDescription')}
           </DialogDescription>
@@ -194,7 +194,7 @@ export default function AddCategoryDialog({
               void onSubmit();
             }}
             className="space-y-6"
-            aria-labelledby="add-category-title"
+            aria-label={t('addCategory')}
             aria-describedby="add-category-description"
           >
             {/* Cover Image Section */}

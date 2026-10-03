@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import DoneButton from '@atoms/shared/DoneButton';
 
 const meta: Meta<typeof DoneButton> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: /Done|Uploading/ }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/DoneButton',
   component: DoneButton,
   tags: ['autodocs'],

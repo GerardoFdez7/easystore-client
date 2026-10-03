@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, userEvent, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -60,6 +61,15 @@ function FormWrapper({
 }
 
 const meta = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByLabelText('Password'),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByLabelText('Confirm Password'),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Authentication/Login/ResetPasswordFields',
   component: FormWrapper,
   parameters: {
@@ -87,6 +97,19 @@ export const Default: Story = {
     withValidation: true,
     showSubmitButton: true,
   },
+  play: async ({ canvas }) => {
+    const password = canvas.getByLabelText('Password');
+    await storybookExpect(password).toHaveAttribute('type', 'password');
+    await userEvent.type(password, 'secret123');
+    const [toggle] = canvas.getAllByRole('button', { name: 'Show password' });
+    await storybookExpect(toggle).toHaveAttribute('aria-pressed', 'false');
+    await userEvent.click(toggle);
+    await storybookExpect(password).toHaveAttribute('type', 'text');
+    await storybookExpect(password).toHaveValue('secret123');
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Hide password' }),
+    ).toHaveAttribute('aria-pressed', 'true');
+  },
 };
 
 export const WithoutValidation: Story = {
@@ -109,12 +132,12 @@ export const WithErrors: Story = {
     showSubmitButton: true,
   },
   play: async ({ canvasElement }) => {
-    // This would trigger validation error by submitting empty form
-    const submitButton = canvasElement.querySelector(
-      'button[type="submit"]',
-    ) as HTMLButtonElement;
-    if (submitButton) {
-      submitButton.click();
-    }
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole('button', { name: 'Reset Password' }),
+    );
+    await storybookExpect(
+      await canvas.findByText('Password must be at least 8 characters'),
+    ).toBeInTheDocument();
   },
 };

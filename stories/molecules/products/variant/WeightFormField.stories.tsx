@@ -1,5 +1,6 @@
+import { expect as storybookExpect, userEvent } from 'storybook/test';
 import WeightFormField from '@molecules/products/variant/WeightFormField';
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { FormProvider, useForm } from 'react-hook-form';
 
 type WeightFormValues = {
@@ -37,8 +38,20 @@ type Story = StoryObj<typeof WeightFormField>;
 
 export const Default: Story = {
   render: () => <WeightFormFixture weight="2.5" />,
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Weight' }),
+    ).toHaveValue('2.5');
+    await storybookExpect(canvas.getByText('kg')).toBeInTheDocument();
+  },
 };
 
 export const Empty: Story = {
   render: () => <WeightFormFixture weight="" />,
+  play: async ({ canvas }) => {
+    const weight = canvas.getByRole('textbox', { name: 'Weight' });
+    await storybookExpect(weight).toHaveValue('');
+    await userEvent.type(weight, '3');
+    await storybookExpect(weight).toHaveValue('3');
+  },
 };

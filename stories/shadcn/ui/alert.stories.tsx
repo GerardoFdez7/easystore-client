@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Alert, AlertDescription, AlertTitle } from '@shadcn/ui/alert';
 
 const meta: Meta<typeof Alert> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByText(/Heads up!|Error!/),
+    ).toBeInTheDocument();
+  },
   title: 'Shadcn/UI/Alert',
   tags: ['autodocs'],
   parameters: {

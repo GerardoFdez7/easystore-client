@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, fn, userEvent } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { ProductGrid } from '@molecules/products/ProductGrid';
 import { TypeEnum, MediaTypeEnum, ConditionEnum } from '@graphql/generated';
 
@@ -145,6 +146,18 @@ export const Default: Story = {
   args: {
     products: mockProducts,
   },
+  play: async ({ canvas, args }) => {
+    await storybookExpect(canvas.getAllByRole('article')).toHaveLength(
+      args.products.length,
+    );
+    for (const product of args.products.slice(0, 3)) {
+      await storybookExpect(
+        canvas.getAllByRole('button', {
+          name: `View ${product.name} details`,
+        })[0],
+      ).toBeInTheDocument();
+    }
+  },
 };
 
 export const WithManyProducts: Story = {
@@ -166,6 +179,18 @@ export const WithManyProducts: Story = {
       },
     },
   },
+  play: async ({ canvas, args }) => {
+    await storybookExpect(canvas.getAllByRole('article')).toHaveLength(
+      args.products.length,
+    );
+    for (const product of args.products.slice(0, 3)) {
+      await storybookExpect(
+        canvas.getAllByRole('button', {
+          name: `View ${product.name} details`,
+        })[0],
+      ).toBeInTheDocument();
+    }
+  },
 };
 
 export const SingleProduct: Story = {
@@ -179,6 +204,18 @@ export const SingleProduct: Story = {
           'Grid with a single product, demonstrating the minimum viable display.',
       },
     },
+  },
+  play: async ({ canvas, args }) => {
+    await storybookExpect(canvas.getAllByRole('article')).toHaveLength(
+      args.products.length,
+    );
+    for (const product of args.products.slice(0, 3)) {
+      await storybookExpect(
+        canvas.getAllByRole('button', {
+          name: `View ${product.name} details`,
+        })[0],
+      ).toBeInTheDocument();
+    }
   },
 };
 
@@ -196,6 +233,11 @@ export const Loading: Story = {
       },
     },
   },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getAllByRole('article', { name: 'Loading product' }),
+    ).toHaveLength(8);
+  },
 };
 
 export const LoadingMore: Story = {
@@ -212,5 +254,25 @@ export const LoadingMore: Story = {
           'Loading more state showing existing products with additional skeleton cards for pagination loading.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getAllByRole('article', { name: 'Loading product' }),
+    ).toHaveLength(4);
+    await storybookExpect(
+      canvas.queryByRole('button', { name: /details/ }),
+    ).toBeNull();
+  },
+};
+
+export const WithLoadMore: Story = {
+  args: {
+    products: mockProducts,
+    hasMore: true,
+    onLoadMore: fn(),
+  },
+  play: async ({ canvas, args }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Load More' }));
+    await storybookExpect(args.onLoadMore).toHaveBeenCalledTimes(1);
   },
 };

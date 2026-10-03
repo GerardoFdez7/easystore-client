@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import React from 'react';
 import {
   Sheet,
@@ -11,6 +12,12 @@ import {
 import { Button } from '@shadcn/ui/button';
 
 const meta: Meta<typeof Sheet> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Open Sheet' }),
+    ).toBeInTheDocument();
+  },
   title: 'Shadcn/UI/Sheet',
   component: Sheet,
   parameters: {

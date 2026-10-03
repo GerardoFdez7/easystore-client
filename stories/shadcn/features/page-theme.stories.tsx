@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { PageThemeProvider, usePageTheme } from '@shadcn/features/page-theme';
 
 function PageThemeStatus() {
@@ -13,6 +14,10 @@ function PageThemeStatus() {
 }
 
 const meta = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('status')).toBeInTheDocument();
+  },
   title: 'Shadcn/Features/PageThemeProvider',
   component: PageThemeProvider,
   parameters: { layout: 'centered' },

@@ -62,6 +62,11 @@ export default function MultiSelectComboboxCategory({
     onValueChange?.([]);
   }, [onValueChange]);
 
+  const triggerLabel =
+    value.length === 0
+      ? placeholder || t('selectCategories')
+      : `${value.length} ${value.length === 1 ? t('category') : t('categories')} ${t('selected')}`;
+
   return (
     <div className={cn('flex items-center gap-1', className)}>
       <Popover open={open} onOpenChange={setOpen}>
@@ -70,6 +75,7 @@ export default function MultiSelectComboboxCategory({
             variant="outline"
             role="combobox"
             aria-expanded={open}
+            aria-label={triggerLabel}
             className={cn(
               'justify-between text-left font-normal',
               'w-full sm:w-auto',
@@ -78,13 +84,11 @@ export default function MultiSelectComboboxCategory({
             )}
             disabled={disabled}
           >
-            {value.length === 0
-              ? placeholder || t('selectCategories')
-              : `${value.length} ${value.length === 1 ? t('category') : t('categories')} ${t('selected')}`}
-            <ChevronsUpDown className="h-4 w-4" />
+            {triggerLabel}
+            <ChevronsUpDown className="h-4 w-4" aria-hidden="true" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="p-0" align="start">
+        <PopoverContent className="p-0" align="start" aria-label={triggerLabel}>
           <Command shouldFilter={false}>
             <CommandInput
               placeholder={t('search')}
@@ -139,8 +143,9 @@ export default function MultiSelectComboboxCategory({
                 className="h-8 w-8 flex-shrink-0"
                 onClick={handleClear}
                 disabled={disabled}
+                aria-label={t('clearFilters')}
               >
-                <FunnelX className="h-4 w-4" />
+                <FunnelX className="h-4 w-4" aria-hidden="true" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>{t('clearFilters')}</TooltipContent>

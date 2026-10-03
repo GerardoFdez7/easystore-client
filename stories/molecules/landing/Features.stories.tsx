@@ -1,5 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { NextIntlClientProvider } from 'next-intl';
+import enMessages from '../../../messages/en.json';
 import Features from '@molecules/landing/Features';
 
 const messages = {
@@ -30,6 +32,15 @@ const messages = {
 };
 
 const meta: Meta<typeof Features> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      await canvas.findByRole('heading', { name: 'Powerful features' }),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByText('AI integrated'),
+    ).toBeInTheDocument();
+  },
   title: 'Molecules/Landing/Features',
   parameters: {
     layout: 'centered',
@@ -42,7 +53,13 @@ type Story = StoryObj<typeof Features>;
 
 export const Default: Story = {
   render: () => (
-    <NextIntlClientProvider locale="en" messages={messages}>
+    <NextIntlClientProvider
+      locale="en"
+      messages={{
+        ...enMessages,
+        Landing: { ...enMessages.Landing, ...messages.Landing },
+      }}
+    >
       <Features />
     </NextIntlClientProvider>
   ),

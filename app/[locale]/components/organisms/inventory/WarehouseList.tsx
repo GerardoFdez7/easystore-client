@@ -85,7 +85,10 @@ export default function WarehouseList({
   );
 
   return (
-    <section className={`space-y-6 ${className}`} aria-label={'warehouseList'}>
+    <section
+      className={`space-y-6 ${className}`}
+      aria-label={t('warehouseList')}
+    >
       {/* Header with search and actions */}
       {(showSearch || showCreateButton) && (
         <header className="flex flex-col gap-4 sm:flex-row">
@@ -130,7 +133,7 @@ export default function WarehouseList({
       ) : warehouses.length === 0 ? (
         renderEmptyState()
       ) : (
-        <div className="space-y-4" role="list" aria-label={'warehouses'}>
+        <div className="space-y-4">
           {warehouses.map((warehouse) => (
             <WarehouseCard
               key={warehouse.id}

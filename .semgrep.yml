@@ -11,8 +11,8 @@ rules:
           - pattern: new XMLHttpRequest(...)
     paths:
       include:
-        - '/app/[locale]/components/atoms/**'
-        - '/app/[locale]/components/molecules/**'
+        - '/app/[[]locale[]]/components/atoms/**'
+        - '/app/[[]locale[]]/components/molecules/**'
   - id: easystore-no-dangerous-html
     languages: [typescript, javascript]
     message: Review dangerouslySetInnerHTML and centralize/sanitize rich HTML.

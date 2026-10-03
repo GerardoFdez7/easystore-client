@@ -1,11 +1,18 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
 import { GraphQLError } from 'graphql';
 import MainInventory from '@organisms/inventory/MainInventory';
 import { FindInventoryDocument } from '@graphql/generated';
 import { mockInventoryTableData } from '../../molecules/inventory/mocks/inventory-table';
 
 const meta: Meta<typeof MainInventory> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: /search/i }),
+    ).toBeInTheDocument();
+  },
   title: 'Organisms/Inventory/MainInventory',
   component: MainInventory,
   parameters: {
@@ -25,7 +32,7 @@ type Story = StoryObj<typeof MainInventory>;
 export const Default: Story = {
   decorators: [
     (Story) => (
-      <MockedProvider
+      <ApolloMswMocks
         mocks={[
           {
             request: {
@@ -58,7 +65,7 @@ export const Default: Story = {
         ]}
       >
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
 };
@@ -67,7 +74,7 @@ export const Default: Story = {
 export const Loading: Story = {
   decorators: [
     (Story) => (
-      <MockedProvider
+      <ApolloMswMocks
         mocks={[
           {
             request: {
@@ -79,7 +86,7 @@ export const Loading: Story = {
         ]}
       >
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
 };
@@ -88,7 +95,7 @@ export const Loading: Story = {
 export const EmptyInventory: Story = {
   decorators: [
     (Story) => (
-      <MockedProvider
+      <ApolloMswMocks
         mocks={[
           {
             request: {
@@ -100,7 +107,7 @@ export const EmptyInventory: Story = {
         ]}
       >
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
 };
@@ -109,7 +116,7 @@ export const EmptyInventory: Story = {
 export const EmptyWarehouse: Story = {
   decorators: [
     (Story) => (
-      <MockedProvider
+      <ApolloMswMocks
         mocks={[
           {
             request: {
@@ -130,7 +137,7 @@ export const EmptyWarehouse: Story = {
         ]}
       >
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
 };

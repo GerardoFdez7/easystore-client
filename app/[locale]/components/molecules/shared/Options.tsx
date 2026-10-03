@@ -207,7 +207,7 @@ export default function Options({
   return (
     <nav
       className={`flex justify-end ${wrapperClassName}`}
-      aria-label="options"
+      aria-label={t('options')}
     >
       <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
         <Tooltip>
@@ -219,8 +219,6 @@ export default function Options({
                 disabled={disabled}
                 className={`h-8 w-8 p-0 ${className}`}
                 aria-label={defaultTooltipContent}
-                aria-haspopup="menu"
-                aria-expanded="false"
               >
                 <MoreHorizontal className="h-4 w-4" />
               </Button>

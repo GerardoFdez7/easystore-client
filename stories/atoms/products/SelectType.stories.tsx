@@ -1,8 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import SelectType from '@atoms/products/SelectType';
 import { TypeEnum } from '@graphql/generated';
 
 const meta: Meta<typeof SelectType> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('combobox', { name: 'Type' }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Products/SelectType',
   component: SelectType,
   parameters: {

@@ -50,11 +50,16 @@ const LoadMoreButton: React.FC<LoadMoreButtonProps> = ({
       size={size}
       onClick={onClick}
       disabled={disabled || isLoading}
+      aria-busy={isLoading}
+      aria-label={isLoading ? t('loadMore') : undefined}
       className={cn(sizeClassName, className)}
     >
       {isLoading ? (
         <>
-          <Loader2 className={cn(getIconSizeClass(), 'animate-spin')} />
+          <Loader2
+            className={cn(getIconSizeClass(), 'animate-spin')}
+            aria-hidden="true"
+          />
           {size !== 'icon'}
         </>
       ) : (

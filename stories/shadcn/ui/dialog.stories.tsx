@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, userEvent, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   Dialog,
   DialogContent,
@@ -10,6 +11,13 @@ import {
 import { Button } from '@shadcn/ui/button';
 
 const meta: Meta<typeof Dialog> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', { name: 'Open dialog' });
+    await storybookExpect(trigger).toBeInTheDocument();
+    await userEvent.click(trigger);
+    await storybookExpect(trigger).toHaveAttribute('aria-expanded', 'true');
+  },
   title: 'Shadcn/UI/Dialog',
   tags: ['autodocs'],
   parameters: {

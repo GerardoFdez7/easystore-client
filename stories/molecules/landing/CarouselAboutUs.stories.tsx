@@ -1,5 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { NextIntlClientProvider } from 'next-intl';
+import enMessages from '../../../messages/en.json';
 import CarouselAboutUs from '@molecules/landing/CarouselAboutUs';
 
 const messages = {
@@ -30,10 +32,24 @@ type Story = StoryObj<typeof CarouselAboutUs>;
 
 export const Default: Story = {
   render: () => (
-    <NextIntlClientProvider locale="en" messages={messages}>
+    <NextIntlClientProvider
+      locale="en"
+      messages={{ ...enMessages, ...messages }}
+    >
       <div className="max-w-5xl">
         <CarouselAboutUs />
       </div>
     </NextIntlClientProvider>
   ),
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('region', { name: 'Founded, Managed by, HQ' }),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByRole('region', { name: 'Focus, Mission' }),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByText('In 2024 to serve SMBs worldwide.'),
+    ).toBeInTheDocument();
+  },
 };

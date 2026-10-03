@@ -3,6 +3,7 @@
 import { Checkbox } from '@shadcn/ui/checkbox';
 import { TableCell, TableRow } from '@shadcn/ui/table';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import ProductStatus from '@atoms/products/ProductStatus';
 import { formatPriceWithCommasAndDots } from '@lib/utils/input-formatters';
@@ -20,6 +21,7 @@ export function ProductTableRow({
   onSelect,
 }: ProductTableRowProps) {
   const router = useRouter();
+  const t = useTranslations('Products');
 
   const handleRowClick = () => {
     router.push(`/products/${product.id}`);
@@ -35,14 +37,18 @@ export function ProductTableRow({
         className="group-hover:bg-background cursor-default"
         onClick={handleCheckboxClick}
       >
-        <Checkbox checked={isSelected} onCheckedChange={onSelect} />
+        <Checkbox
+          checked={isSelected}
+          onCheckedChange={onSelect}
+          aria-label={t('selectProduct', { name: product.name })}
+        />
       </TableCell>
       <TableCell className="text-left">
         <div className="flex items-start gap-3">
           <div className="h-10 w-10 overflow-hidden rounded-lg">
             <Image
               src={product.cover}
-              alt={product.name}
+              alt=""
               width={40}
               height={40}
               className="h-full w-full object-cover"

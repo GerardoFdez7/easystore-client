@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useForm, FormProvider } from 'react-hook-form';
 import TagsFormField from '@molecules/products/product-detail/TagsFormField';
 import { mockProductFormData } from '../mocks/productFormMocks';
@@ -23,6 +24,10 @@ const TagsFormFieldWrapper = ({
 };
 
 const meta: Meta<typeof TagsFormFieldWrapper> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('textbox')).toBeInTheDocument();
+  },
   title: 'Molecules/Products/ProductDetail/TagsFormField',
   component: TagsFormFieldWrapper,
   parameters: {

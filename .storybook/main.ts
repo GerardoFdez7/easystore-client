@@ -6,16 +6,16 @@ import { mergeConfig } from 'vite';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const config: StorybookConfig = {
-  stories: [
-    '../stories/**/*.mdx',
-    '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-  ],
+  stories: ['../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
-    '@storybook/addon-onboarding',
-    '@chromatic-com/storybook',
+    '@storybook/addon-mcp',
     '@storybook/addon-a11y',
     '@storybook/addon-docs',
+    '@storybook/addon-vitest',
   ],
+  features: {
+    componentsManifest: true,
+  },
   framework: {
     name: '@storybook/nextjs-vite',
     options: {},

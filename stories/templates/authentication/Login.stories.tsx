@@ -1,8 +1,50 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import {
+  expect as storybookExpect,
+  userEvent,
+  waitFor,
+  within,
+} from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import LoginTemplate from '@templates/authentication/Login';
 
 const meta = {
-  title: 'Templates/Authentication/LoginTemplate',
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const submit = canvas.getByRole('button', { name: 'Log in' });
+    await storybookExpect(submit).toHaveAttribute('type', 'submit');
+    await userEvent.click(submit);
+    await waitFor(async () => {
+      await storybookExpect(
+        canvas.getByText('Invalid email format'),
+      ).toBeVisible();
+      await storybookExpect(
+        canvas.getByText('Password must be at least 8 characters'),
+      ).toBeVisible();
+    });
+    const reveal = canvas.getByRole('button', { name: /show password/i });
+    await storybookExpect(reveal).toHaveAttribute('aria-pressed', 'false');
+    await userEvent.click(reveal);
+    await storybookExpect(
+      canvas.getByRole('button', { name: /hide password/i }),
+    ).toHaveAttribute('aria-pressed', 'true');
+    await storybookExpect(
+      canvas.getByRole('link', { name: 'Register' }),
+    ).toHaveAttribute('href', '/register');
+    await userEvent.click(
+      canvas.getByRole('button', { name: 'Forgot password?' }),
+    );
+    const body = within(canvasElement.ownerDocument.body);
+    const dialog = await body.findByRole('dialog', { name: 'Forgot Password' });
+    await waitFor(() => storybookExpect(dialog).toBeVisible());
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() =>
+      storybookExpect(body.queryByRole('dialog')).not.toBeInTheDocument(),
+    );
+    await storybookExpect(
+      canvas.getByRole('heading', { level: 1, name: 'Welcome Back!' }),
+    ).toBeVisible();
+  },
+  title: 'Templates/Authentication/Login',
   component: LoginTemplate,
   parameters: {
     layout: 'fullscreen',
@@ -18,67 +60,3 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Mobile: Story = {
-  parameters: {
-    viewport: {
-      defaultViewport: 'mobile1',
-    },
-  },
-};
-
-export const Tablet: Story = {
-  parameters: {
-    viewport: {
-      defaultViewport: 'tablet',
-    },
-  },
-};
-
-export const Desktop: Story = {
-  parameters: {
-    viewport: {
-      defaultViewport: 'desktop',
-    },
-  },
-};
-
-export const LargeDesktop: Story = {
-  parameters: {
-    viewport: {
-      defaultViewport: 'desktop',
-    },
-  },
-  decorators: [
-    (Story) => (
-      <div className="min-h-225 min-w-360">
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-export const DarkMode: Story = {
-  parameters: {
-    backgrounds: {
-      default: 'dark',
-    },
-  },
-  decorators: [
-    (Story) => (
-      <div className="dark">
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-export const HighContrast: Story = {
-  decorators: [
-    (Story) => (
-      <div className="brightness-110 contrast-125">
-        <Story />
-      </div>
-    ),
-  ],
-};

@@ -26,6 +26,8 @@ export interface ComboboxProps {
   value?: string;
   onValueChange?: (value: string) => void;
   placeholder: string;
+  /** Accessible name for the trigger; defaults to the placeholder. */
+  ariaLabel?: string;
   searchPlaceholder: string;
   emptyMessage: string;
   className?: string;
@@ -79,6 +81,7 @@ function Combobox({
   value,
   onValueChange,
   placeholder,
+  ariaLabel,
   searchPlaceholder,
   emptyMessage,
   className,
@@ -150,6 +153,7 @@ function Combobox({
           ref={triggerRef}
           variant="outline"
           role="combobox"
+          aria-label={ariaLabel ?? placeholder}
           aria-expanded={open}
           className={cn(
             'w-fit justify-between',
@@ -169,6 +173,7 @@ function Combobox({
       </PopoverTrigger>
       <PopoverContent
         className="p-0"
+        aria-label={ariaLabel ?? placeholder}
         style={
           calculatedTriggerWidth ? { width: calculatedTriggerWidth } : undefined
         }

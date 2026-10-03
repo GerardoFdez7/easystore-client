@@ -61,7 +61,10 @@ export default function WarehouseCard({
                   className="mt-0.5 h-4 w-4 flex-shrink-0"
                   aria-hidden="true"
                 />
-                <Label className="line-clamp-2" aria-label="Warehouse address">
+                <Label
+                  className="line-clamp-2"
+                  aria-label={t('warehouseAddress')}
+                >
                   {formatAddress(warehouse)}
                 </Label>
               </div>

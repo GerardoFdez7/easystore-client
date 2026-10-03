@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useForm, FormProvider } from 'react-hook-form';
 import CategoryFormField from '@molecules/products/product-detail/CategoryFormField';
 import { mockProductFormData } from '../mocks/productFormMocks';
@@ -53,6 +54,13 @@ export const Default: Story = {
   args: {
     defaultValues: { categories: [] },
   },
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getByText('Categories')).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByRole('heading', { name: 'No categories yet' }),
+    ).toBeInTheDocument();
+    await storybookExpect(canvas.queryAllByRole('listitem')).toHaveLength(0);
+  },
 };
 
 export const WithCategories: Story = {
@@ -68,6 +76,17 @@ export const WithCategories: Story = {
       },
     },
   },
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getAllByRole('listitem')).toHaveLength(
+      mockProductFormData.categories.length,
+    );
+    await storybookExpect(
+      canvas.getByRole('listitem', { name: 'Subcategory: Electronics' }),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByRole('listitem', { name: 'Subcategory: Audio & Video' }),
+    ).toBeInTheDocument();
+  },
 };
 
 export const SingleCategory: Story = {
@@ -82,6 +101,12 @@ export const SingleCategory: Story = {
         story: 'Field with a single category selected.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getAllByRole('listitem')).toHaveLength(1);
+    await storybookExpect(
+      canvas.getByRole('listitem', { name: 'Subcategory: Electronics' }),
+    ).toBeInTheDocument();
   },
 };
 
@@ -101,5 +126,11 @@ export const MultipleCategories: Story = {
         story: 'Field with multiple categories selected.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getAllByRole('listitem')).toHaveLength(3);
+    await storybookExpect(
+      canvas.getByRole('listitem', { name: 'Subcategory: Accessories' }),
+    ).toBeInTheDocument();
   },
 };

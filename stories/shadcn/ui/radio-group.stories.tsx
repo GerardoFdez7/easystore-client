@@ -1,8 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import * as React from 'react';
 import { RadioGroup, RadioGroupItem } from '@shadcn/ui/radio-group';
 
 const meta: Meta<typeof RadioGroup> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('radiogroup')).toBeInTheDocument();
+  },
   title: 'Shadcn/UI/RadioGroup',
   tags: ['autodocs'],
   component: RadioGroup,

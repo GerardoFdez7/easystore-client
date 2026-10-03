@@ -13,7 +13,10 @@ export function TableOfContents({
   const t = useTranslations('Privacy');
 
   return (
-    <nav className={`bg-card rounded-lg p-8 ${className}`}>
+    <nav
+      aria-label={t('tableOfContents')}
+      className={`bg-card rounded-lg p-8 ${className}`}
+    >
       <p className="text-text mb-6 font-medium uppercase">
         {t('tableOfContents')}
       </p>

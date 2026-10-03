@@ -55,6 +55,7 @@ const SortableItem: React.FC<SortableItemProps> = ({
   onThumbClick,
   onRemoveItem,
 }) => {
+  const t = useTranslations('Media');
   const {
     attributes,
     listeners,
@@ -80,8 +81,11 @@ const SortableItem: React.FC<SortableItemProps> = ({
         isEditing ? 'cursor-move touch-none' : 'touch-auto', // Prevent default touch behaviors during editing
         isDragging && 'z-50',
       )}
-      {...attributes}
+      {...(isEditing ? attributes : {})}
       {...(isEditing ? listeners : {})}
+      // The thumbnail and remove controls inside are real buttons, so the
+      // sortable wrapper must not also expose role="button".
+      role={isEditing ? 'group' : undefined}
     >
       {item.type === 'image' ? (
         <ImageThumb
@@ -112,8 +116,9 @@ const SortableItem: React.FC<SortableItemProps> = ({
           }}
           className="hover:bg-background absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:shadow-xl"
           size="sm"
+          aria-label={`${t('removeMedia')} ${item.alt}`}
         >
-          <X className="text-foreground h-3 w-3" />
+          <X className="text-foreground h-3 w-3" aria-hidden="true" />
         </Button>
       )}
 
@@ -161,6 +166,7 @@ const CarouselMedia = ({
     <div className={cn('embla sm:m-2', className)}>
       {/* Main Carousel */}
       <Carousel
+        aria-label={t('mainCarousel')}
         setApi={setMainApi}
         opts={{
           align: 'start',
@@ -216,6 +222,7 @@ const CarouselMedia = ({
         onDragEnd={handleDragEnd}
       >
         <Carousel
+          aria-label={t('thumbnailsCarousel')}
           setApi={setThumbsApi}
           className="mx-auto max-w-60 rounded-xl sm:max-w-xl"
           opts={{

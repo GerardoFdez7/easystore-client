@@ -1,8 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Zap, DollarSign, Users, Rocket, Heart, Star } from 'lucide-react';
 import FeatureIcon from '@atoms/construction/FeatureIcon';
 
 const meta: Meta<typeof FeatureIcon> = {
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByText(args.label)).toBeInTheDocument();
+  },
   title: 'Atoms/Construction/FeatureIcon',
   parameters: {
     layout: 'centered',

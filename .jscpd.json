@@ -2,7 +2,7 @@
   "threshold": 0,
   "minLines": 8,
   "minTokens": 70,
-  "reporters": ["console", "json"],
+  "reporters": ["console"],
   "format": ["typescript", "tsx", "javascript", "jsx"],
   "path": ["app", "server", "i18n"],
   "ignore": [
@@ -12,6 +12,7 @@
     "**/tests/**",
     "**/test/**",
     "**/components/shadcn/**",
+    "storybook-static",
     "**/.next/**",
     "**/node_modules/**"
   ]

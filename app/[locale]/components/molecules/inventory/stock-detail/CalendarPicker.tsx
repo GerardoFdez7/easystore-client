@@ -6,7 +6,7 @@ import { CalendarIcon } from 'lucide-react';
 import { useLocale } from 'next-intl';
 import { Calendar } from '@shadcn/ui/calendar';
 import { Input } from '@shadcn/ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '@shadcn/ui/popover';
+import { Popover, PopoverAnchor, PopoverContent } from '@shadcn/ui/popover';
 import { es as dfEs, enUS as dfEnUS } from 'date-fns/locale';
 import { cn } from '@lib/utils';
 
@@ -61,7 +61,7 @@ export default function CalendarPicker({
   return (
     <div className={className}>
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
+        <PopoverAnchor asChild>
           <div className="relative w-full">
             <Input
               id={id}
@@ -90,11 +90,12 @@ export default function CalendarPicker({
                   setOpen(true);
                 }
               }}
+              onClick={() => setOpen(true)}
               readOnly
             />
             <CalendarIcon className="text-muted-foreground pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2" />
           </div>
-        </PopoverTrigger>
+        </PopoverAnchor>
 
         <PopoverContent className="overflow-hidden p-0" align="center">
           <Calendar

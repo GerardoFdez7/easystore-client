@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Button } from '@shadcn/ui/button';
 
 const meta: Meta<typeof Button> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: /Button|🛒/ }),
+    ).toBeEnabled();
+  },
   title: 'Shadcn/UI/Button',
   tags: ['autodocs'],
   parameters: {

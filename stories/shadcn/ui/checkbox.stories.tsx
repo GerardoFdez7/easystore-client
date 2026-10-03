@@ -1,8 +1,16 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, userEvent, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Checkbox } from '@shadcn/ui/checkbox';
 import { Label } from '@shadcn/ui/label';
 
 const meta: Meta<typeof Checkbox> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const checkbox = canvas.getByLabelText('Accept terms');
+    await storybookExpect(checkbox).not.toBeChecked();
+    await userEvent.click(checkbox);
+    await storybookExpect(checkbox).toBeChecked();
+  },
   title: 'Shadcn/UI/Checkbox',
   tags: ['autodocs'],
   parameters: {

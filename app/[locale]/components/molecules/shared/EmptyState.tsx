@@ -34,7 +34,7 @@ export default function EmptyState({
           <Icon className="text-muted-foreground h-12 w-12" />
         </div>
         <div className="space-y-2">
-          <h3 className="text-xl font-semibold">{title}</h3>
+          <h2 className="text-xl font-semibold">{title}</h2>
           <p className="text-muted-foreground max-w-md">{description}</p>
         </div>
         {buttonText && onButtonClick && (

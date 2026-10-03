@@ -1,6 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
-import React, { useState } from 'react';
-import { MockedProvider } from '@apollo/client/testing/react';
+import {
+  expect as storybookExpect,
+  fn,
+  screen,
+  userEvent,
+  waitFor,
+} from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { useState } from 'react';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
 import AddressCombobox from '@molecules/inventory/AddressCombobox';
 import { FindAllAddressesDocument } from '@graphql/generated';
 import {
@@ -16,6 +23,7 @@ const emptyMock = {
     variables: {
       page: 1,
       limit: 25,
+      name: '',
     },
   },
   result: {
@@ -36,6 +44,7 @@ const successMock = {
     variables: {
       page: 1,
       limit: 25,
+      name: '',
     },
   },
   result: {
@@ -50,6 +59,7 @@ const hasMoreMock = {
     variables: {
       page: 1,
       limit: 25,
+      name: '',
     },
   },
   result: {
@@ -64,6 +74,7 @@ const loadMoreMock = {
     variables: {
       page: 2,
       limit: 25,
+      name: '',
     },
   },
   result: {
@@ -113,8 +124,10 @@ const errorMock = {
     variables: {
       page: 1,
       limit: 25,
+      name: '',
     },
   },
+  error: new globalThis.Error('Failed to load addresses'),
 };
 
 const meta: Meta<typeof AddressCombobox> = {
@@ -188,9 +201,9 @@ including loading, empty, and error states.
   },
   decorators: [
     (Story, { parameters }) => (
-      <MockedProvider mocks={parameters.mocks || [successMock]}>
+      <ApolloMswMocks mocks={parameters.mocks || [successMock]}>
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
 };
@@ -199,8 +212,27 @@ export default meta;
 
 type Story = StoryObj<typeof AddressCombobox>;
 
+// Radix hides the page behind an open popover; close it so only the settled
+// state is audited for accessibility.
+async function closePopover() {
+  await userEvent.keyboard('{Escape}{Escape}');
+  await waitFor(() =>
+    storybookExpect(screen.queryByRole('listbox')).toBeNull(),
+  );
+}
+
+// The trigger stays disabled while the addresses query is loading.
+async function findEnabledTrigger(
+  canvas: Parameters<NonNullable<Story['play']>>[0]['canvas'],
+  name: string,
+) {
+  const trigger = await canvas.findByRole('combobox', { name });
+  await waitFor(() => storybookExpect(trigger).toBeEnabled());
+  return trigger;
+}
+
 export const Default: Story = {
-  args: {},
+  args: { onChange: fn() },
   parameters: {
     mocks: [successMock],
     docs: {
@@ -208,6 +240,15 @@ export const Default: Story = {
         story: 'Default state with loaded addresses available for selection.',
       },
     },
+  },
+  play: async ({ canvas, args }) => {
+    const trigger = await findEnabledTrigger(canvas, 'Select Address');
+    await userEvent.click(trigger);
+    await userEvent.click(
+      await screen.findByRole('option', { name: /Warehouse A/ }),
+    );
+    await storybookExpect(args.onChange).toHaveBeenCalledWith('2');
+    await closePopover();
   },
 };
 
@@ -222,6 +263,14 @@ export const WithSelectedValue: Story = {
         story: 'Combobox with a pre-selected address value.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    const trigger = await canvas.findByRole('combobox');
+    await waitFor(() =>
+      storybookExpect(trigger).toHaveTextContent(
+        'Warehouse A, 456 Storage Avenue, Los Angeles, 90001',
+      ),
+    );
   },
 };
 
@@ -238,6 +287,9 @@ export const Disabled: Story = {
       },
     },
   },
+  play: async ({ canvas }) => {
+    await storybookExpect(await canvas.findByRole('combobox')).toBeDisabled();
+  },
 };
 
 export const Empty: Story = {
@@ -250,6 +302,15 @@ export const Empty: Story = {
       },
     },
   },
+  play: async ({ canvas }) => {
+    const trigger = await findEnabledTrigger(canvas, 'Select Address');
+    await userEvent.click(trigger);
+    await storybookExpect(
+      await screen.findByText('No addresses found'),
+    ).toBeInTheDocument();
+    await storybookExpect(screen.queryAllByRole('option')).toHaveLength(0);
+    await closePopover();
+  },
 };
 
 export const Error: Story = {
@@ -261,6 +322,14 @@ export const Error: Story = {
         story: 'Error state when address loading fails.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    const trigger = await findEnabledTrigger(canvas, 'Select Address');
+    await userEvent.click(trigger);
+    await storybookExpect(
+      await screen.findByText('No addresses found'),
+    ).toBeInTheDocument();
+    await closePopover();
   },
 };
 
@@ -285,6 +354,25 @@ export const WithPagination: Story = {
       },
     },
   },
+  play: async ({ canvas }) => {
+    const trigger = await findEnabledTrigger(
+      canvas,
+      'Select address with pagination...',
+    );
+    await userEvent.click(trigger);
+    await storybookExpect(
+      await screen.findByRole('option', { name: /Warehouse A/ }),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      screen.queryByRole('option', { name: /Regional Hub/ }),
+    ).toBeNull();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Load More' }));
+    await storybookExpect(
+      await screen.findByRole('option', { name: /Regional Hub/ }),
+    ).toBeInTheDocument();
+    await closePopover();
+  },
 };
 
 export const WithSearch: Story = {
@@ -307,6 +395,25 @@ export const WithSearch: Story = {
           'Demonstrates server-side search functionality. Try typing "Main" to see filtered results.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    const trigger = await findEnabledTrigger(canvas, 'Search for addresses...');
+    await userEvent.click(trigger);
+    await storybookExpect(
+      await screen.findByRole('option', { name: /Warehouse A/ }),
+    ).toBeInTheDocument();
+
+    await userEvent.type(
+      screen.getByPlaceholderText('Search addresses...'),
+      'Main',
+    );
+    await waitFor(() =>
+      storybookExpect(screen.getAllByRole('option')).toHaveLength(1),
+    );
+    await storybookExpect(
+      screen.getByRole('option', { name: /Main Office/ }),
+    ).toBeInTheDocument();
+    await closePopover();
   },
 };
 
@@ -335,5 +442,22 @@ export const Interactive: Story = {
           'Interactive example showing the selected value and allowing full interaction.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    const trigger = await findEnabledTrigger(
+      canvas,
+      'Interactive address selection...',
+    );
+    await storybookExpect(
+      canvas.getByText('Selected address ID: None'),
+    ).toBeInTheDocument();
+    await userEvent.click(trigger);
+    await userEvent.click(
+      await screen.findByRole('option', { name: /Distribution Center/ }),
+    );
+    await storybookExpect(
+      canvas.getByText('Selected address ID: 3'),
+    ).toBeInTheDocument();
+    await closePopover();
   },
 };

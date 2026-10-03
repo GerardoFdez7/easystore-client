@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -9,6 +10,12 @@ import {
 } from '@shadcn/ui/breadcrumb';
 
 const meta: Meta<typeof Breadcrumb> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('link', { name: 'Home' }),
+    ).toBeInTheDocument();
+  },
   title: 'Shadcn/UI/Breadcrumb',
   tags: ['autodocs'],
   parameters: {

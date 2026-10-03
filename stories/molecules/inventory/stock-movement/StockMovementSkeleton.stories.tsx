@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import StockMovementSkeleton from '@molecules/inventory/stock-movement/StockMovementSkeleton';
 
 const meta: Meta<typeof StockMovementSkeleton> = {
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getAllByRole('row', { hidden: true }),
+    ).toHaveLength((args.rows ?? 8) + 1);
+  },
   title: 'Molecules/Inventory/History/StockMovementSkeleton',
   component: StockMovementSkeleton,
   parameters: {

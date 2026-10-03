@@ -67,10 +67,10 @@ export default function CategoryCard({
           href={href}
           onClick={handleClick}
           className="group relative block aspect-square w-full overflow-hidden rounded-t-lg focus-visible:ring-2 focus-visible:outline-none"
-          aria-label="view Category"
+          aria-label={t('viewCategory')}
         >
           <Image
-            alt="category Image"
+            alt={t('categoryImageAlt')}
             src={cover}
             fill
             className="object-cover transition-transform group-hover:scale-110"
@@ -84,7 +84,7 @@ export default function CategoryCard({
             href={href}
             onClick={handleClick}
             className="mt-4 flex flex-col rounded px-4 focus-visible:ring-2 focus-visible:outline-none"
-            aria-label="view Category Details"
+            aria-label={t('viewCategoryDetails')}
           >
             <CardTitle className="line-clamp-2 text-sm sm:text-base">
               {name}

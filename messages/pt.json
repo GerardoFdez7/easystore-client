@@ -1,4 +1,8 @@
 {
+  "AuthenticationField": {
+    "showPassword": "Mostrar senha",
+    "hidePassword": "Ocultar senha"
+  },
   "Languages": {
     "Spanish": "Español",
     "English": "English",
@@ -354,6 +358,10 @@
     "pricingDescription": "Descubra planos acessíveis repletos de recursos avançados projetados para cativar seu público, fidelizar clientes e aumentar suas vendas."
   },
   "Media": {
+    "previewAlt": "Pré-visualização",
+    "removeImage": "Remover imagem",
+    "thumbnailLoading": "Carregando...",
+    "thumbnailError": "Erro",
     "fileTypeNotSupported": "O tipo de arquivo {fileType} não é suportado. Formatos suportados: {supportedFormats}",
     "imageSizeExceeded": "O tamanho da imagem {fileSize} excede o limite de {maxSize}MB para imagens",
     "videoSizeExceeded": "O tamanho do vídeo {fileSize} excede o limite de {maxSize}MB para vídeos",
@@ -372,6 +380,10 @@
     "uploadFailed": "Falha no envio",
     "authenticationFailed": "Falha na autenticação",
     "uploading": "Carregando...",
+    "removeMedia": "Remover",
+    "addMore": "Adicionar mais",
+    "mainCarousel": "Galeria de mídia",
+    "thumbnailsCarousel": "Miniaturas de mídia",
     "cover": "Capa"
   },
   "ConfirmRegister": {
@@ -513,6 +525,20 @@
     "registrationSuccessfulDescription": "Bem-vindo {email}!"
   },
   "Dashboard": {
+    "companyLogoAlt": "Logo da empresa",
+    "topProductImageAlt": "Imagem do produto mais vendido",
+    "kpiTotalRevenue": "Receita total",
+    "kpiTotalRevenueFooter": "Em alta neste mês",
+    "kpiTotalRevenueSub": "Visitantes dos últimos 6 meses",
+    "kpiNewCustomers": "Novos clientes",
+    "kpiNewCustomersFooter": "Queda de 20% neste período",
+    "kpiNewCustomersSub": "A aquisição precisa de atenção",
+    "kpiActiveAccounts": "Contas ativas",
+    "kpiActiveAccountsFooter": "Forte retenção de usuários",
+    "kpiActiveAccountsSub": "O engajamento supera as metas",
+    "kpiGrowthRate": "Taxa de crescimento",
+    "kpiGrowthRateFooter": "Aumento constante de desempenho",
+    "kpiGrowthRateSub": "Atende às projeções de crescimento",
     "profile": "Perfil",
     "logOut": "Sair",
     "logoutConfirmTitle": "Confirmar saída",
@@ -555,6 +581,26 @@
     "sidebarToggle": "Alternar barra lateral"
   },
   "Products": {
+    "discardChanges": "Descartar alterações",
+    "discardChangesDescription": "Tem certeza de que deseja descartar as alterações?",
+    "deleteProductTitle": "Excluir produto?",
+    "deleteProductDescription": "Esta ação não pode ser desfeita. O produto será excluído permanentemente do banco de dados.",
+    "unarchiveProduct": "Desarquivar produto",
+    "archiveProductTitle": "Arquivar produto?",
+    "unarchiveProductTitle": "Desarquivar produto?",
+    "archiveProductDescription": "Esta ação ocultará o produto da loja, mas manterá todas as suas informações.",
+    "unarchiveProductDescription": "Esta ação tornará o produto disponível novamente na loja.",
+    "unarchive": "Desarquivar",
+    "saveChanges": "Salvar alterações",
+    "selectProduct": "Selecionar {name}",
+    "viewProductDetails": "Ver detalhes de {name}",
+    "loadingProduct": "Carregando produto",
+    "productMediaAlt": "Mídia de {name}",
+    "productPreviewAlt": "Pré-visualização de {name}",
+    "videoCaptionsUnavailable": "Legendas indisponíveis",
+    "videoNotSupported": "Seu navegador não suporta a tag de vídeo.",
+    "productDetailTitle": "Detalhe do produto",
+    "removeTag": "Remover {name}",
     "addProduct": "Criar produto",
     "status": "Status",
     "category": "Categoria",
@@ -676,6 +722,7 @@
     "moveDown": "Mover para baixo",
     "productType": "Tipo de produto",
     "selectType": "Selecionar tipo",
+    "selectAllProducts": "Selecionar todos os produtos",
     "addVariant": "Adicionar variante",
     "variant": "Variante",
     "condition": "Condição",
@@ -973,6 +1020,10 @@
     "connectWithGoogle": "Conectar com o Google",
     "connectWithFacebook": "Conectar com o Facebook",
     "verified": "verificado",
+    "account": "Conta",
+    "cancel": "Cancelar",
+    "profileUpdated": "Perfil atualizado com sucesso.",
+    "unsavedChanges": "Você tem alterações não salvas",
     "submitErrorTitle": "Algo deu errado",
     "savedChangesTitle": "Alterações salvas",
     "unknownError": "Erro desconhecido",
@@ -1048,6 +1099,20 @@
     "variantNotFoundDescription": "A variante de produto que você está procurando não existe ou foi excluída."
   },
   "Shared": {
+    "loading": "Carregando",
+    "loadingCart": "Carregando carrinho",
+    "loadingFormField": "Carregando campo do formulário",
+    "loadingContent": "Carregando conteúdo",
+    "logoAlt": "Logo da EasyStore",
+    "logoLabel": "Ir para o início ou voltar ao topo",
+    "imageAlt": "Imagem",
+    "companyLogoAlt": "Logo da empresa",
+    "openNavigationMenu": "Abrir menu de navegação",
+    "navigationMenu": "Menu de navegação",
+    "navigationMenuDescription": "Este é o menu de navegação. Use os links para navegar pelo site.",
+    "googleIconAlt": "Ícone do Google",
+    "featureInProgress": "Estamos trabalhando duro neste recurso!",
+    "selectValue": "Selecione um valor",
     "loadMore": "Carregar mais",
     "cancel": "Cancelar",
     "save": "Manter",
@@ -1079,6 +1144,7 @@
     },
     "themeToggle": "Alternar tema",
     "accountMenu": "Menu da conta",
+    "notifications": "Notificações",
     "goBack": "Voltar"
   },
   "Inventory": {
@@ -1089,6 +1155,8 @@
     "noProductVariantsFound": "Nenhuma variante de produto encontrada",
     "emptyStateDescription": "Parece que você ainda não adicionou nenhuma variante de produto ao seu armazém. Comece criando seu primeiro estoque para gerenciar seu inventário de forma eficaz.",
     "addStockButton": "Adicionar Stock",
+    "selectAllRows": "Selecionar todas as linhas",
+    "selectRow": "Selecionar linha",
     "historyButton": "Histórico",
     "manageWarehousesButton": "Gerenciar Armazéns",
     "productTableHead": "Produto",
@@ -1122,6 +1190,7 @@
     "errorDeletingStock": "Falha ao excluir o estoque.",
     "pageInfo": "Página {current} de {total}",
     "AddStock": {
+      "loadingVariants": "Carregando variantes",
       "searchProducts": "Pesquisar produtos...",
       "selectVariant": "Selecionar variante do produto",
       "includeArchived": "Arquivados",
@@ -1154,6 +1223,7 @@
       "loadMore": "Carregar mais"
     },
     "WarehouseManagement": {
+      "warehouseList": "Armazéns",
       "warehouseManagement": "Gestão de Armazéns",
       "warehouseManagementDescription": "Gerencie seus armazéns, endereços e configurações.",
       "createWarehouse": "Criar Armazém",
@@ -1285,6 +1355,24 @@
     }
   },
   "Category": {
+    "loadingCategory": "Carregando categoria",
+    "viewCategory": "Ver categoria",
+    "viewCategoryDetails": "Ver detalhes da categoria",
+    "categoryImageAlt": "Imagem da categoria",
+    "breadcrumbNavigation": "Navegação estrutural",
+    "categoryOptions": "Opções da categoria",
+    "siblingCategories": "Categorias irmãs",
+    "navigateToCategory": "Ir para a categoria",
+    "navigateToCategoryName": "Ir para a categoria {name}",
+    "categoryNavigation": "Navegação de categorias",
+    "categoryControls": "Controles de categorias",
+    "searchCategories": "Buscar categorias",
+    "sortCategoriesBy": "Ordenar categorias por",
+    "sortOrderLabel": "Ordem",
+    "toggleLabel": "Alternar {label}",
+    "cancelDelete": "Cancelar exclusão",
+    "confirmDelete": "Confirmar exclusão",
+    "deletingCategory": "Excluindo categoria",
     "welcomeCategory": "Categorias",
     "addCategory": "Adicionar categoria",
     "createCategory": "Criar categoria",
@@ -1318,6 +1406,11 @@
     "categoryNotFoundDescription": "A categoria que você procura não existe ou pode ter sido removida."
   },
   "CategoryDetail": {
+    "subcategoryLabel": "Subcategoria: {name}",
+    "subcategoryNewLabel": "Subcategoria: {name} (nova)",
+    "categoryCoverAlt": "Capa da categoria {name}",
+    "defaultIconFor": "Ícone padrão de {name}",
+    "removeSubcategoryLabel": "Remover a subcategoria {name}",
     "welcomeDetailCategory": "Criar uma nova categoria",
     "addCategory": "Adicionar categoria",
     "addCategoryDescription": "Preencha os detalhes para criar uma nova categoria",

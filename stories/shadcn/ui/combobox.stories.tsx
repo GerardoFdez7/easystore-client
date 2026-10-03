@@ -1,8 +1,22 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import {
+  expect as storybookExpect,
+  userEvent,
+  waitFor,
+  within,
+} from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
 import { Combobox, ComboboxOption, ComboboxProps } from '@shadcn/ui/combobox';
+import { Button } from '@shadcn/ui/button';
 
 const meta: Meta<typeof Combobox> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('combobox')).toHaveAttribute(
+      'aria-haspopup',
+      'dialog',
+    );
+  },
   title: 'Shadcn/UI/Combobox',
   component: Combobox,
   parameters: {
@@ -179,6 +193,26 @@ export const Interactive: Story = {
     emptyMessage: 'No framework found.',
     width: 200,
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('combobox', {
+      name: 'Select framework...',
+    });
+    await userEvent.click(trigger);
+    const body = within(canvasElement.ownerDocument.body);
+    await userEvent.click(await body.findByRole('option', { name: 'Remix' }));
+    await storybookExpect(
+      canvas.getByText('Selected value: remix'),
+    ).toBeVisible();
+    await storybookExpect(trigger).toHaveTextContent('Remix');
+    await storybookExpect(trigger).toHaveAttribute('aria-expanded', 'false');
+    // Radix removes aria-hidden from the page once the popover has closed
+    await waitFor(() =>
+      storybookExpect(
+        canvasElement.ownerDocument.querySelector('[data-aria-hidden]'),
+      ).toBeNull(),
+    );
+  },
 };
 
 // Controlled state story
@@ -189,24 +223,15 @@ const ControlledComponent = (args: ComboboxProps) => {
   return (
     <div className="space-y-4">
       <div className="flex gap-2">
-        <button
-          onClick={() => setValue('vue')}
-          className="bg-primary rounded px-3 py-1 text-sm text-white"
-        >
+        <Button variant="outline" size="sm" onClick={() => setValue('vue')}>
           Set to Vue.js
-        </button>
-        <button
-          onClick={() => setValue('')}
-          className="bg-muted-foreground rounded px-3 py-1 text-sm text-white"
-        >
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => setValue('')}>
           Clear
-        </button>
-        <button
-          onClick={() => setOpen(!open)}
-          className="bg-secondary rounded px-3 py-1 text-sm text-white"
-        >
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => setOpen(!open)}>
           Toggle Open
-        </button>
+        </Button>
       </div>
       <Combobox
         {...args}
@@ -230,6 +255,19 @@ export const Controlled: Story = {
     searchPlaceholder: 'Search frameworks...',
     emptyMessage: 'No framework found.',
     width: 200,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('combobox');
+    await storybookExpect(trigger).toHaveTextContent('React');
+    await userEvent.click(
+      canvas.getByRole('button', { name: 'Set to Vue.js' }),
+    );
+    await storybookExpect(trigger).toHaveTextContent('Vue.js');
+    await userEvent.click(canvas.getByRole('button', { name: 'Clear' }));
+    await storybookExpect(canvas.getByText(/Selected: None/)).toBeVisible();
+    await userEvent.click(canvas.getByRole('button', { name: 'Toggle Open' }));
+    await storybookExpect(trigger).toHaveAttribute('aria-expanded', 'true');
   },
 };
 
@@ -291,6 +329,13 @@ const MultipleComponent = () => {
 export const Multiple: Story = {
   render: () => <MultipleComponent />,
   args: {},
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const [framework, language, status] = canvas.getAllByRole('combobox');
+    await storybookExpect(framework).toHaveTextContent('Select framework...');
+    await storybookExpect(language).toHaveTextContent('Select language...');
+    await storybookExpect(status).toHaveTextContent('Select status...');
+  },
 };
 
 const LoadMoreComponent = (args: ComboboxProps) => {

@@ -79,7 +79,7 @@ export default function TagSelectFormField<T>({
               <div className={containerClassName}>
                 {/* Select Dropdown */}
                 <Select value="" onValueChange={addItem}>
-                  <SelectTrigger className="bg-card w-full">
+                  <SelectTrigger className="bg-card w-full" aria-label={label}>
                     <SelectValue placeholder={placeholder} />
                   </SelectTrigger>
                   <SelectContent>

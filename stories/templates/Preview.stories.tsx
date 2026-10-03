@@ -1,8 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import PreviewTemplate from '@templates/Preview';
 import { withCountdown } from './mocks/withCountdown';
 
 const meta = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('heading', { name: 'Preview' }),
+    ).toBeInTheDocument();
+  },
   title: 'Templates/Preview',
   component: PreviewTemplate,
   decorators: [withCountdown],

@@ -1,10 +1,17 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import VariantTemplate from '@templates/products/Variant';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
 import { ProductCreationProvider } from '@lib/contexts/ProductCreationContext';
 import { ProductsProvider } from '@lib/contexts/ProductsContext';
 
 const meta: Meta<typeof VariantTemplate> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('heading', { name: 'Variant detail' }),
+    ).toBeInTheDocument();
+  },
   title: 'Templates/Products/VariantTemplate',
   component: VariantTemplate,
   parameters: {
@@ -15,13 +22,13 @@ const meta: Meta<typeof VariantTemplate> = {
   },
   decorators: [
     (Story) => (
-      <MockedProvider mocks={[]}>
+      <ApolloMswMocks mocks={[]}>
         <ProductsProvider>
           <ProductCreationProvider>
             <Story />
           </ProductCreationProvider>
         </ProductsProvider>
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   tags: ['autodocs'],

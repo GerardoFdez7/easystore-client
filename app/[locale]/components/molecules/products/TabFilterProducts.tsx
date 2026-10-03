@@ -88,9 +88,15 @@ export default function TabFilterProducts({
         className="w-full sm:w-auto"
       >
         <TabsList className="w-full justify-start gap-2 border sm:gap-4">
-          <TabsTrigger value="All">{t('all')}</TabsTrigger>
-          <TabsTrigger value="Actives">{t('actives')}</TabsTrigger>
-          <TabsTrigger value="Archived">{t('archived')}</TabsTrigger>
+          <TabsTrigger value="All" aria-controls={undefined}>
+            {t('all')}
+          </TabsTrigger>
+          <TabsTrigger value="Actives" aria-controls={undefined}>
+            {t('actives')}
+          </TabsTrigger>
+          <TabsTrigger value="Archived" aria-controls={undefined}>
+            {t('archived')}
+          </TabsTrigger>
         </TabsList>
       </Tabs>
       {selectedCount > 0 && (

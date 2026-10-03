@@ -1,5 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { NextIntlClientProvider } from 'next-intl';
+import enMessages from '../../../messages/en.json';
 import AboutUs from '@molecules/landing/AboutUs';
 
 const messages = {
@@ -22,6 +24,15 @@ const messages = {
 };
 
 const meta: Meta<typeof AboutUs> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      await canvas.findByRole('heading', { name: 'About EasyStore' }),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByText('Empower sellers with great tools.'),
+    ).toBeInTheDocument();
+  },
   title: 'Molecules/Landing/AboutUs',
   parameters: {
     layout: 'centered',
@@ -34,7 +45,10 @@ type Story = StoryObj<typeof AboutUs>;
 
 export const Default: Story = {
   render: () => (
-    <NextIntlClientProvider locale="en" messages={messages}>
+    <NextIntlClientProvider
+      locale="en"
+      messages={{ ...enMessages, ...messages }}
+    >
       <AboutUs />
     </NextIntlClientProvider>
   ),

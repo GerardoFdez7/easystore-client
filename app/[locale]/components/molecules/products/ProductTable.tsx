@@ -68,6 +68,7 @@ export function ProductTable({
               <Checkbox
                 checked={selectedProducts.length === products.length}
                 onCheckedChange={onSelectAll}
+                aria-label={t('selectAllProducts')}
               />
             </TableHead>
             <SortableHeader<ProductSortBy>

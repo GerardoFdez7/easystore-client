@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import SaveButton from '@atoms/shared/SaveButton';
 
 const meta: Meta<typeof SaveButton> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: /Save|Saving/ }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/SaveButton',
   component: SaveButton,
   parameters: {

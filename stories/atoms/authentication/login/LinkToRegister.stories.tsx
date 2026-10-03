@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import LinkToRegister from '@atoms/authentication/login/LinkToRegister';
 
 const meta = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('link', { name: 'Register' }),
+    ).toHaveAttribute('href', '/register');
+  },
   title: 'Atoms/Authentication/Login/LinkToRegister',
   component: LinkToRegister,
   parameters: {

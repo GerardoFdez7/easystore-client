@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import CartLoader from '@atoms/shared/CartLoader';
 
 const meta = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('status', { name: 'Loading cart' }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/CartLoader',
   component: CartLoader,
   parameters: {

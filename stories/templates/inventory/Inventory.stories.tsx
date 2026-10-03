@@ -1,17 +1,24 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
 import InventoryTemplate from '@templates/inventory/Inventory';
 import { inventoryMocks, emptyInventoryMocks } from './mocks/inventoryMocks';
 
 const meta: Meta<typeof InventoryTemplate> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: /search/i }),
+    ).toBeInTheDocument();
+  },
   component: InventoryTemplate,
   title: 'Templates/Inventory/InventoryTemplate',
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <MockedProvider mocks={inventoryMocks}>
+      <ApolloMswMocks mocks={inventoryMocks}>
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
 };
@@ -36,9 +43,9 @@ export const EmptyState: Story = {
   args: {},
   decorators: [
     (Story) => (
-      <MockedProvider mocks={emptyInventoryMocks}>
+      <ApolloMswMocks mocks={emptyInventoryMocks}>
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   parameters: {

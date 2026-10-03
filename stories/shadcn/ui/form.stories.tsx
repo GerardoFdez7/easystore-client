@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   Form,
   FormField,
@@ -13,6 +14,12 @@ import { useForm } from 'react-hook-form';
 import React from 'react';
 
 const meta: Meta<typeof Form> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: /Submit/ }),
+    ).toBeInTheDocument();
+  },
   title: 'Shadcn/UI/Form',
   tags: ['autodocs'],
   parameters: {

@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import StateCombobox from '@molecules/shared/StateCombobox';
 
 const meta: Meta<typeof StateCombobox> = {
@@ -52,6 +53,11 @@ export const Default: Story = {
     placeholder: 'Select a state',
     options: mockStatesUS,
   },
+  play: async ({ canvas }) => {
+    const combobox = canvas.getByRole('combobox');
+    await storybookExpect(combobox).toHaveTextContent('Select a state');
+    await storybookExpect(combobox).toBeDisabled();
+  },
 };
 
 export const WithSelectedValue: Story = {
@@ -61,6 +67,11 @@ export const WithSelectedValue: Story = {
     placeholder: 'Select a state',
     options: mockStatesUS,
   },
+  play: async ({ canvas }) => {
+    const combobox = canvas.getByRole('combobox');
+    await storybookExpect(combobox).toHaveTextContent('California');
+    await storybookExpect(combobox).toBeDisabled();
+  },
 };
 
 export const NoCountrySelected: Story = {
@@ -68,6 +79,13 @@ export const NoCountrySelected: Story = {
     countryId: undefined,
     placeholder: 'Select a state',
     options: [],
+  },
+  play: async ({ canvas }) => {
+    const combobox = canvas.getByRole('combobox');
+    await storybookExpect(combobox).toHaveTextContent(
+      'Please select a country first',
+    );
+    await storybookExpect(combobox).toBeDisabled();
   },
 };
 
@@ -77,6 +95,11 @@ export const Empty: Story = {
     placeholder: 'No states available',
     options: [],
   },
+  play: async ({ canvas }) => {
+    const combobox = canvas.getByRole('combobox');
+    await storybookExpect(combobox).toHaveTextContent('No states available');
+    await storybookExpect(combobox).toBeDisabled();
+  },
 };
 
 export const Loading: Story = {
@@ -85,5 +108,10 @@ export const Loading: Story = {
     placeholder: 'Loading states...',
     loading: true,
     options: [],
+  },
+  play: async ({ canvas }) => {
+    const combobox = canvas.getByRole('combobox');
+    await storybookExpect(combobox).toHaveTextContent('Loading states...');
+    await storybookExpect(combobox).toBeDisabled();
   },
 };

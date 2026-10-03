@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import React from 'react';
 import { Unlink } from 'lucide-react';
 import { Button } from '@shadcn/ui/button';
@@ -20,6 +21,7 @@ export default function CategoryRelationRemoveButton({
   tooltip,
   onRemove,
 }: CategoryRelationRemoveButtonProps) {
+  const t = useTranslations('CategoryDetail');
   return (
     <div className={containerClassName}>
       <Tooltip>
@@ -31,7 +33,7 @@ export default function CategoryRelationRemoveButton({
             onClick={onRemove}
             disabled={disabled}
             className="hover:bg-destructive/10 hover:text-destructive h-8 w-8 rounded-full p-0 transition-colors"
-            aria-label={`Remove ${categoryName} subcategory`}
+            aria-label={t('removeSubcategoryLabel', { name: categoryName })}
             aria-describedby={`category-name-${categoryName}`}
           >
             <Unlink className="h-4 w-4" aria-hidden="true" />

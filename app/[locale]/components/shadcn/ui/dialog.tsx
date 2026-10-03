@@ -56,14 +56,17 @@ function DialogContent({
   showCloseButton?: boolean;
 }) {
   // Check if children contains a DialogTitle
-  const hasDialogTitle = React.Children.toArray(children).some(
-    (child) =>
-      React.isValidElement(child) &&
-      (child.type === DialogTitle ||
-        (typeof child.type === 'object' &&
-          child.type &&
-          'displayName' in child.type)),
-  );
+  const containsTitle = (nodes: React.ReactNode): boolean =>
+    React.Children.toArray(nodes).some(
+      (child) =>
+        React.isValidElement<{ children?: React.ReactNode }>(child) &&
+        (child.type === DialogTitle ||
+          (typeof child.type === 'object' &&
+            child.type &&
+            'displayName' in child.type) ||
+          containsTitle(child.props.children)),
+    );
+  const hasDialogTitle = containsTitle(children);
 
   return (
     <DialogPortal data-slot="dialog-portal">

@@ -2,9 +2,9 @@
 
 import { EditableField } from '@molecules/profile/EditableField';
 import { Button } from '@shadcn/ui/button';
-// import ProfileSocialButtons from '@molecules/shared/ProfileSocialButton';
+import { Card, CardContent, CardHeader, CardTitle } from '@shadcn/ui/card';
 import { useTranslations } from 'next-intl';
-import { useProfile } from '@hooks/domains/tenant/useProfile';
+import { useProfileDraft } from '@contexts/ProfileDraftContext';
 import FormFieldSkeleton from '@atoms/shared/FormFieldSkeleton';
 import LogoutConfirmDialog from '@atoms/shared/LogoutConfirmDialog';
 import { LogOut } from 'lucide-react';
@@ -12,78 +12,65 @@ import ProfileSection from '@atoms/profile/ProfileSection';
 
 export default function MainProfile() {
   const t = useTranslations('Profile');
-  const { profile, loading, actions } = useProfile();
+  const { profile, loading, values, setField } = useProfileDraft();
 
   return (
-    <main className="relative mt-6 min-h-full w-full flex-1 md:mt-0">
-      {loading ? (
-        <>
-          <FormFieldSkeleton />
-          <FormFieldSkeleton />
-          <FormFieldSkeleton />
-        </>
-      ) : (
-        <>
-          <EditableField
-            label={t('ownerName')}
-            value={profile?.ownerName ?? ''}
-            iconEditable
-            saveLabel={t('save')}
-            onSave={(v) => void actions.updateOwnerName(v)}
-          />
+    <main className="gap-section flex w-full min-w-0 flex-col">
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            <h2>{t('account')}</h2>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="gap-card flex flex-col">
+          {loading ? (
+            <>
+              <FormFieldSkeleton className="mb-0" />
+              <FormFieldSkeleton className="mb-0" />
+              <FormFieldSkeleton className="mb-0" />
+            </>
+          ) : (
+            <>
+              <EditableField
+                id="profile-owner-name"
+                label={t('ownerName')}
+                value={values.ownerName}
+                onChange={(v) => setField('ownerName', v)}
+              />
 
-          <EditableField
-            label={t('domain')}
-            value={profile?.domain ?? ''}
-            iconEditable
-            saveLabel={t('save')}
-            onSave={(v) => void actions.updateDomain(v)}
-          />
+              <EditableField
+                id="profile-domain"
+                label={t('domain')}
+                value={values.domain}
+                onChange={(v) => setField('domain', v)}
+              />
 
-          {/* <EditableField
-            label={t('phone')}
-            value={hasPhone ? phoneDisplay : ''}
-            placeholder={t('noPhone')}
-            {...(hasPhone ? { iconEditable: true } : { actionLabel: t('add') })}
-            saveLabel={t('save')}
-            onSave={(v) => void actions.updatePhone(v)}
-          /> */}
+              <EditableField
+                id="profile-email"
+                label={t('email')}
+                value={profile?.email ?? ''}
+                statusChip={{ label: t('verified'), tone: 'denied' }}
+              />
+            </>
+          )}
+        </CardContent>
+      </Card>
 
-          <EditableField
-            label={t('email')}
-            value={profile?.email ?? ''}
-            statusChip={{ label: t('verified'), tone: 'denied' }}
-          />
-        </>
-      )}
-
-      <ProfileSection
-        title={t('password')}
-        buttonText={t('changePassword')}
-        className="mb-8"
-      />
+      <ProfileSection title={t('password')} buttonText={t('changePassword')} />
       <ProfileSection
         title={t('plan')}
         description={t('currentPlan')}
         buttonText={t('changePlan')}
       />
 
-      {/* Mobile logout button at bottom */}
-      <div className="p-4 md:hidden">
+      <div className="flex justify-end">
         <LogoutConfirmDialog>
-          <Button
-            variant="outline"
-            className="text-title bg-card hover:bg-accent border-border h-10 w-full justify-start rounded-lg px-4 shadow-sm"
-          >
-            <LogOut className="mr-2 h-4 w-4" />
+          <Button variant="outline" className="w-full sm:w-auto">
+            <LogOut />
             {t('logOut')}
           </Button>
         </LogoutConfirmDialog>
       </div>
-
-      {/* <div className="flex justify-center">
-              <ProfileSocialButtons />
-            </div> */}
     </main>
   );
 }

@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import SpinLoader from '@atoms/shared/SpinLoader';
 
 const meta: Meta<typeof SpinLoader> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('status', { name: 'Loading' }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/SpinLoader',
   component: SpinLoader,
   parameters: {

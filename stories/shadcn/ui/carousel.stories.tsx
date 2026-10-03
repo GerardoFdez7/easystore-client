@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   Carousel,
   CarouselContent,
@@ -8,6 +9,10 @@ import {
 } from '@shadcn/ui/carousel';
 
 const meta: Meta<typeof Carousel> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByText('Slide 1')).toBeInTheDocument();
+  },
   title: 'Shadcn/UI/Carousel',
   tags: ['autodocs'],
   parameters: {

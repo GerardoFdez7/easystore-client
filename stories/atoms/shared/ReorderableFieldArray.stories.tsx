@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, fn, userEvent } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import ReorderableFieldArray from '@atoms/shared/ReorderableFieldArray';
 import { Input } from '@shadcn/ui/input';
 import { Label } from '@shadcn/ui/label';
@@ -21,13 +22,13 @@ const meta = {
   tags: ['autodocs'],
   args: {
     items,
-    onMove: () => undefined,
-    onRemove: () => undefined,
+    onMove: fn(),
+    onRemove: fn(),
     t: (key: string) => translations[key] ?? key,
     renderItem: (index: number) => (
       <div className="grid grid-cols-2 gap-3">
-        <Label>{labels[index]}</Label>
-        <Input value={values[index]} readOnly />
+        <Label htmlFor={`field-${items[index].id}`}>{labels[index]}</Label>
+        <Input id={`field-${items[index].id}`} value={values[index]} readOnly />
       </div>
     ),
   },
@@ -53,4 +54,25 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  play: async ({ canvas, args }) => {
+    await storybookExpect(canvas.getByLabelText('Color')).toHaveValue(
+      'Forest green',
+    );
+    await storybookExpect(canvas.getByLabelText('Capacity')).toHaveValue(
+      '750 ml',
+    );
+    const moveUp = canvas.getAllByRole('button', { name: 'Move up' });
+    const moveDown = canvas.getAllByRole('button', { name: 'Move down' });
+    await storybookExpect(moveUp[0]).toBeDisabled();
+    await storybookExpect(moveDown[1]).toBeDisabled();
+    await userEvent.click(moveDown[0]);
+    await storybookExpect(args.onMove).toHaveBeenCalledWith(0, 'down');
+    await userEvent.click(moveUp[1]);
+    await storybookExpect(args.onMove).toHaveBeenCalledWith(1, 'up');
+    const remove = canvas.getAllByRole('button', { name: 'Delete' });
+    await storybookExpect(remove).toHaveLength(items.length);
+    await userEvent.click(remove[1]);
+    await storybookExpect(args.onRemove).toHaveBeenCalledWith(1);
+  },
+};

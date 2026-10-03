@@ -16,6 +16,7 @@ const ignorePatterns = [
   '*.config.ts',
   '*.config.mjs',
   '.storybook',
+  'storybook-static',
   '**/generated.ts',
   'app/\\[locale\\]/components/shadcn/ui/**',
 ];

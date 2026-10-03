@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
 import AddStockDialog from '@organisms/inventory/AddStockDialog';
 import {
   FindAllVariantsToCreateStockDocument,
@@ -45,6 +46,10 @@ interface GetAllWarehousesData {
 }
 
 const meta: Meta<typeof AddStockDialog> = {
+  play: async ({ canvasElement }) => {
+    const dialog = within(canvasElement.ownerDocument.body);
+    await storybookExpect(dialog.getByRole('dialog')).toBeInTheDocument();
+  },
   title: 'Organisms/Inventory/AddStockDialog',
   component: AddStockDialog,
   parameters: {
@@ -217,9 +222,9 @@ const createMocks = (
 export const Default: Story = {
   decorators: [
     (Story) => (
-      <MockedProvider mocks={createMocks()}>
+      <ApolloMswMocks mocks={createMocks()}>
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   args: {
@@ -232,11 +237,11 @@ export const Default: Story = {
 export const Loading: Story = {
   decorators: [
     (Story) => (
-      <MockedProvider
+      <ApolloMswMocks
         mocks={createMocks(mockVariantsData, mockWarehousesData, true)}
       >
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   args: {
@@ -249,9 +254,9 @@ export const Loading: Story = {
 export const WarehouseStep: Story = {
   decorators: [
     (Story) => (
-      <MockedProvider mocks={createMocks()}>
+      <ApolloMswMocks mocks={createMocks()}>
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   args: {

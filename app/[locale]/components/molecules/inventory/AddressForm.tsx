@@ -137,7 +137,7 @@ export default function AddressForm({
               <FormItem>
                 <FormLabel>{t('city')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="New York" {...field} />
+                  <Input placeholder={t('cityPlaceholder')} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -152,7 +152,7 @@ export default function AddressForm({
               <FormItem>
                 <FormLabel>{t('postalCode')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="10001" {...field} />
+                  <Input placeholder={t('postalCodePlaceholder')} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

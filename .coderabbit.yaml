@@ -15,14 +15,14 @@ reviews:
   review_progress: true
   fail_commit_status: true
   high_level_summary: true
-  high_level_summary_in_walkthrough: true
+  high_level_summary_in_walkthrough: false
   high_level_summary_instructions: >-
     Summarize behavioral and UI changes, affected routes and client/server boundaries,
     translation and accessibility impact, security and data-isolation posture,
     performance impact, public GraphQL or configuration contract changes, and test
     evidence. Separate verified facts from assumptions.
   collapse_walkthrough: false
-  sequence_diagrams: false
+  sequence_diagrams: true
   poem: false
   in_progress_fortune: false
 
@@ -267,6 +267,9 @@ reviews:
         error, disabled, selected, and overflow states when relevant; accessible markup;
         realistic typed mocks; and global decorators. Request additions only for changed
         reusable behavior or visual risk, not as a mechanical presence requirement.
+        Check that each story is meaningful and has a meaningful test (a play function
+        with observable assertions); flag stories that only render, or tests that
+        assert nothing useful.
 
     - path: 'DESIGN.md'
       instructions: |

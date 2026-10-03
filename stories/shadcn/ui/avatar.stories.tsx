@@ -1,7 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
-import { Avatar, AvatarImage, AvatarFallback } from '@shadcn/ui/avatar';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { Avatar, AvatarFallback } from '@shadcn/ui/avatar';
 
 const meta: Meta<typeof Avatar> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByText('ES')).toBeVisible();
+  },
   title: 'Shadcn/UI/Avatar',
   tags: ['autodocs'],
   parameters: {
@@ -17,7 +22,6 @@ type Story = StoryObj<typeof Avatar>;
 export const Default: Story = {
   render: () => (
     <Avatar className="h-16 w-16">
-      <AvatarImage src="https://i.pravatar.cc/100?img=12" alt="@user" />
       <AvatarFallback>ES</AvatarFallback>
     </Avatar>
   ),

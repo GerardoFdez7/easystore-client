@@ -1,18 +1,21 @@
 import MainProfile from '@organisms/profile/MainProfile';
 import SidebarProfile from '@organisms/profile/SidebarProfile';
-import { Separator } from '@shadcn/ui/separator';
+import { ProfileDraftProvider } from '@contexts/ProfileDraftContext';
+import BackButton from '@atoms/shared/BackButton';
 
 export default function ProfileTemplate() {
   return (
-    <div className="bg-background mx-4 flex min-h-screen items-center justify-center">
-      <div className="flex w-full max-w-7xl flex-col md:min-h-screen md:flex-row md:items-center">
-        <SidebarProfile />
-        <Separator
-          className="bg-title mx-6 hidden h-200! w-0.5! md:block"
-          orientation="vertical"
-          decorative={true}
-        />
-        <MainProfile />
+    <div className="bg-background min-h-screen">
+      <div className="p-page gap-section mx-auto flex w-full max-w-5xl flex-col">
+        <div className="relative h-9">
+          <BackButton />
+        </div>
+        <ProfileDraftProvider>
+          <div className="lg:grid-cols-profile-page gap-section grid grid-cols-1 items-start">
+            <SidebarProfile />
+            <MainProfile />
+          </div>
+        </ProfileDraftProvider>
       </div>
     </div>
   );

@@ -70,10 +70,11 @@ export default function AttributesCard() {
                       />
                     </div>
                     <div>
-                      <FormLabel className="mb-1">
+                      <FormLabel htmlFor="attributeValue" className="mb-1">
                         {t('attributeValue')}
                       </FormLabel>
                       <Input
+                        id="attributeValue"
                         placeholder={t('attributeValuePlaceholder')}
                         value={newValue}
                         onChange={(e) => setNewValue(e.target.value)}
@@ -116,6 +117,7 @@ export default function AttributesCard() {
                               <FormControl>
                                 <Input
                                   {...field}
+                                  aria-label={t('attributeKey')}
                                   placeholder={t('attributeKeyPlaceholder')}
                                 />
                               </FormControl>
@@ -136,6 +138,7 @@ export default function AttributesCard() {
                               <FormControl>
                                 <Input
                                   {...field}
+                                  aria-label={t('attributeValue')}
                                   placeholder={t('attributeValuePlaceholder')}
                                 />
                               </FormControl>

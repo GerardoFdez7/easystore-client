@@ -1,5 +1,6 @@
+import { expect as storybookExpect } from 'storybook/test';
 import ProductStatus from '@atoms/products/ProductStatus';
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { TypeEnum, type Product } from '@graphql/generated';
 
 const activeProduct = {
@@ -36,6 +37,12 @@ export const Active: Story = {
   args: {
     product: activeProduct,
   },
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getByText('Active')).toBeVisible();
+    await storybookExpect(
+      canvas.queryByText('Archived'),
+    ).not.toBeInTheDocument();
+  },
 };
 
 export const Archived: Story = {
@@ -44,5 +51,9 @@ export const Archived: Story = {
       ...activeProduct,
       isArchived: true,
     },
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getByText('Archived')).toBeVisible();
+    await storybookExpect(canvas.queryByText('Active')).not.toBeInTheDocument();
   },
 };

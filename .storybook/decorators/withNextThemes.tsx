@@ -1,65 +1,34 @@
 'use client';
 
-import { ThemeProvider as NextThemesProvider } from 'next-themes';
-import type { Decorator } from '@storybook/nextjs';
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { useEffect } from 'react';
+import type { Decorator } from '@storybook/nextjs-vite';
+import { ThemeProvider, useTheme } from '@shadcn/features/theme-provider';
 
-type PageThemeContextType = {
-  isDarkModeEnabled: boolean;
-};
+type Theme = 'light' | 'dark' | 'system';
 
-const PageThemeContext = createContext<PageThemeContextType>({
-  isDarkModeEnabled: true,
-});
-
-function usePageTheme() {
-  return useContext(PageThemeContext);
+function isTheme(value: unknown): value is Theme {
+  return value === 'light' || value === 'dark' || value === 'system';
 }
 
-function PageThemeProvider({ children }: { children: ReactNode }) {
-  const [isDarkModeEnabled] = useState(true);
+/** Keeps Storybook's toolbar in sync with the application's theme context. */
+function StorybookThemeBridge({ theme }: { theme: Theme }) {
+  const { setTheme } = useTheme();
 
-  return (
-    <PageThemeContext.Provider value={{ isDarkModeEnabled }}>
-      {children}
-    </PageThemeContext.Provider>
-  );
-}
+  useEffect(() => {
+    setTheme(theme);
+  }, [setTheme, theme]);
 
-function CustomThemeProvider({
-  children,
-  theme,
-  ...props
-}: {
-  children: ReactNode;
-  theme: string;
-  [key: string]: any;
-}) {
-  const { isDarkModeEnabled } = usePageTheme();
-
-  return (
-    <NextThemesProvider
-      {...props}
-      enableSystem={isDarkModeEnabled}
-      attribute="class"
-      defaultTheme={theme}
-      forcedTheme={theme === 'system' ? undefined : theme}
-      key={theme} // Force re-render when theme changes
-    >
-      {children}
-    </NextThemesProvider>
-  );
+  return null;
 }
 
 export const withNextThemes: Decorator = (Story, context) => {
-  const theme = (context?.globals?.theme as string) || 'system';
+  const toolbarTheme = context.globals.theme;
+  const theme = isTheme(toolbarTheme) ? toolbarTheme : 'system';
 
-  // Force re-render when theme changes by using key
   return (
-    <PageThemeProvider>
-      <CustomThemeProvider theme={theme} key={`theme-${theme}`}>
-        <Story />
-      </CustomThemeProvider>
-    </PageThemeProvider>
+    <ThemeProvider defaultTheme={theme} storageKey="easystore-storybook-theme">
+      <StorybookThemeBridge theme={theme} />
+      <Story />
+    </ThemeProvider>
   );
 };

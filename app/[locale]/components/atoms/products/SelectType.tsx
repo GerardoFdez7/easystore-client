@@ -61,7 +61,7 @@ export default function SelectType({
       onValueChange={handleValueChange}
       disabled={disabled}
     >
-      <SelectTrigger className={className}>
+      <SelectTrigger className={className} aria-label={t('type')}>
         <SelectValue placeholder={t('type')} />
       </SelectTrigger>
       <SelectContent>

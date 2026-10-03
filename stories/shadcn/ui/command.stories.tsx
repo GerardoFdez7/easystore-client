@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, userEvent, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import * as React from 'react';
 import {
   Command,
@@ -50,7 +51,15 @@ const CommandInlineExample: React.FC = () => (
   </Command>
 );
 
-export const Inline: Story = { render: () => <CommandInlineExample /> };
+export const Inline: Story = {
+  render: () => <CommandInlineExample />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(canvas.getByPlaceholderText('Search…'), 'mango');
+    await storybookExpect(canvas.getByText('Mango')).toBeVisible();
+    await storybookExpect(canvas.queryByText('Apple')).not.toBeInTheDocument();
+  },
+};
 
 const CommandDialogExample: React.FC = () => {
   const [open, setOpen] = React.useState(false);
@@ -59,6 +68,7 @@ const CommandDialogExample: React.FC = () => {
       <button
         className="rounded-md border px-4 py-2 text-sm"
         onClick={() => setOpen(true)}
+        aria-expanded={open}
       >
         Open Command
       </button>
@@ -87,4 +97,12 @@ const CommandDialogExample: React.FC = () => {
   );
 };
 
-export const InDialog: Story = { render: () => <CommandDialogExample /> };
+export const InDialog: Story = {
+  render: () => <CommandDialogExample />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', { name: 'Open Command' });
+    await userEvent.click(trigger);
+    await storybookExpect(trigger).toHaveAttribute('aria-expanded', 'true');
+  },
+};

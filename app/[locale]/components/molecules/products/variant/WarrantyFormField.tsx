@@ -113,10 +113,14 @@ export default function WarrantyFormField() {
                       />
                     </div>
                     <div>
-                      <FormLabel className="mb-1 text-base">
+                      <FormLabel
+                        htmlFor="warrantyInstructions"
+                        className="mb-1 text-base"
+                      >
                         {t('warrantyInstructions')}
                       </FormLabel>
                       <Textarea
+                        id="warrantyInstructions"
                         maxLength={1000}
                         placeholder={t('warrantyInstructionsPlaceholder')}
                         value={newInstructions}
@@ -172,6 +176,7 @@ export default function WarrantyFormField() {
                                   <FormControl>
                                     <Input
                                       {...fieldProps}
+                                      aria-label={t('warrantyMonths')}
                                       inputMode="numeric"
                                       type="number"
                                       placeholder={t(
@@ -204,6 +209,7 @@ export default function WarrantyFormField() {
                                     <FormControl>
                                       <Textarea
                                         {...fieldProps}
+                                        aria-label={t('warrantyCoverage')}
                                         maxLength={1000}
                                         placeholder={t(
                                           'warrantyCoveragePlaceholder',
@@ -227,6 +233,7 @@ export default function WarrantyFormField() {
                                     <FormControl>
                                       <Textarea
                                         {...fieldProps}
+                                        aria-label={t('warrantyInstructions')}
                                         maxLength={1000}
                                         placeholder={t(
                                           'warrantyInstructionsPlaceholder',

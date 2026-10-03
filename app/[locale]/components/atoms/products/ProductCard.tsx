@@ -9,6 +9,7 @@ import {
 } from '@shadcn/ui/carousel';
 import { Card, CardContent, CardTitle } from '@shadcn/ui/card';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import ProductStatus from '@atoms/products/ProductStatus';
 import BadgeTag from '@atoms/shared/BadgeTag';
@@ -21,6 +22,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const router = useRouter();
+  const t = useTranslations('Products');
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [previewIndex, setPreviewIndex] = React.useState<number | null>(null);
@@ -87,7 +89,9 @@ export function ProductCard({ product }: ProductCardProps) {
       return (
         <Image
           src={mediaItem.url}
-          alt={`${product.name} ${isPreview ? 'preview' : 'media'}`}
+          alt={t(isPreview ? 'productPreviewAlt' : 'productMediaAlt', {
+            name: product.name,
+          })}
           width={300}
           height={300}
           className="h-full w-full object-cover"
@@ -102,8 +106,12 @@ export function ProductCard({ product }: ProductCardProps) {
           preload="metadata"
           muted={isPreview}
         >
-          <track kind="captions" srcLang="en" label="Captions unavailable" />
-          Your browser does not support the video tag.
+          <track
+            kind="captions"
+            srcLang="en"
+            label={t('videoCaptionsUnavailable')}
+          />
+          {t('videoNotSupported')}
         </video>
       );
     }
@@ -113,13 +121,17 @@ export function ProductCard({ product }: ProductCardProps) {
     <article className="group">
       <Card className="m-0 flex cursor-pointer gap-0 p-0 pb-1 transition-transform hover:scale-105">
         {mediaItems.length > 1 ? (
-          <Carousel setApi={setApi} className="w-full">
+          <Carousel
+            setApi={setApi}
+            className="w-full"
+            aria-label={product.name}
+          >
             <CarouselContent>
               {mediaItems.map((mediaItem, index) => (
                 <CarouselItem key={index}>
                   <button
                     className="group relative block aspect-square w-full overflow-hidden rounded-t-lg focus-visible:ring-2 focus-visible:outline-none"
-                    aria-label={`View ${product.name} details`}
+                    aria-label={t('viewProductDetails', { name: product.name })}
                   >
                     {renderMediaContent(mediaItem)}
                   </button>

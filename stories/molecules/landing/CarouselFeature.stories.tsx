@@ -1,5 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { NextIntlClientProvider } from 'next-intl';
+import enMessages from '../../../messages/en.json';
 import CarouselFeature from '@molecules/landing/CarouselFeature';
 
 const messages = {
@@ -41,10 +43,24 @@ type Story = StoryObj<typeof CarouselFeature>;
 
 export const Default: Story = {
   render: () => (
-    <NextIntlClientProvider locale="en" messages={messages}>
+    <NextIntlClientProvider
+      locale="en"
+      messages={{ ...enMessages, ...messages }}
+    >
       <div className="max-w-5xl">
         <CarouselFeature />
       </div>
     </NextIntlClientProvider>
   ),
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getAllByRole('region')).toHaveLength(3);
+    await storybookExpect(
+      canvas.getByRole('region', {
+        name: 'AI integrated, Custom domains, Payments',
+      }),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByText('Create product content faster.'),
+    ).toBeInTheDocument();
+  },
 };

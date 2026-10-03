@@ -14,7 +14,7 @@ export default function ProductStatus({
       className={`${
         product.isArchived
           ? 'border-border bg-muted text-muted-foreground dark:border-border dark:text-muted-foreground'
-          : 'border-border bg-secondary/10 text-secondary dark:border-border dark:text-secondary'
+          : 'border-border bg-secondary/10 text-foreground dark:border-border dark:text-secondary'
       }`}
     >
       {product.isArchived ? t('archivedSingle') : t('active')}

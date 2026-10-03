@@ -1,5 +1,6 @@
+import { expect as storybookExpect } from 'storybook/test';
 import ButtonSidebar from '@atoms/dashboard/ButtonSidebar';
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { SidebarProvider } from '@shadcn/ui/sidebar';
 import { Home } from 'lucide-react';
 
@@ -58,6 +59,11 @@ export const Selected: Story = {
     label: 'Dashboard',
     route: '/dashboard',
   },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Dashboard' }),
+    ).toHaveAttribute('data-active', 'true');
+  },
 };
 
 export const Outline: Story = {
@@ -66,5 +72,10 @@ export const Outline: Story = {
     label: 'Store overview',
     route: '/overview',
     variant: 'outline',
+  },
+  play: async ({ canvas }) => {
+    const button = canvas.getByRole('button', { name: 'Store overview' });
+    await storybookExpect(button).toHaveAttribute('data-active', 'false');
+    await storybookExpect(button).toHaveAttribute('data-size', 'default');
   },
 };

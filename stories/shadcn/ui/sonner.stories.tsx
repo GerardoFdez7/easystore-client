@@ -1,9 +1,16 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Toaster } from '@shadcn/ui/sonner';
 import { Button } from '@shadcn/ui/button';
 import { toast } from 'sonner';
 
 const meta = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Show Default Toast' }),
+    ).toBeInTheDocument();
+  },
   title: 'Shadcn/UI/Sonner',
   component: Toaster,
   parameters: {
@@ -34,7 +41,7 @@ export const Default: Story = {
           Show Default Toast
         </Button>
         <Button
-          className="bg-secondary"
+          variant="secondary"
           onClick={() => toast.success('Operation completed successfully')}
         >
           Show Success Toast
@@ -51,7 +58,7 @@ export const Default: Story = {
           Show Error Toast
         </Button>
         <Button
-          className="bg-warning"
+          className="bg-warning text-black"
           onClick={() =>
             toast.warning('Your session will expire soon', {
               description: 'Please save your work before continuing.',
@@ -75,7 +82,7 @@ export const Default: Story = {
           Show Toast with Action
         </Button>
         <Button
-          className="bg-accent"
+          className="bg-accent text-accent-foreground"
           onClick={() =>
             toast.promise(new Promise((resolve) => setTimeout(resolve, 2000)), {
               loading: 'Loading...',

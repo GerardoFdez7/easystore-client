@@ -1,4 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import {
+  expect as storybookExpect,
+  fn,
+  screen,
+  userEvent,
+  waitFor,
+} from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -22,11 +29,13 @@ function DialogWrapper({
   hasToken = true,
   loading = false,
   isTokenInvalid = false,
+  onSubmit,
 }: {
   isOpen?: boolean;
   hasToken?: boolean;
   loading?: boolean;
   isTokenInvalid?: boolean;
+  onSubmit: (data: ResetPasswordFormData) => Promise<void>;
 }) {
   const form = useForm<ResetPasswordFormData>({
     resolver: zodResolver(mockSchema),
@@ -36,20 +45,15 @@ function DialogWrapper({
     },
   });
 
-  const handleSubmit = async (data: ResetPasswordFormData) => {
-    console.log('Reset password data:', data);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-  };
-
   return (
     <div>
       <DialogResetPassword
         isOpen={isOpen}
-        onClose={() => console.log('Dialog closed')}
-        onSuccess={() => console.log('Password reset successful')}
+        onClose={fn()}
+        onSuccess={fn()}
         token={hasToken ? 'mock-reset-token' : ''}
         form={form}
-        onSubmit={handleSubmit}
+        onSubmit={onSubmit}
         loading={loading}
         isTokenInvalid={isTokenInvalid}
       />
@@ -85,6 +89,23 @@ export const Default: Story = {
     isOpen: true,
     hasToken: true,
     loading: false,
+    onSubmit: fn(async () => undefined),
+  },
+  play: async ({ args }) => {
+    const dialog = await screen.findByRole('dialog');
+    await storybookExpect(dialog).toHaveTextContent('Reset Password');
+    const inputs = dialog.querySelectorAll('input[type="password"]');
+    await userEvent.type(inputs[0] as HTMLElement, 'NewSecret123');
+    await userEvent.type(inputs[1] as HTMLElement, 'NewSecret123');
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Update Password' }),
+    );
+    await waitFor(() =>
+      storybookExpect(args.onSubmit).toHaveBeenCalledWith(
+        { password: 'NewSecret123', confirmPassword: 'NewSecret123' },
+        storybookExpect.anything(),
+      ),
+    );
   },
 };
 
@@ -94,6 +115,17 @@ export const WithInvalidToken: Story = {
     hasToken: true,
     loading: false,
     isTokenInvalid: true,
+    onSubmit: fn(),
+  },
+  play: async () => {
+    await storybookExpect(
+      await screen.findByText(
+        'This reset link has expired. Please request a new one.',
+      ),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      screen.queryByRole('button', { name: 'Update Password' }),
+    ).not.toBeInTheDocument();
   },
 };
 
@@ -102,5 +134,15 @@ export const Loading: Story = {
     isOpen: true,
     hasToken: true,
     loading: true,
+    onSubmit: fn(),
+  },
+  play: async () => {
+    const dialog = await screen.findByRole('dialog');
+    await storybookExpect(dialog).toHaveTextContent('Reset Password');
+    const submit = dialog.querySelector('button[type="submit"]');
+    await storybookExpect(submit).toBeDisabled();
+    await storybookExpect(
+      screen.queryByRole('button', { name: 'Update Password' }),
+    ).not.toBeInTheDocument();
   },
 };

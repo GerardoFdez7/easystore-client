@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import CategoryTemplate from '@templates/categories/Categories';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
 import {
   FindAllCategoriesDocument,
   FindCategoriesTreeDocument,
@@ -125,6 +126,12 @@ const loadingMocks = [
 ];
 
 const meta: Meta<typeof CategoryTemplate> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('region', { name: 'Category controls' }),
+    ).toBeInTheDocument();
+  },
   title: 'Templates/Categories',
   component: CategoryTemplate,
   parameters: {
@@ -138,11 +145,11 @@ const meta: Meta<typeof CategoryTemplate> = {
   },
   decorators: [
     (Story, { parameters }) => (
-      <MockedProvider mocks={parameters?.apolloMocks || successMocks}>
+      <ApolloMswMocks mocks={parameters?.apolloMocks || successMocks}>
         <div className="bg-background min-h-screen">
           <Story />
         </div>
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   argTypes: {

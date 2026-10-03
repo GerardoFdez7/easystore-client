@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import CategoryPicker from '@molecules/categories/detail/CategoryPicker';
 import {
   mockCategoryItems,
@@ -9,6 +10,12 @@ import {
 } from '../mocks/categoryPickerMocks';
 
 const meta: Meta<typeof CategoryPicker> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Create Subcategory' }),
+    ).toBeInTheDocument();
+  },
   title: 'Molecules/Categories/Detail/CategoryPicker',
   component: CategoryPicker,
   parameters: {

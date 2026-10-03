@@ -1,8 +1,15 @@
+import { expect as storybookExpect, within } from 'storybook/test';
 import DeleteProduct from '@atoms/shared/DeleteProduct';
-import { MockedProvider } from '@apollo/client/testing/react';
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 const meta: Meta<typeof DeleteProduct> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: /Delete/ }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/DeleteProduct',
   component: DeleteProduct,
   parameters: {
@@ -11,11 +18,11 @@ const meta: Meta<typeof DeleteProduct> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <MockedProvider mocks={[]}>
+      <ApolloMswMocks mocks={[]}>
         <div className="w-56">
           <Story />
         </div>
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   argTypes: {

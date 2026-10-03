@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, userEvent, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Button } from '@shadcn/ui/button';
 import {
   Collapsible,
@@ -28,6 +29,17 @@ export const OrderDetails: Story = {
       </CollapsibleContent>
     </Collapsible>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', {
+      name: 'Toggle order details',
+    });
+    await storybookExpect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await userEvent.click(trigger);
+    await storybookExpect(
+      canvas.getByText('Order #4189 is packed and ready to ship.'),
+    ).toBeVisible();
+  },
 };
 
 export const OpenByDefault: Story = {
@@ -41,4 +53,14 @@ export const OpenByDefault: Story = {
       </CollapsibleContent>
     </Collapsible>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', {
+      name: 'Toggle store details',
+    });
+    await storybookExpect(trigger).toHaveAttribute('aria-expanded', 'true');
+    await storybookExpect(
+      canvas.getByText('This store accepts online orders every day.'),
+    ).toBeVisible();
+  },
 };

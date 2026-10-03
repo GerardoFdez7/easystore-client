@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, userEvent, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   Drawer,
   DrawerTrigger,
@@ -12,6 +13,17 @@ import {
 import { Button } from '@shadcn/ui/button';
 
 const meta: Meta<typeof Drawer> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Open drawer' }),
+    ).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole('button', { name: 'Open drawer' }));
+    const page = within(canvasElement.ownerDocument.body);
+    await storybookExpect(
+      await page.findByRole('heading', { name: 'Menu' }),
+    ).toBeVisible();
+  },
   title: 'Shadcn/UI/Drawer',
   tags: ['autodocs'],
   component: Drawer,

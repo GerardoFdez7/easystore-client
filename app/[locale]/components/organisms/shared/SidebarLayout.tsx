@@ -10,7 +10,7 @@ interface SidebarLayoutProps {
 
 export default function SidebarLayout({ children, title }: SidebarLayoutProps) {
   return (
-    <main className="pt-22 2xl:m-5">
+    <div className="pt-22 2xl:m-5">
       <SidebarProvider
         defaultOpen={false}
         style={
@@ -31,6 +31,6 @@ export default function SidebarLayout({ children, title }: SidebarLayoutProps) {
           </div>
         </SidebarInset>
       </SidebarProvider>
-    </main>
+    </div>
   );
 }

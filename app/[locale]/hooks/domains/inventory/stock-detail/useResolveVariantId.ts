@@ -37,7 +37,6 @@ export function useResolveVariantId(opts: Options) {
       if (selectedVariant?.id) return selectedVariant.id;
       if (initialVariantId) return initialVariantId;
 
-      // 1) Resolver por SKU exacto
       const skuToUse = selectedVariant?.sku ?? variantSku ?? '';
       if (skuToUse && skuToUse.trim()) {
         const { variants } = await fetchVariantLookup(apollo);
@@ -65,7 +64,6 @@ export function useResolveVariantId(opts: Options) {
         return matchesBySku[0].id;
       }
 
-      // 2) Fallback: por nombre de producto (+ atributo opcional)
       const name = (selectedVariant?.productName ?? productName ?? '').trim();
       if (!name) {
         throw new Error(t('missingVariantIdentifier'));

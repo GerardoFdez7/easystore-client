@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import SortByControl from '@atoms/shared/SortByControl';
 
 const options = [
@@ -8,6 +9,12 @@ const options = [
 ];
 
 const meta: Meta<typeof SortByControl> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('combobox', { name: 'Sort by' }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/SortByControl',
   component: SortByControl,
   parameters: {

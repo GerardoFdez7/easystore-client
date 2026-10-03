@@ -44,12 +44,16 @@ export default function SortableHeader<T = string>({
   return (
     <TableHead
       className={cn(
-        'hover:bg-muted/50 cursor-pointer text-center align-middle transition-colors select-none',
+        'hover:bg-muted/50 p-0 text-center align-middle transition-colors select-none',
         className,
       )}
-      onClick={() => onSort(sortKey)}
+      aria-sort={!isActive ? 'none' : isDesc ? 'descending' : 'ascending'}
     >
-      <div className="flex items-center justify-center gap-2">
+      <button
+        type="button"
+        onClick={() => onSort(sortKey)}
+        className="focus-visible:ring-ring flex h-10 w-full cursor-pointer items-center justify-center gap-2 px-4 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset"
+      >
         {children}
         {Icon ? (
           <Icon
@@ -72,7 +76,7 @@ export default function SortableHeader<T = string>({
             )}
           />
         )}
-      </div>
+      </button>
     </TableHead>
   );
 }

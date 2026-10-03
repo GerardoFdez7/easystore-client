@@ -1,7 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import ProductDetail from '@templates/products/ProductDetail';
 import { ProductCreationProvider } from '@lib/contexts/ProductCreationContext';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
 import { GetMediaTokenDocument } from '@graphql/generated';
 
 // Mock GraphQL responses
@@ -24,6 +25,12 @@ const mocks = [
 ];
 
 const meta: Meta<typeof ProductDetail> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Name' }),
+    ).toBeInTheDocument();
+  },
   title: 'Templates/Products/ProductDetail',
   component: ProductDetail,
   tags: ['autodocs'],
@@ -35,11 +42,11 @@ const meta: Meta<typeof ProductDetail> = {
   },
   decorators: [
     (Story) => (
-      <MockedProvider mocks={mocks}>
+      <ApolloMswMocks mocks={mocks}>
         <ProductCreationProvider>
           <Story />
         </ProductCreationProvider>
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
 };

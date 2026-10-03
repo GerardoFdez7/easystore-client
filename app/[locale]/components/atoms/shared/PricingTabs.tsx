@@ -40,6 +40,9 @@ function TabsTrigger({
   return (
     <TabsPrimitive.Trigger
       data-slot="tabs-trigger"
+      // Pricing tabs act as a selector with no TabsContent panels, so Radix's
+      // aria-controls would reference a non-existent element.
+      aria-controls={undefined}
       className={cn(
         "data-[state=active]:bg-primary dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-primary text-foreground dark:text-muted-foreground h-fill-inset transition-tab inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-4xl border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap hover:cursor-pointer focus-visible:ring-3 focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:text-white data-[state=active]:shadow-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,

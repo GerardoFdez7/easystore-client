@@ -1,7 +1,12 @@
+import { expect as storybookExpect, within } from 'storybook/test';
 import WelcomeDashboard from '@atoms/dashboard/WelcomeDashboard';
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 const meta: Meta<typeof WelcomeDashboard> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('heading')).toBeInTheDocument();
+  },
   title: 'Atoms/Dashboard/WelcomeDashboard',
   component: WelcomeDashboard,
   parameters: {

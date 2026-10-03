@@ -11,9 +11,9 @@ export default function FAQs() {
 
   return (
     <section className="mx-auto p-5">
-      <h1 className="text-title mb-12 text-3xl font-extrabold sm:text-5xl xl:text-left">
+      <h2 className="text-title mb-12 text-3xl font-extrabold sm:text-5xl xl:text-left">
         {t('FAQsTitle')}
-      </h1>
+      </h2>
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger>{t('whatIsEasyStoreTitle')}</AccordionTrigger>

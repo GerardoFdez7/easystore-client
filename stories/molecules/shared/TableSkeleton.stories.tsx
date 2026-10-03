@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import TableSkeleton, {
   skeletonCell,
   stackedSkeletonCell,
@@ -25,6 +26,12 @@ const columns: readonly TableSkeletonColumnSpec[] = [
 ];
 
 const meta: Meta<typeof TableSkeleton> = {
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getAllByRole('row', { hidden: true }),
+    ).toHaveLength(args.rows + 1);
+  },
   title: 'Molecules/Shared/TableSkeleton',
   component: TableSkeleton,
   parameters: {

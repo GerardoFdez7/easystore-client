@@ -1,7 +1,17 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@shadcn/ui/tabs';
 
 const meta: Meta<typeof Tabs> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('tab', { name: 'Account' }),
+    ).toHaveAttribute('data-state', 'active');
+    await storybookExpect(
+      canvas.getByText('Make changes to your account here.'),
+    ).toBeVisible();
+  },
   title: 'Shadcn/UI/Tabs',
   tags: ['autodocs'],
   component: Tabs,

@@ -1,7 +1,14 @@
+import { expect as storybookExpect, within } from 'storybook/test';
 import LinkText from '@atoms/shared/LinkText';
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 const meta: Meta<typeof LinkText> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('link', { name: /View all products|Read the terms/ }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/LinkText',
   component: LinkText,
   parameters: {

@@ -1,9 +1,18 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import UnderConstructionTemplate from '@templates/UnderConstruction';
 import { withCountdown } from './mocks/withCountdown';
 
 const meta: Meta<typeof UnderConstructionTemplate> = {
-  title: 'Templates/UnderConstructionTemplate',
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('heading', {
+        name: "We're Building Something Amazing!",
+      }),
+    ).toBeInTheDocument();
+  },
+  title: 'Templates/UnderConstruction',
   parameters: {
     layout: 'fullscreen',
     nextjs: {

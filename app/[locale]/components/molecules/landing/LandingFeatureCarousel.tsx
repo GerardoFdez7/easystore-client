@@ -29,6 +29,7 @@ export default function LandingFeatureCarousel({
             key={rowItems.map(([, titleKey]) => titleKey).join('-')}
             startAtEnd={rowIndex % 2 === 1}
             className="mb-10 w-full px-4"
+            aria-label={rowItems.map(([, titleKey]) => t(titleKey)).join(', ')}
             opts={carouselOptions}
             autoScroll={true}
           >

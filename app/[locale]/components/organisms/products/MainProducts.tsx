@@ -267,7 +267,7 @@ export default function MainDashboard() {
     hasActiveFilters && (!allProducts || allProducts.length === 0) && !loading;
 
   return (
-    <main className="flex w-full flex-col gap-4 px-4 xl:mx-auto">
+    <div className="flex w-full flex-col gap-4 px-4 xl:mx-auto">
       {hasNoProductsInDatabase ? (
         <EmptyState
           icon={PackageOpen}
@@ -368,6 +368,6 @@ export default function MainDashboard() {
           )}
         </>
       )}
-    </main>
+    </div>
   );
 }

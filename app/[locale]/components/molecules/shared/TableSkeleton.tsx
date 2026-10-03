@@ -135,7 +135,7 @@ export default function TableSkeleton({
 }: TableSkeletonProps) {
   return (
     <div className={cn('w-full', className)}>
-      <Table>
+      <Table aria-hidden="true">
         <TableHeader className={headerClassName}>
           <TableRow className={rowClassName}>
             {columns.map((column, index) => (

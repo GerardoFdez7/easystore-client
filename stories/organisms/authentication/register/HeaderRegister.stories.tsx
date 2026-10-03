@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import HeaderRegister from '@organisms/authentication/register/HeaderRegister';
 import { NextIntlClientProvider } from 'next-intl';
 
@@ -26,6 +27,20 @@ const messages = {
 };
 
 const meta: Meta<typeof HeaderRegister> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('heading', {
+        level: 1,
+        name: 'Create your EasyStore account',
+      }),
+    ).toBeVisible();
+    await storybookExpect(
+      canvas.getByText(
+        "Start selling in minutes \u2014 it's free to get started.",
+      ),
+    ).toBeVisible();
+  },
   title: 'Organisms/Authentication/Register/HeaderRegister',
   parameters: {
     layout: 'fullscreen',

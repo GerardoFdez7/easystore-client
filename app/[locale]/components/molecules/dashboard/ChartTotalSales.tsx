@@ -192,9 +192,9 @@ export function ChartTotalSales() {
               <SelectTrigger
                 className="flex w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
                 size="sm"
-                aria-label="Select a value"
+                aria-label={t('selectValue')}
               >
-                <SelectValue placeholder="Last 3 months" />
+                <SelectValue placeholder={t('3months')} />
               </SelectTrigger>
               <SelectContent className="rounded-xl">
                 <SelectItem value="90d" className="rounded-lg">

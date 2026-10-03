@@ -170,6 +170,7 @@ export default function WarehouseForm({
                       variant="danger"
                       size="icon"
                       disabled={isSubmitting || isDeleting}
+                      aria-label={t('deleteWarehouse')}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>

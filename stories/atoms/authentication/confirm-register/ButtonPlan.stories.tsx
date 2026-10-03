@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import ButtonPlan from '@atoms/authentication/confirm-register/ButtonPlan';
 
 const meta: Meta<typeof ButtonPlan> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: /\S/ }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Authentication/ConfirmRegister/ButtonPlan',
   component: ButtonPlan,
   parameters: {

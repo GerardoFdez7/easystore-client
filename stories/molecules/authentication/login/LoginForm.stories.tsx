@@ -1,8 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import LoginForm from '@molecules/authentication/login/LoginForm';
 import { AccountTypeEnum } from '@graphql/generated';
 
 const meta = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('textbox')).toBeInTheDocument();
+  },
   title: 'Molecules/Authentication/Login/LoginForm',
   component: LoginForm,
   parameters: {

@@ -1,31 +1,45 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import {
+  expect as storybookExpect,
+  userEvent,
+  waitFor,
+  within,
+} from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import MainRegister from '@organisms/authentication/register/MainRegister';
-import { NextIntlClientProvider } from 'next-intl';
-
-const messages = {
-  Register: {
-    registerTitle: 'Create your EasyStore account',
-    registerMessage:
-      "Start selling in minutes \u2014 it's free to get started.",
-    email: 'Email',
-    password: 'Password',
-    confirmPassword: 'Confirm password',
-    buttonRegister: 'Create account',
-    termsMessage: 'By continuing, you agree to the',
-    termsAndConditions: 'Terms & Conditions',
-    and: 'and',
-    privacyPolicy: 'Privacy Policy',
-    messageAccount: 'Already have an account?',
-    login: 'Log in',
-  },
-  Languages: {
-    English: 'English',
-    Spanish: 'Spanish',
-    Portuguese: 'Portuguese',
-  },
-};
 
 const meta: Meta<typeof MainRegister> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const submit = canvas.getByRole('button', { name: 'Register' });
+    await userEvent.click(submit);
+    await waitFor(async () => {
+      await storybookExpect(
+        canvas.getByText('Invalid email format'),
+      ).toBeVisible();
+    });
+    await userEvent.type(canvas.getByLabelText('Email'), 'jane@example.com');
+    await userEvent.type(canvas.getByLabelText('Password'), 'password123');
+    await userEvent.type(
+      canvas.getByLabelText('Confirm Password'),
+      'different123',
+    );
+    await userEvent.click(submit);
+    await waitFor(() =>
+      storybookExpect(canvas.getByText('Passwords do not match')).toBeVisible(),
+    );
+    await storybookExpect(canvas.getByLabelText('Email')).toHaveValue(
+      'jane@example.com',
+    );
+    await storybookExpect(
+      canvas.getByRole('link', { name: 'Log in' }),
+    ).toHaveAttribute('href', '/login');
+    await storybookExpect(
+      canvas.getByRole('link', { name: 'Terms and Conditions' }),
+    ).toHaveAttribute('href', '/terms');
+    await storybookExpect(
+      canvas.getByRole('link', { name: 'Privacy Policy' }),
+    ).toHaveAttribute('href', '/privacy');
+  },
   title: 'Organisms/Authentication/Register/MainRegister',
   parameters: {
     layout: 'fullscreen',
@@ -36,10 +50,4 @@ export default meta;
 
 type Story = StoryObj<typeof MainRegister>;
 
-export const Default: Story = {
-  render: () => (
-    <NextIntlClientProvider locale="en" messages={{ ...messages }}>
-      <MainRegister />
-    </NextIntlClientProvider>
-  ),
-};
+export const Default: Story = {};

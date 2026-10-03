@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
 import AddSubcategory from '@molecules/categories/detail/AddSubcategory';
 import { type CategoryItem } from '@molecules/categories/detail/CategoryPicker';
 import {
@@ -147,6 +148,14 @@ const loadingMocks = [
 ];
 
 const meta: Meta<typeof AddSubcategory> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', {
+        name: /Add subcategories|Add Category/,
+      }),
+    ).toBeInTheDocument();
+  },
   title: 'Molecules/Categories/Detail/AddSubcategory',
   component: AddSubcategory,
   parameters: {
@@ -209,9 +218,9 @@ export const Default: Story = {
   },
   decorators: [
     (Story) => (
-      <MockedProvider mocks={successMocks}>
+      <ApolloMswMocks mocks={successMocks}>
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   parameters: {
@@ -232,9 +241,9 @@ export const WithExcludedIds: Story = {
   },
   decorators: [
     (Story) => (
-      <MockedProvider mocks={successMocks}>
+      <ApolloMswMocks mocks={successMocks}>
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   parameters: {
@@ -256,9 +265,9 @@ export const Disabled: Story = {
   },
   decorators: [
     (Story) => (
-      <MockedProvider mocks={successMocks}>
+      <ApolloMswMocks mocks={successMocks}>
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   parameters: {
@@ -279,9 +288,9 @@ export const Loading: Story = {
   },
   decorators: [
     (Story) => (
-      <MockedProvider mocks={loadingMocks}>
+      <ApolloMswMocks mocks={loadingMocks}>
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   parameters: {
@@ -302,9 +311,9 @@ export const ErrorState: Story = {
   },
   decorators: [
     (Story) => (
-      <MockedProvider mocks={errorMocks}>
+      <ApolloMswMocks mocks={errorMocks}>
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   parameters: {
@@ -325,9 +334,9 @@ export const Empty: Story = {
   },
   decorators: [
     (Story) => (
-      <MockedProvider mocks={emptyMocks}>
+      <ApolloMswMocks mocks={emptyMocks}>
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   parameters: {
@@ -349,9 +358,9 @@ export const ProductSelectionMode: Story = {
   },
   decorators: [
     (Story) => (
-      <MockedProvider mocks={successMocks}>
+      <ApolloMswMocks mocks={successMocks}>
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   parameters: {

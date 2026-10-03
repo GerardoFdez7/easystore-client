@@ -1,7 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import PlanAdvanced from '@molecules/authentication/confirm-register/PlanAdvanced';
 
 const meta: Meta<typeof PlanAdvanced> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByText('$30')).toBeInTheDocument();
+  },
   title: 'Molecules/Authentication/ConfirmRegister/PlanAdvanced',
   component: PlanAdvanced,
   parameters: {

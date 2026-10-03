@@ -1,6 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import {
+  expect as storybookExpect,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import CategoryBreadcrumb from '@molecules/categories/CategoryBreadcrumb';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
 import { mockCategoryBreadcrumbSuccess } from './mocks/categoryBreadcrumbMocks';
 
 const meta: Meta<typeof CategoryBreadcrumb> = {
@@ -17,13 +24,13 @@ const meta: Meta<typeof CategoryBreadcrumb> = {
   },
   decorators: [
     (Story, { parameters }) => (
-      <MockedProvider
+      <ApolloMswMocks
         mocks={parameters?.apolloMocks || mockCategoryBreadcrumbSuccess}
       >
         <div className="mx-auto w-full max-w-4xl p-4">
           <Story />
         </div>
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   argTypes: {
@@ -54,6 +61,21 @@ export const Default: Story = {
       },
     },
   },
+  play: async ({ canvas }) => {
+    const nav = await canvas.findByRole('navigation', {
+      name: 'Breadcrumb navigation',
+    });
+    await storybookExpect(
+      within(nav).getByRole('link', { name: 'Parent categories' }),
+    ).toHaveAttribute('href', '/en/categories');
+    await storybookExpect(
+      within(nav).getAllByRole('button', { name: 'Category options' }),
+    ).toHaveLength(2);
+    await storybookExpect(within(nav).getByText('Laptops')).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+  },
 };
 
 export const SingleLevel: Story = {
@@ -66,6 +88,12 @@ export const SingleLevel: Story = {
         story: 'Breadcrumb with only one level category.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      await canvas.findByText('Electronics'),
+    ).toHaveAttribute('aria-current', 'page');
+    await storybookExpect(canvas.queryByRole('button')).toBeNull();
   },
 };
 
@@ -81,6 +109,26 @@ export const WithSiblings: Story = {
       },
     },
   },
+  play: async ({ canvas }) => {
+    const electronics = await canvas.findByRole('button', {
+      name: 'Category options',
+    });
+    await userEvent.click(electronics);
+    await storybookExpect(
+      await screen.findByRole('menuitem', { name: 'Clothing' }),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      screen.getByRole('menuitem', { name: 'Electronics' }),
+    ).toBeInTheDocument();
+    await storybookExpect(electronics).toHaveAttribute('aria-expanded', 'true');
+    await storybookExpect(canvas.getByText('Computers')).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+    // Close the menu so the page is not left aria-hidden behind it.
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => storybookExpect(screen.queryByRole('menu')).toBeNull());
+  },
 };
 
 export const DeepPath: Story = {
@@ -94,5 +142,17 @@ export const DeepPath: Story = {
           'Breadcrumb with a very deep category path showing multiple levels of navigation.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    const nav = await canvas.findByRole('navigation', {
+      name: 'Breadcrumb navigation',
+    });
+    await storybookExpect(within(nav).getByText('Keyboards')).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+    await storybookExpect(
+      within(nav).getAllByRole('button', { name: 'Category options' }),
+    ).toHaveLength(3);
   },
 };

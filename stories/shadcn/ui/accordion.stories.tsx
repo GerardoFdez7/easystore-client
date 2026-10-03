@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, userEvent, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   Accordion,
   AccordionItem,
@@ -7,6 +8,15 @@ import {
 } from '@shadcn/ui/accordion';
 
 const meta: Meta<typeof Accordion> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', { name: 'What is EasyStore?' });
+    await storybookExpect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await userEvent.click(trigger);
+    await storybookExpect(
+      canvas.getByText('All-in-one commerce platform to sell anywhere.'),
+    ).toBeVisible();
+  },
   title: 'Shadcn/UI/Accordion',
   tags: ['autodocs'],
   parameters: {

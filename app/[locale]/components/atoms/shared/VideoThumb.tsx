@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 interface VideoThumbProps {
   selected: boolean;
@@ -17,6 +18,7 @@ const VideoThumb = ({
   videoSrc,
   altText,
 }: VideoThumbProps) => {
+  const t = useTranslations('Media');
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [thumbnailSrc, setThumbnailSrc] = useState<string>('');
@@ -134,12 +136,13 @@ const VideoThumb = ({
               <div className="flex flex-col items-center">
                 <div className="border-ring h-4 w-4 animate-spin rounded-full border-2 border-t-transparent"></div>
                 <span className="text-muted-foreground mt-1 text-xs">
-                  Loading...
+                  {t('thumbnailLoading')}
                 </span>
               </div>
             ) : error ? (
               <div className="flex flex-col items-center">
                 <svg
+                  aria-hidden="true"
                   className="text-chart-1 h-6 w-6"
                   fill="currentColor"
                   viewBox="0 0 20 20"
@@ -150,10 +153,13 @@ const VideoThumb = ({
                     clipRule="evenodd"
                   />
                 </svg>
-                <span className="text-destructive mt-1 text-xs">Error</span>
+                <span className="text-destructive mt-1 text-xs">
+                  {t('thumbnailError')}
+                </span>
               </div>
             ) : (
               <svg
+                aria-hidden="true"
                 className="text-ring h-6 w-6"
                 fill="currentColor"
                 viewBox="0 0 20 20"
@@ -168,6 +174,7 @@ const VideoThumb = ({
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="rounded-full bg-black/50 p-1">
             <svg
+              aria-hidden="true"
               className="h-4 w-4 text-white"
               fill="currentColor"
               viewBox="0 0 20 20"

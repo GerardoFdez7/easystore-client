@@ -1,7 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import PlanPremium from '@molecules/authentication/confirm-register/PlanPremium';
 
 const meta: Meta<typeof PlanPremium> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByText('$0')).toBeInTheDocument();
+  },
   title: 'Molecules/Authentication/ConfirmRegister/PlanPremium',
   component: PlanPremium,
   parameters: {

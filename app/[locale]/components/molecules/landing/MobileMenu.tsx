@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 import {
   Drawer,
   DrawerContent,
@@ -18,6 +19,7 @@ import { Button } from '@shadcn/ui/button';
 
 export default function MobileMenu() {
   const { isAuthenticated } = useAuth();
+  const t = useTranslations('Shared');
 
   return (
     <Drawer direction="right">
@@ -27,7 +29,7 @@ export default function MobileMenu() {
           variant="ghost"
           type="button"
           size="icon"
-          aria-label="Open navigation menu"
+          aria-label={t('openNavigationMenu')}
           aria-haspopup="true"
           aria-expanded="false"
         >
@@ -38,10 +40,9 @@ export default function MobileMenu() {
         className="bg-background flex h-screen w-56 flex-col shadow-lg"
         aria-describedby="drawer-description"
       >
-        <DrawerTitle className="sr-only">Navigation Menu</DrawerTitle>
+        <DrawerTitle className="sr-only">{t('navigationMenu')}</DrawerTitle>
         <div id="drawer-description" className="sr-only">
-          This is the navigation menu. Use the links to navigate through the
-          site.
+          {t('navigationMenuDescription')}
         </div>
         <div className="bg-background flex flex-col items-center space-y-4 p-4">
           {isAuthenticated && <OwnerMenu />}

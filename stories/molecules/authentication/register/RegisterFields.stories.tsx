@@ -1,5 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { NextIntlClientProvider } from 'next-intl';
+import enMessages from '../../../../messages/en.json';
 import { useForm } from 'react-hook-form';
 import { Form } from '@shadcn/ui/form';
 import RegisterFields from '@molecules/authentication/register/RegisterFields';
@@ -13,6 +15,10 @@ const messages = {
 };
 
 const meta: Meta<typeof RegisterFields> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('textbox')).toBeInTheDocument();
+  },
   title: 'Molecules/Authentication/Register/RegisterFields',
   parameters: {
     layout: 'centered',
@@ -28,7 +34,10 @@ const RegisterFieldsStoryWrapper: React.FC = () => {
     defaultValues: { email: '', password: '', confirmPassword: '' },
   });
   return (
-    <NextIntlClientProvider locale="en" messages={messages}>
+    <NextIntlClientProvider
+      locale="en"
+      messages={{ ...enMessages, ...messages }}
+    >
       <Form {...form}>
         <form className="max-w-md space-y-4">
           <RegisterFields />

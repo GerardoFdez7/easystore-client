@@ -129,8 +129,6 @@ export default function CategoryGrid({
     <>
       <div
         className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
-        role="grid"
-        aria-label="categories Grid"
         aria-busy={loading || isLoadingMore}
       >
         {loading && !isLoadingMore ? (
@@ -162,14 +160,17 @@ export default function CategoryGrid({
             <AlertDialogDescription>{t('description')}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleting} aria-label="cancel Delete">
+            <AlertDialogCancel
+              disabled={deleting}
+              aria-label={t('cancelDelete')}
+            >
               {t('cancel')}
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={() => void confirmDelete()}
               disabled={deleting}
               className="bg-error hover:bg-error/90 text-white"
-              aria-label={deleting ? 'deleting Category' : 'confirm Delete'}
+              aria-label={deleting ? t('deletingCategory') : t('confirmDelete')}
             >
               {deleting ? t('deleting') : t('delete')}
             </AlertDialogAction>

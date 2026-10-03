@@ -174,7 +174,7 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
         className={cn(
           'border-muted-foreground/50 bg-background cursor-pointer border-2 border-dashed transition-colors',
           isDragOver && 'border-primary bg-primary/5',
-          disabled && 'cursor-not-allowed opacity-50',
+          disabled && 'bg-muted cursor-not-allowed',
           error && 'border-destructive',
           className,
         )}
@@ -185,7 +185,10 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
       >
         <CardContent className="p-6">
           <div className="flex flex-col items-center justify-center space-y-4">
-            <Upload className="text-muted-foreground h-8 w-8" />
+            <Upload
+              className="text-muted-foreground h-8 w-8"
+              aria-hidden="true"
+            />
 
             <div className="text-center">
               <p className="text-lg font-medium">
@@ -239,9 +242,12 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
           </div>
 
           {error && (
-            <div className="bg-destructive/10 border-destructive/20 mt-4 rounded-md border p-3">
+            <div
+              role="alert"
+              className="bg-card border-destructive/20 mt-4 rounded-md border p-3"
+            >
               <div className="text-destructive flex items-center text-sm">
-                <AlertCircle className="mr-2 h-4 w-4" />
+                <AlertCircle className="mr-2 h-4 w-4" aria-hidden="true" />
                 {error}
               </div>
             </div>

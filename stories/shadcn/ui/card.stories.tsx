@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   Card,
   CardHeader,
@@ -10,6 +11,10 @@ import {
 import { Button } from '@shadcn/ui/button';
 
 const meta: Meta<typeof Card> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByText('Pro plan')).toBeInTheDocument();
+  },
   title: 'Shadcn/UI/Card',
   tags: ['autodocs'],
   parameters: {

@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import MediaUploader from '@molecules/shared/MediaUploader';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
 import { GetMediaTokenDocument } from '@graphql/generated';
 
 // Mock data for the GraphQL query
@@ -23,6 +24,12 @@ const mocks = [
 ];
 
 const meta: Meta<typeof MediaUploader> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Choose Files' }),
+    ).toBeInTheDocument();
+  },
   title: 'Molecules/Shared/MediaUploader',
   component: MediaUploader,
   parameters: {
@@ -31,11 +38,11 @@ const meta: Meta<typeof MediaUploader> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <MockedProvider mocks={mocks}>
+      <ApolloMswMocks mocks={mocks}>
         <div className="mx-auto max-w-md p-4">
           <Story />
         </div>
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   args: {
@@ -127,11 +134,11 @@ const errorMocks = [
 export const AuthenticationError: Story = {
   decorators: [
     (Story) => (
-      <MockedProvider mocks={errorMocks}>
+      <ApolloMswMocks mocks={errorMocks}>
         <div className="mx-auto max-w-md p-4">
           <Story />
         </div>
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
 };
@@ -159,11 +166,11 @@ const loadingMocks = [
 export const LoadingState: Story = {
   decorators: [
     (Story) => (
-      <MockedProvider mocks={loadingMocks}>
+      <ApolloMswMocks mocks={loadingMocks}>
         <div className="mx-auto max-w-md p-4">
           <Story />
         </div>
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
 };

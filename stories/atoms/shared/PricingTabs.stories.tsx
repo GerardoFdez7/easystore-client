@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   Tabs,
   TabsList,
@@ -8,6 +9,12 @@ import {
 import { useState } from 'react';
 
 const meta: Meta = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('tab', { name: 'Monthly' }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/PricingTabs',
   parameters: {
     layout: 'centered',

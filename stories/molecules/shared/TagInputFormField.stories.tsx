@@ -1,8 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { FormProvider, useForm } from 'react-hook-form';
 import TagInputFormField from '@molecules/shared/TagInputFormField';
 
 const meta: Meta<typeof TagInputFormField> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('textbox')).toBeInTheDocument();
+  },
   title: 'Molecules/Shared/TagInputFormField',
   component: TagInputFormField,
   parameters: {

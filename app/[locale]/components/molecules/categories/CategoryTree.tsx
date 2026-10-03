@@ -26,6 +26,7 @@ const TreeItem = memo(function TreeItem({
   level = 0,
   forcedOpen,
 }: TreeItemProps) {
+  const t = useTranslations('Category');
   const [open, setOpen] = useState(true);
   const hasChildren = !!node.subCategories?.length;
   const router = useRouter();
@@ -77,6 +78,7 @@ const TreeItem = memo(function TreeItem({
               : undefined
           }
           disabled={!hasChildren}
+          aria-hidden={hasChildren ? undefined : true}
           type="button"
         >
           {hasChildren ? (
@@ -93,7 +95,7 @@ const TreeItem = memo(function TreeItem({
           size="sm"
           className="text-text hover:bg-hover flex-1 justify-start py-1 text-left"
           onClick={handleCategoryClick}
-          aria-label={`Navigate to ${node.name} category`}
+          aria-label={t('navigateToCategoryName', { name: node.name })}
           type="button"
         >
           <span className={paddingLeft}>{node.name}</span>
@@ -164,7 +166,7 @@ export default function CategoryTree({
           {!loading && !error && (
             <div
               role="tree"
-              aria-label="category Navigation"
+              aria-label={t('categoryNavigation')}
               className="space-y-1"
             >
               {nodes.map((n) => (

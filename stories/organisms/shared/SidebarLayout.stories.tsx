@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import SidebarLayout from '@organisms/shared/SidebarLayout';
 
 const meta = {
@@ -42,9 +43,22 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('heading', { name: 'Inventory' }),
+    ).toBeInTheDocument();
+  },
+};
 
 export const WithLongContent: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('heading', { name: 'Product catalog' }),
+    ).toBeInTheDocument();
+  },
   args: {
     title: 'Product catalog',
     children: (

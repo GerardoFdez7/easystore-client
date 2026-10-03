@@ -1,9 +1,16 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import SortableHeader from '@atoms/shared/SortableHeader';
 import { Table, TableHeader, TableRow } from '@shadcn/ui/table';
 import { ClockArrowUp, Calendar, Package } from 'lucide-react';
 
 const meta: Meta<typeof SortableHeader> = {
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('columnheader', { name: String(args.children) }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/SortableHeader',
   component: SortableHeader,
   parameters: {
@@ -17,15 +24,18 @@ const meta: Meta<typeof SortableHeader> = {
   },
   tags: ['autodocs'],
   decorators: [
-    (Story) => (
-      <Table className="w-96">
-        <TableHeader>
-          <TableRow>
-            <Story />
-          </TableRow>
-        </TableHeader>
-      </Table>
-    ),
+    (Story, context) =>
+      context.name === 'Multiple Headers' ? (
+        <Story />
+      ) : (
+        <Table className="w-96">
+          <TableHeader>
+            <TableRow>
+              <Story />
+            </TableRow>
+          </TableHeader>
+        </Table>
+      ),
   ],
   argTypes: {
     children: {
@@ -227,50 +237,53 @@ export const WithCustomStyling: Story = {
  * Multiple headers showing different states
  */
 export const MultipleHeaders: Story = {
-  decorators: [
-    () => (
-      <Table className="w-full">
-        <TableHeader>
-          <TableRow>
-            <SortableHeader
-              sortKey="name"
-              currentSortBy="price"
-              currentSortOrder="DESC"
-              onSort={(column) => console.log('Sort by:', column)}
-            >
-              Product Name
-            </SortableHeader>
-            <SortableHeader
-              sortKey="price"
-              currentSortBy="price"
-              currentSortOrder="DESC"
-              onSort={(column) => console.log('Sort by:', column)}
-            >
-              Price
-            </SortableHeader>
-            <SortableHeader
-              sortKey="stock"
-              currentSortBy="price"
-              currentSortOrder="DESC"
-              onSort={(column) => console.log('Sort by:', column)}
-              icon={Package}
-            >
-              Stock
-            </SortableHeader>
-            <SortableHeader
-              sortKey="date"
-              currentSortBy="price"
-              currentSortOrder="DESC"
-              onSort={(column) => console.log('Sort by:', column)}
-              icon={Calendar}
-            >
-              Date
-            </SortableHeader>
-          </TableRow>
-        </TableHeader>
-      </Table>
-    ),
-  ],
+  render: () => (
+    <Table className="w-full">
+      <TableHeader>
+        <TableRow>
+          <SortableHeader
+            sortKey="name"
+            currentSortBy="price"
+            currentSortOrder="DESC"
+            onSort={(column) => console.log('Sort by:', column)}
+          >
+            Product Name
+          </SortableHeader>
+          <SortableHeader
+            sortKey="price"
+            currentSortBy="price"
+            currentSortOrder="DESC"
+            onSort={(column) => console.log('Sort by:', column)}
+          >
+            Price
+          </SortableHeader>
+          <SortableHeader
+            sortKey="stock"
+            currentSortBy="price"
+            currentSortOrder="DESC"
+            onSort={(column) => console.log('Sort by:', column)}
+            icon={Package}
+          >
+            Stock
+          </SortableHeader>
+          <SortableHeader
+            sortKey="date"
+            currentSortBy="price"
+            currentSortOrder="DESC"
+            onSort={(column) => console.log('Sort by:', column)}
+            icon={Calendar}
+          >
+            Date
+          </SortableHeader>
+        </TableRow>
+      </TableHeader>
+    </Table>
+  ),
+  play: async ({ canvasElement }) => {
+    await storybookExpect(
+      within(canvasElement).getAllByRole('columnheader'),
+    ).toHaveLength(4);
+  },
   parameters: {
     docs: {
       description: {

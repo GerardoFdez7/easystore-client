@@ -21,6 +21,7 @@ interface MediaUploaderProps
   multiple?: boolean;
   hideDoneButton?: boolean;
   alwaysEditing?: boolean;
+  reportRemoval?: boolean;
   initialMedia?: string | string[] | null;
   renderDoneButton?: (
     onDone: () => void,
@@ -53,6 +54,7 @@ const MediaUploader = forwardRef<
       minItems = DefaultMinItems,
       hideDoneButton = false,
       alwaysEditing = false,
+      reportRemoval = false,
       initialMedia,
       renderDoneButton,
       renderEditButton,
@@ -92,6 +94,7 @@ const MediaUploader = forwardRef<
         className={className}
         hideDoneButton={hideDoneButton || alwaysEditing}
         alwaysEditing={alwaysEditing}
+        reportRemoval={reportRemoval}
         initialMedia={typeof initialMedia === 'string' ? initialMedia : null}
         renderDoneButton={alwaysEditing ? undefined : renderDoneButton}
         renderEditButton={alwaysEditing ? undefined : renderEditButton}

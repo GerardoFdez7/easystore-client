@@ -1,7 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { ContentSection } from '@molecules/shared/ContentSection';
 
 const meta: Meta<typeof ContentSection> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('heading')).toBeInTheDocument();
+  },
   title: 'Molecules/Shared/ContentSection',
   component: ContentSection,
   parameters: {

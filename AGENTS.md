@@ -37,6 +37,14 @@ For work that needs a plan, Orchestrator delegates Explorer, then Architect with
 evidence brief, then Coder with the approved plan. Small, self-contained changes may
 go directly to Coder. Use Debugger only after an unresolved reproducible failure.
 
+When an approved plan splits into independent units (for example, separate
+components, stories, or files with no shared edits or ordering dependency),
+Orchestrator should summon multiple Coders in parallel, one per unit, each with its
+own scope and the corresponding part of the plan. Keep work sequential when units
+touch the same files or depend on each other's output. Announce the model and
+reasoning level for each parallel Coder, and verify the combined result once all
+finish.
+
 ## Behavior
 
 - Be direct and concise. Lead with the result, evidence, risk, or decision.

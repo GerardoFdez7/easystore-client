@@ -1,4 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import {
+  expect as storybookExpect,
+  fn,
+  userEvent,
+  waitFor,
+} from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import VideoThumb from '@atoms/shared/VideoThumb';
 
 const meta: Meta<typeof VideoThumb> = {
@@ -8,6 +14,9 @@ const meta: Meta<typeof VideoThumb> = {
     layout: 'centered',
   },
   tags: ['autodocs'],
+  args: {
+    onClick: fn(),
+  },
   argTypes: {
     selected: {
       control: 'boolean',
@@ -18,7 +27,7 @@ const meta: Meta<typeof VideoThumb> = {
       description: 'Index of the video thumbnail in the carousel',
     },
     onClick: {
-      action: 'clicked',
+      control: false,
       description: 'Callback function when video thumbnail is clicked',
     },
     videoSrc: {
@@ -44,6 +53,14 @@ export const Default: Story = {
       'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
     altText: 'Big Buck Bunny video thumbnail',
   },
+  play: async ({ canvas, args }) => {
+    const button = canvas.getByRole('button', {
+      name: 'Big Buck Bunny video thumbnail',
+    });
+    await storybookExpect(button).not.toHaveClass('border-title/75');
+    await userEvent.click(button);
+    await storybookExpect(args.onClick).toHaveBeenCalledTimes(1);
+  },
 };
 
 export const Selected: Story = {
@@ -54,15 +71,28 @@ export const Selected: Story = {
       'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
     altText: 'Selected video thumbnail',
   },
+  play: async ({ canvas, args }) => {
+    const button = canvas.getByRole('button', {
+      name: 'Selected video thumbnail',
+    });
+    await storybookExpect(button).toHaveClass('border-title/75');
+    await userEvent.click(button);
+    await storybookExpect(args.onClick).toHaveBeenCalledTimes(1);
+  },
 };
 
 export const Loading: Story = {
   args: {
     selected: false,
     index: 3,
-    videoSrc:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    videoSrc: '',
     altText: 'Loading video thumbnail',
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Loading video thumbnail' }),
+    ).toBeVisible();
+    await storybookExpect(canvas.getByText('Loading...')).toBeVisible();
   },
   parameters: {
     docs: {
@@ -76,8 +106,17 @@ export const Error: Story = {
   args: {
     selected: false,
     index: 4,
-    videoSrc: 'https://invalid-video-url.mp4',
+    videoSrc: '/missing-video.mp4',
     altText: 'Error video thumbnail',
+  },
+  play: async ({ canvas }) => {
+    // The video request 404s, so the thumbnail falls back to the error state.
+    await waitFor(() =>
+      storybookExpect(canvas.getByText('Error')).toBeVisible(),
+    );
+    await storybookExpect(
+      canvas.queryByText('Loading...'),
+    ).not.toBeInTheDocument();
   },
   parameters: {
     docs: {

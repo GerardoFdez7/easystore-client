@@ -1,7 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import AuthenticationHeader from '@molecules/authentication/shared/AuthenticationHeader';
 
 const meta = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('heading')).toBeInTheDocument();
+  },
   title: 'Molecules/Authentication/Shared/AuthenticationHeader',
   component: AuthenticationHeader,
   parameters: {

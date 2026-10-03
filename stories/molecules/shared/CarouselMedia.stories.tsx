@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, fn, userEvent } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import CarouselMedia from '../../../app/[locale]/components/molecules/shared/CarouselMedia';
 
 const meta: Meta<typeof CarouselMedia> = {
@@ -14,37 +15,54 @@ export default meta;
 
 type Story = StoryObj<typeof CarouselMedia>;
 
-// Sample data for stories
+// Sample data for stories (local assets keep the stories deterministic)
 const sampleItems = [
-  {
-    id: '1',
-    type: 'image' as const,
-    src: 'https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&w=800',
-    alt: 'Random landscape',
-  },
-  {
-    id: '2',
-    type: 'video' as const,
-    src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    alt: 'Mountain view',
-  },
+  { id: '1', type: 'image' as const, src: '/laptop.webp', alt: 'Laptop' },
+  { id: '2', type: 'image' as const, src: '/phone.webp', alt: 'Phone' },
   {
     id: '3',
     type: 'image' as const,
-    src: 'https://picsum.photos/800/600?grayscale',
-    alt: 'Black and white city',
+    src: '/portrait_image.webp',
+    alt: 'Portrait',
   },
-  {
-    id: '4',
-    type: 'image' as const,
-    src: 'https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=',
-    alt: 'Ocean waves',
-  },
+  { id: '4', type: 'image' as const, src: '/default.webp', alt: 'Default' },
 ];
 
 export const Default: Story = {
   args: {
     items: sampleItems,
     autoScroll: false,
+  },
+  play: async ({ canvas }) => {
+    for (const { alt } of sampleItems) {
+      await storybookExpect(
+        canvas.getByRole('button', { name: alt }),
+      ).toBeInTheDocument();
+      await storybookExpect(
+        canvas.getAllByRole('img', { name: alt }),
+      ).toHaveLength(2);
+    }
+    await storybookExpect(canvas.getByText('Cover')).toBeInTheDocument();
+    // View mode: no editing controls.
+    await storybookExpect(
+      canvas.queryByRole('button', { name: /Remove/ }),
+    ).toBeNull();
+  },
+};
+
+export const Editing: Story = {
+  args: {
+    items: sampleItems,
+    isEditing: true,
+    autoScroll: false,
+    onRemoveItem: fn(),
+    onAddMore: fn(),
+  },
+  play: async ({ canvas, args }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Remove Phone' }));
+    await storybookExpect(args.onRemoveItem).toHaveBeenCalledWith(1);
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Add more' }));
+    await storybookExpect(args.onAddMore).toHaveBeenCalledTimes(1);
   },
 };

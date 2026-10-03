@@ -1,5 +1,6 @@
+import { expect as storybookExpect, userEvent, within } from 'storybook/test';
 import * as React from 'react';
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   Select,
   SelectTrigger,
@@ -12,6 +13,10 @@ import {
 } from '@shadcn/ui/select';
 
 const meta: Meta<typeof Select> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('combobox')).toBeInTheDocument();
+  },
   title: 'Shadcn/UI/Select',
   tags: ['autodocs'],
   component: Select,
@@ -41,9 +46,18 @@ export default meta;
 type Story = StoryObj<typeof Select>;
 
 export const Basic: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('combobox', { name: 'Language' });
+    await storybookExpect(trigger).toHaveTextContent('Spanish');
+    await userEvent.click(trigger);
+    const body = within(canvasElement.ownerDocument.body);
+    await userEvent.click(await body.findByRole('option', { name: 'English' }));
+    await storybookExpect(trigger).toHaveTextContent('English');
+  },
   render: () => (
     <Select defaultValue="es">
-      <SelectTrigger className="w-56">
+      <SelectTrigger className="w-56" aria-label="Language">
         <SelectValue placeholder="Select a language" />
       </SelectTrigger>
       <SelectContent>
@@ -58,7 +72,7 @@ export const Basic: Story = {
 export const WithGroups: Story = {
   render: () => (
     <Select defaultValue="banana">
-      <SelectTrigger className="w-56">
+      <SelectTrigger className="w-56" aria-label="Fruit">
         <SelectValue placeholder="Pick a fruit" />
       </SelectTrigger>
       <SelectContent>
@@ -84,7 +98,7 @@ const SelectControlledExample: React.FC = () => {
   return (
     <div className="space-y-2">
       <Select value={value} onValueChange={setValue}>
-        <SelectTrigger className="w-64">
+        <SelectTrigger className="w-64" aria-label="Country">
           <SelectValue placeholder="Select country" />
         </SelectTrigger>
         <SelectContent>
@@ -102,12 +116,24 @@ const SelectControlledExample: React.FC = () => {
 
 export const Controlled: Story = {
   render: () => <SelectControlledExample />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('combobox', { name: 'Country' });
+    await storybookExpect(canvas.getByText('ch')).toBeVisible();
+    await userEvent.click(trigger);
+    const body = within(canvasElement.ownerDocument.body);
+    await userEvent.click(
+      await body.findByRole('option', { name: 'Guatemala' }),
+    );
+    await storybookExpect(canvas.getByText('gt')).toBeVisible();
+    await storybookExpect(trigger).toHaveTextContent('Guatemala');
+  },
 };
 
 export const SmallTrigger: Story = {
   render: () => (
     <Select defaultValue="sm">
-      <SelectTrigger className="w-48" size="sm">
+      <SelectTrigger className="w-48" size="sm" aria-label="Size">
         <SelectValue placeholder="Size" />
       </SelectTrigger>
       <SelectContent>
@@ -120,9 +146,15 @@ export const SmallTrigger: Story = {
 };
 
 export const Disabled: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('combobox', { name: 'Disabled select' }),
+    ).toBeDisabled();
+  },
   render: () => (
     <Select defaultValue="a" disabled>
-      <SelectTrigger className="w-56">
+      <SelectTrigger className="w-56" aria-label="Disabled select">
         <SelectValue placeholder="Disabled" />
       </SelectTrigger>
       <SelectContent>

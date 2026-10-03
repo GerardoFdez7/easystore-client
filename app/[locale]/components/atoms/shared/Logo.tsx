@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useRouter } from '@i18n/navigation';
 
@@ -10,6 +11,7 @@ type LogoProps = {
 
 const Logo = ({ redirectTo, className }: LogoProps) => {
   const router = useRouter();
+  const t = useTranslations('Shared');
 
   const handleClick = () => {
     // Always scroll to top first
@@ -29,11 +31,11 @@ const Logo = ({ redirectTo, className }: LogoProps) => {
       type="button"
       className={`flex items-center ${redirectTo ? 'cursor-pointer' : ''} ${className || ''}`}
       onClick={handleClick}
-      aria-label="Navigate to home or scroll to top"
+      aria-label={t('logoLabel')}
     >
       <Image
         src={'/logo.webp'}
-        alt="EasyStore Logo"
+        alt={t('logoAlt')}
         width={60}
         height={64}
         className={`max-[580px]:size-logo-icon ${className?.includes('text-') ? 'h-auto w-auto' : ''}`}

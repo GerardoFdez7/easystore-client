@@ -1,7 +1,15 @@
+import { expect as storybookExpect } from 'storybook/test';
 import { Separator } from '@shadcn/ui/separator';
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 const meta: Meta<typeof Separator> = {
+  play: async ({ canvasElement }) => {
+    await storybookExpect(
+      canvasElement.querySelector(
+        '[data-slot="separator"][data-orientation="vertical"]',
+      ),
+    ).toBeInTheDocument();
+  },
   title: 'Shadcn/UI/Separator',
   component: Separator,
   parameters: {

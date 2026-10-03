@@ -1,5 +1,6 @@
+import { expect as storybookExpect, within } from 'storybook/test';
 import { ChartContainer } from '@shadcn/ui/chart';
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   BarChart,
   Bar,
@@ -24,6 +25,10 @@ const chartConfig = {
 };
 
 const meta: Meta<typeof ChartContainer> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByText('Jan')).toBeInTheDocument();
+  },
   title: 'Shadcn/UI/Chart',
   component: ChartContainer,
   parameters: {

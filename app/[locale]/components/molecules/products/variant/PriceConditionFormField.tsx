@@ -117,6 +117,7 @@ export default function PriceConditionFormField({
               >
                 <SelectTrigger
                   className="sm:w-60"
+                  aria-label={t('condition')}
                   aria-invalid={!!fieldState.error}
                 >
                   <SelectValue placeholder={t('selectCondition')} />

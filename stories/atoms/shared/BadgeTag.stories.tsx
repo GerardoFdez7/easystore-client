@@ -1,7 +1,14 @@
+import { expect as storybookExpect, within } from 'storybook/test';
 import BadgeTag from '@atoms/shared/BadgeTag';
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 const meta: Meta<typeof BadgeTag> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByText(/Sustainable|Limited edition/),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/BadgeTag',
   component: BadgeTag,
   parameters: {

@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   Table,
   TableHeader,
@@ -11,6 +12,10 @@ import {
 } from '@shadcn/ui/table';
 
 const meta: Meta<typeof Table> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('table')).toBeInTheDocument();
+  },
   title: 'Shadcn/UI/Table',
   component: Table,
   parameters: {

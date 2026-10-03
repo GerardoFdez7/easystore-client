@@ -1,5 +1,11 @@
+import {
+  expect as storybookExpect,
+  screen,
+  userEvent,
+  within,
+} from 'storybook/test';
 // Popover.stories.tsx
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import * as React from 'react';
 import { Popover, PopoverTrigger, PopoverContent } from '@shadcn/ui/popover';
 
@@ -20,7 +26,7 @@ const PopoverPlayground: React.FC<PlaygroundProps> = ({
         Open popover
       </button>
     </PopoverTrigger>
-    <PopoverContent align={align} sideOffset={sideOffset}>
+    <PopoverContent align={align} sideOffset={sideOffset} aria-label="Greeting">
       <div className="space-y-1">
         <p className="text-sm font-medium">Hello 👋</p>
         <p className="text-muted-foreground text-xs">
@@ -34,6 +40,13 @@ const PopoverPlayground: React.FC<PlaygroundProps> = ({
 
 // ✅ tipa el Meta contra el wrapper para que `align` y `sideOffset` sean válidos
 const meta = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Open popover' }));
+    await storybookExpect(
+      await screen.findByRole('dialog', { name: 'Greeting' }),
+    ).toHaveTextContent('Hello 👋');
+  },
   title: 'Shadcn/UI/Popover',
   tags: ['autodocs'],
   component: PopoverPlayground,

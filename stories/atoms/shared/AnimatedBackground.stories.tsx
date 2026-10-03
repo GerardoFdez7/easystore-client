@@ -1,7 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import AnimatedBackground from '@atoms/shared/AnimatedBackground';
 
 const meta: Meta<typeof AnimatedBackground> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('presentation')).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/AnimatedBackground',
   parameters: {
     layout: 'fullscreen',

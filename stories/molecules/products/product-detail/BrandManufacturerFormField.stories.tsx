@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, userEvent } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useForm, FormProvider } from 'react-hook-form';
 import BrandManufacturerFormField from '@molecules/products/product-detail/BrandManufacturerFormField';
 import { mockProductFormData } from '../mocks/productFormMocks';
@@ -51,6 +52,15 @@ export const Default: Story = {
   args: {
     defaultValues: { brand: '', manufacturer: '' },
   },
+  play: async ({ canvas }) => {
+    const brand = canvas.getByRole('textbox', { name: 'Brand' });
+    const manufacturer = canvas.getByRole('textbox', { name: 'Manufacturer' });
+    await storybookExpect(brand).toHaveValue('');
+    await userEvent.type(brand, 'Acme');
+    await userEvent.type(manufacturer, 'Acme Industries');
+    await storybookExpect(brand).toHaveValue('Acme');
+    await storybookExpect(manufacturer).toHaveValue('Acme Industries');
+  },
 };
 
 export const WithValues: Story = {
@@ -66,6 +76,14 @@ export const WithValues: Story = {
         story: 'Fields pre-filled with brand and manufacturer values.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Brand' }),
+    ).toHaveValue(mockProductFormData.brand);
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Manufacturer' }),
+    ).toHaveValue(mockProductFormData.manufacturer);
   },
 };
 
@@ -83,6 +101,14 @@ export const BrandOnly: Story = {
       },
     },
   },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Brand' }),
+    ).toHaveValue('TechBrand');
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Manufacturer' }),
+    ).toHaveValue('');
+  },
 };
 
 export const ManufacturerOnly: Story = {
@@ -98,5 +124,13 @@ export const ManufacturerOnly: Story = {
         story: 'Only the manufacturer field has a value.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Brand' }),
+    ).toHaveValue('');
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Manufacturer' }),
+    ).toHaveValue('Manufacturing Corp.');
   },
 };

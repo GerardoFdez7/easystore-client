@@ -23,7 +23,7 @@ export default function Portrait() {
           <h1 className="mb-13 text-5xl font-extrabold sm:text-6xl">
             {t('title')}
           </h1>
-          <p className="font-regular text-text mb-40 text-xl sm:text-2xl">
+          <p className="font-regular mb-40 text-xl sm:text-2xl">
             {t('slogan')}
           </p>
           <div className="flex gap-4">

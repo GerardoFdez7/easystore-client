@@ -1,9 +1,16 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { SortBy, SortOrder } from '@graphql/generated';
 import WarehouseList from '@organisms/inventory/WarehouseList';
 import { mockWarehouses } from './mocks/mockWarehouses';
 
 const meta: Meta<typeof WarehouseList> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('region', { name: 'Warehouses' }),
+    ).toBeInTheDocument();
+  },
   title: 'Organisms/Inventory/WarehouseList',
   component: WarehouseList,
   parameters: {

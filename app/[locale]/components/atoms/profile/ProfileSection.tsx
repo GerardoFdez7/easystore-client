@@ -1,4 +1,11 @@
 import { Button } from '@shadcn/ui/button';
+import {
+  Card,
+  CardAction,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@shadcn/ui/card';
 
 interface ProfileSectionProps {
   title: string;
@@ -13,25 +20,21 @@ export default function ProfileSection({
   description,
   buttonText,
   onButtonClick,
-  className = 'mb-10',
+  className,
 }: ProfileSectionProps) {
   return (
-    <section
-      className={`${className} md:grid-cols-profile-section grid grid-cols-1 items-start gap-3 md:gap-6`}
-    >
-      <div className="text-title pt-1 font-bold md:pt-2">{title}</div>
-      <div className="bg-foreground border-border rounded-xl border p-4 shadow-sm sm:p-5">
-        {description && (
-          <p className="text-text mb-4 font-medium">{description}</p>
-        )}
-        <Button
-          variant="outline"
-          className="border-title text-title hover:bg-title w-full rounded-full hover:text-white"
-          onClick={onButtonClick}
-        >
-          {buttonText}
-        </Button>
-      </div>
-    </section>
+    <Card className={className}>
+      <CardHeader>
+        <CardTitle>
+          <h2>{title}</h2>
+        </CardTitle>
+        {description && <CardDescription>{description}</CardDescription>}
+        <CardAction>
+          <Button type="button" variant="outline" onClick={onButtonClick}>
+            {buttonText}
+          </Button>
+        </CardAction>
+      </CardHeader>
+    </Card>
   );
 }

@@ -85,7 +85,7 @@ export default function MainProductDetail({
         deleteDescription={t('deleteDescriptionSingle')}
         disabled={archiveLoading || restoreLoading || deleteLoading}
       />
-      <main className="mx-4 flex max-w-screen-md justify-center lg:mx-auto lg:w-full">
+      <div className="mx-4 flex max-w-screen-md justify-center lg:mx-auto lg:w-full">
         <Form {...form}>
           <form
             onSubmit={(e) => {
@@ -124,7 +124,7 @@ export default function MainProductDetail({
             </div>
           </form>
         </Form>
-      </main>
+      </div>
     </>
   );
 }

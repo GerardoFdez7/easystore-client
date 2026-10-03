@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import StockMovementTemplate from '@templates/inventory/StockMovement';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
 import {
   FindAllMovementsDocument,
   FindWarehousesDocument,
@@ -12,18 +13,30 @@ const mockWarehouses = [
   {
     id: '1',
     name: 'Main Warehouse',
+    addressId: 'address-1',
+    addressLine1: '1 Main Street',
+    countryCode: 'GT',
+    postalCode: '01001',
     city: 'Guatemala City',
     __typename: 'Warehouse' as const,
   },
   {
     id: '2',
     name: 'Secondary Warehouse',
+    addressId: 'address-2',
+    addressLine1: '2 Secondary Street',
+    countryCode: 'GT',
+    postalCode: '09001',
     city: 'Quetzaltenango',
     __typename: 'Warehouse' as const,
   },
   {
     id: '3',
     name: 'Online Store Warehouse',
+    addressId: 'address-3',
+    addressLine1: '3 Online Street',
+    countryCode: 'GT',
+    postalCode: '03001',
     city: 'Antigua',
     __typename: 'Warehouse' as const,
   },
@@ -46,6 +59,7 @@ const mockStockMovementsResponse = {
         stockMovements: mockStockMovements.map(
           (movement: (typeof mockStockMovements)[0]) => ({
             id: movement.id,
+            warehouseId: '1',
             productName: movement.productName,
             variantSku: movement.variantSku,
             variantFirstAttribute: movement.variantFirstAttribute,
@@ -110,6 +124,12 @@ const mockWarehousesResponse = {
 };
 
 const meta: Meta<typeof StockMovementTemplate> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('switch', { name: 'Include Deleted' }),
+    ).toBeInTheDocument();
+  },
   title: 'Templates/Inventory/StockMovement',
   component: StockMovementTemplate,
   parameters: {
@@ -136,13 +156,19 @@ type Story = StoryObj<typeof StockMovementTemplate>;
  * Shows the complete stock movement history page with data.
  */
 export const Default: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      await canvas.findByText('Wireless Headphones'),
+    ).toBeInTheDocument();
+  },
   decorators: [
     (Story) => (
-      <MockedProvider
+      <ApolloMswMocks
         mocks={[mockStockMovementsResponse, mockWarehousesResponse]}
       >
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   parameters: {
@@ -160,13 +186,19 @@ export const Default: Story = {
  * Shows the template when no movement data is available.
  */
 export const EmptyState: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      await canvas.findByRole('heading', { name: 'No stock movements found' }),
+    ).toBeInTheDocument();
+  },
   decorators: [
     (Story) => (
-      <MockedProvider
+      <ApolloMswMocks
         mocks={[mockEmptyStockMovementsResponse, mockWarehousesResponse]}
       >
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   parameters: {

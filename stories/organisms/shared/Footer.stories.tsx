@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import Footer from '@organisms/shared/Footer';
 import { NextIntlClientProvider } from 'next-intl';
 
@@ -12,6 +13,10 @@ const messages = {
 };
 
 const meta: Meta<typeof Footer> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('contentinfo')).toBeInTheDocument();
+  },
   title: 'Organisms/Shared/Footer',
   parameters: {
     layout: 'fullscreen',

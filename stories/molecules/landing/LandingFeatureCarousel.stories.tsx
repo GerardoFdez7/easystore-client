@@ -1,5 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { NextIntlClientProvider } from 'next-intl';
+import enMessages from '../../../messages/en.json';
 import { Sparkles, Tag } from 'lucide-react';
 import LandingFeatureCarousel from '@molecules/landing/LandingFeatureCarousel';
 
@@ -34,10 +36,22 @@ export const Default: Story = {
     rowSizes: [2],
   },
   render: (args) => (
-    <NextIntlClientProvider locale="en" messages={messages}>
+    <NextIntlClientProvider
+      locale="en"
+      messages={{ ...enMessages, ...messages }}
+    >
       <div className="w-5xl max-w-full">
         <LandingFeatureCarousel {...args} />
       </div>
     </NextIntlClientProvider>
   ),
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('region', { name: 'AI tools, Custom domains' }),
+    ).toBeInTheDocument();
+    await storybookExpect(canvas.getByText('AI tools')).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByText('Use the domain your customers know.'),
+    ).toBeInTheDocument();
+  },
 };

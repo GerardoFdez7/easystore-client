@@ -1,6 +1,24 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import {
+  expect as storybookExpect,
+  fn,
+  screen,
+  userEvent,
+  waitFor,
+} from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import WarehouseForm from '@molecules/inventory/WarehouseForm';
 import { mockWarehouse } from './mocks/warehouseMocks';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
+import { FindAllAddressesDocument } from '@graphql/generated';
+import { mockAddressesData } from './mocks/addressMocks';
+
+const addressesMock = {
+  request: {
+    query: FindAllAddressesDocument,
+    variables: { page: 1, limit: 25, name: '' },
+  },
+  result: { data: mockAddressesData },
+};
 
 const meta: Meta<typeof WarehouseForm> = {
   title: 'Molecules/Inventory/WarehouseForm',
@@ -15,6 +33,13 @@ const meta: Meta<typeof WarehouseForm> = {
     },
   },
   tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <ApolloMswMocks mocks={[addressesMock]}>
+        <Story />
+      </ApolloMswMocks>
+    ),
+  ],
   argTypes: {
     warehouse: {
       description: 'Warehouse data for editing (null for creation)',
@@ -49,8 +74,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    onSubmit: async () => {},
-    onCancel: () => {},
+    open: true,
+    onSubmit: fn(async () => undefined),
+    onCancel: fn(),
     isSubmitting: false,
     isDeleting: false,
   },
@@ -61,14 +87,35 @@ export const Default: Story = {
       },
     },
   },
+  play: async ({ args }) => {
+    const dialog = await screen.findByRole('dialog');
+    await storybookExpect(dialog).toHaveTextContent('Create Warehouse');
+    await storybookExpect(
+      screen.queryByRole('button', { name: 'Delete Warehouse' }),
+    ).toBeNull();
+
+    await userEvent.type(
+      screen.getByRole('textbox', { name: 'Warehouse Name' }),
+      'A',
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+    await storybookExpect(
+      await screen.findByText('Warehouse name must be at least 2 characters'),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      screen.getByText('Address is required'),
+    ).toBeInTheDocument();
+    await storybookExpect(args.onSubmit).not.toHaveBeenCalled();
+  },
 };
 
 export const EditMode: Story = {
   args: {
+    open: true,
     warehouse: mockWarehouse,
-    onSubmit: async () => {},
-    onCancel: () => {},
-    onDelete: async () => true,
+    onSubmit: fn(async () => undefined),
+    onCancel: fn(),
+    onDelete: fn(async () => true),
     isSubmitting: false,
     isDeleting: false,
   },
@@ -79,14 +126,39 @@ export const EditMode: Story = {
       },
     },
   },
+  play: async ({ args }) => {
+    const dialog = await screen.findByRole('dialog');
+    await storybookExpect(dialog).toHaveTextContent('Edit Warehouse');
+    await storybookExpect(
+      screen.getByRole('textbox', { name: 'Warehouse Name' }),
+    ).toHaveValue('Main Warehouse');
+    // Nothing changed yet, so saving is disabled.
+    await storybookExpect(
+      screen.getByRole('button', { name: 'Save' }),
+    ).toBeDisabled();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Delete Warehouse' }),
+    );
+    const confirm = await screen.findByRole('alertdialog');
+    await storybookExpect(confirm).toHaveTextContent(
+      'Confirm Delete Warehouse',
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Delete' }));
+    await waitFor(() =>
+      storybookExpect(args.onDelete).toHaveBeenCalledWith(mockWarehouse.id),
+    );
+    await waitFor(() => storybookExpect(args.onCancel).toHaveBeenCalled());
+  },
 };
 
 export const Submitting: Story = {
   args: {
+    open: true,
     warehouse: mockWarehouse,
-    onSubmit: async () => {},
-    onCancel: () => {},
-    onDelete: async () => true,
+    onSubmit: fn(async () => undefined),
+    onCancel: fn(),
+    onDelete: fn(async () => true),
     isSubmitting: true,
     isDeleting: false,
   },
@@ -97,14 +169,24 @@ export const Submitting: Story = {
       },
     },
   },
+  play: async () => {
+    await screen.findByRole('dialog');
+    await storybookExpect(
+      screen.getByRole('button', { name: 'Loading Save' }),
+    ).toBeDisabled();
+    await storybookExpect(
+      screen.getByRole('button', { name: 'Delete Warehouse' }),
+    ).toBeDisabled();
+  },
 };
 
 export const Deleting: Story = {
   args: {
+    open: true,
     warehouse: mockWarehouse,
-    onSubmit: async () => {},
-    onCancel: () => {},
-    onDelete: async () => true,
+    onSubmit: fn(async () => undefined),
+    onCancel: fn(),
+    onDelete: fn(async () => true),
     isSubmitting: false,
     isDeleting: true,
   },
@@ -114,5 +196,11 @@ export const Deleting: Story = {
         story: 'Form in deleting state with loading indicators.',
       },
     },
+  },
+  play: async () => {
+    await screen.findByRole('dialog');
+    await storybookExpect(
+      screen.getByRole('button', { name: 'Delete Warehouse' }),
+    ).toBeDisabled();
   },
 };

@@ -13,9 +13,9 @@ export default function ItemFeature({ icon, title, text }: ItemFeatureProps) {
       <div className="bg-card h-41.25 basis-auto rounded-lg p-4">
         <div className="mb-4 flex items-center gap-2">
           {icon}
-          <h3 className="text-text text-2xl leading-none font-bold sm:text-3xl">
+          <h2 className="text-text text-2xl leading-none font-bold sm:text-3xl">
             {title}
-          </h3>
+          </h2>
         </div>
         <p className="text-text text-2xl leading-none">{text}</p>
       </div>

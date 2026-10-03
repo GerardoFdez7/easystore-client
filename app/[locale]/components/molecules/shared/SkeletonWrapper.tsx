@@ -10,6 +10,7 @@ import {
   useCallback,
 } from 'react';
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 function assignRef(ref: React.Ref<HTMLElement>, value: HTMLElement | null) {
   if (typeof ref === 'function') {
@@ -72,6 +73,7 @@ export default function SkeletonWrapper({
   autoMeasure = true,
   inheritLayout = true,
 }: SkeletonWrapperProps) {
+  const t = useTranslations('Shared');
   const childRef = useRef<HTMLElement>(null);
   const invisibleRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -336,7 +338,12 @@ export default function SkeletonWrapper({
   if (!loading) return <>{childWithRef}</>;
 
   return (
-    <div ref={containerRef} className="contents">
+    <div
+      ref={containerRef}
+      className="contents"
+      role="status"
+      aria-label={t('loadingContent')}
+    >
       {/* Invisible render for measurement - only shown during loading */}
       {invisibleChild && (
         <div

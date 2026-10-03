@@ -1,8 +1,16 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Label } from '@shadcn/ui/label';
 import { Input } from '@shadcn/ui/input';
 
 const meta: Meta<typeof Label> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByLabelText('Name')).toHaveAttribute(
+      'placeholder',
+      'John Doe',
+    );
+  },
   title: 'Shadcn/UI/Label',
   tags: ['autodocs'],
   parameters: {

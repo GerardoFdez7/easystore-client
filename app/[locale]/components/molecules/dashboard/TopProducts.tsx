@@ -61,9 +61,9 @@ export default function TopProducts() {
                 className="flex flex-col items-center text-center"
               >
                 <ImageTopProducts />
-                <h4 className="text-foreground mb-1 text-xs font-medium">
+                <h2 className="text-foreground mb-1 text-xs font-medium">
                   {product.name}
-                </h4>
+                </h2>
                 <p className="text-secondary text-xs font-medium">
                   {product.price}
                 </p>

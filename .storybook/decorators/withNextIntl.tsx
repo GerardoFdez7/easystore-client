@@ -1,5 +1,5 @@
 import { NextIntlClientProvider } from 'next-intl';
-import type { Decorator } from '@storybook/nextjs';
+import type { Decorator } from '@storybook/nextjs-vite';
 import enMessages from '../../messages/en.json';
 import esMessages from '../../messages/es.json';
 import ptMessages from '../../messages/pt.json';

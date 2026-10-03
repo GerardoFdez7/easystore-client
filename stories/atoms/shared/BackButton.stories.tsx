@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import BackButton from '@atoms/shared/BackButton';
 
 const meta: Meta<typeof BackButton> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Back' }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/BackButton',
   component: BackButton,
   parameters: {

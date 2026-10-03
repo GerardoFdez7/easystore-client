@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { Fragment, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { ChevronDown, ChevronRight } from 'lucide-react';
@@ -49,7 +49,7 @@ export default function CategoryBreadcrumb({
   }
 
   return (
-    <nav aria-label="breadcrumb Navigation" role="navigation">
+    <nav aria-label={t('breadcrumbNavigation')} role="navigation">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -68,7 +68,7 @@ export default function CategoryBreadcrumb({
             const hasMultipleSiblings = currentSiblings.length > 1;
 
             return (
-              <div key={`${item.name}-${index}`} className="flex items-center">
+              <Fragment key={`${item.name}-${index}`}>
                 <BreadcrumbSeparator aria-hidden="true">
                   <ChevronRight className="h-4 w-4" />
                 </BreadcrumbSeparator>
@@ -85,9 +85,7 @@ export default function CategoryBreadcrumb({
                           variant="ghost"
                           size="sm"
                           className="hover:text-title h-auto p-0 font-normal transition-colors"
-                          aria-label="category Options"
-                          aria-haspopup="menu"
-                          aria-expanded="false"
+                          aria-label={t('categoryOptions')}
                         >
                           {item.name}
                           <ChevronDown
@@ -99,7 +97,7 @@ export default function CategoryBreadcrumb({
                       <DropdownMenuContent
                         align="start"
                         role="menu"
-                        aria-label="sibling Categories"
+                        aria-label={t('siblingCategories')}
                       >
                         {currentSiblings.map((sibling: CategoryInfo) => (
                           <DropdownMenuItem
@@ -120,13 +118,13 @@ export default function CategoryBreadcrumb({
                     <BreadcrumbLink
                       href={`/${locale}/categories/${item.fullPath.join('/')}`}
                       className="hover:text-title transition-colors"
-                      aria-label="navigate To Category"
+                      aria-label={t('navigateToCategory')}
                     >
                       {item.name}
                     </BreadcrumbLink>
                   )}
                 </BreadcrumbItem>
-              </div>
+              </Fragment>
             );
           })}
         </BreadcrumbList>
