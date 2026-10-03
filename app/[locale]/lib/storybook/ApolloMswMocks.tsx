@@ -6,7 +6,7 @@ import { setContext } from '@apollo/client/link/context';
 import { getOperationAST, type DocumentNode } from 'graphql';
 import { graphql, HttpResponse } from 'msw';
 import getClient from '../apollo/client';
-import { link } from '../apollo/link';
+import { graphqlUri, link } from '../apollo/link';
 
 type ApolloMock = {
   request: { query: DocumentNode; variables?: Record<string, unknown> };
@@ -87,8 +87,14 @@ export const ApolloMswMocks = ({
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
 
+if (!graphqlUri) {
+  throw new Error(
+    'NEXT_PUBLIC_GRAPHQL_URI must be defined for Storybook Apollo MSW mocks.',
+  );
+}
+
 export const apolloMswHandler = graphql
-  .link('http://localhost:3001/gql')
+  .link(graphqlUri)
   .operation(async ({ operationName, request, variables }) => {
     const fixtureId = request.headers.get(storyFixtureHeader);
     const mock = findMock(

@@ -33,8 +33,34 @@ jobs:
       - name: Create .env file
         run: cp .env.example .env
 
-      - name: Verify project
-        run: npm run verify
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test Error Handling
+        run: npm run test-errors:test
+
+      - name: Test architecture
+        run: npm run architecture:test
+
+      - name: Test Storybook
+        run: npm run test:storybook:ci
+        env:
+          NEXT_PUBLIC_GRAPHQL_URI: http://localhost:3001/gql
+
+      - name: Check architecture
+        run: npm run architecture
+
+      - name: Check architecture with Semgrep
+        run: npm run architecture:semgrep
+
+      - name: Check duplication
+        run: npm run duplication
+
+      - name: Build
+        run: npm run build
 
       - name: Comment PR on failure
         if: failure()
