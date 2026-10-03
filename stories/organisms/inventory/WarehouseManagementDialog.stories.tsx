@@ -1,8 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import WarehouseManagementDialog from '@organisms/inventory/WarehouseManagementDialog';
 import { mockWarehouses } from './mocks/mockWarehouses';
 
 const meta: Meta<typeof WarehouseManagementDialog> = {
+  play: async ({ canvasElement }) => {
+    const dialog = within(canvasElement.ownerDocument.body);
+    await storybookExpect(
+      await dialog.findByRole('dialog'),
+    ).toBeInTheDocument();
+  },
   title: 'Organisms/Inventory/WarehouseManagementDialog',
   component: WarehouseManagementDialog,
   parameters: {

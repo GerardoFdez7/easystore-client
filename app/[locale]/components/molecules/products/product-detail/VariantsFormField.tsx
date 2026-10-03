@@ -243,6 +243,7 @@ export default function VariantsFormField({
                                     onClick={(e) => {
                                       handleDeleteDraft(e, index);
                                     }}
+                                    aria-label={tVariant('deleteVariant')}
                                     className="hover:bg-destructive/10 hover:text-destructive"
                                   >
                                     <Trash2 className="h-4 w-4" />
@@ -305,11 +306,7 @@ export default function VariantsFormField({
                                     </TableCell>
                                     <TableCell>{variant.condition}</TableCell>
                                     <TableCell>
-                                      <div
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                        }}
-                                      >
+                                      <div>
                                         {isArchived ? (
                                           <Tooltip>
                                             <TooltipTrigger asChild>
@@ -318,6 +315,7 @@ export default function VariantsFormField({
                                                 variant="ghost"
                                                 size="icon"
                                                 onClick={(e) => {
+                                                  e.stopPropagation();
                                                   handleArchiveClick(
                                                     e,
                                                     variant.id,
@@ -325,6 +323,9 @@ export default function VariantsFormField({
                                                   );
                                                 }}
                                                 disabled={isActionLoading}
+                                                aria-label={tVariant(
+                                                  'restoreVariant',
+                                                )}
                                                 className="hover:bg-primary/10 hover:text-primary"
                                               >
                                                 <RotateCcw className="h-4 w-4" />
@@ -349,6 +350,9 @@ export default function VariantsFormField({
                                                   );
                                                 }}
                                                 disabled={isActionLoading}
+                                                aria-label={tVariant(
+                                                  'archiveVariant',
+                                                )}
                                                 className="hover:bg-warning/10 hover:text-warning"
                                               >
                                                 <Archive className="h-4 w-4" />
@@ -376,6 +380,9 @@ export default function VariantsFormField({
                                                 isLastActiveVariant ||
                                                 isActionLoading
                                               }
+                                              aria-label={tVariant(
+                                                'deleteVariant',
+                                              )}
                                               className="hover:bg-destructive/10 hover:text-destructive"
                                             >
                                               <Trash2 className="h-4 w-4" />

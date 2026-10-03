@@ -182,7 +182,7 @@ export function ChartTotalSales() {
               value={timeRange}
               onValueChange={setTimeRange}
               variant="outline"
-              className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
+              className="hidden *:data-[slot=toggle-group-item]:px-4! @[767px]/card:flex"
             >
               <ToggleGroupItem value="90d">{t('3months')}</ToggleGroupItem>
               <ToggleGroupItem value="30d">{t('30days')}</ToggleGroupItem>
@@ -192,9 +192,9 @@ export function ChartTotalSales() {
               <SelectTrigger
                 className="flex w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
                 size="sm"
-                aria-label="Select a value"
+                aria-label={t('selectValue')}
               >
-                <SelectValue placeholder="Last 3 months" />
+                <SelectValue placeholder={t('3months')} />
               </SelectTrigger>
               <SelectContent className="rounded-xl">
                 <SelectItem value="90d" className="rounded-lg">
@@ -213,7 +213,7 @@ export function ChartTotalSales() {
         <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
           <ChartContainer
             config={chartConfig}
-            className="aspect-auto h-[250px] w-full"
+            className="aspect-auto h-62.5 w-full"
           >
             <AreaChart data={filteredData}>
               <defs>

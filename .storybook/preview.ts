@@ -1,13 +1,18 @@
-import type { Preview } from '@storybook/nextjs';
+import type { Preview } from '@storybook/nextjs-vite';
+import { mswLoader } from 'msw-storybook-addon/csf3';
 import { withNextIntl } from './decorators/withNextIntl';
 import { withNextThemes } from './decorators/withNextThemes';
 import { withApollo } from './decorators/withApollo';
 import { withAuth } from './decorators/withAuth';
+import { apolloMswHandler } from '../app/[locale]/lib/storybook/ApolloMswMocks';
 // @ts-ignore - CSS import for styling
 import '../app/[locale]/globals.css';
 
 const preview: Preview = {
   parameters: {
+    msw: {
+      handlers: [apolloMswHandler],
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -28,11 +33,19 @@ const preview: Preview = {
           },
         ],
       },
+
       // Run accessibility checks automatically
       manual: false,
+
+      // 'todo' - show a11y violations in the test UI only
+      // 'error' - fail CI on a11y violations
+      // 'off' - skip a11y checks entirely
+      test: 'error',
     },
   },
-  decorators: [withApollo, withAuth, withNextIntl, withNextThemes],
+  decorators: [withAuth, withApollo, withNextIntl, withNextThemes],
+  // mswLoader() creates and initializes the browser worker for CSF 3 stories.
+  loaders: [mswLoader()],
   globalTypes: {
     locale: {
       name: 'Locale',
@@ -43,8 +56,6 @@ const preview: Preview = {
         items: [
           { value: 'en', title: 'English' },
           { value: 'es', title: 'Español' },
-          { value: 'fr', title: 'Français' },
-          { value: 'it', title: 'Italiano' },
           { value: 'pt', title: 'Português' },
         ],
       },

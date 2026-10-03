@@ -131,7 +131,7 @@ export default function MainInventory() {
   }
 
   return (
-    <main className="flex w-full flex-col gap-4 px-4 xl:mx-auto">
+    <div className="flex w-full flex-col gap-4 px-4 xl:mx-auto">
       <InventoryActionButtons
         loading={loading}
         onAddStockClick={() => setIsAddStockDialogOpen(true)}
@@ -172,6 +172,6 @@ export default function MainInventory() {
           void refetch().catch((_error) => {});
         }}
       />
-    </main>
+    </div>
   );
 }

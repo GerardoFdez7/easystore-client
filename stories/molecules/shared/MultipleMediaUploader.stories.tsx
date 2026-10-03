@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import MultipleMediaUploader from '@molecules/shared/MultipleMediaUploader';
 
 const meta: Meta<typeof MultipleMediaUploader> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Choose Files' }),
+    ).toBeInTheDocument();
+  },
   title: 'Molecules/Shared/MultipleMediaUploader',
   component: MultipleMediaUploader,
   tags: ['autodocs'],
@@ -172,16 +179,11 @@ export const WithCustomDoneButton: Story = {
       <button
         onClick={onDone}
         disabled={isProcessing}
-        style={{
-          padding: '12px 24px',
-          backgroundColor: isProcessing ? '#ccc' : '#28a745',
-          color: 'white',
-          border: 'none',
-          borderRadius: '8px',
-          cursor: isProcessing ? 'not-allowed' : 'pointer',
-          fontSize: '16px',
-          fontWeight: 'bold',
-        }}
+        className={
+          isProcessing
+            ? 'bg-muted-foreground cursor-not-allowed rounded-lg border-none px-6 py-3 text-base font-bold text-white'
+            : 'bg-secondary cursor-pointer rounded-lg border-none px-6 py-3 text-base font-bold text-white'
+        }
       >
         {isProcessing ? 'Processing...' : 'Upload Gallery'}
       </button>

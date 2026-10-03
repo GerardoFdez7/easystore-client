@@ -6,11 +6,13 @@ import {
   CombinedProtocolErrors,
 } from '@apollo/client/errors';
 
+export const graphqlUri = process.env.NEXT_PUBLIC_GRAPHQL_URI;
+
 /**
  * HTTP Link configuration for GraphQL requests
  */
 const httpLink = new HttpLink({
-  uri: process.env.NEXT_PUBLIC_GRAPHQL_URI,
+  uri: graphqlUri,
   credentials: 'include',
   headers: {
     'Content-Type': 'application/json',

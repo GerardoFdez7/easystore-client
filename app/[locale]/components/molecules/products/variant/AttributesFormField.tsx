@@ -12,7 +12,7 @@ import {
 import { Button } from '@shadcn/ui/button';
 import { Input } from '@shadcn/ui/input';
 import { Plus } from 'lucide-react';
-import ArrayItemBox from '@atoms/shared/ArrayItemBox';
+import ReorderableFieldArray from '@atoms/shared/ReorderableFieldArray';
 import { useTranslations } from 'next-intl';
 
 export default function AttributesCard() {
@@ -70,10 +70,11 @@ export default function AttributesCard() {
                       />
                     </div>
                     <div>
-                      <FormLabel className="mb-1">
+                      <FormLabel htmlFor="attributeValue" className="mb-1">
                         {t('attributeValue')}
                       </FormLabel>
                       <Input
+                        id="attributeValue"
                         placeholder={t('attributeValuePlaceholder')}
                         value={newValue}
                         onChange={(e) => setNewValue(e.target.value)}
@@ -97,67 +98,58 @@ export default function AttributesCard() {
 
               {/* Display existing attributes */}
               {fields.length > 0 && (
-                <div className="border-border bg-muted/10 rounded-lg border p-8">
-                  <div className="space-y-3">
-                    {fields.map((field, index) => (
-                      <ArrayItemBox
-                        key={field.id}
-                        index={index}
-                        canMoveUp={index > 0}
-                        canMoveDown={index < fields.length - 1}
-                        onMoveUp={() => moveAttribute(index, 'up')}
-                        onMoveDown={() => moveAttribute(index, 'down')}
-                        onDelete={() => remove(index)}
-                        t={t}
-                      >
-                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                          <div>
-                            <FormLabel className="text-xs">
-                              {t('attributeKey')}
-                            </FormLabel>
-                            <FormField
-                              control={control}
-                              name={`attributes.${index}.key`}
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormControl>
-                                    <Input
-                                      {...field}
-                                      placeholder={t('attributeKeyPlaceholder')}
-                                    />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                          </div>
-                          <div>
-                            <FormLabel className="text-xs">
-                              {t('attributeValue')}
-                            </FormLabel>
-                            <FormField
-                              control={control}
-                              name={`attributes.${index}.value`}
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormControl>
-                                    <Input
-                                      {...field}
-                                      placeholder={t(
-                                        'attributeValuePlaceholder',
-                                      )}
-                                    />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                          </div>
-                        </div>
-                      </ArrayItemBox>
-                    ))}
-                  </div>
-                </div>
+                <ReorderableFieldArray
+                  items={fields}
+                  onMove={moveAttribute}
+                  onRemove={remove}
+                  t={t}
+                  renderItem={(index) => (
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      <div>
+                        <FormLabel className="text-xs">
+                          {t('attributeKey')}
+                        </FormLabel>
+                        <FormField
+                          control={control}
+                          name={`attributes.${index}.key`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Input
+                                  {...field}
+                                  aria-label={t('attributeKey')}
+                                  placeholder={t('attributeKeyPlaceholder')}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div>
+                        <FormLabel className="text-xs">
+                          {t('attributeValue')}
+                        </FormLabel>
+                        <FormField
+                          control={control}
+                          name={`attributes.${index}.value`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Input
+                                  {...field}
+                                  aria-label={t('attributeValue')}
+                                  placeholder={t('attributeValuePlaceholder')}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  )}
+                />
               )}
 
               {fields.length === 0 && (

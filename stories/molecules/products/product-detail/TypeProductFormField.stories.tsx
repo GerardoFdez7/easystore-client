@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, screen, userEvent } from 'storybook/test';
+import { TypeEnum } from '@graphql/generated';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useForm, FormProvider } from 'react-hook-form';
 import TypeProductFormField from '@molecules/products/product-detail/TypeProductFormField';
 
@@ -9,7 +11,7 @@ const TypeProductFormFieldWrapper = ({
   defaultValues?: { productType: string };
 }) => {
   const methods = useForm({
-    defaultValues: defaultValues || { productType: 'Physical' },
+    defaultValues: defaultValues || { productType: TypeEnum.Physical },
   });
 
   return (
@@ -48,7 +50,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Physical: Story = {
   args: {
-    defaultValues: { productType: 'Physical' },
+    defaultValues: { productType: TypeEnum.Physical },
   },
   parameters: {
     docs: {
@@ -57,11 +59,20 @@ export const Physical: Story = {
       },
     },
   },
+  play: async ({ canvas }) => {
+    const select = canvas.getByRole('combobox', { name: 'Product Type' });
+    await storybookExpect(select).toHaveTextContent('Physical');
+    await userEvent.click(select);
+    await userEvent.click(
+      await screen.findByRole('option', { name: 'Digital' }),
+    );
+    await storybookExpect(select).toHaveTextContent('Digital');
+  },
 };
 
 export const Digital: Story = {
   args: {
-    defaultValues: { productType: 'Digital' },
+    defaultValues: { productType: TypeEnum.Digital },
   },
   parameters: {
     docs: {
@@ -69,5 +80,9 @@ export const Digital: Story = {
         story: 'Product type set to Digital.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    const select = canvas.getByRole('combobox', { name: 'Product Type' });
+    await storybookExpect(select).toHaveTextContent('Digital');
   },
 };

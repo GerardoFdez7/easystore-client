@@ -101,7 +101,6 @@ export function useCreateWarehouseStock(opts: CreateStockByLookupOptions = {}) {
           input,
           reason: values.reason ?? reason ?? null,
           nowIso: new Date().toISOString(),
-          nowMs: Date.now(),
         });
       }
 

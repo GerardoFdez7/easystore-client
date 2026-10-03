@@ -121,11 +121,7 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
     !isLoading
   ) {
     return (
-      <main
-        className="mx-auto w-full px-4"
-        role="main"
-        aria-labelledby="categories-title"
-      >
+      <div className="mx-auto w-full px-4">
         <EmptyState
           icon={Dices}
           title={t('noCategoriesTitle')}
@@ -133,16 +129,12 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
           buttonText={t('createCategory')}
           onButtonClick={handleCreateCategory}
         />
-      </main>
+      </div>
     );
   }
 
   return (
-    <main
-      className="mx-auto w-full px-4"
-      role="main"
-      aria-labelledby="main-categories-title"
-    >
+    <div className="mx-auto w-full px-4">
       <div className="flex flex-col gap-4">
         {categoryPath.length > 0 && (
           <CategoryBreadcrumb categoryPath={categoryPath} />
@@ -219,6 +211,6 @@ export default function MainCategory({ categoryPath = [] }: MainCategoryProps) {
         )}
       </div>
       <CategoryTree open={treeOpen} onOpenChange={setTreeOpen} />
-    </main>
+    </div>
   );
 }

@@ -1,5 +1,7 @@
 'use client';
 
+import type { CSSProperties } from 'react';
+
 import ButtonPrimary from '@atoms/landing/ButtonPrimary';
 import ButtonViewPlans from '@atoms/landing/ButtonViewPlans';
 import Link from 'next/link';
@@ -11,17 +13,17 @@ export default function Portrait() {
   const { isAuthenticated } = useAuth();
   return (
     <section
-      className="my-3 min-h-[770px] rounded-xl bg-cover bg-center text-white sm:min-h-[770px]"
-      style={{
-        backgroundImage: `url('/portrait_image.webp')`,
-      }}
+      className="my-3 min-h-192.5 rounded-xl bg-(image:--portrait-bg) bg-cover bg-center text-white sm:min-h-192.5"
+      style={
+        { '--portrait-bg': `url('/portrait_image.webp')` } as CSSProperties
+      }
     >
       <div className="max-w-7xl py-20 sm:ml-13">
         <div className="max-w-85 pl-5 sm:max-w-xl">
           <h1 className="mb-13 text-5xl font-extrabold sm:text-6xl">
             {t('title')}
           </h1>
-          <p className="font-regular text-text mb-40 text-xl sm:text-2xl">
+          <p className="font-regular mb-40 text-xl sm:text-2xl">
             {t('slogan')}
           </p>
           <div className="flex gap-4">

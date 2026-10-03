@@ -1,7 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import ImageThumb from '@atoms/shared/ImageThumb';
 
 const meta: Meta<typeof ImageThumb> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('img')).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/Thumb',
   component: ImageThumb,
   parameters: {

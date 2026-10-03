@@ -1,7 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import React from 'react';
 import WarehouseCombobox from '@molecules/inventory/WarehouseCombobox';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
 import { FindWarehousesDocument } from '@graphql/generated';
 
 // Mock data for successful query
@@ -184,6 +185,12 @@ const loadMoreMock = {
 };
 
 const meta: Meta<typeof WarehouseCombobox> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByText('Filter by warehouse'),
+    ).toBeInTheDocument();
+  },
   title: 'Molecules/Inventory/WarehouseCombobox',
   component: WarehouseCombobox,
   parameters: {
@@ -206,9 +213,9 @@ const meta: Meta<typeof WarehouseCombobox> = {
   },
   decorators: [
     (Story, { parameters }) => (
-      <MockedProvider mocks={parameters.mocks || [successMock]}>
+      <ApolloMswMocks mocks={parameters.mocks || [successMock]}>
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
 };
@@ -252,11 +259,10 @@ export const Disabled: Story = {
 export const HasMore: Story = {
   render: () => {
     const [selectedWarehouse, setSelectedWarehouse] =
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       React.useState<string>('');
 
     return (
-      <MockedProvider mocks={[hasMoreMock, loadMoreMock]}>
+      <ApolloMswMocks mocks={[hasMoreMock, loadMoreMock]}>
         <div className="space-y-4">
           <WarehouseCombobox
             value={selectedWarehouse}
@@ -266,7 +272,7 @@ export const HasMore: Story = {
             Selected Warehouse ID: {selectedWarehouse || 'None'}
           </div>
         </div>
-      </MockedProvider>
+      </ApolloMswMocks>
     );
   },
 };

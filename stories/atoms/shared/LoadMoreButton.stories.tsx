@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, fn, userEvent } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import LoadMoreButton from '@atoms/shared/LoadMoreButton';
 
 const meta: Meta<typeof LoadMoreButton> = {
@@ -24,7 +25,7 @@ const meta: Meta<typeof LoadMoreButton> = {
       description: 'Whether the button is disabled',
     },
     onClick: {
-      action: 'clicked',
+      control: false,
       description: 'Click handler for the load more action',
     },
     size: {
@@ -64,16 +65,39 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+type Play = NonNullable<Story['play']>;
+
+const clicksOnce: Play = async ({ canvas, args }) => {
+  const button = canvas.getByRole('button', { name: 'Load More' });
+  await storybookExpect(button).toBeEnabled();
+  await userEvent.click(button);
+  await storybookExpect(args.onClick).toHaveBeenCalledTimes(1);
+};
+
+const isBusy: Play = async ({ canvas }) => {
+  const button = canvas.getByRole('button', { name: 'Load More' });
+  await storybookExpect(button).toBeDisabled();
+  await storybookExpect(button).toHaveAttribute('aria-busy', 'true');
+};
+
+const isDisabled: Play = async ({ canvas, args }) => {
+  const button = canvas.getByRole('button', { name: 'Load More' });
+  await storybookExpect(button).toBeDisabled();
+  await storybookExpect(button).not.toHaveAttribute('aria-busy', 'true');
+  await storybookExpect(args.onClick).not.toHaveBeenCalled();
+};
+
 // Default state
 export const Default: Story = {
   args: {
-    onClick: () => console.log('Load more clicked'),
+    onClick: fn(),
     isLoading: false,
     disabled: false,
     size: 'default',
     showContainer: true,
     iconSize: 'md',
   },
+  play: clicksOnce,
 };
 
 // Loading state
@@ -82,6 +106,7 @@ export const Loading: Story = {
     ...Default.args,
     isLoading: true,
   },
+  play: isBusy,
 };
 
 // Disabled state
@@ -90,6 +115,7 @@ export const Disabled: Story = {
     ...Default.args,
     disabled: true,
   },
+  play: isDisabled,
 };
 
 // Small size variant
@@ -99,6 +125,7 @@ export const SmallSize: Story = {
     size: 'sm',
     iconSize: 'sm',
   },
+  play: clicksOnce,
 };
 
 // Small size loading
@@ -107,6 +134,7 @@ export const SmallSizeLoading: Story = {
     ...SmallSize.args,
     isLoading: true,
   },
+  play: isBusy,
 };
 
 // Large size variant
@@ -116,6 +144,7 @@ export const LargeSize: Story = {
     size: 'lg',
     iconSize: 'lg',
   },
+  play: clicksOnce,
 };
 
 // Without container wrapper
@@ -131,6 +160,12 @@ export const WithoutContainer: Story = {
           'Button without the centered container wrapper for custom positioning.',
       },
     },
+  },
+  play: async (context) => {
+    await clicksOnce(context);
+    const button = context.canvas.getByRole('button', { name: 'Load More' });
+    await storybookExpect(button.parentElement).toBe(context.canvasElement);
+    await storybookExpect(button).toHaveTextContent('Load More');
   },
 };
 
@@ -148,6 +183,12 @@ export const CustomStyling: Story = {
       },
     },
   },
+  play: async (context) => {
+    await clicksOnce(context);
+    const button = context.canvas.getByRole('button', { name: 'Load More' });
+    await storybookExpect(button).toHaveClass('text-blue-700');
+    await storybookExpect(button.parentElement).toHaveClass('pt-6');
+  },
 };
 
 // Icon only variant
@@ -164,6 +205,7 @@ export const IconOnly: Story = {
       },
     },
   },
+  play: clicksOnce,
 };
 
 // Icon only loading
@@ -172,6 +214,7 @@ export const IconOnlyLoading: Story = {
     ...IconOnly.args,
     isLoading: true,
   },
+  play: isBusy,
 };
 
 // Different icon sizes comparison
@@ -193,6 +236,14 @@ export const IconSizeComparison: Story = {
       },
     },
   },
+  play: async ({ canvas }) => {
+    const buttons = canvas.getAllByRole('button', { name: 'Load More' });
+    await storybookExpect(buttons).toHaveLength(3);
+    for (const button of buttons) {
+      await storybookExpect(button).toBeDisabled();
+      await storybookExpect(button).toHaveAttribute('aria-busy', 'true');
+    }
+  },
 };
 
 // Size variants comparison
@@ -213,6 +264,13 @@ export const SizeComparison: Story = {
         story: 'Comparison of different button sizes.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    const buttons = canvas.getAllByRole('button', { name: 'Load More' });
+    await storybookExpect(buttons).toHaveLength(3);
+    for (const button of buttons) {
+      await storybookExpect(button).toBeEnabled();
+    }
   },
 };
 
@@ -241,5 +299,16 @@ export const AllStates: Story = {
         story: 'Showcase of all button states in different sizes.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    const buttons = canvas.getAllByRole('button', { name: 'Load More' });
+    await storybookExpect(buttons).toHaveLength(6);
+    // Loading and disabled variants are not interactive.
+    await storybookExpect(
+      buttons.filter((b) => b.hasAttribute('disabled')),
+    ).toHaveLength(4);
+    await storybookExpect(
+      buttons.filter((b) => b.getAttribute('aria-busy') === 'true'),
+    ).toHaveLength(2);
   },
 };

@@ -1,18 +1,54 @@
-import { Skeleton } from '@shadcn/ui/skeleton';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@shadcn/ui/table';
-import { cn } from '@lib/utils';
+import TableSkeleton, {
+  skeletonCell,
+  stackedSkeletonCell,
+  type TableSkeletonColumnSpec,
+} from '@molecules/shared/TableSkeleton';
 
 interface StockMovementSkeletonProps {
   className?: string;
   rows?: number;
 }
+
+const centeredHeader = {
+  cellClassName: 'text-center',
+  wrapperClassName: 'flex items-center justify-center',
+};
+
+const centeredBody = {
+  cellClassName: 'text-center',
+  wrapperClassName: 'flex justify-center',
+};
+
+const columns: readonly TableSkeletonColumnSpec[] = [
+  {
+    header: skeletonCell('h-4 w-28', {
+      cellClassName: 'flex items-center justify-center',
+    }),
+    body: stackedSkeletonCell(['h-4 w-32', 'h-3 w-24'], {
+      wrapperClassName: 'flex flex-col gap-1',
+    }),
+  },
+  {
+    header: skeletonCell('h-4 w-16', centeredHeader),
+    body: skeletonCell('h-4 w-24', centeredBody),
+  },
+  {
+    header: skeletonCell('h-4 w-30', centeredHeader),
+    body: skeletonCell('h-4 w-16', centeredBody),
+  },
+  {
+    header: skeletonCell('h-4 w-24', centeredHeader),
+    body: skeletonCell('h-4 w-64', centeredBody),
+  },
+  {
+    header: skeletonCell('h-4 w-24', centeredHeader),
+    body: skeletonCell('h-4 w-14', centeredBody),
+  },
+  {
+    header: skeletonCell('h-4 w-20', centeredHeader),
+    body: skeletonCell('h-4 w-24', centeredBody),
+  },
+];
 
 /**
  * StockMovementSkeleton - A skeleton component that matches the StockMovementTable structure
@@ -26,102 +62,11 @@ export default function StockMovementSkeleton({
   rows = 25,
 }: StockMovementSkeletonProps) {
   return (
-    <div className={cn('w-full', className)}>
-      <Table>
-        <TableHeader>
-          <TableRow className="hover:bg-background">
-            <TableHead className="flex items-center justify-center">
-              <Skeleton className="h-4 w-28" />
-            </TableHead>
-            <TableHead className="text-center">
-              <div className="flex items-center justify-center">
-                <Skeleton className="h-4 w-16" />
-              </div>
-            </TableHead>
-            <TableHead className="text-center">
-              <div className="flex items-center justify-center">
-                <Skeleton className="h-4 w-30" />
-              </div>
-            </TableHead>
-            <TableHead className="text-center">
-              <div className="flex items-center justify-center">
-                <Skeleton className="h-4 w-24" />
-              </div>
-            </TableHead>
-            <TableHead className="text-center">
-              <div className="flex items-center justify-center">
-                <Skeleton className="h-4 w-24" />
-              </div>
-            </TableHead>
-            <TableHead className="text-center">
-              <div className="flex items-center justify-center">
-                <Skeleton className="h-4 w-20" />
-              </div>
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {Array.from({ length: rows }).map((_, index) => (
-            <TableRow key={index} className="hover:bg-background">
-              <TableCell>
-                <div className="flex flex-col gap-1">
-                  <Skeleton className="h-4 w-32" />
-                  <Skeleton className="h-3 w-24" />
-                </div>
-              </TableCell>
-              <TableCell className="text-center">
-                <div className="flex justify-center">
-                  <Skeleton className="h-4 w-24" />
-                </div>
-              </TableCell>
-              <TableCell className="text-center">
-                <div className="flex justify-center">
-                  <Skeleton className="h-4 w-16" />
-                </div>
-              </TableCell>
-              <TableCell className="text-center">
-                <div className="flex justify-center">
-                  <Skeleton className="h-4 w-64" />
-                </div>
-              </TableCell>
-              <TableCell className="text-center">
-                <div className="flex justify-center">
-                  <Skeleton className="h-4 w-14" />
-                </div>
-              </TableCell>
-              <TableCell className="text-center">
-                <div className="flex justify-center">
-                  <Skeleton className="h-4 w-24" />
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      {/* TablePagination Skeleton */}
-      <div className="text-muted-foreground mt-4 flex items-center justify-between px-2 text-left">
-        {/* Left side - Page info skeleton */}
-        <div className="flex-1 text-left">
-          <Skeleton className="h-4 w-32 md:w-40" />
-        </div>
-
-        {/* Right side - Pagination buttons skeleton */}
-        <div className="flex items-center space-x-2">
-          {/* Desktop: Show all 4 buttons */}
-          <div className="hidden items-center space-x-2 md:flex">
-            <Skeleton className="h-8 w-8" />
-            <Skeleton className="h-8 w-8" />
-            <Skeleton className="h-8 w-8" />
-            <Skeleton className="h-8 w-8" />
-          </div>
-
-          {/* Mobile: Show only 2 buttons */}
-          <div className="flex items-center space-x-2 md:hidden">
-            <Skeleton className="h-8 w-8" />
-            <Skeleton className="h-8 w-8" />
-          </div>
-        </div>
-      </div>
-    </div>
+    <TableSkeleton
+      className={className}
+      columns={columns}
+      rowClassName="hover:bg-background"
+      rows={rows}
+    />
   );
 }

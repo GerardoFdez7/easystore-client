@@ -19,7 +19,7 @@ export default function MainTouch() {
       <div className="mx-auto max-w-7xl px-6 py-12">
         <div className="grid grid-cols-1 items-start gap-16 lg:grid-cols-2">
           <section>
-            <h1 className="text-title mb-10 text-[32px] font-extrabold sm:text-5xl 2xl:text-5xl">
+            <h1 className="text-title mb-10 text-4xl font-extrabold sm:text-5xl 2xl:text-5xl">
               {t('title')}
             </h1>
             <FeaturesList />

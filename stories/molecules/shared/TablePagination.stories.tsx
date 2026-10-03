@@ -1,8 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import TablePagination from '@molecules/shared/TablePagination';
 
 const meta: Meta<typeof TablePagination> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Previous' }),
+    ).toBeInTheDocument();
+  },
   title: 'Molecules/Shared/TablePagination',
   component: TablePagination,
   parameters: {

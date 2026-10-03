@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import TimeUnit from '@atoms/construction/TimeUnit';
 
 const meta: Meta<typeof TimeUnit> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByText(/Days|Hours|Minutes|Seconds/),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Construction/TimeUnit',
   parameters: {
     layout: 'centered',

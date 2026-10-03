@@ -12,6 +12,14 @@ import {
   UpdateTenantProfileMutationVariables,
 } from '@graphql/generated';
 
+export type ProfilePatch = {
+  ownerName?: string;
+  businessName?: string;
+  domain?: string;
+  description?: string;
+  logo?: string | null;
+};
+
 export type Profile = {
   ownerName: string;
   businessName: string;
@@ -35,15 +43,20 @@ export function useProfile() {
 
   const profile = data?.getTenantById;
 
+  const isValidDomain = (value: string) => {
+    try {
+      const hostname = new URL(`https://${value}`).hostname;
+
+      return hostname === value && hostname.includes('.');
+    } catch (_error) {
+      return false;
+    }
+  };
+
   /** Field validators */
   const phoneRegex = /^[+\d().\-\s]{6,20}$/;
   const validators = {
-    domain: z
-      .string()
-      .regex(
-        /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/i,
-        { message: t('invalidDomain') },
-      ),
+    domain: z.string().refine(isValidDomain, { message: t('invalidDomain') }),
     phone: z
       .string()
       .trim()
@@ -248,6 +261,49 @@ export function useProfile() {
     } catch (_e) {}
   };
 
+  /** Validates and saves several profile fields in a single request */
+  const updateProfile = async (patch: ProfilePatch) => {
+    const checks: Array<[boolean, string | undefined]> = [];
+    const next: Partial<Profile> = {};
+
+    if (patch.ownerName !== undefined) {
+      const r = validators.ownerName.safeParse(patch.ownerName);
+      checks.push([r.success, r.error?.issues[0]?.message]);
+      if (r.success) next.ownerName = r.data;
+    }
+    if (patch.businessName !== undefined) {
+      const r = validators.businessName.safeParse(patch.businessName);
+      checks.push([r.success, r.error?.issues[0]?.message]);
+      if (r.success) next.businessName = r.data;
+    }
+    if (patch.domain !== undefined) {
+      const r = validators.domain.safeParse(patch.domain);
+      checks.push([r.success, r.error?.issues[0]?.message]);
+      if (r.success) next.domain = r.data;
+    }
+    if (patch.description !== undefined) {
+      const r = validators.description.safeParse(patch.description);
+      checks.push([r.success, r.error?.issues[0]?.message]);
+      if (r.success) next.description = r.data.trim() === '' ? null : r.data;
+    }
+    if (patch.logo !== undefined) {
+      const r = validators.logo.safeParse(patch.logo);
+      checks.push([r.success, r.error?.issues[0]?.message]);
+      if (r.success) next.logo = r.data;
+    }
+
+    const failed = checks.find(([ok]) => !ok);
+    if (failed) {
+      return { success: false, error: failed[1] || t('unknownError') };
+    }
+
+    await updateField(next);
+    toast.success(t('savedChangesTitle'), {
+      description: t('profileUpdated'),
+    });
+    return { success: true };
+  };
+
   /** Phone derived values */
   const rawPhone = (profile?.defaultPhoneNumberId ?? '').trim();
   const hasPhone = rawPhone.length > 0;
@@ -270,6 +326,7 @@ export function useProfile() {
       updateBusinessName,
       updateOwnerName,
       updateLogo,
+      updateProfile,
       mutate: refetch, // still exposed if we need to force a refresh
     },
   };

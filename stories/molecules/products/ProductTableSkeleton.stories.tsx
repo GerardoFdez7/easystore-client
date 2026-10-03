@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import ProductTableSkeleton from '@molecules/products/ProductTableSkeleton';
 
 const meta: Meta<typeof ProductTableSkeleton> = {
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getAllByRole('row', { hidden: true }),
+    ).toHaveLength((args.rows ?? 25) + 1);
+  },
   title: 'Molecules/Products/ProductTableSkeleton',
   component: ProductTableSkeleton,
   parameters: {

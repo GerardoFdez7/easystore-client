@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,29 +14,29 @@ import { Button } from '@shadcn/ui/button';
 import { Trash2 } from 'lucide-react';
 
 export default function DeleteProduct() {
+  const t = useTranslations('Products');
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
           variant="outline"
-          className="border-[#ed2727] bg-[#ffffff] text-[#ed2727] hover:bg-[#ed2727] hover:text-[#ffffff] dark:text-white"
+          className="border-destructive bg-card text-destructive hover:bg-destructive hover:text-card dark:text-card"
         >
           <Trash2 className="mr-2 h-4 w-4" />
-          Delete
+          {t('delete')}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete product?</AlertDialogTitle>
+          <AlertDialogTitle>{t('deleteProductTitle')}</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. The product will be permanently
-            deleted from the database.
+            {t('deleteProductDescription')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction className="bg-[#ed2727] text-white hover:bg-[#d12525]">
-            Delete
+          <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
+          <AlertDialogAction className="bg-destructive text-card hover:bg-error">
+            {t('delete')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

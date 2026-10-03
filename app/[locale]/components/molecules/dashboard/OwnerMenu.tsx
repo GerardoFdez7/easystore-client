@@ -56,14 +56,17 @@ export default function OwnerMenu() {
       <Tooltip>
         <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
-            <Avatar
-              className="h-11 w-11 cursor-pointer hover:opacity-80"
+            <button
+              type="button"
+              className="cursor-pointer rounded-full hover:opacity-80"
               aria-label={tShared('accountMenu')}
             >
-              <AvatarFallback className="text-background bg-title text-xl font-bold">
-                {getInitials(tenantData?.ownerName)}
-              </AvatarFallback>
-            </Avatar>
+              <Avatar className="h-11 w-11">
+                <AvatarFallback className="text-background bg-title text-xl font-bold">
+                  {getInitials(tenantData?.ownerName)}
+                </AvatarFallback>
+              </Avatar>
+            </button>
           </DropdownMenuTrigger>
         </TooltipTrigger>
         <TooltipContent>{tShared('accountMenu')}</TooltipContent>

@@ -1,10 +1,11 @@
 import { cn } from 'utils';
+import { useTranslations } from 'next-intl';
 
 interface SpinLoaderProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg' | 'xl';
   message?: string;
-  variant?: 'default' | 'primary' | 'secondary';
+  variant?: 'default' | 'primary' | 'secondary' | 'inverse';
   borderWidth?: 'thin' | 'normal' | 'thick';
 }
 
@@ -19,6 +20,7 @@ const SpinLoader: React.FC<SpinLoaderProps> = ({
   variant = 'default',
   borderWidth = 'normal',
 }) => {
+  const t = useTranslations('Shared');
   const sizeClasses = {
     sm: 'h-4 w-4',
     md: 'h-8 w-8',
@@ -33,14 +35,18 @@ const SpinLoader: React.FC<SpinLoaderProps> = ({
   };
 
   const variantClasses = {
-    default: 'border-gray-300 border-b-gray-900',
+    default: 'border-muted-foreground/30 border-b-title',
     primary: 'border-primary/30 border-b-primary',
     secondary: 'border-secondary/30 border-b-secondary',
+    // For use on filled `title` / `primary` surfaces
+    inverse: 'border-primary-foreground/30 border-b-primary-foreground',
   };
 
   return (
     <div
       className={cn('flex min-h-screen items-center justify-center', className)}
+      role="status"
+      aria-label={message ?? t('loading')}
     >
       <div
         className={cn(

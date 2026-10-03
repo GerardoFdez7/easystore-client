@@ -42,17 +42,24 @@ const LoadMoreButton: React.FC<LoadMoreButtonProps> = ({
     }
   };
 
+  const sizeClassName = size === 'sm' ? 'text-xs' : '';
+
   const buttonContent = (
     <Button
       variant="outline"
       size={size}
       onClick={onClick}
       disabled={disabled || isLoading}
-      className={cn(size === 'sm' && 'text-xs', size === 'default', className)}
+      aria-busy={isLoading}
+      aria-label={isLoading ? t('loadMore') : undefined}
+      className={cn(sizeClassName, className)}
     >
       {isLoading ? (
         <>
-          <Loader2 className={cn(getIconSizeClass(), 'animate-spin')} />
+          <Loader2
+            className={cn(getIconSizeClass(), 'animate-spin')}
+            aria-hidden="true"
+          />
           {size !== 'icon'}
         </>
       ) : (

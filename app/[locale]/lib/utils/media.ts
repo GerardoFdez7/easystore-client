@@ -1,8 +1,36 @@
 import { MediaItem, ProcessedData } from '@lib/types/media';
 
+type FileCountTranslation = (
+  key: string,
+  params?: Record<string, string>,
+) => string;
+
+interface FileCountValidation {
+  isValid: boolean;
+  error?: string;
+}
+
 /**
  * Utility functions for media processing and validation
  */
+
+const validateMaximumFileCount = (
+  files: File[],
+  multiple: boolean,
+  maxItems: number,
+  translateFn?: FileCountTranslation,
+): FileCountValidation => {
+  if (!multiple || files.length <= maxItems) {
+    return { isValid: true };
+  }
+
+  return {
+    isValid: false,
+    error: translateFn
+      ? translateFn('maxFilesExceeded', { maxItems: maxItems.toString() })
+      : `Cannot upload more than ${maxItems} media files`,
+  };
+};
 
 /**
  * Converts files to media items for carousel display
@@ -30,19 +58,9 @@ export const validateFileCount = (
   files: File[],
   multiple: boolean,
   maxItems: number = 10,
-  translateFn?: (key: string, params?: Record<string, string>) => string,
-): { isValid: boolean; error?: string } => {
-  if (multiple && files.length > maxItems) {
-    return {
-      isValid: false,
-      error: translateFn
-        ? translateFn('maxFilesExceeded', { maxItems: maxItems.toString() })
-        : `Cannot upload more than ${maxItems} media files`,
-    };
-  }
-
-  return { isValid: true };
-};
+  translateFn?: FileCountTranslation,
+): FileCountValidation =>
+  validateMaximumFileCount(files, multiple, maxItems, translateFn);
 
 /**
  * Validates file count for upload submission (Done button)
@@ -53,15 +71,17 @@ export const validateFileCountForSubmission = (
   multiple: boolean,
   maxItems: number = 10,
   minItems: number = 2,
-  translateFn?: (key: string, params?: Record<string, string>) => string,
-): { isValid: boolean; error?: string } => {
-  if (multiple && files.length > maxItems) {
-    return {
-      isValid: false,
-      error: translateFn
-        ? translateFn('maxFilesExceeded', { maxItems: maxItems.toString() })
-        : `Cannot upload more than ${maxItems} media files`,
-    };
+  translateFn?: FileCountTranslation,
+): FileCountValidation => {
+  const maximumValidation = validateMaximumFileCount(
+    files,
+    multiple,
+    maxItems,
+    translateFn,
+  );
+
+  if (!maximumValidation.isValid) {
+    return maximumValidation;
   }
 
   if (multiple && files.length < minItems) {

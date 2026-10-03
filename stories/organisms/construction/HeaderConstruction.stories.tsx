@@ -1,7 +1,16 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import HeaderConstruction from '@organisms/construction/HeaderConstruction';
 
 const meta: Meta<typeof HeaderConstruction> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('heading', {
+        name: "We're Building Something Amazing!",
+      }),
+    ).toBeInTheDocument();
+  },
   title: 'Organisms/Construction/HeaderConstruction',
   parameters: {
     layout: 'centered',

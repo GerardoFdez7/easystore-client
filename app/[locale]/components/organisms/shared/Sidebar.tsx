@@ -71,6 +71,7 @@ export default function Sidebar(props: ComponentProps<typeof ShadcnSidebar>) {
           </SidebarMenuItem>
 
           <Collapsible
+            asChild
             open={openProducts}
             onOpenChange={setOpenProducts}
             className="group/collapsible"

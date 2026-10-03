@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
 type ImageStartProps = {
@@ -5,10 +6,11 @@ type ImageStartProps = {
 };
 
 export default function ImageStart({ src }: ImageStartProps) {
+  const t = useTranslations('Shared');
   return (
     <Image
       src={src}
-      alt="Image"
+      alt={t('imageAlt')}
       width={241}
       height={275}
       className="rounded-lg"

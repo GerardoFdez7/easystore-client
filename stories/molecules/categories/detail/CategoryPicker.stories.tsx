@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import CategoryPicker from '@molecules/categories/detail/CategoryPicker';
 import {
   mockCategoryItems,
@@ -9,6 +10,12 @@ import {
 } from '../mocks/categoryPickerMocks';
 
 const meta: Meta<typeof CategoryPicker> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Create Subcategory' }),
+    ).toBeInTheDocument();
+  },
   title: 'Molecules/Categories/Detail/CategoryPicker',
   component: CategoryPicker,
   parameters: {
@@ -57,14 +64,12 @@ export default meta;
 type Story = StoryObj<typeof CategoryPicker>;
 
 export const Default: Story = {
-  name: 'Default State',
   args: {
     items: mockCategoryItems,
   },
 };
 
 export const EmptyState: Story = {
-  name: 'Empty State',
   args: {
     items: mockEmptyCategoryItems,
   },
@@ -79,7 +84,6 @@ export const EmptyState: Story = {
 };
 
 export const WithLongNames: Story = {
-  name: 'With Long Names',
   args: {
     items: mockCategoryItemsWithLongNames,
   },
@@ -155,7 +159,6 @@ export const NoCatalog: Story = {
 };
 
 export const SingleItem: Story = {
-  name: 'Single Item',
   args: {
     items: [mockCategoryItems[0]],
   },
@@ -169,7 +172,6 @@ export const SingleItem: Story = {
 };
 
 export const MobileLayout: Story = {
-  name: 'Mobile Layout',
   args: {
     items: mockCategoryItems,
   },

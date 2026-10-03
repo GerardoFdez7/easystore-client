@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import StockMovementSkeleton from '@molecules/inventory/stock-movement/StockMovementSkeleton';
 
 const meta: Meta<typeof StockMovementSkeleton> = {
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getAllByRole('row', { hidden: true }),
+    ).toHaveLength((args.rows ?? 8) + 1);
+  },
   title: 'Molecules/Inventory/History/StockMovementSkeleton',
   component: StockMovementSkeleton,
   parameters: {
@@ -39,7 +46,7 @@ type Story = StoryObj<typeof StockMovementSkeleton>;
 export const Default: Story = {
   args: {},
   render: (args) => (
-    <div className="w-[1000px]">
+    <div className="w-250">
       <StockMovementSkeleton {...args} />
     </div>
   ),
@@ -50,7 +57,7 @@ export const WithFewerRows: Story = {
     rows: 3,
   },
   render: (args) => (
-    <div className="w-[1000px]">
+    <div className="w-250">
       <StockMovementSkeleton {...args} />
     </div>
   ),
@@ -61,7 +68,7 @@ export const WithMoreRows: Story = {
     rows: 15,
   },
   render: (args) => (
-    <div className="w-[1000px]">
+    <div className="w-250">
       <StockMovementSkeleton {...args} />
     </div>
   ),

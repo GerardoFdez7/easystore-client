@@ -1,0 +1,69 @@
+rules:
+  - id: easystore-no-network-in-atomic-components
+    languages: [typescript, javascript]
+    message: Network calls do not belong in atoms or molecules; use a hook/organism boundary.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          ...
+      - pattern-either:
+          - pattern: fetch(...)
+          - pattern: new XMLHttpRequest(...)
+    paths:
+      include:
+        - '/app/[[]locale[]]/components/atoms/**'
+        - '/app/[[]locale[]]/components/molecules/**'
+  - id: easystore-no-dangerous-html
+    languages: [typescript, javascript]
+    message: Review dangerouslySetInnerHTML and centralize/sanitize rich HTML.
+    severity: ERROR
+    pattern: dangerouslySetInnerHTML={...}
+  - id: easystore-no-next-router
+    languages: [typescript, javascript]
+    message: App Router code must use next/navigation instead of next/router.
+    severity: ERROR
+    pattern-regex: import\s+[^;]+\s+from\s+[\"']next/router[\"']
+  - id: easystore-no-server-secret-in-client
+    languages: [typescript, javascript]
+    message: Client modules may only read explicitly public NEXT_PUBLIC_* environment variables.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          'use client'
+          ...
+      - pattern: process.env.$NAME
+      - metavariable-regex:
+          metavariable: $NAME
+          regex: ^(?!NEXT_PUBLIC_).+$
+  - id: easystore-storybook-legacy-framework-import
+    languages: [typescript, javascript]
+    message: Storybook stories and support must use @storybook/nextjs-vite.
+    severity: ERROR
+    pattern-regex: import\s+(?:type\s+)?[^;]+\s+from\s+["']@storybook/(?:nextjs|react|react-vite)["']
+    paths:
+      include:
+        - /stories/**
+        - /.storybook/**
+  - id: easystore-storybook-apollo-testing-import
+    languages: [typescript, javascript]
+    message: Mock Apollo Client v4 network requests in Storybook with MSW handlers, not Apollo testing utilities.
+    severity: ERROR
+    pattern-regex: import\s+(?:type\s+)?[^;]+\s+from\s+["']@apollo/client/testing(?:/[^"']*)?["']
+    paths:
+      include:
+        - /stories/**
+        - /.storybook/**
+  - id: easystore-storybook-apollo-provider-mock
+    languages: [typescript, javascript]
+    message: Mock Apollo Client v4 network requests in Storybook with MSW handlers, not provider or link mocks.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: <MockedProvider ... />
+          - pattern: <MockedProvider ...>...</MockedProvider>
+          - pattern: new MockLink(...)
+          - pattern: new MockSubscriptionLink(...)
+    paths:
+      include:
+        - /stories/**
+        - /.storybook/**

@@ -42,17 +42,21 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 interface AuthProviderProps {
   children: ReactNode;
   fallback?: ReactNode;
+  /** Allows isolated environments to render a known auth state without a loading gate. */
+  initialAuthState?: Partial<AuthState>;
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({
   children,
   fallback,
+  initialAuthState,
 }) => {
   const [authState, setAuthState] = useState<AuthState>({
     isAuthenticated: false,
     loading: true,
     tenantData: null,
     tenantLoading: false,
+    ...initialAuthState,
   });
 
   const router = useRouter();

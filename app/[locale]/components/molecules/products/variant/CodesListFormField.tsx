@@ -36,7 +36,7 @@ export default function CodesListFormField() {
                     : ''
                 }`}
               >
-                <FormLabel htmlFor={field} className="text-md font-normal">
+                <FormLabel htmlFor={field} className="text-base font-normal">
                   {t(field)}
                 </FormLabel>
                 <FormControl>

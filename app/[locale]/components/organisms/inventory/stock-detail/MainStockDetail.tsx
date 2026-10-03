@@ -130,7 +130,7 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
           attributes={selectedVariant?.attributes ?? []}
           warehouseName={warehouseName}
         />
-        <main>
+        <div>
           <FormProvider {...form}>
             <Form {...form}>
               <form onSubmit={onFormSubmit} className="w-full space-y-6">
@@ -293,7 +293,7 @@ export default function MainStockDetail({ warehouseName, sku }: Props) {
               />
             </Form>
           </FormProvider>
-        </main>
+        </div>
       </div>
     </>
   );

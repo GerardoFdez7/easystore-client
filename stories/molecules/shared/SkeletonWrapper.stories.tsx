@@ -1,8 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import SkeletonWrapper from '@molecules/shared/SkeletonWrapper';
 import WarehouseCombobox from '@molecules/inventory/WarehouseCombobox';
 
 const meta: Meta<typeof SkeletonWrapper> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('status', { name: 'Loading content' }),
+    ).toBeInTheDocument();
+  },
   title: 'Molecules/Shared/SkeletonWrapper',
   component: SkeletonWrapper,
   parameters: {
@@ -59,7 +66,7 @@ export const WithComponent: Story = {
 
 export const CustomDimensions: Story = {
   args: {
-    children: <div className="h-32 w-64 rounded-lg bg-blue-200" />,
+    children: <div className="bg-border h-32 w-64 rounded-lg" />,
     fallbackHeight: 'h-32',
     fallbackWidth: 'w-64',
   },

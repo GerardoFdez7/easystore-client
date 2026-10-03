@@ -1,8 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import EmptyState from '@molecules/shared/EmptyState';
 import { Home, PlusCircle, Settings, Warehouse } from 'lucide-react';
 
 const meta = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('heading')).toBeInTheDocument();
+  },
   title: 'Molecules/Shared/EmptyState',
   component: EmptyState,
   parameters: {

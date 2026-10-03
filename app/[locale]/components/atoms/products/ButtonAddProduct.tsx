@@ -16,7 +16,7 @@ export default function ButtonAddProduct() {
 
   return (
     <Button
-      className="mt-4 text-sm sm:text-[16px]"
+      className="mt-4 text-sm sm:text-base"
       variant="title"
       onClick={handleAddProduct}
     >

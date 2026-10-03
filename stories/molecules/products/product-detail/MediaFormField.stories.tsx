@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useEffect } from 'react';
 import MediaFormField from '@molecules/products/product-detail/MediaFormField';
@@ -58,6 +59,18 @@ export const Default: Story = {
   args: {
     defaultValues: { cover: '', media: [] },
   },
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getByText('Media')).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByText('Upload media files'),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Choose Files' }),
+    ).toBeEnabled();
+    await storybookExpect(
+      canvas.queryByRole('region', { name: 'Media gallery' }),
+    ).toBeNull();
+  },
 };
 
 export const WithCoverOnly: Story = {
@@ -73,5 +86,11 @@ export const WithCoverOnly: Story = {
         story: 'Field with only a cover image, no additional gallery media.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      await canvas.findByRole('region', { name: 'Media gallery' }),
+    ).toBeInTheDocument();
+    await storybookExpect(canvas.getByText('Cover')).toBeInTheDocument();
   },
 };

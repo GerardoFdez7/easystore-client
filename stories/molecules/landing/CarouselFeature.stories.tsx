@@ -1,11 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { NextIntlClientProvider } from 'next-intl';
+import enMessages from '../../../messages/en.json';
 import CarouselFeature from '@molecules/landing/CarouselFeature';
 
 const messages = {
   Landing: {
-    unlimetedProductsT: 'Unlimited products',
-    unlimetedProducts: 'No hard caps on catalog size.',
+    aiIntegratedT: 'AI integrated',
+    aiIntegrated: 'Create product content faster.',
     customDomainsT: 'Custom domains',
     customDomains: 'Bring your own domain easily.',
     paymantT: 'Payments',
@@ -14,8 +16,8 @@ const messages = {
     growBussiness: 'Insights and analytics built-in.',
     zeroTransactionT: '0% fees',
     zeroTransaction: 'Keep more of what you earn.',
-    manageEaseT: 'Manage with ease',
-    manageEase: 'Centralized dashboard for operations.',
+    satIntegrationT: 'SAT integration',
+    satIntegration: 'Keep tax workflows connected.',
     noCodeT: 'No-code',
     noCode: 'Launch without writing code.',
     sellEverywhereT: 'Sell everywhere',
@@ -41,10 +43,24 @@ type Story = StoryObj<typeof CarouselFeature>;
 
 export const Default: Story = {
   render: () => (
-    <NextIntlClientProvider locale="en" messages={messages}>
+    <NextIntlClientProvider
+      locale="en"
+      messages={{ ...enMessages, ...messages }}
+    >
       <div className="max-w-5xl">
         <CarouselFeature />
       </div>
     </NextIntlClientProvider>
   ),
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getAllByRole('region')).toHaveLength(3);
+    await storybookExpect(
+      canvas.getByRole('region', {
+        name: 'AI integrated, Custom domains, Payments',
+      }),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByText('Create product content faster.'),
+    ).toBeInTheDocument();
+  },
 };

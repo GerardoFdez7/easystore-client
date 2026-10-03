@@ -3,23 +3,103 @@
 
 @theme {
   --breakpoint-3xl: 112.5rem; /* 1800px converted to rem (1800/16 = 112.5) */
+  --font-heading: var(--font-inter);
+  --font-regular: var(--font-inter);
+  --spacing-control: 0.5rem;
+  --spacing-page: 1.25rem;
+  --spacing-section: 1.5rem;
+  --spacing-card: 1.5rem;
+}
+
+@utility embla {
+  overflow: hidden;
+}
+
+@utility grid-cols-profile-section {
+  grid-template-columns: 140px 1fr;
+}
+
+@utility max-h-dialog {
+  max-height: 90vh;
+}
+
+@utility grid-cols-profile-page {
+  grid-template-columns: 20rem minmax(0, 1fr);
+}
+
+@utility grid-cols-legal {
+  grid-template-columns: 250px minmax(0, 42rem);
+}
+
+@utility basis-thumb {
+  flex: 0 0 15%;
+}
+
+@utility basis-thumb-sm {
+  flex: 0 0 23%;
+}
+
+@utility size-cart-loader {
+  height: calc(var(--spacing) * var(--cart-size));
+  width: calc(var(--spacing) * var(--cart-size));
+}
+
+@utility size-logo-icon {
+  height: 10vw;
+  width: 10vw;
+}
+
+@utility text-logo-sm {
+  font-size: 6vw;
+}
+
+@utility text-logo {
+  font-size: 40px;
+}
+
+@utility h-fill-inset {
+  height: calc(100% - 1px);
+}
+
+@utility transition-tab {
+  transition-property: color, box-shadow;
+  transition-timing-function: var(--default-transition-timing-function);
+  transition-duration: var(--default-transition-duration);
+}
+
+@utility transition-header-size {
+  transition-property: width, height;
+}
+
+@utility h-drawer {
+  height: 85vh;
+}
+
+@utility grid-cols-category-row {
+  grid-template-columns: 48px 1fr auto;
+}
+
+@utility grid-cols-category-row-lg {
+  grid-template-columns: 48px 1fr auto auto 48px;
 }
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
   --font-sans: var(--font-inter);
+  --font-size-default: 1rem;
   --radius: 0.625rem;
 
   /* Default colors for all pages */
   --background: #f3f4f6;
   --foreground: #423f3d;
-  --primary: #bc5bf5;
-  --secondary: #10b981;
+  --primary: #9d3fe0;
+  --secondary: #0a7d57;
   --warning: #f59e0b;
-  --error: #dc2626;
+  --error: #b91c1c;
   --title-color: #000000;
   --hover: #e6e7e9;
+  --primary-tint: #ebdbf5;
 
   /* Other shadcn variables */
   --card: oklch(1 0 0);
@@ -27,12 +107,12 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(94.912% 0.00011 271.152);
-  --muted-foreground: oklch(0.556 0 0);
+  --muted-foreground: oklch(0.52 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
+  --destructive: oklch(0.53 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
@@ -52,6 +132,7 @@
 }
 
 @theme inline {
+  --color-text: var(--foreground);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -91,23 +172,24 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-hover: var(--hover);
+  --color-primary-tint: var(--primary-tint);
 }
 
 /* Dark mode colors for pages that need dark mode */
 .dark {
   --background: #121212;
   --foreground: #f3f4f6;
-  --primary: #bc5bf5;
+  --primary: #9d3fe0;
   --secondary: #10b981;
   --warning: #f59e0b;
   --error: #dc2626;
   --title-color: #ffffff;
   --hover: #303030;
+  --primary-tint: #3c244b;
   --card: oklch(0.145 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.145 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: #bc5bf5;
   --primary-foreground: oklch(0.205 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -134,11 +216,29 @@
 }
 
 @layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+    font-size: var(--font-size-default);
+  }
+
+  /*
+   * Text inherits the application's default size. Use Tailwind's important
+   * modifier (for example, !text-sm or sm:!text-lg) only for intentional
+   * exceptions to this baseline.
+   */
+  button,
+  input,
+  optgroup,
+  select,
+  textarea {
+    font-size: inherit;
   }
 }
 
@@ -211,6 +311,11 @@
 
 .success-toast .custom-toast-description {
   color: white !important;
+}
+
+/* Widen the toast stack while the unsaved-changes bar is shown (matches its story) */
+[data-sonner-toaster]:has([data-slot='unsaved-changes-toast']) {
+  --width: min(32rem, calc(100vw - 2rem)) !important;
 }
 
 /* Water fill animation for upload button */

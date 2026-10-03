@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, fn, userEvent } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import ProductVariantGroup from '@molecules/inventory/ProductVariantGroup';
 
 const meta: Meta<typeof ProductVariantGroup> = {
@@ -9,7 +10,7 @@ const meta: Meta<typeof ProductVariantGroup> = {
   },
   decorators: [
     (Story) => (
-      <div style={{ width: '100%', maxWidth: 800 }}>
+      <div className="w-full max-w-200">
         <Story />
       </div>
     ),
@@ -58,8 +59,30 @@ export const Default: Story = {
         value: attr.value,
       })),
     })),
-    onVariantSelect: (variantId, productName) =>
-      console.log('Selected variant:', variantId, 'from product:', productName),
+    onVariantSelect: fn(),
+  },
+  play: async ({ canvas, args }) => {
+    await storybookExpect(
+      canvas.getByText('Classic T-Shirt'),
+    ).toBeInTheDocument();
+    await storybookExpect(canvas.getByText('3 variants')).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getAllByRole('button', { name: /Select/ }),
+    ).toHaveLength(3);
+    await storybookExpect(
+      canvas.getByText('Color: Red, Size: Large'),
+    ).toBeInTheDocument();
+
+    await userEvent.click(canvas.getAllByRole('button', { name: /Select/ })[1]);
+    await storybookExpect(args.onVariantSelect).toHaveBeenCalledWith(
+      '2',
+      'TSHIRT-RED-L',
+      'Classic T-Shirt',
+      [
+        { key: 'Color', value: 'Red' },
+        { key: 'Size', value: 'Large' },
+      ],
+    );
   },
 };
 
@@ -74,8 +97,15 @@ export const WithSelectedVariant: Story = {
       })),
     })),
     selectedVariantId: '2',
-    onVariantSelect: (variantId, productName) =>
-      console.log('Selected variant:', variantId, 'from product:', productName),
+    onVariantSelect: fn(),
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Selected' }),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getAllByRole('button', { name: /^Select$/ }),
+    ).toHaveLength(2);
   },
 };
 
@@ -89,8 +119,16 @@ export const SingleVariant: Story = {
         attributes: [{ key: 'Type', value: 'Standard' }],
       },
     ],
-    onVariantSelect: (variantId, productName) =>
-      console.log('Selected variant:', variantId, 'from product:', productName),
+    onVariantSelect: fn(),
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByText('Simple Product'),
+    ).toBeInTheDocument();
+    await storybookExpect(canvas.getByText('1 variant')).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByText('SKU: SIMPLE-001'),
+    ).toBeInTheDocument();
   },
 };
 
@@ -107,8 +145,13 @@ export const VariantWithoutSku: Story = {
         ],
       },
     ],
-    onVariantSelect: (variantId, productName) =>
-      console.log('Selected variant:', variantId, 'from product:', productName),
+    onVariantSelect: fn(),
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByText('Color: Green, Material: Cotton'),
+    ).toBeInTheDocument();
+    await storybookExpect(canvas.queryByText(/SKU:/)).toBeNull();
   },
 };
 
@@ -140,8 +183,13 @@ export const ManyVariants: Story = {
         ],
       },
     ],
-    onVariantSelect: (variantId, productName) =>
-      console.log('Selected variant:', variantId, 'from product:', productName),
+    onVariantSelect: fn(),
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getByText('5 variants')).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getAllByRole('button', { name: /Select/ }),
+    ).toHaveLength(5);
   },
 };
 
@@ -171,7 +219,12 @@ export const ManyAttributes: Story = {
         ],
       },
     ],
-    onVariantSelect: (variantId, productName) =>
-      console.log('Selected variant:', variantId, 'from product:', productName),
+    onVariantSelect: fn(),
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getByText(/Fit: Regular/)).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByText('SKU: ATTR-PROD-123'),
+    ).toBeInTheDocument();
   },
 };

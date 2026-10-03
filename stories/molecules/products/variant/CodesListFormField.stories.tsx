@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, userEvent } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import CodesListFormField from '@molecules/products/variant/CodesListFormField';
@@ -32,7 +33,7 @@ function DefaultStory() {
 
   return (
     <FormProvider {...methods}>
-      <div className="w-[720px]">
+      <div className="w-180">
         <CodesListFormField />
       </div>
     </FormProvider>
@@ -41,4 +42,17 @@ function DefaultStory() {
 
 export const Default: Story = {
   render: () => <DefaultStory />,
+  play: async ({ canvas }) => {
+    for (const label of ['SKU', 'UPC', 'EAN', 'ISBN', 'Barcode']) {
+      await storybookExpect(
+        canvas.getByRole('textbox', { name: label }),
+      ).toHaveValue('');
+    }
+    const sku = canvas.getByRole('textbox', { name: 'SKU' });
+    await userEvent.type(sku, 'ABC-1234');
+    await storybookExpect(sku).toHaveValue('ABC-1234');
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'UPC' }),
+    ).toHaveValue('');
+  },
 };

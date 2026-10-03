@@ -1,51 +1,29 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
-import { useEffect } from 'react';
+import {
+  expect as storybookExpect,
+  screen,
+  userEvent,
+  waitFor,
+} from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import ResetPasswordForm from '@molecules/authentication/login/ResetPasswordForm';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
+import { UpdatePasswordDocument } from '@graphql/generated';
 
-// Mock component to simulate different URL states
-function ResetPasswordFormWrapper({
-  hasToken = false,
-  token = 'mock-reset-token',
-}: {
-  hasToken?: boolean;
-  token?: string;
-}) {
-  useEffect(() => {
-    if (hasToken) {
-      // Mock URL search params
-      const url = new URL(window.location.href);
-      url.searchParams.set('token', encodeURIComponent(token));
-      window.history.replaceState({}, '', url.toString());
-    } else {
-      // Clear token from URL
-      const url = new URL(window.location.href);
-      url.searchParams.delete('token');
-      window.history.replaceState({}, '', url.toString());
-    }
-  }, [hasToken, token]);
+const newPassword = 'NewSecret123';
 
-  return (
-    <div className="bg-background min-h-screen p-4">
-      <div className="mb-4 text-center">
-        <h2 className="text-xl font-semibold">
-          {hasToken
-            ? 'Reset Password Form (with token)'
-            : 'Reset Password Form (no token)'}
-        </h2>
-        <p className="mt-2 text-sm text-gray-600">
-          {hasToken
-            ? 'The reset password dialog should appear automatically'
-            : 'No reset token in URL - dialog will not appear'}
-        </p>
-      </div>
-      <ResetPasswordForm />
-    </div>
-  );
-}
+const updatePasswordMock = (success: boolean, message: string) => ({
+  request: {
+    query: UpdatePasswordDocument,
+    variables: { token: 'mock-reset-token', password: newPassword },
+  },
+  result: {
+    data: { updatePassword: { __typename: 'Response', success, message } },
+  },
+});
 
 const meta = {
   title: 'Molecules/Authentication/Login/ResetPasswordForm',
-  component: ResetPasswordFormWrapper,
+  component: ResetPasswordForm,
   parameters: {
     layout: 'fullscreen',
     nextjs: {
@@ -53,51 +31,103 @@ const meta = {
     },
   },
   tags: ['autodocs'],
-  argTypes: {
-    hasToken: {
-      control: 'boolean',
-      description: 'Whether a reset token is present in the URL',
-    },
-    token: {
-      control: 'text',
-      description: 'The reset token value',
-    },
-  },
-} satisfies Meta<typeof ResetPasswordFormWrapper>;
+  decorators: [
+    (Story, { parameters }) => (
+      <ApolloMswMocks mocks={parameters.apolloMocks ?? []}>
+        <div className="bg-background min-h-screen p-4">
+          <Story />
+        </div>
+      </ApolloMswMocks>
+    ),
+  ],
+} satisfies Meta<typeof ResetPasswordForm>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  args: {
-    hasToken: false,
+// The dialog is rendered in a portal, so query it through `screen`.
+async function fillAndSubmit(confirm: string) {
+  const dialog = await screen.findByRole('dialog');
+  const passwordInputs = dialog.querySelectorAll('input[type="password"]');
+  await userEvent.type(passwordInputs[0] as HTMLElement, newPassword);
+  await userEvent.type(passwordInputs[1] as HTMLElement, confirm);
+  await userEvent.click(
+    screen.getByRole('button', { name: 'Update Password' }),
+  );
+}
+
+export const NoToken: Story = {
+  play: async () => {
+    await storybookExpect(screen.queryByRole('dialog')).toBeNull();
   },
 };
 
 export const WithToken: Story = {
-  args: {
-    hasToken: true,
-    token: 'mock-reset-token-12345',
+  parameters: {
+    nextjs: { navigation: { query: { token: 'mock-reset-token' } } },
+  },
+  play: async () => {
+    const dialog = await screen.findByRole('dialog');
+    await storybookExpect(dialog).toHaveTextContent('Reset Password');
+    await storybookExpect(
+      screen.getByRole('button', { name: 'Update Password' }),
+    ).toBeEnabled();
+  },
+};
+
+export const PasswordsDoNotMatch: Story = {
+  parameters: {
+    nextjs: { navigation: { query: { token: 'mock-reset-token' } } },
+  },
+  play: async () => {
+    await fillAndSubmit('Different123');
+    await storybookExpect(
+      await screen.findByText("Passwords don't match"),
+    ).toBeInTheDocument();
+    await storybookExpect(screen.getByRole('dialog')).toBeInTheDocument();
+  },
+};
+
+export const SuccessfulReset: Story = {
+  parameters: {
+    nextjs: { navigation: { query: { token: 'mock-reset-token' } } },
+    apolloMocks: [updatePasswordMock(true, 'Password updated')],
+  },
+  play: async () => {
+    await fillAndSubmit(newPassword);
+    await waitFor(() =>
+      storybookExpect(screen.queryByRole('dialog')).toBeNull(),
+    );
   },
 };
 
 export const WithExpiredToken: Story = {
-  args: {
-    hasToken: true,
-    token: 'expired-token',
+  parameters: {
+    nextjs: { navigation: { query: { token: 'mock-reset-token' } } },
+    apolloMocks: [updatePasswordMock(false, 'Token expired')],
+  },
+  play: async () => {
+    await fillAndSubmit(newPassword);
+    await storybookExpect(
+      await screen.findByText(
+        'This reset link has expired. Please request a new one.',
+      ),
+    ).toBeInTheDocument();
   },
 };
 
 export const WithInvalidToken: Story = {
-  args: {
-    hasToken: true,
-    token: 'invalid-token-format',
+  parameters: {
+    nextjs: { navigation: { query: { token: 'mock-reset-token' } } },
+    apolloMocks: [updatePasswordMock(false, 'Invalid token')],
   },
-};
-
-export const NoToken: Story = {
-  args: {
-    hasToken: false,
+  play: async () => {
+    await fillAndSubmit(newPassword);
+    await storybookExpect(
+      await screen.findByText(
+        'This reset link has expired. Please request a new one.',
+      ),
+    ).toBeInTheDocument();
   },
 };

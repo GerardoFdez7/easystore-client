@@ -1,4 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import {
+  expect as storybookExpect,
+  fn,
+  screen,
+  userEvent,
+  waitFor,
+} from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import AddCategoryDialog from '@molecules/categories/detail/AddCategoryDialog';
 import { Button } from '@shadcn/ui/button';
 import { Plus } from 'lucide-react';
@@ -65,54 +72,105 @@ type Story = StoryObj<typeof AddCategoryDialog>;
 export const Default: Story = {
   args: {
     open: true,
-    onAdd: (category) => {
-      console.log('New category added:', category);
-    },
+    onAdd: fn(),
+    onOpenChange: fn(),
   },
   parameters: {
     docs: {
       description: {
         story:
-          'Default AddCategoryDialog with the standard trigger button. Click the button to open the dialog and create a new category.',
+          'AddCategoryDialog opened with the standard form. Typing a name enables the Add button, which emits the new category.',
       },
     },
+  },
+  play: async ({ args }) => {
+    const dialog = await screen.findByRole('dialog');
+    await storybookExpect(dialog).toHaveTextContent('Add Category');
+    const add = screen.getByRole('button', { name: 'Add' });
+    await storybookExpect(add).toBeDisabled();
+
+    await userEvent.type(
+      screen.getByRole('textbox', { name: 'Name' }),
+      'Books',
+    );
+    await userEvent.type(
+      screen.getByRole('textbox', { name: 'Description' }),
+      'All the books',
+    );
+    await storybookExpect(add).toBeEnabled();
+    await storybookExpect(dialog).toBeInTheDocument();
+
+    await userEvent.click(add);
+    await waitFor(() =>
+      storybookExpect(args.onAdd).toHaveBeenCalledWith(
+        storybookExpect.objectContaining({
+          name: 'Books',
+          description: 'All the books',
+        }),
+      ),
+    );
+    await storybookExpect(args.onOpenChange).toHaveBeenCalledWith(false);
+  },
+};
+
+export const Cancel: Story = {
+  args: {
+    open: true,
+    onAdd: fn(),
+    onOpenChange: fn(),
+  },
+  play: async ({ args }) => {
+    await screen.findByRole('dialog');
+    await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+    await storybookExpect(args.onOpenChange).toHaveBeenCalledWith(false);
+    await storybookExpect(args.onAdd).not.toHaveBeenCalled();
   },
 };
 
 export const InteractiveExample: Story = {
-  render: () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleCategoryAdd = (category: any) => {
-      alert(
-        `Category "${category.name}" added successfully!\n\nDetails:\n- Name: ${category.name}\n- Description: ${category.description || 'No description'}\n- Cover: ${category.cover || 'No cover image'}`,
-      );
-    };
-
-    return (
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Try adding a category:</h3>
-        <AddCategoryDialog
-          onAdd={handleCategoryAdd}
-          trigger={
-            <Button size="lg">
-              <Plus className="mr-2 h-5 w-5" />
-              Create New Category
-            </Button>
-          }
-        />
-        <p className="text-muted-foreground text-sm">
-          Fill out the form and click &quot;Add&quot; to see the category data
-          in an alert.
-        </p>
-      </div>
-    );
+  args: {
+    onAdd: fn(),
   },
+  render: (args) => (
+    <div className="space-y-4">
+      <h3 className="text-lg font-semibold">Try adding a category:</h3>
+      <AddCategoryDialog
+        onAdd={args.onAdd}
+        trigger={
+          <Button size="lg">
+            <Plus className="mr-2 h-5 w-5" />
+            Create New Category
+          </Button>
+        }
+      />
+    </div>
+  ),
   parameters: {
     docs: {
       description: {
         story:
-          'Interactive example where you can actually create a category and see the resulting data. This demonstrates the complete workflow of the component.',
+          'Uncontrolled usage with a custom trigger: opening the dialog, filling the form and adding emits the category.',
       },
     },
+  },
+  play: async ({ canvas, args }) => {
+    const trigger = canvas.getByRole('button', { name: 'Create New Category' });
+    await storybookExpect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await userEvent.click(trigger);
+    await screen.findByRole('dialog');
+
+    await userEvent.type(
+      screen.getByRole('textbox', { name: 'Name' }),
+      'Garden',
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Add' }));
+    await waitFor(() =>
+      storybookExpect(args.onAdd).toHaveBeenCalledWith(
+        storybookExpect.objectContaining({ name: 'Garden' }),
+      ),
+    );
+    await waitFor(() =>
+      storybookExpect(screen.queryByRole('dialog')).not.toBeInTheDocument(),
+    );
   },
 };

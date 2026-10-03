@@ -64,7 +64,7 @@ export default function WarrantyFormField() {
                     <div>
                       <FormLabel
                         htmlFor="warrantyMonths"
-                        className="text-md mb-1"
+                        className="mb-1 text-base"
                       >
                         {t('warrantyMonths')}
                       </FormLabel>
@@ -100,7 +100,7 @@ export default function WarrantyFormField() {
                     <div>
                       <FormLabel
                         htmlFor="warrantyCoverage"
-                        className="text-md mb-1"
+                        className="mb-1 text-base"
                       >
                         {t('warrantyCoverage')}
                       </FormLabel>
@@ -113,10 +113,14 @@ export default function WarrantyFormField() {
                       />
                     </div>
                     <div>
-                      <FormLabel className="text-md mb-1">
+                      <FormLabel
+                        htmlFor="warrantyInstructions"
+                        className="mb-1 text-base"
+                      >
                         {t('warrantyInstructions')}
                       </FormLabel>
                       <Textarea
+                        id="warrantyInstructions"
                         maxLength={1000}
                         placeholder={t('warrantyInstructionsPlaceholder')}
                         value={newInstructions}
@@ -172,6 +176,7 @@ export default function WarrantyFormField() {
                                   <FormControl>
                                     <Input
                                       {...fieldProps}
+                                      aria-label={t('warrantyMonths')}
                                       inputMode="numeric"
                                       type="number"
                                       placeholder={t(
@@ -204,6 +209,7 @@ export default function WarrantyFormField() {
                                     <FormControl>
                                       <Textarea
                                         {...fieldProps}
+                                        aria-label={t('warrantyCoverage')}
                                         maxLength={1000}
                                         placeholder={t(
                                           'warrantyCoveragePlaceholder',
@@ -227,6 +233,7 @@ export default function WarrantyFormField() {
                                     <FormControl>
                                       <Textarea
                                         {...fieldProps}
+                                        aria-label={t('warrantyInstructions')}
                                         maxLength={1000}
                                         placeholder={t(
                                           'warrantyInstructionsPlaceholder',

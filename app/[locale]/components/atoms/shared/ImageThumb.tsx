@@ -15,9 +15,11 @@ const ImageThumb = ({
   altText,
 }: ImageThumbProps) => {
   return (
-    <div
-      className={`min-w-20 flex-[0_0_15%] cursor-pointer overflow-hidden rounded-lg sm:min-w-35 sm:flex-[0_0_23%] ${
-        selected ? 'border-title border-opacity-75 border' : ''
+    <button
+      type="button"
+      aria-label={altText}
+      className={`basis-thumb sm:basis-thumb-sm min-w-20 cursor-pointer overflow-hidden rounded-lg border-0 bg-transparent p-0 text-left sm:min-w-35 ${
+        selected ? 'border-title/75 border' : ''
       }`}
       onClick={onClick}
     >
@@ -35,7 +37,7 @@ const ImageThumb = ({
           }`}
         />
       </div>
-    </div>
+    </button>
   );
 };
 

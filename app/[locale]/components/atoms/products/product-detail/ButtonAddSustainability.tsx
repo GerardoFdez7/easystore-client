@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { Button } from '@shadcn/ui/button';
 import { Plus } from 'lucide-react';
 import { forwardRef } from 'react';
@@ -6,6 +7,7 @@ const ButtonAddSustainability = forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement>
 >((props, ref) => {
+  const t = useTranslations('Products');
   return (
     <Button
       ref={ref}
@@ -15,7 +17,7 @@ const ButtonAddSustainability = forwardRef<
       {...props}
     >
       <Plus className="mr-2 h-4 w-4" />
-      Add sustainability
+      {t('addSustainability')}
     </Button>
   );
 });

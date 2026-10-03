@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useQuery } from '@apollo/client/react';
 
 interface UseInfiniteScrollOptions<TData> {
@@ -78,24 +78,26 @@ export function useInfiniteScroll<
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
   const [currentData, setCurrentData] = useState<TData | undefined>(undefined);
 
-  // Use refs to store the latest callback functions to avoid dependency issues
+  // Callers usually pass inline functions; keep the latest ones in refs so
+  // handleDataUpdate stays referentially stable and effects depending on it
+  // don't re-run (and re-append items) on every render.
   const getItemsRef = useRef(getItems);
-  const getHasMoreRef = useRef(getHasMore);
-  const getTotalRef = useRef(getTotal);
   const mergeItemsRef = useRef(mergeItems);
+  useEffect(() => {
+    getItemsRef.current = getItems;
+    mergeItemsRef.current = mergeItems;
+  });
+  const lastHandledRef = useRef<{ data: TData; page: number } | null>(null);
 
-  // Update refs when callbacks change
-  getItemsRef.current = getItems;
-  getHasMoreRef.current = getHasMore;
-  getTotalRef.current = getTotal;
-  mergeItemsRef.current = mergeItems;
-
-  // Handle data updates when query completes - now stable with refs
   const handleDataUpdate = useCallback(
     (data: TData | undefined, currentPage: number) => {
       setCurrentData(data);
 
       if (!data) return;
+
+      const last = lastHandledRef.current;
+      if (last && last.data === data && last.page === currentPage) return;
+      lastHandledRef.current = { data, page: currentPage };
 
       const newItems = getItemsRef.current(data);
 
@@ -109,12 +111,11 @@ export function useInfiniteScroll<
 
       setIsLoadingMore(false);
     },
-    [], // Empty dependency array since we use refs
+    [],
   );
 
-  // Computed values - use refs to avoid dependency issues
-  const hasMore = getHasMoreRef.current(currentData);
-  const total = getTotalRef.current(currentData);
+  const hasMore = getHasMore(currentData);
+  const total = getTotal(currentData);
 
   // Load more function
   const loadMore = useCallback(
@@ -140,15 +141,19 @@ export function useInfiniteScroll<
         });
 
         if (result.data) {
+          // The query re-runs with the new page variables; the consumer's
+          // effect then feeds that data through handleDataUpdate, which
+          // appends the items once and clears isLoadingMore.
           setPage((prev) => prev + 1);
-          handleDataUpdate(result.data as TData, page + 1);
+        } else {
+          setIsLoadingMore(false);
         }
       } catch (err) {
         console.error('Error loading more items:', err);
         setIsLoadingMore(false);
       }
     },
-    [hasMore, isLoadingMore, page, handleDataUpdate],
+    [hasMore, isLoadingMore, page],
   );
 
   // Reset pagination
@@ -156,6 +161,7 @@ export function useInfiniteScroll<
     setPage(initialPage);
     setAllItems([]);
     setCurrentData(undefined);
+    lastHandledRef.current = null;
     onReset?.();
   }, [initialPage, onReset]);
 

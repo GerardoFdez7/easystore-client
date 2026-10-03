@@ -5,7 +5,7 @@ import Everywhere from '@molecules/landing/Everywhere';
 import Features from '@molecules/landing/Features';
 import Portrait from '@molecules/landing/Portrait';
 import Start from '@molecules/landing/Start';
-import PricingLading from '@molecules/landing/PricingLanding';
+import PricingLading from '@organisms/landing/PricingLanding';
 
 export default function MainLanding() {
   return (

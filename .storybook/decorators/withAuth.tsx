@@ -1,5 +1,5 @@
 import { ComponentType, ReactNode } from 'react';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { ApolloMswMocks } from '../../app/[locale]/lib/storybook/ApolloMswMocks';
 import { AuthProvider } from '../../app/[locale]/lib/contexts/AuthContext';
 import {
   ValidateTokenDocument,
@@ -16,6 +16,7 @@ const authMocks = [
       data: {
         validateToken: {
           success: true,
+          message: 'Token is valid',
         },
       },
     },
@@ -39,9 +40,14 @@ const authMocks = [
 // Mock AuthProvider wrapper that provides GraphQL mocks
 const MockAuthWrapper = ({ children }: { children: ReactNode }) => {
   return (
-    <MockedProvider mocks={authMocks}>
-      <AuthProvider fallback={<div>Loading...</div>}>{children}</AuthProvider>
-    </MockedProvider>
+    <ApolloMswMocks mocks={authMocks}>
+      <AuthProvider
+        fallback={<div>Loading...</div>}
+        initialAuthState={{ isAuthenticated: true, loading: false }}
+      >
+        {children}
+      </AuthProvider>
+    </ApolloMswMocks>
   );
 };
 

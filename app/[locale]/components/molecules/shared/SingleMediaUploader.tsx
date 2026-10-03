@@ -15,6 +15,8 @@ interface SingleMediaUploaderProps
   className?: string;
   hideDoneButton?: boolean;
   alwaysEditing?: boolean;
+  /** In alwaysEditing mode, also report removals through onMediaProcessed(null). */
+  reportRemoval?: boolean;
   initialMedia?: string | null;
   renderDoneButton?: (
     onDone: () => void,
@@ -35,6 +37,7 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
   className,
   hideDoneButton = false,
   alwaysEditing = false,
+  reportRemoval = false,
   initialMedia,
   renderDoneButton,
   renderEditButton,
@@ -105,7 +108,7 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
   useEffect(() => {
     if (initialMedia && !persistedMedia && !wasRemovedIntentionally) {
       setPersistedMedia({ url: initialMedia });
-      setInitialMediaState(initialMedia); // Set initial state for change detection
+      setInitialMediaState(initialMedia);
     } else if (!initialMedia && persistedMedia) {
       // Clear persisted media when initialMedia is removed
       setPersistedMedia(null);
@@ -161,7 +164,7 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
 
     // Only notify parent about removal if NOT in alwaysEditing mode
     // In alwaysEditing mode, changes should only be persisted on form submission
-    if (persistedMedia && !alwaysEditing) {
+    if (persistedMedia && (!alwaysEditing || reportRemoval)) {
       void onMediaProcessed?.(null);
     }
   };

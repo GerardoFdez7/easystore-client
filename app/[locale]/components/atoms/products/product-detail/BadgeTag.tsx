@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { Badge } from '@shadcn/ui/badge';
 import { X } from 'lucide-react';
 
@@ -7,14 +8,20 @@ interface BadgeTagProps {
 }
 
 export default function BadgeTag({ text, onRemove }: BadgeTagProps) {
+  const t = useTranslations('Products');
   return (
     <Badge
       variant="secondary"
-      className="text-foreground bg-[#d9d9d9] text-xs hover:bg-[#c4c0c0] sm:text-sm dark:text-gray-600"
+      className="text-foreground bg-border hover:bg-hover dark:text-foreground text-xs sm:text-sm"
     >
       {text}
-      <button onClick={onRemove} className="ml-2">
-        <X className="h-3 w-3 hover:text-red-600" />
+      <button
+        type="button"
+        onClick={onRemove}
+        className="ml-2"
+        aria-label={t('removeTag', { name: text })}
+      >
+        <X className="hover:text-destructive h-3 w-3" aria-hidden="true" />
       </button>
     </Badge>
   );

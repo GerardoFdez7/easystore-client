@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, userEvent, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { TableOfContents } from '@molecules/shared/TableOfContents';
 import { useState } from 'react';
 
@@ -45,12 +46,26 @@ export const Default: Story = {
     items: sampleItems,
     activeId: '',
   },
+  play: async ({ canvas }) => {
+    const nav = canvas.getByRole('navigation', { name: 'Table of contents' });
+    const links = within(nav).getAllByRole('link');
+    await storybookExpect(links).toHaveLength(8);
+    await storybookExpect(links[1]).toHaveAttribute('href', '#values');
+  },
 };
 
 export const WithActiveItem: Story = {
   args: {
     items: sampleItems,
     activeId: 'values',
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('link', { name: '2. Our Values' }).closest('li'),
+    ).toHaveClass('bg-hover');
+    await storybookExpect(
+      canvas.getByRole('link', { name: '1. Introduction' }).closest('li'),
+    ).not.toHaveClass('bg-hover');
   },
 };
 
@@ -59,6 +74,11 @@ export const CustomWidth: Story = {
     items: sampleItems,
     activeId: 'why',
     className: 'w-96',
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('navigation', { name: 'Table of contents' }),
+    ).toHaveClass('w-96');
   },
 };
 
@@ -70,6 +90,9 @@ export const FewItems: Story = {
       { id: 'section3', label: '3. Third Section' },
     ],
     activeId: 'section2',
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getAllByRole('link')).toHaveLength(3);
   },
 };
 
@@ -84,11 +107,11 @@ function InteractiveTableOfContents() {
           <button
             key={item.id}
             onClick={() => setActiveId(item.id)}
-            className={`rounded px-3 py-1 text-sm ${
+            className={
               activeId === item.id
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
+                ? 'bg-primary rounded px-3 py-1 text-sm text-white'
+                : 'bg-border text-foreground hover:bg-hover rounded px-3 py-1 text-sm'
+            }
           >
             {item.label}
           </button>
@@ -100,4 +123,14 @@ function InteractiveTableOfContents() {
 
 export const Interactive: Story = {
   render: () => <InteractiveTableOfContents />,
+  play: async ({ canvas }) => {
+    const item = (label: string) =>
+      canvas.getByRole('link', { name: label }).closest('li');
+    await storybookExpect(item('1. Introduction')).toHaveClass('bg-hover');
+    await userEvent.click(
+      canvas.getByRole('button', { name: '3. Why We Collect' }),
+    );
+    await storybookExpect(item('3. Why We Collect')).toHaveClass('bg-hover');
+    await storybookExpect(item('1. Introduction')).not.toHaveClass('bg-hover');
+  },
 };

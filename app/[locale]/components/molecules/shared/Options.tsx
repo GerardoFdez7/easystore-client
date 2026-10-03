@@ -52,6 +52,46 @@ interface OptionsProps {
   wrapperClassName?: string;
 }
 
+interface OptionMenuItemProps {
+  option: OptionItem;
+  onSelect: (option: OptionItem) => void;
+  showDisabledTooltip?: boolean;
+}
+
+function OptionMenuItem({
+  option,
+  onSelect,
+  showDisabledTooltip = false,
+}: OptionMenuItemProps) {
+  const IconComponent = option.icon;
+  const menuItem = (
+    <DropdownMenuItem
+      variant={option.variant}
+      disabled={option.disabled}
+      onClick={() => onSelect(option)}
+      className="cursor-pointer"
+      role="menuitem"
+      aria-label={option.label}
+    >
+      {IconComponent && (
+        <IconComponent className="h-4 w-4" aria-hidden="true" />
+      )}
+      {option.label}
+    </DropdownMenuItem>
+  );
+
+  if (showDisabledTooltip && option.disabled && option.disabledTooltip) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>{menuItem}</TooltipTrigger>
+        <TooltipContent side="left">{option.disabledTooltip}</TooltipContent>
+      </Tooltip>
+    );
+  }
+
+  return menuItem;
+}
+
 export default function Options({
   options = [],
   showDelete = false,
@@ -167,7 +207,7 @@ export default function Options({
   return (
     <nav
       className={`flex justify-end ${wrapperClassName}`}
-      aria-label="options"
+      aria-label={t('options')}
     >
       <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
         <Tooltip>
@@ -179,8 +219,6 @@ export default function Options({
                 disabled={disabled}
                 className={`h-8 w-8 p-0 ${className}`}
                 aria-label={defaultTooltipContent}
-                aria-haspopup="menu"
-                aria-expanded="false"
               >
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
@@ -191,63 +229,24 @@ export default function Options({
 
         <DropdownMenuContent align="end" className="w-48" role="menu">
           <DropdownMenuLabel>{t('options')}</DropdownMenuLabel>
-          {regularOptions.map((option) => {
-            const IconComponent = option.icon;
-            const menuItem = (
-              <DropdownMenuItem
-                key={option.id}
-                variant={option.variant}
-                disabled={option.disabled}
-                onClick={() => handleOptionClick(option)}
-                className="cursor-pointer"
-                role="menuitem"
-                aria-label={option.label}
-              >
-                {IconComponent && (
-                  <IconComponent className="h-4 w-4" aria-hidden="true" />
-                )}
-                {option.label}
-              </DropdownMenuItem>
-            );
-
-            // Wrap in tooltip if disabled and tooltip text is provided
-            if (option.disabled && option.disabledTooltip) {
-              return (
-                <Tooltip key={option.id}>
-                  <TooltipTrigger asChild>{menuItem}</TooltipTrigger>
-                  <TooltipContent side="left">
-                    {option.disabledTooltip}
-                  </TooltipContent>
-                </Tooltip>
-              );
-            }
-
-            return menuItem;
-          })}
+          {regularOptions.map((option) => (
+            <OptionMenuItem
+              key={option.id}
+              option={option}
+              onSelect={handleOptionClick}
+              showDisabledTooltip
+            />
+          ))}
           {destructiveOptions.length > 0 && regularOptions.length > 0 && (
             <DropdownMenuSeparator />
           )}
-          {destructiveOptions.map((option) => {
-            const IconComponent = option.icon;
-            const menuItem = (
-              <DropdownMenuItem
-                key={option.id}
-                variant={option.variant}
-                disabled={option.disabled}
-                onClick={() => handleOptionClick(option)}
-                className="cursor-pointer"
-                role="menuitem"
-                aria-label={option.label}
-              >
-                {IconComponent && (
-                  <IconComponent className="h-4 w-4" aria-hidden="true" />
-                )}
-                {option.label}
-              </DropdownMenuItem>
-            );
-
-            return menuItem;
-          })}
+          {destructiveOptions.map((option) => (
+            <OptionMenuItem
+              key={option.id}
+              option={option}
+              onSelect={handleOptionClick}
+            />
+          ))}
         </DropdownMenuContent>
       </DropdownMenu>
 

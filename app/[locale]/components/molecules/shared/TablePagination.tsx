@@ -6,6 +6,7 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  type LucideIcon,
 } from 'lucide-react';
 import { Button } from '@shadcn/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@shadcn/ui/tooltip';
@@ -24,6 +25,74 @@ interface TablePaginationProps {
   canNextPage: boolean;
 }
 
+interface PaginationButtonProps {
+  disabled: boolean;
+  icon: LucideIcon;
+  label: string;
+  onClick: () => void;
+  tooltipContent?: React.ReactNode;
+}
+
+interface PageStepButtonsProps {
+  canNextPage: boolean;
+  canPreviousPage: boolean;
+  nextLabel: string;
+  onNextPage: () => void;
+  onPreviousPage: () => void;
+  previousLabel: string;
+}
+
+function PaginationButton({
+  disabled,
+  icon: Icon,
+  label,
+  onClick,
+  tooltipContent = label,
+}: PaginationButtonProps) {
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={onClick}
+          disabled={disabled}
+          aria-label={label}
+        >
+          <Icon className="h-4 w-4" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>{tooltipContent}</TooltipContent>
+    </Tooltip>
+  );
+}
+
+function PageStepButtons({
+  canNextPage,
+  canPreviousPage,
+  nextLabel,
+  onNextPage,
+  onPreviousPage,
+  previousLabel,
+}: PageStepButtonsProps) {
+  return (
+    <>
+      <PaginationButton
+        disabled={!canPreviousPage}
+        icon={ChevronLeft}
+        label={previousLabel}
+        onClick={onPreviousPage}
+      />
+      <PaginationButton
+        disabled={!canNextPage}
+        icon={ChevronRight}
+        label={nextLabel}
+        onClick={onNextPage}
+      />
+    </>
+  );
+}
+
 export default function TablePagination({
   currentPage,
   totalPages,
@@ -39,6 +108,16 @@ export default function TablePagination({
   const t = useTranslations('Inventory');
 
   const showSelectedCount = selectedCount > 0;
+  const pageStepButtons = (
+    <PageStepButtons
+      canNextPage={canNextPage}
+      canPreviousPage={canPreviousPage}
+      nextLabel={t('nextButton')}
+      onNextPage={onNextPage}
+      onPreviousPage={onPreviousPage}
+      previousLabel={t('previousButton')}
+    />
+  );
 
   return (
     <div className="text-muted-foreground mt-4 flex items-center justify-between px-2 text-left">
@@ -64,100 +143,25 @@ export default function TablePagination({
       <div className="flex items-center space-x-2">
         {/* Desktop: Show all 4 buttons */}
         <div className="hidden items-center space-x-2 md:flex">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={onFirstPage}
-                disabled={!canPreviousPage}
-                aria-label={t('firstPageButton')}
-              >
-                <ChevronsLeft className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>{t('firstPageButton')}</TooltipContent>
-          </Tooltip>
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={onPreviousPage}
-                disabled={!canPreviousPage}
-                aria-label={t('previousButton')}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>{t('previousButton')}</TooltipContent>
-          </Tooltip>
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={onNextPage}
-                disabled={!canNextPage}
-                aria-label={t('nextButton')}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>{t('nextButton')}</TooltipContent>
-          </Tooltip>
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={onLastPage}
-                disabled={!canNextPage}
-                aria-label={t('lastPageButton')}
-              >
-                <ChevronsRight className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{t('lastPageButton')}</p>
-            </TooltipContent>
-          </Tooltip>
+          <PaginationButton
+            disabled={!canPreviousPage}
+            icon={ChevronsLeft}
+            label={t('firstPageButton')}
+            onClick={onFirstPage}
+          />
+          {pageStepButtons}
+          <PaginationButton
+            disabled={!canNextPage}
+            icon={ChevronsRight}
+            label={t('lastPageButton')}
+            onClick={onLastPage}
+            tooltipContent={<p>{t('lastPageButton')}</p>}
+          />
         </div>
 
         {/* Mobile: Show only previous and next buttons */}
         <div className="flex items-center space-x-2 md:hidden">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={onPreviousPage}
-                disabled={!canPreviousPage}
-                aria-label={t('previousButton')}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>{t('previousButton')}</TooltipContent>
-          </Tooltip>
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={onNextPage}
-                disabled={!canNextPage}
-                aria-label={t('nextButton')}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>{t('nextButton')}</TooltipContent>
-          </Tooltip>
+          {pageStepButtons}
         </div>
       </div>
     </div>

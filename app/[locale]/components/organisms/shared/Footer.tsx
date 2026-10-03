@@ -11,7 +11,7 @@ export default function Footer() {
 
   return (
     <footer className="mt-auto px-10 2xl:px-35">
-      <span style={{ opacity: 0.7 }}>
+      <span className="opacity-85">
         <div className="bg-foreground mx-auto mb-8 h-0.5 w-auto rounded-full"></div>
       </span>
       <div className="mb-9 flex flex-col items-center gap-3 text-center sm:flex-row sm:flex-wrap sm:justify-center">
@@ -23,8 +23,8 @@ export default function Footer() {
         <LinkFooter href="/privacy" text={t('privacyPolicy')} />
       </div>
 
-      <div className="text-center text-[17px] 2xl:text-xl">
-        <span style={{ opacity: 0.7 }} className="text-foreground">
+      <div className="text-center text-lg 2xl:text-xl">
+        <span className="text-foreground opacity-85">
           {t('inc', { year: currentYear })}
         </span>
       </div>

@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import ComboboxCategory from '@atoms/products/ComboboxCategory';
 
 const meta: Meta<typeof ComboboxCategory> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('combobox', { name: 'Category' }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Products/ComboboxCategory',
   component: ComboboxCategory,
   parameters: {

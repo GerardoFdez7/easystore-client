@@ -1,9 +1,5 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import {
-  CreateAddressMutationVariables,
-  AddressTypeEnum,
-} from '@graphql/generated';
 import { useAddressForm } from '@hooks/domains/address';
 import {
   Form,
@@ -18,9 +14,10 @@ import { Textarea } from '@shadcn/ui/textarea';
 import CountryCombobox from '../shared/CountryCombobox';
 import StateCombobox from '../shared/StateCombobox';
 import FormActions from '@molecules/shared/FormActions';
+import { AddressType, type AddressInput } from '@lib/types/inventory';
 
 interface AddressFormProps {
-  onSubmit: (address: CreateAddressMutationVariables['input']) => Promise<void>;
+  onSubmit: (address: AddressInput) => Promise<void>;
   onCancel: () => void;
   isSubmitting?: boolean;
 }
@@ -35,7 +32,7 @@ export default function AddressForm({
 
   const { form, handleSubmit: handleFormSubmit } = useAddressForm({
     onSuccess: async (data) => {
-      const addressInput: CreateAddressMutationVariables['input'] = {
+      const addressInput: AddressInput = {
         name: data.name,
         addressLine1: data.addressLine1,
         addressLine2: data.addressLine2 || undefined,
@@ -45,7 +42,7 @@ export default function AddressForm({
         stateId: data.stateId,
         deliveryNum: data.deliveryNum,
         deliveryInstructions: data.deliveryInstructions || undefined,
-        addressType: AddressTypeEnum.Warehouse, // Fixed to warehouse type
+        addressType: AddressType.Warehouse, // Fixed to warehouse type
       };
       await onSubmit(addressInput);
     },
@@ -140,7 +137,7 @@ export default function AddressForm({
               <FormItem>
                 <FormLabel>{t('city')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="New York" {...field} />
+                  <Input placeholder={t('cityPlaceholder')} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -155,7 +152,7 @@ export default function AddressForm({
               <FormItem>
                 <FormLabel>{t('postalCode')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="10001" {...field} />
+                  <Input placeholder={t('postalCodePlaceholder')} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

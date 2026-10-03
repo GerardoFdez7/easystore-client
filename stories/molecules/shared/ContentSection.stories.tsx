@@ -1,7 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { ContentSection } from '@molecules/shared/ContentSection';
 
 const meta: Meta<typeof ContentSection> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('heading')).toBeInTheDocument();
+  },
   title: 'Molecules/Shared/ContentSection',
   component: ContentSection,
   parameters: {
@@ -38,11 +43,11 @@ export const Default: Story = {
     title: 'Example Section',
     children: (
       <div>
-        <p className="mb-4 leading-relaxed text-gray-700">
+        <p className="text-foreground mb-4 leading-relaxed">
           This is an example content section with some sample text to
           demonstrate how the component looks and behaves.
         </p>
-        <ul className="mb-4 list-disc space-y-1 pl-6 text-gray-700">
+        <ul className="text-foreground mb-4 list-disc space-y-1 pl-6">
           <li>First bullet point</li>
           <li>Second bullet point</li>
           <li>Third bullet point</li>
@@ -58,7 +63,7 @@ export const WithCustomClass: Story = {
     title: 'Custom Styled Section',
     className: 'bg-gray-50 p-4 rounded-lg',
     children: (
-      <p className="text-gray-700">
+      <p className="text-foreground">
         This section has custom styling applied through the className prop.
       </p>
     ),
@@ -71,18 +76,18 @@ export const LongContent: Story = {
     title: 'Section with Long Content',
     children: (
       <div>
-        <p className="mb-4 leading-relaxed text-gray-700">
+        <p className="text-foreground mb-4 leading-relaxed">
           This section demonstrates how the component handles longer content.
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>
-        <p className="mb-4 leading-relaxed text-gray-700">
+        <p className="text-foreground mb-4 leading-relaxed">
           Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
           nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
           reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
           pariatur.
         </p>
-        <ul className="mb-4 list-disc space-y-1 pl-6 text-gray-700">
+        <ul className="text-foreground mb-4 list-disc space-y-1 pl-6">
           <li>Multiple paragraphs</li>
           <li>Bullet points</li>
           <li>Proper spacing</li>

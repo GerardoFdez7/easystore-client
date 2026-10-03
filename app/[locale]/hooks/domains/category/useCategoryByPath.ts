@@ -10,6 +10,7 @@ import {
   SortOrder,
 } from '@graphql/generated';
 import { nameToSlug } from '@lib/utils/path-utils';
+import { createCategoryPathIdMap } from './categoryLookup';
 
 type GqlCategory = NonNullable<
   FindCategoriesTreeQuery['getAllCategories']
@@ -43,32 +44,10 @@ export function useCategoryByPath(categoryPath: string[] = []) {
     [data?.getAllCategories?.categories],
   );
 
-  // Build a simple map of category names to IDs for efficient lookup
-  const categoryMap = useMemo(() => {
-    const map = new Map<string, string>();
-
-    const addCategoriesRecursively = (category: GqlCategory) => {
-      // Store by both original name and slug format
-      const originalName = category.name.toLowerCase();
-      const slugName = category.name.toLowerCase().replace(/\s+/g, '-');
-
-      map.set(originalName, category.id);
-      map.set(slugName, category.id);
-
-      // Add subcategories recursively
-      if (category.subCategories && category.subCategories.length > 0) {
-        category.subCategories.forEach((subCategory) => {
-          addCategoriesRecursively(subCategory as GqlCategory);
-        });
-      }
-    };
-
-    categories.forEach((category) => {
-      addCategoriesRecursively(category);
-    });
-
-    return map;
-  }, [categories]);
+  const categoryMap = useMemo(
+    () => createCategoryPathIdMap(categories),
+    [categories],
+  );
 
   // Simple resolution logic
   const resolvedParentId = useMemo(() => {

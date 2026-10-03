@@ -149,7 +149,11 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
                 <div className="flex flex-wrap items-center gap-1">
                   {selectedVariantAttributes.length > 0 ? (
                     selectedVariantAttributes.map((attr, index) => (
-                      <Badge key={index} variant="outline" className="text-md">
+                      <Badge
+                        key={index}
+                        variant="outline"
+                        className="text-base"
+                      >
                         {attr.key}: {attr.value}
                       </Badge>
                     ))
@@ -190,7 +194,7 @@ const AddStockDialog: FC<AddStockDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[90vh] max-w-4xl flex-col overflow-hidden">
+      <DialogContent className="max-h-dialog flex max-w-4xl flex-col overflow-hidden">
         <DialogHeader>
           <DialogTitle className="flex items-start gap-2 text-left">
             {getStepIcon()}

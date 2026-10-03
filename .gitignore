@@ -49,10 +49,11 @@ docker-compose.override.yml
 
 # Storybook
 *storybook.log
+storybook-static
 
 # generated types from api
 app/[locale]/lib/graphql/generated.ts
 
 .vscode/
-.github/*
 .trae/*
+.plans/

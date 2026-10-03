@@ -9,18 +9,20 @@ import {
 } from '@shadcn/ui/carousel';
 import { Card, CardContent, CardTitle } from '@shadcn/ui/card';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { Product } from '@graphql/generated';
 import ProductStatus from '@atoms/products/ProductStatus';
 import BadgeTag from '@atoms/shared/BadgeTag';
 import { formatPriceWithCommasAndDots } from '@lib/utils/input-formatters';
+import type { ProductListItem } from '@lib/types/product';
 
 interface ProductCardProps {
-  product: Product;
+  product: ProductListItem;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
   const router = useRouter();
+  const t = useTranslations('Products');
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [previewIndex, setPreviewIndex] = React.useState<number | null>(null);
@@ -87,7 +89,9 @@ export function ProductCard({ product }: ProductCardProps) {
       return (
         <Image
           src={mediaItem.url}
-          alt={`${product.name} ${isPreview ? 'preview' : 'media'}`}
+          alt={t(isPreview ? 'productPreviewAlt' : 'productMediaAlt', {
+            name: product.name,
+          })}
           width={300}
           height={300}
           className="h-full w-full object-cover"
@@ -102,7 +106,12 @@ export function ProductCard({ product }: ProductCardProps) {
           preload="metadata"
           muted={isPreview}
         >
-          Your browser does not support the video tag.
+          <track
+            kind="captions"
+            srcLang="en"
+            label={t('videoCaptionsUnavailable')}
+          />
+          {t('videoNotSupported')}
         </video>
       );
     }
@@ -112,13 +121,17 @@ export function ProductCard({ product }: ProductCardProps) {
     <article className="group">
       <Card className="m-0 flex cursor-pointer gap-0 p-0 pb-1 transition-transform hover:scale-105">
         {mediaItems.length > 1 ? (
-          <Carousel setApi={setApi} className="w-full">
+          <Carousel
+            setApi={setApi}
+            className="w-full"
+            aria-label={product.name}
+          >
             <CarouselContent>
               {mediaItems.map((mediaItem, index) => (
                 <CarouselItem key={index}>
                   <button
                     className="group relative block aspect-square w-full overflow-hidden rounded-t-lg focus-visible:ring-2 focus-visible:outline-none"
-                    aria-label={`View ${product.name} details`}
+                    aria-label={t('viewProductDetails', { name: product.name })}
                   >
                     {renderMediaContent(mediaItem)}
                   </button>
@@ -142,22 +155,25 @@ export function ProductCard({ product }: ProductCardProps) {
             {/* Progress indicators with preview */}
             <div className="absolute right-0 bottom-2 left-0 z-20 flex justify-center gap-1 px-4">
               {mediaItems.map((_, index) => (
-                <div
+                <button
                   key={index}
+                  type="button"
                   className="relative flex-1"
                   onMouseEnter={() => handleIndicatorHover(index)}
                   onMouseLeave={handleIndicatorLeave}
                   onClick={() => handleIndicatorClick(index)}
                 >
-                  <button
-                    className={`h-1 w-full rounded-full transition-all duration-200 ${
+                  <span
+                    className={`block h-1 w-full rounded-full transition-all duration-200 ${
                       index === current - 1
                         ? 'bg-white'
                         : 'bg-white/50 hover:bg-white/70'
                     }`}
-                    aria-label={`Preview slide ${index + 1}${index === 0 ? ' (cover)' : ''}`}
                   />
-                </div>
+                  <span className="sr-only">
+                    {`Preview slide ${index + 1}${index === 0 ? ' (cover)' : ''}`}
+                  </span>
+                </button>
               ))}
             </div>
           </Carousel>

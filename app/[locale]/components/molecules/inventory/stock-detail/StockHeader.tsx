@@ -32,16 +32,14 @@ export default function StockHeader({
         {/* Left column: All product fields */}
         <div className="flex flex-col items-center gap-2 sm:items-start">
           {/* SKU */}
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl">
-              {sku && (
-                <>
-                  <span className="font-medium">SKU:</span>{' '}
-                  <span className="text-muted-foreground">[{sku}]</span>
-                </>
-              )}
-            </h1>
-          </div>
+          {sku && (
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl">
+                <span className="font-medium">SKU:</span>{' '}
+                <span className="text-muted-foreground">[{sku}]</span>
+              </h1>
+            </div>
+          )}
 
           {/* Product attributes */}
           {hasAttrs && (

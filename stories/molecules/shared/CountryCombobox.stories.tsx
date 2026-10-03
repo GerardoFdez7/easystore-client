@@ -1,4 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import {
+  expect as storybookExpect,
+  fn,
+  screen,
+  userEvent,
+  waitFor,
+} from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import CountryCombobox from '@molecules/shared/CountryCombobox';
 
 const meta: Meta<typeof CountryCombobox> = {
@@ -44,10 +51,30 @@ const mockCountries = [
   { label: 'France', value: 'FR' },
 ];
 
+// Radix hides the page behind an open popover; close it so only the settled
+// state is audited for accessibility.
+async function closePopover() {
+  await userEvent.keyboard('{Escape}{Escape}');
+  await waitFor(() =>
+    storybookExpect(screen.queryByRole('listbox')).toBeNull(),
+  );
+}
+
 export const Default: Story = {
   args: {
     placeholder: 'Select a country',
     options: mockCountries,
+    onValueChange: fn(),
+  },
+  play: async ({ canvas, args }) => {
+    const trigger = canvas.getByRole('combobox', { name: 'Select a country' });
+    await waitFor(() => storybookExpect(trigger).toBeEnabled());
+    await userEvent.click(trigger);
+    await storybookExpect(await screen.findAllByRole('option')).toHaveLength(5);
+
+    await userEvent.click(screen.getByRole('option', { name: /Canada/ }));
+    await storybookExpect(args.onValueChange).toHaveBeenCalledWith('CA');
+    await closePopover();
   },
 };
 
@@ -57,12 +84,27 @@ export const WithSelectedValue: Story = {
     placeholder: 'Select a country',
     options: mockCountries,
   },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('combobox', { name: 'Select a country' }),
+    ).toHaveTextContent('United States');
+  },
 };
 
 export const Empty: Story = {
   args: {
     placeholder: 'Countries',
     options: [],
+  },
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('combobox', { name: 'Countries' });
+    await waitFor(() => storybookExpect(trigger).toBeEnabled());
+    await userEvent.click(trigger);
+    await storybookExpect(
+      await screen.findByText('No country found'),
+    ).toBeInTheDocument();
+    await storybookExpect(screen.queryAllByRole('option')).toHaveLength(0);
+    await closePopover();
   },
 };
 
@@ -71,5 +113,10 @@ export const Loading: Story = {
     placeholder: 'Loading countries...',
     loading: true,
     options: mockCountries,
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('combobox', { name: 'Loading countries...' }),
+    ).toBeDisabled();
   },
 };

@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import React from 'react';
 import Image from 'next/image';
 import { Button } from '@shadcn/ui/button';
@@ -21,6 +22,7 @@ const SingleImagePreview: React.FC<SingleImagePreviewProps> = ({
   className,
   viewOnly = false,
 }) => {
+  const t = useTranslations('Media');
   const generatedImageUrl = React.useMemo(() => {
     return file ? URL.createObjectURL(file) : null;
   }, [file]);
@@ -51,7 +53,7 @@ const SingleImagePreview: React.FC<SingleImagePreviewProps> = ({
           <Image
             key={fileKey}
             src={displayImageUrl}
-            alt="Preview"
+            alt={t('previewAlt')}
             fill
             className="object-cover"
             priority
@@ -60,11 +62,13 @@ const SingleImagePreview: React.FC<SingleImagePreviewProps> = ({
           {/* Remove Button - only show if not in view-only mode */}
           {!viewOnly && onRemove && (
             <Button
+              type="button"
               onClick={onRemove}
-              className="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:bg-gray-100 hover:shadow-xl"
+              className="hover:bg-background absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:shadow-xl"
               disabled={isProcessing}
+              aria-label={t('removeImage')}
             >
-              <X className="h-4 w-4 text-gray-600" />
+              <X className="text-foreground h-4 w-4" aria-hidden="true" />
             </Button>
           )}
         </div>

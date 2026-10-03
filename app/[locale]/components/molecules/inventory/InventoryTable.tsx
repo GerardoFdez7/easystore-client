@@ -14,10 +14,10 @@ import {
 import { formatDate } from '@lib/utils';
 import { buildInventoryPath } from '@lib/utils/path';
 import {
-  FindInventoryQueryVariables,
-  StockPerWarehouseSortBy,
-} from '@graphql/generated';
-import { InventoryItem } from '@lib/types/inventory';
+  type InventoryItem,
+  type InventoryQueryVariables,
+  type SortField,
+} from '@lib/types/inventory';
 import type { SortDirection } from '@lib/types/sort';
 import { Package, Plus, ClockArrowUp, ClockArrowDown } from 'lucide-react';
 import EmptyState from '@molecules/shared/EmptyState';
@@ -26,15 +26,12 @@ import TablePagination from '@molecules/shared/TablePagination';
 import SortableHeader from '@atoms/shared/SortableHeader';
 
 type InventoryTableProps = {
-  variables: FindInventoryQueryVariables;
+  variables: InventoryQueryVariables;
   className?: string;
   inventory: InventoryItem[];
   onCreateStock?: () => void;
-  onSortChange?: (
-    field: keyof StockPerWarehouseSortBy,
-    direction: SortDirection,
-  ) => void;
-  sortField?: keyof StockPerWarehouseSortBy | null;
+  onSortChange?: (field: SortField, direction: SortDirection) => void;
+  sortField?: SortField | null;
   sortDirection?: SortDirection;
 };
 
@@ -54,7 +51,7 @@ export default function InventoryTable({
   const router = useRouter();
   const locale = useLocale();
 
-  const handleSort = (field: keyof StockPerWarehouseSortBy) => {
+  const handleSort = (field: SortField) => {
     let newDirection: SortDirection = 'ASC';
 
     if (sortField === field) {
@@ -109,9 +106,10 @@ export default function InventoryTable({
                   currentItems.length > 0
                 }
                 onCheckedChange={handleSelectAll}
+                aria-label={t('selectAllRows')}
               />
             </TableHead>
-            <SortableHeader<keyof StockPerWarehouseSortBy>
+            <SortableHeader<SortField>
               sortKey="variantFirstAttribute"
               currentSortBy={sortField}
               currentSortOrder={sortDirection}
@@ -119,7 +117,7 @@ export default function InventoryTable({
             >
               {t('productTableHead')}
             </SortableHeader>
-            <SortableHeader<keyof StockPerWarehouseSortBy>
+            <SortableHeader<SortField>
               sortKey="sku"
               currentSortBy={sortField}
               currentSortOrder={sortDirection}
@@ -127,7 +125,7 @@ export default function InventoryTable({
             >
               {t('skuTableHead')}
             </SortableHeader>
-            <SortableHeader<keyof StockPerWarehouseSortBy>
+            <SortableHeader<SortField>
               sortKey="available"
               currentSortBy={sortField}
               currentSortOrder={sortDirection}
@@ -135,7 +133,7 @@ export default function InventoryTable({
             >
               {t('availableTableHead')}
             </SortableHeader>
-            <SortableHeader<keyof StockPerWarehouseSortBy>
+            <SortableHeader<SortField>
               sortKey="reserved"
               currentSortBy={sortField}
               currentSortOrder={sortDirection}
@@ -143,7 +141,7 @@ export default function InventoryTable({
             >
               {t('reservedTableHead')}
             </SortableHeader>
-            <SortableHeader<keyof StockPerWarehouseSortBy>
+            <SortableHeader<SortField>
               sortKey="replenishmentDate"
               currentSortBy={sortField}
               currentSortOrder={sortDirection}
@@ -176,6 +174,7 @@ export default function InventoryTable({
                   onCheckedChange={(checked) =>
                     handleSelectRow(item.id, checked as boolean)
                   }
+                  aria-label={t('selectRow')}
                 />
               </TableCell>
               <TableCell>

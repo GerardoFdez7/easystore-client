@@ -1,7 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import MainConstruction from '@organisms/construction/MainConstruction';
+import { withCountdown } from '../../templates/mocks/withCountdown';
 
 const meta: Meta<typeof MainConstruction> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByText('Lightning Fast'),
+    ).toBeInTheDocument();
+  },
   title: 'Organisms/Construction/MainConstruction',
   parameters: {
     layout: 'centered',
@@ -10,6 +18,7 @@ const meta: Meta<typeof MainConstruction> = {
     },
   },
   component: MainConstruction,
+  decorators: [withCountdown],
 };
 
 export default meta;

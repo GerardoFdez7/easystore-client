@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useRouter } from '@i18n/navigation';
 
@@ -10,6 +11,7 @@ type LogoProps = {
 
 const Logo = ({ redirectTo, className }: LogoProps) => {
   const router = useRouter();
+  const t = useTranslations('Shared');
 
   const handleClick = () => {
     // Always scroll to top first
@@ -25,27 +27,25 @@ const Logo = ({ redirectTo, className }: LogoProps) => {
   };
 
   return (
-    <div
+    <button
+      type="button"
       className={`flex items-center ${redirectTo ? 'cursor-pointer' : ''} ${className || ''}`}
-      onClick={redirectTo ? handleClick : undefined}
-      role={redirectTo ? 'button' : undefined}
-      aria-label={
-        redirectTo ? 'Navigate to home or scroll to top' : 'EasyStore Logo'
-      }
+      onClick={handleClick}
+      aria-label={t('logoLabel')}
     >
       <Image
-        src={'/logo.webp'}
-        alt="EasyStore Logo"
+        src={'/logo.svg'}
+        alt={t('logoAlt')}
         width={60}
         height={64}
-        className={`max-[580px]:h-[10vw] max-[580px]:w-[10vw] ${className?.includes('text-') ? 'h-auto w-auto' : ''}`}
+        className={`max-[580px]:size-logo-icon ${className?.includes('text-') ? 'h-auto w-auto' : ''}`}
       />
       <span
-        className={`text-title font-extrabold max-[580px]:text-[6vw] ${className?.includes('text-') ? className.split(' ').find((c) => c.startsWith('text-')) || 'text-[40px]' : 'text-[40px]'}`}
+        className={`text-title max-[580px]:text-logo-sm font-extrabold ${className?.includes('text-') ? className.split(' ').find((c) => c.startsWith('text-')) || 'text-logo' : 'text-logo'}`}
       >
         EasyStore
       </span>
-    </div>
+    </button>
   );
 };
 

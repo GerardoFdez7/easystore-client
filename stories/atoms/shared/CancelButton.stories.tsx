@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import CancelButton from '@atoms/shared/CancelButton';
 
 const meta: Meta<typeof CancelButton> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Cancel' }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/CancelButton',
   component: CancelButton,
   parameters: {

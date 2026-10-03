@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="544" viewBox="14 17.9 94.9 100.8" preserveAspectRatio="xMidYMid meet" role="img" aria-label="EasyStore alternative cart logo">
+  <g fill="none" stroke="#9D3FE0" stroke-linecap="round" stroke-linejoin="round">
+    <!-- A compact upper cart with its basket continuously braced into a wide chassis. -->
+    <path class="logo-cart" style="--logo-dash-length: 210" stroke-width="6" d="M22 32h12v10h62l-6 35H38l5 9h45" />
+    <!-- Ring wheels preserve the open centers on a transparent canvas. -->
+    <circle class="logo-wheel" style="--logo-dash-length: 51" cx="51" cy="103" r="8" stroke-width="5" />
+    <circle class="logo-wheel" style="--logo-dash-length: 51" cx="80" cy="103" r="8" stroke-width="5" />
+  </g>
+</svg>

@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import StockHeader from '@molecules/inventory/stock-detail/StockHeader';
 import {
   mockStockHeaderData,
@@ -69,10 +70,24 @@ type Story = StoryObj<typeof StockHeader>;
 export const Default: Story = {
   args: {},
   render: (args) => (
-    <div className="w-[800px]">
+    <div className="w-200">
       <StockHeader {...args} />
     </div>
   ),
+  play: async ({ canvas }) => {
+    const headings = canvas.getAllByRole('heading');
+    await storybookExpect(headings[0]).toHaveTextContent('SKU: [WBH-001-BLK]');
+    await storybookExpect(headings[1]).toHaveTextContent(
+      'Warehouse: Main Warehouse',
+    );
+    await storybookExpect(canvas.getByText('Color: Black')).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByText('Connectivity: Bluetooth 5.0'),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByText('Wireless Bluetooth Headphones'),
+    ).toBeInTheDocument();
+  },
 };
 
 export const Minimal: Story = {
@@ -80,10 +95,17 @@ export const Minimal: Story = {
     ...mockStockHeaderMinimal,
   },
   render: (args) => (
-    <div className="w-[800px]">
+    <div className="w-200">
       <StockHeader {...args} />
     </div>
   ),
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getAllByRole('heading')[0]).toHaveTextContent(
+      'SKU: [USB-2M]',
+    );
+    await storybookExpect(canvas.getByText('USB Cable')).toBeInTheDocument();
+    await storybookExpect(canvas.queryByText(/Color:/)).toBeNull();
+  },
 };
 
 export const NoAttributes: Story = {
@@ -91,30 +113,51 @@ export const NoAttributes: Story = {
     ...mockStockHeaderNoAttributes,
   },
   render: (args) => (
-    <div className="w-[800px]">
+    <div className="w-200">
       <StockHeader {...args} />
     </div>
   ),
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getAllByRole('heading')[0]).toHaveTextContent(
+      'SKU: [LS-ADJ-001]',
+    );
+    await storybookExpect(canvas.getByText('Laptop Stand')).toBeInTheDocument();
+  },
 };
 
 export const NoWarehouse: Story = {
   args: {
     ...mockStockHeaderNoWarehouse,
+    warehouseName: undefined,
   },
   render: (args) => (
-    <div className="w-[800px]">
+    <div className="w-200">
       <StockHeader {...args} />
     </div>
   ),
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getAllByRole('heading')).toHaveLength(1);
+    await storybookExpect(canvas.queryByText(/Warehouse:/)).toBeNull();
+    await storybookExpect(
+      canvas.getByText('Model: iPhone 15'),
+    ).toBeInTheDocument();
+  },
 };
 
 export const OnlySKU: Story = {
   args: {
     ...mockStockHeaderOnlySKU,
+    productName: undefined,
   },
   render: (args) => (
-    <div className="w-[800px]">
+    <div className="w-200">
       <StockHeader {...args} />
     </div>
   ),
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getAllByRole('heading')[0]).toHaveTextContent(
+      'SKU: [TEST-001]',
+    );
+    await storybookExpect(canvas.queryByText(/Product:/)).toBeNull();
+  },
 };

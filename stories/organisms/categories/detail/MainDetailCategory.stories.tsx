@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import MainDetailCategory from '@organisms/categories/detail/MainDetailCategory';
 
 const meta: Meta<typeof MainDetailCategory> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Name' }),
+    ).toBeInTheDocument();
+  },
   title: 'Organisms/Categories/Detail/MainDetailCategory',
   component: MainDetailCategory,
   parameters: {

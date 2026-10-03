@@ -1,8 +1,24 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import {
+  expect as storybookExpect,
+  fn,
+  userEvent,
+  waitFor,
+  within,
+} from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import CategoryControls from '@molecules/categories/CategoryControls';
 import { SortBy, SortOrder } from '@graphql/generated';
 
 const meta: Meta<typeof CategoryControls> = {
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('region', { name: 'Category controls' }),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: args.searchPlaceholder }),
+    ).toBeInTheDocument();
+  },
   title: 'Molecules/Categories/CategoryControls',
   component: CategoryControls,
   parameters: {
@@ -64,16 +80,16 @@ const meta: Meta<typeof CategoryControls> = {
   },
   args: {
     searchTerm: '',
-    onSearchChange: () => {},
-    updateSortBy: () => {},
-    updateSortOrder: () => {},
+    onSearchChange: fn(),
+    updateSortBy: fn(),
+    updateSortOrder: fn(),
     searchPlaceholder: 'Search categories...',
     addButtonHref: '/categories/new',
     addButtonText: 'Add Category',
     showAddButton: true,
     sortBy: SortBy.Name,
     sortOrder: SortOrder.Asc,
-    onTreeToggle: () => {},
+    onTreeToggle: fn(),
     treeButtonText: 'Category Tree',
   },
   decorators: [(Story) => <Story />],
@@ -88,6 +104,23 @@ export const Default: Story = {
       <CategoryControls {...args} />
     </div>
   ),
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('link', { name: 'Add Category' }),
+    ).toHaveAttribute('href', '/categories/new');
+    await userEvent.type(
+      canvas.getByRole('textbox', { name: 'Search categories...' }),
+      'Phones',
+    );
+    await waitFor(() =>
+      storybookExpect(args.onSearchChange).toHaveBeenCalledWith('Phones'),
+    );
+    await userEvent.click(
+      canvas.getByRole('button', { name: 'Toggle category tree' }),
+    );
+    await storybookExpect(args.onTreeToggle).toHaveBeenCalledTimes(1);
+  },
 };
 
 export const WithSearchTerm: Story = {
@@ -98,6 +131,12 @@ export const WithSearchTerm: Story = {
   ),
   args: {
     searchTerm: 'Electronics',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Search categories...' }),
+    ).toHaveValue('Electronics');
   },
 };
 
@@ -110,6 +149,12 @@ export const WithoutAddButton: Story = {
   args: {
     showAddButton: false,
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.queryByRole('link', { name: 'Add Category' }),
+    ).toBeNull();
+  },
 };
 
 export const CustomPlaceholder: Story = {
@@ -120,6 +165,12 @@ export const CustomPlaceholder: Story = {
   ),
   args: {
     searchPlaceholder: 'Find your category...',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Find your category...' }),
+    ).toHaveAttribute('placeholder', 'Find your category...');
   },
 };
 

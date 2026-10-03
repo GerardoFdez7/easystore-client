@@ -1,37 +1,26 @@
-import React from 'react';
-import type { Meta, StoryObj } from '@storybook/nextjs';
-import { useForm } from 'react-hook-form';
-import { FormProvider } from 'react-hook-form';
-import { Form } from '@shadcn/ui/form';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import MainVariant from '@organisms/products/variant/MainVariant';
+import { ProductCreationProvider } from '@contexts/ProductCreationContext';
+import { ProductsProvider } from '@contexts/ProductsContext';
 
 const MockMainVariant = () => {
-  const form = useForm();
-
-  const handleSubmit = (data: unknown) => {
-    console.log('Form submitted:', data);
-  };
-
   return (
-    <main>
-      <FormProvider {...form}>
-        <Form {...form}>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              void form.handleSubmit(handleSubmit)(e);
-            }}
-            className="space-y-6"
-          >
-            <MainVariant productId="123" isNew={true} />
-          </form>
-        </Form>
-      </FormProvider>
-    </main>
+    <ProductsProvider>
+      <ProductCreationProvider>
+        <MainVariant productId="123" isNew={true} />
+      </ProductCreationProvider>
+    </ProductsProvider>
   );
 };
 
 const meta: Meta<typeof MainVariant> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Add' }),
+    ).toBeInTheDocument();
+  },
   title: 'Organisms/Products/Variant/MainVariant',
   component: MockMainVariant,
   parameters: {

@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, fn, userEvent } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import SingleImagePreview from '@atoms/shared/SingleImagePreview';
 
 const createMockFile = (name: string, size: number = 1024 * 1024): File => {
@@ -24,6 +25,9 @@ const meta: Meta<typeof SingleImagePreview> = {
   },
   tags: ['autodocs'],
   decorators: [(Story) => <Story />],
+  args: {
+    onRemove: fn(),
+  },
   argTypes: {
     file: {
       control: false,
@@ -34,7 +38,7 @@ const meta: Meta<typeof SingleImagePreview> = {
       description: 'URL of the image to display',
     },
     onRemove: {
-      action: 'remove clicked',
+      control: false,
       description: 'Callback function when remove button is clicked',
     },
     isProcessing: {
@@ -64,6 +68,13 @@ export const Default: Story = {
     isProcessing: false,
     viewOnly: false,
   },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('img', { name: 'Preview' }),
+    ).toBeVisible();
+    // Without an onRemove handler there is nothing to remove.
+    await storybookExpect(canvas.queryByRole('button')).not.toBeInTheDocument();
+  },
 };
 
 // Editing state
@@ -74,6 +85,13 @@ export const Editing: Story = {
     isProcessing: false,
     viewOnly: false,
   },
+  play: async ({ canvas, args }) => {
+    await storybookExpect(
+      canvas.getByRole('img', { name: 'Preview' }),
+    ).toBeVisible();
+    await userEvent.click(canvas.getByRole('button', { name: 'Remove image' }));
+    await storybookExpect(args.onRemove).toHaveBeenCalledTimes(1);
+  },
 };
 
 // Uploading state
@@ -82,5 +100,13 @@ export const Uploading: Story = {
     imageUrl: '/phone.webp',
     isProcessing: true,
     viewOnly: false,
+  },
+  play: async ({ canvas, args }) => {
+    await storybookExpect(
+      canvas.getByRole('img', { name: 'Preview' }),
+    ).toBeVisible();
+    const remove = canvas.getByRole('button', { name: 'Remove image' });
+    await storybookExpect(remove).toBeDisabled();
+    await storybookExpect(args.onRemove).not.toHaveBeenCalled();
   },
 };

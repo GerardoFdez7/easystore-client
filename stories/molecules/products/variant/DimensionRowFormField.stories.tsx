@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, userEvent } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import DimensionRowFormField from '@molecules/products/variant/DimensionRowFormField';
@@ -30,7 +31,7 @@ function DefaultStory() {
 
   return (
     <FormProvider {...methods}>
-      <div className="w-[720px]">
+      <div className="w-180">
         <DimensionRowFormField />
       </div>
     </FormProvider>
@@ -50,7 +51,7 @@ function WithValuesStory() {
 
   return (
     <FormProvider {...methods}>
-      <div className="w-[720px]">
+      <div className="w-180">
         <DimensionRowFormField />
       </div>
     </FormProvider>
@@ -59,8 +60,33 @@ function WithValuesStory() {
 
 export const Default: Story = {
   render: () => <DefaultStory />,
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Height' }),
+    ).toHaveValue('');
+    await storybookExpect(
+      canvas.getByRole('spinbutton', { name: 'Width' }),
+    ).toHaveValue(null);
+    await storybookExpect(
+      canvas.getByRole('spinbutton', { name: 'Length' }),
+    ).toHaveValue(null);
+    const height = canvas.getByRole('textbox', { name: 'Height' });
+    await userEvent.type(height, '12.5');
+    await storybookExpect(height).toHaveValue('12.5');
+  },
 };
 
 export const WithValues: Story = {
   render: () => <WithValuesStory />,
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Height' }),
+    ).toHaveValue('10.5');
+    await storybookExpect(
+      canvas.getByRole('spinbutton', { name: 'Width' }),
+    ).toHaveValue(8.2);
+    await storybookExpect(
+      canvas.getByRole('spinbutton', { name: 'Length' }),
+    ).toHaveValue(15);
+  },
 };

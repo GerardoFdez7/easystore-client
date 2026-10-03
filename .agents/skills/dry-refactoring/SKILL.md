@@ -1,0 +1,87 @@
+---
+name: dry-refactoring
+description: >-
+  Eliminate meaningful copy-paste duplication reported jscpd gate using
+  semantics-preserving extraction and verification. Use when npm run duplication
+  fails, when adding repeated components/hooks code, or when reviewing whether
+  similar interfaces, functions, classes, or tests should share an
+  abstraction.
+---
+
+# DRY refactoring
+
+Eliminate meaningful copy-paste duplication reported by the frontend jscpd gate
+without coupling unrelated component layers or weakening the repository's
+duplication policy.
+
+## Prerequisites
+
+In Coder mode, first run the repository-configured jscpd gate. Use the supplied gate output and inspect the reported clone
+locations instead.
+
+```bash
+npm run duplication
+```
+
+For focused diagnosis, preserve `.jscpd.json` settings and add the AI reporter:
+
+```bash
+npx jscpd --config .jscpd.json --reporters console,ai <path>
+```
+
+## Workflow
+
+Coder perform the full workflow below, evaluates whether the
+reported duplication is semantic, whether the extraction preserves ownership, and
+whether the supplied verification covers all call sites.
+
+1. Run `npm run duplication` and locate both sides of each clone.
+2. Read the complete containing functions/classes and their tests.
+3. Decide whether the code has the same semantics, owner, invariants, and reasons to
+   change. Similar syntax across unrelated atomic layers, routes, or feature
+   modules is not sufficient.
+4. Extract the smallest clear function, type, value object, test builder, module, or
+   stable base behavior.
+5. Update every call site and add/adjust tests that preserve behavior.
+6. Run focused tests and then the single repository gate, `npm run verify`.
+7. Repeat with the highest-impact meaningful clone.
+
+## Refactoring Strategies
+
+**Extract function** — when the duplicate is a block of logic:
+
+```ts
+// Before: same block in two places
+// After: shared function called from both places
+```
+
+**Extract module/utility** — when the duplicate spans multiple files in different domains:
+
+```ts
+// Move shared logic to a shared utility file and import it
+```
+
+**Extract constant or config** — when the duplicate is repeated data or configuration.
+
+**Composition/shared utility** — when behavior and invariants are genuinely
+shared across frontend features or component layers.
+
+**Template/base class** — only when the duplicate represents a stable behavioral
+contract, not merely a similar class shape.
+
+Always ensure:
+
+- All call sites are updated, not just the two reported by jscpd
+- Tests still pass after refactoring
+- The extracted abstraction has a clear, descriptive name
+- No feature or component layer now imports another layer's internal implementation
+- No jscpd threshold or ignore was changed merely to silence the finding
+
+## Tips
+
+- Start with clones that have the highest line count — they have the most impact
+- A clone between test files may indicate a missing test helper
+- Clones across unrelated modules may signal a missing shared utility
+- A cross-format clone (same logic in a `.js` and a `.ts` file, found with `--cross-formats`) often means code was ported without deleting the original — consolidate into one implementation (usually the TypeScript one) and update imports, rather than extracting a third shared copy
+- Prefer focused reporters for diagnosis, but validate with the checked-in config
+- Some repeated orchestration is preferable to a misleading cross-domain abstraction

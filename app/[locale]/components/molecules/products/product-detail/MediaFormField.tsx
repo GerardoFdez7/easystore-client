@@ -9,7 +9,7 @@ import {
   FormMessage,
   FormLabel,
 } from '@shadcn/ui/form';
-import MediaUploader from '@organisms/shared/MediaUploader';
+import MediaUploader from '@molecules/shared/MediaUploader';
 import type { ProcessedData } from '@lib/types/media';
 import { useTranslations } from 'next-intl';
 

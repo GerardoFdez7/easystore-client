@@ -3,10 +3,10 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import { Unlink, Dices, Plus } from 'lucide-react';
+import { Dices, Plus } from 'lucide-react';
 import { Button } from '@shadcn/ui/button';
 import { Label } from '@shadcn/ui/label';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@shadcn/ui/tooltip';
+import CategoryRelationRemoveButton from '@atoms/categories/detail/CategoryRelationRemoveButton';
 import EmptyState from '@molecules/shared/EmptyState';
 import AddSubcategoriesPicker from '@molecules/categories/detail/AddSubcategory';
 import AddCategoryDialog, {
@@ -281,24 +281,29 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
               (newCat) => newCat.id === c.id,
             );
             return (
-              <article
+              <div
                 key={c.id}
                 className={cn(
-                  'border-border/30 grid grid-cols-[48px_1fr_auto] items-center gap-3 border-b px-4 py-3 last:border-none',
-                  'sm:grid-cols-[48px_1fr_auto_auto_48px]',
+                  'border-border/30 grid-cols-category-row grid items-center gap-3 border-b px-4 py-3 last:border-none',
+                  'sm:grid-cols-category-row-lg',
                   'hover:bg-muted/50 transition-colors duration-200',
                   'focus-within:bg-muted/50 focus-within:ring-ring/20 focus-within:ring-2',
                   isNewCategory && 'bg-muted/50', // Visual indicator for new categories
                 )}
                 role="listitem"
-                aria-label={`Subcategory: ${c.name}${isNewCategory ? ' (new)' : ''}`}
+                aria-label={t(
+                  isNewCategory ? 'subcategoryNewLabel' : 'subcategoryLabel',
+                  {
+                    name: c.name,
+                  },
+                )}
               >
                 <div className="flex items-center justify-center">
                   <div className="border-border/20 bg-muted/30 relative h-10 w-10 overflow-hidden rounded-lg border">
                     {c.cover ? (
                       <Image
                         src={c.cover}
-                        alt={`${c.name} category cover`}
+                        alt={t('categoryCoverAlt', { name: c.name })}
                         fill
                         className="object-cover transition-transform duration-200 hover:scale-105"
                         sizes="40px"
@@ -307,7 +312,7 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
                       <div
                         className="bg-muted flex h-full w-full items-center justify-center"
                         role="img"
-                        aria-label={`Default icon for ${c.name}`}
+                        aria-label={t('defaultIconFor', { name: c.name })}
                       >
                         <Dices
                           className="text-muted-foreground h-4 w-4"
@@ -336,48 +341,22 @@ const CategoryPicker = React.memo<Props>(function CategoryPicker({
                   )}
                 </div>
 
-                <div className="hidden items-center justify-end sm:flex">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleRemove(c.id)}
-                        disabled={disabled}
-                        className="hover:bg-destructive/10 hover:text-destructive h-8 w-8 rounded-full p-0 transition-colors"
-                        aria-label={`Remove ${c.name} subcategory`}
-                        aria-describedby={`category-name-${c.name}`}
-                      >
-                        <Unlink className="h-4 w-4" aria-hidden="true" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{t('removeRelation')}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
+                <CategoryRelationRemoveButton
+                  categoryName={c.name}
+                  disabled={disabled}
+                  containerClassName="hidden items-center justify-end sm:flex"
+                  tooltip={<p>{t('removeRelation')}</p>}
+                  onRemove={() => handleRemove(c.id)}
+                />
 
-                <div className="col-span-3 flex items-center justify-end sm:hidden">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleRemove(c.id)}
-                        disabled={disabled}
-                        className="hover:bg-destructive/10 hover:text-destructive h-8 w-8 rounded-full p-0 transition-colors"
-                        aria-label={`Remove ${c.name} subcategory`}
-                        aria-describedby={`category-name-${c.name}`}
-                      >
-                        <Unlink className="h-4 w-4" aria-hidden="true" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>{t('removeRelation')}</TooltipContent>
-                  </Tooltip>
-                </div>
-              </article>
+                <CategoryRelationRemoveButton
+                  categoryName={c.name}
+                  disabled={disabled}
+                  containerClassName="col-span-3 flex items-center justify-end sm:hidden"
+                  tooltip={t('removeRelation')}
+                  onRemove={() => handleRemove(c.id)}
+                />
+              </div>
             );
           })}
         </div>

@@ -140,7 +140,7 @@ export const ContactFields: React.FC = () => {
                   placeholder={t('selectCountry')}
                   searchPlaceholder={t('searchCountry')}
                   emptyMessage={t('noCountriesFound')}
-                  className="border-primary dark:border-primary [&>svg:hidden] w-full font-light"
+                  className="border-primary dark:border-primary w-full font-light [&>svg]:hidden"
                   width="100%"
                 />
               </FormControl>
@@ -159,7 +159,10 @@ export const ContactFields: React.FC = () => {
               <FormLabel>{t('annualRevenue')}</FormLabel>
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="border-primary w-full font-light">
+                  <SelectTrigger
+                    className="border-primary w-full font-light"
+                    aria-label={t('annualRevenue')}
+                  >
                     <SelectValue placeholder={t('selectAnnualRevenue')} />
                   </SelectTrigger>
                   <SelectContent>

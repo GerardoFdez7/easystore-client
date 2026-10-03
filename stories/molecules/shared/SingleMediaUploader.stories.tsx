@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import SingleMediaUploader from '@molecules/shared/SingleMediaUploader';
 
 const meta: Meta<typeof SingleMediaUploader> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Choose Files' }),
+    ).toBeInTheDocument();
+  },
   title: 'Molecules/Shared/SingleMediaUploader',
   component: SingleMediaUploader,
   tags: ['autodocs'],
@@ -122,14 +129,11 @@ export const WithCustomDoneButton: Story = {
       <button
         onClick={onDone}
         disabled={isProcessing}
-        style={{
-          padding: '8px 16px',
-          backgroundColor: isProcessing ? '#ccc' : '#007bff',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: isProcessing ? 'not-allowed' : 'pointer',
-        }}
+        className={
+          isProcessing
+            ? 'bg-muted-foreground cursor-not-allowed rounded border-none px-4 py-2 text-white'
+            : 'bg-primary cursor-pointer rounded border-none px-4 py-2 text-white'
+        }
       >
         {isProcessing ? 'Uploading...' : 'Custom Upload'}
       </button>

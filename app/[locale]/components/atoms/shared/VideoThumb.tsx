@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 interface VideoThumbProps {
   selected: boolean;
@@ -17,6 +18,7 @@ const VideoThumb = ({
   videoSrc,
   altText,
 }: VideoThumbProps) => {
+  const t = useTranslations('Media');
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [thumbnailSrc, setThumbnailSrc] = useState<string>('');
@@ -95,9 +97,11 @@ const VideoThumb = ({
   }, [videoSrc]);
 
   return (
-    <div
-      className={`min-w-20 flex-[0_0_15%] cursor-pointer overflow-hidden rounded-lg sm:min-w-35 sm:flex-[0_0_23%] ${
-        selected ? 'border-title border-opacity-75 border' : ''
+    <button
+      type="button"
+      aria-label={altText}
+      className={`basis-thumb sm:basis-thumb-sm min-w-20 cursor-pointer overflow-hidden rounded-lg border-0 bg-transparent p-0 text-left sm:min-w-35 ${
+        selected ? 'border-title/75 border' : ''
       }`}
       onClick={onClick}
     >
@@ -127,16 +131,19 @@ const VideoThumb = ({
             className="object-cover"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gray-200">
+          <div className="bg-hover flex h-full w-full items-center justify-center">
             {loading ? (
               <div className="flex flex-col items-center">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent"></div>
-                <span className="mt-1 text-xs text-gray-500">Loading...</span>
+                <div className="border-ring h-4 w-4 animate-spin rounded-full border-2 border-t-transparent"></div>
+                <span className="text-muted-foreground mt-1 text-xs">
+                  {t('thumbnailLoading')}
+                </span>
               </div>
             ) : error ? (
               <div className="flex flex-col items-center">
                 <svg
-                  className="h-6 w-6 text-red-400"
+                  aria-hidden="true"
+                  className="text-chart-1 h-6 w-6"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -146,11 +153,14 @@ const VideoThumb = ({
                     clipRule="evenodd"
                   />
                 </svg>
-                <span className="mt-1 text-xs text-red-500">Error</span>
+                <span className="text-destructive mt-1 text-xs">
+                  {t('thumbnailError')}
+                </span>
               </div>
             ) : (
               <svg
-                className="h-6 w-6 text-gray-400"
+                aria-hidden="true"
+                className="text-ring h-6 w-6"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -164,6 +174,7 @@ const VideoThumb = ({
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="rounded-full bg-black/50 p-1">
             <svg
+              aria-hidden="true"
               className="h-4 w-4 text-white"
               fill="currentColor"
               viewBox="0 0 20 20"
@@ -180,7 +191,7 @@ const VideoThumb = ({
           }`}
         />
       </div>
-    </div>
+    </button>
   );
 };
 

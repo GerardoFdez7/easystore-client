@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useForm, FormProvider } from 'react-hook-form';
 import VariantsFormField from '@molecules/products/product-detail/VariantsFormField';
 import { ProductCreationProvider } from '@lib/contexts/ProductCreationContext';
@@ -74,6 +75,16 @@ export const Default: Story = {
       },
     },
   },
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getByText('Variants')).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByRole('heading', { name: 'No variants yet' }),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Create First Variant' }),
+    ).toBeEnabled();
+    await storybookExpect(canvas.queryByRole('table')).toBeNull();
+  },
 };
 
 export const WithSingleVariant: Story = {
@@ -97,6 +108,12 @@ export const WithSingleVariant: Story = {
         story: 'Field with a single product variant.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getByRole('table')).toBeInTheDocument();
+    await storybookExpect(canvas.getAllByRole('row')).toHaveLength(2);
+    await storybookExpect(canvas.getByText('WH-BLK-001')).toBeInTheDocument();
+    await storybookExpect(canvas.getByText('Color: Black')).toBeInTheDocument();
   },
 };
 
@@ -135,5 +152,11 @@ export const WithMultipleVariants: Story = {
           'Field with multiple product variants demonstrating different colors.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(canvas.getAllByRole('row')).toHaveLength(4);
+    for (const sku of ['WH-BLK-001', 'WH-WHT-001', 'WH-SLV-001']) {
+      await storybookExpect(canvas.getByText(sku)).toBeInTheDocument();
+    }
   },
 };

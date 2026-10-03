@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,36 +16,37 @@ import { useState } from 'react';
 
 export default function ArchivedProduct() {
   const [isArchived, setIsArchived] = useState(false);
+  const t = useTranslations('Products');
 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
           variant="outline"
-          className="border border-black bg-[#ffffff] hover:bg-[#000000] hover:text-[#ffffff]"
+          className="border-title bg-card hover:bg-title hover:text-card border"
         >
           <Archive className="mr-2 h-4 w-4" />
-          {isArchived ? 'Unarchive product' : 'Archive product'}
+          {isArchived ? t('unarchiveProduct') : t('archiveProduct')}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {isArchived ? '¿Unarchive product?' : '¿Archive product?'}
+            {isArchived ? t('unarchiveProductTitle') : t('archiveProductTitle')}
           </AlertDialogTitle>
           <AlertDialogDescription>
             {isArchived
-              ? 'This action will make the product available again in the store.'
-              : 'This action will hide the product from the store but keep all its information.'}
+              ? t('unarchiveProductDescription')
+              : t('archiveProductDescription')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => setIsArchived(!isArchived)}
             className="bg-title hover:bg-title/80 text-white dark:text-black"
           >
-            {isArchived ? 'Unarchive' : 'Archive'}
+            {isArchived ? t('unarchive') : t('archive')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

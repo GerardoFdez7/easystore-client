@@ -74,7 +74,8 @@ export default function ArchivedProduct({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <div
+        <button
+          type="button"
           className="flex w-full cursor-pointer items-center gap-2 px-2 py-1.5 text-sm"
           onClick={(e) => e.stopPropagation()}
         >
@@ -91,7 +92,7 @@ export default function ArchivedProduct({
               </span>
             </>
           )}
-        </div>
+        </button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -114,7 +115,7 @@ export default function ArchivedProduct({
           <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleArchive}
-            className="bg-title border border-black hover:bg-black/85 dark:hover:bg-gray-300"
+            className="bg-title dark:hover:bg-hover border border-black hover:bg-black/85"
             disabled={loading}
           >
             {loading

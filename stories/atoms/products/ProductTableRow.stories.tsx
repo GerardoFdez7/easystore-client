@@ -1,5 +1,6 @@
+import { expect as storybookExpect, fn, userEvent } from 'storybook/test';
 import { ProductTableRow } from '@atoms/products/ProductTableRow';
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { MediaTypeEnum, TypeEnum } from '@graphql/generated';
 import { Table, TableBody } from '@shadcn/ui/table';
 
@@ -18,9 +19,10 @@ const meta: Meta<typeof ProductTableRow> = {
       </Table>
     ),
   ],
+  args: { onSelect: fn() },
   argTypes: {
     isSelected: { control: 'boolean' },
-    onSelect: { action: 'selected' },
+    onSelect: { control: false },
     product: { control: 'object' },
   },
 };
@@ -54,7 +56,14 @@ export const Default: Story = {
   args: {
     product: mockProduct,
     isSelected: false,
-    onSelect: (checked: boolean) => console.log('Selected:', checked),
+  },
+  play: async ({ canvas, args }) => {
+    await storybookExpect(canvas.getByRole('table')).toBeInTheDocument();
+    await storybookExpect(canvas.getByText('Phone')).toBeVisible();
+    const checkbox = canvas.getByRole('checkbox', { name: 'Select Phone' });
+    await storybookExpect(checkbox).not.toBeChecked();
+    await userEvent.click(checkbox);
+    await storybookExpect(args.onSelect).toHaveBeenCalledWith(true);
   },
 };
 
@@ -62,7 +71,12 @@ export const Selected: Story = {
   args: {
     product: mockProduct,
     isSelected: true,
-    onSelect: (checked: boolean) => console.log('Selected:', checked),
+  },
+  play: async ({ canvas, args }) => {
+    const checkbox = canvas.getByRole('checkbox', { name: 'Select Phone' });
+    await storybookExpect(checkbox).toBeChecked();
+    await userEvent.click(checkbox);
+    await storybookExpect(args.onSelect).toHaveBeenCalledWith(false);
   },
 };
 
@@ -75,6 +89,17 @@ export const LongName: Story = {
       updatedAt: '2024-01-15T12:30:00Z',
     },
     isSelected: false,
-    onSelect: (checked: boolean) => console.log('Selected:', checked),
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByText(
+        'Super Long Product Name That Might Wrap to Multiple Lines',
+      ),
+    ).toBeVisible();
+    await storybookExpect(
+      canvas.getByRole('checkbox', {
+        name: 'Select Super Long Product Name That Might Wrap to Multiple Lines',
+      }),
+    ).not.toBeChecked();
   },
 };

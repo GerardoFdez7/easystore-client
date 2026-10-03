@@ -1,11 +1,15 @@
-import { FindCategoriesTreeDocument } from '@graphql/generated';
+import {
+  FindCategoriesTreeDocument,
+  SortBy,
+  SortOrder,
+} from '@graphql/generated';
 
 // Mock data for successful breadcrumb navigation
 export const mockCategoryBreadcrumbSuccess = [
   {
     request: {
       query: FindCategoriesTreeDocument,
-      variables: {},
+      variables: { sortBy: SortBy.Name, sortOrder: SortOrder.Asc },
     },
     result: {
       data: {
@@ -156,7 +160,7 @@ export const mockCategoryBreadcrumbLoading = [
   {
     request: {
       query: FindCategoriesTreeDocument,
-      variables: {},
+      variables: { sortBy: SortBy.Name, sortOrder: SortOrder.Asc },
     },
     result: {
       loading: true,
@@ -170,7 +174,7 @@ export const mockCategoryBreadcrumbError = [
   {
     request: {
       query: FindCategoriesTreeDocument,
-      variables: {},
+      variables: { sortBy: SortBy.Name, sortOrder: SortOrder.Asc },
     },
     error: new Error('Failed to fetch categories'),
   },

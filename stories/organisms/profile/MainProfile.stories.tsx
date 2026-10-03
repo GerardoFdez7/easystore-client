@@ -1,9 +1,17 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { ProfileDraftProvider } from '@contexts/ProfileDraftContext';
 import MainProfile from '@organisms/profile/MainProfile';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
 import { FindTenantProfileDocument } from '@graphql/generated';
 
 const meta: Meta<typeof MainProfile> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Change password' }),
+    ).toBeInTheDocument();
+  },
   component: MainProfile,
   parameters: {
     layout: 'centered',
@@ -12,6 +20,13 @@ const meta: Meta<typeof MainProfile> = {
     },
   },
   title: 'Organisms/Profile/MainProfile',
+  decorators: [
+    (Story) => (
+      <ProfileDraftProvider>
+        <Story />
+      </ProfileDraftProvider>
+    ),
+  ],
 };
 
 export default meta;
@@ -23,7 +38,7 @@ export const Default: Story = {};
 export const Loading: Story = {
   decorators: [
     (Story) => (
-      <MockedProvider
+      <ApolloMswMocks
         mocks={[
           {
             request: {
@@ -34,7 +49,7 @@ export const Loading: Story = {
         ]}
       >
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
 };

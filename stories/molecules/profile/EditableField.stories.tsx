@@ -1,7 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { EditableField } from '@molecules/profile/EditableField';
 
 const meta: Meta<typeof EditableField> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('textbox')).toBeInTheDocument();
+  },
   component: EditableField,
   title: 'Molecules/Profile/EditableField',
   args: {

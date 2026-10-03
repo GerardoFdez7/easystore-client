@@ -1,8 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import MainProducts from '@organisms/products/MainProducts';
 import { ProductsProvider } from '@lib/contexts/ProductsContext';
 import { ProductCreationProvider } from '@lib/contexts/ProductCreationContext';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
 import {
   FindAllProductsDocument,
   ProductSortBy,
@@ -91,6 +92,12 @@ const mockProductsResponse = {
 };
 
 const meta: Meta<typeof MainProducts> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: /search/i }),
+    ).toBeInTheDocument();
+  },
   title: 'Organisms/Products/MainProducts',
   component: MainProducts,
   parameters: {
@@ -126,7 +133,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   decorators: [
     (Story) => (
-      <MockedProvider mocks={[mockProductsResponse]}>
+      <ApolloMswMocks mocks={[mockProductsResponse]}>
         <ProductsProvider
           initialVariables={{
             page: 1,
@@ -142,7 +149,7 @@ export const Default: Story = {
             <Story />
           </ProductCreationProvider>
         </ProductsProvider>
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   parameters: {
@@ -162,7 +169,7 @@ export const Default: Story = {
 export const ZeroProductsInDatabase: Story = {
   decorators: [
     (Story) => (
-      <MockedProvider mocks={[mockEmptyResponse]}>
+      <ApolloMswMocks mocks={[mockEmptyResponse]}>
         <ProductsProvider
           initialVariables={{
             page: 1,
@@ -178,7 +185,7 @@ export const ZeroProductsInDatabase: Story = {
             <Story />
           </ProductCreationProvider>
         </ProductsProvider>
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   parameters: {
@@ -198,7 +205,7 @@ export const ZeroProductsInDatabase: Story = {
 export const ZeroProductsWhenFiltering: Story = {
   decorators: [
     (Story) => (
-      <MockedProvider mocks={[mockEmptyFilterResponse]}>
+      <ApolloMswMocks mocks={[mockEmptyFilterResponse]}>
         <ProductsProvider
           initialVariables={{
             page: 1,
@@ -214,7 +221,7 @@ export const ZeroProductsWhenFiltering: Story = {
             <Story />
           </ProductCreationProvider>
         </ProductsProvider>
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   parameters: {

@@ -13,6 +13,7 @@ import {
   type UpdateMutation,
   type AddVariantToProductInput,
 } from '@graphql/generated';
+import { updateProductDetailCacheFromMutation } from '../productCacheUpdates';
 
 interface UseVariantManagementReturn {
   // CRUD operations
@@ -41,30 +42,13 @@ export function useVariantManagement(): UseVariantManagementReturn {
     useMutation(UpdateDocument, {
       errorPolicy: 'all',
       update: (cache, { data }, { variables }) => {
-        if (data?.updateProduct && variables?.id) {
-          const productId = variables.id;
-          const updatedProduct = data.updateProduct;
-
-          // Update FindProductByIdDocument cache (for individual product detail)
-          cache.updateQuery<FindProductByIdQuery>(
-            {
-              query: FindProductByIdDocument,
-              variables: { id: productId },
-            },
-            (existingData) => {
-              if (!existingData?.getProductById) {
-                return existingData;
-              }
-
-              return {
-                ...existingData,
-                getProductById: {
-                  ...existingData.getProductById,
-                  ...updatedProduct,
-                },
-              };
-            },
-          );
+        const update = updateProductDetailCacheFromMutation(
+          cache,
+          data,
+          variables,
+        );
+        if (update) {
+          const { productId, updatedProduct } = update;
 
           // Update FindAllProductsDocument cache (for products list)
           cache.updateQuery<FindAllProductsQuery>(

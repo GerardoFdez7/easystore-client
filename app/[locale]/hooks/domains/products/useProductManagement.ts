@@ -7,13 +7,12 @@ import { useTranslations } from 'next-intl';
 import {
   CreateProductDocument,
   UpdateDocument,
-  FindProductByIdDocument,
-  FindProductByIdQuery,
   type CreateProductMutation,
   type CreateProductMutationVariables,
   type UpdateMutation,
   type UpdateMutationVariables,
 } from '@graphql/generated';
+import { updateProductDetailCacheFromMutation } from './productCacheUpdates';
 
 interface UseProductManagementReturn {
   // CRUD operations
@@ -51,30 +50,13 @@ export function useProductManagement(): UseProductManagementReturn {
     useMutation(UpdateDocument, {
       errorPolicy: 'all',
       update: (cache, { data }, { variables }) => {
-        if (data?.updateProduct && variables?.id) {
-          const productId = variables.id;
-          const updatedProduct = data.updateProduct;
-
-          // Update FindProductByIdDocument cache (for individual product detail)
-          cache.updateQuery<FindProductByIdQuery>(
-            {
-              query: FindProductByIdDocument,
-              variables: { id: productId },
-            },
-            (existingData) => {
-              if (!existingData?.getProductById) {
-                return existingData;
-              }
-
-              return {
-                ...existingData,
-                getProductById: {
-                  ...existingData.getProductById,
-                  ...updatedProduct,
-                },
-              };
-            },
-          );
+        const update = updateProductDetailCacheFromMutation(
+          cache,
+          data,
+          variables,
+        );
+        if (update) {
+          const { productId, updatedProduct } = update;
 
           // Update the product in cache using cache.modify (works for all queries)
           cache.modify({

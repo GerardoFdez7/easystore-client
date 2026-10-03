@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import BackButton from '@atoms/shared/BackButton';
 
 const meta: Meta<typeof BackButton> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Back' }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/BackButton',
   component: BackButton,
   parameters: {
@@ -13,7 +20,7 @@ const meta: Meta<typeof BackButton> = {
   // Wrap in a relative box so the absolute button is visible
   decorators: [
     (Story) => (
-      <div className="relative h-40 w-80 rounded border border-gray-200 bg-gray-50">
+      <div className="border-border bg-accent relative h-40 w-80 rounded border">
         <Story />
       </div>
     ),

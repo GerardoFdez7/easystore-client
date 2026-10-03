@@ -1,10 +1,17 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import React from 'react';
 import ArrayItemBox from '@atoms/shared/ArrayItemBox';
 import { Input } from '@shadcn/ui/input';
 import { Label } from '@shadcn/ui/label';
 
 const meta: Meta<typeof ArrayItemBox> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Delete' }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/ArrayItemBox',
   component: ArrayItemBox,
   parameters: { layout: 'centered' },

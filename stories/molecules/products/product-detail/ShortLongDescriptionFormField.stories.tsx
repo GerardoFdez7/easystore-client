@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, userEvent } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useForm, FormProvider } from 'react-hook-form';
 import ShortLongDescriptionFormField from '@molecules/products/product-detail/ShortLongDescriptionFormField';
 import { mockProductFormData } from '../mocks/productFormMocks';
@@ -57,6 +58,14 @@ export const Default: Story = {
       longDescription: '',
     },
   },
+  play: async ({ canvas }) => {
+    const short = canvas.getByRole('textbox', { name: 'Short Description' });
+    const long = canvas.getByRole('textbox', { name: 'Long Description' });
+    await userEvent.type(short, 'Compact wallet');
+    await userEvent.type(long, 'Genuine leather wallet.');
+    await storybookExpect(short).toHaveValue('Compact wallet');
+    await storybookExpect(long).toHaveValue('Genuine leather wallet.');
+  },
 };
 
 export const WithValues: Story = {
@@ -72,6 +81,14 @@ export const WithValues: Story = {
         story: 'Fields pre-filled with short and long descriptions.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Short Description' }),
+    ).toHaveValue(mockProductFormData.shortDescription);
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Long Description' }),
+    ).toHaveValue(mockProductFormData.longDescription);
   },
 };
 
@@ -89,6 +106,14 @@ export const ShortDescriptionOnly: Story = {
       },
     },
   },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Short Description' }),
+    ).toHaveValue(mockProductFormData.shortDescription);
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Long Description' }),
+    ).toHaveValue('');
+  },
 };
 
 export const LongDescriptionOnly: Story = {
@@ -105,6 +130,14 @@ export const LongDescriptionOnly: Story = {
       },
     },
   },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Short Description' }),
+    ).toHaveValue('');
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Long Description' }),
+    ).toHaveValue(mockProductFormData.longDescription);
+  },
 };
 
 export const NearCharacterLimit: Story = {
@@ -120,5 +153,19 @@ export const NearCharacterLimit: Story = {
         story: 'Both fields near their character limits to test validation.',
       },
     },
+  },
+  play: async ({ canvas }) => {
+    const short = canvas.getByRole('textbox', { name: 'Short Description' });
+    const long = canvas.getByRole('textbox', { name: 'Long Description' });
+    await storybookExpect(short).toHaveValue('A'.repeat(195) + '...');
+    await storybookExpect(long).toHaveValue('B'.repeat(1995) + '...');
+    const shortMax = Number(short.getAttribute('maxlength'));
+    const longMax = Number(long.getAttribute('maxlength'));
+    await storybookExpect(
+      (short as HTMLTextAreaElement).value.length,
+    ).toBeLessThanOrEqual(shortMax);
+    await storybookExpect(
+      (long as HTMLTextAreaElement).value.length,
+    ).toBeLessThanOrEqual(longMax);
   },
 };

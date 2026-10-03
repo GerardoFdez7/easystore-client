@@ -12,17 +12,17 @@ export default function HeaderConfirmRegister() {
         <LanguageButton />
       </div>
       <div className="px-5">
-        <h1 className="text-title mb-2 text-[32px] font-extrabold sm:text-4xl 2xl:text-5xl">
+        <h1 className="text-title mb-2 text-3xl font-extrabold sm:text-4xl 2xl:text-5xl">
           {t('title')}
         </h1>
-        <p className="text-primary tex-[16px] mb-8 2xl:text-xl">
+        <p className="text-primary mb-8 text-base 2xl:text-xl">
           {t('description')}
         </p>
 
         <div className="mb-15">
           <Label
             htmlFor="businessName"
-            className="tex-[16px] text-foreground mb-2 block font-medium 2xl:text-xl"
+            className="text-foreground mb-2 block text-base font-medium 2xl:text-xl"
           >
             {t('businessName')}
           </Label>
@@ -30,7 +30,7 @@ export default function HeaderConfirmRegister() {
             required
             type="text"
             id="businessName"
-            className="md:w-[593px]"
+            className="md:w-148.25"
           />
         </div>
       </div>

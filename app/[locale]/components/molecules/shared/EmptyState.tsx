@@ -30,17 +30,17 @@ export default function EmptyState({
   return (
     <div className="mt-8 flex w-full flex-col items-center justify-center gap-6 sm:mx-auto">
       <div className="flex flex-col items-center gap-4 text-center">
-        <div className="dark:bg-muted rounded-full bg-gray-200 p-6">
+        <div className="dark:bg-muted bg-hover rounded-full p-6">
           <Icon className="text-muted-foreground h-12 w-12" />
         </div>
         <div className="space-y-2">
-          <h3 className="text-xl font-semibold">{title}</h3>
+          <h2 className="text-xl font-semibold">{title}</h2>
           <p className="text-muted-foreground max-w-md">{description}</p>
         </div>
         {buttonText && onButtonClick && (
           <Button
             type="button"
-            className="text-md mt-4"
+            className="mt-4 text-base"
             variant={buttonVariant}
             onClick={onButtonClick}
           >

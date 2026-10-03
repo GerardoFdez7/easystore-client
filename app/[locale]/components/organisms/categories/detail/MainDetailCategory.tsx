@@ -39,7 +39,7 @@ import {
 } from '@shadcn/ui/form';
 import SaveButton from '@atoms/shared/SaveButton';
 import Options from '@molecules/shared/Options';
-import MediaUploader from '@organisms/shared/MediaUploader';
+import MediaUploader from '@molecules/shared/MediaUploader';
 import CategoryPicker, {
   type CategoryItem,
   type NewCategoryItem,
@@ -445,7 +445,7 @@ export default function MainDetailCategory({
         deleteTitle={tCategory('title')}
         deleteDescription={tCategory('description')}
       />
-      <main className="mx-4 flex max-w-3xl justify-center lg:mx-auto lg:w-full">
+      <div className="mx-4 flex max-w-3xl justify-center lg:mx-auto lg:w-full">
         <div className="relative w-full">
           <section className="flex flex-col gap-4">
             <Form {...form}>
@@ -455,7 +455,6 @@ export default function MainDetailCategory({
                   void form.handleSubmit(onSubmit)(e);
                 }}
                 className="w-full space-y-8"
-                role="form"
                 aria-label={formAriaLabel}
               >
                 {/* Cover Image Section */}
@@ -600,7 +599,7 @@ export default function MainDetailCategory({
             </Form>
           </section>
         </div>
-      </main>
+      </div>
     </>
   );
 }

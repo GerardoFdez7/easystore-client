@@ -1,8 +1,15 @@
+import { expect as storybookExpect, within } from 'storybook/test';
 import ButtonAddProduct from '@atoms/products/ButtonAddProduct';
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { ProductCreationProvider } from '@lib/contexts/ProductCreationContext';
 
 const meta: Meta<typeof ButtonAddProduct> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Create Product' }),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Products/ButtonAddProduct',
   component: ButtonAddProduct,
   parameters: {

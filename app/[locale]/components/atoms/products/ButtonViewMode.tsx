@@ -21,11 +21,16 @@ export default function ButtonViewMode({
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button variant="ghost" size="icon" onClick={onViewModeToggle}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onViewModeToggle}
+          aria-label={tooltipText}
+        >
           {viewMode === 'table' ? (
-            <LayoutGrid className="size-6" />
+            <LayoutGrid className="size-6" aria-hidden="true" />
           ) : (
-            <Table2 className="size-6" />
+            <Table2 className="size-6" aria-hidden="true" />
           )}
         </Button>
       </TooltipTrigger>

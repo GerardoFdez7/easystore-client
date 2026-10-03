@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, fn, userEvent } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import AddressForm from '@molecules/inventory/AddressForm';
 
 const meta: Meta<typeof AddressForm> = {
@@ -36,16 +37,46 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    onSubmit: async () => {},
-    onCancel: () => {},
+    onSubmit: fn(async () => undefined),
+    onCancel: fn(),
     isSubmitting: false,
+  },
+  play: async ({ canvas, args }) => {
+    await userEvent.type(
+      canvas.getByRole('textbox', { name: 'Name' }),
+      'Main Warehouse',
+    );
+    await userEvent.click(canvas.getByRole('button', { name: 'Save' }));
+
+    // Invalid form: validation messages appear and nothing is submitted.
+    await storybookExpect(
+      await canvas.findByText('Address line 1 must be at least 1 character'),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByText('Country is required'),
+    ).toBeInTheDocument();
+    await storybookExpect(args.onSubmit).not.toHaveBeenCalled();
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Cancel' }));
+    await storybookExpect(args.onCancel).toHaveBeenCalledTimes(1);
   },
 };
 
 export const Submitting: Story = {
   args: {
-    onSubmit: async () => {},
-    onCancel: () => {},
+    onSubmit: fn(async () => undefined),
+    onCancel: fn(),
     isSubmitting: true,
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('textbox', { name: 'Street Address' }),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Cancel' }),
+    ).toBeDisabled();
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Loading Save' }),
+    ).toBeDisabled();
   },
 };

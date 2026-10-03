@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import InventoryTableSkeleton from '@molecules/inventory/InventoryTableSkeleton';
 
 const meta: Meta<typeof InventoryTableSkeleton> = {
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getAllByRole('row', { hidden: true }),
+    ).toHaveLength((args.rows ?? 8) + 1);
+  },
   title: 'Molecules/Inventory/InventoryTableSkeleton',
   component: InventoryTableSkeleton,
   parameters: {
@@ -38,7 +45,7 @@ type Story = StoryObj<typeof InventoryTableSkeleton>;
 export const Default: Story = {
   args: {},
   render: (args) => (
-    <div className="w-[800px]">
+    <div className="w-200">
       <InventoryTableSkeleton {...args} />
     </div>
   ),
@@ -49,7 +56,7 @@ export const WithFewerRows: Story = {
     rows: 3,
   },
   render: (args) => (
-    <div className="w-[800px]">
+    <div className="w-200">
       <InventoryTableSkeleton {...args} />
     </div>
   ),
@@ -60,7 +67,7 @@ export const WithMoreRows: Story = {
     rows: 10,
   },
   render: (args) => (
-    <div className="w-[800px]">
+    <div className="w-200">
       <InventoryTableSkeleton {...args} />
     </div>
   ),

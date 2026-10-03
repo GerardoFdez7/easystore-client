@@ -1,7 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import SearchBar from '@atoms/shared/SearchBar';
 
 const meta: Meta<typeof SearchBar> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByRole('textbox')).toBeInTheDocument();
+  },
   title: 'Atoms/Shared/SearchBar',
   component: SearchBar,
   parameters: {

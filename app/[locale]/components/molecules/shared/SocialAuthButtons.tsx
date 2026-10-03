@@ -20,7 +20,7 @@ export const SocialAuthButtons: React.FC = () => {
       <Button variant={'social'} size={'xl'} onClick={handleGoogleAuth}>
         <Image
           src="/icon_google.webp"
-          alt="Google icon"
+          alt=""
           width={24}
           height={24}
           className="mr-4 inline-block"
@@ -30,7 +30,7 @@ export const SocialAuthButtons: React.FC = () => {
       <Button variant={'social'} size={'xl'} onClick={handleFacebookAuth}>
         <Image
           src="/icon_facebook.webp"
-          alt="Facebook icon"
+          alt=""
           width={24}
           height={24}
           className="mr-2 inline-block"

@@ -1,7 +1,19 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import FeatureIcons from '@molecules/construction/FeatureIcons';
 
 const meta: Meta<typeof FeatureIcons> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    for (const label of [
+      'Lightning Fast',
+      'Low Cost',
+      'User Friendly',
+      'Quick Launch',
+    ]) {
+      await storybookExpect(canvas.getByText(label)).toBeInTheDocument();
+    }
+  },
   title: 'Molecules/Construction/FeatureIcons',
   parameters: {
     layout: 'centered',

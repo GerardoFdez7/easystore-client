@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, userEvent, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -57,6 +58,13 @@ function FormWrapper({
 }
 
 const meta = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(canvas.getByLabelText('Email')).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByLabelText('Password'),
+    ).toBeInTheDocument();
+  },
   title: 'Molecules/Authentication/Login/LoginFields',
   component: FormWrapper,
   parameters: {
@@ -117,12 +125,10 @@ export const WithErrors: Story = {
     showSubmitButton: true,
   },
   play: async ({ canvasElement }) => {
-    // This would trigger validation error by submitting empty form
-    const submitButton = canvasElement.querySelector(
-      'button[type="submit"]',
-    ) as HTMLButtonElement;
-    if (submitButton) {
-      submitButton.click();
-    }
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Sign In' }));
+    await storybookExpect(
+      await canvas.findByText('Please enter a valid email address'),
+    ).toBeInTheDocument();
   },
 };

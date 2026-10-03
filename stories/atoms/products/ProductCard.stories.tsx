@@ -1,8 +1,15 @@
+import { expect as storybookExpect, within } from 'storybook/test';
 import { ProductCard } from '@atoms/products/ProductCard';
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { MediaTypeEnum, TypeEnum } from '@graphql/generated';
 
 const meta: Meta<typeof ProductCard> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByText('Eco-Friendly Water Bottle'),
+    ).toBeInTheDocument();
+  },
   title: 'Atoms/Products/ProductCard',
   component: ProductCard,
   parameters: {

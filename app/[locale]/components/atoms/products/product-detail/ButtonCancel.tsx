@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { Button } from '@shadcn/ui/button';
 import {
   AlertDialog,
@@ -14,25 +15,26 @@ import { useRouter } from 'next/navigation';
 
 export default function ButtonCancel() {
   const router = useRouter();
+  const t = useTranslations('Products');
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline">Cancel</Button>
+        <Button variant="outline">{t('cancel')}</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Discard Changes</AlertDialogTitle>
+          <AlertDialogTitle>{t('discardChanges')}</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to discard changes?
+            {t('discardChangesDescription')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => router.back()}
             className="bg-title hover:bg-title/80 text-white dark:text-black"
           >
-            Discard Changes
+            {t('discardChanges')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

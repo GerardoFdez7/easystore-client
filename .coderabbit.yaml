@@ -1,0 +1,318 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+inheritance: false
+language: 'en-US'
+tone_instructions: >-
+  Be concise, direct, and evidence-based. Lead with severity and impact. Explain a
+  concrete failure or attack scenario, then the smallest safe fix and the verification
+  that proves it. Do not praise, speculate, or report cosmetic churn as a defect.
+
+reviews:
+  profile: 'assertive'
+  request_changes_workflow: true
+  review_status: true
+  review_details: true
+  review_progress: true
+  fail_commit_status: true
+  high_level_summary: true
+  high_level_summary_in_walkthrough: false
+  high_level_summary_instructions: >-
+    Summarize behavioral and UI changes, affected routes and client/server boundaries,
+    translation and accessibility impact, security and data-isolation posture,
+    performance impact, public GraphQL or configuration contract changes, and test
+    evidence. Separate verified facts from assumptions.
+  collapse_walkthrough: false
+  sequence_diagrams: true
+  poem: false
+  in_progress_fortune: false
+
+  slop_detection:
+    enabled: true
+    label: 'ai-slop'
+
+  # quality-check.yml requests a review only after its quality steps pass. Keep
+  # automatic reviews disabled so a pull request cannot bypass that CI gate.
+  auto_review:
+    enabled: false
+    auto_incremental_review: false
+    drafts: false
+    base_branches:
+      - 'development'
+
+  path_filters:
+    - '!**/node_modules/**'
+    - '!dist/**'
+    - '!build/**'
+    - '!coverage/**'
+    - '!test-results/**'
+    - '!storybook-static/**'
+    - '!**/*.snap'
+    - '!**/*generated*.ts'
+
+  pre_merge_checks:
+    override_requested_reviewers_only: true
+    docstrings:
+      mode: 'off'
+    title:
+      mode: 'error'
+      requirements: >-
+        Use concise English and identify the affected behavior or user-facing domain.
+        Prefer an imperative title. Reject WIP titles and vague titles such as "fix",
+        "update", or "changes" without a specific object and outcome.
+    description:
+      mode: 'error'
+    issue_assessment:
+      mode: 'warning'
+    custom_checks:
+      - name: 'Translations and language quality'
+        mode: 'error'
+        instructions: >-
+          Review every changed visible or announced user-facing text, including page
+          titles and metadata, labels, placeholders, accessible names, validation
+          messages, notifications, loading, empty, error, disabled, and success
+          states. Require the established next-intl system and correct values in
+          messages/en.json, messages/es.json, and messages/pt.json: used keys must
+          exist, preserve intended ICU variables, plurals, and context, and carry the
+          same meaning. Check spelling, accents, punctuation, grammar, and product
+          terminology in each locale; flag copied untranslated content and semantically
+          wrong keys. Do not demand mechanical JSON equality or flag identifiers,
+          proper names, brands, user content, or valid technical terms.
+      - name: 'Client security and privacy boundaries'
+        mode: 'error'
+        instructions: >-
+          Trace changed untrusted data through HTML or Markdown rendering, URLs,
+          navigation and redirects, uploads, serialized props, responses, Apollo cache,
+          logs, telemetry, and errors. Fail concrete XSS, open redirect, unsafe URL,
+          secret or PII exposure, client-trusted identity, permission, tenant, or store
+          decision, cross-session/store cache leakage, and repeatable destructive action
+          hazards. UI permissions are not authorization: require proportional evidence
+          that the server enforces trust boundaries. State the source, sink, attack
+          scenario, impact, and smallest mitigation; do not invent risks without a
+          reachable path.
+      - name: 'Functional accessibility'
+        mode: 'error'
+        instructions: >-
+          Review keyboard and screen-reader behavior across initial, loading, success,
+          error, empty, and disabled states. Require localized accessible names;
+          correct label, help, and error relationships; focus management, restoration,
+          and traps where dialogs or transitions need them; operable widgets; appropriate
+          live announcements; meaningful headings, landmarks, and tables; image
+          alternatives; and information not conveyed by color alone. Complement rather
+          than repeat jsx-a11y. Claim contrast or target-size defects only with evidence
+          from the changed implementation or design tokens.
+      - name: 'Performance and data behavior'
+        mode: 'error'
+        instructions: >-
+          Flag evidenced unnecessary client boundaries, browser-only work or heavy
+          dependencies in critical paths, request waterfalls, duplicate requests, N+1
+          or overfetched GraphQL data, missing limits or pagination, unsafe Apollo cache
+          policy, expensive rerenders, uncleared effects, and image loading or CLS
+          regressions. Describe the affected scenario and cost. Do not require
+          memoization, abstraction, or a dependency change by default.
+      - name: 'Optimistic mutation behavior'
+        mode: 'error'
+        instructions: >-
+          Review optimistic UI only for changed mutations where visible network latency
+          clearly harms the user experience and the expected result is safe to
+          anticipate; do not require it for every mutation, destructive or privileged
+          action, uncertain server-side outcome, or flow where confirmation is
+          important. When used, require a complete typed optimistic response consistent
+          with the GraphQL mutation result, stable temporary identity and Apollo cache
+          keys, and an update or cache policy that reconciles the optimistic entity with
+          the server result without duplicates, stale data, or flicker. Check that
+          optimistic cache updates tolerate Apollo running them for both optimistic and
+          confirmed results, concurrent mutations, retries, and out-of-order responses;
+          prevent double submission. Require error rollback or reconciliation through
+          the established centralized error path, and localized, accessible pending,
+          error, and success feedback when observable. Client anticipation must never
+          assume authorization or replace server enforcement. Report an omission only
+          with a concrete latency and safety rationale; otherwise review correctness of
+          the chosen non-optimistic state.
+      - name: 'English source code and inline documentation'
+        mode: 'error'
+        instructions: >-
+          Require changed source code and inline documentation to use clear English:
+          identifiers and names for APIs, types, variables, functions, classes, files,
+          and exported symbols; comments, JSDoc, TODOs, and developer-facing error or
+          log messages must also be English. Exclude localized user-facing copy and its
+          translation keys or message fixtures, i18n resources, user-provided content,
+          proper names and brands, established standards or protocol names, and external
+          API or schema fields that must preserve their contract. Do not flag ordinary
+          technical terms, generated files, or code that is outside the changed scope.
+      - name: 'Frontend conventions and risk-aware coverage'
+        mode: 'error'
+        instructions: >-
+          Enforce AGENTS.md and .agents/skills/easystore-components with their applicable
+          references: semantic component ownership and reuse, explicit public types,
+          generated GraphQL contracts, centralized localized errors, and React Hook Form
+          plus Zod form conventions. Require Storybook states, test scenarios, mocks,
+          and observable assertions only when changed behavior or risk warrants them.
+          Do not repeat automated checks for syntax, tokens, naming, story presence, or
+          deterministic architecture rules. Treat weakening quality scripts, exclusions,
+          allowlists, or enforcement rules as a review finding unless narrowly justified.
+
+  tools:
+    github-checks:
+      enabled: true
+    eslint:
+      enabled: true
+    semgrep:
+      enabled: true
+      config_file: '.semgrep.yml'
+    opengrep:
+      enabled: false
+    gitleaks:
+      enabled: true
+    trufflehog:
+      enabled: true
+    osvScanner:
+      enabled: true
+    actionlint:
+      enabled: true
+    zizmor:
+      enabled: true
+    yamllint:
+      enabled: true
+    hadolint:
+      enabled: true
+    trivy:
+      enabled: true
+    dotenvLint:
+      enabled: true
+    languagetool:
+      enabled: true
+      level: 'picky'
+
+  path_instructions:
+    - path: '**/*'
+      instructions: |
+        Apply these rules to every changed file:
+
+        - Follow AGENTS.md, .agents/skills/easystore-components/SKILL.md, and its
+          applicable references. For visual work, follow DESIGN.md and the actual
+          globals.css. For Next.js APIs and conventions, use the installed version-
+          matched Next.js documentation.
+        - Prioritize concrete behavioral, security, translation, accessibility, and
+          performance defects. Consider tools/architecture/check.mjs, .semgrep.yml,
+          and eslint.config.mjs authoritative for deterministic coverage: do not repeat
+          their findings, but review omissions, escapes, bypasses, weakened scripts,
+          broadened exclusions, and unjustified exceptions.
+        - Apply the English source-code and inline-documentation rule across changed
+          source files, while preserving localized user-facing content and contractual
+          external names as described by the custom check.
+        - Every finding must identify the location, evidence, user or attack scenario,
+          impact, smallest safe fix, and proportional verification. Do not claim checks
+          passed without evidence. Do not require abstractions, memoization, tests, or
+          dependencies without a concrete need.
+
+    - path: 'app/**'
+      instructions: |
+        Review Server and Client Component boundaries: keep client code narrow, serialize
+        only safe data, and avoid leaking session, tenant, store, or cache state across
+        users. Check translated metadata, navigation, loading and error behavior,
+        landmarks and heading order, safe redirects, localized copy, and observable
+        loading, empty, error, disabled, and success states.
+
+    - path: 'app/**/components/**'
+      instructions: |
+        Enforce the atoms, molecules, organisms, templates, and shadcn ownership model.
+        Preserve downward composition, search for existing components before introducing
+        duplicates, keep public props explicitly typed in the appropriate type boundary,
+        and keep hooks, forms, accessibility, localized copy, and UI state ownership
+        semantically cohesive. Do not duplicate deterministic lint or architecture rules.
+
+    - path: 'app/**/hooks/**'
+      instructions: |
+        Keep domain GraphQL behavior in domain hooks and utilities reusable only when
+        their contract is genuinely shared. Check hook dependencies, cleanup, stale
+        session/store data, cancellation where needed, public types, and form ownership;
+        do not request a new abstraction without evidence of meaningful duplication.
+
+    - path: 'app/**/lib/**'
+      instructions: |
+        Review public types, contexts, Apollo boundaries, utilities, and services for
+        safe serialization, client-only assumptions, cache/session-store isolation,
+        localized error handling, and narrowly scoped reusable contracts.
+
+    - path: 'server/graphql/domains/**/*.gql'
+      instructions: |
+        Require named operations, minimal selections, typed variables, bounded limits and
+        pagination where collections are exposed, and UI, Apollo-cache, and generated
+        contract compatibility. Do not duplicate GraphQL lint findings or request manual
+        edits to generated output.
+
+    - path: 'server/errors/**'
+      instructions: |
+        Preserve priority-based classification, localized recovery, and safe error
+        masking. Fail raw backend internals, credentials, tokens, PII, variables, or
+        sensitive response data reaching UI, logs, telemetry, or user-facing messages.
+
+    - path: '{messages/en.json,messages/es.json,messages/pt.json}'
+      instructions: |
+        Verify language correctness and semantic equivalence across supported locales:
+        spelling, accents, terminology, punctuation, ICU syntax and variables, plural
+        context, copied untranslated text, and meaningful key use. Do not require a
+        mechanically identical JSON shape when locale-specific grammar requires a
+        different expression.
+
+    - path: 'i18n/**/*.ts'
+      instructions: |
+        Review locale resolution, fallback, namespace use, localized date/number formats,
+        and locale-aware navigation. Do not allow fallback behavior to silently expose
+        wrong-language, unescaped, or inaccessible user-facing content.
+
+    - path: 'stories/**/*'
+      instructions: |
+        Treat stories as component documentation. Review meaningful loading, empty,
+        error, disabled, selected, and overflow states when relevant; accessible markup;
+        realistic typed mocks; and global decorators. Request additions only for changed
+        reusable behavior or visual risk, not as a mechanical presence requirement.
+        Check that each story is meaningful and has a meaningful test (a play function
+        with observable assertions); flag stories that only render, or tests that
+        assert nothing useful.
+
+    - path: 'DESIGN.md'
+      instructions: |
+        Treat this as the visual source of truth. Review visual coherence, readability,
+        component states, contrast evidence, and reduced-motion guidance without
+        duplicating token or syntax checks enforced elsewhere.
+
+    - path: 'app/**/globals.css'
+      instructions: |
+        Review actual global styles for coherence with DESIGN.md, readable states,
+        evidence-based contrast, focus visibility, and reduced motion. Do not repeat
+        deterministic token or syntax enforcement.
+
+    - path: 'next.config.ts'
+      instructions: |
+        Review trusted configuration, public runtime-variable exposure, redirects,
+        remote image policy, cache behavior, and compatibility contracts.
+
+    - path: 'proxy.ts'
+      instructions: |
+        Review route matching, locale and authentication redirects, untrusted URL input,
+        headers, cookies, and cache boundaries for bypasses or loops.
+
+    - path: 'codegen.ts'
+      instructions: |
+        Review GraphQL source, output, scalar, and generation contracts. Reject changes
+        that hide incompatible schema or generated-type failures.
+
+    - path: '.github/workflows/**'
+      instructions: |
+        Review least-privilege permissions, untrusted pull-request input, command and
+        artifact/cache poisoning, secret exposure, pinned actions, timeouts, and
+        concurrency. Preserve the quality workflow's effective review gate.
+
+    - path: '.env.example'
+      instructions: |
+        Ensure examples contain no secrets, document only safe public values, and do not
+        normalize exposing server-only settings to browser code.
+
+    - path: '{tools/architecture/**,.semgrep.yml,eslint.config.mjs,package.json,.coderabbit.yaml}'
+      instructions: |
+        Treat quality tooling and configuration as enforcement code. Reject weakened
+        scripts, rules, severity, coverage, path filters, exceptions, generated-output
+        handling, or review gates; flag bypasses through aliases, dynamic imports, or
+        widened excludes. Require a narrow English rationale and proportional fixture or
+        behavior evidence for any legitimate exception.

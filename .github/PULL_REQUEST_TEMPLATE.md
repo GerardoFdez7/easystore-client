@@ -1,68 +1,69 @@
-## ✨ Descripción
+## Summary
 
-Por favor, describe clara y concisamente los cambios introducidos en este Pull Request. Explica el "porqué" detrás de los cambios".
+<!-- Explain what this PR changes and why the change is needed. -->
 
-* **Problema Resuelto / Característica Implementada:**
-    * [Ej: Soluciona #123 (Enlace a la incidencia)]
-    * [Ej: Implementa la nueva página de perfil de usuario.]
+- **Problem solved or capability introduced:**
+- **Why this approach:**
 
-* **Impacto:**
-    * Describe cualquier impacto potencial en la funcionalidad existente, rendimiento o experiencia de usuario.
-    * [Ej: Impacto en la carga inicial de la página X, mejora en la navegación del componente Y.]
+## Impact
 
-## 🚀 Cambios
+<!-- Describe effects on existing behavior, user experience, security, accessibility, translations, performance, and data handling. Write "None" only when there is no impact. -->
 
-Enumera los cambios clave realizados en este PR. Usa viñetas para facilitar la lectura.
+- **Affected routes, components, or domains:**
+- **Security and privacy impact (XSS, redirects, session/store isolation, cache):**
+- **Accessibility and translation impact (en, es, pt):**
+- **Performance impact (client boundaries, requests, bundle, rendering):**
+- **GraphQL or configuration contract impact:**
 
-* [Ej: Creación del componente `UserProfileCard` siguiendo el patrón Atomic Design (nivel: Organism).]
-* [Ej: Modificación del hook `useAuth` para integrar el nuevo endpoint de autenticación.]
-* [Ej: Actualización de rutas en `next.config.js` para la página Z.]
+## Changes
 
-## 🧪 Pruebas
+<!-- List the important implementation and contract changes. Remove this comment before submission. -->
 
-Describe las pruebas que has realizado para asegurar la calidad y corrección de tus cambios.
+-
 
-* **Pruebas Manuales:**
-    * Proporciona pasos claros sobre cómo probar tus cambios manualmente.
-    * [Ej: 1. Navegar a `/perfil`. 2. Verificar que la información del usuario se carga correctamente. 3. Probar la edición de datos y guardar.]
-    * [Ej: Verificar la responsividad en dispositivos móviles (iPhone 13, iPad Air).]
+## Testing
 
-* **Pruebas Automatizadas:**
-    * [ ] Pruebas unitarias (Jest/RTL) añadidas/actualizadas para componentes/hooks.
-    * [ ] Pruebas de integración (Playwright/Cypress) añadidas/actualizadas para flujos clave.
-    * Detalles sobre pruebas específicas ejecutadas:
-        * [Ej: `npm run test:unit src/components/UserProfileCard`]
-        * [Ej: `npm run test:e2e -- --spec=login-flow.spec.ts`]
+<!--
+Every new or changed Storybook story must be meaningful and carry a meaningful test:
+a play function with observable assertions on behavior, accessibility, or state.
+Do not add stories or tests that only render a component without verifying anything.
+-->
 
-## ✅ Checklist
+- **Stories added or updated:**
+  - Path:
+  - States covered (default, loading, empty, error, disabled, overflow):
+- **Story tests added or updated:**
+  - Scenarios and assertions:
+- **Manual verification (routes, locales, viewports, keyboard and screen reader):**
+- **Verification command executed:**
+  - `npm run verify`
+- **If stories or tests were unchanged, explain why existing coverage is sufficient:**
 
-Antes de enviar este Pull Request, por favor asegúrate de lo siguiente:
+## Screenshots
 
-* [ ] He leído la guía [CONTRIBUTING.md](https://github.com/GerardoFdez7/easystore-client/blob/main/CONTRIBUTING.md).
-* [ ] He realizado una auto-revisión de mi propio código.
-* [ ] He comentado mi código, particularmente en áreas difíciles de entender.
-* [ ] He realizado la documentación de los componentes en StoryBook si aplica.
-* [ ] Mis cambios no generan nuevas advertencias en la consola.
-* [ ] Todas las pruebas unitarias/de integración existentes y nuevas pasan localmente con mis cambios.
-* [ ] Los componentes nuevos o modificados siguen los principios de **Atomic Design**.
-* [ ] Se han considerado las optimizaciones de rendimiento de Next.js (lazy load, optimización de imágenes, etc.).
+<!-- Include before/after screenshots or recordings for visual changes, in light and dark themes when relevant. Write "None" when not applicable. -->
 
-## 📸 Capturas de Pantalla (si aplica)
+-
 
-Si tus cambios involucran actualizaciones de UI o elementos visuales, por favor incluye capturas de pantalla.
+## Checklist
 
-* [Captura de pantalla 1]
-* [Captura de pantalla 2]
+- [ ] All developer-facing content is in English; localized resources use their target language.
+- [ ] I reviewed my own changes and removed placeholders and unrelated changes.
+- [ ] Stories are meaningful and each one has a meaningful test.
+- [ ] Architecture, duplication, lint, and build checks pass.
+- [ ] Components follow the Atomic Design ownership model and reuse existing components.
+- [ ] User-facing text is translated in `messages/en.json`, `messages/es.json`, and `messages/pt.json`.
+- [ ] Accessibility (keyboard, screen reader, focus, states) was considered.
+- [ ] Security, privacy, and performance implications are documented above.
 
-## 🤝 Incidencias / PRs Relacionados
+## Related Issues
 
-Enlaza cualquier incidencia o Pull Request relevante.
+<!-- Link issues or PRs, for example: "Closes #123". Write "None" when not applicable. -->
 
-* [Ej: Cierra #456]
-* [Ej: Relacionado con #789]
+-
 
-## 🚨 Cambios Rompedores (si aplica)
+## Breaking Changes
 
-Si este PR introduce algún cambio que rompa la compatibilidad, descríbelo aquí.
+<!-- Describe component API, GraphQL, route, configuration, or translation-key incompatibilities and the migration plan. Write "None" when not applicable. -->
 
-* [Ej: El componente `OldFormComponent` ha sido eliminado y reemplazado por `NewFormComponent`. Los consumidores deben actualizar sus importaciones.]
+-

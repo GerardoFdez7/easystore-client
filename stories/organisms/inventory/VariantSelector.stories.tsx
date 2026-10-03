@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
 import VariantSelector from '@organisms/inventory/VariantSelector';
 import {
   FindAllVariantsToCreateStockDocument,
@@ -8,6 +9,12 @@ import {
 } from '@graphql/generated';
 
 const meta: Meta<typeof VariantSelector> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('region', { name: 'Select Product Variant' }),
+    ).toBeInTheDocument();
+  },
   title: 'Organisms/Inventory/VariantSelector',
   component: VariantSelector,
   parameters: {
@@ -164,9 +171,9 @@ const createMocks = (
 export const Default: Story = {
   decorators: [
     (Story) => (
-      <MockedProvider mocks={createMocks(mockVariantsData)}>
+      <ApolloMswMocks mocks={createMocks(mockVariantsData)}>
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   args: {
@@ -178,9 +185,9 @@ export const Default: Story = {
 export const Loading: Story = {
   decorators: [
     (Story) => (
-      <MockedProvider mocks={createMocks(mockVariantsData, true)}>
+      <ApolloMswMocks mocks={createMocks(mockVariantsData, true)}>
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   args: {
@@ -192,9 +199,9 @@ export const Loading: Story = {
 export const Empty: Story = {
   decorators: [
     (Story) => (
-      <MockedProvider mocks={createMocks(mockVariantsEmpty)}>
+      <ApolloMswMocks mocks={createMocks(mockVariantsEmpty)}>
         <Story />
-      </MockedProvider>
+      </ApolloMswMocks>
     ),
   ],
   args: {

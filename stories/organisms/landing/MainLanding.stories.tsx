@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import { expect as storybookExpect, within } from 'storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import MainLanding from '@organisms/landing/MainLanding';
 import { NextIntlClientProvider } from 'next-intl';
 
@@ -141,6 +142,14 @@ const messages = {
 };
 
 const meta: Meta<typeof MainLanding> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      canvas.getByRole('heading', {
+        name: 'Grow Your Brand Effortlessly with EasyStore',
+      }),
+    ).toBeInTheDocument();
+  },
   title: 'Organisms/Landing/MainLanding',
   parameters: {
     layout: 'fullscreen',

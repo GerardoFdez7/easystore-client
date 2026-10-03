@@ -56,11 +56,7 @@ const VariantSelector: React.FC<VariantSelectorProps> = ({
   };
 
   return (
-    <section
-      className="mx-4 space-y-4"
-      role="region"
-      aria-label={'variantSelection'}
-    >
+    <section className="mx-4 space-y-4" aria-label={t('selectVariant')}>
       {/* Search and Filters */}
       <div className="space-y-4">
         {/* Search Input */}
@@ -121,9 +117,14 @@ const VariantSelector: React.FC<VariantSelectorProps> = ({
       </div>
 
       {/* Variants Grid */}
-      <div className="space-y-4" role="list" aria-label={'productVariants'}>
+      <div className="space-y-4">
         {loading ? (
-          <div className="space-y-4" aria-live="polite" aria-label="loading">
+          <div
+            className="space-y-4"
+            role="status"
+            aria-live="polite"
+            aria-label={t('loadingVariants')}
+          >
             {Array.from({ length: 3 }).map((_, index) => (
               <Card key={index} className="w-full">
                 {/* Card Header Skeleton */}

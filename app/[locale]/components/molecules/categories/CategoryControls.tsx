@@ -1,11 +1,12 @@
+import { useTranslations } from 'next-intl';
 import { memo, useCallback } from 'react';
 import Link from 'next/link';
-import { SortBy, SortOrder } from '@graphql/generated';
 import { Plus, ListTree, Edit } from 'lucide-react';
 import { Button } from '@shadcn/ui/button';
 import SearchBar from '@atoms/shared/SearchBar';
 import SortBySelect from '@atoms/shared/SortBySelect';
 import SortOrderSelect from '@atoms/shared/SortOrderSelect';
+import { SortBy, SortOrder } from '@lib/types/sort';
 
 interface CategoryControlsProps {
   searchTerm: string;
@@ -44,6 +45,7 @@ function CategoryControls({
   updateSortOrder,
   loading = false,
 }: CategoryControlsProps) {
+  const t = useTranslations('Category');
   const handleSortByChange = useCallback(
     (value: SortBy | null) => {
       updateSortBy(value || SortBy.Name);
@@ -59,11 +61,7 @@ function CategoryControls({
   );
 
   return (
-    <section
-      className="flex flex-col gap-4"
-      role="region"
-      aria-label="Category controls"
-    >
+    <section className="flex flex-col gap-4" aria-label={t('categoryControls')}>
       <div className="flex w-full flex-col items-center gap-4">
         <div className="flex w-full flex-col justify-end gap-2 sm:flex-row">
           {showEditButton && editButtonHref && editButtonText && (
@@ -98,7 +96,7 @@ function CategoryControls({
           placeholder={searchPlaceholder}
           searchTerm={searchTerm}
           onSearchChange={onSearchChange}
-          aria-label="Search categories"
+          aria-label={t('searchCategories')}
         />
 
         <div className="flex w-full items-center justify-between gap-4">
@@ -106,7 +104,7 @@ function CategoryControls({
             <SortBySelect
               value={sortBy}
               onChange={handleSortByChange}
-              aria-label="Sort categories by"
+              aria-label={t('sortCategoriesBy')}
             />
           </div>
 
@@ -114,7 +112,7 @@ function CategoryControls({
             <SortOrderSelect
               value={sortOrder}
               onChange={handleSortOrderChange}
-              aria-label="Sort order"
+              aria-label={t('sortOrderLabel')}
             />
             {onTreeToggle && treeButtonText && (
               <Button
@@ -122,7 +120,9 @@ function CategoryControls({
                 onClick={onTreeToggle}
                 disabled={loading}
                 className="flex items-center gap-2"
-                aria-label={`Toggle ${treeButtonText.toLowerCase()}`}
+                aria-label={t('toggleLabel', {
+                  label: treeButtonText.toLowerCase(),
+                })}
                 type="button"
               >
                 <ListTree className="h-4 w-4" aria-hidden="true" />

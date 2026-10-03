@@ -27,7 +27,7 @@ export default function Pricing({
   const [width, setWidth] = useState<number | null>(null);
   const [billing, setBilling] = useState<BillingType>('monthly');
   const styleTriggersPlans =
-    'data-[state=active]:bg-title dark:data-[state=active]:bg-title text-title text-[12px] rounded-xl dark:data-[state=active]:text-black';
+    'data-[state=active]:bg-title dark:data-[state=active]:bg-title text-title text-xs rounded-xl dark:data-[state=active]:text-black';
 
   const prices: Record<BillingType, Record<PlanType, string>> = {
     monthly: {
@@ -91,7 +91,7 @@ export default function Pricing({
         defaultValue={billing}
         onValueChange={(val) => setBilling(val as BillingType)}
       >
-        <TabsList className="mx-auto grid w-[263px] grid-cols-2 gap-2">
+        <TabsList className="mx-auto grid w-65.75 grid-cols-2 gap-2">
           <TabsTrigger value="monthly"> {t('monthly')}</TabsTrigger>
           <TabsTrigger value="yearly"> {t('yearly')}</TabsTrigger>
         </TabsList>
@@ -131,8 +131,8 @@ export default function Pricing({
             className={clsx(
               'mx-auto grid rounded-xl',
               width !== null && width <= 360
-                ? 'h-auto w-[263px] grid-cols-2'
-                : 'h-[50px] w-[360px] grid-cols-4',
+                ? 'h-auto w-65.75 grid-cols-2'
+                : 'h-12.5 w-90 grid-cols-4',
             )}
           >
             <TabsTrigger className={styleTriggersPlans} value="basic">

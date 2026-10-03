@@ -69,7 +69,7 @@ export default function ArrayItemBox({
           type="button"
           variant="ghost"
           size="icon"
-          className="text-error h-8 w-8 hover:text-red-700"
+          className="text-error hover:text-destructive h-8 w-8"
           onClick={onDelete}
           aria-label={t('delete') ?? 'Delete'}
         >
