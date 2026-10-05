@@ -21,7 +21,10 @@ query findProductById($id: String!) {
     }
     variants {
       id
-      price
+      price {
+        amount
+        currency
+      }
       condition
       attributes {
         key
@@ -70,8 +73,8 @@ query findProductById($id: String!) {
 }
 
 query findAllProducts(
-  $page: Float = 1
-  $limit: Float = 25
+  $page: Int = 1
+  $limit: Int = 25
   $categoriesIds: [ID!] = []
   $type: TypeEnum
   $sortBy: ProductSortBy = NAME
@@ -139,7 +142,10 @@ query findAllProducts(
         }
         isbn
         personalizationOptions
-        price
+        price {
+          amount
+          currency
+        }
         sku
         upc
         variantCover
@@ -165,8 +171,8 @@ query findAllProducts(
 }
 
 query findAllVariantsToCreateStock(
-  $page: Float = 1
-  $limit: Float = 10
+  $page: Int = 1
+  $limit: Int = 10
   $sortBy: ProductSortBy = NAME
   $sortOrder: SortOrder = ASC
   $filterMode: ProductFilterMode = ACTIVES

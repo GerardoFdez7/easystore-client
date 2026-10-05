@@ -98,7 +98,7 @@ export default function Pricing({
       </Tabs>
 
       <div className="hidden min-[904px]:block">
-        <div className="grid grid-cols-2 justify-items-center gap-6 2xl:grid-cols-4">
+        <div className="mx-auto grid max-w-338 grid-cols-2 justify-items-center gap-6 2xl:grid-cols-4">
           <PlanBasic
             price={prices[billing].basic}
             selected={selectedPlan === 'basic'}

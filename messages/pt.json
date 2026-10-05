@@ -545,6 +545,11 @@
     "logoutConfirmDescription": "Tem certeza de que deseja sair da sua sessão?",
     "logoutConfirmCancel": "Cancelar",
     "logoutConfirmAction": "Sair",
+    "help": "Ajuda",
+    "helpDialogTitle": "Precisa de ajuda?",
+    "helpDialogDescription": "Continue para nossa comunidade no Discord para receber suporte.",
+    "helpDialogCancel": "Cancelar",
+    "helpDialogAction": "Continuar para o Discord",
     "welcomeDashboard": "Bem-vindo ao Seu Painel",
     "descriptionDashboard": "Acompanhe o desempenho do seu negócio e gerencie sua loja com facilidade.",
     "sales": "Vendas",
@@ -578,7 +583,9 @@
     "shipped": "Enviado",
     "completed": "Completado",
     "cancelled": "Cancelado",
-    "sidebarToggle": "Alternar barra lateral"
+    "sidebarToggle": "Alternar barra lateral",
+    "sidebarPin": "Manter barra lateral aberta",
+    "sidebarUnpin": "Recolher barra lateral automaticamente"
   },
   "Products": {
     "discardChanges": "Descartar alterações",

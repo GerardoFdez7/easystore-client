@@ -11,8 +11,12 @@ export default function NaviLinks() {
 
   return (
     <nav className="hidden items-center gap-6 lg:flex">
-      <ThemeToggle />
-      <LanguageButton />
+      {!isAuthenticated && (
+        <>
+          <ThemeToggle />
+          <LanguageButton />
+        </>
+      )}
       <LinkPricing />
       {!isAuthenticated && <LinkLog />}
     </nav>

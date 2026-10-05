@@ -13,7 +13,10 @@ mutation createProduct($input: CreateProductInput!) {
         key
         value
       }
-      price
+      price {
+        amount
+        currency
+      }
       weight
       variantCover
       upc
@@ -119,7 +122,10 @@ mutation update($id: String!, $input: UpdateProductInput!) {
       }
       isbn
       personalizationOptions
-      price
+      price {
+        amount
+        currency
+      }
       sku
       upc
       variantCover

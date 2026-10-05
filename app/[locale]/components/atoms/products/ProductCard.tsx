@@ -13,7 +13,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import ProductStatus from '@atoms/products/ProductStatus';
 import BadgeTag from '@atoms/shared/BadgeTag';
-import { formatPriceWithCommasAndDots } from '@lib/utils/input-formatters';
+import { formatMoney } from '@lib/utils/money';
 import type { ProductListItem } from '@lib/types/product';
 
 interface ProductCardProps {
@@ -214,10 +214,9 @@ export function ProductCard({ product }: ProductCardProps) {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-foreground text-sm">
-                  {process.env.NEXT_PUBLIC_DEFAULT_CURRENCY}
                   {product.variants?.[0]?.price
-                    ? formatPriceWithCommasAndDots(product.variants[0].price)
-                    : '0.00'}
+                    ? formatMoney(product.variants[0].price)
+                    : '-'}
                 </span>
                 <ProductStatus product={product} />
               </div>

@@ -1,7 +1,7 @@
 import { expect as storybookExpect, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { ProfileDraftProvider } from '@contexts/ProfileDraftContext';
-import MainProfile from '@organisms/profile/MainProfile';
+import { ProfileDraftProvider } from '@contexts/settings/profile/ProfileDraftContext';
+import MainProfile from '@organisms/settings/profile/MainProfile';
 import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
 import { FindTenantProfileDocument } from '@graphql/generated';
 
@@ -19,7 +19,7 @@ const meta: Meta<typeof MainProfile> = {
       appDirectory: true,
     },
   },
-  title: 'Organisms/Profile/MainProfile',
+  title: 'Organisms/Settings/Profile/MainProfile',
   decorators: [
     (Story) => (
       <ProfileDraftProvider>

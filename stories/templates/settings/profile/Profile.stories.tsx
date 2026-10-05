@@ -6,7 +6,7 @@ import {
   within,
 } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import ProfileTemplate from '@templates/Profile';
+import ProfileTemplate from '@templates/settings/profile/Profile';
 import { Toaster } from '@shadcn/ui/sonner';
 
 const meta: Meta<typeof ProfileTemplate> = {
@@ -17,7 +17,7 @@ const meta: Meta<typeof ProfileTemplate> = {
     ).toBeInTheDocument();
   },
   component: ProfileTemplate,
-  title: 'Templates/Profile',
+  title: 'Templates/Settings/Profile',
   decorators: [
     (Story) => (
       <>

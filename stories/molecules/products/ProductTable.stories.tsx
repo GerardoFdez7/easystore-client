@@ -93,7 +93,7 @@ const mockProducts = [
     variants: [
       {
         id: 'variant_1',
-        price: 699.99,
+        price: { amount: '699.99', currency: 'GTQ' },
         sku: 'PHN-001',
         condition: ConditionEnum.New,
         attributes: [
@@ -135,7 +135,7 @@ const mockProducts = [
     variants: [
       {
         id: 'variant_2',
-        price: 24.99,
+        price: { amount: '24.99', currency: 'GTQ' },
         sku: 'WTR-002',
         condition: ConditionEnum.New,
         attributes: [
@@ -169,7 +169,7 @@ const mockProducts = [
     variants: [
       {
         id: 'variant_3',
-        price: 199.99,
+        price: { amount: '199.99', currency: 'GTQ' },
         sku: 'HDN-003',
         condition: ConditionEnum.Used,
         attributes: [

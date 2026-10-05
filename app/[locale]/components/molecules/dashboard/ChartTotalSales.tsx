@@ -140,6 +140,7 @@ const chartConfig = {
 
 export function ChartTotalSales() {
   const t = useTranslations('Dashboard');
+  const tShared = useTranslations('Shared');
 
   const isMobile = useIsMobile();
 
@@ -192,7 +193,7 @@ export function ChartTotalSales() {
               <SelectTrigger
                 className="flex w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
                 size="sm"
-                aria-label={t('selectValue')}
+                aria-label={tShared('selectValue')}
               >
                 <SelectValue placeholder={t('3months')} />
               </SelectTrigger>

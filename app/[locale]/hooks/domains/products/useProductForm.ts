@@ -8,6 +8,8 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useProductManagement, useGetProductById } from './';
 import { useProductCreation } from '@contexts/ProductCreationContext';
+import { toMoneyInput } from '@lib/utils/money';
+import { useStoreInfo } from '@hooks/domains/store/useStoreInfo';
 import {
   Media,
   TypeEnum,
@@ -165,6 +167,7 @@ export function useProductForm({
   onCancel,
 }: UseProductFormProps): UseProductFormReturn {
   const t = useTranslations('Products');
+  const { store } = useStoreInfo();
   const router = useRouter();
   const { createProduct, updateProduct, isCreating, isUpdating } =
     useProductManagement();
@@ -344,6 +347,11 @@ export function useProductForm({
     async (data: ProductFormData) => {
       try {
         if (isNew) {
+          // Variant prices are priced in the store's currency
+          if (!store) {
+            throw new Error('Store currency is not available yet');
+          }
+
           // Create new product
           const input = {
             name: data.name,
@@ -369,7 +377,7 @@ export function useProductForm({
                 : 'IMAGE') as MediaTypeEnum,
             })),
             variants: variantsDraft.map((variant) => ({
-              price: variant.price,
+              price: toMoneyInput(variant.price, store.currency),
               condition: variant.condition as ConditionEnum,
               attributes: variant.attributes?.map((attr) => ({
                 key: attr.key,
@@ -516,6 +524,7 @@ export function useProductForm({
       variantsDraft,
       clearAllDrafts,
       router,
+      store,
     ],
   );
 

@@ -1,14 +1,14 @@
 'use client';
 
-import { EditableField } from '@molecules/profile/EditableField';
+import { EditableField } from '@molecules/settings/profile/EditableField';
 import { Button } from '@shadcn/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@shadcn/ui/card';
 import { useTranslations } from 'next-intl';
-import { useProfileDraft } from '@contexts/ProfileDraftContext';
+import { useProfileDraft } from '@contexts/settings/profile/ProfileDraftContext';
 import FormFieldSkeleton from '@atoms/shared/FormFieldSkeleton';
 import LogoutConfirmDialog from '@atoms/shared/LogoutConfirmDialog';
 import { LogOut } from 'lucide-react';
-import ProfileSection from '@atoms/profile/ProfileSection';
+import ProfileSection from '@atoms/settings/profile/ProfileSection';
 
 export default function MainProfile() {
   const t = useTranslations('Profile');
@@ -27,29 +27,20 @@ export default function MainProfile() {
             <>
               <FormFieldSkeleton className="mb-0" />
               <FormFieldSkeleton className="mb-0" />
-              <FormFieldSkeleton className="mb-0" />
             </>
           ) : (
             <>
               <EditableField
-                id="profile-owner-name"
+                id="profile-name"
                 label={t('ownerName')}
-                value={values.ownerName}
-                onChange={(v) => setField('ownerName', v)}
-              />
-
-              <EditableField
-                id="profile-domain"
-                label={t('domain')}
-                value={values.domain}
-                onChange={(v) => setField('domain', v)}
+                value={values.name}
+                onChange={(v) => setField('name', v)}
               />
 
               <EditableField
                 id="profile-email"
                 label={t('email')}
                 value={profile?.email ?? ''}
-                statusChip={{ label: t('verified'), tone: 'denied' }}
               />
             </>
           )}

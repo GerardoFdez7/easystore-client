@@ -14,17 +14,13 @@ import { useTranslations } from 'next-intl';
 import {
   useProfile,
   type ProfilePatch,
-} from '@hooks/domains/tenant/useProfile';
+} from '@hooks/domains/settings/profile/useProfile';
 import type { FindTenantProfileQuery } from '@graphql/generated';
 
 type Profile = FindTenantProfileQuery['getTenantById'];
 
 type DraftValues = {
-  ownerName: string;
-  businessName: string;
-  domain: string;
-  description: string;
-  logo: string | null;
+  name: string;
 };
 
 interface ProfileDraftContextType {
@@ -36,7 +32,7 @@ interface ProfileDraftContextType {
     key: K,
     value: DraftValues[K],
   ) => void;
-  /** Incremented on cancel so uncontrolled children (the logo uploader) reset. */
+  /** Incremented on cancel so uncontrolled children reset. */
   resetKey: number;
 }
 
@@ -45,11 +41,7 @@ const ProfileDraftContext = createContext<ProfileDraftContextType | undefined>(
 );
 
 const savedValues = (profile: Profile | undefined): DraftValues => ({
-  ownerName: profile?.ownerName ?? '',
-  businessName: profile?.businessName ?? '',
-  domain: profile?.domain ?? '',
-  description: profile?.description ?? '',
-  logo: profile?.logo ?? null,
+  name: profile?.name ?? '',
 });
 
 export const ProfileDraftProvider: React.FC<{ children: React.ReactNode }> = ({

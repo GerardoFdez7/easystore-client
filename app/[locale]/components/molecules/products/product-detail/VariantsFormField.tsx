@@ -40,7 +40,8 @@ import {
   useRestoreVariant,
   useDeleteVariant,
 } from '@hooks/domains/products/variant';
-import { formatPriceWithCommasAndDots } from '@lib/utils/input-formatters';
+import { formatMoney } from '@lib/utils/money';
+import { useStoreInfo } from '@hooks/domains/store/useStoreInfo';
 
 interface VariantsFormFieldProps {
   productId: string;
@@ -52,6 +53,7 @@ export default function VariantsFormField({
   const { control } = useFormContext();
   const router = useRouter();
   const t = useTranslations('Products');
+  const currency = useStoreInfo().store?.currency;
   const tVariant = useTranslations('Variant');
   const { variantsDraft, removeVariantDraft } = useProductCreation();
 
@@ -231,8 +233,12 @@ export default function VariantsFormField({
                                 </TableCell>
                                 <TableCell>{variant.codes.sku}</TableCell>
                                 <TableCell>
-                                  {process.env.NEXT_PUBLIC_DEFAULT_CURRENCY}
-                                  {formatPriceWithCommasAndDots(variant.price)}
+                                  {currency
+                                    ? formatMoney({
+                                        amount: variant.price,
+                                        currency,
+                                      })
+                                    : variant.price}
                                 </TableCell>
                                 <TableCell>{variant.condition}</TableCell>
                                 <TableCell>
@@ -299,10 +305,7 @@ export default function VariantsFormField({
                                     </TableCell>
                                     <TableCell>{variant.sku}</TableCell>
                                     <TableCell>
-                                      {process.env.NEXT_PUBLIC_DEFAULT_CURRENCY}
-                                      {formatPriceWithCommasAndDots(
-                                        variant.price,
-                                      )}
+                                      {formatMoney(variant.price)}
                                     </TableCell>
                                     <TableCell>{variant.condition}</TableCell>
                                     <TableCell>

@@ -12,6 +12,7 @@ const meta: Meta<typeof OwnerLogo> = {
   parameters: {
     layout: 'centered',
   },
+  args: { logo: 'https://ik.imagekit.io/demo/img/image4.jpeg' },
   tags: ['autodocs'],
 };
 
@@ -19,4 +20,4 @@ export default meta;
 
 type Story = StoryObj<typeof OwnerLogo>;
 
-export const AuthenticatedTenant: Story = {};
+export const Default: Story = {};

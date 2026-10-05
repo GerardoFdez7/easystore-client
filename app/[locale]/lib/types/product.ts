@@ -18,7 +18,7 @@ export type Category = {
 
 export type Variant = {
   id: string;
-  price: number;
+  price: { amount: string; currency: string };
   sku: string;
   attributes: Attribute[];
   condition: string;

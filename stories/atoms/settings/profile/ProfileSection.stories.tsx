@@ -1,10 +1,10 @@
 import { expect as storybookExpect, fn, userEvent } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import ProfileSection from '@atoms/profile/ProfileSection';
+import ProfileSection from '@atoms/settings/profile/ProfileSection';
 
 const meta: Meta<typeof ProfileSection> = {
   component: ProfileSection,
-  title: 'Atoms/Profile/ProfileSection',
+  title: 'Atoms/Settings/Profile/ProfileSection',
   parameters: {
     layout: 'centered',
   },

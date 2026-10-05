@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, ComponentProps } from 'react';
+import { useEffect, useState, ComponentProps } from 'react';
 import {
   Package,
   Users,
@@ -13,8 +13,9 @@ import {
   Warehouse,
   Dices,
   ChevronLeft,
+  Pin,
+  PinOff,
 } from 'lucide-react';
-import OwnerLogo from '@atoms/dashboard/OwnerLogo';
 import ButtonSidebar from '@atoms/dashboard/ButtonSidebar';
 import {
   Sidebar as ShadcnSidebar,
@@ -32,15 +33,24 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@shadcn/ui/collapsible';
+import OwnerLogo from '@atoms/dashboard/OwnerLogo';
 import { Button } from '@shadcn/ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@shadcn/ui/tooltip';
 import { useTranslations } from 'next-intl';
-import { useAuth } from '@contexts/AuthContext';
+import { useStoreInfo } from '@hooks/domains/store/useStoreInfo';
+import { usePinnedSidebar } from '@hooks/utils/usePinnedSidebar';
 
 export default function Sidebar(props: ComponentProps<typeof ShadcnSidebar>) {
   const t = useTranslations('Dashboard');
   const [openProducts, setOpenProducts] = useState(false);
   const { state, setOpen } = useSidebar();
-  const { tenantData } = useAuth();
+  const { store } = useStoreInfo();
+  const { pinned, setPinned } = usePinnedSidebar();
+
+  // Pinned keeps the sidebar expanded; otherwise it keeps the default collapsed state.
+  useEffect(() => {
+    if (pinned) setOpen(true);
+  }, [pinned, setOpen]);
 
   const handleExpand = () => {
     if (state === 'collapsed') {
@@ -53,10 +63,31 @@ export default function Sidebar(props: ComponentProps<typeof ShadcnSidebar>) {
 
   return (
     <ShadcnSidebar className="mt-20 h-auto" collapsible="icon" {...props}>
-      <SidebarHeader className="mt-2">
-        {tenantData?.logo && <OwnerLogo />}
+      <SidebarHeader className="relative mt-4">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-pressed={pinned}
+              aria-label={pinned ? t('sidebarUnpin') : t('sidebarPin')}
+              onClick={() => setPinned(!pinned)}
+              className="absolute top-0 right-2 size-8 group-data-[collapsible=icon]:hidden"
+            >
+              {pinned ? (
+                <PinOff className="text-title size-4" />
+              ) : (
+                <Pin className="text-title size-4" />
+              )}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">
+            {pinned ? t('sidebarUnpin') : t('sidebarPin')}
+          </TooltipContent>
+        </Tooltip>
+        {store?.logo && <OwnerLogo logo={store.logo} />}
         <h3 className="text-title w-full text-center font-semibold group-data-[collapsible=icon]:hidden">
-          {tenantData?.businessName || ''}
+          {store?.name || ''}
         </h3>
       </SidebarHeader>
 

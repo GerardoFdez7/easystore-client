@@ -21,8 +21,8 @@ const meta: Meta<typeof NaviLinks> = {
 
     await storybookExpect(pricing).toHaveAttribute('href', '#plans');
     await storybookExpect(
-      await canvas.findByRole('button', { name: 'Toggle theme' }),
-    ).toBeInTheDocument();
+      canvas.queryByRole('button', { name: 'Toggle theme' }),
+    ).not.toBeInTheDocument();
   },
   title: 'Molecules/Landing/NaviLinks',
   parameters: {

@@ -18,39 +18,29 @@ import {
 } from '@shadcn/ui/select';
 import type { Condition } from '@lib/types/variant';
 import { useTranslations } from 'next-intl';
-import { formatPriceWithCommasAndDots } from '@lib/utils/input-formatters';
+import { formatAmount, isDecimalString } from '@lib/utils/money';
+import { useStoreInfo } from '@hooks/domains/store/useStoreInfo';
 
 interface PriceConditionFormFieldProps {
   currency?: string;
 }
 
 export default function PriceConditionFormField({
-  currency = process.env.NEXT_PUBLIC_DEFAULT_CURRENCY,
+  currency: currencyProp,
 }: PriceConditionFormFieldProps) {
+  const { store } = useStoreInfo();
+  const currency = currencyProp ?? store?.currency;
   const { control } = useFormContext();
   const t = useTranslations('Variant');
   const [isFocused, setIsFocused] = useState(false);
 
-  const onPriceChange = (value: string, onChange: (value: number) => void) => {
-    // Remove all non-numeric characters except the decimal point
+  const onPriceChange = (value: string, onChange: (value: string) => void) => {
+    // Keep only digits and a single decimal point; the amount stays an exact string
     const cleaned = value.replace(/,/g, '.').replace(/[^\d.]/g, '');
     const parts = cleaned.split('.');
-    const normalized =
-      parts.length <= 2 ? cleaned : `${parts[0]}.${parts.slice(1).join('')}`;
-
-    // Convert to number for storage
-    const numValue = normalized === '' ? 0 : Number(normalized);
-    if (!Number.isNaN(numValue)) {
-      onChange(numValue);
-    }
-  };
-
-  const onPriceBlur = (value: number) => {
-    setIsFocused(false);
-    // Value stays as number in the form, display formatting happens in input rendering
-    if (typeof value !== 'number' || Number.isNaN(value)) {
-      return;
-    }
+    onChange(
+      parts.length <= 2 ? cleaned : `${parts[0]}.${parts.slice(1).join('')}`,
+    );
   };
 
   return (
@@ -77,15 +67,13 @@ export default function PriceConditionFormField({
                   className="sm:w-60"
                   placeholder={t('pricePlaceholder')}
                   value={
-                    !isFocused &&
-                    typeof field.value === 'number' &&
-                    !Number.isNaN(field.value)
-                      ? formatPriceWithCommasAndDots(field.value)
-                      : field.value || ''
+                    !isFocused && currency && isDecimalString(field.value)
+                      ? formatAmount(field.value, currency)
+                      : (field.value ?? '')
                   }
                   onFocus={() => setIsFocused(true)}
                   onBlur={() => {
-                    onPriceBlur(field.value);
+                    setIsFocused(false);
                     field.onBlur();
                   }}
                   onChange={(e) =>

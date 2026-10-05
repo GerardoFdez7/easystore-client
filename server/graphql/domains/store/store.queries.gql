@@ -1,0 +1,8 @@
+query findCurrentStore {
+  getStoreById {
+    id
+    name
+    logo
+    currency
+  }
+}

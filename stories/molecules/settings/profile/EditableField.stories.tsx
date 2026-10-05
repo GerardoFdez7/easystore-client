@@ -1,18 +1,22 @@
 import { expect as storybookExpect, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { DescriptionEditor } from '@molecules/profile/DescriptionEditor';
+import { EditableField } from '@molecules/settings/profile/EditableField';
 
-const meta: Meta<typeof DescriptionEditor> = {
+const meta: Meta<typeof EditableField> = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await storybookExpect(canvas.getByRole('textbox')).toBeInTheDocument();
   },
-  component: DescriptionEditor,
-  title: 'Molecules/Profile/DescriptionEditor',
+  component: EditableField,
+  title: 'Molecules/Settings/Profile/EditableField',
+  args: {
+    label: 'Email',
+    value: 'test@example.com',
+  },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof DescriptionEditor>;
+type Story = StoryObj<typeof EditableField>;
 
 export const Default: Story = {};

@@ -1,20 +1,14 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useQuery } from '@apollo/client/react';
-import {
-  FindCategoriesTreeDocument,
-  FindCategoriesTreeQuery,
-  FindCategoriesTreeQueryVariables,
-  SortBy,
-  SortOrder,
-} from '@graphql/generated';
+import { SortOrder } from '@graphql/generated';
 import { slugToName } from '@lib/utils/path-utils';
+import { useCategoriesTree } from './useCategoriesTree';
 
-// Type for GraphQL category from FindCategoriesTreeQuery
-type GqlCategory = NonNullable<
-  FindCategoriesTreeQuery['getAllCategories']
->['categories'][number];
+interface CategoryInfoSource {
+  name: string;
+  subCategories?: CategoryInfoSource[];
+}
 
 function findCategoryByPath(
   hierarchy: CategoryInfo[],
@@ -53,22 +47,14 @@ interface BreadcrumbItem {
  * @returns Category hierarchy information for breadcrumb navigation
  */
 export function useCategoryPathNames(categoryPath: string[] = []) {
-  const { data, loading, error } = useQuery<
-    FindCategoriesTreeQuery,
-    FindCategoriesTreeQueryVariables
-  >(FindCategoriesTreeDocument, {
-    variables: {
-      sortBy: SortBy.Name,
-      sortOrder: SortOrder.Asc,
-    },
-    fetchPolicy: 'cache-and-network',
-    errorPolicy: 'all',
+  const { categories, loading, error } = useCategoriesTree({
+    sortOrder: SortOrder.Asc,
   });
 
   // Build a comprehensive category map with hierarchy information
   const categoryHierarchy = useMemo(() => {
     const buildHierarchy = (
-      cats: GqlCategory[],
+      cats: CategoryInfoSource[],
       parentPath = '',
     ): CategoryInfo[] => {
       return cats.map((cat) => {
@@ -80,16 +66,14 @@ export function useCategoryPathNames(categoryPath: string[] = []) {
           slug,
           path: currentPath,
           children: cat.subCategories
-            ? buildHierarchy(cat.subCategories as GqlCategory[], currentPath)
+            ? buildHierarchy(cat.subCategories, currentPath)
             : undefined,
         };
       });
     };
 
-    return buildHierarchy(
-      (data?.getAllCategories?.categories as GqlCategory[]) || [],
-    );
-  }, [data?.getAllCategories?.categories]);
+    return buildHierarchy(categories);
+  }, [categories]);
 
   // Build breadcrumb items from the current path
   const breadcrumbItems = useMemo(() => {

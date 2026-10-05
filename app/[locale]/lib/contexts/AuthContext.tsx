@@ -19,9 +19,7 @@ import {
 import { isProtectedRoute } from '@lib/consts/routes';
 
 interface TenantData {
-  ownerName: string;
-  businessName?: string;
-  logo?: string;
+  name: string;
 }
 
 interface AuthState {
@@ -136,9 +134,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
       setAuthState((prev) => ({
         ...prev,
         tenantData: {
-          ownerName: tenant.ownerName,
-          businessName: tenant.businessName || undefined,
-          logo: tenant.logo || undefined,
+          name: tenant.name,
         },
         tenantLoading,
       }));

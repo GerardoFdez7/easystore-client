@@ -26,7 +26,10 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
+  /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: { input: any; output: any };
+  /** An exact canonical decimal string without exponent notation, such as "123.45". */
+  Decimal: { input: any; output: any };
 };
 
 export enum AccountTypeEnum {
@@ -58,7 +61,7 @@ export type AddVariantToProductInput = {
   installmentPayments?: InputMaybe<Array<CreateInstallmentInput>>;
   isbn?: InputMaybe<Scalars['String']['input']>;
   personalizationOptions?: InputMaybe<Array<Scalars['String']['input']>>;
-  price: Scalars['Float']['input'];
+  price: MoneyInput;
   sku: Scalars['String']['input'];
   upc?: InputMaybe<Scalars['String']['input']>;
   variantCover?: InputMaybe<Scalars['String']['input']>;
@@ -110,6 +113,7 @@ export type AuthIdentity = {
 
 export type AuthenticationInput = {
   accountType: AccountTypeEnum;
+  domain?: InputMaybe<Scalars['String']['input']>;
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
 };
@@ -117,20 +121,20 @@ export type AuthenticationInput = {
 export type Cart = {
   __typename?: 'Cart';
   cartItems: Array<CartItem>;
-  customerId: Scalars['ID']['output'];
   id: Scalars['ID']['output'];
-  totalCart: Scalars['Float']['output'];
+  totalCart: Array<Money>;
 };
 
 export type CartItem = {
   __typename?: 'CartItem';
+  currency?: Maybe<Scalars['String']['output']>;
   firstAttribute?: Maybe<FirstAttribute>;
   id: Scalars['ID']['output'];
   productName?: Maybe<Scalars['String']['output']>;
   promotionId?: Maybe<Scalars['ID']['output']>;
   qty: Scalars['Int']['output'];
-  subTotal?: Maybe<Scalars['Float']['output']>;
-  unitPrice?: Maybe<Scalars['Float']['output']>;
+  subTotal?: Maybe<Scalars['Decimal']['output']>;
+  unitPrice?: Maybe<Scalars['Decimal']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
   variantId: Scalars['ID']['output'];
 };
@@ -186,6 +190,15 @@ export type CreateCategoryInput = {
   subCategories?: InputMaybe<Array<CreateCategoryInput>>;
 };
 
+export type CreateCustomerReviewProductInput = {
+  /** Review comment */
+  comment: Scalars['String']['input'];
+  /** Rating from 1.0 to 5.0 */
+  ratingCount: Scalars['Float']['input'];
+  /** Variant ID being reviewed */
+  variantId: Scalars['ID']['input'];
+};
+
 export type CreateDimensionInput = {
   height: Scalars['Float']['input'];
   length: Scalars['Float']['input'];
@@ -220,6 +233,14 @@ export type CreateProductInput = {
   sustainabilities?: InputMaybe<Array<CreateSustainabilityInput>>;
   tags?: InputMaybe<Array<Scalars['String']['input']>>;
   variants: Array<AddVariantToProductInput>;
+};
+
+export type CreateStoreInput = {
+  currency?: InputMaybe<CurrencyCodes>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  domain?: InputMaybe<Scalars['String']['input']>;
+  logo?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateSustainabilityInput = {
@@ -407,6 +428,74 @@ export enum CurrencyCodes {
   Zwl = 'ZWL',
 }
 
+export type Customer = {
+  __typename?: 'Customer';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  defaultBillingAddressId?: Maybe<Scalars['ID']['output']>;
+  defaultPhoneNumberId?: Maybe<Scalars['ID']['output']>;
+  defaultShippingAddressId?: Maybe<Scalars['ID']['output']>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type CustomerFirstAttribute = {
+  __typename?: 'CustomerFirstAttribute';
+  key: Scalars['String']['output'];
+  value: Scalars['String']['output'];
+};
+
+export type CustomerReviewProduct = {
+  __typename?: 'CustomerReviewProduct';
+  comment: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  ratingCount: Scalars['Float']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  variantId: Scalars['ID']['output'];
+};
+
+export type CustomerReviewProductWithVariant = {
+  __typename?: 'CustomerReviewProductWithVariant';
+  comment: Scalars['String']['output'];
+  firstAttribute?: Maybe<CustomerFirstAttribute>;
+  id: Scalars['ID']['output'];
+  isArchived?: Maybe<Scalars['Boolean']['output']>;
+  price?: Maybe<Money>;
+  productName: Scalars['String']['output'];
+  ratingCount: Scalars['Float']['output'];
+  sku: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  variantId: Scalars['ID']['output'];
+};
+
+export type Dashboard = {
+  __typename?: 'Dashboard';
+  ordersTimeline: Array<OrderTimeline>;
+  recentOrders: Array<RecentOrder>;
+  summary: DashboardSummary;
+  topProducts: Array<TopProduct>;
+};
+
+export type DashboardSummary = {
+  __typename?: 'DashboardSummary';
+  averageOrderValue: Money;
+  cancelledOrders: Scalars['Int']['output'];
+  cancelledRevenue: Money;
+  completedOrders: Scalars['Int']['output'];
+  completedRevenue: Money;
+  confirmedOrders: Scalars['Int']['output'];
+  processingOrders: Scalars['Int']['output'];
+  shippedOrders: Scalars['Int']['output'];
+  totalOrders: Scalars['Int']['output'];
+  totalRevenue: Money;
+  uniqueCustomers: Scalars['Int']['output'];
+};
+
+export type DeleteCustomerReviewProductInput = {
+  /** Review ID to delete */
+  id: Scalars['ID']['input'];
+};
+
 export type Dimension = {
   __typename?: 'Dimension';
   height: Scalars['Float']['output'];
@@ -423,13 +512,6 @@ export type FirstAttribute = {
 export type ForgotPasswordInput = {
   accountType: AccountTypeEnum;
   email: Scalars['String']['input'];
-};
-
-export type GetCartPaginatedInput = {
-  /** Number of items per page (max 50) */
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  /** Page number for pagination (starts from 1) */
-  page?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type GetInTouchInput = {
@@ -471,17 +553,32 @@ export enum MediaTypeEnum {
   Video = 'VIDEO',
 }
 
+export type Money = {
+  __typename?: 'Money';
+  amount: Scalars['Decimal']['output'];
+  currency: Scalars['String']['output'];
+};
+
+export type MoneyInput = {
+  amount: Scalars['Decimal']['input'];
+  currency: Scalars['String']['input'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addItemToCart: Cart;
+  addReviewProduct: CustomerReviewProduct;
   addStockToWarehouse: Warehouse;
+  addVariantToWishList: Wishlist;
   archiveVariant: Product;
   createAddress: AddressType;
   createCategory: Category;
   createProduct: Product;
+  createStore: Store;
   createWarehouse: Warehouse;
   deleteAddress: AddressType;
   deleteCategory: Category;
+  deleteReviewProduct: Scalars['Boolean']['output'];
   deleteWarehouse: Warehouse;
   forgotPassword: Response;
   getInTouch: Response;
@@ -491,17 +588,24 @@ export type Mutation = {
   register: AuthIdentity;
   removeItemFromCart: Cart;
   removeManyItemsFromCart: Cart;
+  removeManyVariantsFromWishList: WishListMultiStatus;
   removeStockFromWarehouse: Warehouse;
   removeVariant: Product;
+  removeVariantFromWishList: Scalars['Boolean']['output'];
   restoreProduct: Product;
   restoreVariant: Product;
+  setDefaultStore: Tenant;
   softDeleteProduct: Product;
+  switchStore: Response;
   updateAddress: AddressType;
   updateCategory: Category;
+  updateCustomer: Customer;
   updateItemQty: Cart;
   updatePassword: Response;
   updateProduct: Product;
+  updateReviewProduct: CustomerReviewProduct;
   updateStockInWarehouse: Warehouse;
+  updateStore: Store;
   updateTenant: Tenant;
   updateWarehouse: Warehouse;
 };
@@ -510,11 +614,19 @@ export type MutationAddItemToCartArgs = {
   input: AddItemToCartInput;
 };
 
+export type MutationAddReviewProductArgs = {
+  input: CreateCustomerReviewProductInput;
+};
+
 export type MutationAddStockToWarehouseArgs = {
   input: AddStockToWarehouseInput;
   reason?: InputMaybe<Scalars['String']['input']>;
   variantId: Scalars['ID']['input'];
   warehouseId: Scalars['ID']['input'];
+};
+
+export type MutationAddVariantToWishListArgs = {
+  input: WishListItemCreateInput;
 };
 
 export type MutationArchiveVariantArgs = {
@@ -534,6 +646,10 @@ export type MutationCreateProductArgs = {
   input: CreateProductInput;
 };
 
+export type MutationCreateStoreArgs = {
+  input: CreateStoreInput;
+};
+
 export type MutationCreateWarehouseArgs = {
   input: CreateWarehouseInput;
 };
@@ -544,6 +660,10 @@ export type MutationDeleteAddressArgs = {
 
 export type MutationDeleteCategoryArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type MutationDeleteReviewProductArgs = {
+  input: DeleteCustomerReviewProductInput;
 };
 
 export type MutationDeleteWarehouseArgs = {
@@ -578,6 +698,10 @@ export type MutationRemoveManyItemsFromCartArgs = {
   input: RemoveManyItemFromCartInput;
 };
 
+export type MutationRemoveManyVariantsFromWishListArgs = {
+  input: WishListManyItemsInput;
+};
+
 export type MutationRemoveStockFromWarehouseArgs = {
   reason?: InputMaybe<Scalars['String']['input']>;
   stockId: Scalars['ID']['input'];
@@ -589,6 +713,10 @@ export type MutationRemoveVariantArgs = {
   productId: Scalars['String']['input'];
 };
 
+export type MutationRemoveVariantFromWishListArgs = {
+  input: WishListItemDeleteInput;
+};
+
 export type MutationRestoreProductArgs = {
   id: Scalars['String']['input'];
 };
@@ -598,8 +726,16 @@ export type MutationRestoreVariantArgs = {
   productId: Scalars['String']['input'];
 };
 
+export type MutationSetDefaultStoreArgs = {
+  storeId: Scalars['String']['input'];
+};
+
 export type MutationSoftDeleteProductArgs = {
   id: Scalars['String']['input'];
+};
+
+export type MutationSwitchStoreArgs = {
+  storeId: Scalars['ID']['input'];
 };
 
 export type MutationUpdateAddressArgs = {
@@ -610,6 +746,10 @@ export type MutationUpdateAddressArgs = {
 export type MutationUpdateCategoryArgs = {
   id: Scalars['ID']['input'];
   input: UpdateCategoryInput;
+};
+
+export type MutationUpdateCustomerArgs = {
+  input: UpdateCustomerInput;
 };
 
 export type MutationUpdateItemQtyArgs = {
@@ -625,11 +765,19 @@ export type MutationUpdateProductArgs = {
   input: UpdateProductInput;
 };
 
+export type MutationUpdateReviewProductArgs = {
+  input: UpdateCustomerReviewProductInput;
+};
+
 export type MutationUpdateStockInWarehouseArgs = {
   input: UpdateStockInWarehouseInput;
   reason?: InputMaybe<Scalars['String']['input']>;
   stockId: Scalars['ID']['input'];
   warehouseId: Scalars['ID']['input'];
+};
+
+export type MutationUpdateStoreArgs = {
+  input: UpdateStoreInput;
 };
 
 export type MutationUpdateTenantArgs = {
@@ -639,6 +787,13 @@ export type MutationUpdateTenantArgs = {
 export type MutationUpdateWarehouseArgs = {
   id: Scalars['ID']['input'];
   input: UpdateWarehouseInput;
+};
+
+export type OrderTimeline = {
+  __typename?: 'OrderTimeline';
+  date: Scalars['String']['output'];
+  ordersCount: Scalars['Int']['output'];
+  revenue: Money;
 };
 
 export type PaginatedAddressesType = {
@@ -653,13 +808,20 @@ export type PaginatedCart = {
   cartItems: Array<CartItem>;
   hasMore: Scalars['Boolean']['output'];
   total: Scalars['Int']['output'];
-  totalCart: Scalars['Float']['output'];
+  totalCart: Array<Money>;
 };
 
 export type PaginatedCategoriesType = {
   __typename?: 'PaginatedCategoriesType';
   categories: Array<Category>;
   hasMore: Scalars['Boolean']['output'];
+  total: Scalars['Int']['output'];
+};
+
+export type PaginatedCustomerReviewProductWithVariant = {
+  __typename?: 'PaginatedCustomerReviewProductWithVariant';
+  hasMore: Scalars['Boolean']['output'];
+  reviews: Array<CustomerReviewProductWithVariant>;
   total: Scalars['Int']['output'];
 };
 
@@ -677,11 +839,25 @@ export type PaginatedStockMovementsType = {
   total: Scalars['Int']['output'];
 };
 
+export type PaginatedStoresType = {
+  __typename?: 'PaginatedStoresType';
+  hasMore: Scalars['Boolean']['output'];
+  stores: Array<Store>;
+  total: Scalars['Int']['output'];
+};
+
 export type PaginatedWarehousesType = {
   __typename?: 'PaginatedWarehousesType';
   hasMore: Scalars['Boolean']['output'];
   total: Scalars['Int']['output'];
   warehouses: Array<Warehouse>;
+};
+
+export type PaginatedWishlist = {
+  __typename?: 'PaginatedWishlist';
+  hasMore: Scalars['Boolean']['output'];
+  total: Scalars['Int']['output'];
+  wishlistItems: Array<WishListWithVariant>;
 };
 
 export type Product = {
@@ -735,14 +911,21 @@ export type Query = {
   getAllCountries: Array<CountryType>;
   getAllProducts: PaginatedProductsType;
   getAllStockMovements: PaginatedStockMovementsType;
+  getAllStores: PaginatedStoresType;
   getAllWarehouses: PaginatedWarehousesType;
   getCart: PaginatedCart;
   getCategoryById: Category;
+  getCustomerById: Customer;
+  getCustomerReviews: PaginatedCustomerReviewProductWithVariant;
+  /** Get all dashboard  in a single query: summary, timeline, recent orders, and top products. */
+  getDashboard: Dashboard;
   getMediaUploadToken: MediaAuthResponse;
   getProductById: Product;
   getStatesByCountryId: Array<StateType>;
+  getStoreById: Store;
   getTenantById: Tenant;
   getWarehouseById: Warehouse;
+  getWishListItems: PaginatedWishlist;
   validateToken: Response;
 };
 
@@ -770,9 +953,9 @@ export type QueryGetAllCategoriesArgs = {
 export type QueryGetAllProductsArgs = {
   categoriesIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   filterMode?: InputMaybe<ProductFilterMode>;
-  limit?: InputMaybe<Scalars['Float']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
-  page?: InputMaybe<Scalars['Float']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
   sortBy?: InputMaybe<ProductSortBy>;
   sortOrder?: InputMaybe<SortOrder>;
   type?: InputMaybe<TypeEnum>;
@@ -791,6 +974,11 @@ export type QueryGetAllStockMovementsArgs = {
   warehouseId: Scalars['ID']['input'];
 };
 
+export type QueryGetAllStoresArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type QueryGetAllWarehousesArgs = {
   addressId?: InputMaybe<Scalars['ID']['input']>;
   includeAddresses?: InputMaybe<Scalars['Boolean']['input']>;
@@ -803,11 +991,18 @@ export type QueryGetAllWarehousesArgs = {
 };
 
 export type QueryGetCartArgs = {
-  input: GetCartPaginatedInput;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryGetCategoryByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type QueryGetCustomerReviewsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  reviewIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 export type QueryGetProductByIdArgs = {
@@ -818,9 +1013,31 @@ export type QueryGetStatesByCountryIdArgs = {
   countryId: Scalars['ID']['input'];
 };
 
+export type QueryGetStoreByIdArgs = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+};
+
 export type QueryGetWarehouseByIdArgs = {
   id: Scalars['ID']['input'];
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type QueryGetWishListItemsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  sortBy?: InputMaybe<WishListSortBy>;
+  sortOrder?: InputMaybe<SortOrder>;
+};
+
+export type RecentOrder = {
+  __typename?: 'RecentOrder';
+  customerName: Scalars['String']['output'];
+  orderDate: Scalars['DateTime']['output'];
+  orderId: Scalars['ID']['output'];
+  orderNumber: Scalars['String']['output'];
+  orderStatus: Scalars['String']['output'];
+  orderTotal: Money;
+  shippingCity?: Maybe<Scalars['String']['output']>;
 };
 
 export type RemoveItemFromCartInput = {
@@ -899,6 +1116,18 @@ export type StockPerWarehouseSortBy = {
   variantFirstAttribute?: InputMaybe<SortOrder>;
 };
 
+export type Store = {
+  __typename?: 'Store';
+  createdAt: Scalars['DateTime']['output'];
+  currency: CurrencyCodes;
+  description?: Maybe<Scalars['String']['output']>;
+  domain?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  logo?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 export type Sustainability = {
   __typename?: 'Sustainability';
   certification: Scalars['String']['output'];
@@ -907,18 +1136,28 @@ export type Sustainability = {
 
 export type Tenant = {
   __typename?: 'Tenant';
-  businessName?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
-  currency: CurrencyCodes;
   defaultBillingAddressId?: Maybe<Scalars['ID']['output']>;
   defaultPhoneNumberId?: Maybe<Scalars['ID']['output']>;
   defaultShippingAddressId?: Maybe<Scalars['ID']['output']>;
-  description?: Maybe<Scalars['String']['output']>;
-  domain?: Maybe<Scalars['String']['output']>;
+  defaultStoreId?: Maybe<Scalars['ID']['output']>;
   email: Scalars['String']['output'];
-  logo?: Maybe<Scalars['String']['output']>;
-  ownerName: Scalars['String']['output'];
+  name: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type TopProduct = {
+  __typename?: 'TopProduct';
+  ordersCount: Scalars['Int']['output'];
+  productBrand?: Maybe<Scalars['String']['output']>;
+  productCover?: Maybe<Scalars['String']['output']>;
+  productName: Scalars['String']['output'];
+  totalQuantitySold: Scalars['Int']['output'];
+  totalRevenue: Money;
+  variantCover?: Maybe<Scalars['String']['output']>;
+  variantId: Scalars['ID']['output'];
+  variantPrice: Money;
+  variantSku: Scalars['String']['output'];
 };
 
 export enum TypeEnum {
@@ -945,6 +1184,22 @@ export type UpdateCategoryInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   parentId?: InputMaybe<Scalars['ID']['input']>;
   subCategories?: InputMaybe<Array<UpdateCategoryInput>>;
+};
+
+export type UpdateCustomerInput = {
+  defaultBillingAddressId?: InputMaybe<Scalars['ID']['input']>;
+  defaultPhoneNumberId?: InputMaybe<Scalars['ID']['input']>;
+  defaultShippingAddressId?: InputMaybe<Scalars['ID']['input']>;
+  name: Scalars['String']['input'];
+};
+
+export type UpdateCustomerReviewProductInput = {
+  /** Updated review comment */
+  comment?: InputMaybe<Scalars['String']['input']>;
+  /** Review ID to update */
+  id: Scalars['ID']['input'];
+  /** Updated rating from 1.0 to 5.0 */
+  ratingCount?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type UpdateItemQtyInput = {
@@ -991,21 +1246,24 @@ export type UpdateStockInWarehouseInput = {
   serialNumbers?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+export type UpdateStoreInput = {
+  currency?: InputMaybe<CurrencyCodes>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  domain?: InputMaybe<Scalars['String']['input']>;
+  logo?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UpdateSustainabilityInput = {
   certification?: InputMaybe<Scalars['String']['input']>;
   recycledPercentage?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type UpdateTenantInput = {
-  businessName?: InputMaybe<Scalars['String']['input']>;
-  currency?: InputMaybe<CurrencyCodes>;
   defaultBillingAddressId?: InputMaybe<Scalars['ID']['input']>;
   defaultPhoneNumberId?: InputMaybe<Scalars['ID']['input']>;
   defaultShippingAddressId?: InputMaybe<Scalars['ID']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  domain?: InputMaybe<Scalars['String']['input']>;
-  logo?: InputMaybe<Scalars['String']['input']>;
-  ownerName?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateWarehouseInput = {
@@ -1025,7 +1283,7 @@ export type Variant = {
   isArchived?: Maybe<Scalars['Boolean']['output']>;
   isbn?: Maybe<Scalars['String']['output']>;
   personalizationOptions?: Maybe<Array<Scalars['String']['output']>>;
-  price: Scalars['Float']['output'];
+  price: Money;
   sku: Scalars['String']['output'];
   upc?: Maybe<Scalars['String']['output']>;
   variantCover?: Maybe<Scalars['String']['output']>;
@@ -1059,6 +1317,64 @@ export type Warranty = {
   coverage: Scalars['String']['output'];
   instructions: Scalars['String']['output'];
   months: Scalars['Float']['output'];
+};
+
+export type WishListItemCreateInput = {
+  variantId: Scalars['String']['input'];
+};
+
+export type WishListItemDeleteInput = {
+  variantId: Scalars['String']['input'];
+};
+
+export type WishListManyItemsInput = {
+  variantIds: Array<Scalars['String']['input']>;
+};
+
+export type WishListMultiStatus = {
+  __typename?: 'WishListMultiStatus';
+  results: Array<WishListMultiStatusResult>;
+  summary: WishListMultiStatusSummary;
+};
+
+export type WishListMultiStatusResult = {
+  __typename?: 'WishListMultiStatusResult';
+  id?: Maybe<Scalars['ID']['output']>;
+  message: Scalars['String']['output'];
+  status: Scalars['Int']['output'];
+  variantId: Scalars['ID']['output'];
+};
+
+export type WishListMultiStatusSummary = {
+  __typename?: 'WishListMultiStatusSummary';
+  failed: Scalars['Int']['output'];
+  successful: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
+};
+
+export enum WishListSortBy {
+  AddedAt = 'ADDED_AT',
+  Name = 'NAME',
+  Price = 'PRICE',
+}
+
+export type WishListWithVariant = {
+  __typename?: 'WishListWithVariant';
+  firstAttribute?: Maybe<CustomerFirstAttribute>;
+  id: Scalars['ID']['output'];
+  isArchived?: Maybe<Scalars['Boolean']['output']>;
+  price?: Maybe<Money>;
+  productName: Scalars['String']['output'];
+  sku: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  variantId: Scalars['ID']['output'];
+};
+
+export type Wishlist = {
+  __typename?: 'Wishlist';
+  id: Scalars['ID']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  variantId: Scalars['ID']['output'];
 };
 
 export type CreateAddressMutationVariables = Exact<{
@@ -1440,6 +1756,8 @@ export type FindCategoriesForPickerQuery = {
 };
 
 export type FindCategoriesTreeQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
   sortBy?: InputMaybe<SortBy>;
   sortOrder?: InputMaybe<SortOrder>;
 }>;
@@ -1448,71 +1766,13 @@ export type FindCategoriesTreeQuery = {
   __typename?: 'Query';
   getAllCategories: {
     __typename?: 'PaginatedCategoriesType';
+    total: number;
+    hasMore: boolean;
     categories: Array<{
       __typename?: 'Category';
       id: string;
       name: string;
       parentId?: string | null;
-      subCategories: Array<{
-        __typename?: 'Category';
-        id: string;
-        parentId?: string | null;
-        name: string;
-        subCategories: Array<{
-          __typename?: 'Category';
-          id: string;
-          parentId?: string | null;
-          name: string;
-          subCategories: Array<{
-            __typename?: 'Category';
-            id: string;
-            parentId?: string | null;
-            name: string;
-            subCategories: Array<{
-              __typename?: 'Category';
-              id: string;
-              parentId?: string | null;
-              name: string;
-              subCategories: Array<{
-                __typename?: 'Category';
-                id: string;
-                parentId?: string | null;
-                name: string;
-                subCategories: Array<{
-                  __typename?: 'Category';
-                  id: string;
-                  parentId?: string | null;
-                  name: string;
-                  subCategories: Array<{
-                    __typename?: 'Category';
-                    id: string;
-                    parentId?: string | null;
-                    name: string;
-                    subCategories: Array<{
-                      __typename?: 'Category';
-                      id: string;
-                      parentId?: string | null;
-                      name: string;
-                      subCategories: Array<{
-                        __typename?: 'Category';
-                        id: string;
-                        parentId?: string | null;
-                        name: string;
-                        subCategories: Array<{
-                          __typename?: 'Category';
-                          id: string;
-                          parentId?: string | null;
-                          name: string;
-                        }>;
-                      }>;
-                    }>;
-                  }>;
-                }>;
-              }>;
-            }>;
-          }>;
-        }>;
-      }>;
     }>;
   };
 };
@@ -1820,7 +2080,6 @@ export type CreateProductMutation = {
     isArchived: boolean;
     variants?: Array<{
       __typename?: 'Variant';
-      price: number;
       weight?: number | null;
       variantCover?: string | null;
       upc?: string | null;
@@ -1835,6 +2094,7 @@ export type CreateProductMutation = {
         key: string;
         value: string;
       }>;
+      price: { __typename?: 'Money'; amount: any; currency: string };
       installmentPayments?: Array<{
         __typename?: 'Installment';
         months: number;
@@ -1933,7 +2193,6 @@ export type UpdateMutation = {
       ean?: string | null;
       isbn?: string | null;
       personalizationOptions?: Array<string> | null;
-      price: number;
       sku: string;
       upc?: string | null;
       variantCover?: string | null;
@@ -1955,6 +2214,7 @@ export type UpdateMutation = {
         interestRate: number;
         months: number;
       }> | null;
+      price: { __typename?: 'Money'; amount: any; currency: string };
       variantMedia?: Array<{
         __typename?: 'Media';
         mediaType: MediaTypeEnum;
@@ -2040,7 +2300,6 @@ export type FindProductByIdQuery = {
     variants?: Array<{
       __typename?: 'Variant';
       id: string;
-      price: number;
       condition: ConditionEnum;
       weight?: number | null;
       sku: string;
@@ -2051,6 +2310,7 @@ export type FindProductByIdQuery = {
       variantCover?: string | null;
       personalizationOptions?: Array<string> | null;
       isArchived?: boolean | null;
+      price: { __typename?: 'Money'; amount: any; currency: string };
       attributes: Array<{
         __typename?: 'Attribute';
         key: string;
@@ -2091,8 +2351,8 @@ export type FindProductByIdQuery = {
 };
 
 export type FindAllProductsQueryVariables = Exact<{
-  page?: InputMaybe<Scalars['Float']['input']>;
-  limit?: InputMaybe<Scalars['Float']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
   categoriesIds?: InputMaybe<
     Array<Scalars['ID']['input']> | Scalars['ID']['input']
   >;
@@ -2151,7 +2411,6 @@ export type FindAllProductsQuery = {
         ean?: string | null;
         isbn?: string | null;
         personalizationOptions?: Array<string> | null;
-        price: number;
         sku: string;
         upc?: string | null;
         variantCover?: string | null;
@@ -2173,6 +2432,7 @@ export type FindAllProductsQuery = {
           interestRate: number;
           months: number;
         }> | null;
+        price: { __typename?: 'Money'; amount: any; currency: string };
         variantMedia?: Array<{
           __typename?: 'Media';
           mediaType: MediaTypeEnum;
@@ -2193,8 +2453,8 @@ export type FindAllProductsQuery = {
 };
 
 export type FindAllVariantsToCreateStockQueryVariables = Exact<{
-  page?: InputMaybe<Scalars['Float']['input']>;
-  limit?: InputMaybe<Scalars['Float']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
   sortBy?: InputMaybe<ProductSortBy>;
   sortOrder?: InputMaybe<SortOrder>;
   filterMode?: InputMaybe<ProductFilterMode>;
@@ -2269,6 +2529,19 @@ export type RemoveVariantfromProductMutation = {
   };
 };
 
+export type FindCurrentStoreQueryVariables = Exact<{ [key: string]: never }>;
+
+export type FindCurrentStoreQuery = {
+  __typename?: 'Query';
+  getStoreById: {
+    __typename?: 'Store';
+    id: string;
+    name?: string | null;
+    logo?: string | null;
+    currency: CurrencyCodes;
+  };
+};
+
 export type UpdateTenantProfileMutationVariables = Exact<{
   input: UpdateTenantInput;
 }>;
@@ -2277,12 +2550,8 @@ export type UpdateTenantProfileMutation = {
   __typename?: 'Mutation';
   updateTenant: {
     __typename?: 'Tenant';
-    ownerName: string;
+    name: string;
     email: string;
-    businessName?: string | null;
-    description?: string | null;
-    domain?: string | null;
-    logo?: string | null;
     defaultPhoneNumberId?: string | null;
   };
 };
@@ -2293,12 +2562,8 @@ export type FindTenantProfileQuery = {
   __typename?: 'Query';
   getTenantById: {
     __typename?: 'Tenant';
-    ownerName: string;
+    name: string;
     email: string;
-    businessName?: string | null;
-    description?: string | null;
-    domain?: string | null;
-    logo?: string | null;
     defaultPhoneNumberId?: string | null;
   };
 };
@@ -2307,12 +2572,7 @@ export type FindTenantAuthInfoQueryVariables = Exact<{ [key: string]: never }>;
 
 export type FindTenantAuthInfoQuery = {
   __typename?: 'Query';
-  getTenantById: {
-    __typename?: 'Tenant';
-    ownerName: string;
-    businessName?: string | null;
-    logo?: string | null;
-  };
+  getTenantById: { __typename?: 'Tenant'; name: string };
 };
 
 export const CreateAddressDocument = {
@@ -4180,6 +4440,21 @@ export const FindCategoriesTreeDocument = {
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '1' },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'limit' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '50' },
+        },
+        {
+          kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
             name: { kind: 'Name', value: 'sortBy' },
@@ -4207,6 +4482,27 @@ export const FindCategoriesTreeDocument = {
             kind: 'Field',
             name: { kind: 'Name', value: 'getAllCategories' },
             arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'page' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'page' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'limit' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'limit' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'includeSubcategories' },
+                value: { kind: 'BooleanValue', value: false },
+              },
               {
                 kind: 'Argument',
                 name: { kind: 'Name', value: 'sortBy' },
@@ -4239,330 +4535,11 @@ export const FindCategoriesTreeDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'parentId' },
                       },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'subCategories' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'id' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'parentId' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'name' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'subCategories' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'id' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'parentId' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'name' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'subCategories',
-                                    },
-                                    selectionSet: {
-                                      kind: 'SelectionSet',
-                                      selections: [
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'id' },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'parentId',
-                                          },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'name' },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'subCategories',
-                                          },
-                                          selectionSet: {
-                                            kind: 'SelectionSet',
-                                            selections: [
-                                              {
-                                                kind: 'Field',
-                                                name: {
-                                                  kind: 'Name',
-                                                  value: 'id',
-                                                },
-                                              },
-                                              {
-                                                kind: 'Field',
-                                                name: {
-                                                  kind: 'Name',
-                                                  value: 'parentId',
-                                                },
-                                              },
-                                              {
-                                                kind: 'Field',
-                                                name: {
-                                                  kind: 'Name',
-                                                  value: 'name',
-                                                },
-                                              },
-                                              {
-                                                kind: 'Field',
-                                                name: {
-                                                  kind: 'Name',
-                                                  value: 'subCategories',
-                                                },
-                                                selectionSet: {
-                                                  kind: 'SelectionSet',
-                                                  selections: [
-                                                    {
-                                                      kind: 'Field',
-                                                      name: {
-                                                        kind: 'Name',
-                                                        value: 'id',
-                                                      },
-                                                    },
-                                                    {
-                                                      kind: 'Field',
-                                                      name: {
-                                                        kind: 'Name',
-                                                        value: 'parentId',
-                                                      },
-                                                    },
-                                                    {
-                                                      kind: 'Field',
-                                                      name: {
-                                                        kind: 'Name',
-                                                        value: 'name',
-                                                      },
-                                                    },
-                                                    {
-                                                      kind: 'Field',
-                                                      name: {
-                                                        kind: 'Name',
-                                                        value: 'subCategories',
-                                                      },
-                                                      selectionSet: {
-                                                        kind: 'SelectionSet',
-                                                        selections: [
-                                                          {
-                                                            kind: 'Field',
-                                                            name: {
-                                                              kind: 'Name',
-                                                              value: 'id',
-                                                            },
-                                                          },
-                                                          {
-                                                            kind: 'Field',
-                                                            name: {
-                                                              kind: 'Name',
-                                                              value: 'parentId',
-                                                            },
-                                                          },
-                                                          {
-                                                            kind: 'Field',
-                                                            name: {
-                                                              kind: 'Name',
-                                                              value: 'name',
-                                                            },
-                                                          },
-                                                          {
-                                                            kind: 'Field',
-                                                            name: {
-                                                              kind: 'Name',
-                                                              value:
-                                                                'subCategories',
-                                                            },
-                                                            selectionSet: {
-                                                              kind: 'SelectionSet',
-                                                              selections: [
-                                                                {
-                                                                  kind: 'Field',
-                                                                  name: {
-                                                                    kind: 'Name',
-                                                                    value: 'id',
-                                                                  },
-                                                                },
-                                                                {
-                                                                  kind: 'Field',
-                                                                  name: {
-                                                                    kind: 'Name',
-                                                                    value:
-                                                                      'parentId',
-                                                                  },
-                                                                },
-                                                                {
-                                                                  kind: 'Field',
-                                                                  name: {
-                                                                    kind: 'Name',
-                                                                    value:
-                                                                      'name',
-                                                                  },
-                                                                },
-                                                                {
-                                                                  kind: 'Field',
-                                                                  name: {
-                                                                    kind: 'Name',
-                                                                    value:
-                                                                      'subCategories',
-                                                                  },
-                                                                  selectionSet:
-                                                                    {
-                                                                      kind: 'SelectionSet',
-                                                                      selections:
-                                                                        [
-                                                                          {
-                                                                            kind: 'Field',
-                                                                            name: {
-                                                                              kind: 'Name',
-                                                                              value:
-                                                                                'id',
-                                                                            },
-                                                                          },
-                                                                          {
-                                                                            kind: 'Field',
-                                                                            name: {
-                                                                              kind: 'Name',
-                                                                              value:
-                                                                                'parentId',
-                                                                            },
-                                                                          },
-                                                                          {
-                                                                            kind: 'Field',
-                                                                            name: {
-                                                                              kind: 'Name',
-                                                                              value:
-                                                                                'name',
-                                                                            },
-                                                                          },
-                                                                          {
-                                                                            kind: 'Field',
-                                                                            name: {
-                                                                              kind: 'Name',
-                                                                              value:
-                                                                                'subCategories',
-                                                                            },
-                                                                            selectionSet:
-                                                                              {
-                                                                                kind: 'SelectionSet',
-                                                                                selections:
-                                                                                  [
-                                                                                    {
-                                                                                      kind: 'Field',
-                                                                                      name: {
-                                                                                        kind: 'Name',
-                                                                                        value:
-                                                                                          'id',
-                                                                                      },
-                                                                                    },
-                                                                                    {
-                                                                                      kind: 'Field',
-                                                                                      name: {
-                                                                                        kind: 'Name',
-                                                                                        value:
-                                                                                          'parentId',
-                                                                                      },
-                                                                                    },
-                                                                                    {
-                                                                                      kind: 'Field',
-                                                                                      name: {
-                                                                                        kind: 'Name',
-                                                                                        value:
-                                                                                          'name',
-                                                                                      },
-                                                                                    },
-                                                                                    {
-                                                                                      kind: 'Field',
-                                                                                      name: {
-                                                                                        kind: 'Name',
-                                                                                        value:
-                                                                                          'subCategories',
-                                                                                      },
-                                                                                      selectionSet:
-                                                                                        {
-                                                                                          kind: 'SelectionSet',
-                                                                                          selections:
-                                                                                            [
-                                                                                              {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                  kind: 'Name',
-                                                                                                  value:
-                                                                                                    'id',
-                                                                                                },
-                                                                                              },
-                                                                                              {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                  kind: 'Name',
-                                                                                                  value:
-                                                                                                    'parentId',
-                                                                                                },
-                                                                                              },
-                                                                                              {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                  kind: 'Name',
-                                                                                                  value:
-                                                                                                    'name',
-                                                                                                },
-                                                                                              },
-                                                                                            ],
-                                                                                        },
-                                                                                    },
-                                                                                  ],
-                                                                              },
-                                                                          },
-                                                                        ],
-                                                                    },
-                                                                },
-                                                              ],
-                                                            },
-                                                          },
-                                                        ],
-                                                      },
-                                                    },
-                                                  ],
-                                                },
-                                              },
-                                            ],
-                                          },
-                                        },
-                                      ],
-                                    },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
                     ],
                   },
                 },
+                { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'hasMore' } },
               ],
             },
           },
@@ -6066,7 +6043,23 @@ export const CreateProductDocument = {
                           ],
                         },
                       },
-                      { kind: 'Field', name: { kind: 'Name', value: 'price' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'price' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'amount' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'currency' },
+                            },
+                          ],
+                        },
+                      },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'weight' },
@@ -6490,7 +6483,23 @@ export const UpdateDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'personalizationOptions' },
                       },
-                      { kind: 'Field', name: { kind: 'Name', value: 'price' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'price' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'amount' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'currency' },
+                            },
+                          ],
+                        },
+                      },
                       { kind: 'Field', name: { kind: 'Name', value: 'sku' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'upc' } },
                       {
@@ -6818,7 +6827,23 @@ export const FindProductByIdDocument = {
                     kind: 'SelectionSet',
                     selections: [
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'price' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'price' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'amount' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'currency' },
+                            },
+                          ],
+                        },
+                      },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'condition' },
@@ -6998,7 +7023,7 @@ export const FindAllProductsDocument = {
         {
           kind: 'VariableDefinition',
           variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Float' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
           defaultValue: { kind: 'IntValue', value: '1' },
         },
         {
@@ -7007,7 +7032,7 @@ export const FindAllProductsDocument = {
             kind: 'Variable',
             name: { kind: 'Name', value: 'limit' },
           },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Float' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
           defaultValue: { kind: 'IntValue', value: '25' },
         },
         {
@@ -7364,6 +7389,19 @@ export const FindAllProductsDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'price' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'amount' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'currency' },
+                                  },
+                                ],
+                              },
                             },
                             {
                               kind: 'Field',
@@ -7468,7 +7506,7 @@ export const FindAllVariantsToCreateStockDocument = {
         {
           kind: 'VariableDefinition',
           variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Float' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
           defaultValue: { kind: 'IntValue', value: '1' },
         },
         {
@@ -7477,7 +7515,7 @@ export const FindAllVariantsToCreateStockDocument = {
             kind: 'Variable',
             name: { kind: 'Name', value: 'limit' },
           },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Float' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
           defaultValue: { kind: 'IntValue', value: '10' },
         },
         {
@@ -7891,6 +7929,37 @@ export const RemoveVariantfromProductDocument = {
   RemoveVariantfromProductMutation,
   RemoveVariantfromProductMutationVariables
 >;
+export const FindCurrentStoreDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'findCurrentStore' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getStoreById' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'logo' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'currency' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  FindCurrentStoreQuery,
+  FindCurrentStoreQueryVariables
+>;
 export const UpdateTenantProfileDocument = {
   kind: 'Document',
   definitions: [
@@ -7933,15 +8002,8 @@ export const UpdateTenantProfileDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'ownerName' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'email' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'businessName' },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'domain' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'logo' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'defaultPhoneNumberId' },
@@ -7973,15 +8035,8 @@ export const FindTenantProfileDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'ownerName' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'email' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'businessName' },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'domain' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'logo' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'defaultPhoneNumberId' },
@@ -8013,12 +8068,7 @@ export const FindTenantAuthInfoDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'ownerName' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'businessName' },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'logo' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
               ],
             },
           },

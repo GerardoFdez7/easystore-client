@@ -1,20 +1,10 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useQuery } from '@apollo/client/react';
-import {
-  FindCategoriesTreeDocument,
-  FindCategoriesTreeQuery,
-  FindCategoriesTreeQueryVariables,
-  SortBy,
-  SortOrder,
-} from '@graphql/generated';
+import { SortOrder } from '@graphql/generated';
 import { nameToSlug } from '@lib/utils/path-utils';
 import { createCategorySlugIdMap } from './categoryLookup';
-
-type GqlCategory = NonNullable<
-  FindCategoriesTreeQuery['getAllCategories']
->['categories'][number];
+import { useCategoriesTree } from './useCategoriesTree';
 
 /**
  * Hook to resolve category ID from a category slug
@@ -22,23 +12,10 @@ type GqlCategory = NonNullable<
  * @returns The resolved category ID and loading state
  */
 export function useCategoryIdBySlug(slug?: string) {
-  const { data, loading, error } = useQuery<
-    FindCategoriesTreeQuery,
-    FindCategoriesTreeQueryVariables
-  >(FindCategoriesTreeDocument, {
-    variables: {
-      sortBy: SortBy.Name,
-      sortOrder: SortOrder.Asc,
-    },
-    fetchPolicy: 'cache-and-network',
-    errorPolicy: 'all',
-    skip: !slug,
+  const { categories, loading, error } = useCategoriesTree({
+    enabled: Boolean(slug),
+    sortOrder: SortOrder.Asc,
   });
-
-  const categories = useMemo(
-    () => (data?.getAllCategories?.categories ?? []) as GqlCategory[],
-    [data?.getAllCategories?.categories],
-  );
 
   const slugToIdMap = useMemo(
     () => createCategorySlugIdMap(categories),

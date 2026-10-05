@@ -1,9 +1,8 @@
 import Logo from '@atoms/shared/Logo';
-import OwnerMenu from '@molecules/dashboard/OwnerMenu';
+import HelpButton from '@molecules/dashboard/HelpButton';
 import ThemeToggle from '@atoms/shared/ThemeToggle';
 // import NotificationButton from '@atoms/shared/NotificationButton';
 import { LanguageButton } from '@atoms/shared/ButtonLanguage';
-// import { ShieldQuestionIcon } from 'lucide-react';
 
 export default function HeaderDashboard() {
   return (
@@ -11,11 +10,10 @@ export default function HeaderDashboard() {
       <div className="flex items-center justify-between">
         <Logo redirectTo="/dashboard" />
         <div className="flex items-center gap-3">
-          {/* <ShieldQuestionIcon className="text-title hover:bg-hover h-5 w-5" /> */}
+          <HelpButton />
           {/* <NotificationButton /> */}
           <ThemeToggle />
           <LanguageButton />
-          <OwnerMenu />
         </div>
       </div>
     </header>

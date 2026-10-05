@@ -545,6 +545,11 @@
     "logoutConfirmDescription": "Are you sure you want to log out of your session?",
     "logoutConfirmCancel": "Cancel",
     "logoutConfirmAction": "Log out",
+    "help": "Help",
+    "helpDialogTitle": "Need help?",
+    "helpDialogDescription": "Continue to our Discord community for support.",
+    "helpDialogCancel": "Cancel",
+    "helpDialogAction": "Continue to Discord",
     "welcomeDashboard": "Welcome to Your Dashboard",
     "descriptionDashboard": "Track your business performance and manage your store with ease.",
     "sales": "Sales",
@@ -578,7 +583,9 @@
     "shipped": "Shipped",
     "completed": "Completed",
     "cancelled": "Cancelled",
-    "sidebarToggle": "Toggle sidebar"
+    "sidebarToggle": "Toggle sidebar",
+    "sidebarPin": "Keep sidebar open",
+    "sidebarUnpin": "Auto-collapse sidebar"
   },
   "Products": {
     "discardChanges": "Discard Changes",

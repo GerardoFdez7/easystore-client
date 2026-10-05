@@ -23,10 +23,6 @@
   max-height: 90vh;
 }
 
-@utility grid-cols-profile-page {
-  grid-template-columns: 20rem minmax(0, 1fr);
-}
-
 @utility grid-cols-legal {
   grid-template-columns: 250px minmax(0, 42rem);
 }
