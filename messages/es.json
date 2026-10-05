@@ -1535,5 +1535,31 @@
     "serialNumberMustBeNonEmpty": "El número de serie no debe estar vacío",
     "serialNumberExceedsMax": "El número de serie no puede exceder 100 caracteres",
     "serialNumbersExceedsMax": "No se pueden agregar más de 1000 números de serie"
+  },
+  "StoreProfile": {
+    "title": "Perfil de la tienda",
+    "subtitle": "Actualiza los datos de tu tienda. Los cambios se guardan al confirmar.",
+    "logo": "Logo",
+    "name": "Nombre",
+    "namePlaceholder": "Nombre de la tienda",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Describe tu tienda...",
+    "domain": "Dominio",
+    "domainPlaceholder": "mitienda.com",
+    "currency": "Moneda",
+    "selectCurrency": "Selecciona la moneda",
+    "unsavedChanges": "Tienes cambios sin guardar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "saved": "Tienda actualizada",
+    "nameLength": "El nombre debe tener entre 2 y 100 caracteres",
+    "descriptionLength": "La descripción debe tener entre 20 y 2000 caracteres",
+    "domainInvalid": "Ingresa un dominio válido, p. ej. example.com",
+    "uploadLogo": "Subir logo",
+    "domainTaken": "Este dominio ya está en uso",
+    "logoInvalid": "El logo debe ser una URL válida",
+    "editStore": "Editar perfil de la tienda",
+    "defaultName": "Tu tienda",
+    "logoUpdated": "Logo actualizado"
   }
 }

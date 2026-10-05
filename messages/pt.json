@@ -1536,5 +1536,31 @@
     "serialNumberMustBeNonEmpty": "O número de série não deve estar vazio",
     "serialNumberExceedsMax": "O número de série não pode exceder 100 caracteres",
     "serialNumbersExceedsMax": "Não é possível adicionar mais de 1000 números de série"
+  },
+  "StoreProfile": {
+    "title": "Perfil da loja",
+    "subtitle": "Atualize os dados da sua loja. As alterações são salvas ao confirmar.",
+    "logo": "Logo",
+    "name": "Nome",
+    "namePlaceholder": "Nome da loja",
+    "description": "Descrição",
+    "descriptionPlaceholder": "Descreva sua loja...",
+    "domain": "Domínio",
+    "domainPlaceholder": "minhaloja.com",
+    "currency": "Moeda",
+    "selectCurrency": "Selecione a moeda",
+    "unsavedChanges": "Você tem alterações não salvas",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "saved": "Loja atualizada",
+    "nameLength": "O nome deve ter entre 2 e 100 caracteres",
+    "descriptionLength": "A descrição deve ter entre 20 e 2000 caracteres",
+    "domainInvalid": "Informe um domínio válido, ex.: example.com",
+    "uploadLogo": "Enviar logo",
+    "domainTaken": "Este domínio já está em uso",
+    "logoInvalid": "O logo deve ser uma URL válida",
+    "editStore": "Editar perfil da loja",
+    "defaultName": "Sua loja",
+    "logoUpdated": "Logo atualizado"
   }
 }

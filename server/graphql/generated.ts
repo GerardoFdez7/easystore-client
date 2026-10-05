@@ -2365,6 +2365,23 @@ export type RemoveVariantfromProductMutation = {
   };
 };
 
+export type UpdateStoreMutationVariables = Exact<{
+  input: UpdateStoreInput;
+}>;
+
+export type UpdateStoreMutation = {
+  __typename?: 'Mutation';
+  updateStore: {
+    __typename?: 'Store';
+    id: string;
+    name?: string | null;
+    logo?: string | null;
+    description?: string | null;
+    domain?: string | null;
+    currency: CurrencyCodes;
+  };
+};
+
 export type FindCurrentStoreQueryVariables = Exact<{ [key: string]: never }>;
 
 export type FindCurrentStoreQuery = {
@@ -2374,6 +2391,8 @@ export type FindCurrentStoreQuery = {
     id: string;
     name?: string | null;
     logo?: string | null;
+    description?: string | null;
+    domain?: string | null;
     currency: CurrencyCodes;
   };
 };
@@ -7711,6 +7730,62 @@ export const RemoveVariantfromProductDocument = {
   RemoveVariantfromProductMutation,
   RemoveVariantfromProductMutationVariables
 >;
+export const UpdateStoreDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'updateStore' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'UpdateStoreInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'updateStore' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'logo' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'domain' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'currency' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UpdateStoreMutation, UpdateStoreMutationVariables>;
 export const FindCurrentStoreDocument = {
   kind: 'Document',
   definitions: [
@@ -7730,6 +7805,8 @@ export const FindCurrentStoreDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'logo' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'domain' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'currency' } },
               ],
             },

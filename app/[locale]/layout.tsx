@@ -54,8 +54,9 @@ export default async function RootLayout({
                   </PinnedSidebarProvider>
                 </AuthProvider>
               </CountdownProvider>
+              {/* Inside the intl provider: custom toasts (e.g. the unsaved-changes bar) use translations. */}
+              <Toaster />
             </NextIntlClientProvider>
-            <Toaster />
           </ThemeProvider>
         </ApolloWrapper>
       </body>

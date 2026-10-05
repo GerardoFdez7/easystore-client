@@ -21,6 +21,18 @@ const testCases = [
     errorMessage: 'warehouse name already exists',
     expectedHandlerId: 'warehouse-name-exists',
   },
+  {
+    description: 'store domain already exists (shown on the form field)',
+    errorMessage: 'Store domain already exists',
+    expectedHandlerId: 'store-domain-exists',
+  },
+  {
+    description: 'masked production conflict on updateStore (domain taken)',
+    errorMessage: 'Resource already exists',
+    extensions: { code: 'CONFLICT' },
+    path: ['updateStore'],
+    expectedHandlerId: 'store-domain-exists',
+  },
   // Authentication errors
   {
     description: 'unauthenticated token validation (should be silent)',

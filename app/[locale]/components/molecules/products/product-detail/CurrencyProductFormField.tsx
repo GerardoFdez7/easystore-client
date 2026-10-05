@@ -14,9 +14,7 @@ import {
   SelectValue,
 } from '@shadcn/ui/select';
 import { useTranslations } from 'next-intl';
-import { CurrencyCodes } from '@graphql/generated';
-
-const currencyCodes = Object.values(CurrencyCodes).sort();
+import { CURRENCY_CODES } from '@lib/consts/currencies';
 
 /** Currency shared by every variant price of the product. */
 export default function CurrencyProductFormField() {
@@ -47,7 +45,7 @@ export default function CurrencyProductFormField() {
                   <SelectValue placeholder={t('selectCurrency')} />
                 </SelectTrigger>
                 <SelectContent>
-                  {currencyCodes.map((code) => (
+                  {CURRENCY_CODES.map((code) => (
                     <SelectItem key={code} value={code}>
                       {code}
                     </SelectItem>

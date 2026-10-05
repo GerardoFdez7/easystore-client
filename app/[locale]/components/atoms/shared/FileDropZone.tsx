@@ -20,6 +20,12 @@ interface FileDropZoneProps {
   error?: string;
   maxItems?: number; // Maximum number of items allowed
   currentItemCount?: number; // Current number of items already selected
+  /** Overrides the default "Upload media files" heading. */
+  title?: string;
+  /** Hides the accepted formats / max size hint. */
+  hideFormatHint?: boolean;
+  /** Renders the drop zone as a centered 1:1 square, matching SingleImagePreview. */
+  square?: boolean;
 }
 
 const FileDropZone: React.FC<FileDropZoneProps> = ({
@@ -34,6 +40,9 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
   error: externalError,
   maxItems,
   currentItemCount = 0,
+  title,
+  hideFormatHint = false,
+  square = false,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
@@ -176,6 +185,8 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
           isDragOver && 'border-primary bg-primary/5',
           disabled && 'bg-muted cursor-not-allowed',
           error && 'border-destructive',
+          square &&
+            'mx-auto flex aspect-square w-full max-w-lg items-center justify-center',
           className,
         )}
         onDragOver={handleDragOver}
@@ -183,7 +194,7 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
         onDrop={handleDrop}
         onClick={(event) => openFileDialog(event)}
       >
-        <CardContent className="p-6">
+        <CardContent className={cn('p-6', square && 'w-full')}>
           <div className="flex flex-col items-center justify-center space-y-4">
             <Upload
               className="text-muted-foreground h-8 w-8"
@@ -192,38 +203,42 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
 
             <div className="text-center">
               <p className="text-lg font-medium">
-                {isDragOver ? t('dropFilesHere') : t('uploadMediaFiles')}
+                {isDragOver
+                  ? t('dropFilesHere')
+                  : (title ?? t('uploadMediaFiles'))}
               </p>
               <p className="text-muted-foreground mt-1 text-sm">
                 {t('dragAndDropOrClick')}
               </p>
-              <p className="text-muted-foreground mt-2 text-xs">
-                {(() => {
-                  const images = acceptedFileTypes
-                    .filter((type) => type.startsWith('image/'))
-                    .map((type) => type.split('/')[1]);
-                  const videos = acceptedFileTypes
-                    .filter((type) => type.startsWith('video/'))
-                    .map((type) => type.split('/')[1]);
+              {!hideFormatHint && (
+                <p className="text-muted-foreground mt-2 text-xs">
+                  {(() => {
+                    const images = acceptedFileTypes
+                      .filter((type) => type.startsWith('image/'))
+                      .map((type) => type.split('/')[1]);
+                    const videos = acceptedFileTypes
+                      .filter((type) => type.startsWith('video/'))
+                      .map((type) => type.split('/')[1]);
 
-                  let text = '';
-                  if (images.length > 0) {
-                    text += t('imagesFormat', {
-                      formats: images.join(', '),
-                      maxSize: maxImageSize.toString(),
-                    });
-                  }
-                  if (videos.length > 0) {
-                    if (text) text += ' • ';
-                    text += t('videosFormat', {
-                      formats: videos.join(', '),
-                      maxSize: maxVideoSize.toString(),
-                    });
-                  }
+                    let text = '';
+                    if (images.length > 0) {
+                      text += t('imagesFormat', {
+                        formats: images.join(', '),
+                        maxSize: maxImageSize.toString(),
+                      });
+                    }
+                    if (videos.length > 0) {
+                      if (text) text += ' • ';
+                      text += t('videosFormat', {
+                        formats: videos.join(', '),
+                        maxSize: maxVideoSize.toString(),
+                      });
+                    }
 
-                  return text;
-                })()}
-              </p>
+                    return text;
+                  })()}
+                </p>
+              )}
             </div>
 
             <Button

@@ -1,0 +1,10 @@
+mutation updateStore($input: UpdateStoreInput!) {
+  updateStore(input: $input) {
+    id
+    name
+    logo
+    description
+    domain
+    currency
+  }
+}

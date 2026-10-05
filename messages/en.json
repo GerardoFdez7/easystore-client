@@ -1535,5 +1535,31 @@
     "serialNumberMustBeNonEmpty": "Serial number must not be empty",
     "serialNumberExceedsMax": "Serial number cannot exceed 100 characters",
     "serialNumbersExceedsMax": "Cannot add more than 1000 serial numbers"
+  },
+  "StoreProfile": {
+    "title": "Store profile",
+    "subtitle": "Update your store's details. Changes are saved when you confirm.",
+    "logo": "Logo",
+    "name": "Name",
+    "namePlaceholder": "Store name",
+    "description": "Description",
+    "descriptionPlaceholder": "Describe your store...",
+    "domain": "Domain",
+    "domainPlaceholder": "mystore.com",
+    "currency": "Currency",
+    "selectCurrency": "Select currency",
+    "unsavedChanges": "You have unsaved changes",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saved": "Store updated",
+    "nameLength": "Name must be between 2 and 100 characters",
+    "descriptionLength": "Description must be between 20 and 2000 characters",
+    "domainInvalid": "Enter a valid domain, e.g. example.com",
+    "uploadLogo": "Upload logo",
+    "domainTaken": "This domain is already in use",
+    "logoInvalid": "Logo must be a valid URL",
+    "editStore": "Edit store profile",
+    "defaultName": "Your store",
+    "logoUpdated": "Logo updated"
   }
 }

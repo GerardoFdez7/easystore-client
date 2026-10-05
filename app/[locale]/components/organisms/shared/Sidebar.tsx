@@ -33,19 +33,35 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@shadcn/ui/collapsible';
-import OwnerLogo from '@atoms/dashboard/OwnerLogo';
 import { Button } from '@shadcn/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@shadcn/ui/tooltip';
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
+import SingleImagePreview from '@atoms/shared/SingleImagePreview';
+import SingleMediaUploader from '@molecules/shared/SingleMediaUploader';
+import StoreProfileDialog from '@organisms/shared/StoreProfileDialog';
 import { useStoreInfo } from '@hooks/domains/store/useStoreInfo';
+import { useUpdateStore } from '@hooks/domains/store/useUpdateStore';
+import {
+  DefaultAcceptedFileTypes,
+  DefaultMaxImageSize,
+  DefaultVideoSize,
+} from '@lib/consts/media-uploader';
+import type { ProcessedData } from '@lib/types/media';
 import { usePinnedSidebar } from '@hooks/utils/usePinnedSidebar';
+
+const LOGO_FILE_TYPES = DefaultAcceptedFileTypes.filter((type) =>
+  type.startsWith('image/'),
+);
 
 export default function Sidebar(props: ComponentProps<typeof ShadcnSidebar>) {
   const t = useTranslations('Dashboard');
+  const tStore = useTranslations('StoreProfile');
   const [openProducts, setOpenProducts] = useState(false);
   const { state, setOpen } = useSidebar();
   const { store } = useStoreInfo();
   const { pinned, setPinned } = usePinnedSidebar();
+  const { updateStore } = useUpdateStore();
 
   // Pinned keeps the sidebar expanded; otherwise it keeps the default collapsed state.
   useEffect(() => {
@@ -61,46 +77,55 @@ export default function Sidebar(props: ComponentProps<typeof ShadcnSidebar>) {
     return false;
   };
 
+  // Saves the first logo as soon as it is uploaded; the store then has a logo.
+  const handleLogoProcessed = async (data?: ProcessedData | null) => {
+    if (!data?.cover) return;
+    const { store: saved } = await updateStore({ logo: data.cover });
+    if (saved) toast.success(tStore('logoUpdated'));
+  };
+
   return (
     <ShadcnSidebar className="mt-20 h-auto" collapsible="icon" {...props}>
-      <SidebarHeader className="mt-4">
-        {store?.logo && <OwnerLogo logo={store.logo} />}
-        <div className="flex items-center gap-2 group-data-[collapsible=icon]:hidden">
-          <span className="size-8 shrink-0" aria-hidden />
-          {store?.name ? (
-            <h3 className="text-title min-w-0 flex-1 truncate text-center font-semibold">
-              {store.name}
-            </h3>
-          ) : (
-            <span className="min-w-0 flex-1" aria-hidden />
-          )}
-          <Tooltip>
-            <TooltipTrigger asChild>
+      <SidebarHeader>
+        {store && (
+          <div className="group-data-[collapsible=icon]:hidden">
+            {store.logo ? (
+              <SingleImagePreview imageUrl={store.logo} viewOnly transparent />
+            ) : (
+              <SingleMediaUploader
+                alwaysEditing
+                dropZoneTitle={tStore('uploadLogo')}
+                transparentPreview
+                hideFormatHint
+                onMediaProcessed={handleLogoProcessed}
+                onUploadError={(message) => toast.error(message)}
+                acceptedFileTypes={LOGO_FILE_TYPES}
+                maxImageSize={DefaultMaxImageSize}
+                maxVideoSize={DefaultVideoSize}
+                className="[&>div]:space-y-2!"
+              />
+            )}
+          </div>
+        )}
+        <div className="group-data-[collapsible=icon]:hidden">
+          {store ? (
+            <StoreProfileDialog store={store}>
               <Button
-                variant="ghost"
-                size="icon"
-                data-sidebar-pin
-                aria-pressed={pinned}
-                aria-label={pinned ? t('sidebarUnpin') : t('sidebarPin')}
-                onClick={() => setPinned(!pinned)}
-                className="size-8 shrink-0"
+                variant="outline"
+                aria-label={tStore('editStore')}
+                className="w-full font-semibold"
               >
-                {pinned ? (
-                  <PinOff className="text-title size-4" />
-                ) : (
-                  <Pin className="text-title size-4" />
-                )}
+                <span className="truncate">
+                  {store.name || tStore('defaultName')}
+                </span>
               </Button>
-            </TooltipTrigger>
-            <TooltipContent side="bottom">
-              {pinned ? t('sidebarUnpin') : t('sidebarPin')}
-            </TooltipContent>
-          </Tooltip>
+            </StoreProfileDialog>
+          ) : null}
         </div>
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarMenu className="gap-2 px-2">
+        <SidebarMenu className="gap-2 px-2 pt-2">
           <SidebarMenuItem>
             <ButtonSidebar
               icon={<LayoutDashboard className="text-title" />}
@@ -200,11 +225,34 @@ export default function Sidebar(props: ComponentProps<typeof ShadcnSidebar>) {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <ButtonSidebar
-              icon={<Settings className="text-title" />}
-              label={t('settings')}
-              route="settings"
-            />
+            <div className="flex items-center gap-2">
+              <ButtonSidebar
+                icon={<Settings className="text-title" />}
+                label={t('settings')}
+                route="settings"
+              />
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    data-sidebar-pin
+                    aria-pressed={pinned}
+                    aria-label={pinned ? t('sidebarUnpin') : t('sidebarPin')}
+                    onClick={() => setPinned(!pinned)}
+                    className="group-data-[collapsible=icon]:hidden"
+                  >
+                    {pinned ? (
+                      <PinOff className="text-title size-6" />
+                    ) : (
+                      <Pin className="text-title size-6" />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                  {pinned ? t('sidebarUnpin') : t('sidebarPin')}
+                </TooltipContent>
+              </Tooltip>
+            </div>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

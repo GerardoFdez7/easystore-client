@@ -281,6 +281,25 @@ const databaseConstraintHandlers: ErrorHandler[] = [
     },
   },
   {
+    id: 'store-domain-exists',
+    priority: 147,
+    matcher: (error: GraphQLFormattedError) => {
+      // Production masks the message as "Resource already exists" (CONFLICT), so
+      // match the operation too: the domain is the only unique field of a store.
+      const message = error.message?.toLowerCase() || '';
+      return (
+        message.includes('store domain already exists') ||
+        (error.extensions?.code === 'CONFLICT' &&
+          error.path?.[0] === 'updateStore')
+      );
+    },
+    handler: () => {
+      // The store form shows this on the domain field (see useUpdateStore),
+      // so no toast is surfaced here.
+      return true;
+    },
+  },
+  {
     id: 'dimension-required-physical',
     priority: 145,
     matcher: (error: GraphQLFormattedError) => {

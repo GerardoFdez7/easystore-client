@@ -38,6 +38,20 @@ const testCases = [
     expectedHandler: 'warehouse-name-exists',
   },
   {
+    name: 'Store Domain Already Exists',
+    error: { message: 'Store domain already exists' },
+    expectedHandler: 'store-domain-exists',
+  },
+  {
+    name: 'Store Domain Conflict (masked in production)',
+    error: {
+      message: 'Resource already exists',
+      extensions: { code: 'CONFLICT' },
+      path: ['updateStore'],
+    },
+    expectedHandler: 'store-domain-exists',
+  },
+  {
     name: 'Unauthenticated Token Validation',
     error: {
       message: 'Authentication required',

@@ -23,7 +23,7 @@ colors:
   popover-foreground: 'oklch(0.145 0 0)'
   muted: 'oklch(94.912% 0.00011 271.152)'
   muted-foreground: 'oklch(0.52 0 0)'
-  accent: 'oklch(0.97 0 0)'
+  accent: 'oklch(0.95 0 0)'
   accent-foreground: 'oklch(0.205 0 0)'
   border: 'oklch(0.922 0 0)'
   input: 'oklch(0.922 0 0)'
