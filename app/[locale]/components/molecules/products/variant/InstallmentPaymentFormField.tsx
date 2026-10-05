@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import {
   FormField,
@@ -123,73 +123,35 @@ export default function InstallmentPaymentFormField() {
                     </Button>
                   </div>
                 </div>
-              </div>
 
-              {/* Display existing installment payments */}
-              {fields.length > 0 && (
-                <ReorderableFieldArray
-                  items={fields}
-                  onMove={moveInstallmentPayment}
-                  onRemove={remove}
-                  t={t}
-                  renderItem={(index) => (
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                      <div>
-                        <FormLabel>{t('months')}</FormLabel>
-                        <FormField
-                          control={control}
-                          name={`installmentPayments.${index}.months`}
-                          render={({ field: fieldProps }) => (
-                            <FormItem>
-                              <FormControl>
-                                <Input
-                                  {...fieldProps}
-                                  aria-label={t('months')}
-                                  inputMode="numeric"
-                                  type="number"
-                                  placeholder={t('monthsPlaceholder')}
-                                  onChange={(e) => {
-                                    const value = sanitizeNumericInput(
-                                      e.target.value,
-                                    );
-                                    fieldProps.onChange(value);
-                                  }}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      <div>
-                        <FormLabel>{t('interestRate')}</FormLabel>
-                        <div className="relative">
-                          <span className="pointer-events-none absolute inset-y-0 right-3 my-1.5 flex items-center rounded-md border px-2 font-medium">
-                            %
-                          </span>
+                {/* Display existing installment payments */}
+                {fields.length > 0 && (
+                  <ReorderableFieldArray
+                    items={fields}
+                    onMove={moveInstallmentPayment}
+                    onRemove={remove}
+                    t={t}
+                    renderItem={(index) => (
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <div>
+                          <FormLabel>{t('months')}</FormLabel>
                           <FormField
                             control={control}
-                            name={`installmentPayments.${index}.interestRate`}
+                            name={`installmentPayments.${index}.months`}
                             render={({ field: fieldProps }) => (
                               <FormItem>
                                 <FormControl>
                                   <Input
                                     {...fieldProps}
-                                    aria-label={t('interestRate')}
-                                    inputMode="decimal"
-                                    type="decimal"
-                                    placeholder={t('interestRatePlaceholder')}
+                                    aria-label={t('months')}
+                                    inputMode="numeric"
+                                    type="number"
+                                    placeholder={t('monthsPlaceholder')}
                                     onChange={(e) => {
-                                      handleDecimalInputChange(
+                                      const value = sanitizeNumericInput(
                                         e.target.value,
-                                        (value) => fieldProps.onChange(value),
                                       );
-                                    }}
-                                    onBlur={(e) => {
-                                      handleDecimalInputBlur(
-                                        e.target.value,
-                                        (value) => fieldProps.onChange(value),
-                                      );
+                                      fieldProps.onChange(value);
                                     }}
                                   />
                                 </FormControl>
@@ -198,11 +160,49 @@ export default function InstallmentPaymentFormField() {
                             )}
                           />
                         </div>
+                        <div>
+                          <FormLabel>{t('interestRate')}</FormLabel>
+                          <div className="relative">
+                            <span className="pointer-events-none absolute inset-y-0 right-3 my-1.5 flex items-center rounded-md border px-2 font-medium">
+                              %
+                            </span>
+                            <FormField
+                              control={control}
+                              name={`installmentPayments.${index}.interestRate`}
+                              render={({ field: fieldProps }) => (
+                                <FormItem>
+                                  <FormControl>
+                                    <Input
+                                      {...fieldProps}
+                                      aria-label={t('interestRate')}
+                                      inputMode="decimal"
+                                      type="decimal"
+                                      placeholder={t('interestRatePlaceholder')}
+                                      onChange={(e) => {
+                                        handleDecimalInputChange(
+                                          e.target.value,
+                                          (value) => fieldProps.onChange(value),
+                                        );
+                                      }}
+                                      onBlur={(e) => {
+                                        handleDecimalInputBlur(
+                                          e.target.value,
+                                          (value) => fieldProps.onChange(value),
+                                        );
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                />
-              )}
+                    )}
+                  />
+                )}
+              </div>
 
               {fields.length === 0 && (
                 <p className="text-muted-foreground py-8 text-center text-sm">

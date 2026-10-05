@@ -63,32 +63,39 @@ export default function Sidebar(props: ComponentProps<typeof ShadcnSidebar>) {
 
   return (
     <ShadcnSidebar className="mt-20 h-auto" collapsible="icon" {...props}>
-      <SidebarHeader className="relative mt-4">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-pressed={pinned}
-              aria-label={pinned ? t('sidebarUnpin') : t('sidebarPin')}
-              onClick={() => setPinned(!pinned)}
-              className="absolute top-0 right-2 size-8 group-data-[collapsible=icon]:hidden"
-            >
-              {pinned ? (
-                <PinOff className="text-title size-4" />
-              ) : (
-                <Pin className="text-title size-4" />
-              )}
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="bottom">
-            {pinned ? t('sidebarUnpin') : t('sidebarPin')}
-          </TooltipContent>
-        </Tooltip>
+      <SidebarHeader className="mt-4">
         {store?.logo && <OwnerLogo logo={store.logo} />}
-        <h3 className="text-title w-full text-center font-semibold group-data-[collapsible=icon]:hidden">
-          {store?.name || ''}
-        </h3>
+        <div className="flex items-center gap-2 group-data-[collapsible=icon]:hidden">
+          <span className="size-8 shrink-0" aria-hidden />
+          {store?.name ? (
+            <h3 className="text-title min-w-0 flex-1 truncate text-center font-semibold">
+              {store.name}
+            </h3>
+          ) : (
+            <span className="min-w-0 flex-1" aria-hidden />
+          )}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-pressed={pinned}
+                aria-label={pinned ? t('sidebarUnpin') : t('sidebarPin')}
+                onClick={() => setPinned(!pinned)}
+                className="size-8 shrink-0"
+              >
+                {pinned ? (
+                  <PinOff className="text-title size-4" />
+                ) : (
+                  <Pin className="text-title size-4" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              {pinned ? t('sidebarUnpin') : t('sidebarPin')}
+            </TooltipContent>
+          </Tooltip>
+        </div>
       </SidebarHeader>
 
       <SidebarContent>

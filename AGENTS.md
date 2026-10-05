@@ -56,6 +56,8 @@ finish.
   this file.
 - Ask only when a missing decision materially affects behavior, a public contract,
   data, security, accessibility, or destructive impact.
+- Follow `docs/MONETARY-CONTRACT.md` for any price, currency, or money value: decimal
+  strings and `lib/utils/money.ts` helpers, never `number`.
 - Do not add dependencies, expose secrets, perform destructive operations, or make
   externally visible breaking changes without explicit approval.
 - Report exact verification evidence and distinguish current-task failures from

@@ -1,5 +1,4 @@
 import { useTranslations } from 'next-intl';
-import React from 'react';
 import SidebarLayout from '@organisms/shared/SidebarLayout';
 import MainStockDetail from '@organisms/inventory/stock-detail/MainStockDetail';
 import HeaderDashboard from '@organisms/shared/HeaderDashboard';

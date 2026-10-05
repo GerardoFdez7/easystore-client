@@ -4,9 +4,13 @@ import Link from 'next/link';
 
 type PlanEnterpriseProps = {
   price: string;
+  originalPrice?: string;
 };
 
-export default function PlanEnterprise({ price }: PlanEnterpriseProps) {
+export default function PlanEnterprise({
+  price,
+  originalPrice,
+}: PlanEnterpriseProps) {
   const t = useTranslations('ConfirmRegister');
 
   return (
@@ -14,6 +18,7 @@ export default function PlanEnterprise({ price }: PlanEnterpriseProps) {
       title={t('enterprise')}
       from={t('from')}
       price={price}
+      originalPrice={originalPrice}
       features={[
         t('1featureEnterprise'),
         t('2featureEnterprise'),

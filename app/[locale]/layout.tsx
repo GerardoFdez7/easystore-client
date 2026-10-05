@@ -5,9 +5,12 @@ import { CountdownProvider } from '@contexts/CountdownContext';
 import { ApolloWrapper } from '@lib/apollo/apollo-provider';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
+import { cookies } from 'next/headers';
 import { routing } from '@i18n/routing';
 import { Toaster } from '@shadcn/ui/sonner';
 import { AuthProvider } from '@contexts/AuthContext';
+import { PinnedSidebarProvider } from '@contexts/PinnedSidebarContext';
+import { sidebarPinnedCookieName } from '@lib/consts/sidebar';
 import './globals.css';
 
 // Load Inter font with all weights
@@ -34,6 +37,9 @@ export default async function RootLayout({
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
+  const cookieStore = await cookies();
+  const initialPinned =
+    cookieStore.get(sidebarPinnedCookieName)?.value === 'true';
 
   return (
     <html lang={locale} suppressHydrationWarning>
@@ -42,7 +48,11 @@ export default async function RootLayout({
           <ThemeProvider>
             <NextIntlClientProvider>
               <CountdownProvider>
-                <AuthProvider>{children}</AuthProvider>
+                <AuthProvider>
+                  <PinnedSidebarProvider initialPinned={initialPinned}>
+                    {children}
+                  </PinnedSidebarProvider>
+                </AuthProvider>
               </CountdownProvider>
             </NextIntlClientProvider>
             <Toaster />

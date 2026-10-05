@@ -128,6 +128,19 @@ reviews:
           assume authorization or replace server enforcement. Report an omission only
           with a concrete latency and safety rationale; otherwise review correctness of
           the chosen non-optimistic state.
+      - name: 'Monetary values'
+        mode: 'error'
+        instructions: >-
+          Enforce docs/MONETARY-CONTRACT.md for every changed price, amount, currency, or
+          total. Fail money represented or computed as a JavaScript number (state, form
+          values, props, Number(), parseFloat(), toFixed(), float arithmetic), hand-built
+          amounts instead of normalizeDecimal, hardcoded currency symbols or codes,
+          a default-currency constant or environment variable, display that bypasses
+          formatMoney or formatAmount, combining Money values without a matching-currency
+          check, and client-submitted totals, taxes, or discounts. Require currency to come
+          from the Money value or the product (or its draft); the store currency is only
+          the default for a new product, and variants never carry their own currency. Do not flag non-monetary numbers
+          such as quantities, percentages, or dimensions.
       - name: 'English source code and inline documentation'
         mode: 'error'
         instructions: >-
@@ -227,6 +240,13 @@ reviews:
         their contract is genuinely shared. Check hook dependencies, cleanup, stale
         session/store data, cancellation where needed, public types, and form ownership;
         do not request a new abstraction without evidence of meaningful duplication.
+
+    - path: 'app/**/lib/utils/money.ts'
+      instructions: |
+        Treat as the single home of money helpers. Verify exact decimal-string handling
+        with no float round trip, 2-decimal scale, canonical normalization, and Intl-based
+        display consistent with docs/MONETARY-CONTRACT.md. Require executable evidence
+        for changed rounding, normalization, or formatting behavior.
 
     - path: 'app/**/lib/**'
       instructions: |

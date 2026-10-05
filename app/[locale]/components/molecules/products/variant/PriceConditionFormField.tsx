@@ -1,4 +1,3 @@
-import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useState } from 'react';
 import {
@@ -19,17 +18,15 @@ import {
 import type { Condition } from '@lib/types/variant';
 import { useTranslations } from 'next-intl';
 import { formatAmount, isDecimalString } from '@lib/utils/money';
-import { useStoreInfo } from '@hooks/domains/store/useStoreInfo';
 
 interface PriceConditionFormFieldProps {
+  /** Currency of the product the variant belongs to. */
   currency?: string;
 }
 
 export default function PriceConditionFormField({
-  currency: currencyProp,
+  currency,
 }: PriceConditionFormFieldProps) {
-  const { store } = useStoreInfo();
-  const currency = currencyProp ?? store?.currency;
   const { control } = useFormContext();
   const t = useTranslations('Variant');
   const [isFocused, setIsFocused] = useState(false);
@@ -38,8 +35,10 @@ export default function PriceConditionFormField({
     // Keep only digits and a single decimal point; the amount stays an exact string
     const cleaned = value.replace(/,/g, '.').replace(/[^\d.]/g, '');
     const parts = cleaned.split('.');
+    const [integer = '', fraction] = parts;
+    // At most 2 decimals, per the monetary contract
     onChange(
-      parts.length <= 2 ? cleaned : `${parts[0]}.${parts.slice(1).join('')}`,
+      fraction === undefined ? integer : `${integer}.${fraction.slice(0, 2)}`,
     );
   };
 

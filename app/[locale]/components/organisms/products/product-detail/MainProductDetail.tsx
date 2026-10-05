@@ -6,6 +6,7 @@ import NameFormField from '@molecules/products/product-detail/NameFormField';
 import BrandManufacturerFormField from '@molecules/products/product-detail/BrandManufacturerFormField';
 import ShortLongDescriptionFormField from '@molecules/products/product-detail/ShortLongDescriptionFormField';
 import TypeProductFormField from '@molecules/products/product-detail/TypeProductFormField';
+import CurrencyProductFormField from '@molecules/products/product-detail/CurrencyProductFormField';
 import MediaFormField from '@molecules/products/product-detail/MediaFormField';
 import { Form } from '@shadcn/ui/form';
 import TagsFormField from '@molecules/products/product-detail/TagsFormField';
@@ -101,6 +102,7 @@ export default function MainProductDetail({
             <div className="w-full space-y-6 sm:flex sm:flex-row sm:gap-6">
               <NameFormField />
               <TypeProductFormField />
+              <CurrencyProductFormField />
             </div>
             <ShortLongDescriptionFormField />
             <VariantsFormField productId={param} />

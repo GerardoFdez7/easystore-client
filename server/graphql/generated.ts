@@ -61,7 +61,7 @@ export type AddVariantToProductInput = {
   installmentPayments?: InputMaybe<Array<CreateInstallmentInput>>;
   isbn?: InputMaybe<Scalars['String']['input']>;
   personalizationOptions?: InputMaybe<Array<Scalars['String']['input']>>;
-  price: MoneyInput;
+  price: Scalars['Decimal']['input'];
   sku: Scalars['String']['input'];
   upc?: InputMaybe<Scalars['String']['input']>;
   variantCover?: InputMaybe<Scalars['String']['input']>;
@@ -224,6 +224,7 @@ export type CreateProductInput = {
   brand?: InputMaybe<Scalars['String']['input']>;
   categories?: InputMaybe<Array<CreateProductCategoryInput>>;
   cover: Scalars['String']['input'];
+  currency: CurrencyCodes;
   longDescription?: InputMaybe<Scalars['String']['input']>;
   manufacturer?: InputMaybe<Scalars['String']['input']>;
   media?: InputMaybe<Array<CreateMediaInput>>;
@@ -260,172 +261,8 @@ export type CreateWarrantyInput = {
 };
 
 export enum CurrencyCodes {
-  Aed = 'AED',
-  Afn = 'AFN',
-  All = 'ALL',
-  Amd = 'AMD',
-  Ang = 'ANG',
-  Aoa = 'AOA',
-  Ars = 'ARS',
-  Aud = 'AUD',
-  Awg = 'AWG',
-  Azn = 'AZN',
-  Bam = 'BAM',
-  Bbd = 'BBD',
-  Bdt = 'BDT',
-  Bgn = 'BGN',
-  Bhd = 'BHD',
-  Bif = 'BIF',
-  Bmd = 'BMD',
-  Bnd = 'BND',
-  Bob = 'BOB',
-  Bov = 'BOV',
-  Brl = 'BRL',
-  Bsd = 'BSD',
-  Btn = 'BTN',
-  Bwp = 'BWP',
-  Byr = 'BYR',
-  Bzd = 'BZD',
-  Cad = 'CAD',
-  Cdf = 'CDF',
-  Che = 'CHE',
-  Chf = 'CHF',
-  Chw = 'CHW',
-  Clf = 'CLF',
-  Clp = 'CLP',
-  Cny = 'CNY',
-  Cop = 'COP',
-  Cou = 'COU',
-  Crc = 'CRC',
-  Cuc = 'CUC',
-  Cup = 'CUP',
-  Cve = 'CVE',
-  Czk = 'CZK',
-  Djf = 'DJF',
-  Dkk = 'DKK',
-  Dop = 'DOP',
-  Dzd = 'DZD',
-  Egp = 'EGP',
-  Ern = 'ERN',
-  Etb = 'ETB',
-  Eur = 'EUR',
-  Fjd = 'FJD',
-  Fkp = 'FKP',
-  Gbp = 'GBP',
-  Gel = 'GEL',
-  Ghs = 'GHS',
-  Gip = 'GIP',
-  Gmd = 'GMD',
-  Gnf = 'GNF',
   Gtq = 'GTQ',
-  Gyd = 'GYD',
-  Hkd = 'HKD',
-  Hnl = 'HNL',
-  Hrk = 'HRK',
-  Htg = 'HTG',
-  Huf = 'HUF',
-  Idr = 'IDR',
-  Ils = 'ILS',
-  Inr = 'INR',
-  Iqd = 'IQD',
-  Irr = 'IRR',
-  Isk = 'ISK',
-  Jmd = 'JMD',
-  Jod = 'JOD',
-  Jpy = 'JPY',
-  Kes = 'KES',
-  Kgs = 'KGS',
-  Khr = 'KHR',
-  Kmf = 'KMF',
-  Kpw = 'KPW',
-  Krw = 'KRW',
-  Kwd = 'KWD',
-  Kyd = 'KYD',
-  Kzt = 'KZT',
-  Lak = 'LAK',
-  Lbp = 'LBP',
-  Lkr = 'LKR',
-  Lrd = 'LRD',
-  Lsl = 'LSL',
-  Lyd = 'LYD',
-  Mad = 'MAD',
-  Mdl = 'MDL',
-  Mga = 'MGA',
-  Mkd = 'MKD',
-  Mmk = 'MMK',
-  Mnt = 'MNT',
-  Mop = 'MOP',
-  Mro = 'MRO',
-  Mur = 'MUR',
-  Mvr = 'MVR',
-  Mwk = 'MWK',
-  Mxn = 'MXN',
-  Mxv = 'MXV',
-  Myr = 'MYR',
-  Mzn = 'MZN',
-  Nad = 'NAD',
-  Ngn = 'NGN',
-  Nio = 'NIO',
-  Nok = 'NOK',
-  Npr = 'NPR',
-  Nzd = 'NZD',
-  Omr = 'OMR',
-  Pab = 'PAB',
-  Pen = 'PEN',
-  Pgk = 'PGK',
-  Php = 'PHP',
-  Pkr = 'PKR',
-  Pln = 'PLN',
-  Pyg = 'PYG',
-  Qar = 'QAR',
-  Ron = 'RON',
-  Rsd = 'RSD',
-  Rub = 'RUB',
-  Rwf = 'RWF',
-  Sar = 'SAR',
-  Sbd = 'SBD',
-  Scr = 'SCR',
-  Sdg = 'SDG',
-  Sek = 'SEK',
-  Sgd = 'SGD',
-  Sll = 'SLL',
-  Sos = 'SOS',
-  Srd = 'SRD',
-  Ssp = 'SSP',
-  Std = 'STD',
-  Svc = 'SVC',
-  Syp = 'SYP',
-  Szl = 'SZL',
-  Thb = 'THB',
-  Tjs = 'TJS',
-  Tmt = 'TMT',
-  Tnd = 'TND',
-  Top = 'TOP',
-  Try = 'TRY',
-  Ttd = 'TTD',
-  Twd = 'TWD',
-  Tzs = 'TZS',
-  Uah = 'UAH',
-  Ugx = 'UGX',
   Usd = 'USD',
-  Uyi = 'UYI',
-  Uyu = 'UYU',
-  Uzs = 'UZS',
-  Vef = 'VEF',
-  Vnd = 'VND',
-  Vuv = 'VUV',
-  Wst = 'WST',
-  Xaf = 'XAF',
-  Xcd = 'XCD',
-  Xdr = 'XDR',
-  Xof = 'XOF',
-  Xpf = 'XPF',
-  Xsu = 'XSU',
-  Xua = 'XUA',
-  Yer = 'YER',
-  Zar = 'ZAR',
-  Zmw = 'ZMW',
-  Zwl = 'ZWL',
 }
 
 export type Customer = {
@@ -557,11 +394,6 @@ export type Money = {
   __typename?: 'Money';
   amount: Scalars['Decimal']['output'];
   currency: Scalars['String']['output'];
-};
-
-export type MoneyInput = {
-  amount: Scalars['Decimal']['input'];
-  currency: Scalars['String']['input'];
 };
 
 export type Mutation = {
@@ -866,6 +698,7 @@ export type Product = {
   categories?: Maybe<Array<ProductCategory>>;
   cover: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
+  currency: CurrencyCodes;
   id: Scalars['ID']['output'];
   isArchived: Scalars['Boolean']['output'];
   longDescription?: Maybe<Scalars['String']['output']>;
@@ -1226,6 +1059,7 @@ export type UpdateProductInput = {
   brand?: InputMaybe<Scalars['String']['input']>;
   categories?: InputMaybe<Array<UpdateProductCategoryInput>>;
   cover?: InputMaybe<Scalars['String']['input']>;
+  currency?: InputMaybe<CurrencyCodes>;
   longDescription?: InputMaybe<Scalars['String']['input']>;
   manufacturer?: InputMaybe<Scalars['String']['input']>;
   media?: InputMaybe<Array<UpdateMediaInput>>;
@@ -2071,6 +1905,7 @@ export type CreateProductMutation = {
     shortDescription: string;
     longDescription?: string | null;
     productType: TypeEnum;
+    currency: CurrencyCodes;
     cover: string;
     tags?: Array<string> | null;
     brand?: string | null;
@@ -2162,6 +1997,7 @@ export type UpdateMutation = {
     manufacturer?: string | null;
     name: string;
     productType: TypeEnum;
+    currency: CurrencyCodes;
     shortDescription: string;
     tags?: Array<string> | null;
     updatedAt: any;
@@ -2283,6 +2119,7 @@ export type FindProductByIdQuery = {
     updatedAt: any;
     createdAt: any;
     productType: TypeEnum;
+    currency: CurrencyCodes;
     isArchived: boolean;
     media?: Array<{
       __typename?: 'Media';
@@ -2380,6 +2217,7 @@ export type FindAllProductsQuery = {
       manufacturer?: string | null;
       isArchived: boolean;
       productType: TypeEnum;
+      currency: CurrencyCodes;
       shortDescription: string;
       tags?: Array<string> | null;
       updatedAt: any;
@@ -6013,6 +5851,7 @@ export const CreateProductDocument = {
                   name: { kind: 'Name', value: 'longDescription' },
                 },
                 { kind: 'Field', name: { kind: 'Name', value: 'productType' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'currency' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'cover' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'tags' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'brand' } },
@@ -6384,6 +6223,7 @@ export const UpdateDocument = {
                 },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'productType' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'currency' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'shortDescription' },
@@ -7000,6 +6840,7 @@ export const FindProductByIdDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'productType' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'currency' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'isArchived' } },
               ],
             },
@@ -7262,6 +7103,10 @@ export const FindAllProductsDocument = {
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'productType' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'currency' },
                       },
                       {
                         kind: 'Field',

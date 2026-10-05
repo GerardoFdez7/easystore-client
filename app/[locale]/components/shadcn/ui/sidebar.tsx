@@ -25,8 +25,6 @@ import {
 } from '@shadcn/ui/tooltip';
 import { useTranslations } from 'next-intl';
 
-const SidebarCookieName = 'sidebar_state';
-const SidebarCookieMaxAge = 60 * 60 * 24 * 7;
 const SidebarWidth = '16rem';
 const SidebarWidthMobile = '18rem';
 const SidebarWidthIcon = '4rem';
@@ -81,9 +79,6 @@ function SidebarProvider({
       } else {
         _setOpen(openState);
       }
-
-      // This sets the cookie to keep the sidebar state.
-      document.cookie = `${SidebarCookieName}=${openState}; path=/; max-age=${SidebarCookieMaxAge}`;
     },
     [setOpenProp, open],
   );

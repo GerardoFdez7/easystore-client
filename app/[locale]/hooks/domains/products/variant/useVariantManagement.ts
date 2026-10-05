@@ -95,10 +95,7 @@ export function useVariantManagement(): UseVariantManagementReturn {
         const existingVariants =
           existingProduct?.getProductById?.variants?.map((variant) => ({
             sku: variant.sku,
-            price: {
-              amount: variant.price.amount,
-              currency: variant.price.currency,
-            },
+            price: variant.price.amount,
             condition: variant.condition,
             attributes: variant.attributes.map((attr) => ({
               key: attr.key,

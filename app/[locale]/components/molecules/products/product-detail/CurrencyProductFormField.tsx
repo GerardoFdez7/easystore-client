@@ -14,9 +14,12 @@ import {
   SelectValue,
 } from '@shadcn/ui/select';
 import { useTranslations } from 'next-intl';
-import { ProductType } from '@lib/types/product';
+import { CurrencyCodes } from '@graphql/generated';
 
-export default function TypeProductFormField() {
+const currencyCodes = Object.values(CurrencyCodes).sort();
+
+/** Currency shared by every variant price of the product. */
+export default function CurrencyProductFormField() {
   const { control } = useFormContext();
   const t = useTranslations('Products');
 
@@ -24,34 +27,31 @@ export default function TypeProductFormField() {
     <section className="w-full">
       <FormField
         control={control}
-        name="productType"
+        name="currency"
         render={({ field, fieldState }) => (
           <FormItem>
-            <FormLabel htmlFor="productType" className="text-lg font-semibold">
-              {t('productType')}
+            <FormLabel htmlFor="currency" className="text-lg font-semibold">
+              {t('currency')}
             </FormLabel>
             <FormControl>
               <Select
-                value={field.value || ProductType.Physical}
+                value={field.value || ''}
                 required={true}
-                onValueChange={(value) => {
-                  field.onChange(value);
-                }}
+                onValueChange={field.onChange}
               >
                 <SelectTrigger
                   className="w-full"
-                  aria-label={t('productType')}
+                  aria-label={t('currency')}
                   aria-invalid={!!fieldState.error}
                 >
-                  <SelectValue placeholder={t('selectType')} />
+                  <SelectValue placeholder={t('selectCurrency')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={ProductType.Physical}>
-                    {t('physical')}
-                  </SelectItem>
-                  <SelectItem value={ProductType.Digital}>
-                    {t('digital')}
-                  </SelectItem>
+                  {currencyCodes.map((code) => (
+                    <SelectItem key={code} value={code}>
+                      {code}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </FormControl>

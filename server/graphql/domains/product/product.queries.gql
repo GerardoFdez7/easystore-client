@@ -68,6 +68,7 @@ query findProductById($id: String!) {
     updatedAt
     createdAt
     productType
+    currency
     isArchived
   }
 }
@@ -115,6 +116,7 @@ query findAllProducts(
       }
       isArchived
       productType
+      currency
       shortDescription
       sustainabilities {
         certification

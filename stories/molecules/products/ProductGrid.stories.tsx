@@ -1,7 +1,12 @@
 import { expect as storybookExpect, fn, userEvent } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { ProductGrid } from '@molecules/products/ProductGrid';
-import { TypeEnum, MediaTypeEnum, ConditionEnum } from '@graphql/generated';
+import {
+  TypeEnum,
+  MediaTypeEnum,
+  ConditionEnum,
+  CurrencyCodes,
+} from '@graphql/generated';
 
 const meta: Meta<typeof ProductGrid> = {
   title: 'Molecules/Products/ProductGrid',
@@ -33,6 +38,7 @@ const mockProducts = [
     longDescription: 'A modern smartphone with advanced features.',
     manufacturer: 'TechCorp Manufacturing',
     productType: TypeEnum.Physical,
+    currency: CurrencyCodes.Gtq,
     shortDescription: 'A modern smartphone.',
     tags: ['electronics', 'mobile', 'smartphone'],
     categories: [
@@ -75,6 +81,7 @@ const mockProducts = [
     longDescription: 'A sustainable water bottle made from recycled materials.',
     manufacturer: 'EcoLife Products',
     productType: TypeEnum.Physical,
+    currency: CurrencyCodes.Gtq,
     shortDescription: 'Reusable water bottle.',
     tags: ['eco-friendly', 'sustainable', 'bottle'],
     categories: [
@@ -117,6 +124,7 @@ const mockProducts = [
     longDescription: 'Premium noise-cancelling wireless headphones.',
     manufacturer: 'AudioTech Industries',
     productType: TypeEnum.Physical,
+    currency: CurrencyCodes.Gtq,
     shortDescription: 'Noise-cancelling headphones.',
     tags: ['audio', 'wireless', 'headphones'],
     categories: [

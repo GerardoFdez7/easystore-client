@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { FormProvider } from 'react-hook-form';
 import { Form } from '@shadcn/ui/form';
 import ContactFields from '@molecules/landing/get-in-touch/ContactFields';

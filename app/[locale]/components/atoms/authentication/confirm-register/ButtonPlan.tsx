@@ -1,12 +1,14 @@
 import { Button } from '@shadcn/ui/button';
 import { Check } from 'lucide-react';
 import Link from 'next/link';
+import { cn } from 'utils';
 
 type ButtonPlanProps = {
   text: string;
   selected?: boolean;
   onSelect: () => void;
   mode?: 'confirm' | 'landing';
+  recommended?: boolean;
 };
 
 export default function ButtonPlan({
@@ -14,6 +16,7 @@ export default function ButtonPlan({
   selected,
   onSelect,
   mode = 'confirm',
+  recommended,
 }: ButtonPlanProps) {
   const content = (
     <div className="flex items-center justify-between gap-x-4 text-lg">
@@ -24,10 +27,14 @@ export default function ButtonPlan({
     </div>
   );
 
+  // Only the recommended plan gets the filled button; the rest are outlined.
+  const variant = recommended ? 'plans' : 'outline';
+  const baseClass = 'w-full rounded-full py-6 hover:cursor-pointer';
+
   if (mode === 'landing') {
     return (
       <Link href="/register">
-        <Button className="py-6 hover:cursor-pointer" variant={'plans'}>
+        <Button className={baseClass} variant={variant}>
           {content}
         </Button>
       </Link>
@@ -36,8 +43,8 @@ export default function ButtonPlan({
 
   return (
     <Button
-      className={`py-6 ${selected ? 'bg-black' : ''}`}
-      variant={'plans'}
+      className={cn(baseClass, selected && 'border-primary border-2')}
+      variant={variant}
       onClick={onSelect}
     >
       {content}

@@ -1,7 +1,7 @@
 import { expect as storybookExpect, within } from 'storybook/test';
 import { ProductCard } from '@atoms/products/ProductCard';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { MediaTypeEnum, TypeEnum } from '@graphql/generated';
+import { MediaTypeEnum, TypeEnum, CurrencyCodes } from '@graphql/generated';
 
 const meta: Meta<typeof ProductCard> = {
   play: async ({ canvasElement }) => {
@@ -46,6 +46,7 @@ const mockProduct = {
   ],
   isArchived: false,
   productType: TypeEnum.Physical,
+  currency: CurrencyCodes.Gtq,
   shortDescription: 'A reusable eco-friendly water bottle.',
   createdAt: '2024-01-01T00:00:00Z',
   updatedAt: '2024-01-15T12:30:00Z',
@@ -70,6 +71,7 @@ export const WithoutMedia: Story = {
       media: undefined,
       isArchived: false,
       productType: TypeEnum.Physical,
+      currency: CurrencyCodes.Gtq,
       shortDescription: 'A reusable eco-friendly water bottle.',
     },
   },

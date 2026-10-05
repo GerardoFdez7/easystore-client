@@ -1,9 +1,9 @@
 import { CategoryTreeNode } from '@hooks/domains/category';
+import { FindCategoriesTreeDocument, SortOrder } from '@graphql/generated';
 import {
-  FindCategoriesTreeDocument,
-  SortBy,
-  SortOrder,
-} from '@graphql/generated';
+  categoriesTreeResult,
+  categoriesTreeVariables,
+} from './categoriesTreeQuery';
 
 // Mock tree data with nested categories
 export const mockCategoryTreeData: CategoryTreeNode[] = [
@@ -149,31 +149,14 @@ export const mockCategoryTreeData: CategoryTreeNode[] = [
   },
 ];
 
-// Convert CategoryTreeNode to GraphQL format for mocking
-const convertToGqlFormat = (node: CategoryTreeNode): CategoryTreeNode => ({
-  id: node.id,
-  name: node.name,
-  parentId: node.parentId,
-  subCategories: node.subCategories?.map(convertToGqlFormat) || [],
-});
-
 // Mock for successful tree query
 export const mockCategoryTreeSuccess = [
   {
     request: {
       query: FindCategoriesTreeDocument,
-      variables: {
-        sortBy: SortBy.Name,
-        sortOrder: SortOrder.Desc,
-      },
+      variables: categoriesTreeVariables(SortOrder.Desc),
     },
-    result: {
-      data: {
-        getAllCategories: {
-          categories: mockCategoryTreeData.map(convertToGqlFormat),
-        },
-      },
-    },
+    result: categoriesTreeResult(mockCategoryTreeData),
   },
 ];
 
@@ -182,18 +165,9 @@ export const mockCategoryTreeLoading = [
   {
     request: {
       query: FindCategoriesTreeDocument,
-      variables: {
-        sortBy: SortBy.Name,
-        sortOrder: SortOrder.Desc,
-      },
+      variables: categoriesTreeVariables(SortOrder.Desc),
     },
-    result: {
-      data: {
-        getAllCategories: {
-          categories: [],
-        },
-      },
-    },
+    result: categoriesTreeResult([]),
     delay: Infinity, // Simulate loading delay
   },
 ];
@@ -203,18 +177,9 @@ export const mockCategoryTreeEmpty = [
   {
     request: {
       query: FindCategoriesTreeDocument,
-      variables: {
-        sortBy: SortBy.Name,
-        sortOrder: SortOrder.Desc,
-      },
+      variables: categoriesTreeVariables(SortOrder.Desc),
     },
-    result: {
-      data: {
-        getAllCategories: {
-          categories: [],
-        },
-      },
-    },
+    result: categoriesTreeResult([]),
   },
 ];
 
@@ -223,10 +188,7 @@ export const mockCategoryTreeError = [
   {
     request: {
       query: FindCategoriesTreeDocument,
-      variables: {
-        sortBy: SortBy.Name,
-        sortOrder: SortOrder.Desc,
-      },
+      variables: categoriesTreeVariables(SortOrder.Desc),
     },
     error: new Error('Failed to load categories'),
   },

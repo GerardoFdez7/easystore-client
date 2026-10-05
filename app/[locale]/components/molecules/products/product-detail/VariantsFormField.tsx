@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import {
   FormField,
@@ -41,7 +41,6 @@ import {
   useDeleteVariant,
 } from '@hooks/domains/products/variant';
 import { formatMoney } from '@lib/utils/money';
-import { useStoreInfo } from '@hooks/domains/store/useStoreInfo';
 
 interface VariantsFormFieldProps {
   productId: string;
@@ -51,9 +50,9 @@ export default function VariantsFormField({
   productId,
 }: VariantsFormFieldProps) {
   const { control } = useFormContext();
+  const currency = useWatch({ control, name: 'currency' }) as string;
   const router = useRouter();
   const t = useTranslations('Products');
-  const currency = useStoreInfo().store?.currency;
   const tVariant = useTranslations('Variant');
   const { variantsDraft, removeVariantDraft } = useProductCreation();
 

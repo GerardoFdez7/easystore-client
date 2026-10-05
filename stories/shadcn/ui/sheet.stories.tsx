@@ -1,6 +1,5 @@
 import { expect as storybookExpect, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import React from 'react';
 import {
   Sheet,
   SheetTrigger,

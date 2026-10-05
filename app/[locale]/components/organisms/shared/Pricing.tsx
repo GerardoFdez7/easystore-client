@@ -36,16 +36,28 @@ export default function Pricing({
       advanced: '$30',
       enterprise: '$100',
     },
-    yearly: { basic: '$0', premium: '$11', advanced: '$22', enterprise: '$75' },
+    // Yearly = monthly price with the 25% yearly discount applied.
+    yearly: {
+      basic: '$0',
+      premium: '$11.25',
+      advanced: '$22.50',
+      enterprise: '$75',
+    },
   };
+
+  // Anchor: show the monthly price crossed out next to the discounted yearly one.
+  const originalPrice = (plan: PlanType) =>
+    billing === 'yearly' && plan !== 'basic' ? prices.monthly[plan] : undefined;
 
   const renderPlan = () => {
     const price = prices[billing][selectedPlan];
+    const anchor = originalPrice(selectedPlan);
     switch (selectedPlan) {
       case 'basic':
         return (
           <PlanBasic
             price={price}
+            originalPrice={anchor}
             selected={selectedPlan === 'basic'}
             onSelect={() => setSelectedPlan('basic')}
             mode={mode}
@@ -55,6 +67,7 @@ export default function Pricing({
         return (
           <PlanPremium
             price={price}
+            originalPrice={anchor}
             selected={selectedPlan === 'premium'}
             onSelect={() => setSelectedPlan('premium')}
             mode={mode}
@@ -64,13 +77,14 @@ export default function Pricing({
         return (
           <PlanAdvanced
             price={price}
+            originalPrice={anchor}
             selected={selectedPlan === 'advanced'}
             onSelect={() => setSelectedPlan('advanced')}
             mode={mode}
           />
         );
       case 'enterprise':
-        return <PlanEnterprise price={price} />;
+        return <PlanEnterprise price={price} originalPrice={anchor} />;
     }
   };
 
@@ -91,14 +105,19 @@ export default function Pricing({
         defaultValue={billing}
         onValueChange={(val) => setBilling(val as BillingType)}
       >
-        <TabsList className="mx-auto grid w-65.75 grid-cols-2 gap-2">
+        <TabsList className="mx-auto grid w-80 grid-cols-2 gap-2">
           <TabsTrigger value="monthly"> {t('monthly')}</TabsTrigger>
-          <TabsTrigger value="yearly"> {t('yearly')}</TabsTrigger>
+          <TabsTrigger value="yearly" className="group">
+            {t('yearly')}
+            <span className="bg-primary/10 text-title rounded-full px-2 py-0.5 text-xs font-semibold group-data-[state=active]:bg-white group-data-[state=active]:text-black">
+              {t('yearlyDiscount')}
+            </span>
+          </TabsTrigger>
         </TabsList>
       </Tabs>
 
       <div className="hidden min-[904px]:block">
-        <div className="mx-auto grid max-w-338 grid-cols-2 justify-items-center gap-6 2xl:grid-cols-4">
+        <div className="mx-auto grid max-w-338 grid-cols-2 justify-items-center gap-6 pt-4 2xl:grid-cols-4">
           <PlanBasic
             price={prices[billing].basic}
             selected={selectedPlan === 'basic'}
@@ -107,17 +126,22 @@ export default function Pricing({
           />
           <PlanPremium
             price={prices[billing].premium}
+            originalPrice={originalPrice('premium')}
             selected={selectedPlan === 'premium'}
             onSelect={() => setSelectedPlan('premium')}
             mode={mode}
           />
           <PlanAdvanced
             price={prices[billing].advanced}
+            originalPrice={originalPrice('advanced')}
             selected={selectedPlan === 'advanced'}
             onSelect={() => setSelectedPlan('advanced')}
             mode={mode}
           />
-          <PlanEnterprise price={prices[billing].enterprise} />
+          <PlanEnterprise
+            price={prices[billing].enterprise}
+            originalPrice={originalPrice('enterprise')}
+          />
         </div>
       </div>
 

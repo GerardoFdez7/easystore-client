@@ -8,13 +8,14 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useProductManagement, useGetProductById } from './';
 import { useProductCreation } from '@contexts/ProductCreationContext';
-import { toMoneyInput } from '@lib/utils/money';
+import { normalizeDecimal } from '@lib/utils/money';
 import { useStoreInfo } from '@hooks/domains/store/useStoreInfo';
 import {
   Media,
   TypeEnum,
   MediaTypeEnum,
   ConditionEnum,
+  CurrencyCodes,
 } from '@graphql/generated';
 
 // Create Zod schema factory that uses translations
@@ -24,6 +25,7 @@ const createProductFormSchema = (
   variantsDraftLength: number = 0,
 ) =>
   z.object({
+    currency: z.string().min(1, { message: t('currencyRequired') }),
     name: z
       .string()
       .trim()
@@ -193,6 +195,7 @@ export function useProductForm({
     // Mode is 'create' - use draft data if available
     if (isNew) {
       return {
+        currency: productDraft?.currency || store?.currency || '',
         name: productDraft?.name || '',
         shortDescription: productDraft?.shortDescription || '',
         longDescription: productDraft?.longDescription || null,
@@ -213,6 +216,7 @@ export function useProductForm({
     // Mode is 'update' - product data not yet available
     if (!product) {
       return {
+        currency: '',
         name: '',
         shortDescription: '',
         longDescription: null,
@@ -230,6 +234,7 @@ export function useProductForm({
 
     // Mode is 'update' and product data is available
     return {
+      currency: product.currency || '',
       name: product.name || '',
       shortDescription: product.shortDescription || '',
       longDescription: product.longDescription || null,
@@ -254,7 +259,7 @@ export function useProductForm({
       sustainabilities: product.sustainabilities || [],
       media: product.media?.map((mediaItem: Media) => mediaItem.url) || [],
     };
-  }, [product, isNew, productDraft, variantsDraft]);
+  }, [product, isNew, productDraft, variantsDraft, store?.currency]);
 
   // Initialize form
   const form = useForm<ProductFormData>({
@@ -273,6 +278,13 @@ export function useProductForm({
       form.reset(originalValues);
     }
   }, [product, isNew, originalValues, form]);
+
+  // New products default to the store currency once it loads; the tenant may change it
+  useEffect(() => {
+    if (isNew && store?.currency && !form.getValues('currency')) {
+      form.setValue('currency', store.currency, { shouldValidate: true });
+    }
+  }, [isNew, store?.currency, form]);
 
   // Save draft on form change (only in create mode)
   useEffect(() => {
@@ -347,11 +359,6 @@ export function useProductForm({
     async (data: ProductFormData) => {
       try {
         if (isNew) {
-          // Variant prices are priced in the store's currency
-          if (!store) {
-            throw new Error('Store currency is not available yet');
-          }
-
           // Create new product
           const input = {
             name: data.name,
@@ -361,6 +368,7 @@ export function useProductForm({
             manufacturer: data.manufacturer || null,
             cover: data.cover,
             productType: data.productType as TypeEnum,
+            currency: data.currency as CurrencyCodes,
             tags: data.tags || null,
             categories: data.categories?.map((cat) => ({
               categoryId: cat.categoryId,
@@ -377,7 +385,7 @@ export function useProductForm({
                 : 'IMAGE') as MediaTypeEnum,
             })),
             variants: variantsDraft.map((variant) => ({
-              price: toMoneyInput(variant.price, store.currency),
+              price: normalizeDecimal(variant.price),
               condition: variant.condition as ConditionEnum,
               attributes: variant.attributes?.map((attr) => ({
                 key: attr.key,
@@ -472,6 +480,9 @@ export function useProductForm({
             case 'productType':
               fieldsToUpdate.productType = value as TypeEnum;
               break;
+            case 'currency':
+              fieldsToUpdate.currency = value as CurrencyCodes;
+              break;
             case 'tags':
               fieldsToUpdate.tags = value || null;
               break;
@@ -524,7 +535,6 @@ export function useProductForm({
       variantsDraft,
       clearAllDrafts,
       router,
-      store,
     ],
   );
 

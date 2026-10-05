@@ -4,9 +4,15 @@ type HeaderPlanProps = {
   title: string;
   price: string;
   from?: string;
+  originalPrice?: string;
 };
 
-export default function HeaderPlan({ title, price, from }: HeaderPlanProps) {
+export default function HeaderPlan({
+  title,
+  price,
+  from,
+  originalPrice,
+}: HeaderPlanProps) {
   const t = useTranslations('ConfirmRegister');
 
   return (
@@ -14,7 +20,12 @@ export default function HeaderPlan({ title, price, from }: HeaderPlanProps) {
       <h3 className="text-title font-bold">{title}</h3>
       {from && <p className="text-title font-bold">{from}</p>}
       <div className="flex items-baseline">
-        <span className="text-title text-4xl font-extrabold">{price}</span>
+        {originalPrice && (
+          <s className="text-muted-foreground mr-2 text-xl font-semibold">
+            {originalPrice}
+          </s>
+        )}
+        <span className="text-title text-5xl font-extrabold">{price}</span>
         <span className="text-title ml-1 font-bold">{t('month')}</span>
       </div>
     </div>

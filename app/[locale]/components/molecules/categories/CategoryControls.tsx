@@ -80,8 +80,8 @@ function CategoryControls({
           {showAddButton && addButtonHref && addButtonText && (
             <Button
               asChild
+              variant="title"
               disabled={loading}
-              className="text-accent bg-title hover:bg-accent-foreground"
               aria-label={addButtonText}
             >
               <Link href={addButtonHref}>

@@ -1,4 +1,4 @@
-import type { Money, MoneyInput } from '@graphql/generated';
+import type { Money } from '@graphql/generated';
 
 /**
  * Money amounts travel as exact Decimal strings (see the backend monetary
@@ -16,15 +16,13 @@ export const normalizeDecimal = (value: string): string => {
   return negative && unsigned !== '0' ? `-${unsigned}` : unsigned;
 };
 
-/** Whether the string is a plain non-negative decimal such as "12", "12." or "12.50". */
+/** Whether the string is a non-negative amount with at most 2 decimals ("12", "12.", "12.5"). */
 export const isDecimalString = (value: string): boolean =>
-  /^\d+\.?\d*$/.test(value.trim());
+  /^\d+\.?\d{0,2}$/.test(value.trim());
 
-/** Builds the GraphQL MoneyInput from a decimal string and its currency. */
-export const toMoneyInput = (amount: string, currency: string): MoneyInput => ({
-  amount: normalizeDecimal(amount),
-  currency,
-});
+/** Whether the amount is a valid decimal string greater than zero. */
+export const isPositiveDecimal = (value: string): boolean =>
+  isDecimalString(value) && /[1-9]/.test(value);
 
 /**
  * Intl.NumberFormat (v3) formats exact decimal strings without rounding through
@@ -42,6 +40,8 @@ const getFormatter = (currency: string, locale: string) => {
       style: 'currency',
       currency,
       currencyDisplay: 'narrowSymbol',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     });
     formatters.set(key, formatter);
   }

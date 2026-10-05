@@ -9,6 +9,10 @@ import {
   SortOrder,
 } from '@graphql/generated';
 import {
+  categoriesTreeResult,
+  categoriesTreeVariables,
+} from '../../molecules/categories/mocks/categoriesTreeQuery';
+import {
   mockCategories,
   mockEmptyCategories,
 } from '../../molecules/categories/mocks/categoryMocks';
@@ -66,7 +70,7 @@ const listRequest = ({
 
 const treeRequest = {
   query: FindCategoriesTreeDocument,
-  variables: { sortBy: SortBy.Name, sortOrder: SortOrder.Asc },
+  variables: categoriesTreeVariables(SortOrder.Asc),
 };
 
 const listResult = (categories: unknown[]) => ({
@@ -79,9 +83,7 @@ const listResult = (categories: unknown[]) => ({
   },
 });
 
-const treeResult = (categories: unknown[]) => ({
-  data: { getAllCategories: { categories } },
-});
+const treeResult = categoriesTreeResult;
 
 const treeMock = {
   request: treeRequest,

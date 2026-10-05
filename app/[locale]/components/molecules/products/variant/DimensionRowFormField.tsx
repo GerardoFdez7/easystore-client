@@ -1,4 +1,3 @@
-import React from 'react';
 import { FormLabel } from '@shadcn/ui/form';
 import { useTranslations } from 'next-intl';
 import DecimalFormField from '@atoms/products/variant/DecimalFormField';

@@ -1,7 +1,7 @@
 import { expect as storybookExpect } from 'storybook/test';
 import ProductStatus from '@atoms/products/ProductStatus';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { TypeEnum, type Product } from '@graphql/generated';
+import { TypeEnum, type Product, CurrencyCodes } from '@graphql/generated';
 
 const activeProduct = {
   id: 'product-1',
@@ -11,6 +11,7 @@ const activeProduct = {
   updatedAt: '2026-01-11T12:00:00.000Z',
   isArchived: false,
   productType: TypeEnum.Physical,
+  currency: CurrencyCodes.Gtq,
   shortDescription: 'A durable everyday bottle.',
 } satisfies Product;
 

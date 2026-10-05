@@ -13,7 +13,7 @@ const meta: Meta<typeof ProfileTemplate> = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await storybookExpect(
-      canvas.getByRole('heading', { name: 'Store Profile' }),
+      await canvas.findByRole('heading', { name: 'Account' }),
     ).toBeInTheDocument();
   },
   component: ProfileTemplate,

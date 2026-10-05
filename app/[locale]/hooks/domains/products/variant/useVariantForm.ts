@@ -8,8 +8,11 @@ import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { useVariantFromProducts } from '@lib/contexts/ProductsContext';
 import { useProductCreation } from '@lib/contexts/ProductCreationContext';
-import { isDecimalString, toMoneyInput } from '@lib/utils/money';
-import { useStoreInfo } from '@hooks/domains/store/useStoreInfo';
+import {
+  isDecimalString,
+  isPositiveDecimal,
+  normalizeDecimal,
+} from '@lib/utils/money';
 import { useVariantManagement } from './useVariantManagement';
 import {
   ConditionEnum,
@@ -156,10 +159,9 @@ function normalizeCondition(condition: VariantFormData['condition']) {
 
 function buildSharedVariantInput(
   data: VariantFormData,
-  currency: string,
 ): Omit<AddVariantToProductInput, 'dimension' | 'weight'> {
   return {
-    price: toMoneyInput(data.price, currency),
+    price: normalizeDecimal(data.price),
     condition: normalizeCondition(data.condition),
     attributes: data.attributes.map(({ key, value }) => ({ key, value })),
     sku: data.codes.sku,
@@ -230,7 +232,6 @@ export function useVariantForm({
   const { addVariant, updateVariant, isAdding, isUpdating } =
     useVariantManagement();
   const { addVariantDraft, productDraft } = useProductCreation();
-  const { store } = useStoreInfo();
 
   // Get variant data from context only when editing (not creating new)
   const {
@@ -340,8 +341,7 @@ export function useVariantForm({
       // In create mode - check if required fields are filled
       const currentValues = form.getValues();
       return (
-        isDecimalString(currentValues.price) &&
-        Number(currentValues.price) > 0 &&
+        isPositiveDecimal(currentValues.price) &&
         currentValues.codes.sku !== null &&
         currentValues.codes.sku !== ''
       );
@@ -385,16 +385,10 @@ export function useVariantForm({
           return;
         }
 
-        // Existing variants keep their own currency; new ones use the store's
-        const currency = variant?.price.currency ?? store?.currency;
-        if (!currency) {
-          throw new Error('Currency is not available yet');
-        }
-
         if (isNew) {
           // Create new variant for existing product
           const input: AddVariantToProductInput = {
-            ...buildSharedVariantInput(data, currency),
+            ...buildSharedVariantInput(data),
             ...(data.dimensions && {
               dimension: {
                 height: data.dimensions.height ?? 0,
@@ -430,7 +424,7 @@ export function useVariantForm({
         }
 
         const variantInput: AddVariantToProductInput = {
-          ...buildSharedVariantInput(data, currency),
+          ...buildSharedVariantInput(data),
           dimension: {
             height: data.dimensions?.height ?? 0,
             width: data.dimensions?.width ?? 0,
@@ -449,8 +443,6 @@ export function useVariantForm({
     [
       isNew,
       isNewProduct,
-      variant,
-      store,
       variantId,
       productId,
       addVariant,

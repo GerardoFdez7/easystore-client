@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { useTranslations } from 'next-intl';
 import { Combobox } from '@shadcn/ui/combobox';
 import { useCountryCombobox } from '@hooks/domains/address/geo';

@@ -2,6 +2,7 @@ import {
   expect as storybookExpect,
   screen,
   userEvent,
+  waitFor,
   within,
 } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
@@ -28,17 +29,14 @@ const meta: Meta<typeof HelpButton> = {
       dialogCanvas.getByRole('link', { name: 'Continue to Discord' }),
     ).toHaveAttribute('href', 'https://discord.com/invite/35nBjqV4KC');
 
-    const overlay = document.querySelector<HTMLElement>(
-      '[data-slot="dialog-overlay"]',
+    await userEvent.click(dialogCanvas.getByRole('button', { name: 'Cancel' }));
+    await waitFor(
+      () =>
+        storybookExpect(
+          screen.queryByRole('dialog', { name: 'Need help?' }),
+        ).not.toBeInTheDocument(),
+      { timeout: 3000 },
     );
-    if (!overlay) {
-      throw new Error('Expected the dialog overlay to be rendered');
-    }
-
-    await userEvent.click(overlay);
-    await storybookExpect(
-      screen.queryByRole('dialog', { name: 'Need help?' }),
-    ).not.toBeInTheDocument();
   },
   title: 'Molecules/Dashboard/HelpButton',
   component: HelpButton,

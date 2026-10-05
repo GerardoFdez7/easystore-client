@@ -1,6 +1,9 @@
+'use client';
+
 import { SiteHeader } from '@atoms/shared/SiteHeader';
 import { SidebarInset, SidebarProvider } from '@shadcn/ui/sidebar';
 import Sidebar from '@organisms/shared/Sidebar';
+import { usePinnedSidebar } from '@hooks/utils/usePinnedSidebar';
 import { ReactNode } from 'react';
 
 interface SidebarLayoutProps {
@@ -9,10 +12,14 @@ interface SidebarLayoutProps {
 }
 
 export default function SidebarLayout({ children, title }: SidebarLayoutProps) {
+  // Read the pinned preference before first paint so the sidebar mounts already
+  // expanded instead of collapsed-then-animating open on every navigation.
+  const { pinned } = usePinnedSidebar();
+
   return (
     <div className="pt-22 2xl:m-5">
       <SidebarProvider
-        defaultOpen={false}
+        defaultOpen={pinned}
         style={
           {
             '--header-height': 'calc(var(--spacing) * 12)',

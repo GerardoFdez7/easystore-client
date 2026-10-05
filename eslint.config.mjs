@@ -100,6 +100,8 @@ const eslintConfig = [
     languageOptions: {
       parser: tsParser,
       parserOptions: {
+        // React 17+ automatic JSX runtime: don't treat `React` as implicitly used.
+        jsxPragma: null,
         project: './tsconfig.json',
         tsconfigRootDir: __dirname,
       },
@@ -116,6 +118,8 @@ const eslintConfig = [
       '@typescript-eslint/await-thenable': 'error',
       '@typescript-eslint/no-misused-promises': 'error',
 
+      // Automatic JSX runtime: let unused `import React` be reported.
+      'react/jsx-uses-react': 'off',
       'react-hooks/immutability': 'error',
       'react-hooks/purity': 'error',
       'react-hooks/refs': 'error',
