@@ -7,17 +7,20 @@ two disagree, the backend file wins and this file must be fixed.
 ## Rules
 
 1. **Money is `{ amount, currency }`.** `amount` is a Decimal **string** (for example
-   `"12.5"`), `currency` is an ISO 4217 code. Read both from GraphQL (`Money`). Variant
-   inputs send only the amount (`price` as a Decimal string); the currency is the
-   product's.
+   `"12.5"`), `currency` is an ISO 4217 code. Read both from GraphQL `Money` values (cart
+   items, totals, dashboard). A variant's `price` is the exception, in both the API
+   output and its inputs: it is only a Decimal amount, and its currency is the
+   product's. Variants never carry or choose their own currency.
 2. **Never use `number` for money.** Not for state, form values, props, transport, or
    arithmetic. Do not call `Number()`, `parseFloat()`, `toFixed()`, or `+` on an
    amount. `Money.amount` is typed `any` by codegen: treat it as `string` and narrow it
    at the boundary.
 3. **Scale is always 2.** Inputs accept at most 2 fractional digits and never round
    silently. The backend remains authoritative and rejects anything else.
-4. **Normalize before sending.** Use `normalizeDecimal(amount)`; it strips leading and
-   trailing zeros and negative zero. Do not hand-format amounts.
+4. **Normalize before sending.** Use `normalizeDecimal(amount)`; it strips leading
+   integer zeros, trailing fractional zeros, and negative zero (`"12.50"` is sent as
+   `"12.5"`), and never emits exponent notation or a `+` sign. Do not hand-format
+   amounts. Display shows two decimals; transport does not.
 5. **Display with `Intl`.** Use `formatMoney` / `formatAmount`. They render amounts
    with the currency's symbol and exactly 2 decimals, from the decimal string, with
    no float round trip. Do not use `toLocaleString` on numbers or hardcode symbols
@@ -28,9 +31,13 @@ two disagree, the backend file wins and this file must be fixed.
    No environment variable or constant holds a default currency.
 7. **One currency per calculation.** Assert that currencies match before combining
    `Money` values; never add amounts of different currencies.
-8. **Server is authoritative.** Never submit totals, taxes, or discounts. Client math is
-   a preview; when the server responds, render the server's values without local
-   adjustment.
+8. **Server is authoritative.** Never submit totals, taxes, or discounts; send ids and
+   quantities. Client math is a preview; when the server responds, render the server's
+   values without local adjustment.
+9. **Rates are not money.** Tax, discount, and interest rates and other ratios are not
+   `Money`; they have their own typed fields and may have more than 2 fractional
+   digits. Plan prices and promotion values have no currency column yet, so they are
+   not `Money` either.
 
 ## Supported currencies and scale
 
@@ -95,31 +102,41 @@ previews):
   Variant forms show the product currency next to the price (`PriceConditionFormField`
   takes it as a prop). Read it from the product (or the product draft for a new
   product), never from the store or a constant.
-- Display money with `formatMoney`, using the `Money` value's own currency (variant
-  `price` outputs already carry the product currency) or the product's currency for
-  drafts.
+- A variant's `price` is a plain Decimal string in both the API output and its inputs;
+  it has no currency. Display it with `formatMoney({ amount: variant.price, currency })`,
+  where `currency` is `product.currency` (or the product form's `currency` value for
+  drafts). Never read a currency off a variant.
 - The store currency can change at any time. Read it from the Apollo cache and refetch
-  after a store update. It only supplies the default for a new product.
-- Changing a product's currency is allowed in the UI and reprices its variants by
-  keeping the amounts (no conversion). The server rejects it when orders already
+  after a store update. It only supplies the default for a new product; changing it
+  never reprices or restricts existing variants.
+- Every dashboard monetary value is in the authenticated tenant's configured currency;
+  render it with that currency and do not mix it with product currencies.
+- Changing a product's currency is allowed in the UI and keeps every variant amount
+  (no conversion). The server rejects it when orders already
   contain one of its variants in the current currency (`PRODUCT_CURRENCY_LOCKED`,
   `CONFLICT`); surface the localized error through the centralized error path.
-- A cart holds one currency. The server rejects adding a variant whose product
-  currency differs from the items already in the cart; surface that error and do not
-  combine totals of different currencies.
+- A cart holds one currency, set by its first item (an empty cart accepts any). The
+  server rejects adding a variant whose product currency differs from the items already
+  in the cart, and checkout rejects a line whose currency differs from the order's;
+  surface those errors and do not combine totals of different currencies.
+- Order lines snapshot price and currency on the server and never change; render them
+  as returned.
 
 ## Stories and tests
 
 Cover money behavior with executable assertions where risk warrants: normalization,
 rejecting a third decimal, formatting for a non-USD currency, and the not-loaded
-currency state. Story and test fixtures use `{ amount: '12.5', currency: 'USD' }`
-shaped values, never numbers.
+currency state. Fixtures follow the API shape: every product fixture has a `currency`,
+variant `price` values (API outputs, inputs, and form values) are decimal strings such
+as `'12.5'`, and `Money` fixtures (cart, totals) are `{ amount: '12.5', currency: 'USD' }`.
+Never use numbers.
 
 ## Review checklist
 
 - No `number`, `Number()`, `parseFloat()`, `toFixed()`, or float arithmetic on amounts.
 - No hardcoded currency symbol, currency code, or default-currency env variable.
 - Amounts are normalized with `normalizeDecimal`; display uses `formatMoney`/`formatAmount`.
-- Currency is read from the store or the value itself.
+- Currency is read from the product (or draft) or the `Money` value itself; the store
+  currency only seeds a new product.
 - No client-submitted totals, taxes, or discounts.
 - Any combination of `Money` values asserts matching currencies.

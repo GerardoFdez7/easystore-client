@@ -1,5 +1,4 @@
-export const sidebarPinnedStorageKey = 'easystore:sidebar-pinned';
-// Server-readable mirror of the localStorage preference, so SSR can render the
-// sidebar already expanded.
+// Cookie (not localStorage) so the server can render the sidebar already
+// expanded on first paint.
 export const sidebarPinnedCookieName = 'sidebar_pinned';
 export const sidebarPinnedCookieMaxAge = 60 * 60 * 24 * 365;

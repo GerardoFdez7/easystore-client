@@ -1,103 +1,77 @@
-import { expect as storybookExpect, within } from 'storybook/test';
+import type { ReactNode } from 'react';
+import {
+  expect as storybookExpect,
+  userEvent,
+  waitFor,
+  within,
+} from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import MainProducts from '@organisms/products/MainProducts';
 import { ProductsProvider } from '@lib/contexts/ProductsContext';
 import { ProductCreationProvider } from '@lib/contexts/ProductCreationContext';
 import { ApolloMswMocks } from '@lib/storybook/ApolloMswMocks';
-import {
-  FindAllProductsDocument,
-  ProductSortBy,
-  SortOrder,
-  ProductFilterMode,
-} from '@graphql/generated';
+import { FindAllProductsDocument, ProductFilterMode } from '@graphql/generated';
 import { mockProducts } from './mocks/productsMocks';
 
-// Mock GraphQL responses
-const mockEmptyResponse = {
-  request: {
-    query: FindAllProductsDocument,
-    variables: {
-      page: 1,
-      limit: 25,
-      categoriesIds: [],
-      sortBy: ProductSortBy.Name,
-      sortOrder: SortOrder.Asc,
-      filterMode: ProductFilterMode.Actives,
-      name: '',
-    },
-  },
-  result: {
-    data: {
-      getAllProducts: {
-        __typename: 'PaginatedProductsType',
-        products: [],
-        total: 0,
-        hasMore: false,
-      },
-    },
-  },
+type ProductsVariables = {
+  name?: string | null;
+  filterMode?: ProductFilterMode;
 };
 
-const mockEmptyFilterResponse = {
-  request: {
-    query: FindAllProductsDocument,
-    variables: {
-      page: 1,
-      limit: 25,
-      categoriesIds: [],
-      sortBy: ProductSortBy.Name,
-      sortOrder: SortOrder.Asc,
-      filterMode: ProductFilterMode.Actives,
-      name: 'nonexistent',
+const productsResponse = (products: typeof mockProducts) => ({
+  data: {
+    getAllProducts: {
+      __typename: 'PaginatedProductsType',
+      products: products.map((product) => ({
+        ...product,
+        __typename: 'Product',
+      })),
+      total: products.length,
+      hasMore: false,
     },
   },
-  result: {
-    data: {
-      getAllProducts: {
-        __typename: 'PaginatedProductsType',
-        products: [],
-        total: 0,
-        hasMore: false,
-      },
-    },
-  },
-};
+});
 
-const mockProductsResponse = {
-  request: {
-    query: FindAllProductsDocument,
-    variables: {
-      page: 1,
-      limit: 25,
-      categoriesIds: [],
-      sortBy: ProductSortBy.Name,
-      sortOrder: SortOrder.Asc,
-      filterMode: ProductFilterMode.Actives,
-      name: '',
-    },
-  },
-  result: {
-    data: {
-      getAllProducts: {
-        __typename: 'PaginatedProductsType',
-        products: mockProducts.map((product) => ({
-          ...product,
-          __typename: 'Product',
-        })),
-        total: mockProducts.length,
-        hasMore: false,
-      },
-    },
-  },
-};
+/** Applies the same name and archived filters the server would. */
+const filterProducts = ({ name, filterMode }: ProductsVariables) =>
+  mockProducts.filter((product) => {
+    const matchesName =
+      !name || product.name.toLowerCase().includes(name.toLowerCase());
+    const matchesMode =
+      filterMode === ProductFilterMode.Actives
+        ? !product.isArchived
+        : filterMode === ProductFilterMode.Archives
+          ? product.isArchived
+          : true;
+    return matchesName && matchesMode;
+  });
+
+/** Serves every findAllProducts request, whatever its variables. */
+const productsMock = (
+  result: ApolloMswMocksProps['mocks'][number]['result'],
+  delay?: number,
+) => ({
+  request: { query: FindAllProductsDocument, variables: () => true },
+  result,
+  delay,
+});
+
+type ApolloMswMocksProps = React.ComponentProps<typeof ApolloMswMocks>;
+
+const withProductsApi = (mocks: ApolloMswMocksProps['mocks']) =>
+  function ProductsApiDecorator(Story: () => ReactNode) {
+    return (
+      <ApolloMswMocks mocks={mocks}>
+        <ProductsProvider>
+          <ProductCreationProvider>
+            <Story />
+          </ProductCreationProvider>
+        </ProductsProvider>
+      </ApolloMswMocks>
+    );
+  };
 
 const meta: Meta<typeof MainProducts> = {
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await storybookExpect(
-      canvas.getByRole('textbox', { name: /search/i }),
-    ).toBeInTheDocument();
-  },
   title: 'Organisms/Products/MainProducts',
   component: MainProducts,
   parameters: {
@@ -105,131 +79,90 @@ const meta: Meta<typeof MainProducts> = {
     docs: {
       description: {
         component:
-          'Main organism component for the products page. Provides a comprehensive interface for managing products including filtering, searching, viewing modes (table/grid), and CRUD operations. Integrates with ProductsProvider for state management and ProductCreationProvider for product creation workflows.',
+          'Main organism for the products page: searching, filtering, sorting, table/grid view modes and product actions. Data comes from ProductsProvider; stories mock the findAllProducts query.',
       },
     },
   },
   tags: ['autodocs'],
-  decorators: [
-    (Story) => (
-      <ProductsProvider>
-        <ProductCreationProvider>
-          <Story />
-        </ProductCreationProvider>
-      </ProductsProvider>
-    ),
-  ],
 };
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-/**
- * Default state of the MainProducts component.
- * Shows the complete product management interface with all features enabled.
- * Connects to the real API through ProductsProvider.
- */
+/** All products in the default table view. */
 export const Default: Story = {
   decorators: [
-    (Story) => (
-      <ApolloMswMocks mocks={[mockProductsResponse]}>
-        <ProductsProvider
-          initialVariables={{
-            page: 1,
-            limit: 25,
-            categoriesIds: [],
-            sortBy: ProductSortBy.Name,
-            sortOrder: SortOrder.Asc,
-            filterMode: ProductFilterMode.Actives,
-            name: 'nonexistent',
-          }}
-        >
-          <ProductCreationProvider>
-            <Story />
-          </ProductCreationProvider>
-        </ProductsProvider>
-      </ApolloMswMocks>
-    ),
+    withProductsApi([
+      productsMock((variables) =>
+        productsResponse(filterProducts(variables as ProductsVariables)),
+      ),
+    ]),
   ],
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Table view mode displaying products in a structured table format with columns for product details, sorting capabilities, and bulk actions. This is the default view mode.',
-      },
-    },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      await canvas.findByText('Wireless Bluetooth Headphones'),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByText('Mechanical Gaming Keyboard'),
+    ).toBeInTheDocument();
   },
 };
 
-/**
- * Empty database state - no products exist in the system.
- * Shows the empty state message encouraging users to add their first product.
- */
-export const ZeroProductsInDatabase: Story = {
-  decorators: [
-    (Story) => (
-      <ApolloMswMocks mocks={[mockEmptyResponse]}>
-        <ProductsProvider
-          initialVariables={{
-            page: 1,
-            limit: 25,
-            categoriesIds: [],
-            sortBy: ProductSortBy.Name,
-            sortOrder: SortOrder.Asc,
-            filterMode: ProductFilterMode.Actives,
-            name: '',
-          }}
-        >
-          <ProductCreationProvider>
-            <Story />
-          </ProductCreationProvider>
-        </ProductsProvider>
-      </ApolloMswMocks>
-    ),
-  ],
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Empty database state when no products exist in the system. Displays an empty state message with a call-to-action to add the first product.',
-      },
-    },
+/** No products exist yet: shows the empty state with a call to add the first one. */
+export const EmptyState: Story = {
+  decorators: [withProductsApi([productsMock(productsResponse([]))])],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      await canvas.findByText('No products found'),
+    ).toBeInTheDocument();
   },
 };
 
-/**
- * Empty filter results - products exist but none match the current filter/search.
- * Shows the "no results found" message with suggestions to modify filters.
- */
-export const ZeroProductsWhenFiltering: Story = {
+/** The products request never resolves, so the table skeleton stays visible. */
+export const Loading: Story = {
+  decorators: [withProductsApi([productsMock(productsResponse([]), Infinity)])],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      await canvas.findByRole('textbox', { name: /search/i }),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.queryByText('Wireless Bluetooth Headphones'),
+    ).not.toBeInTheDocument();
+  },
+};
+
+/** Searching narrows the list, and a search with no match shows the filtered empty state. */
+export const Filtering: Story = {
   decorators: [
-    (Story) => (
-      <ApolloMswMocks mocks={[mockEmptyFilterResponse]}>
-        <ProductsProvider
-          initialVariables={{
-            page: 1,
-            limit: 25,
-            categoriesIds: [],
-            sortBy: ProductSortBy.Name,
-            sortOrder: SortOrder.Asc,
-            filterMode: ProductFilterMode.Actives,
-            name: '',
-          }}
-        >
-          <ProductCreationProvider>
-            <Story />
-          </ProductCreationProvider>
-        </ProductsProvider>
-      </ApolloMswMocks>
-    ),
+    withProductsApi([
+      productsMock((variables) =>
+        productsResponse(filterProducts(variables as ProductsVariables)),
+      ),
+    ]),
   ],
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Empty filter results state when products exist in the database but none match the current search or filter criteria. Shows appropriate messaging to help users adjust their filters.',
-      },
-    },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const search = await canvas.findByRole('textbox', { name: /search/i });
+    await canvas.findByText('Wireless Bluetooth Headphones');
+
+    await userEvent.type(search, 'keyboard');
+    await storybookExpect(
+      await canvas.findByText('Mechanical Gaming Keyboard'),
+    ).toBeInTheDocument();
+    await waitFor(() =>
+      storybookExpect(
+        canvas.queryByText('Wireless Bluetooth Headphones'),
+      ).not.toBeInTheDocument(),
+    );
+
+    await userEvent.clear(search);
+    await userEvent.type(search, 'nonexistent');
+    await storybookExpect(
+      await canvas.findByText('No products match your filters'),
+    ).toBeInTheDocument();
   },
 };

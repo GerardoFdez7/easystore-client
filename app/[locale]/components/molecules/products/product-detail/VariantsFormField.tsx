@@ -51,6 +51,9 @@ export default function VariantsFormField({
 }: VariantsFormFieldProps) {
   const { control } = useFormContext();
   const currency = useWatch({ control, name: 'currency' }) as string;
+  // Every variant is priced in the product currency
+  const formatPrice = (amount: string) =>
+    currency ? formatMoney({ amount, currency }) : amount;
   const router = useRouter();
   const t = useTranslations('Products');
   const tVariant = useTranslations('Variant');
@@ -232,12 +235,7 @@ export default function VariantsFormField({
                                 </TableCell>
                                 <TableCell>{variant.codes.sku}</TableCell>
                                 <TableCell>
-                                  {currency
-                                    ? formatMoney({
-                                        amount: variant.price,
-                                        currency,
-                                      })
-                                    : variant.price}
+                                  {formatPrice(variant.price)}
                                 </TableCell>
                                 <TableCell>{variant.condition}</TableCell>
                                 <TableCell>
@@ -304,7 +302,7 @@ export default function VariantsFormField({
                                     </TableCell>
                                     <TableCell>{variant.sku}</TableCell>
                                     <TableCell>
-                                      {formatMoney(variant.price)}
+                                      {formatPrice(variant.price)}
                                     </TableCell>
                                     <TableCell>{variant.condition}</TableCell>
                                     <TableCell>

@@ -5,6 +5,7 @@ import { Slot } from '@radix-ui/react-slot';
 import { cva, VariantProps } from 'class-variance-authority';
 import { PanelLeftIcon } from 'lucide-react';
 import { useIsMobile } from '@hooks/utils/useMobile';
+import { usePinnedSidebar } from '@hooks/utils/usePinnedSidebar';
 import { cn } from 'utils';
 import { Button } from '@shadcn/ui/button';
 import { Input } from '@shadcn/ui/input';
@@ -65,6 +66,7 @@ function SidebarProvider({
   onOpenChange?: (open: boolean) => void;
 }) {
   const isMobile = useIsMobile();
+  const { pinned } = usePinnedSidebar();
   const [openMobile, setOpenMobile] = React.useState(false);
 
   // This is the internal state of the sidebar.
@@ -85,8 +87,15 @@ function SidebarProvider({
 
   // Helper to toggle the sidebar.
   const toggleSidebar = React.useCallback(() => {
-    return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open);
-  }, [isMobile, setOpen, setOpenMobile]);
+    if (isMobile) return setOpenMobile((open) => !open);
+    // While pinned open the toggle is inert: send focus to the pin control so
+    // the user sees why (its tooltip explains it) and can unpin.
+    if (pinned && open) {
+      document.querySelector<HTMLElement>('[data-sidebar-pin]')?.focus();
+      return;
+    }
+    return setOpen((open) => !open);
+  }, [isMobile, pinned, open, setOpen, setOpenMobile]);
 
   // Adds a keyboard shortcut to toggle the sidebar.
   React.useEffect(() => {

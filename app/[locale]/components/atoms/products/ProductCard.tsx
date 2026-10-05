@@ -119,7 +119,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <article className="group">
-      <Card className="m-0 flex cursor-pointer gap-0 p-0 pb-1 transition-transform hover:scale-105">
+      <Card className="m-0 flex cursor-pointer gap-0 p-0 py-0! pb-1! transition-transform hover:scale-105">
         {mediaItems.length > 1 ? (
           <Carousel
             setApi={setApi}
@@ -215,7 +215,10 @@ export function ProductCard({ product }: ProductCardProps) {
               <div className="flex items-center justify-between">
                 <span className="text-foreground text-sm">
                   {product.variants?.[0]?.price
-                    ? formatMoney(product.variants[0].price)
+                    ? formatMoney({
+                        amount: product.variants[0].price,
+                        currency: product.currency,
+                      })
                     : '-'}
                 </span>
                 <ProductStatus product={product} />

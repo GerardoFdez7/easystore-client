@@ -9,7 +9,13 @@ import getClient from '../apollo/client';
 import { graphqlUri, link } from '../apollo/link';
 
 type ApolloMock = {
-  request: { query: DocumentNode; variables?: Record<string, unknown> };
+  request: {
+    query: DocumentNode;
+    /** Exact variables, or a predicate for operations whose variables vary. */
+    variables?:
+      | Record<string, unknown>
+      | ((variables: Record<string, unknown>) => boolean);
+  };
   result?:
     | { data?: unknown; errors?: unknown }
     | ((variables: Record<string, unknown>) => {
@@ -32,9 +38,12 @@ const mocksByFixtureId = new Map<string, readonly ApolloMock[]>();
 let nextFixtureId = 0;
 
 const sameVariables = (
-  expected: Record<string, unknown> | undefined,
+  expected: ApolloMock['request']['variables'],
   received: Record<string, unknown>,
-) => JSON.stringify(expected ?? {}) === JSON.stringify(received);
+) =>
+  typeof expected === 'function'
+    ? expected(received)
+    : JSON.stringify(expected ?? {}) === JSON.stringify(received);
 
 const findMock = (
   mocks: readonly ApolloMock[] | undefined,

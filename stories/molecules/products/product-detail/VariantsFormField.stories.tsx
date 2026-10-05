@@ -12,7 +12,7 @@ const VariantsFormFieldWrapper = ({
     variants: Array<{
       id: string;
       sku: string;
-      price: { amount: string; currency: string };
+      price: string;
       compareAtPrice?: string;
       costPerItem?: string;
       attributes: Array<{ key: string; value: string }>;
@@ -94,7 +94,7 @@ export const WithSingleVariant: Story = {
         {
           id: 'variant_001',
           sku: 'WH-BLK-001',
-          price: { amount: '199.99', currency: 'USD' },
+          price: '199.99',
           compareAtPrice: '249.99',
           costPerItem: '120.00',
           attributes: [{ key: 'Color', value: 'Black' }],
@@ -124,21 +124,21 @@ export const WithMultipleVariants: Story = {
         {
           id: 'variant_001',
           sku: 'WH-BLK-001',
-          price: { amount: '199.99', currency: 'USD' },
+          price: '199.99',
           compareAtPrice: '249.99',
           attributes: [{ key: 'Color', value: 'Black' }],
         },
         {
           id: 'variant_002',
           sku: 'WH-WHT-001',
-          price: { amount: '199.99', currency: 'USD' },
+          price: '199.99',
           compareAtPrice: '249.99',
           attributes: [{ key: 'Color', value: 'White' }],
         },
         {
           id: 'variant_003',
           sku: 'WH-SLV-001',
-          price: { amount: '219.99', currency: 'USD' },
+          price: '219.99',
           compareAtPrice: '269.99',
           attributes: [{ key: 'Color', value: 'Silver' }],
         },

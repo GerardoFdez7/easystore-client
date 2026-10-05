@@ -26,9 +26,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
-  /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: { input: any; output: any };
-  /** An exact canonical decimal string without exponent notation, such as "123.45". */
   Decimal: { input: any; output: any };
 };
 
@@ -1117,7 +1115,7 @@ export type Variant = {
   isArchived?: Maybe<Scalars['Boolean']['output']>;
   isbn?: Maybe<Scalars['String']['output']>;
   personalizationOptions?: Maybe<Array<Scalars['String']['output']>>;
-  price: Money;
+  price: Scalars['Decimal']['output'];
   sku: Scalars['String']['output'];
   upc?: Maybe<Scalars['String']['output']>;
   variantCover?: Maybe<Scalars['String']['output']>;
@@ -1915,6 +1913,7 @@ export type CreateProductMutation = {
     isArchived: boolean;
     variants?: Array<{
       __typename?: 'Variant';
+      price: any;
       weight?: number | null;
       variantCover?: string | null;
       upc?: string | null;
@@ -1929,7 +1928,6 @@ export type CreateProductMutation = {
         key: string;
         value: string;
       }>;
-      price: { __typename?: 'Money'; amount: any; currency: string };
       installmentPayments?: Array<{
         __typename?: 'Installment';
         months: number;
@@ -2029,6 +2027,7 @@ export type UpdateMutation = {
       ean?: string | null;
       isbn?: string | null;
       personalizationOptions?: Array<string> | null;
+      price: any;
       sku: string;
       upc?: string | null;
       variantCover?: string | null;
@@ -2050,7 +2049,6 @@ export type UpdateMutation = {
         interestRate: number;
         months: number;
       }> | null;
-      price: { __typename?: 'Money'; amount: any; currency: string };
       variantMedia?: Array<{
         __typename?: 'Media';
         mediaType: MediaTypeEnum;
@@ -2137,6 +2135,7 @@ export type FindProductByIdQuery = {
     variants?: Array<{
       __typename?: 'Variant';
       id: string;
+      price: any;
       condition: ConditionEnum;
       weight?: number | null;
       sku: string;
@@ -2147,7 +2146,6 @@ export type FindProductByIdQuery = {
       variantCover?: string | null;
       personalizationOptions?: Array<string> | null;
       isArchived?: boolean | null;
-      price: { __typename?: 'Money'; amount: any; currency: string };
       attributes: Array<{
         __typename?: 'Attribute';
         key: string;
@@ -2249,6 +2247,7 @@ export type FindAllProductsQuery = {
         ean?: string | null;
         isbn?: string | null;
         personalizationOptions?: Array<string> | null;
+        price: any;
         sku: string;
         upc?: string | null;
         variantCover?: string | null;
@@ -2270,7 +2269,6 @@ export type FindAllProductsQuery = {
           interestRate: number;
           months: number;
         }> | null;
-        price: { __typename?: 'Money'; amount: any; currency: string };
         variantMedia?: Array<{
           __typename?: 'Media';
           mediaType: MediaTypeEnum;
@@ -5882,23 +5880,7 @@ export const CreateProductDocument = {
                           ],
                         },
                       },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'price' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'amount' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'currency' },
-                            },
-                          ],
-                        },
-                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'price' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'weight' },
@@ -6323,23 +6305,7 @@ export const UpdateDocument = {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'personalizationOptions' },
                       },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'price' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'amount' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'currency' },
-                            },
-                          ],
-                        },
-                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'price' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'sku' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'upc' } },
                       {
@@ -6667,23 +6633,7 @@ export const FindProductByIdDocument = {
                     kind: 'SelectionSet',
                     selections: [
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'price' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'amount' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'currency' },
-                            },
-                          ],
-                        },
-                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'price' } },
                       {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'condition' },
@@ -7234,19 +7184,6 @@ export const FindAllProductsDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'price' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'amount' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'currency' },
-                                  },
-                                ],
-                              },
                             },
                             {
                               kind: 'Field',

@@ -79,6 +79,7 @@ export default function Sidebar(props: ComponentProps<typeof ShadcnSidebar>) {
               <Button
                 variant="ghost"
                 size="icon"
+                data-sidebar-pin
                 aria-pressed={pinned}
                 aria-label={pinned ? t('sidebarUnpin') : t('sidebarPin')}
                 onClick={() => setPinned(!pinned)}

@@ -21,10 +21,7 @@ query findProductById($id: String!) {
     }
     variants {
       id
-      price {
-        amount
-        currency
-      }
+      price
       condition
       attributes {
         key
@@ -144,10 +141,7 @@ query findAllProducts(
         }
         isbn
         personalizationOptions
-        price {
-          amount
-          currency
-        }
+        price
         sku
         upc
         variantCover

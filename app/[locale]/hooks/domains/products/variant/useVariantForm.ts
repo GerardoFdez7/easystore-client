@@ -281,7 +281,7 @@ export function useVariantForm({
     }
     // Mode is 'update' and variant data is available
     return {
-      price: variant.price?.amount ?? '',
+      price: variant.price ?? '',
       condition: (variant.condition as 'NEW' | 'USED' | 'REFURBISHED') || 'NEW',
       attributes:
         variant.attributes?.map((attr) => ({

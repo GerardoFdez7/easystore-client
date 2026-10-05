@@ -68,7 +68,10 @@ export function ProductTableRow({
       <TableCell>{product.variants?.[0].sku}</TableCell>
       <TableCell>
         {product.variants?.[0]?.price
-          ? formatMoney(product.variants[0].price)
+          ? formatMoney({
+              amount: product.variants[0].price,
+              currency: product.currency,
+            })
           : '-'}
       </TableCell>
       <TableCell>{product.variants?.length}</TableCell>
