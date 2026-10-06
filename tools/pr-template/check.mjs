@@ -11,7 +11,18 @@ const CONDITIONAL_LABEL_PREFIXES = [
   'If stories or tests were unchanged',
 ];
 
-const stripComments = (text) => text.replace(/<!--[\s\S]*?-->/g, '');
+// Repeats until stable so removing one comment cannot splice a new `<!--` out
+// of the surrounding text, then drops any unterminated comment to the end
+// (Markdown renderers hide it too).
+const stripComments = (text) => {
+  let previous;
+  let result = text;
+  do {
+    previous = result;
+    result = result.replace(/<!--[\s\S]*?-->/g, '');
+  } while (result !== previous);
+  return result.replace(/<!--[\s\S]*$/, '');
+};
 
 const splitSections = (markdown) => {
   const sections = new Map();
