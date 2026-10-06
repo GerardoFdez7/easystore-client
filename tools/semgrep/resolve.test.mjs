@@ -14,12 +14,18 @@ test('resolves spaced PATH, pipx, and python user base on Linux/macOS', () => {
     assert.ok(paths.includes('/tmp/python base/bin/semgrep'));
   }
 });
-test('postinstall skips production and omitted dev dependencies', () => {
-  assert.equal(shouldInstallSemgrep({}), true);
+test('postinstall only runs in development, outside CI', () => {
+  const dev = { NODE_ENV: 'development' };
+  assert.equal(shouldInstallSemgrep(dev), true);
+  assert.equal(shouldInstallSemgrep({}), false);
   assert.equal(shouldInstallSemgrep({ NODE_ENV: 'production' }), false);
-  assert.equal(shouldInstallSemgrep({ npm_config_production: 'true' }), false);
+  assert.equal(shouldInstallSemgrep({ ...dev, CI: 'true' }), false);
   assert.equal(
-    shouldInstallSemgrep({ npm_config_omit: 'optional,dev' }),
+    shouldInstallSemgrep({ ...dev, npm_config_production: 'true' }),
+    false,
+  );
+  assert.equal(
+    shouldInstallSemgrep({ ...dev, npm_config_omit: 'optional,dev' }),
     false,
   );
 });

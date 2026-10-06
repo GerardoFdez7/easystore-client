@@ -1,7 +1,8 @@
 import { delimiter, join } from 'node:path';
 
 export const shouldInstallSemgrep = (env) =>
-  env.NODE_ENV !== 'production' &&
+  env.NODE_ENV === 'development' &&
+  !env.CI &&
   env.npm_config_production !== 'true' &&
   !(env.npm_config_omit ?? '')
     .split(',')
