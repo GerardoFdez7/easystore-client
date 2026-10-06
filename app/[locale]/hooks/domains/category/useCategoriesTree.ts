@@ -71,7 +71,7 @@ export function useCategoriesTree(opts: UseCategoriesTreeOptions = {}) {
   const variables = useMemo<FindCategoriesTreeQueryVariables>(
     () => ({
       page: 1,
-      limit: 25,
+      limit: 50,
       sortBy: opts.sortBy ?? SortBy.Name,
       sortOrder: opts.sortOrder ?? SortOrder.Desc,
     }),
