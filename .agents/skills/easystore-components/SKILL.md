@@ -25,6 +25,8 @@ generic guidance already provided by specialist skills.
   [references/component-architecture.md](references/component-architecture.md).
 - For hooks, GraphQL operations, Apollo usage, forms, and centralized errors, read
   [references/data-and-errors.md](references/data-and-errors.md).
+- For prices, currencies, or any money value, read
+  [docs/MONETARY-CONTRACT.md](../../../docs/MONETARY-CONTRACT.md).
 - For reusable-component documentation, executable interactions, and network
   fixtures, read [references/storybook.md](references/storybook.md).
 - Before handing off an implementation, read

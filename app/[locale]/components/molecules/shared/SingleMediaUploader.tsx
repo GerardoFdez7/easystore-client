@@ -17,7 +17,21 @@ interface SingleMediaUploaderProps
   alwaysEditing?: boolean;
   /** In alwaysEditing mode, also report removals through onMediaProcessed(null). */
   reportRemoval?: boolean;
+  /**
+   * In alwaysEditing mode, keep the selected file local instead of uploading it
+   * on selection. The parent receives it through onFileChange and uploads it
+   * when its own form is saved.
+   */
+  deferUpload?: boolean;
+  /** Reports the pending file on selection, or null when it is removed. */
+  onFileChange?: (file: File | null) => void;
   initialMedia?: string | null;
+  /** Heading shown on the empty drop zone. */
+  dropZoneTitle?: string;
+  /** Hides the accepted formats / max size hint on the empty drop zone. */
+  hideFormatHint?: boolean;
+  /** Previews drop their card surface, so transparent PNGs show the page background. */
+  transparentPreview?: boolean;
   renderDoneButton?: (
     onDone: () => void,
     isProcessing: boolean,
@@ -38,7 +52,12 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
   hideDoneButton = false,
   alwaysEditing = false,
   reportRemoval = false,
+  deferUpload = false,
+  onFileChange,
   initialMedia,
+  dropZoneTitle,
+  hideFormatHint,
+  transparentPreview,
   renderDoneButton,
   renderEditButton,
   acceptedFileTypes,
@@ -141,13 +160,16 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
     setIsEditing(true);
     setWasRemovedIntentionally(false); // Reset flag when new files are selected
 
+    onFileChange?.(files[0] ?? null);
+
     // In alwaysEditing mode, upload immediately when file is selected
-    if (alwaysEditing && files.length > 0) {
+    if (alwaysEditing && !deferUpload && files.length > 0) {
       void startUpload(files);
     }
   };
 
   const handleRemoveFile = () => {
+    onFileChange?.(null);
     setSelectedFiles([]);
     setPersistedMedia(null);
     setWasRemovedIntentionally(true);
@@ -201,6 +223,9 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
           maxVideoSize={maxVideoSize}
           disabled={disabled || isUploading || isProcessing}
           multiple={false}
+          title={dropZoneTitle}
+          hideFormatHint={hideFormatHint}
+          square
         />
       ) : !isEditing && persistedMedia && !alwaysEditing ? (
         // Has media - show view-only mode (existing or uploaded) - only when not in alwaysEditing mode
@@ -212,6 +237,7 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
                 : null
             }
             viewOnly={true}
+            transparent={transparentPreview}
             className="mx-auto"
           />
           {/* Edit Button */}
@@ -237,6 +263,9 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
               maxVideoSize={maxVideoSize}
               disabled={disabled || isUploading || isProcessing}
               multiple={false}
+              title={dropZoneTitle}
+              hideFormatHint={hideFormatHint}
+              square
             />
           ) : (
             <SingleImagePreview
@@ -250,6 +279,7 @@ const SingleMediaUploader: React.FC<SingleMediaUploaderProps> = ({
                   : undefined
               }
               onRemove={handleRemoveFile}
+              transparent={transparentPreview}
               isProcessing={isProcessing}
             />
           )}

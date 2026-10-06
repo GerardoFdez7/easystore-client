@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import {
   FormField,
@@ -40,7 +40,7 @@ import {
   useRestoreVariant,
   useDeleteVariant,
 } from '@hooks/domains/products/variant';
-import { formatPriceWithCommasAndDots } from '@lib/utils/input-formatters';
+import { formatMoney } from '@lib/utils/money';
 
 interface VariantsFormFieldProps {
   productId: string;
@@ -50,6 +50,10 @@ export default function VariantsFormField({
   productId,
 }: VariantsFormFieldProps) {
   const { control } = useFormContext();
+  const currency = useWatch({ control, name: 'currency' }) as string;
+  // Every variant is priced in the product currency
+  const formatPrice = (amount: string) =>
+    currency ? formatMoney({ amount, currency }) : amount;
   const router = useRouter();
   const t = useTranslations('Products');
   const tVariant = useTranslations('Variant');
@@ -231,8 +235,7 @@ export default function VariantsFormField({
                                 </TableCell>
                                 <TableCell>{variant.codes.sku}</TableCell>
                                 <TableCell>
-                                  {process.env.NEXT_PUBLIC_DEFAULT_CURRENCY}
-                                  {formatPriceWithCommasAndDots(variant.price)}
+                                  {formatPrice(variant.price)}
                                 </TableCell>
                                 <TableCell>{variant.condition}</TableCell>
                                 <TableCell>
@@ -299,10 +302,7 @@ export default function VariantsFormField({
                                     </TableCell>
                                     <TableCell>{variant.sku}</TableCell>
                                     <TableCell>
-                                      {process.env.NEXT_PUBLIC_DEFAULT_CURRENCY}
-                                      {formatPriceWithCommasAndDots(
-                                        variant.price,
-                                      )}
+                                      {formatPrice(variant.price)}
                                     </TableCell>
                                     <TableCell>{variant.condition}</TableCell>
                                     <TableCell>

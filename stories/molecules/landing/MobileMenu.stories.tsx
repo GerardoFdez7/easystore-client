@@ -24,8 +24,8 @@ const meta: Meta<typeof MobileMenu> = {
       await page.findByRole('link', { name: 'Pricing' }),
     ).toHaveAttribute('href', '#plans');
     await storybookExpect(
-      await page.findByRole('button', { name: 'Toggle theme' }),
-    ).toBeInTheDocument();
+      page.queryByRole('button', { name: 'Toggle theme' }),
+    ).not.toBeInTheDocument();
   },
   title: 'Molecules/Landing/MobileMenu',
   parameters: {

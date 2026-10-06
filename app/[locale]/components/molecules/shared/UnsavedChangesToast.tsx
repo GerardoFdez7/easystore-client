@@ -31,7 +31,7 @@ export default function UnsavedChangesToast({
       role="status"
       aria-live="polite"
       className={cn(
-        'bg-card text-card-foreground border-border gap-card flex w-full items-center justify-between rounded-xl border p-4 shadow-sm',
+        'bg-card text-card-foreground border-border gap-card pointer-events-auto flex w-full items-center justify-between rounded-xl border p-4 shadow-sm',
         className,
       )}
     >

@@ -12,9 +12,17 @@ const meta = {
   },
   title: 'Templates/Settings',
   component: SettingsTemplate,
+  args: {
+    children: <p>Profile settings content</p>,
+  },
   decorators: [withCountdown],
   parameters: {
     layout: 'fullscreen',
+    nextjs: {
+      navigation: {
+        pathname: '/en/settings/profile',
+      },
+    },
     docs: {
       description: {
         component:
@@ -29,4 +37,10 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const UnderConstruction: Story = {};
+export const Profile: Story = {
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('link', { name: 'Profile' }),
+    ).toHaveAttribute('aria-current', 'page');
+  },
+};

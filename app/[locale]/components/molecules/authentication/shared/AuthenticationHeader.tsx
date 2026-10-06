@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import BackButton from '@atoms/shared/BackButton';
 import LogoImage from '@atoms/shared/LogoImage';
 import { LanguageButton } from '@atoms/shared/ButtonLanguage';

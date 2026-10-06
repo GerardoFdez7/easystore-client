@@ -9,7 +9,7 @@ const meta: Meta<typeof Main> = {
       canvas.getByRole('heading', { level: 2, name: 'Choose a Plan' }),
     ).toBeVisible();
     const monthly = canvas.getByRole('tab', { name: 'Monthly' });
-    const yearly = canvas.getByRole('tab', { name: 'Yearly' });
+    const yearly = canvas.getByRole('tab', { name: /Yearly/ });
     await storybookExpect(monthly).toHaveAttribute('aria-selected', 'true');
     await userEvent.click(yearly);
     await storybookExpect(yearly).toHaveAttribute('aria-selected', 'true');

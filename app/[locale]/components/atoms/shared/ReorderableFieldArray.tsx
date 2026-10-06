@@ -19,23 +19,21 @@ export default function ReorderableFieldArray({
   t,
 }: ReorderableFieldArrayProps) {
   return (
-    <div className="border-border bg-muted/10 rounded-lg border p-8">
-      <div className="space-y-3">
-        {items.map((item, index) => (
-          <ArrayItemBox
-            key={item.id}
-            index={index}
-            canMoveUp={index > 0}
-            canMoveDown={index < items.length - 1}
-            onMoveUp={() => onMove(index, 'up')}
-            onMoveDown={() => onMove(index, 'down')}
-            onDelete={() => onRemove(index)}
-            t={t}
-          >
-            {renderItem(index)}
-          </ArrayItemBox>
-        ))}
-      </div>
+    <div className="border-border mt-4 space-y-3 border-t pt-6">
+      {items.map((item, index) => (
+        <ArrayItemBox
+          key={item.id}
+          index={index}
+          canMoveUp={index > 0}
+          canMoveDown={index < items.length - 1}
+          onMoveUp={() => onMove(index, 'up')}
+          onMoveDown={() => onMove(index, 'down')}
+          onDelete={() => onRemove(index)}
+          t={t}
+        >
+          {renderItem(index)}
+        </ArrayItemBox>
+      ))}
     </div>
   );
 }

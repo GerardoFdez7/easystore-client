@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { useTranslations } from 'next-intl';
 import {
   Drawer,
@@ -46,8 +45,12 @@ export default function MobileMenu() {
         </div>
         <div className="bg-background flex flex-col items-center space-y-4 p-4">
           {isAuthenticated && <OwnerMenu />}
-          <ThemeToggle />
-          <LanguageButton />
+          {!isAuthenticated && (
+            <>
+              <ThemeToggle />
+              <LanguageButton />
+            </>
+          )}
           <LinkPricing />
           {!isAuthenticated && <LinkLog />}
         </div>

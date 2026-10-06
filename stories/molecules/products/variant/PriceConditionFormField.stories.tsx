@@ -1,6 +1,5 @@
 import { expect as storybookExpect, screen, userEvent } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import PriceConditionFormField from '@molecules/products/variant/PriceConditionFormField';
 
@@ -22,14 +21,14 @@ type Story = StoryObj<typeof PriceConditionFormField>;
 function DefaultStory() {
   const methods = useForm({
     defaultValues: {
-      price: 0,
+      price: '',
       condition: '',
     },
   });
 
   return (
     <FormProvider {...methods}>
-      <PriceConditionFormField />
+      <PriceConditionFormField currency="GTQ" />
     </FormProvider>
   );
 }
@@ -43,6 +42,7 @@ export const Default: Story = {
     await storybookExpect(
       (price as HTMLInputElement).value.replace(/\D/g, ''),
     ).toMatch(/^2000/);
+    await storybookExpect(canvas.getByText('GTQ')).toBeInTheDocument();
     const condition = canvas.getByRole('combobox', { name: 'Condition' });
     await userEvent.click(condition);
     await userEvent.click(await screen.findByRole('option', { name: 'Used' }));

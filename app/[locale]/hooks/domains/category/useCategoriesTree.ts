@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useQuery } from '@apollo/client/react';
 import {
   FindCategoriesTreeDocument,
@@ -13,14 +13,13 @@ import {
 export interface UseCategoriesTreeOptions {
   sortBy?: SortBy;
   sortOrder?: SortOrder;
+  enabled?: boolean;
 }
 
-// Recursive type to handle deeply nested category structure
-type RecursiveCategoryNode = {
+type FlatCategoryNode = {
   id: string;
   name: string;
   parentId?: string | null;
-  subCategories?: RecursiveCategoryNode[];
 };
 
 export interface CategoryTreeNode {
@@ -31,13 +30,37 @@ export interface CategoryTreeNode {
   subCategories?: CategoryTreeNode[];
 }
 
-const mapToTreeNode = (c: RecursiveCategoryNode): CategoryTreeNode => ({
-  id: c.id,
-  name: c.name,
-  parentId: c.parentId,
-  count: Array.isArray(c.subCategories) ? c.subCategories.length : 0,
-  subCategories: c.subCategories ? c.subCategories.map(mapToTreeNode) : [],
-});
+function buildCategoryTree(categories: FlatCategoryNode[]): CategoryTreeNode[] {
+  const nodes = new Map<string, CategoryTreeNode>();
+
+  categories.forEach((category) => {
+    nodes.set(category.id, {
+      id: category.id,
+      name: category.name,
+      parentId: category.parentId,
+      count: 0,
+      subCategories: [],
+    });
+  });
+
+  const roots: CategoryTreeNode[] = [];
+
+  categories.forEach((category) => {
+    const node = nodes.get(category.id);
+    if (!node) return;
+    const parent = category.parentId ? nodes.get(category.parentId) : undefined;
+
+    if (parent) {
+      parent.subCategories?.push(node);
+      parent.count = parent.subCategories?.length ?? 0;
+      return;
+    }
+
+    roots.push(node);
+  });
+
+  return roots;
+}
 
 /**
  * Hook to fetch and manage hierarchical category tree data
@@ -45,33 +68,67 @@ const mapToTreeNode = (c: RecursiveCategoryNode): CategoryTreeNode => ({
  * @returns Category tree data with loading and error states
  */
 export function useCategoriesTree(opts: UseCategoriesTreeOptions = {}) {
-  const variables: FindCategoriesTreeQueryVariables = {
-    sortBy: opts.sortBy ?? SortBy.Name,
-    sortOrder: opts.sortOrder ?? SortOrder.Desc,
-  };
+  const variables = useMemo<FindCategoriesTreeQueryVariables>(
+    () => ({
+      page: 1,
+      limit: 50,
+      sortBy: opts.sortBy ?? SortBy.Name,
+      sortOrder: opts.sortOrder ?? SortOrder.Desc,
+    }),
+    [opts.sortBy, opts.sortOrder],
+  );
 
-  const { data, loading, error, refetch } = useQuery<
+  const { data, loading, error, refetch, fetchMore } = useQuery<
     FindCategoriesTreeQuery,
     FindCategoriesTreeQueryVariables
   >(FindCategoriesTreeDocument, {
     variables,
+    skip: opts.enabled === false,
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',
     errorPolicy: 'all',
   });
 
+  const fetchedPages = useRef(new Set<number>());
+
+  useEffect(() => {
+    fetchedPages.current.clear();
+  }, [variables.sortBy, variables.sortOrder]);
+
+  useEffect(() => {
+    const result = data?.getAllCategories;
+    if (!result?.hasMore) return;
+
+    const nextPage =
+      Math.floor(result.categories.length / (variables.limit ?? 50)) + 1;
+    if (fetchedPages.current.has(nextPage)) return;
+
+    fetchedPages.current.add(nextPage);
+    void fetchMore({
+      variables: { ...variables, page: nextPage },
+      updateQuery: (previous, { fetchMoreResult }) => {
+        const next = fetchMoreResult.getAllCategories;
+        if (!next) return previous;
+
+        return {
+          getAllCategories: {
+            ...next,
+            categories: [
+              ...previous.getAllCategories.categories,
+              ...next.categories,
+            ],
+          },
+        };
+      },
+    });
+  }, [data?.getAllCategories, fetchMore, variables]);
+
   const categories = useMemo(() => {
-    const rawCategories = data?.getAllCategories?.categories ?? [];
-    return rawCategories.map(mapToTreeNode);
+    return buildCategoryTree(data?.getAllCategories?.categories ?? []);
   }, [data?.getAllCategories?.categories]);
 
-  // Filter to only show parent categories (parentId is null)
-  const parentCategories = useMemo(() => {
-    return categories.filter((category) => !category.parentId);
-  }, [categories]);
-
   return {
-    categories: parentCategories,
+    categories,
     allCategories: categories,
     loading,
     error,

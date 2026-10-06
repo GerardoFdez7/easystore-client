@@ -4,6 +4,7 @@ mutation createProduct($input: CreateProductInput!) {
     shortDescription
     longDescription
     productType
+    currency
     cover
     tags
     brand
@@ -92,6 +93,7 @@ mutation update($id: String!, $input: UpdateProductInput!) {
     }
     name
     productType
+    currency
     shortDescription
     sustainabilities {
       certification

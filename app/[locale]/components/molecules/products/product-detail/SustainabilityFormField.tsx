@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import {
   FormField,
@@ -12,7 +12,7 @@ import {
 import { Button } from '@shadcn/ui/button';
 import { Input } from '@shadcn/ui/input';
 import { Plus } from 'lucide-react';
-import ArrayItemBox from '@atoms/shared/ArrayItemBox';
+import ReorderableFieldArray from '@atoms/shared/ReorderableFieldArray';
 import type { Sustainability } from '@lib/types/product';
 import { useTranslations } from 'next-intl';
 
@@ -155,70 +155,61 @@ export default function SustainabilityFormField() {
                 <Plus className="h-4 w-4" /> {t('addSustainability')}
               </Button>
             </div>
-          </div>
 
-          {/* Display existing sustainability */}
-          {fields.length > 0 && (
-            <div className="border-border bg-muted/10 rounded-lg border p-8">
-              <div className="space-y-3">
-                {fields.map((field, index) => (
-                  <ArrayItemBox
-                    key={field.id}
-                    index={index}
-                    canMoveUp={index > 0}
-                    canMoveDown={index < fields.length - 1}
-                    onMoveUp={() => moveAttribute(index, 'up')}
-                    onMoveDown={() => moveAttribute(index, 'down')}
-                    onDelete={() => deleteAttribute(index)}
-                    t={t}
-                  >
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                      <FormField
-                        control={control}
-                        name={`sustainabilities.${index}.certification`}
-                        render={({ field: certField }) => (
-                          <FormItem>
-                            <FormLabel className="text-xs">
-                              {t('certification')}
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder={t('certificationPlaceholder')}
-                                {...certField}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={control}
-                        name={`sustainabilities.${index}.recycledPercentage`}
-                        render={({ field: percentField }) => (
-                          <FormItem>
-                            <FormLabel className="text-xs">
-                              {t('recycledPercentage')}
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                type="number"
-                                placeholder="0-100"
-                                {...percentField}
-                                onChange={(e) =>
-                                  percentField.onChange(Number(e.target.value))
-                                }
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </ArrayItemBox>
-                ))}
-              </div>
-            </div>
-          )}
+            {/* Display existing sustainability */}
+            {fields.length > 0 && (
+              <ReorderableFieldArray
+                items={fields}
+                onMove={moveAttribute}
+                onRemove={deleteAttribute}
+                t={t}
+                renderItem={(index) => (
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <FormField
+                      control={control}
+                      name={`sustainabilities.${index}.certification`}
+                      render={({ field: certField }) => (
+                        <FormItem>
+                          <FormLabel className="text-xs">
+                            {t('certification')}
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder={t('certificationPlaceholder')}
+                              {...certField}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={control}
+                      name={`sustainabilities.${index}.recycledPercentage`}
+                      render={({ field: percentField }) => (
+                        <FormItem>
+                          <FormLabel className="text-xs">
+                            {t('recycledPercentage')}
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              placeholder="0-100"
+                              {...percentField}
+                              onChange={(e) =>
+                                percentField.onChange(Number(e.target.value))
+                              }
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                )}
+              />
+            )}
+          </div>
 
           {fields.length === 0 && (
             <p className="text-muted-foreground py-8 text-center text-sm">

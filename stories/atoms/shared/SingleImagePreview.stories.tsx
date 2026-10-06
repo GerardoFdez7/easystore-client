@@ -1,6 +1,7 @@
 import { expect as storybookExpect, fn, userEvent } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import SingleImagePreview from '@atoms/shared/SingleImagePreview';
+import { transparentLogoPng } from './mocks/transparent-logo';
 
 const createMockFile = (name: string, size: number = 1024 * 1024): File => {
   const file = new File(['mock file content'], name, {
@@ -52,6 +53,11 @@ const meta: Meta<typeof SingleImagePreview> = {
     viewOnly: {
       control: 'boolean',
       description: 'Whether the component is in view-only mode',
+    },
+    transparent: {
+      control: 'boolean',
+      description:
+        'Drops the card surface so transparent PNGs show the page background; the image is still cropped to the square',
     },
   },
 };
@@ -108,5 +114,38 @@ export const Uploading: Story = {
     const remove = canvas.getByRole('button', { name: 'Remove image' });
     await storybookExpect(remove).toBeDisabled();
     await storybookExpect(args.onRemove).not.toHaveBeenCalled();
+  },
+};
+
+// PNG with a transparent background, on a transparent surface, still cropped to the square
+export const TransparentPng: Story = {
+  args: {
+    imageUrl: transparentLogoPng,
+    transparent: true,
+    viewOnly: false,
+  },
+  play: async ({ canvas, args }) => {
+    const image = canvas.getByRole('img', { name: 'Preview' });
+    await storybookExpect(image).toBeVisible();
+    // Always cropped to the square.
+    await storybookExpect(image).toHaveClass('object-cover');
+    await userEvent.click(canvas.getByRole('button', { name: 'Remove image' }));
+    await storybookExpect(args.onRemove).toHaveBeenCalledTimes(1);
+  },
+};
+
+// Same transparent PNG in the read-only preview
+export const TransparentPngViewOnly: Story = {
+  args: {
+    imageUrl: transparentLogoPng,
+    transparent: true,
+    viewOnly: true,
+    onRemove: undefined,
+  },
+  play: async ({ canvas }) => {
+    const image = canvas.getByRole('img', { name: 'Preview' });
+    await storybookExpect(image).toBeVisible();
+    await storybookExpect(image).toHaveClass('object-cover');
+    await storybookExpect(canvas.queryByRole('button')).not.toBeInTheDocument();
   },
 };

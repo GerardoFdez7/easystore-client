@@ -1,6 +1,5 @@
 import { expect as storybookExpect, userEvent } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import WarrantyFormField from '@molecules/products/variant/WarrantyFormField';
 

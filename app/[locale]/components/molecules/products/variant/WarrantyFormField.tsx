@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import {
   FormField,
@@ -13,7 +13,7 @@ import { Button } from '@shadcn/ui/button';
 import { Input } from '@shadcn/ui/input';
 import { Textarea } from '@shadcn/ui/textarea';
 import { Plus } from 'lucide-react';
-import ArrayItemBox from '@atoms/shared/ArrayItemBox';
+import ReorderableFieldArray from '@atoms/shared/ReorderableFieldArray';
 import { useTranslations } from 'next-intl';
 
 export default function WarrantyFormField() {
@@ -146,49 +146,64 @@ export default function WarrantyFormField() {
                     <Plus className="h-4 w-4" /> {t('addWarranty')}
                   </Button>
                 </div>
-              </div>
 
-              {/* Display existing warranties */}
-              {fields.length > 0 && (
-                <div className="border-border bg-muted/10 rounded-lg border p-8">
-                  <div className="space-y-3">
-                    {fields.map((field, index) => (
-                      <ArrayItemBox
-                        key={field.id}
-                        index={index}
-                        canMoveUp={index > 0}
-                        canMoveDown={index < fields.length - 1}
-                        onMoveUp={() => moveWarranty(index, 'up')}
-                        onMoveDown={() => moveWarranty(index, 'down')}
-                        onDelete={() => remove(index)}
-                        t={t}
-                      >
-                        <div className="space-y-3">
+                {/* Display existing warranties */}
+                {fields.length > 0 && (
+                  <ReorderableFieldArray
+                    items={fields}
+                    onMove={moveWarranty}
+                    onRemove={remove}
+                    t={t}
+                    renderItem={(index) => (
+                      <div className="space-y-3">
+                        <div>
+                          <FormLabel className="text-xs">
+                            {t('warrantyMonths')}
+                          </FormLabel>
+                          <FormField
+                            control={control}
+                            name={`warranties.${index}.months`}
+                            render={({ field: fieldProps }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Input
+                                    {...fieldProps}
+                                    aria-label={t('warrantyMonths')}
+                                    inputMode="numeric"
+                                    type="number"
+                                    placeholder={t('warrantyMonthsPlaceholder')}
+                                    onChange={(e) => {
+                                      const value = e.target.value.replace(
+                                        /\D/g,
+                                        '',
+                                      );
+                                      fieldProps.onChange(value);
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                           <div>
                             <FormLabel className="text-xs">
-                              {t('warrantyMonths')}
+                              {t('warrantyCoverage')}
                             </FormLabel>
                             <FormField
                               control={control}
-                              name={`warranties.${index}.months`}
+                              name={`warranties.${index}.coverage`}
                               render={({ field: fieldProps }) => (
                                 <FormItem>
                                   <FormControl>
-                                    <Input
+                                    <Textarea
                                       {...fieldProps}
-                                      aria-label={t('warrantyMonths')}
-                                      inputMode="numeric"
-                                      type="number"
+                                      aria-label={t('warrantyCoverage')}
+                                      maxLength={1000}
                                       placeholder={t(
-                                        'warrantyMonthsPlaceholder',
+                                        'warrantyCoveragePlaceholder',
                                       )}
-                                      onChange={(e) => {
-                                        const value = e.target.value.replace(
-                                          /\D/g,
-                                          '',
-                                        );
-                                        fieldProps.onChange(value);
-                                      }}
                                     />
                                   </FormControl>
                                   <FormMessage />
@@ -196,62 +211,36 @@ export default function WarrantyFormField() {
                               )}
                             />
                           </div>
-                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                            <div>
-                              <FormLabel className="text-xs">
-                                {t('warrantyCoverage')}
-                              </FormLabel>
-                              <FormField
-                                control={control}
-                                name={`warranties.${index}.coverage`}
-                                render={({ field: fieldProps }) => (
-                                  <FormItem>
-                                    <FormControl>
-                                      <Textarea
-                                        {...fieldProps}
-                                        aria-label={t('warrantyCoverage')}
-                                        maxLength={1000}
-                                        placeholder={t(
-                                          'warrantyCoveragePlaceholder',
-                                        )}
-                                      />
-                                    </FormControl>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                            </div>
-                            <div>
-                              <FormLabel className="text-xs">
-                                {t('warrantyInstructions')}
-                              </FormLabel>
-                              <FormField
-                                control={control}
-                                name={`warranties.${index}.instructions`}
-                                render={({ field: fieldProps }) => (
-                                  <FormItem>
-                                    <FormControl>
-                                      <Textarea
-                                        {...fieldProps}
-                                        aria-label={t('warrantyInstructions')}
-                                        maxLength={1000}
-                                        placeholder={t(
-                                          'warrantyInstructionsPlaceholder',
-                                        )}
-                                      />
-                                    </FormControl>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                            </div>
+                          <div>
+                            <FormLabel className="text-xs">
+                              {t('warrantyInstructions')}
+                            </FormLabel>
+                            <FormField
+                              control={control}
+                              name={`warranties.${index}.instructions`}
+                              render={({ field: fieldProps }) => (
+                                <FormItem>
+                                  <FormControl>
+                                    <Textarea
+                                      {...fieldProps}
+                                      aria-label={t('warrantyInstructions')}
+                                      maxLength={1000}
+                                      placeholder={t(
+                                        'warrantyInstructionsPlaceholder',
+                                      )}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
                           </div>
                         </div>
-                      </ArrayItemBox>
-                    ))}
-                  </div>
-                </div>
-              )}
+                      </div>
+                    )}
+                  />
+                )}
+              </div>
 
               {fields.length === 0 && (
                 <p className="text-muted-foreground py-8 text-center text-sm">

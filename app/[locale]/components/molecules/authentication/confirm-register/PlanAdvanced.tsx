@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 
 type PlanAdvancedProps = {
   price: string;
+  originalPrice?: string;
   selected: boolean;
   onSelect: () => void;
   mode?: 'confirm' | 'landing';
@@ -11,6 +12,7 @@ type PlanAdvancedProps = {
 
 export default function PlanAdvanced({
   price,
+  originalPrice,
   selected,
   onSelect,
   mode,
@@ -20,6 +22,8 @@ export default function PlanAdvanced({
     <CardPlan
       title={t('advanced')}
       price={price}
+      originalPrice={originalPrice}
+      highlighted
       features={[
         t('1featureAdvanced'),
         t('2featureAdvanced'),
@@ -33,6 +37,7 @@ export default function PlanAdvanced({
         selected={selected}
         onSelect={onSelect}
         mode={mode}
+        recommended
       />
     </CardPlan>
   );

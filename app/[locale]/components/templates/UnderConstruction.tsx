@@ -1,4 +1,3 @@
-import type React from 'react';
 import HeaderConstruction from '@organisms/construction/HeaderConstruction';
 import MainConstruction from '@organisms/construction/MainConstruction';
 import Footer from '@organisms/shared/Footer';

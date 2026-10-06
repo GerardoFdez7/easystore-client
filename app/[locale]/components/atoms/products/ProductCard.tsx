@@ -13,7 +13,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import ProductStatus from '@atoms/products/ProductStatus';
 import BadgeTag from '@atoms/shared/BadgeTag';
-import { formatPriceWithCommasAndDots } from '@lib/utils/input-formatters';
+import { formatMoney } from '@lib/utils/money';
 import type { ProductListItem } from '@lib/types/product';
 
 interface ProductCardProps {
@@ -119,7 +119,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <article className="group">
-      <Card className="m-0 flex cursor-pointer gap-0 p-0 pb-1 transition-transform hover:scale-105">
+      <Card className="m-0 flex cursor-pointer gap-0 p-0 py-0! pb-1! transition-transform hover:scale-105">
         {mediaItems.length > 1 ? (
           <Carousel
             setApi={setApi}
@@ -214,10 +214,12 @@ export function ProductCard({ product }: ProductCardProps) {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-foreground text-sm">
-                  {process.env.NEXT_PUBLIC_DEFAULT_CURRENCY}
                   {product.variants?.[0]?.price
-                    ? formatPriceWithCommasAndDots(product.variants[0].price)
-                    : '0.00'}
+                    ? formatMoney({
+                        amount: product.variants[0].price,
+                        currency: product.currency,
+                      })
+                    : '-'}
                 </span>
                 <ProductStatus product={product} />
               </div>

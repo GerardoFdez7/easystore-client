@@ -23,10 +23,6 @@
   max-height: 90vh;
 }
 
-@utility grid-cols-profile-page {
-  grid-template-columns: 20rem minmax(0, 1fr);
-}
-
 @utility grid-cols-legal {
   grid-template-columns: 250px minmax(0, 42rem);
 }
@@ -110,7 +106,7 @@
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(94.912% 0.00011 271.152);
   --muted-foreground: oklch(0.52 0 0);
-  --accent: oklch(0.97 0 0);
+  --accent: oklch(0.95 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.53 0.245 27.325);
   --border: oklch(0.922 0 0);
@@ -313,9 +309,13 @@
   color: white !important;
 }
 
-/* Widen the toast stack while the unsaved-changes bar is shown (matches its story) */
-[data-sonner-toaster]:has([data-slot='unsaved-changes-toast']) {
-  --width: min(32rem, calc(100vw - 2rem)) !important;
+/* Unsaved-changes bar: wider than the default toast and centered on the toaster.
+   Scoped to the bar's own toast (not the toaster) so other toasts, e.g. the
+   success one, keep the default width and never resize when the bar leaves. */
+[data-sonner-toast]:has([data-slot='unsaved-changes-toast']) {
+  --bar-width: min(32rem, calc(100vw - 2rem));
+  width: var(--bar-width);
+  left: calc((100% - var(--bar-width)) / 2);
 }
 
 /* Water fill animation for upload button */

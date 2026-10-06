@@ -65,13 +65,14 @@ query findProductById($id: String!) {
     updatedAt
     createdAt
     productType
+    currency
     isArchived
   }
 }
 
 query findAllProducts(
-  $page: Float = 1
-  $limit: Float = 25
+  $page: Int = 1
+  $limit: Int = 25
   $categoriesIds: [ID!] = []
   $type: TypeEnum
   $sortBy: ProductSortBy = NAME
@@ -112,6 +113,7 @@ query findAllProducts(
       }
       isArchived
       productType
+      currency
       shortDescription
       sustainabilities {
         certification
@@ -165,8 +167,8 @@ query findAllProducts(
 }
 
 query findAllVariantsToCreateStock(
-  $page: Float = 1
-  $limit: Float = 10
+  $page: Int = 1
+  $limit: Int = 10
   $sortBy: ProductSortBy = NAME
   $sortOrder: SortOrder = ASC
   $filterMode: ProductFilterMode = ACTIVES

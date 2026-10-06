@@ -1,6 +1,5 @@
 import { expect as storybookExpect, within } from 'storybook/test';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Form } from '@shadcn/ui/form';
 import PersonalizationOptionsFormField from '@molecules/products/variant/PersonalizationOptionsFormField';

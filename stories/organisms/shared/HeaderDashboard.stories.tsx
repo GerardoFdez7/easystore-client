@@ -8,9 +8,6 @@ const meta: Meta<typeof HeaderDashboard> = {
     await storybookExpect(
       await canvas.findByRole('button', { name: 'Toggle theme' }),
     ).toBeInTheDocument();
-    await storybookExpect(
-      await canvas.findByLabelText('Account menu'),
-    ).toBeInTheDocument();
   },
   title: 'Organisms/Shared/HeaderDashboard',
   component: HeaderDashboard,

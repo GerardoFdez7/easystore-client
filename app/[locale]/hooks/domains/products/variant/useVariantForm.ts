@@ -8,6 +8,11 @@ import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { useVariantFromProducts } from '@lib/contexts/ProductsContext';
 import { useProductCreation } from '@lib/contexts/ProductCreationContext';
+import {
+  isDecimalString,
+  isPositiveDecimal,
+  normalizeDecimal,
+} from '@lib/utils/money';
 import { useVariantManagement } from './useVariantManagement';
 import {
   ConditionEnum,
@@ -23,9 +28,9 @@ const createVariantFormSchema = (
   isPhysical: boolean = false,
 ) =>
   z.object({
-    price: z.coerce
-      .number<number>()
-      .nonnegative({ message: t('priceNonNegative') }), // Unnused
+    price: z
+      .string()
+      .refine(isDecimalString, { message: t('priceNonNegative') }),
     condition: z.enum(['NEW', 'USED', 'REFURBISHED'], {
       error: t('conditionRequired'),
     }),
@@ -156,7 +161,7 @@ function buildSharedVariantInput(
   data: VariantFormData,
 ): Omit<AddVariantToProductInput, 'dimension' | 'weight'> {
   return {
-    price: typeof data.price === 'string' ? parseFloat(data.price) : data.price,
+    price: normalizeDecimal(data.price),
     condition: normalizeCondition(data.condition),
     attributes: data.attributes.map(({ key, value }) => ({ key, value })),
     sku: data.codes.sku,
@@ -251,7 +256,7 @@ export function useVariantForm({
     // Mode is 'create' or variant data is not yet available
     if (isNew || !variant) {
       return {
-        price: 0,
+        price: '',
         condition: 'NEW',
         attributes: [],
         dimensions: {
@@ -276,7 +281,7 @@ export function useVariantForm({
     }
     // Mode is 'update' and variant data is available
     return {
-      price: variant.price || 0,
+      price: variant.price ?? '',
       condition: (variant.condition as 'NEW' | 'USED' | 'REFURBISHED') || 'NEW',
       attributes:
         variant.attributes?.map((attr) => ({
@@ -336,8 +341,7 @@ export function useVariantForm({
       // In create mode - check if required fields are filled
       const currentValues = form.getValues();
       return (
-        typeof currentValues.price === 'number' &&
-        currentValues.price > 0 &&
+        isPositiveDecimal(currentValues.price) &&
         currentValues.codes.sku !== null &&
         currentValues.codes.sku !== ''
       );

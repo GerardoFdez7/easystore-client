@@ -1,20 +1,10 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useQuery } from '@apollo/client/react';
-import {
-  FindCategoriesTreeDocument,
-  FindCategoriesTreeQuery,
-  FindCategoriesTreeQueryVariables,
-  SortBy,
-  SortOrder,
-} from '@graphql/generated';
+import { SortOrder } from '@graphql/generated';
 import { nameToSlug } from '@lib/utils/path-utils';
 import { createCategoryPathIdMap } from './categoryLookup';
-
-type GqlCategory = NonNullable<
-  FindCategoriesTreeQuery['getAllCategories']
->['categories'][number];
+import { useCategoriesTree } from './useCategoriesTree';
 
 /**
  * Hook to resolve category ID from a path of category slugs
@@ -25,24 +15,9 @@ type GqlCategory = NonNullable<
  * @returns The resolved parent category ID and loading state
  */
 export function useCategoryByPath(categoryPath: string[] = []) {
-  // Fetch root categories with all their subcategories to build the complete resolution map
-  // Use the tree query to get complete category hierarchy
-  const { data, loading, error } = useQuery<
-    FindCategoriesTreeQuery,
-    FindCategoriesTreeQueryVariables
-  >(FindCategoriesTreeDocument, {
-    variables: {
-      sortBy: SortBy.Name,
-      sortOrder: SortOrder.Asc,
-    },
-    fetchPolicy: 'cache-and-network',
-    errorPolicy: 'all',
+  const { categories, loading, error } = useCategoriesTree({
+    sortOrder: SortOrder.Asc,
   });
-
-  const categories = useMemo(
-    () => (data?.getAllCategories?.categories ?? []) as GqlCategory[],
-    [data?.getAllCategories?.categories],
-  );
 
   const categoryMap = useMemo(
     () => createCategoryPathIdMap(categories),

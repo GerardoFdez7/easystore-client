@@ -9,7 +9,7 @@ const meta: Meta<typeof Pricing> = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const monthly = canvas.getByRole('tab', { name: 'Monthly' });
-    const yearly = canvas.getByRole('tab', { name: 'Yearly' });
+    const yearly = canvas.getByRole('tab', { name: /Yearly/ });
     await storybookExpect(monthly).toHaveAttribute('aria-selected', 'true');
     await userEvent.click(yearly);
     await storybookExpect(yearly).toHaveAttribute('aria-selected', 'true');

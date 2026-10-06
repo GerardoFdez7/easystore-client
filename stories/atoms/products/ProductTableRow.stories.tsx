@@ -1,7 +1,7 @@
 import { expect as storybookExpect, fn, userEvent } from 'storybook/test';
 import { ProductTableRow } from '@atoms/products/ProductTableRow';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { MediaTypeEnum, TypeEnum } from '@graphql/generated';
+import { MediaTypeEnum, TypeEnum, CurrencyCodes } from '@graphql/generated';
 import { Table, TableBody } from '@shadcn/ui/table';
 
 const meta: Meta<typeof ProductTableRow> = {
@@ -47,6 +47,7 @@ const mockProduct = {
   ],
   isArchived: false,
   productType: TypeEnum.Physical,
+  currency: CurrencyCodes.Gtq,
   shortDescription: 'A modern smartphone.',
   createdAt: '2024-01-01T00:00:00Z',
   updatedAt: '2024-01-15T12:30:00Z',

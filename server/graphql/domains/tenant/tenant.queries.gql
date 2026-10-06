@@ -1,19 +1,13 @@
 query findTenantProfile {
   getTenantById {
-    ownerName
+    name
     email
-    businessName
-    description
-    domain
-    logo
     defaultPhoneNumberId
   }
 }
 
 query findTenantAuthInfo {
   getTenantById {
-    ownerName
-    businessName
-    logo
+    name
   }
 }

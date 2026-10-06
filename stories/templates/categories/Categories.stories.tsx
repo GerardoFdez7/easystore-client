@@ -8,6 +8,10 @@ import {
   SortBy,
   SortOrder,
 } from '@graphql/generated';
+import {
+  categoriesTreeResult,
+  categoriesTreeVariables,
+} from '../../molecules/categories/mocks/categoriesTreeQuery';
 import { mockCategories } from '../../molecules/categories/mocks/categoryMocks';
 
 // Enhanced mock categories with proper GraphQL structure
@@ -65,18 +69,9 @@ const successMocks = [
   {
     request: {
       query: FindCategoriesTreeDocument,
-      variables: {
-        sortBy: SortBy.Name,
-        sortOrder: SortOrder.Asc,
-      },
+      variables: categoriesTreeVariables(SortOrder.Asc),
     },
-    result: {
-      data: {
-        getAllCategories: {
-          categories: mockCategoriesWithSubcategories,
-        },
-      },
-    },
+    result: categoriesTreeResult(mockCategoriesWithSubcategories),
   },
 ];
 
@@ -109,18 +104,9 @@ const loadingMocks = [
   {
     request: {
       query: FindCategoriesTreeDocument,
-      variables: {
-        sortBy: SortBy.Name,
-        sortOrder: SortOrder.Asc,
-      },
+      variables: categoriesTreeVariables(SortOrder.Asc),
     },
-    result: {
-      data: {
-        getAllCategories: {
-          categories: [],
-        },
-      },
-    },
+    result: categoriesTreeResult([]),
     delay: Infinity, // Simulate loading delay
   },
 ];
@@ -242,15 +228,9 @@ export const NoSubcategories: Story = {
       {
         request: {
           query: FindCategoriesTreeDocument,
-          variables: {},
+          variables: categoriesTreeVariables(SortOrder.Asc),
         },
-        result: {
-          data: {
-            getAllCategories: {
-              categories: mockCategoriesWithSubcategories,
-            },
-          },
-        },
+        result: categoriesTreeResult(mockCategoriesWithSubcategories),
       },
     ],
     docs: {
@@ -292,15 +272,9 @@ export const NoCategories: Story = {
       {
         request: {
           query: FindCategoriesTreeDocument,
-          variables: {},
+          variables: categoriesTreeVariables(SortOrder.Asc),
         },
-        result: {
-          data: {
-            getAllCategories: {
-              categories: [],
-            },
-          },
-        },
+        result: categoriesTreeResult([]),
       },
     ],
     docs: {

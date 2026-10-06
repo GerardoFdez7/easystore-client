@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import {
   FormField,
@@ -54,103 +54,105 @@ export default function AttributesCard() {
           <FormControl>
             <div className="space-y-4">
               {/* Persistent input fields for adding new attributes */}
-              {fields.length <= 30 && (
-                <div className="border-border bg-muted/30 rounded-lg border p-4">
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    <div>
-                      <FormLabel htmlFor="attributeKey" className="mb-1">
-                        {t('attributeKey')}
-                      </FormLabel>
-                      <Input
-                        id="attributeKey"
-                        type="text"
-                        placeholder={t('attributeKeyPlaceholder')}
-                        value={newKey}
-                        onChange={(e) => setNewKey(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <FormLabel htmlFor="attributeValue" className="mb-1">
-                        {t('attributeValue')}
-                      </FormLabel>
-                      <Input
-                        id="attributeValue"
-                        placeholder={t('attributeValuePlaceholder')}
-                        value={newValue}
-                        onChange={(e) => setNewValue(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div className="mt-3 flex justify-end">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="w-full sm:w-auto"
-                      onClick={addAttribute}
-                      disabled={!newKey.trim() || !newValue.trim()}
-                    >
-                      <Plus className="h-4 w-4" /> {t('addAttribute')}
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {/* Display existing attributes */}
-              {fields.length > 0 && (
-                <ReorderableFieldArray
-                  items={fields}
-                  onMove={moveAttribute}
-                  onRemove={remove}
-                  t={t}
-                  renderItem={(index) => (
+              <div className="border-border bg-muted/30 rounded-lg border p-4">
+                {fields.length <= 30 && (
+                  <>
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <div>
-                        <FormLabel className="text-xs">
+                        <FormLabel htmlFor="attributeKey" className="mb-1">
                           {t('attributeKey')}
                         </FormLabel>
-                        <FormField
-                          control={control}
-                          name={`attributes.${index}.key`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <Input
-                                  {...field}
-                                  aria-label={t('attributeKey')}
-                                  placeholder={t('attributeKeyPlaceholder')}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
+                        <Input
+                          id="attributeKey"
+                          type="text"
+                          placeholder={t('attributeKeyPlaceholder')}
+                          value={newKey}
+                          onChange={(e) => setNewKey(e.target.value)}
                         />
                       </div>
                       <div>
-                        <FormLabel className="text-xs">
+                        <FormLabel htmlFor="attributeValue" className="mb-1">
                           {t('attributeValue')}
                         </FormLabel>
-                        <FormField
-                          control={control}
-                          name={`attributes.${index}.value`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <Input
-                                  {...field}
-                                  aria-label={t('attributeValue')}
-                                  placeholder={t('attributeValuePlaceholder')}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
+                        <Input
+                          id="attributeValue"
+                          placeholder={t('attributeValuePlaceholder')}
+                          value={newValue}
+                          onChange={(e) => setNewValue(e.target.value)}
                         />
                       </div>
                     </div>
-                  )}
-                />
-              )}
+                    <div className="mt-3 flex justify-end">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="w-full sm:w-auto"
+                        onClick={addAttribute}
+                        disabled={!newKey.trim() || !newValue.trim()}
+                      >
+                        <Plus className="h-4 w-4" /> {t('addAttribute')}
+                      </Button>
+                    </div>
+                  </>
+                )}
+
+                {/* Display existing attributes */}
+                {fields.length > 0 && (
+                  <ReorderableFieldArray
+                    items={fields}
+                    onMove={moveAttribute}
+                    onRemove={remove}
+                    t={t}
+                    renderItem={(index) => (
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <div>
+                          <FormLabel className="text-xs">
+                            {t('attributeKey')}
+                          </FormLabel>
+                          <FormField
+                            control={control}
+                            name={`attributes.${index}.key`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    aria-label={t('attributeKey')}
+                                    placeholder={t('attributeKeyPlaceholder')}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div>
+                          <FormLabel className="text-xs">
+                            {t('attributeValue')}
+                          </FormLabel>
+                          <FormField
+                            control={control}
+                            name={`attributes.${index}.value`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    aria-label={t('attributeValue')}
+                                    placeholder={t('attributeValuePlaceholder')}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  />
+                )}
+              </div>
 
               {fields.length === 0 && (
                 <p className="text-muted-foreground py-8 text-center text-sm">

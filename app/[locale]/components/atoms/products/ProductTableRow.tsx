@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import ProductStatus from '@atoms/products/ProductStatus';
-import { formatPriceWithCommasAndDots } from '@lib/utils/input-formatters';
+import { formatMoney } from '@lib/utils/money';
 import type { ProductListItem } from '@lib/types/product';
 
 interface ProductTableRowProps {
@@ -67,10 +67,12 @@ export function ProductTableRow({
       </TableCell>
       <TableCell>{product.variants?.[0].sku}</TableCell>
       <TableCell>
-        {process.env.NEXT_PUBLIC_DEFAULT_CURRENCY}
         {product.variants?.[0]?.price
-          ? formatPriceWithCommasAndDots(product.variants[0].price)
-          : '0.00'}
+          ? formatMoney({
+              amount: product.variants[0].price,
+              currency: product.currency,
+            })
+          : '-'}
       </TableCell>
       <TableCell>{product.variants?.length}</TableCell>
       <TableCell>{product.categories?.[0]?.categoryName || '-'}</TableCell>

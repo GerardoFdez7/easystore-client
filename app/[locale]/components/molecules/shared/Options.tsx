@@ -220,7 +220,7 @@ export default function Options({
                 className={`h-8 w-8 p-0 ${className}`}
                 aria-label={defaultTooltipContent}
               >
-                <MoreHorizontal className="h-4 w-4" />
+                <MoreHorizontal className="size-6" />
               </Button>
             </DropdownMenuTrigger>
           </TooltipTrigger>

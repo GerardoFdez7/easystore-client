@@ -11,7 +11,7 @@ function ProductCardSkeleton() {
       aria-label={t('loadingProduct')}
       aria-busy="true"
     >
-      <Card className="m-0 flex flex-col gap-0 p-0">
+      <Card className="m-0 flex flex-col gap-0 p-0!">
         {/* Image skeleton - matches the aspect-square image area */}
         <div className="relative block aspect-square w-full overflow-hidden rounded-t-lg">
           <Skeleton className="h-full w-full" />

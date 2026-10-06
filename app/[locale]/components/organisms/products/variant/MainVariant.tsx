@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { RotateCcw } from 'lucide-react';
@@ -70,6 +70,11 @@ export default function MainVariant({
     ? productDraft?.productType === TypeEnum.Digital
     : (existingProduct?.productType ?? contextProduct?.productType) ===
       TypeEnum.Digital;
+
+  // Every variant is priced in its product's currency
+  const currency = isNewProduct
+    ? productDraft?.currency
+    : (existingProduct?.currency ?? contextProduct?.currency);
 
   // Get variant data to check if archived
   const variant = contextProduct?.variants?.find((v) => v.id === variantId);
@@ -162,7 +167,7 @@ export default function MainVariant({
                 mediaFieldName="variantMedia"
                 isSubmitting={isSubmitting}
               />
-              <PriceConditionFormField />
+              <PriceConditionFormField currency={currency} />
               <AttributesFormField />
               {!isDigitalProduct && (
                 <>

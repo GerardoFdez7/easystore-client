@@ -22,10 +22,11 @@ const env = {
   XDG_CONFIG_HOME: join(isolatedDir, 'config'),
   XDG_DATA_HOME: join(isolatedDir, 'data'),
 };
+const INSTALL_TIMEOUT_MS = 10 * 60 * 1000;
 const run = (command, args, options = {}) =>
   spawnSync(command, args, {
     env,
-    timeout: 10000,
+    timeout: options.timeout ?? 60000,
     stdio: options.stdio ?? 'ignore',
     shell: false,
     encoding: 'utf8',
@@ -52,7 +53,10 @@ const finish = (code) => {
 };
 if (findSemgrep()) finish(0);
 if (available('pipx')) {
-  const result = run('pipx', ['install', 'semgrep'], { stdio: 'inherit' });
+  const result = run('pipx', ['install', 'semgrep'], {
+    stdio: 'inherit',
+    timeout: INSTALL_TIMEOUT_MS,
+  });
   addCandidate(run('pipx', ['environment', '--value', 'PIPX_BIN_DIR']).stdout);
   if (result.status === 0 && findSemgrep()) finish(0);
 }
@@ -69,6 +73,7 @@ for (const command of pythonCommands) {
   if (process.platform !== 'win32' && base) addCandidate(join(base, 'bin'));
   const result = run(command, ['-m', 'pip', 'install', '--user', 'semgrep'], {
     stdio: 'inherit',
+    timeout: INSTALL_TIMEOUT_MS,
   });
   if (result.status === 0 && findSemgrep()) finish(0);
 }

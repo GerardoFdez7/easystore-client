@@ -9,6 +9,7 @@ import {
   ConditionEnum,
   ProductSortBy,
   SortOrder,
+  CurrencyCodes,
 } from '@graphql/generated';
 
 const meta: Meta<typeof ProductTable> = {
@@ -74,6 +75,7 @@ const mockProducts = [
     longDescription: 'A modern smartphone with advanced features.',
     manufacturer: 'TechCorp Manufacturing',
     productType: TypeEnum.Physical,
+    currency: CurrencyCodes.Gtq,
     shortDescription: 'A modern smartphone.',
     tags: ['electronics', 'mobile', 'smartphone'],
     categories: [
@@ -93,7 +95,7 @@ const mockProducts = [
     variants: [
       {
         id: 'variant_1',
-        price: 699.99,
+        price: '699.99',
         sku: 'PHN-001',
         condition: ConditionEnum.New,
         attributes: [
@@ -116,6 +118,7 @@ const mockProducts = [
     longDescription: 'A sustainable water bottle made from recycled materials.',
     manufacturer: 'EcoLife Products',
     productType: TypeEnum.Physical,
+    currency: CurrencyCodes.Gtq,
     shortDescription: 'Reusable water bottle.',
     tags: ['eco-friendly', 'sustainable', 'bottle'],
     categories: [
@@ -135,7 +138,7 @@ const mockProducts = [
     variants: [
       {
         id: 'variant_2',
-        price: 24.99,
+        price: '24.99',
         sku: 'WTR-002',
         condition: ConditionEnum.New,
         attributes: [
@@ -158,6 +161,7 @@ const mockProducts = [
     longDescription: 'Premium noise-cancelling wireless headphones.',
     manufacturer: 'AudioTech Industries',
     productType: TypeEnum.Physical,
+    currency: CurrencyCodes.Gtq,
     shortDescription: 'Noise-cancelling headphones.',
     tags: ['audio', 'wireless', 'headphones'],
     categories: [
@@ -169,7 +173,7 @@ const mockProducts = [
     variants: [
       {
         id: 'variant_3',
-        price: 199.99,
+        price: '199.99',
         sku: 'HDN-003',
         condition: ConditionEnum.Used,
         attributes: [

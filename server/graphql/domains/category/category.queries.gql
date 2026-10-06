@@ -84,62 +84,25 @@ query findCategoriesForPicker(
   }
 }
 
-query findCategoriesTree($sortBy: SortBy = NAME, $sortOrder: SortOrder = ASC) {
-  getAllCategories(sortBy: $sortBy, sortOrder: $sortOrder) {
+query findCategoriesTree(
+  $page: Int = 1
+  $limit: Int = 50
+  $sortBy: SortBy = NAME
+  $sortOrder: SortOrder = ASC
+) {
+  getAllCategories(
+    page: $page
+    limit: $limit
+    includeSubcategories: false
+    sortBy: $sortBy
+    sortOrder: $sortOrder
+  ) {
     categories {
       id
       name
       parentId
-      subCategories {
-        id
-        parentId
-        name
-        subCategories {
-          id
-          parentId
-          name
-          subCategories {
-            id
-            parentId
-            name
-            subCategories {
-              id
-              parentId
-              name
-              subCategories {
-                id
-                parentId
-                name
-                subCategories {
-                  id
-                  parentId
-                  name
-                  subCategories {
-                    id
-                    parentId
-                    name
-                    subCategories {
-                      id
-                      parentId
-                      name
-                      subCategories {
-                        id
-                        parentId
-                        name
-                        subCategories {
-                          id
-                          parentId
-                          name
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
     }
+    total
+    hasMore
   }
 }

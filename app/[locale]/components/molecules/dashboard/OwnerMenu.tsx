@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
 } from '@shadcn/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@shadcn/ui/avatar';
-import { LogOut, User, LayoutDashboard } from 'lucide-react';
+import { LogOut, LayoutDashboard } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter, usePathname } from '@i18n/navigation';
 import LogoutConfirmDialog from '@atoms/shared/LogoutConfirmDialog';
@@ -22,10 +22,6 @@ export default function OwnerMenu() {
   const router = useRouter();
   const pathname = usePathname();
   const { tenantData } = useAuth();
-
-  const handleProfileClick = () => {
-    router.push('/profile');
-  };
 
   const handleDashboardClick = () => {
     router.push('/dashboard');
@@ -63,7 +59,7 @@ export default function OwnerMenu() {
             >
               <Avatar className="h-11 w-11">
                 <AvatarFallback className="text-background bg-title text-xl font-bold">
-                  {getInitials(tenantData?.ownerName)}
+                  {getInitials(tenantData?.name)}
                 </AvatarFallback>
               </Avatar>
             </button>
@@ -83,11 +79,6 @@ export default function OwnerMenu() {
             onClick={handleDashboardClick}
           />
         )}
-        <OwnerMenuItem
-          icon={User}
-          label={t('profile')}
-          onClick={handleProfileClick}
-        />
         <LogoutConfirmDialog>
           <OwnerMenuItem
             icon={LogOut}
