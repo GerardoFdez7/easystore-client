@@ -48,7 +48,7 @@ function handleNetworkError(networkError: Error, context: ErrorContext): void {
   toast.error(getLocalizedMessage(locale, 'title'), {
     description:
       getLocalizedMessage(locale, 'network-error') +
-      (isDevelopment ? ` Backend message: "${networkError.message}"` : ''),
+      (isDevelopment ? ` Development message: "${networkError.message}"` : ''),
     duration: Infinity,
   });
 }

@@ -4,7 +4,7 @@ import { findErrorHandler, errorRegistry } from '../error-registry';
 /**
  * Test cases for error handlers to prevent conflicts and ensure correct matching
  */
-const testCases = [
+export const testCases = [
   // Database constraint errors
   {
     description: 'warehouse addressid already exists',
@@ -12,8 +12,8 @@ const testCases = [
     expectedHandlerId: 'warehouse-address-exists',
   },
   {
-    description: 'address already exists (generic)',
-    errorMessage: 'address already exists',
+    description: 'address name already exists',
+    errorMessage: 'address name already exists',
     expectedHandlerId: 'address-exists',
   },
   {
@@ -58,19 +58,6 @@ const testCases = [
   },
   // HTTP status errors
   {
-    description: 'not found error (should be silent)',
-    errorMessage: 'Resource not found',
-    extensions: { originalError: { error: 'Not Found' } },
-    path: ['validateToken'],
-    expectedHandlerId: 'not-found-expected',
-  },
-  {
-    description: 'unexpected not found error',
-    errorMessage: 'Resource not found',
-    extensions: { originalError: { error: 'Not Found' } },
-    expectedHandlerId: 'not-found-unexpected',
-  },
-  {
     description: 'bad request error',
     errorMessage: 'Bad request',
     extensions: { originalError: { statusCode: 400 } },
@@ -87,6 +74,77 @@ const testCases = [
     errorMessage: 'Internal server error',
     extensions: { originalError: { statusCode: 500 } },
     expectedHandlerId: 'internal-server-error',
+  },
+  // Production-shaped errors (masked by the backend: code + reason/resource only)
+  {
+    description: 'production invalid credentials',
+    errorMessage: 'Authentication required',
+    extensions: { code: 'UNAUTHENTICATED', reason: 'INVALID_CREDENTIALS' },
+    path: ['login'],
+    expectedHandlerId: 'invalid-credentials',
+  },
+  {
+    description: 'production account locked',
+    errorMessage: 'Operation not permitted',
+    extensions: { code: 'FORBIDDEN', reason: 'ACCOUNT_LOCKED' },
+    path: ['login'],
+    expectedHandlerId: 'account-locked',
+  },
+  {
+    description: 'production forbidden without reason',
+    errorMessage: 'Operation not permitted',
+    extensions: { code: 'FORBIDDEN' },
+    expectedHandlerId: 'unauthorized',
+  },
+  {
+    description: 'production not found with resource',
+    errorMessage: 'Resource not found',
+    extensions: { code: 'NOT_FOUND', resource: 'product' },
+    path: ['getProductById'],
+    expectedHandlerId: 'not-found',
+  },
+  {
+    description: 'production unique conflict keeps the exposed message',
+    errorMessage: 'Product sku already exists',
+    extensions: { code: 'CONFLICT', field: 'sku' },
+    expectedHandlerId: 'product-sku-exists',
+  },
+  {
+    description: 'category hierarchy depth exceeded (public bad request)',
+    errorMessage:
+      'Category hierarchy cannot exceed 10 levels. Parent is at depth 10, adding this category would reach depth 11',
+    extensions: { code: 'BAD_USER_INPUT' },
+    expectedHandlerId: 'category-hierarchy-depth-exceeded',
+  },
+  {
+    description: 'weight must be a positive value',
+    errorMessage: 'Weight must be a positive value for physical products.',
+    extensions: { code: 'BAD_USER_INPUT' },
+    expectedHandlerId: 'weight-must-be-positive',
+  },
+  {
+    description: 'production internal server error',
+    errorMessage: 'Internal server error',
+    extensions: { code: 'INTERNAL_SERVER_ERROR' },
+    expectedHandlerId: 'internal-server-error',
+  },
+  {
+    description: 'product currency locked',
+    errorMessage: 'Product currency cannot change while orders use it',
+    extensions: { code: 'CONFLICT' },
+    expectedHandlerId: 'product-currency-locked',
+  },
+  {
+    description: 'item already in cart',
+    errorMessage: 'Item already exists in cart.',
+    extensions: { code: 'BAD_USER_INPUT' },
+    expectedHandlerId: 'cart-item-exists',
+  },
+  {
+    description: 'item already in wish list',
+    errorMessage: 'This variant already exist in your wishlist!',
+    extensions: { code: 'BAD_USER_INPUT' },
+    expectedHandlerId: 'wish-list-item-exists',
   },
 ];
 

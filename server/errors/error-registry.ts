@@ -30,6 +30,32 @@ function getLocalizedMessage(locale: string, key: keyof typeof en.Errors) {
 }
 
 /**
+ * Production responses are masked: the backend only sends `extensions.code`
+ * plus, for some failures, `extensions.reason` / `extensions.resource`.
+ * Development responses additionally carry `extensions.originalError`.
+ */
+function getExtension(error: GraphQLFormattedError, key: string): unknown {
+  return error.extensions?.[key];
+}
+
+function isNotFound(error: GraphQLFormattedError): boolean {
+  const originalError = getExtension(error, 'originalError') as
+    | { error?: string }
+    | undefined;
+  return (
+    getExtension(error, 'code') === 'NOT_FOUND' ||
+    originalError?.error === 'Not Found'
+  );
+}
+
+function getHttpStatus(error: GraphQLFormattedError): number | undefined {
+  const originalError = getExtension(error, 'originalError') as
+    | { statusCode?: number }
+    | undefined;
+  return originalError?.statusCode;
+}
+
+/**
  * Database constraint error handlers
  * Priority: 100-199 (highest priority for specific database constraints)
  */
@@ -55,7 +81,7 @@ const databaseConstraintHandlers: ErrorHandler[] = [
             getLocalizedMessage(
               locale,
               'warehouseAddressAlreadyExistsDescription',
-            ) + (isDevelopment ? ` Backend message: ${error.message}` : ''),
+            ) + (isDevelopment ? ` Development message: ${error.message}` : ''),
         },
       );
       return true;
@@ -73,7 +99,7 @@ const databaseConstraintHandlers: ErrorHandler[] = [
       toast.warning(getLocalizedMessage(locale, 'addressNameAlreadyExists'), {
         description:
           getLocalizedMessage(locale, 'addressNameAlreadyExistsDescription') +
-          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+          (isDevelopment ? ` Development message: ${error.message}` : ''),
       });
       return true;
     },
@@ -95,7 +121,7 @@ const databaseConstraintHandlers: ErrorHandler[] = [
       toast.warning(getLocalizedMessage(locale, 'warehouseNameAlreadyExists'), {
         description:
           getLocalizedMessage(locale, 'warehouseNameAlreadyExistsDescription') +
-          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+          (isDevelopment ? ` Development message: ${error.message}` : ''),
       });
       return true;
     },
@@ -117,7 +143,7 @@ const databaseConstraintHandlers: ErrorHandler[] = [
       toast.warning(getLocalizedMessage(locale, 'categoryNameAlreadyExists'), {
         description:
           getLocalizedMessage(locale, 'categoryNameAlreadyExistsDescription') +
-          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+          (isDevelopment ? ` Development message: ${error.message}` : ''),
       });
       return true;
     },
@@ -128,8 +154,6 @@ const databaseConstraintHandlers: ErrorHandler[] = [
     matcher: (error: GraphQLFormattedError) => {
       const message = error.message?.toLowerCase() || '';
       return (
-        (message.includes('database update category failed') ||
-          message.includes('database create category failed')) &&
         message.includes('category hierarchy cannot exceed') &&
         message.includes('levels')
       );
@@ -143,7 +167,7 @@ const databaseConstraintHandlers: ErrorHandler[] = [
             getLocalizedMessage(
               locale,
               'categoryHierarchyDepthExceededDescription',
-            ) + (isDevelopment ? ` Backend message: ${error.message}` : ''),
+            ) + (isDevelopment ? ` Development message: ${error.message}` : ''),
         },
       );
       return true;
@@ -166,7 +190,7 @@ const databaseConstraintHandlers: ErrorHandler[] = [
       toast.warning(getLocalizedMessage(locale, 'productNameAlreadyExists'), {
         description:
           getLocalizedMessage(locale, 'productNameAlreadyExistsDescription') +
-          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+          (isDevelopment ? ` Development message: ${error.message}` : ''),
       });
       return true;
     },
@@ -186,7 +210,7 @@ const databaseConstraintHandlers: ErrorHandler[] = [
       toast.warning(getLocalizedMessage(locale, 'productSkuAlreadyExists'), {
         description:
           getLocalizedMessage(locale, 'productSkuAlreadyExistsDescription') +
-          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+          (isDevelopment ? ` Development message: ${error.message}` : ''),
       });
       return true;
     },
@@ -207,7 +231,7 @@ const databaseConstraintHandlers: ErrorHandler[] = [
       toast.warning(getLocalizedMessage(locale, 'productUpcAlreadyExists'), {
         description:
           getLocalizedMessage(locale, 'productUpcAlreadyExistsDescription') +
-          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+          (isDevelopment ? ` Development message: ${error.message}` : ''),
       });
       return true;
     },
@@ -228,7 +252,7 @@ const databaseConstraintHandlers: ErrorHandler[] = [
       toast.warning(getLocalizedMessage(locale, 'productEanAlreadyExists'), {
         description:
           getLocalizedMessage(locale, 'productEanAlreadyExistsDescription') +
-          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+          (isDevelopment ? ` Development message: ${error.message}` : ''),
       });
       return true;
     },
@@ -249,7 +273,7 @@ const databaseConstraintHandlers: ErrorHandler[] = [
       toast.warning(getLocalizedMessage(locale, 'productIsbnAlreadyExists'), {
         description:
           getLocalizedMessage(locale, 'productIsbnAlreadyExistsDescription') +
-          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+          (isDevelopment ? ` Development message: ${error.message}` : ''),
       });
       return true;
     },
@@ -274,7 +298,7 @@ const databaseConstraintHandlers: ErrorHandler[] = [
             getLocalizedMessage(
               locale,
               'productBarcodeAlreadyExistsDescription',
-            ) + (isDevelopment ? ` Backend message: ${error.message}` : ''),
+            ) + (isDevelopment ? ` Development message: ${error.message}` : ''),
         },
       );
       return true;
@@ -320,7 +344,7 @@ const databaseConstraintHandlers: ErrorHandler[] = [
           getLocalizedMessage(
             locale,
             'dimensionRequiredForPhysicalDescription',
-          ) + (isDevelopment ? ` Backend message: ${error.message}` : ''),
+          ) + (isDevelopment ? ` Development message: ${error.message}` : ''),
       });
       return true;
     },
@@ -342,7 +366,75 @@ const databaseConstraintHandlers: ErrorHandler[] = [
       toast.error(getLocalizedMessage(locale, 'weightRequiredForPhysical'), {
         description:
           getLocalizedMessage(locale, 'weightRequiredForPhysicalDescription') +
-          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+          (isDevelopment ? ` Development message: ${error.message}` : ''),
+      });
+      return true;
+    },
+  },
+  {
+    id: 'weight-must-be-positive',
+    priority: 148,
+    matcher: (error: GraphQLFormattedError) => {
+      const message = error.message?.toLowerCase() || '';
+      return message.includes('weight must be a positive value');
+    },
+    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
+      const { locale, isDevelopment } = context;
+      toast.error(getLocalizedMessage(locale, 'weightMustBePositive'), {
+        description:
+          getLocalizedMessage(locale, 'weightMustBePositiveDescription') +
+          (isDevelopment ? ` Development message: ${error.message}` : ''),
+      });
+      return true;
+    },
+  },
+  {
+    id: 'product-currency-locked',
+    priority: 149,
+    matcher: (error: GraphQLFormattedError) => {
+      const message = error.message?.toLowerCase() || '';
+      return message.includes('product currency cannot change');
+    },
+    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
+      const { locale, isDevelopment } = context;
+      toast.warning(getLocalizedMessage(locale, 'productCurrencyLocked'), {
+        description:
+          getLocalizedMessage(locale, 'productCurrencyLockedDescription') +
+          (isDevelopment ? ` Development message: ${error.message}` : ''),
+      });
+      return true;
+    },
+  },
+  {
+    id: 'cart-item-exists',
+    priority: 150,
+    matcher: (error: GraphQLFormattedError) => {
+      const message = error.message?.toLowerCase() || '';
+      return message.includes('item already exists in cart');
+    },
+    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
+      const { locale, isDevelopment } = context;
+      toast.warning(getLocalizedMessage(locale, 'cartItemAlreadyExists'), {
+        description:
+          getLocalizedMessage(locale, 'cartItemAlreadyExistsDescription') +
+          (isDevelopment ? ` Development message: ${error.message}` : ''),
+      });
+      return true;
+    },
+  },
+  {
+    id: 'wish-list-item-exists',
+    priority: 151,
+    matcher: (error: GraphQLFormattedError) => {
+      const message = error.message?.toLowerCase() || '';
+      return message.includes('already exist in your wishlist');
+    },
+    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
+      const { locale, isDevelopment } = context;
+      toast.warning(getLocalizedMessage(locale, 'wishListItemAlreadyExists'), {
+        description:
+          getLocalizedMessage(locale, 'wishListItemAlreadyExistsDescription') +
+          (isDevelopment ? ` Development message: ${error.message}` : ''),
       });
       return true;
     },
@@ -376,14 +468,17 @@ const authenticationHandlers: ErrorHandler[] = [
     priority: 210,
     matcher: (error: GraphQLFormattedError) => {
       const message = error.message?.toLowerCase() || '';
-      return message.includes('invalid credentials');
+      return (
+        getExtension(error, 'reason') === 'INVALID_CREDENTIALS' ||
+        message.includes('invalid credentials')
+      );
     },
     handler: (error: GraphQLFormattedError, context: ErrorContext) => {
       const { locale, isDevelopment } = context;
       toast.error(getLocalizedMessage(locale, 'invalidCredentials'), {
         description:
           getLocalizedMessage(locale, 'invalidCredentialsDescription') +
-          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+          (isDevelopment ? ` Development message: ${error.message}` : ''),
       });
       return true;
     },
@@ -393,14 +488,17 @@ const authenticationHandlers: ErrorHandler[] = [
     priority: 220,
     matcher: (error: GraphQLFormattedError) => {
       const message = error.message?.toLowerCase() || '';
-      return message.includes('account is temporarily locked');
+      return (
+        getExtension(error, 'reason') === 'ACCOUNT_LOCKED' ||
+        message.includes('account is temporarily locked')
+      );
     },
     handler: (error: GraphQLFormattedError, context: ErrorContext) => {
       const { locale, isDevelopment } = context;
       toast.warning(getLocalizedMessage(locale, 'accountLocked'), {
         description:
           getLocalizedMessage(locale, 'accountLockedDescription') +
-          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+          (isDevelopment ? ` Development message: ${error.message}` : ''),
       });
       return true;
     },
@@ -410,17 +508,14 @@ const authenticationHandlers: ErrorHandler[] = [
     priority: 230,
     matcher: (error: GraphQLFormattedError) => {
       const message = error.message?.toLowerCase() || '';
-      return (
-        message.includes('database create auth identity failed') &&
-        message.includes('email already exists')
-      );
+      return message.includes('email already exists');
     },
     handler: (error: GraphQLFormattedError, context: ErrorContext) => {
       const { locale, isDevelopment } = context;
       toast.warning(getLocalizedMessage(locale, 'associatedAccount'), {
         description:
           getLocalizedMessage(locale, 'associatedAccountDescription') +
-          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+          (isDevelopment ? ` Development message: ${error.message}` : ''),
       });
       return true;
     },
@@ -433,69 +528,31 @@ const authenticationHandlers: ErrorHandler[] = [
  */
 const httpStatusHandlers: ErrorHandler[] = [
   {
-    id: 'not-found-expected',
+    id: 'not-found',
     priority: 300,
-    matcher: (error: GraphQLFormattedError) => {
-      const originalError = error.extensions?.originalError as {
-        error?: string;
-        statusCode?: number;
-      };
-
-      // Only handle as silent if it's a known expected 404 scenario
-      const isNotFound = originalError?.error === 'Not Found';
-      if (!isNotFound) return false;
-
-      // List of GraphQL operations where 404 is expected and should be silent
-      // Add more operations here as needed
-      const expectedNotFoundOperations = [
-        'getWarehouseById',
-        'getCategoryById',
-      ];
-
-      // Check if this error comes from an expected operation
-      const operationName = error.path?.[0];
-      const isExpectedOperation =
-        typeof operationName === 'string' &&
-        expectedNotFoundOperations.includes(operationName);
-
-      return isExpectedOperation;
-    },
-    handler: (error: GraphQLFormattedError, context: ErrorContext) => {
-      // Silent handler for expected 404 errors - don't show toast
-      // But still log in development for debugging context
-      if (context.isDevelopment) {
-        console.info('Expected 404 handled silently:', {
-          operation: error.path?.[0],
-          message: error.message,
-        });
-      }
-      return true;
-    },
-  },
-  {
-    id: 'not-found-unexpected',
-    priority: 310,
-    allowConsoleLog: true, // Allow console logging for unexpected 404s in development
-    matcher: (error: GraphQLFormattedError) => {
-      const originalError = error.extensions?.originalError as {
-        error?: string;
-        statusCode?: number;
-      };
-      // Handle any remaining 404 errors that weren't caught by the expected handler
-      return originalError?.error === 'Not Found';
-    },
+    allowConsoleLog: true,
+    matcher: (error: GraphQLFormattedError) => isNotFound(error),
     handler: (error: GraphQLFormattedError, context: ErrorContext) => {
       const { locale, isDevelopment } = context;
+      const backendMessage = isDevelopment
+        ? ` Development message: ${error.message}`
+        : '';
 
-      // Show a developer-friendly warning for unexpected 404s
-      if (isDevelopment) {
-        toast.warning('Unexpected 404', {
-          description: `Operation "${error.path?.[0]}" returned Not Found. Please handle it at your component, showing a friendly message to the user and add it to the expected operations at \"server/errors/error-registry.ts."\.`,
+      // Name the missing resource when the backend exposes it
+      const resource = getExtension(error, 'resource');
+      const key = `${String(resource)}NotFound` as keyof typeof en.Errors;
+      if (typeof resource === 'string' && key in en.Errors) {
+        toast.error(getLocalizedMessage(locale, key), {
+          description:
+            getLocalizedMessage(
+              locale,
+              `${key}Description` as keyof typeof en.Errors,
+            ) + backendMessage,
         });
       } else {
-        // In production, show a generic error to users
         toast.error(getLocalizedMessage(locale, 'title'), {
-          description: getLocalizedMessage(locale, 'not-found-error'),
+          description:
+            getLocalizedMessage(locale, 'not-found-error') + backendMessage,
         });
       }
       return true;
@@ -505,17 +562,20 @@ const httpStatusHandlers: ErrorHandler[] = [
     id: 'bad-request',
     priority: 310,
     matcher: (error: GraphQLFormattedError) => {
-      const originalError = error.extensions?.originalError as {
-        statusCode?: number;
-      };
-      return originalError?.statusCode === 400;
+      return (
+        getHttpStatus(error) === 400 ||
+        getExtension(error, 'code') === 'BAD_USER_INPUT'
+      );
     },
     handler: (error: GraphQLFormattedError, context: ErrorContext) => {
       const { locale, isDevelopment } = context;
       toast.error(getLocalizedMessage(locale, 'title'), {
+        // BAD_USER_INPUT messages are public by contract: show them as-is.
         description:
-          getLocalizedMessage(locale, 'bad-request-error') +
-          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+          getExtension(error, 'code') === 'BAD_USER_INPUT' && error.message
+            ? error.message
+            : getLocalizedMessage(locale, 'bad-request-error') +
+              (isDevelopment ? ` Development message: ${error.message}` : ''),
       });
       return true;
     },
@@ -524,17 +584,19 @@ const httpStatusHandlers: ErrorHandler[] = [
     id: 'unauthorized',
     priority: 320,
     matcher: (error: GraphQLFormattedError) => {
-      const originalError = error.extensions?.originalError as {
-        statusCode?: number;
-      };
-      return originalError?.statusCode === 401;
+      const code = getExtension(error, 'code');
+      return (
+        getHttpStatus(error) === 401 ||
+        code === 'UNAUTHENTICATED' ||
+        code === 'FORBIDDEN'
+      );
     },
     handler: (error: GraphQLFormattedError, context: ErrorContext) => {
       const { locale, isDevelopment } = context;
       toast.error(getLocalizedMessage(locale, 'title'), {
         description:
           getLocalizedMessage(locale, 'unauthorized-error') +
-          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+          (isDevelopment ? ` Development message: ${error.message}` : ''),
       });
       return true;
     },
@@ -543,17 +605,17 @@ const httpStatusHandlers: ErrorHandler[] = [
     id: 'internal-server-error',
     priority: 330,
     matcher: (error: GraphQLFormattedError) => {
-      const originalError = error.extensions?.originalError as {
-        statusCode?: number;
-      };
-      return originalError?.statusCode === 500;
+      return (
+        getHttpStatus(error) === 500 ||
+        getExtension(error, 'code') === 'INTERNAL_SERVER_ERROR'
+      );
     },
     handler: (error: GraphQLFormattedError, context: ErrorContext) => {
       const { locale, isDevelopment } = context;
       toast.error(getLocalizedMessage(locale, 'title'), {
         description:
           getLocalizedMessage(locale, 'internal-server-error') +
-          (isDevelopment ? ` Backend message: ${error.message}` : ''),
+          (isDevelopment ? ` Development message: ${error.message}` : ''),
       });
       return true;
     },
@@ -600,7 +662,7 @@ function fallbackHandler(
   toast.error(getLocalizedMessage(locale, 'title'), {
     description:
       getLocalizedMessage(locale, 'generic-error') +
-      (isDevelopment ? ` Backend message: ${error.message}` : ''),
+      (isDevelopment ? ` Development message: ${error.message}` : ''),
   });
 }
 

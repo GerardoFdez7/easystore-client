@@ -14,6 +14,7 @@
 
 import { GraphQLFormattedError } from 'graphql';
 import { errorRegistry, findErrorHandler } from '../error-registry';
+import { testCases as registryTestCases } from './error-registry.test';
 import {
   suggestErrorPriority,
   generateErrorHandlerTemplate,
@@ -83,15 +84,7 @@ const testCases = [
       message: 'Resource not found',
       extensions: { originalError: { error: 'Not Found', statusCode: 404 } },
     },
-    expectedHandler: 'not-found-unexpected',
-  },
-  {
-    name: 'Unexpected Not Found',
-    error: {
-      message: 'Resource not found',
-      extensions: { originalError: { error: 'Not Found', statusCode: 404 } },
-    },
-    expectedHandler: 'not-found-unexpected',
+    expectedHandler: 'not-found',
   },
   {
     name: 'Bad Request',
@@ -117,6 +110,15 @@ const testCases = [
     },
     expectedHandler: 'internal-server-error',
   },
+  ...registryTestCases.map((testCase) => ({
+    name: testCase.description,
+    error: {
+      message: testCase.errorMessage,
+      extensions: testCase.extensions,
+      path: testCase.path,
+    } as GraphQLFormattedError,
+    expectedHandler: testCase.expectedHandlerId,
+  })),
 ];
 
 /**

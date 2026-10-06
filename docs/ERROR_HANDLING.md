@@ -259,12 +259,9 @@ The system intelligently controls console logging to prevent Next.js error overl
 - **Selective Debugging**: Handlers can opt-in to console logging using the `allowConsoleLog` property
 - **Development Mode**: Only unexpected errors or handlers with explicit logging permission show in console
 
-### Enhanced 404 Error Handling
+### 404 Error Handling
 
-The system differentiates between expected and unexpected 404 errors:
-
-- **Expected 404s** (`not-found-expected`, priority 300): Silent handling for known operations like `getAllWarehouses`, `getWarehouseById`, `findInventory`
-- **Unexpected 404s** (`not-found-unexpected`, priority 310): Developer warnings for potential missing endpoints with console logging enabled
+Every not-found error (`not-found`, priority 300) shows a toast. In production the backend exposes `extensions.resource` (for example `product`), so the toast names the missing resource using the `<resource>NotFound` messages; otherwise a generic not-found message is shown.
 
 ### Backend Message Display
 
@@ -378,7 +375,7 @@ return (
 7. **Automated Priority Assignment**: Intelligent priority suggestions
 8. **Conflict Detection**: Automatic conflict detection and resolution
 9. **Console Logging Control**: Selective debugging with `allowConsoleLog` property
-10. **Enhanced 404 Handling**: Differentiation between expected and unexpected 404 errors
+10. **Resource-aware 404 Handling**: Not-found toasts name the missing resource
 
 ## Performance Considerations
 
