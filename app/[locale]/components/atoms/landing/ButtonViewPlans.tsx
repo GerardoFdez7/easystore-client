@@ -6,7 +6,7 @@ export default function ButtonViewPlans() {
 
   return (
     <Button
-      className="flex h-17.5 cursor-pointer items-center justify-center rounded-full border-3 border-white bg-transparent text-2xl font-bold text-white hover:cursor-pointer max-sm:h-12 max-sm:w-52 max-sm:min-w-48 max-sm:text-base"
+      className="max-[580px]:h-cta-sm max-[580px]:w-cta-sm max-[580px]:text-cta-sm flex h-17.5 cursor-pointer items-center justify-center rounded-full border-3 border-white bg-transparent text-2xl font-bold text-white hover:cursor-pointer max-[580px]:min-w-0 max-[580px]:px-2"
       variant={'ghost'}
     >
       {t('buttonViewPlans')}

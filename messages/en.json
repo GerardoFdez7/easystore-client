@@ -1145,6 +1145,7 @@
     "imageAlt": "Image",
     "companyLogoAlt": "Company logo",
     "openNavigationMenu": "Open navigation menu",
+    "closeNavigationMenu": "Close navigation menu",
     "navigationMenu": "Navigation menu",
     "navigationMenuDescription": "This is the navigation menu. Use the links to navigate through the site.",
     "googleIconAlt": "Google icon",

@@ -41,12 +41,24 @@
 }
 
 @utility size-logo-icon {
-  height: 10vw;
-  width: 10vw;
+  height: 11vw;
+  width: 11vw;
 }
 
 @utility text-logo-sm {
-  font-size: 6vw;
+  font-size: 7vw;
+}
+
+@utility h-cta-sm {
+  height: 12vw;
+}
+
+@utility w-cta-sm {
+  width: 32vw;
+}
+
+@utility text-cta-sm {
+  font-size: max(14px, 4vw);
 }
 
 @utility text-logo {

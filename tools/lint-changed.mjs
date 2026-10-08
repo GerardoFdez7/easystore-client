@@ -26,7 +26,11 @@ if (files.length === 0) {
 
 console.log(`Linting ${files.length} uncommitted file(s)...`);
 
-const run = (args) => spawnSync('npx', args, { stdio: 'inherit' }).status ?? 1;
+const run = (args) =>
+  spawnSync('npx', args, {
+    stdio: 'inherit',
+    shell: process.platform === 'win32',
+  }).status ?? 1;
 
 const scriptFiles = files.filter((file) => /\.(js|jsx|ts|tsx)$/.test(file));
 const eslintStatus = scriptFiles.length

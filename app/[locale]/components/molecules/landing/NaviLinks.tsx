@@ -10,7 +10,7 @@ export default function NaviLinks() {
   const { isAuthenticated } = useAuth();
 
   return (
-    <nav className="hidden items-center gap-6 lg:flex">
+    <nav className="hidden items-center gap-4 lg:flex">
       {!isAuthenticated && (
         <>
           <ThemeToggle />

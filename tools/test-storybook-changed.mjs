@@ -66,7 +66,7 @@ const result = spawnSync(
     ...process.argv.slice(2),
     ...existing,
   ],
-  { stdio: 'inherit' },
+  { stdio: 'inherit', shell: process.platform === 'win32' },
 );
 
 process.exit(result.status ?? 1);

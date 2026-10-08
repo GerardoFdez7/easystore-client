@@ -36,7 +36,7 @@ const Logo = ({ redirectTo, className }: LogoProps) => {
       <Image
         src={'/logo.svg'}
         alt={t('logoAlt')}
-        width={60}
+        width={64}
         height={64}
         className={`max-[580px]:size-logo-icon ${className?.includes('text-') ? 'h-auto w-auto' : ''}`}
       />
