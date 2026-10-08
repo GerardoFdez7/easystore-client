@@ -24,7 +24,6 @@
     "architecture:test": "node --test tools/architecture/check.test.mjs",
     "architecture:semgrep": "node tools/semgrep/run.mjs scan --config .semgrep.yml --error app/[locale]/components",
     "duplication": "jscpd --config .jscpd.json",
-    "ui:add:lucide-animated": "node tools/add-lucide-animated.mjs",
     "verify": "npm run build && npm run lint:changed:fix && npm run test && npm run architecture && npm run duplication",
     "format:fix": "prettier --write .",
     "docker": "docker-compose up",
