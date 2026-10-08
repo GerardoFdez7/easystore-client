@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { LanguageButton } from '@atoms/shared/ButtonLanguage';
 import ThemeToggle from '@atoms/shared/ThemeToggle';
@@ -19,16 +19,28 @@ export default function MobileMenu() {
   const [open, setOpen] = useState(false);
   const panelId = useId();
   const iconRef = useRef<MenuIconHandle>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const shouldRestoreFocusRef = useRef(false);
 
   useEffect(() => {
     if (open) iconRef.current?.startAnimation();
     else iconRef.current?.stopAnimation();
   }, [open]);
 
+  useLayoutEffect(() => {
+    if (!open && shouldRestoreFocusRef.current) {
+      toggleRef.current?.focus();
+      shouldRestoreFocusRef.current = false;
+    }
+  }, [open]);
+
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key === 'Escape') {
+        shouldRestoreFocusRef.current = true;
+        setOpen(false);
+      }
     };
     const desktop = window.matchMedia('(min-width: 1024px)');
     const onChange = (e: MediaQueryListEvent) => {
@@ -47,6 +59,7 @@ export default function MobileMenu() {
   return (
     <div>
       <Button
+        ref={toggleRef}
         className="cursor-pointer lg:hidden"
         variant="ghost"
         type="button"

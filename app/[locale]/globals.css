@@ -58,7 +58,7 @@
 }
 
 @utility text-cta-sm {
-  font-size: 4vw;
+  font-size: max(14px, 4vw);
 }
 
 @utility text-logo {

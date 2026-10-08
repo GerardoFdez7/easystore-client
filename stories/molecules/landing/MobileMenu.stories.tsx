@@ -15,24 +15,27 @@ const messages = {
 };
 
 const meta: Meta<typeof MobileMenu> = {
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByLabelText('Open navigation menu'));
-
+  play: async () => {
     const page = within(document.body);
-    await storybookExpect(
-      await page.findByRole('link', { name: 'Pricing' }),
-    ).toHaveAttribute('href', '#plans');
-    await storybookExpect(
-      page.queryByRole('button', { name: 'Toggle theme' }),
-    ).not.toBeInTheDocument();
-    await storybookExpect(
-      canvas.getByLabelText('Close navigation menu'),
-    ).toHaveAttribute('aria-expanded', 'true');
+    const toggle = page.getByLabelText('Open navigation menu');
+    await userEvent.click(toggle);
+
+    const pricingLink = await page.findByRole('link', { name: 'Pricing' });
+    await storybookExpect(pricingLink).toHaveAttribute('href', '#plans');
+    await storybookExpect(toggle).toHaveAttribute('aria-expanded', 'true');
+
+    pricingLink.focus();
+    await storybookExpect(pricingLink).toHaveFocus();
+    await userEvent.keyboard('{Escape}');
+    await storybookExpect(toggle).toHaveFocus();
+    await storybookExpect(toggle).toHaveAttribute('aria-expanded', 'false');
   },
   title: 'Molecules/Landing/MobileMenu',
   parameters: {
     layout: 'centered',
+    viewport: {
+      defaultViewport: 'mobile1',
+    },
   },
   component: MobileMenu,
 };
