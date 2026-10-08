@@ -35,6 +35,7 @@ const buttonVariants = cva(
         lg: 'h-10 px-6 has-[>svg]:px-4',
         xl: 'h-12 px-8 has-[>svg]:px-5',
         icon: 'size-9',
+        auto: 'h-auto w-auto px-4 py-2',
       },
     },
     defaultVariants: {

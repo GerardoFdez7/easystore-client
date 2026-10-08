@@ -26,6 +26,9 @@ const meta: Meta<typeof MobileMenu> = {
     await storybookExpect(
       page.queryByRole('button', { name: 'Toggle theme' }),
     ).not.toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByLabelText('Close navigation menu'),
+    ).toHaveAttribute('aria-expanded', 'true');
   },
   title: 'Molecules/Landing/MobileMenu',
   parameters: {

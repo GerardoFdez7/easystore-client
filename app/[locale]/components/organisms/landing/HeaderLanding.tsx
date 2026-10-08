@@ -13,7 +13,7 @@ export default function HeaderLanding() {
   return (
     <header className="bg-background fixed top-0 right-0 left-0 z-50 flex h-20 items-center justify-between px-3 pt-4 pb-4 sm:h-25 sm:px-10">
       <Logo redirectTo={'/'} />
-      <div className="flex items-center gap-2 lg:gap-6">
+      <div className="flex items-center gap-1 sm:gap-2 lg:gap-6">
         <NaviLinks />
         {isAuthenticated ? (
           <div className="hidden lg:block">
