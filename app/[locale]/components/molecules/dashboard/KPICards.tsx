@@ -1,77 +1,46 @@
-import CardStat from '@atoms/dashboard/CardStat';
-import { IconTrendingDown, IconTrendingUp } from '@tabler/icons-react';
-import type { DashboardSummary } from '@hooks/domains/dashboard';
 import { useTranslations } from 'next-intl';
+import CardStat from '@atoms/dashboard/CardStat';
+import type { DashboardSummary } from '@hooks/domains/dashboard';
+import { formatMoney } from '@lib/utils/money';
 
 interface KPICardsProps {
   summary?: DashboardSummary;
+  locale: string;
 }
 
-export function KPICards({ summary }: KPICardsProps) {
+export function KPICards({ summary, locale }: KPICardsProps) {
   const t = useTranslations('Dashboard');
-  const currency = process.env.NEXT_PUBLIC_DEFAULT_CURRENCY || 'Q';
 
-  if (!summary) {
-    return null;
-  }
+  if (!summary) return null;
 
-  // Calculate percentage of completed orders
-  const completionRate =
-    summary.totalOrders > 0
-      ? ((summary.completedOrders / summary.totalOrders) * 100).toFixed(1)
-      : '0';
-
-  // Calculate percentage of cancelled orders
-  const cancellationRate =
-    summary.totalOrders > 0
-      ? ((summary.cancelledOrders / summary.totalOrders) * 100).toFixed(1)
-      : '0';
-
-  const cancellationRateNum = parseFloat(cancellationRate);
+  const formatCount = (value: number) =>
+    new Intl.NumberFormat(locale).format(value);
 
   return (
-    <section className="grid grid-cols-1 gap-4 px-5 @2xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+    <section
+      aria-label={t('keyMetrics')}
+      className="gap-card grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4"
+    >
       <CardStat
         description={t('sales')}
-        amount={`${currency}${summary.totalRevenue.toLocaleString()}`}
-        trend={`${summary.totalOrders} ${t('ordersLabel')}`}
-        icon={<IconTrendingUp className="size-4" />}
-        footerText={`${currency}${summary.averageOrderValue.toFixed(2)} ${t('avgOrderValue')}`}
-        footerSubtext={`${summary.completedOrders} ${t('completedOrders')}`}
+        amount={formatMoney(summary.totalRevenue, locale)}
+        footerText={`${formatCount(summary.totalOrders)} ${t('ordersLabel')}`}
       />
       <CardStat
         description={t('customers')}
-        amount={summary.uniqueCustomers.toLocaleString()}
-        trend={`${completionRate}% ${t('completion')}`}
-        icon={<IconTrendingUp className="size-4" />}
-        footerText={`${summary.processingOrders} ${t('processing')}`}
-        footerSubtext={`${summary.confirmedOrders} ${t('confirmed')}`}
+        amount={formatCount(summary.uniqueCustomers)}
+        footerText={`${formatCount(summary.completedOrders)} ${t('completedOrders')}`}
       />
       <CardStat
         description={t('orders')}
-        amount={summary.totalOrders.toLocaleString()}
-        trend={`${summary.shippedOrders} ${t('shipped')}`}
-        icon={<IconTrendingUp className="size-4" />}
-        footerText={`${summary.completedOrders} ${t('completed')}`}
-        footerSubtext={`${summary.cancelledOrders} ${t('cancelled')}`}
+        amount={formatCount(summary.totalOrders)}
+        footerText={`${formatCount(summary.processingOrders)} ${t('processing')}`}
+        footerSubtext={`${formatCount(summary.cancelledOrders)} ${t('cancelled')}`}
       />
       <CardStat
         description={t('averageOrderValue')}
-        amount={`${currency}${summary.averageOrderValue.toFixed(2)}`}
-        trend={
-          cancellationRateNum > 5
-            ? `-${cancellationRate}%`
-            : `+${completionRate}%`
-        }
-        icon={
-          cancellationRateNum > 5 ? (
-            <IconTrendingDown className="size-4" />
-          ) : (
-            <IconTrendingUp className="size-4" />
-          )
-        }
-        footerText={`${completionRate}% ${t('orderCompletionRate')}`}
-        footerSubtext={`${summary.completedOrders} ${t('completedOrders')}`}
+        amount={formatMoney(summary.averageOrderValue, locale)}
+        footerText={`${formatCount(summary.completedOrders)} ${t('completedOrders')}`}
       />
     </section>
   );

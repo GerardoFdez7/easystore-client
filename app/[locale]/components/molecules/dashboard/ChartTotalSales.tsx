@@ -1,8 +1,10 @@
 'use client';
 
-import * as React from 'react';
+import { useId, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
-
+import type { OrderTimelinePoint } from '@hooks/domains/dashboard';
+import { formatMoney, isDecimalString } from '@lib/utils/money';
 import {
   Card,
   CardAction,
@@ -12,187 +14,174 @@ import {
   CardTitle,
 } from '@shadcn/ui/card';
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
+  type ChartConfig,
 } from '@shadcn/ui/chart';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@shadcn/ui/select';
-import { ToggleGroup, ToggleGroupItem } from '@shadcn/ui/toggle-group';
-import { useIsMobile } from '@hooks/utils/useMobile';
-import { useTranslations } from 'next-intl';
-import type { OrderTimelinePoint } from '@hooks/domains/dashboard';
-
-export const description = 'An interactive area chart';
+  ChartTotalSalesRange,
+  salesRanges as ranges,
+  type SalesRange as Range,
+} from './ChartTotalSalesRange';
 
 interface ChartTotalSalesProps {
   ordersTimeline: OrderTimelinePoint[];
-  totalRevenue: number;
+  totalRevenue: OrderTimelinePoint['revenue'];
+  locale: string;
+}
+
+type ChartPoint = OrderTimelinePoint & { revenueCents: number };
+
+/** Recharts needs numeric coordinates; the displayed Money stays a decimal string. */
+function toSafeChartCoordinate(amount: string): number | null {
+  if (!isDecimalString(amount) || amount.endsWith('.')) return null;
+
+  const [whole, fraction = ''] = amount.split('.');
+  const cents = BigInt(whole) * 100n + BigInt(fraction.padEnd(2, '0'));
+  if (cents > BigInt(Number.MAX_SAFE_INTEGER)) return null;
+
+  return Number(cents);
+}
+
+function formatDate(date: string, locale: string): string {
+  return new Date(`${date}T00:00:00Z`).toLocaleDateString(locale, {
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
 }
 
 export function ChartTotalSales({
   ordersTimeline,
   totalRevenue,
+  locale,
 }: ChartTotalSalesProps) {
   const t = useTranslations('Dashboard');
-  const tShared = useTranslations('Shared');
-
-  const isMobile = useIsMobile();
-  const [timeRange, setTimeRange] = React.useState('90d');
-  const currency = process.env.NEXT_PUBLIC_DEFAULT_CURRENCY || 'Q';
-
-  const chartConfig = {
-    revenue: {
-      label: t('revenue'),
-      color: 'var(--foreground)',
-    },
+  const [timeRange, setTimeRange] = useState<Range>('90d');
+  const gradientId = `revenue-${useId().replace(/:/g, '')}`;
+  const lastDate = ordersTimeline.at(-1)?.date;
+  const cutoff = lastDate ? new Date(`${lastDate}T00:00:00Z`) : null;
+  cutoff?.setUTCDate(cutoff.getUTCDate() - ranges[timeRange] + 1);
+  const cutoffDate = cutoff?.toISOString().slice(0, 10);
+  const visiblePoints = ordersTimeline.filter(
+    (point) => !cutoffDate || point.date >= cutoffDate,
+  );
+  const chartData = visiblePoints.map((point) => {
+    const revenueCents = toSafeChartCoordinate(point.revenue.amount);
+    return revenueCents === null ? null : { ...point, revenueCents };
+  });
+  const canPlot = chartData.every(
+    (point): point is ChartPoint => point !== null,
+  );
+  const config = {
+    revenueCents: { label: t('revenue'), color: 'var(--foreground)' },
   } satisfies ChartConfig;
 
-  React.useEffect(() => {
-    if (isMobile) {
-      setTimeRange('7d');
-    }
-  }, [isMobile]);
-
-  // Transform the data for the chart
-  const chartData = React.useMemo(() => {
-    return ordersTimeline.map((item) => ({
-      date: item.date,
-      revenue: item.revenue,
-    }));
-  }, [ordersTimeline]);
-
-  const filteredData = React.useMemo(() => {
-    if (chartData.length === 0) {
-      return [];
-    }
-
-    const date = new Date(chartData[chartData.length - 1].date);
-    let daysToSubtract = 90;
-
-    if (timeRange === '30d') {
-      daysToSubtract = 30;
-    } else if (timeRange === '7d') {
-      daysToSubtract = 7;
-    }
-
-    const startDateFilter = new Date(date);
-    startDateFilter.setDate(startDateFilter.getDate() - daysToSubtract);
-
-    return chartData.filter((item) => new Date(item.date) >= startDateFilter);
-  }, [chartData, timeRange]);
-
   return (
-    <section className="pb-10">
-      <h1 className="text-title mb-4 text-2xl font-bold">{t('totalSales')}</h1>
+    <section aria-labelledby="total-sales-heading">
+      <h2
+        id="total-sales-heading"
+        className="text-title mb-4 text-xl font-semibold"
+      >
+        {t('totalSales')}
+      </h2>
       <Card className="@container/card">
         <CardHeader>
-          <CardTitle className="text-3xl">
-            {`${currency}${totalRevenue.toLocaleString()}`}
+          <CardTitle className="text-2xl tabular-nums">
+            {formatMoney(totalRevenue, locale)}
           </CardTitle>
-          <CardDescription>
-            <span className="text-secondary hidden @[767px]/card:block">
-              {t('salesOverTime')}
-            </span>
-            <Select value={timeRange} onValueChange={setTimeRange}>
-              <SelectTrigger
-                className="flex w-full **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
-                size="sm"
-                aria-label={tShared('selectValue')}
-              >
-                <SelectValue placeholder={t('3months')} />
-              </SelectTrigger>
-              <SelectContent className="rounded-xl">
-                <SelectItem value="90d" className="rounded-lg">
-                  {t('3months')}
-                </SelectItem>
-                <SelectItem value="30d" className="rounded-lg">
-                  {t('30days')}
-                </SelectItem>
-                <SelectItem value="7d" className="rounded-lg">
-                  {t('7days')}
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </CardDescription>
+          <CardDescription>{t('salesOverTime')}</CardDescription>
           <CardAction>
-            <ToggleGroup
-              type="single"
+            <ChartTotalSalesRange
               value={timeRange}
               onValueChange={setTimeRange}
-              variant="outline"
-              className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
-            >
-              <ToggleGroupItem value="90d">{t('3months')}</ToggleGroupItem>
-              <ToggleGroupItem value="30d">{t('30days')}</ToggleGroupItem>
-              <ToggleGroupItem value="7d">{t('7days')}</ToggleGroupItem>
-            </ToggleGroup>
+            />
           </CardAction>
         </CardHeader>
         <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-          <ChartContainer
-            config={chartConfig}
-            className="aspect-auto h-62.5 w-full"
-          >
-            <AreaChart data={filteredData}>
-              <defs>
-                <linearGradient id="fillRevenue" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="5%"
-                    stopColor="var(--color-revenue)"
-                    stopOpacity={1.0}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor="var(--color-revenue)"
-                    stopOpacity={0.1}
-                  />
-                </linearGradient>
-              </defs>
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey="date"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                minTickGap={32}
-                tickFormatter={(value) => {
-                  const date = new Date(value);
-                  return date.toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                  });
-                }}
-              />
-              <ChartTooltip
-                cursor={false}
-                defaultIndex={isMobile ? -1 : 10}
-                content={
-                  <ChartTooltipContent
-                    labelFormatter={(value) => {
-                      return new Date(value).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                      });
-                    }}
-                    indicator="dot"
-                  />
-                }
-              />
-              <Area
-                dataKey="revenue"
-                type="natural"
-                fill="url(#fillRevenue)"
-                stroke="var(--color-revenue)"
-              />
-            </AreaChart>
-          </ChartContainer>
+          {visiblePoints.length === 0 ? (
+            <p className="text-muted-foreground py-card text-center text-sm">
+              {t('noOrdersTitle')}
+            </p>
+          ) : canPlot ? (
+            <ChartContainer
+              config={config}
+              className="aspect-auto h-62.5 w-full"
+              role="img"
+              aria-label={t('salesOverTime')}
+            >
+              <AreaChart data={chartData} accessibilityLayer>
+                <defs>
+                  <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="5%"
+                      stopColor="var(--color-revenueCents)"
+                      stopOpacity={0.75}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="var(--color-revenueCents)"
+                      stopOpacity={0.05}
+                    />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="date"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  minTickGap={32}
+                  tickFormatter={(date: string) => formatDate(date, locale)}
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={
+                    <ChartTooltipContent
+                      labelFormatter={(_label, payload) =>
+                        formatDate(String(payload[0]?.payload.date), locale)
+                      }
+                      formatter={(_value, _name, item) => {
+                        const point = item.payload as ChartPoint;
+                        return (
+                          <span className="text-foreground tabular-nums">
+                            {formatMoney(point.revenue, locale)}
+                          </span>
+                        );
+                      }}
+                    />
+                  }
+                />
+                <Area
+                  dataKey="revenueCents"
+                  name={t('revenue')}
+                  type="natural"
+                  fill={`url(#${gradientId})`}
+                  stroke="var(--color-revenueCents)"
+                  strokeWidth={2}
+                  dot={chartData.length === 1 ? { r: 5 } : false}
+                  activeDot={{ r: 5 }}
+                />
+              </AreaChart>
+            </ChartContainer>
+          ) : (
+            <ol className="divide-border divide-y">
+              {visiblePoints.map((point) => (
+                <li
+                  key={point.date}
+                  className="gap-control py-control flex items-center justify-between text-sm"
+                >
+                  <time dateTime={point.date} className="text-muted-foreground">
+                    {formatDate(point.date, locale)}
+                  </time>
+                  <span className="text-title font-medium tabular-nums">
+                    {formatMoney(point.revenue, locale)}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          )}
         </CardContent>
       </Card>
     </section>

@@ -1,62 +1,46 @@
+import { useTranslations } from 'next-intl';
 import { Skeleton } from '@shadcn/ui/skeleton';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@shadcn/ui/table';
+import { Table, TableBody, TableCell, TableRow } from '@shadcn/ui/table';
+import { SalesOverviewHeader } from './SalesOverview';
 
 export default function SalesOverviewSkeleton() {
-  return (
-    <>
-      <Skeleton className="mb-4 h-8 w-40" />
+  const t = useTranslations('Dashboard');
 
-      <div className="overflow-x-auto rounded-lg shadow-sm">
-        <Table className="bg-card min-w-[600px]">
-          <TableHeader>
-            <TableRow>
-              <TableHead className="text-foreground text-sm font-semibold sm:pl-5">
-                <Skeleton className="h-4 w-16" />
-              </TableHead>
-              <TableHead className="text-foreground text-sm font-semibold">
-                <Skeleton className="h-4 w-12" />
-              </TableHead>
-              <TableHead className="text-foreground text-sm font-semibold">
-                <Skeleton className="h-4 w-20" />
-              </TableHead>
-              <TableHead className="text-foreground text-sm font-semibold">
-                <Skeleton className="h-4 w-14" />
-              </TableHead>
-              <TableHead className="text-foreground text-sm font-semibold">
-                <Skeleton className="h-4 w-16" />
-              </TableHead>
-            </TableRow>
-          </TableHeader>
+  return (
+    <section aria-labelledby="sales-overview-heading" aria-busy="true">
+      <h2
+        id="sales-overview-heading"
+        className="text-title mb-4 text-xl font-semibold"
+      >
+        {t('salesOverview')}
+      </h2>
+
+      <div aria-hidden="true">
+        <Table>
+          <SalesOverviewHeader />
           <TableBody>
             {Array.from({ length: 5 }).map((_, index) => (
               <TableRow key={index}>
-                <TableCell className="font-mono text-sm sm:pl-5">
-                  <Skeleton className="h-4 w-24" />
-                </TableCell>
-                <TableCell className="text-sm">
-                  <Skeleton className="h-4 w-20" />
-                </TableCell>
-                <TableCell className="text-sm">
-                  <Skeleton className="h-4 w-32" />
-                </TableCell>
-                <TableCell className="text-sm">
-                  <Skeleton className="h-4 w-16" />
+                <TableCell>
+                  <Skeleton className="mx-auto h-4 w-24" />
                 </TableCell>
                 <TableCell>
-                  <Skeleton className="h-6 w-20 rounded-full" />
+                  <Skeleton className="mx-auto h-4 w-20" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="mx-auto h-4 w-32" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="mx-auto h-4 w-16" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="mx-auto h-6 w-20 rounded-full" />
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </div>
-    </>
+    </section>
   );
 }

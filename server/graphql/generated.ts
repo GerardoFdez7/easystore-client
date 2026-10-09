@@ -26,7 +26,9 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
+  /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: { input: any; output: any };
+  /** An exact canonical decimal string without exponent notation, such as "123.45". */
   Decimal: { input: any; output: any };
 };
 
@@ -1605,6 +1607,62 @@ export type FindCategoriesTreeQuery = {
       id: string;
       name: string;
       parentId?: string | null;
+    }>;
+  };
+};
+
+export type GetDashboardDataQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetDashboardDataQuery = {
+  __typename?: 'Query';
+  getDashboard: {
+    __typename?: 'Dashboard';
+    summary: {
+      __typename?: 'DashboardSummary';
+      totalOrders: number;
+      uniqueCustomers: number;
+      completedOrders: number;
+      cancelledOrders: number;
+      processingOrders: number;
+      confirmedOrders: number;
+      shippedOrders: number;
+      totalRevenue: { __typename?: 'Money'; amount: any; currency: string };
+      averageOrderValue: {
+        __typename?: 'Money';
+        amount: any;
+        currency: string;
+      };
+      completedRevenue: { __typename?: 'Money'; amount: any; currency: string };
+      cancelledRevenue: { __typename?: 'Money'; amount: any; currency: string };
+    };
+    ordersTimeline: Array<{
+      __typename?: 'OrderTimeline';
+      date: string;
+      ordersCount: number;
+      revenue: { __typename?: 'Money'; amount: any; currency: string };
+    }>;
+    recentOrders: Array<{
+      __typename?: 'RecentOrder';
+      orderId: string;
+      orderNumber: string;
+      orderDate: any;
+      customerName: string;
+      orderStatus: string;
+      shippingCity?: string | null;
+      orderTotal: { __typename?: 'Money'; amount: any; currency: string };
+    }>;
+    topProducts: Array<{
+      __typename?: 'TopProduct';
+      variantId: string;
+      variantSku: string;
+      productName: string;
+      productBrand?: string | null;
+      variantCover?: string | null;
+      productCover?: string | null;
+      totalQuantitySold: number;
+      ordersCount: number;
+      variantPrice: { __typename?: 'Money'; amount: any; currency: string };
+      totalRevenue: { __typename?: 'Money'; amount: any; currency: string };
     }>;
   };
 };
@@ -4395,6 +4453,294 @@ export const FindCategoriesTreeDocument = {
                 },
                 { kind: 'Field', name: { kind: 'Name', value: 'total' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'hasMore' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  FindCategoriesTreeQuery,
+  FindCategoriesTreeQueryVariables
+>;
+export const GetDashboardDataDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'getDashboardData' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getDashboard' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'summary' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'totalOrders' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'totalRevenue' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'amount' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'currency' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'averageOrderValue' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'amount' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'currency' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'uniqueCustomers' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'completedOrders' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'cancelledOrders' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'processingOrders' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'confirmedOrders' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'shippedOrders' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'completedRevenue' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'amount' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'currency' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'cancelledRevenue' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'amount' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'currency' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'ordersTimeline' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'date' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'ordersCount' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'revenue' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'amount' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'currency' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'recentOrders' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'orderId' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'orderNumber' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'orderDate' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'customerName' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'orderTotal' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'amount' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'currency' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'orderStatus' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'shippingCity' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'topProducts' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variantId' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variantSku' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'productName' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'productBrand' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variantPrice' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'amount' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'currency' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'variantCover' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'productCover' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'totalQuantitySold' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'totalRevenue' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'amount' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'currency' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'ordersCount' },
+                      },
+                    ],
+                  },
+                },
               ],
             },
           },

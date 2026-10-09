@@ -565,6 +565,7 @@
     "30days": "Last 30 days",
     "7days": "Last 7 days",
     "salesOverview": "Sales Overview",
+    "keyMetrics": "Key metrics",
     "order": "Order",
     "date": "Date",
     "customer": "Customer",
@@ -605,6 +606,9 @@
     "revenue": "Revenue",
     "noOrdersTitle": "No Orders Yet",
     "noOrdersDescription": "Your dashboard will come to life once you start receiving orders. All your sales metrics and analytics will appear here.",
+    "loadErrorTitle": "Dashboard unavailable",
+    "loadErrorDescription": "We couldn't load your dashboard. Please try again.",
+    "retry": "Try again",
     "createOrder": "Create Order"
   },
   "Products": {

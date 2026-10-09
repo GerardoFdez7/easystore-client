@@ -6,7 +6,7 @@ import PlanEnterprise from '@molecules/authentication/confirm-register/PlanEnter
 import { Tabs, TabsList, TabsTrigger } from '@atoms/shared/PricingTabs';
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import clsx from 'clsx';
+import { clsx } from 'cn';
 
 type PricingProps = {
   selectedPlan: PlanType;

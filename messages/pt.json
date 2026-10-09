@@ -565,6 +565,7 @@
     "30days": "Últimos 30 dias",
     "7days": "Últimos 7 dias",
     "salesOverview": "Visão Geral de Vendas",
+    "keyMetrics": "Métricas principais",
     "order": "Pedido",
     "date": "Data",
     "customer": "Cliente",
@@ -605,6 +606,9 @@
     "revenue": "Receita",
     "noOrdersTitle": "Ainda não há pedidos",
     "noOrdersDescription": "Seu painel ganhará vida assim que você começar a receber pedidos. Todas as suas métricas e análises de vendas aparecerão aqui.",
+    "loadErrorTitle": "Painel indisponível",
+    "loadErrorDescription": "Não foi possível carregar seu painel. Tente novamente.",
+    "retry": "Tentar novamente",
     "createOrder": "Criar Pedido"
   },
   "Products": {

@@ -1,20 +1,27 @@
 import { Skeleton } from '@shadcn/ui/skeleton';
-import { Card, CardContent, CardHeader } from '@shadcn/ui/card';
+import { Card, CardContent } from '@shadcn/ui/card';
+import { useTranslations } from 'next-intl';
 
 export default function TopProductsSkeleton() {
+  const t = useTranslations('Dashboard');
+
   return (
-    <section className="py-10">
-      <Skeleton className="mb-4 h-8 w-32" />
-      <Card className="mb-8">
-        <CardHeader></CardHeader>
+    <section aria-labelledby="top-products-heading" aria-busy="true">
+      <h2
+        id="top-products-heading"
+        className="text-title mb-4 text-xl font-semibold"
+      >
+        {t('topProducts')}
+      </h2>
+      <Card>
         <CardContent>
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 2xl:grid-cols-4 @min-7xl:grid-cols-5">
+          <div className="gap-card grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
             {Array.from({ length: 10 }).map((_, index) => (
               <div
                 key={index}
-                className="flex flex-col items-center text-center"
+                className="flex min-w-0 flex-col items-center text-center"
               >
-                <Skeleton className="mb-2 h-24 w-24 rounded-lg" />
+                <Skeleton className="mb-3 h-32 w-40 max-w-full rounded-lg" />
                 <Skeleton className="mb-1 h-4 w-20" />
                 <Skeleton className="mb-1 h-3 w-16" />
                 <Skeleton className="h-3 w-14" />

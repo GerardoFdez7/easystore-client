@@ -1,15 +1,23 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, within } from 'storybook/test';
 import SalesOverviewSkeleton from '@molecules/dashboard/SalesOverviewSkeleton';
 
 const meta: Meta<typeof SalesOverviewSkeleton> = {
   title: 'Molecules/Dashboard/SalesOverviewSkeleton',
   component: SalesOverviewSkeleton,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(
+      canvas.getByRole('heading', { name: 'Sales Overview' }),
+    ).toBeVisible();
+    await expect(canvasElement.querySelectorAll('tbody tr')).toHaveLength(5);
+  },
   parameters: {
     layout: 'padded',
     docs: {
       description: {
         component:
-          'A skeleton loading component for the Sales Overview table section in the dashboard. Displays animated skeleton placeholders for the section title and a table with 5 rows showing order information. The table includes skeleton columns for Order ID, Date, Customer, Total, and Status, with a minimum width of 600px for horizontal scrolling on small screens.',
+          'The original Sales Overview loading component. Its visible title and table headers stay in place while five order rows show loading placeholders.',
       },
     },
   },
@@ -28,72 +36,7 @@ export const Default: Story = {
     docs: {
       description: {
         story:
-          'Default skeleton state displaying a table with 5 order rows. Each row includes placeholders for all columns: order number, date, customer name, total amount, and order status. The table has a rounded border and shadow to match the actual SalesOverview component.',
-      },
-    },
-  },
-};
-
-/**
- * Mobile viewport with horizontal scroll
- */
-export const Mobile: Story = {
-  parameters: {
-    viewport: {
-      defaultViewport: 'mobile1',
-    },
-    docs: {
-      description: {
-        story:
-          'Sales Overview skeleton on mobile devices. The table maintains its minimum width of 600px, enabling horizontal scrolling for better data visibility on small screens.',
-      },
-    },
-  },
-};
-
-/**
- * Tablet viewport
- */
-export const Tablet: Story = {
-  parameters: {
-    viewport: {
-      defaultViewport: 'tablet',
-    },
-    docs: {
-      description: {
-        story:
-          'Sales Overview skeleton on tablet devices, showing the full table width with all columns visible.',
-      },
-    },
-  },
-};
-
-/**
- * Desktop viewport with full table width
- */
-export const Desktop: Story = {
-  parameters: {
-    viewport: {
-      defaultViewport: 'desktop',
-    },
-    docs: {
-      description: {
-        story:
-          'Sales Overview skeleton on desktop screens, displaying the complete table structure with optimal spacing and alignment for all columns.',
-      },
-    },
-  },
-};
-
-/**
- * Loading state during data fetch
- */
-export const LoadingState: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Demonstrates the skeleton state that appears when the dashboard is loading recent order data from the backend. This skeleton ensures users see a structured loading state instead of a blank screen.',
+          'Five loading rows with the same semantic table structure as Sales Overview.',
       },
     },
   },

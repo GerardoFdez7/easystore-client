@@ -1,21 +1,57 @@
-import { Card, CardContent, CardHeader } from '@shadcn/ui/card';
+'use client';
+
+import { useState } from 'react';
+import { Card, CardContent } from '@shadcn/ui/card';
 import { useTranslations } from 'next-intl';
 import type { TopProduct } from '@hooks/domains/dashboard';
+import { formatMoney } from '@lib/utils/money';
 import Image from 'next/image';
 
 interface TopProductsProps {
   topProducts: TopProduct[];
+  locale: string;
 }
 
-export default function TopProducts({ topProducts }: TopProductsProps) {
+function ProductCover({ src, name }: { src: string | null; name: string }) {
   const t = useTranslations('Dashboard');
-  const currency = process.env.NEXT_PUBLIC_DEFAULT_CURRENCY || 'Q';
+  const [failed, setFailed] = useState(false);
 
   return (
-    <section className="py-10">
-      <h1 className="text-title mb-4 text-2xl font-bold">{t('topProducts')}</h1>
-      <Card className="mb-8">
-        <CardHeader></CardHeader>
+    <div className="bg-muted mb-3 flex h-32 w-40 max-w-full items-center justify-center overflow-hidden rounded-lg">
+      {src && !failed ? (
+        <Image
+          src={src}
+          alt=""
+          width={160}
+          height={128}
+          className="h-full w-full object-contain"
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <span
+          className="text-muted-foreground px-2 text-center text-xs"
+          role="img"
+          aria-label={`${name}: ${t('noImage')}`}
+        >
+          {t('noImage')}
+        </span>
+      )}
+    </div>
+  );
+}
+
+export default function TopProducts({ topProducts, locale }: TopProductsProps) {
+  const t = useTranslations('Dashboard');
+
+  return (
+    <section aria-labelledby="top-products-heading">
+      <h2
+        id="top-products-heading"
+        className="text-title mb-4 text-xl font-semibold"
+      >
+        {t('topProducts')}
+      </h2>
+      <Card>
         <CardContent>
           {topProducts.length === 0 ? (
             <div className="flex h-40 items-center justify-center">
@@ -24,36 +60,32 @@ export default function TopProducts({ topProducts }: TopProductsProps) {
               </span>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 2xl:grid-cols-4 @min-7xl:grid-cols-5">
+            <div className="gap-card grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
               {topProducts.map((product) => (
                 <div
                   key={product.variantId}
-                  className="flex flex-col items-center text-center"
+                  className="flex min-w-0 flex-col items-center text-center"
                 >
-                  <div className="bg-muted mb-2 flex h-24 w-24 items-center justify-center overflow-hidden rounded-lg">
-                    {(product.variantCover ?? product.productCover) ? (
-                      <Image
-                        src={product.variantCover ?? product.productCover ?? ''}
-                        alt={product.productName}
-                        width={96}
-                        height={96}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <span className="text-muted-foreground text-xs">
-                        {t('noImage')}
-                      </span>
-                    )}
-                  </div>
-                  <h4 className="text-foreground mb-1 text-xs font-medium">
+                  <ProductCover
+                    key={
+                      product.variantCover ??
+                      product.productCover ??
+                      product.variantId
+                    }
+                    src={product.variantCover ?? product.productCover ?? null}
+                    name={product.productName}
+                  />
+                  <h3 className="text-title mb-1 max-w-full text-sm font-medium wrap-break-word">
                     {product.productName}
-                  </h4>
-                  <p className="text-secondary mb-1 text-xs font-medium">
-                    {currency}
-                    {product.variantPrice.toLocaleString()}
+                  </h3>
+                  <p className="text-secondary mb-1 text-sm font-medium tabular-nums">
+                    {formatMoney(product.variantPrice, locale)}
                   </p>
                   <p className="text-muted-foreground text-xs">
-                    {product.totalQuantitySold} {t('sold')}
+                    {new Intl.NumberFormat(locale).format(
+                      product.totalQuantitySold,
+                    )}{' '}
+                    {t('sold')}
                   </p>
                 </div>
               ))}

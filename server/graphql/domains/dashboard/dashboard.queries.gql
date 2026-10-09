@@ -1,43 +1,67 @@
-query GetDashboardData {
-  getDashboardData {
+query getDashboardData {
+  getDashboard {
     summary {
-      total_orders
-      total_revenue
-      average_order_value
-      unique_customers
-      completed_orders
-      cancelled_orders
-      processing_orders
-      confirmed_orders
-      shipped_orders
-      completed_revenue
-      cancelled_revenue
+      totalOrders
+      totalRevenue {
+        amount
+        currency
+      }
+      averageOrderValue {
+        amount
+        currency
+      }
+      uniqueCustomers
+      completedOrders
+      cancelledOrders
+      processingOrders
+      confirmedOrders
+      shippedOrders
+      completedRevenue {
+        amount
+        currency
+      }
+      cancelledRevenue {
+        amount
+        currency
+      }
     }
     ordersTimeline {
       date
-      orders_count
-      revenue
+      ordersCount
+      revenue {
+        amount
+        currency
+      }
     }
     recentOrders {
-      order_id
-      order_number
-      order_date
-      customer_name
-      order_total
-      order_status
-      shipping_city
+      orderId
+      orderNumber
+      orderDate
+      customerName
+      orderTotal {
+        amount
+        currency
+      }
+      orderStatus
+      shippingCity
     }
     topProducts {
-      variant_id
-      variant_sku
-      product_name
-      product_brand
-      variant_price
-      variant_cover
-      product_cover
-      total_quantity_sold
-      total_revenue
-      orders_count
+      variantId
+      variantSku
+      productName
+      productBrand
+      variantPrice {
+        amount
+        currency
+      }
+      variantCover
+      productCover
+      totalQuantitySold
+      totalRevenue {
+        amount
+        currency
+      }
+      ordersCount
     }
   }
 }
