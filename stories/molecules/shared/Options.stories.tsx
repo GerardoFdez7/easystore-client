@@ -272,3 +272,68 @@ export const EmptyOptions: Story = {
     await storybookExpect(canvasElement).toBeEmptyDOMElement();
   },
 };
+
+export const InlineOnDesktop: Story = {
+  args: {
+    options: mockOptionsWithDisabled.map((option) =>
+      option.id === 'settings'
+        ? { ...option, disabledTooltip: 'Settings unavailable' }
+        : option,
+    ),
+    showDelete: true,
+    onDelete: fn(),
+    inlineOnDesktop: true,
+    tooltipContent: 'All options',
+  },
+  globals: {
+    viewport: { value: 'desktop', isRotated: false },
+  },
+  play: async ({ canvas, args }) => {
+    const edit = canvas.getByRole('button', { name: 'Edit' });
+    await storybookExpect(edit).toBeVisible();
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Delete' }),
+    ).toBeVisible();
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Settings' }),
+    ).toHaveAttribute('aria-disabled', 'true');
+
+    await userEvent.click(edit);
+    await storybookExpect(args.options?.[0].onClick).toHaveBeenCalledTimes(1);
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Settings' }));
+    await storybookExpect(args.options?.[1].onClick).not.toHaveBeenCalled();
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Delete' }));
+    await storybookExpect(
+      await screen.findByRole('alertdialog'),
+    ).toBeInTheDocument();
+  },
+};
+
+export const InlineHiddenOnMobile: Story = {
+  args: {
+    options: mockOptions,
+    showDelete: true,
+    onDelete: fn(),
+    inlineOnDesktop: true,
+    tooltipContent: 'All options',
+  },
+  globals: {
+    viewport: { value: 'mobile1', isRotated: false },
+  },
+  play: async ({ canvas }) => {
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'All options' }),
+    ).toBeVisible();
+    // Role queries skip display:none elements, so the inline button is absent
+    await storybookExpect(
+      canvas.queryByRole('button', { name: 'Edit' }),
+    ).toBeNull();
+    await openMenu(canvas, 'All options');
+    await storybookExpect(
+      screen.getByRole('menuitem', { name: 'Edit' }),
+    ).toBeInTheDocument();
+    await closeMenu();
+  },
+};

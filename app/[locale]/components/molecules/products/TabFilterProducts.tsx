@@ -102,6 +102,7 @@ export default function TabFilterProducts({
       {selectedCount > 0 && (
         <div className="mr-2">
           <Options
+            inlineOnDesktop
             options={customOptions}
             showArchive={hasActiveProducts}
             onArchive={handleArchive}

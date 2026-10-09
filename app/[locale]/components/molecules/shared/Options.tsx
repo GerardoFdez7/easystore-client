@@ -50,6 +50,7 @@ interface OptionsProps {
   tooltipContent?: string;
   className?: string;
   wrapperClassName?: string;
+  inlineOnDesktop?: boolean;
 }
 
 interface OptionMenuItemProps {
@@ -108,6 +109,7 @@ export default function Options({
   tooltipContent,
   className = '',
   wrapperClassName = '',
+  inlineOnDesktop = false,
 }: OptionsProps) {
   const t = useTranslations('Shared.options');
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -204,11 +206,51 @@ export default function Options({
 
   const defaultTooltipContent = tooltipContent || t('options');
 
+  const renderInlineOption = (option: OptionItem) => {
+    const IconComponent = option.icon;
+    const showTooltip = option.disabled && option.disabledTooltip;
+    const button = (
+      <Button
+        key={option.id}
+        variant="outline"
+        disabled={option.disabled && !showTooltip}
+        aria-disabled={showTooltip ? true : undefined}
+        onClick={() => handleOptionClick(option)}
+        className={`aria-disabled:cursor-not-allowed aria-disabled:opacity-50 ${
+          option.variant === 'destructive'
+            ? 'text-destructive hover:text-destructive'
+            : ''
+        }`}
+      >
+        {IconComponent && (
+          <IconComponent className="size-4" aria-hidden="true" />
+        )}
+        {option.label}
+      </Button>
+    );
+
+    if (showTooltip) {
+      return (
+        <Tooltip key={option.id}>
+          <TooltipTrigger asChild>{button}</TooltipTrigger>
+          <TooltipContent>{option.disabledTooltip}</TooltipContent>
+        </Tooltip>
+      );
+    }
+
+    return button;
+  };
+
   return (
     <nav
-      className={`flex justify-end ${wrapperClassName}`}
+      className={`flex items-center justify-end ${wrapperClassName}`}
       aria-label={t('options')}
     >
+      {inlineOnDesktop && (
+        <div className="hidden items-center gap-2 md:flex">
+          {allOptions.map(renderInlineOption)}
+        </div>
+      )}
       <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -217,7 +259,7 @@ export default function Options({
                 variant="ghost"
                 size="sm"
                 disabled={disabled}
-                className={`h-8 w-8 p-0 ${className}`}
+                className={`h-8 w-8 p-0 ${inlineOnDesktop ? 'md:hidden' : ''} ${className}`}
                 aria-label={defaultTooltipContent}
               >
                 <MoreHorizontal className="size-6" />
