@@ -311,6 +311,24 @@ export const InlineOnDesktop: Story = {
   },
 };
 
+export const InlineDisabled: Story = {
+  args: {
+    options: mockOptions,
+    inlineOnDesktop: true,
+    disabled: true,
+    tooltipContent: 'All options',
+  },
+  globals: {
+    viewport: { value: 'desktop', isRotated: false },
+  },
+  play: async ({ canvas, args }) => {
+    const edit = canvas.getByRole('button', { name: 'Edit' });
+    await storybookExpect(edit).toBeDisabled();
+    await userEvent.click(edit, { pointerEventsCheck: 0 });
+    await storybookExpect(args.options?.[0].onClick).not.toHaveBeenCalled();
+  },
+};
+
 export const InlineHiddenOnMobile: Story = {
   args: {
     options: mockOptions,

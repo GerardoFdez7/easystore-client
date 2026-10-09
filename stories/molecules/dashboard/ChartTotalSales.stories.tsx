@@ -37,6 +37,7 @@ type Story = StoryObj<typeof ChartTotalSales>;
 export const Default: Story = {
   args: {
     locale: 'en',
+    today: '2026-10-09',
     totalRevenue: { amount: '1992.30', currency: 'USD' },
     ordersTimeline: timeline,
   },
@@ -55,6 +56,7 @@ export const Default: Story = {
 export const SevenDays: Story = {
   args: {
     locale: 'en',
+    today: '2026-10-09',
     totalRevenue: { amount: '1992.30', currency: 'USD' },
     ordersTimeline: timeline,
   },
@@ -72,6 +74,7 @@ export const SevenDays: Story = {
 export const OnePoint: Story = {
   args: {
     locale: 'es',
+    today: '2026-10-09',
     totalRevenue: { amount: '1754.99', currency: 'GTQ' },
     ordersTimeline: [
       {
@@ -100,6 +103,23 @@ export const Empty: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    await expect(canvas.getByText('No Orders Yet')).toBeInTheDocument();
+    await expect(
+      canvas.queryByRole('img', { name: 'Sales over time' }),
+    ).not.toBeInTheDocument();
+  },
+};
+
+export const LastOrderOlderThanRange: Story = {
+  args: {
+    locale: 'en',
+    today: '2026-12-01',
+    totalRevenue: { amount: '1992.30', currency: 'USD' },
+    ordersTimeline: timeline,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('radio', { name: 'Last 7 days' }));
     await expect(canvas.getByText('No Orders Yet')).toBeInTheDocument();
     await expect(
       canvas.queryByRole('img', { name: 'Sales over time' }),

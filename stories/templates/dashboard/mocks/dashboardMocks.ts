@@ -1,13 +1,14 @@
 import { GetDashboardDataDocument } from '@graphql/generated';
 
 const TIMELINE_DAYS = 90;
-const LAST_DATE = Date.UTC(2026, 9, 9);
+// The timeline ends today so it always falls inside the chart's ranges.
+const LAST_DATE = Date.parse(new Date().toISOString().slice(0, 10));
 const DAY_MS = 86_400_000;
 
-// Money is built from integer cents so fixtures never touch floating point.
-const money = (cents: number) => ({
+// Money fixtures are decimal strings, as on the wire; no cent arithmetic.
+const money = (amount: string) => ({
   __typename: 'Money' as const,
-  amount: `${Math.floor(cents / 100)}.${String(cents % 100).padStart(2, '0')}`,
+  amount,
   currency: 'USD',
 });
 
@@ -17,17 +18,16 @@ const ordersTimeline = Array.from({ length: TIMELINE_DAYS }, (_, index) => {
     .toISOString()
     .slice(0, 10);
   const ordersCount = 1 + ((index * 7) % 5) + (index % 7 === 5 ? 3 : 0);
-  const cents = ordersCount * (4200 + ((index * 131) % 1800)) + index * 90;
+  const whole = 40 + ordersCount * 12 + (index % 17) + Math.floor(index / 3);
   return {
     __typename: 'OrderTimeline' as const,
     date,
     ordersCount,
-    cents,
+    revenue: money(`${whole}.${String((index * 37) % 100).padStart(2, '0')}`),
   };
 });
 
 const totalOrders = ordersTimeline.reduce((sum, d) => sum + d.ordersCount, 0);
-const totalCents = ordersTimeline.reduce((sum, d) => sum + d.cents, 0);
 const cancelledOrders = Math.round(totalOrders * 0.04);
 const processingOrders = Math.round(totalOrders * 0.08);
 const confirmedOrders = Math.round(totalOrders * 0.06);
@@ -38,8 +38,7 @@ const completedOrders =
   processingOrders -
   confirmedOrders -
   shippedOrders;
-const cancelledCents = Math.round(totalCents * 0.04);
-const completedCents = Math.round(totalCents * 0.78);
+const totalRevenue = money('18450.75');
 
 const customers = [
   'Alicia Rivera',
@@ -63,6 +62,17 @@ const statuses = [
 ];
 const cities = ['Guatemala City', 'Antigua', 'Quetzaltenango', 'Escuintla'];
 
+const orderTotals = [
+  '45.00',
+  '82.79',
+  '120.58',
+  '158.37',
+  '196.16',
+  '53.95',
+  '91.74',
+  '129.53',
+];
+
 const recentOrders = customers.map((customerName, index) => ({
   __typename: 'RecentOrder' as const,
   orderId: `order-${index + 1}`,
@@ -71,7 +81,7 @@ const recentOrders = customers.map((customerName, index) => ({
     LAST_DATE - index * DAY_MS + 12 * 3_600_000,
   ).toISOString(),
   customerName,
-  orderTotal: money(4500 + ((index * 3779) % 16_000)),
+  orderTotal: money(orderTotals[index]),
   orderStatus: statuses[index],
   shippingCity: cities[index % cities.length],
 }));
@@ -87,8 +97,28 @@ const productNames = [
   'Canvas tote bag',
 ];
 
+const unitPrices = [
+  '18.00',
+  '24.50',
+  '31.00',
+  '37.50',
+  '44.00',
+  '50.50',
+  '57.00',
+  '63.50',
+];
+const productRevenues = [
+  '1728.00',
+  '2205.00',
+  '2480.00',
+  '2625.00',
+  '2640.00',
+  '2525.00',
+  '2280.00',
+  '1905.00',
+];
+
 const topProducts = productNames.map((productName, index) => {
-  const unitCents = 1800 + index * 650;
   const totalQuantitySold = 96 - index * 11;
   return {
     __typename: 'TopProduct' as const,
@@ -96,11 +126,11 @@ const topProducts = productNames.map((productName, index) => {
     variantSku: `SKU-${String(index + 1).padStart(3, '0')}`,
     productName,
     productBrand: index % 3 === 0 ? 'EasyStore' : null,
-    variantPrice: money(unitCents),
+    variantPrice: money(unitPrices[index]),
     variantCover: '/laptop.webp',
     productCover: null,
     totalQuantitySold,
-    totalRevenue: money(unitCents * totalQuantitySold),
+    totalRevenue: money(productRevenues[index]),
     ordersCount: Math.ceil(totalQuantitySold * 0.7),
   };
 });
@@ -110,21 +140,18 @@ const populatedDashboard = {
   summary: {
     __typename: 'DashboardSummary' as const,
     totalOrders,
-    totalRevenue: money(totalCents),
-    averageOrderValue: money(Math.round(totalCents / totalOrders)),
+    totalRevenue,
+    averageOrderValue: money('57.50'),
     uniqueCustomers: Math.round(totalOrders * 0.58),
     completedOrders,
     cancelledOrders,
     processingOrders,
     confirmedOrders,
     shippedOrders,
-    completedRevenue: money(completedCents),
-    cancelledRevenue: money(cancelledCents),
+    completedRevenue: money('14391.59'),
+    cancelledRevenue: money('738.03'),
   },
-  ordersTimeline: ordersTimeline.map(({ cents, ...point }) => ({
-    ...point,
-    revenue: money(cents),
-  })),
+  ordersTimeline,
   recentOrders,
   topProducts,
 };
@@ -134,20 +161,25 @@ const emptyDashboard = {
   summary: {
     ...populatedDashboard.summary,
     totalOrders: 0,
-    totalRevenue: money(0),
-    averageOrderValue: money(0),
+    totalRevenue: money('0'),
+    averageOrderValue: money('0'),
     uniqueCustomers: 0,
     completedOrders: 0,
     cancelledOrders: 0,
     processingOrders: 0,
     confirmedOrders: 0,
     shippedOrders: 0,
-    completedRevenue: money(0),
-    cancelledRevenue: money(0),
+    completedRevenue: money('0'),
+    cancelledRevenue: money('0'),
   },
   ordersTimeline: [],
   recentOrders: [],
   topProducts: [],
+};
+
+const historicalDashboard = {
+  ...emptyDashboard,
+  recentOrders,
 };
 
 const dashboardRequest = { query: GetDashboardDataDocument };
@@ -166,6 +198,13 @@ export const emptyDashboardMocks = [
   },
 ];
 
+export const historicalOrdersDashboardMocks = [
+  {
+    request: dashboardRequest,
+    result: { data: { getDashboard: historicalDashboard } },
+  },
+];
+
 export const errorDashboardMocks = [
   { request: dashboardRequest, error: new Error('Network error') },
 ];
@@ -178,4 +217,4 @@ export const loadingDashboardMocks = [
 export const expectedTotalRevenue = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
-}).format(totalCents / 100);
+}).format(totalRevenue.amount as unknown as number);

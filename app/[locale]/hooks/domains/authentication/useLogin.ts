@@ -10,12 +10,13 @@ import {
   AccountTypeEnum,
   LoginMutationVariables,
 } from '@graphql/generated';
-import { useMutation } from '@apollo/client/react';
+import { useApolloClient, useMutation } from '@apollo/client/react';
 import { useAuth } from '@contexts/AuthContext';
 
 export const useLogin = (accountType: AccountTypeEnum) => {
   const t = useTranslations('Login');
   const router = useRouter();
+  const client = useApolloClient();
   const { checkAuth, refreshTenantData } = useAuth();
 
   // Schema validation based on backend value objects
@@ -48,7 +49,10 @@ export const useLogin = (accountType: AccountTypeEnum) => {
           description: t('loginSuccessfulDescription'),
         });
 
-        checkAuth()
+        // Drop any data cached by a previous account before loading this one
+        client
+          .clearStore()
+          .then(() => checkAuth())
           .then(() => {
             // Trigger tenant data fetch after successful authentication
             refreshTenantData();

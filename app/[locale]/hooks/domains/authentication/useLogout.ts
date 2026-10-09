@@ -2,11 +2,12 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from '@i18n/navigation';
 import { toast } from 'sonner';
 import { LogoutDocument, LogoutMutation } from '@graphql/generated';
-import { useMutation } from '@apollo/client/react';
+import { useApolloClient, useMutation } from '@apollo/client/react';
 
 export const useLogout = () => {
   const t = useTranslations('Login');
   const router = useRouter();
+  const client = useApolloClient();
 
   // Use the GraphQL mutation hook
   const [logoutMutation, { data, error, loading }] =
@@ -16,6 +17,9 @@ export const useLogout = () => {
           toast.success(t('logoutSuccessful'), {
             description: t('logoutSuccessfulDescription'),
           });
+
+          // Drop account-owned cached data so the next session never sees it
+          void client.clearStore();
 
           // Redirect to login page
           router.push('/login');

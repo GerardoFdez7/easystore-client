@@ -7,6 +7,7 @@ import {
   emptyDashboardMocks,
   errorDashboardMocks,
   expectedTotalRevenue,
+  historicalOrdersDashboardMocks,
   loadingDashboardMocks,
 } from '../../templates/dashboard/mocks/dashboardMocks';
 
@@ -84,6 +85,27 @@ export const Empty: Story = {
     await storybookExpect(
       await canvas.findByText('No Orders Yet'),
     ).toBeInTheDocument();
+  },
+};
+
+export const OnlyHistoricalOrders: Story = {
+  decorators: [withMocks(historicalOrdersDashboardMocks)],
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The reporting period has no orders but older orders exist, so the dashboard stays visible instead of showing the empty state.',
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      await canvas.findByRole('heading', { name: 'Total Sales' }),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.queryByText('No Orders Yet', { selector: 'h3, h2' }),
+    ).not.toBeInTheDocument();
   },
 };
 

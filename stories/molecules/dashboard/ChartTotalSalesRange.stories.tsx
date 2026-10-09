@@ -33,7 +33,6 @@ export const Default: Story = {
 export const Narrow: Story = {
   args: {
     defaultValue: '30d',
-    value: '90d',
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

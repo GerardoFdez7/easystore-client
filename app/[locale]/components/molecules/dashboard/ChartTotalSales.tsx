@@ -4,7 +4,7 @@ import { useId, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 import type { OrderTimelinePoint } from '@hooks/domains/dashboard';
-import { formatMoney, isDecimalString } from '@lib/utils/money';
+import { formatMoney, toChartCoordinate } from '@lib/utils/money';
 import {
   Card,
   CardAction,
@@ -29,20 +29,11 @@ interface ChartTotalSalesProps {
   ordersTimeline: OrderTimelinePoint[];
   totalRevenue: OrderTimelinePoint['revenue'];
   locale: string;
+  /** UTC day (YYYY-MM-DD) the ranges end on; defaults to today. */
+  today?: string;
 }
 
 type ChartPoint = OrderTimelinePoint & { revenueCents: number };
-
-/** Recharts needs numeric coordinates; the displayed Money stays a decimal string. */
-function toSafeChartCoordinate(amount: string): number | null {
-  if (!isDecimalString(amount) || amount.endsWith('.')) return null;
-
-  const [whole, fraction = ''] = amount.split('.');
-  const cents = BigInt(whole) * 100n + BigInt(fraction.padEnd(2, '0'));
-  if (cents > BigInt(Number.MAX_SAFE_INTEGER)) return null;
-
-  return Number(cents);
-}
 
 function formatDate(date: string, locale: string): string {
   return new Date(`${date}T00:00:00Z`).toLocaleDateString(locale, {
@@ -56,19 +47,20 @@ export function ChartTotalSales({
   ordersTimeline,
   totalRevenue,
   locale,
+  today,
 }: ChartTotalSalesProps) {
   const t = useTranslations('Dashboard');
   const [timeRange, setTimeRange] = useState<Range>('90d');
   const gradientId = `revenue-${useId().replace(/:/g, '')}`;
-  const lastDate = ordersTimeline.at(-1)?.date;
-  const cutoff = lastDate ? new Date(`${lastDate}T00:00:00Z`) : null;
-  cutoff?.setUTCDate(cutoff.getUTCDate() - ranges[timeRange] + 1);
-  const cutoffDate = cutoff?.toISOString().slice(0, 10);
+  const [currentDay] = useState(() => new Date().toISOString().slice(0, 10));
+  const cutoff = new Date(`${today ?? currentDay}T00:00:00Z`);
+  cutoff.setUTCDate(cutoff.getUTCDate() - ranges[timeRange] + 1);
+  const cutoffDate = cutoff.toISOString().slice(0, 10);
   const visiblePoints = ordersTimeline.filter(
-    (point) => !cutoffDate || point.date >= cutoffDate,
+    (point) => point.date >= cutoffDate,
   );
   const chartData = visiblePoints.map((point) => {
-    const revenueCents = toSafeChartCoordinate(point.revenue.amount);
+    const revenueCents = toChartCoordinate(point.revenue.amount);
     return revenueCents === null ? null : { ...point, revenueCents };
   });
   const canPlot = chartData.every(

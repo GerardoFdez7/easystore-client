@@ -42,7 +42,8 @@ export default function MainDashboard() {
           buttonIcon={RotateCcw}
           onButtonClick={() => void refetch()}
         />
-      ) : dashboardData.summary.totalOrders === 0 ? (
+      ) : dashboardData.summary.totalOrders === 0 &&
+        dashboardData.recentOrders.length === 0 ? (
         <EmptyState
           icon={ShoppingCart}
           title={t('noOrdersTitle')}

@@ -59,12 +59,13 @@ decimals from `Intl` or the currency; the helpers always format 2 decimals.
 
 All money helpers live in `app/[locale]/lib/utils/money.ts`:
 
-| Helper             | Purpose                                                   |
-| ------------------ | --------------------------------------------------------- |
-| `isDecimalString`  | Validates a non-negative decimal string (form validation) |
-| `normalizeDecimal` | Canonical transport form of a decimal string              |
-| `formatMoney`      | Symbol + 2 decimals for a `Money` value                   |
-| `formatAmount`     | Grouped 2-decimal amount without a symbol (for inputs)    |
+| Helper              | Purpose                                                   |
+| ------------------- | --------------------------------------------------------- |
+| `isDecimalString`   | Validates a non-negative decimal string (form validation) |
+| `normalizeDecimal`  | Canonical transport form of a decimal string              |
+| `formatMoney`       | Symbol + 2 decimals for a `Money` value                   |
+| `formatAmount`      | Grouped 2-decimal amount without a symbol (for inputs)    |
+| `toChartCoordinate` | Chart-only numeric coordinate (cents); never displayed    |
 
 Add new helpers here; do not scatter money logic across components or hooks.
 

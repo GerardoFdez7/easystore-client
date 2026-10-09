@@ -165,7 +165,7 @@ export default function Options({
   };
 
   const handleOptionClick = (option: OptionItem) => {
-    if (option.onClick && !option.disabled) {
+    if (option.onClick && !option.disabled && !disabled) {
       option.onClick();
     }
   };
@@ -213,7 +213,7 @@ export default function Options({
       <Button
         key={option.id}
         variant="outline"
-        disabled={option.disabled && !showTooltip}
+        disabled={(disabled || option.disabled) && !showTooltip}
         aria-disabled={showTooltip ? true : undefined}
         onClick={() => handleOptionClick(option)}
         className={`aria-disabled:cursor-not-allowed aria-disabled:opacity-50 ${

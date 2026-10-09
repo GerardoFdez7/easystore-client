@@ -25,6 +25,20 @@ export const isPositiveDecimal = (value: string): boolean =>
   isDecimalString(value) && /[1-9]/.test(value);
 
 /**
+ * Chart-only exception to the "never `number`" rule: charting libraries need a
+ * numeric coordinate. Returns the amount in minor units (cents) as a safe
+ * integer, or null when it is not a valid amount. Never display, store, or do
+ * arithmetic with the result; render the original decimal string instead.
+ */
+export const toChartCoordinate = (amount: string): number | null => {
+  if (!isDecimalString(amount) || amount.endsWith('.')) return null;
+
+  const [whole, fraction = ''] = amount.trim().split('.');
+  const cents = BigInt(whole) * 100n + BigInt(fraction.padEnd(2, '0'));
+  return cents > BigInt(Number.MAX_SAFE_INTEGER) ? null : Number(cents);
+};
+
+/**
  * Intl.NumberFormat (v3) formats exact decimal strings without rounding through
  * a float, but the bundled TS typings only declare `number | bigint`.
  */
