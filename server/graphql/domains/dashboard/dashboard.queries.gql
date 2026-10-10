@@ -1,0 +1,67 @@
+query getDashboardData {
+  getDashboard {
+    summary {
+      totalOrders
+      totalRevenue {
+        amount
+        currency
+      }
+      averageOrderValue {
+        amount
+        currency
+      }
+      uniqueCustomers
+      completedOrders
+      cancelledOrders
+      processingOrders
+      confirmedOrders
+      shippedOrders
+      completedRevenue {
+        amount
+        currency
+      }
+      cancelledRevenue {
+        amount
+        currency
+      }
+    }
+    ordersTimeline {
+      date
+      ordersCount
+      revenue {
+        amount
+        currency
+      }
+    }
+    recentOrders {
+      orderId
+      orderNumber
+      orderDate
+      customerName
+      orderTotal {
+        amount
+        currency
+      }
+      orderStatus
+      shippingCity
+    }
+    topProducts {
+      variantId
+      variantSku
+      productName
+      productBrand
+      variantPrice {
+        amount
+        currency
+      }
+      variantCover
+      productCover
+      totalQuantitySold
+      totalRevenue {
+        amount
+        currency
+      }
+      ordersCount
+    }
+  }
+}

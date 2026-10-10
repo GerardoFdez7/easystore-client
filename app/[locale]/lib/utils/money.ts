@@ -1,3 +1,4 @@
+import Decimal from 'decimal.js';
 import type { Money } from '@graphql/generated';
 
 /**
@@ -23,6 +24,53 @@ export const isDecimalString = (value: string): boolean =>
 /** Whether the amount is a valid decimal string greater than zero. */
 export const isPositiveDecimal = (value: string): boolean =>
   isDecimalString(value) && /[1-9]/.test(value);
+
+/** Whether the string is a complete money amount ("12", "12.5", "12.50"). */
+export const isMoneyAmount = (value: string): boolean => {
+  const [whole = '', fraction, ...rest] = value.split('.');
+  return (
+    rest.length === 0 &&
+    /^\d+$/.test(whole) &&
+    (fraction === undefined || /^\d{1,2}$/.test(fraction))
+  );
+};
+
+/**
+ * Sums amounts of one currency exactly and returns a 2-decimal string. Returns
+ * null when the list is empty, an amount is invalid, or currencies differ.
+ */
+export const sumMoney = (
+  values: Pick<Money, 'amount' | 'currency'>[],
+): Pick<Money, 'amount' | 'currency'> | null => {
+  const [first] = values;
+  if (!first) return null;
+  if (
+    values.some(
+      (value) =>
+        value.currency !== first.currency || !isMoneyAmount(value.amount),
+    )
+  ) {
+    return null;
+  }
+
+  const total = values.reduce(
+    (sum, value) => sum.plus(value.amount),
+    new Decimal(0),
+  );
+  return { amount: total.toFixed(2), currency: first.currency };
+};
+
+/**
+ * Chart-only exception to the "never `number`" rule: charting libraries need a
+ * numeric coordinate. Returns null for an invalid amount. Never display, store,
+ * or do arithmetic with the result; render the original decimal string instead.
+ */
+export const toChartCoordinate = (amount: string): number | null => {
+  if (!isMoneyAmount(amount)) return null;
+
+  const coordinate = new Decimal(amount).toNumber();
+  return Number.isSafeInteger(Math.trunc(coordinate)) ? coordinate : null;
+};
 
 /**
  * Intl.NumberFormat (v3) formats exact decimal strings without rounding through

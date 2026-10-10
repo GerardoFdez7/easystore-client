@@ -1,5 +1,9 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+import type { RecentOrder } from '@hooks/domains/dashboard';
+import { formatMoney } from '@lib/utils/money';
+import { Badge } from '@shadcn/ui/badge';
 import {
   Table,
   TableBody,
@@ -8,129 +12,101 @@ import {
   TableHeader,
   TableRow,
 } from '@shadcn/ui/table';
-import { useTranslations } from 'next-intl';
-
-const orders = [
-  {
-    order: 'ORD-001',
-    date: '2024-06-01',
-    customer: 'Alice Johnson',
-    total: '$120.00',
-    status: 'PROCESSING',
-  },
-  {
-    order: 'ORD-002',
-    date: '2024-06-02',
-    customer: 'Bob Smith',
-    total: '$80.00',
-    status: 'CONFIRMED',
-  },
-  {
-    order: 'ORD-003',
-    date: '2024-06-03',
-    customer: 'Charlie Brown',
-    total: '$150.00',
-    status: 'SHIPPED',
-  },
-  {
-    order: 'ORD-004',
-    date: '2024-06-04',
-    customer: 'Diana Prince',
-    total: '$200.00',
-    status: 'COMPLETED',
-  },
-  {
-    order: 'ORD-005',
-    date: '2024-06-05',
-    customer: 'Eve Adams',
-    total: '$95.00',
-    status: 'CANCELLED',
-  },
-];
 
 function StatusBadge({ status }: { status: string }) {
   const t = useTranslations('Dashboard');
   let label = status;
 
-  let color = 'bg-foreground';
+  let variant: 'outline' | 'secondary' | 'destructive' = 'outline';
   switch (status) {
     case 'PROCESSING':
-      color = 'bg-yellow-100 text-yellow-700';
       label = t('processing');
       break;
     case 'CONFIRMED':
-      color = 'bg-blue-100 text-blue-700';
       label = t('confirmed');
       break;
     case 'SHIPPED':
-      color = 'bg-purple-100 text-purple-700';
       label = t('shipped');
       break;
     case 'COMPLETED':
-      color = 'bg-green-100 text-green-700';
+      variant = 'secondary';
       label = t('completed');
       break;
     case 'CANCELLED':
-      color = 'bg-red-100 text-red-700';
+      variant = 'destructive';
       label = t('cancelled');
       break;
-    default:
-      color = 'bg-gray-100 text-gray-700';
   }
-  return (
-    <span className={`rounded-full px-3 py-1 text-xs font-semibold ${color}`}>
-      {label}
-    </span>
-  );
+  return <Badge variant={variant}>{label}</Badge>;
 }
 
-export default function SalesOverview() {
+/** Column headers shared with the loading skeleton. */
+export function SalesOverviewHeader() {
   const t = useTranslations('Dashboard');
 
   return (
-    <>
-      <h1 className="text-title mb-4 text-2xl font-bold">
-        {t('salesOverview')}
-      </h1>
+    <TableHeader>
+      <TableRow>
+        <TableHead scope="col">{t('order')}</TableHead>
+        <TableHead scope="col">{t('date')}</TableHead>
+        <TableHead scope="col">{t('customer')}</TableHead>
+        <TableHead scope="col">{t('total')}</TableHead>
+        <TableHead scope="col">{t('status')}</TableHead>
+      </TableRow>
+    </TableHeader>
+  );
+}
 
-      <div className="overflow-x-auto rounded-lg shadow-sm">
-        <Table className="bg-card min-w-150">
-          <TableHeader>
-            <TableRow>
-              <TableHead className="text-foreground text-sm font-semibold sm:pl-5">
-                {t('order')}
-              </TableHead>
-              <TableHead className="text-foreground text-sm font-semibold">
-                {t('date')}
-              </TableHead>
-              <TableHead className="text-foreground text-sm font-semibold">
-                {t('customer')}
-              </TableHead>
-              <TableHead className="text-foreground text-sm font-semibold">
-                {t('total')}
-              </TableHead>
-              <TableHead className="text-foreground text-sm font-semibold">
-                {t('status')}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
+interface SalesOverviewProps {
+  recentOrders: RecentOrder[];
+  locale: string;
+}
+
+export default function SalesOverview({
+  recentOrders,
+  locale,
+}: SalesOverviewProps) {
+  const t = useTranslations('Dashboard');
+
+  return (
+    <section aria-labelledby="sales-overview-heading">
+      <h2
+        id="sales-overview-heading"
+        className="text-title mb-4 text-xl font-semibold"
+      >
+        {t('salesOverview')}
+      </h2>
+
+      <div className="bg-card text-card-foreground overflow-hidden rounded-xl border shadow-sm">
+        <Table aria-label={t('salesOverview')} className="bg-transparent">
+          <SalesOverviewHeader />
           <TableBody>
-            {orders.map((order) => (
-              <TableRow key={order.order} className="hover:bg-hover transition">
-                <TableCell className="font-mono text-sm sm:pl-5">
-                  {order.order}
-                </TableCell>
-                <TableCell className="text-sm">{order.date}</TableCell>
-                <TableCell className="text-sm">{order.customer}</TableCell>
-                <TableCell className="text-sm">{order.total}</TableCell>
-                <TableCell>
-                  <StatusBadge status={order.status} />
-                </TableCell>
+            {recentOrders.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5}>{t('noRecentOrders')}</TableCell>
               </TableRow>
-            ))}
+            ) : (
+              recentOrders.map((order) => (
+                <TableRow key={order.orderId}>
+                  <TableCell>{order.orderNumber}</TableCell>
+                  <TableCell>
+                    {new Date(order.orderDate).toLocaleDateString(locale, {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                    })}
+                  </TableCell>
+                  <TableCell>{order.customerName}</TableCell>
+                  <TableCell>{formatMoney(order.orderTotal, locale)}</TableCell>
+                  <TableCell>
+                    <StatusBadge status={order.orderStatus} />
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>
-    </>
+    </section>
   );
 }
