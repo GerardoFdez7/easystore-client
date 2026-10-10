@@ -205,6 +205,23 @@ export const historicalOrdersDashboardMocks = [
   },
 ];
 
+export const malformedAmountDashboardMocks = [
+  {
+    request: dashboardRequest,
+    result: {
+      data: {
+        getDashboard: {
+          ...populatedDashboard,
+          summary: {
+            ...populatedDashboard.summary,
+            totalRevenue: money('12.345'),
+          },
+        },
+      },
+    },
+  },
+];
+
 export const errorDashboardMocks = [
   { request: dashboardRequest, error: new Error('Network error') },
 ];

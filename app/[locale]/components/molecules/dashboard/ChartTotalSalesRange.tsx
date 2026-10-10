@@ -24,6 +24,7 @@ interface ChartTotalSalesRangeProps {
   value?: SalesRange;
   defaultValue?: SalesRange;
   onValueChange?: (value: SalesRange) => void;
+  disabled?: boolean;
 }
 
 /** Range picker shared by the chart and its skeleton; it needs no server data. */
@@ -31,6 +32,7 @@ export function ChartTotalSalesRange({
   value,
   defaultValue = '90d',
   onValueChange,
+  disabled = false,
 }: ChartTotalSalesRangeProps) {
   const t = useTranslations('Dashboard');
 
@@ -44,6 +46,7 @@ export function ChartTotalSalesRange({
         value={value}
         defaultValue={value === undefined ? defaultValue : undefined}
         onValueChange={selectRange}
+        disabled={disabled}
       >
         <SelectTrigger
           size="sm"
@@ -67,6 +70,7 @@ export function ChartTotalSalesRange({
         value={value}
         defaultValue={value === undefined ? defaultValue : undefined}
         onValueChange={selectRange}
+        disabled={disabled}
         variant="outline"
         aria-label={t('salesOverTime')}
         className="hidden @[767px]/card:flex"

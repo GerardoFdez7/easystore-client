@@ -77,34 +77,36 @@ export default function SalesOverview({
         {t('salesOverview')}
       </h2>
 
-      <Table aria-label={t('salesOverview')}>
-        <SalesOverviewHeader />
-        <TableBody>
-          {recentOrders.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={5}>{t('noRecentOrders')}</TableCell>
-            </TableRow>
-          ) : (
-            recentOrders.map((order) => (
-              <TableRow key={order.orderId}>
-                <TableCell>{order.orderNumber}</TableCell>
-                <TableCell>
-                  {new Date(order.orderDate).toLocaleDateString(locale, {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                  })}
-                </TableCell>
-                <TableCell>{order.customerName}</TableCell>
-                <TableCell>{formatMoney(order.orderTotal, locale)}</TableCell>
-                <TableCell>
-                  <StatusBadge status={order.orderStatus} />
-                </TableCell>
+      <div className="bg-card text-card-foreground overflow-hidden rounded-xl border shadow-sm">
+        <Table aria-label={t('salesOverview')} className="bg-transparent">
+          <SalesOverviewHeader />
+          <TableBody>
+            {recentOrders.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5}>{t('noRecentOrders')}</TableCell>
               </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+            ) : (
+              recentOrders.map((order) => (
+                <TableRow key={order.orderId}>
+                  <TableCell>{order.orderNumber}</TableCell>
+                  <TableCell>
+                    {new Date(order.orderDate).toLocaleDateString(locale, {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                    })}
+                  </TableCell>
+                  <TableCell>{order.customerName}</TableCell>
+                  <TableCell>{formatMoney(order.orderTotal, locale)}</TableCell>
+                  <TableCell>
+                    <StatusBadge status={order.orderStatus} />
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </section>
   );
 }

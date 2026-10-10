@@ -27,6 +27,9 @@ const verifyLoadingState: Story['play'] = async ({ canvasElement }) => {
     canvas.getByRole('heading', { name: 'Total Sales' }),
   ).toBeInTheDocument();
   await expect(canvas.getByRole('region')).toHaveAttribute('aria-busy', 'true');
+  for (const range of canvas.getAllByRole('radio')) {
+    await expect(range).toBeDisabled();
+  }
 };
 
 export const Default: Story = { play: verifyLoadingState };

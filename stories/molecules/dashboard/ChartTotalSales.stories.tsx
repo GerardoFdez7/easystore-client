@@ -49,7 +49,7 @@ export const Default: Story = {
     await expect(
       canvas.getByRole('img', { name: 'Sales over time' }),
     ).toBeInTheDocument();
-    await expect(canvas.getByText(/1,992\.30/)).toBeInTheDocument();
+    await expect(canvas.getByText('$1,992.30')).toBeInTheDocument();
   },
 };
 
@@ -66,6 +66,7 @@ export const SevenDays: Story = {
     await expect(
       canvas.getByRole('radio', { name: 'Last 7 days' }),
     ).toHaveAttribute('data-state', 'on');
+    await expect(canvas.getByText('$635.45')).toBeInTheDocument();
     await expect(canvas.queryByText(/Jul 15/)).not.toBeInTheDocument();
     await expect(canvas.findByText(/Oct 9/)).resolves.toBeInTheDocument();
   },

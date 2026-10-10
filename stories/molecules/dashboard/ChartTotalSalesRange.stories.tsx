@@ -42,6 +42,14 @@ export const Narrow: Story = {
   },
 };
 
+export const Disabled: Story = {
+  args: { disabled: true },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('combobox')).toBeDisabled();
+  },
+};
+
 export const Wide: Story = {
   decorators: [
     (Story) => (

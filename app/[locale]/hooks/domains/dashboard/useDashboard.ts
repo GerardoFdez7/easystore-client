@@ -1,3 +1,4 @@
+import { isMoneyAmount } from '@lib/utils/money';
 import { useQuery } from '@apollo/client/react';
 import {
   GetDashboardDataDocument,
@@ -52,7 +53,7 @@ export interface DashboardData {
 }
 
 function hasDecimalAmount(value: QuerySummary['totalRevenue']): value is Money {
-  return typeof value.amount === 'string';
+  return typeof value.amount === 'string' && isMoneyAmount(value.amount);
 }
 
 function hasValidMoney(

@@ -4,7 +4,7 @@ import { useId, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 import type { OrderTimelinePoint } from '@hooks/domains/dashboard';
-import { formatMoney, toChartCoordinate } from '@lib/utils/money';
+import { formatMoney, sumMoney, toChartCoordinate } from '@lib/utils/money';
 import {
   Card,
   CardAction,
@@ -59,6 +59,10 @@ export function ChartTotalSales({
   const visiblePoints = ordersTimeline.filter(
     (point) => point.date >= cutoffDate,
   );
+  const rangeTotal = sumMoney(visiblePoints.map((point) => point.revenue)) ?? {
+    amount: '0',
+    currency: totalRevenue.currency,
+  };
   const chartData = visiblePoints.map((point) => {
     const revenueCents = toChartCoordinate(point.revenue.amount);
     return revenueCents === null ? null : { ...point, revenueCents };
@@ -80,11 +84,13 @@ export function ChartTotalSales({
       </h2>
       <Card className="@container/card">
         <CardHeader>
-          <CardTitle className="text-2xl tabular-nums">
-            {formatMoney(totalRevenue, locale)}
+          <CardTitle className="col-start-1 text-2xl tabular-nums">
+            {formatMoney(rangeTotal, locale)}
           </CardTitle>
-          <CardDescription>{t('salesOverTime')}</CardDescription>
-          <CardAction>
+          <CardDescription className="col-start-1">
+            {t('salesOverTime')}
+          </CardDescription>
+          <CardAction className="col-span-2 col-start-1 row-span-1 row-start-3 justify-self-end sm:col-span-1 sm:col-start-2 sm:row-span-2 sm:row-start-1">
             <ChartTotalSalesRange
               value={timeRange}
               onValueChange={setTimeRange}

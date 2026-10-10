@@ -9,6 +9,7 @@ import {
   expectedTotalRevenue,
   historicalOrdersDashboardMocks,
   loadingDashboardMocks,
+  malformedAmountDashboardMocks,
 } from '../../templates/dashboard/mocks/dashboardMocks';
 
 const meta: Meta<typeof MainDashboard> = {
@@ -106,6 +107,19 @@ export const OnlyHistoricalOrders: Story = {
     await storybookExpect(
       canvas.queryByText('No Orders Yet', { selector: 'h3, h2' }),
     ).not.toBeInTheDocument();
+  },
+};
+
+export const MalformedAmount: Story = {
+  decorators: [withMocks(malformedAmountDashboardMocks)],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await storybookExpect(
+      await canvas.findByText('Dashboard unavailable'),
+    ).toBeInTheDocument();
+    await storybookExpect(
+      canvas.getByRole('button', { name: 'Try again' }),
+    ).toBeInTheDocument();
   },
 };
 
