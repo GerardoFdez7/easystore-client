@@ -253,9 +253,9 @@ export const FullyActive: Story = {
     await storybookExpect(
       canvas.getByRole('tab', { name: 'Archived' }),
     ).toHaveAttribute('aria-selected', 'true');
-    // Selected products reveal the bulk options menu.
+    // Selected products reveal the bulk actions, inline on desktop.
     await storybookExpect(
-      canvas.getByRole('button', { name: 'Options' }),
+      canvas.getByRole('button', { name: 'Restore Products' }),
     ).toBeInTheDocument();
   },
   parameters: {
